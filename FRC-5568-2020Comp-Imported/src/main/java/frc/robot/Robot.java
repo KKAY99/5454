@@ -212,6 +212,9 @@ public class Robot extends TimedRobot {
         static NetworkTableEntry networkTableEntryShooterSonar = SubSystems.add("Shooter Sonar", 0)
                         .withWidget(BuiltInWidgets.kNumberBar).withSize(2, 2).getEntry();
 
+        static NetworkTableEntry networkTableEntrySonarShortShot = SubSystems.add("Short Shot",false)
+                .withWidget(BuiltInWidgets.kBooleanBox).withSize(2, 2).getEntry();
+        
         static NetworkTableEntry networkTableEntryShooterPower = AutoTab.add("Shooter Power", 0)
                         .withWidget(BuiltInWidgets.kNumberBar).withSize(2, 2).getEntry();
 
@@ -425,6 +428,8 @@ public class Robot extends TimedRobot {
          */
         @Override
         public void robotPeriodic() {
+                boolean onSonarTarget=false;
+                
                 m_LimeLight.update();
                 m_ShooterLights.set(on);
                 m_ledStrip.update();
@@ -489,8 +494,14 @@ public class Robot extends TimedRobot {
                 networkTableEntryConveyorShutoffTriggered.setBoolean(conveyorShutdownSensor.getValue() < 2000);
 
                 networkTableEntryVisionDistance.setDouble(Vision.getDistance());
-                //networkTableEntryShooterSonar.setDouble(shooterSonarSensor.getValue());
+                //netw networkTableEntryShooterSonarorkTableEntryShooterSonar.setDouble(shooterSonarSensor.getValue());
                 networkTableEntryShooterSonar.setDouble(m_FrontUltraSonic.getRangeInches());
+                //if(m_FrontUltraSonic.isRangeValid()){
+                        onSonarTarget=(m_FrontUltraSonic.getRangeInches()>=Constants.kshortShotRangeLow && m_FrontUltraSonic.getRangeInches()<=Constants.kshortShotRangeHigh);
+      
+                //}                
+                networkTableEntrySonarShortShot.setBoolean(onSonarTarget);
+                
                 // #endregion
                 // #endregion
         }
@@ -509,9 +520,12 @@ public class Robot extends TimedRobot {
                 currentState = AutoEnumeration.Delay;
 
                 autoTimerHasBeenSet = false;
-
-                switch (autoChooserSwitch.getValue()) {
-                case AutoModes.AutoNav1:
+                //KK 5/29 SWITCH issue delay harcoded to 5 and using delay for auto
+                System.out.println("Auto Value Set to " + delaySwitch.getValue());
+                //switch (autoChooserSwitch.getValue()) {
+                switch (delaySwitch.getValue()) {
+                
+                        case AutoModes.AutoNav1:
                         shouldRun = false;
                         shouldShoot = false;
                         shouldDriveForward = false;
@@ -620,8 +634,9 @@ public class Robot extends TimedRobot {
                         shouldMoveSecondPartner = false;
                         break;
                 }
-
-                delay = delaySwitch.getValue();
+                //KK 5/29 SWITCH issue delay harcoded to 2
+                //delay = delaySwitch.getValue();
+                delay=2;
                 System.out.println("Delay Value Set to " + delay);
                 // if (isSimulation()) {
                 // shouldRun = true;
@@ -661,8 +676,7 @@ public class Robot extends TimedRobot {
         @Override
         public void autonomousPeriodic() {
                 m_LimeLight.update();
-                System.out.println("Delay Value is  " + delay);
-
+                
                 m_Intake.raise();
                 m_Shooter.longPneumatic(LongUp);
 
@@ -865,6 +879,8 @@ public class Robot extends TimedRobot {
                                 }
                                 if (autoSubTimer.hasPeriodPassed(driveForwardTime)) {
                                         autoSubTimerHasBeenSet = false;
+                                        m_Drive.move((double) 90, (double) .5, (double) 70, true);
+                       
                                         currentState = AutoEnumeration.End;
                                 } else {
                                         double drivePower = 0.6;
@@ -1050,7 +1066,8 @@ public class Robot extends TimedRobot {
                         shooterPneumaticResetTimer.start();
                 } else {
 
-                        m_LongShooterSolenoid.set(LongUp);
+                        // 5/29/21 3:14pm
+                        // m_LongShooterSolenoid.set(LongUp);
                         // m_ShortShooterSolenoid.set(ShortDown);
 
                         if (shooterPneumaticRestTimerSet) {

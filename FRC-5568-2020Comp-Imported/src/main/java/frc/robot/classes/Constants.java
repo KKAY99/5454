@@ -13,7 +13,8 @@ public class Constants {
 	public static final double kShooting10=.60;
 	public static final double kShootingUpClose=.50;
 	public static final double kAutoShootSpeed=0.55;
-	            
+	public static final double kshortShotRangeLow=28;
+	public static final double kshortShotRangeHigh=33; 
 	/*
 	 * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now
 	 * we just want the primary one.

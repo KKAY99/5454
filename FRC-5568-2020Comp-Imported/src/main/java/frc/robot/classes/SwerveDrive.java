@@ -74,15 +74,25 @@ public class SwerveDrive {
     public double backLeftSpeed = 0;
     public double backRightSpeed = 0;
 
-    public static final int frontLeftOffset = 513;
-    public static final int frontRightOffset = 272;
+    // How to get offsets
+    // Point all gears towards the inside of the robot, facing forwards.
+    // Ex: Front left bevel gear faces front right bevel gear
+    // Spin all wheels 1 rotation at a time until the value is between 0 and -1024
+    // Check Actual encoder values on Swerve shuffleboard tab
+    // Make sure wheels are straight with each other using a straight ...
+    // ... edge like the yardstick
+
+    public static final int frontLeftOffset = -533;
+    public static final int frontRightOffset = -764;
     
-    public static final int backLeftOffset = 396;
-    public static final int backRightOffset =-400;
-    //public int frontLeftOffset = -172;
-    //public int frontRightOffset = -434;
-    //public int backLeftOffset = -127;
-    //public int backRightOffset = -936;
+    public static final int backLeftOffset = -639;
+    public static final int backRightOffset = -406;
+    
+    // Offset backup 5/19/21 3:04pm
+    // public static final int frontLeftOffset = 513;
+    // public static final int frontRightOffset = 272;
+    // public static final int backLeftOffset = 396;
+    // public static final int backRightOffset =-400;
 
     public double m_FWD = 0;
     public double m_STR = 0;
