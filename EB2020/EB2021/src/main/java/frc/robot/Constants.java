@@ -72,6 +72,7 @@ public final class Constants {
      public static int climberSlow=10;
      public static int climberFast=9;
      public static int climberTime=8;
+     public static int CameraSwitch=9;
      public static int climberBackJS=7;
      public static int climberBackXB=4;
      public static int climberSlowXB=7;

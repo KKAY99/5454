@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoModes;
-import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode.PixelFormat;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -43,7 +45,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto Selector", m_autoChooser);
     m_driveMode=Constants.DriveMode.forwardMode;
     m_robotContainer = new RobotContainer(); 
-    CameraServer.getInstance().startAutomaticCapture();  
+    m_FrontCamera=CameraServer.getInstance().startAutomaticCapture(0);  
+    m_FrontCamera.setResolution(160, 120);
+    m_FrontCamera.setFPS(60);
+    m_TopCamera=CameraServer.getInstance().startAutomaticCapture(1);  
+    m_TopCamera.setResolution(160,120);
+    m_TopCamera.setFPS(30);
   //  m_Gyro.calibrate();
   //  m_Gyro.reset();
     
