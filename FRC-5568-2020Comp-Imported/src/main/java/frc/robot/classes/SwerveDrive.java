@@ -106,6 +106,7 @@ public class SwerveDrive {
     double D = 0.0;
 
     public final double defaultDeadzone = 0.07;
+    public final double expandedDeadzone = 0.09;
     public final double shootingRotationDeadzone = 0.01;
     public final double defaultRotationDeadzone = 0.2;
     public boolean isZero = false;
@@ -116,9 +117,13 @@ public class SwerveDrive {
 
     //AutDrive by Limelight 
     private boolean m_autoDrive=false;
+    private boolean m_isShootingLong=false;
+    private boolean m_isShootingShort=false;
     private Limelight m_Limelight;
     private double m_targetDistance;
     private double m_targetXPos;
+    private boolean m_isAligned = false;
+    private double m_timestamp = 0.0;
 
     private boolean gyroAlignedZero = false;
     private double gyroAngleError;
@@ -422,10 +427,14 @@ public class SwerveDrive {
         // FWD = temp;
         // }
         //KK autoDrive Disable if any joystick movement is detected outside the deadzone
-          if(Math.abs(FWD_Joystick)>defaultDeadzone || Math.abs(STR_Joystick)>defaultDeadzone || Math.abs(RCW_Joystick)>defaultDeadzone){
+          if(Math.abs(FWD_Joystick)>expandedDeadzone || Math.abs(STR_Joystick)>expandedDeadzone || Math.abs(RCW_Joystick)>2*expandedDeadzone){
             
-            System.out.println("Switching Drive Mode" + FWD_Joystick + "," + STR_Joystick );
+            if(m_autoDrive) {
+                System.out.println("Switching Drive Mode" + FWD_Joystick + "," + STR_Joystick );
+            }
             m_autoDrive=false;
+            m_isShootingLong=false;
+            m_isShootingShort=false;
         }   
         if(m_autoDrive==false){
             //primary joystick driven drive mode
@@ -436,12 +445,15 @@ public class SwerveDrive {
             if(gyroAlignedZero) {
                 if (m_Limelight.isTargetAvailible()){
                     double currentdistance = m_Limelight.getDistance();
-                    double xPos=m_Limelight.getX();
-                    MoveToTargetAdvanced(m_targetDistance-currentdistance,m_targetXPos-xPos);
+                     double xPos=m_Limelight.getX();
+                    System.out.println(m_targetDistance + " * " + currentdistance); 
+                    MoveToTargetNew(m_targetDistance-currentdistance,m_targetXPos-xPos);
                 }else{
                     //If the target is not available stop autodrive
                     driveKill();
                     m_autoDrive=false;
+                    m_isShootingShort=false;
+                    m_isShootingLong=false;
                 }
             } else {
                 gyroAngleError = (gyroAngle) * 50.0 / 180.0;
@@ -477,7 +489,7 @@ public class SwerveDrive {
             }
             
         }
-        System.out.println(FWD +" * " + STR  +" * " + RCW);
+        System.out.println("F is " + FWD +" STR is " + STR  +" RCW is " + RCW);
         driveRobot(FWD,STR,RCW);
 
     }
@@ -519,11 +531,70 @@ public class SwerveDrive {
             }
             
         }
-        //System.out.println(FWD +" * " + STR  +" * " + RCW);
+       if(!(FWD+STR+RCW==0.0)){
+        System.out.println("F is " + FWD +" STR is " + STR  +" RCW is " + RCW);
+        }
         driveRobot(FWD,STR,RCW);
+        //steer0();
 
     }
-    
+    private void MoveToTargetNew(double distanceGap, double xGap){ //ts 7/24/21: add intake during movement?
+        double FWD=0;
+        double STR=0;
+        double RCW=0;
+        double driveSpeedSTR;
+        double driveSpeedFWD;
+        //kind of PID
+        driveSpeedSTR=Math.abs(xGap)*0.025;
+        if((driveSpeedSTR < 0.05)&& (driveSpeedSTR>0.0)){
+          driveSpeedSTR+=0.05;
+        }
+          if (Math.abs(xGap)>Constants.kVisionXTolerance){
+              if(xGap>0){
+                  STR=driveSpeedSTR;
+              }
+              else{
+                  STR=-driveSpeedSTR;
+              }
+          }
+
+        driveSpeedFWD=Math.abs(distanceGap)*0.05;
+        if((driveSpeedFWD < 0.05)&& (driveSpeedFWD>0.0)){
+          driveSpeedFWD+=0.05;
+        }
+
+          if (Math.abs(distanceGap)>Constants.kVisionDistanceTolerance){
+            if (distanceGap>0){
+                FWD=-driveSpeedFWD;
+            }
+            else{
+                FWD=driveSpeedFWD;
+            }
+          }
+         if(!(FWD+STR+RCW==0.0)){
+          System.out.println("F is " + FWD +" STR is " + STR  +" RCW is " + RCW);
+          m_isAligned = true;
+
+          }
+          else{
+            if(m_isAligned) {
+                System.out.println("xx - F is " + FWD +" STR is " + STR  +" RCW is " + RCW);
+                      }
+            m_isAligned = false;
+             
+          }
+
+          driveRobot(FWD,STR,RCW);
+          //steer0();
+    }
+
+    private void steer0(){
+        quickSteer(m_SrxFrontRightSteering,0,false);
+        quickSteer(m_SrxFrontLeftSteering,0,false);
+        quickSteer(m_SrxBackRightSteering,0,false);
+        quickSteer(m_SrxBackRightSteering,0,false);
+
+    }
     public void steer(TalonSRX controller, double targetAngle, int offset) {
         final int ticksPerRotation = 1024; // in encoder counts
         final double current = controller.getSelectedSensorPosition( Constants.kSlotIdx);
@@ -635,14 +706,17 @@ public class SwerveDrive {
 
         return ShuffleboardAdjustedAngle;
     }
-    public void targetAlign(Limelight activeLimelight,double targetDistance,double targetXPos){
+    public void targetAlign(Limelight activeLimelight,double targetDistance,double targetXPos, boolean isShootingLong, boolean isShootingShort){
         m_targetDistance=targetDistance;
         m_targetXPos=targetXPos;
         m_Limelight=activeLimelight;     
         gyroAlignedZero = false;
         if(activeLimelight.isTargetAvailible()==true)
         {
+            m_isAligned = false;
             m_autoDrive=true;
+            m_isShootingLong=isShootingLong;
+            m_isShootingShort=isShootingShort;
         }
         
     }
@@ -699,5 +773,16 @@ public class SwerveDrive {
     }
 
 }
+
+public boolean isAutoShootLong(){
+    return m_isShootingLong;
+}
+public boolean isAutoShootShort(){
+    return m_isShootingShort;
+}
+public boolean isReadyToShoot(){
+    return m_isAligned && m_autoDrive;
+}
+
 
 }

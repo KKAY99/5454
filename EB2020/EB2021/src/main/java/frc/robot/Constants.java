@@ -18,7 +18,7 @@ import java.io.File;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double kSpeedMultiplier=.80;  // change to fraction to slow robot down
+    public static final double kSpeedMultiplier=1.0;  // change to fraction to slow robot down
     public static final double kHookLiftTime=2.0;
     public static final double kSlowMoveLeft=0.25;
     public static final double kSlowMoveRight=0.20;
@@ -64,8 +64,13 @@ public final class Constants {
        
 
    }  
+   public static final class ColorWheel{
+       public static int wheelMotorPort=4;
+       public static double RightSpeed=.9;
+       public static double LeftSpeed=-.9;
+   }
    public static final class ButtonConstants {
-     public static int intakeIn=1;   
+     public static int intakeIn=1;//joystick controls   
      public static int intakeOut=2;
      public static int intakeLiftUp=3;
      public static int intakeLiftDown=4;
@@ -74,15 +79,25 @@ public final class Constants {
      public static int climberTime=8;
      public static int CameraSwitch=9;
      public static int climberBackJS=7;
-     public static int climberBackXB=4;
-     public static int climberSlowXB=7;
+
+     public static int climberBackXB=7;//xbox controls
+     public static int climberSlowXB=1;
+     public static int intakeInXB=5;   
+     public static int intakeOutXB=6;
+     public static int climberFastXB=4;
+     public static int climberTimeXB=3;
+     public static int CameraSwitchXB=8;
+     public static int intakeLiftUpXB=3;
+     public static int intakeLiftDownXB=4;
      
      public static int ReverseDriveMode=8;
     }
     public static final class LimeLightValues{
         public static final double targetHeight=98.03; // 249 cm
-        public static final double limelightHeight=21.5;
-        public static final double limelightAngle=14.5;
+        //KK FRONt LIMELIGH public static final double limelightHeight=21.5;
+      //KK FRONt LIMELIGH  public static final double limelightAngle=14.5;
+      public static final double limelightAngle=45;
+      public static final double limelightHeight=22.875;
     }
 
    public static final class AutoModes{
@@ -91,6 +106,7 @@ public final class Constants {
        public static final int autoMoveBackward=2;
        public static final int autoMoveShoot=3;
        public static final int autoMoveToShoot=5;
+       public static final int autoMoveShootFromRight=6;
    }
    public static final class AutoConstants{
        public static double moveSpeed=0.28; // adjust on carpet
@@ -98,9 +114,26 @@ public final class Constants {
        public static double moveRightSpeed=0.28;
        public static double moveOnlyTime=2;
        public static double moveGoalTime=4.0;
+       public static double moveRightStep1=1.4;
+       public static double moveRightStep2=0.2;
+       public static double moveRightStep3=0.3;
+       public static double moveRightStep4=0.2;
+       public static double moveRightStep5=2.0;    
+       
        public static double moveLastGoalTime=4.0;
        public static double moveOffWall=1;
-       public static double moveBackup=1;
+       public static double moveBackup=3;
    }
+   public static final class TeleOpAutomationConstants{
+    public static double moveSpeed=0.28; // adjust on carpet
+    public static double moveLeftSpeed=-0.50;
+    public static double moveRightSpeed=0.56;
+    public static double moveOnlyTime=2;
+    public static double moveGoalTime=2.0;
+    public static double moveLastGoalTime=4.0;
+    public static double moveOffWall=1;
+    public static double moveBackup=3;
+}
+
 
 }

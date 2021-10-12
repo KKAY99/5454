@@ -5,9 +5,9 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 
 public class SwappableCamera extends SubsystemBase {
-                                                                      private int m_activeCamera=0;
+                                                                        private int m_activeCamera=0;
     private UsbCamera m_Camera1;
-    private USbCamera m_Camera2; 
+    private UsbCamera m_Camera2; 
     /**
    * Creates a new IntakeSubsystem.
    */
@@ -21,12 +21,12 @@ public class SwappableCamera extends SubsystemBase {
 
  public void StartCameras(int CameraNumber)
 {
-    m_USBCamera=CameraServer.getInstance().startAutomaticCapture(CameraNumber);  
+    m_Camera1=CameraServer.getInstance().startAutomaticCapture(CameraNumber);  
     
 }
 public void EndCamera(int CameraNumber)
 {
-    m_USBCamera=CameraServer.getInstance();  
+    //m_Camera2=CameraServer.getInstance();  
     
 }
 

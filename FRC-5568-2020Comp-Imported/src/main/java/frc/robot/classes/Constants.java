@@ -10,7 +10,7 @@ public class Constants {
 	 */
 	public static final int kSlotIdx = 0;
 	public static final double kShootingTrench=.6599;
-	public static final double kShooting10=.60;
+	public static final double kShooting10=.85;
 	public static final double kShootingUpClose=.50;
 	public static final double kAutoShootSpeed=0.55;
 	public static final double kshortShotRangeLow=28;
@@ -51,11 +51,12 @@ public class Constants {
 	public static final Gains kGains = new Gains(20, 0.0, 200, 0.0, 0, 1.0);
 	
 	/* Constants for AutoDrive Targeting Mode driven by Vision*/
-	public static double kVisionDriveSpeedFast=.55;
+	public static double kVisionDriveSpeedFast=.25;
 	public static double kVisionDriveSpeedSlow=.15;
-	public static double kTrenchShootingDistance=225;
-	public static double kVisionDistanceTolerance=5;
-	public static double kVisionXTolerance=1;
+	public static double kInitLineShootingDistance=197;
+	public static double kSafeZoneShootingDistance=78;
+	public static double kVisionDistanceTolerance=5; 
+	public static double kVisionXTolerance=.75; //changed from 0.5 
 	public static double kVisionXToleranceRCW=.5;
 	public static double kVisionGyroTolerance = 0.5;
 	/*
@@ -63,8 +64,8 @@ public class Constants {
 	*/
 	public static final class LimeLightValues{
 		public static final double targetHeight=98.03; // 249 cm
-		public static final double targetXPosShoot=0;
-		public static final double targetXPosTrench=-24;
+		public static final double targetXPosShoot=5;
+		public static final double targetXPosSafeZone=5;
         public static final double limelightHeight=21;
         public static final double limelightAngle=38;
     }

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.*;
 import edu.wpi.first.wpilibj.Timer;
@@ -34,6 +35,8 @@ public class RobotContainer {
   private final IntakeLiftSubsystem m_IntakeLiftSubsystem =new IntakeLiftSubsystem();
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+  private final ColorWheelSubsystem m_ColorWheel = new ColorWheelSubsystem();
+  
   private final Limelight m_LimeLight = new Limelight(LimeLightValues.targetHeight, LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle);
 //  private Joystick m_rightJoystick = new Joystick(InputControllers.kJoystickRight);
   private Joystick m_leftJoystick = new Joystick(InputControllers.kJoystickLeft);
@@ -68,16 +71,23 @@ public class RobotContainer {
     new POVButton(m_leftJoystick,90).whenHeld(new RobotMoveCommand(m_RobotDrive,Constants.kSlowMoveTurn,Constants.kSlowMoveTurn));   
     new POVButton(m_leftJoystick,180).whenHeld(new RobotMoveCommand(m_RobotDrive,Constants.kSlowMoveLeft,-Constants.kSlowMoveRight));  
     new POVButton(m_leftJoystick,270).whenHeld(new RobotMoveCommand(m_RobotDrive,-Constants.kSlowMoveTurn,-Constants.kSlowMoveTurn));  
+    new POVButton(m_xBox,90).whenHeld(new ColorWheelSpinCommand (m_ColorWheel,Constants.ColorWheel.RightSpeed));   
+    new POVButton(m_xBox,270).whenHeld(new ColorWheelSpinCommand (m_ColorWheel,Constants.ColorWheel.LeftSpeed));   
     
     new JoystickButton(m_leftJoystick,ButtonConstants.intakeIn).whenHeld(new IntakeCommand(m_IntakeSubsystem,IntakeConstants.intakeSpeed));
+    new JoystickButton(m_xBox,ButtonConstants.intakeInXB).whenHeld(new IntakeCommand(m_IntakeSubsystem,IntakeConstants.intakeSpeed));
     SmartDashboard.putString("Intake In","Right-Button " + ButtonConstants.intakeIn);
     new JoystickButton(m_leftJoystick,ButtonConstants.intakeOut).whenHeld(new IntakeCommand(m_IntakeSubsystem,-IntakeConstants.intakeSpeed));
+    new JoystickButton(m_xBox,ButtonConstants.intakeOutXB).whenHeld(new IntakeCommand(m_IntakeSubsystem,-IntakeConstants.intakeSpeed));
     SmartDashboard.putString("Intake Out","Right-Button " + ButtonConstants.intakeOut);
     new JoystickButton(m_leftJoystick,ButtonConstants.climberSlow).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedSlow));
+    new JoystickButton(m_xBox,ButtonConstants.climberSlowXB).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedSlow));
     SmartDashboard.putString("Climber Slow","Right-Button " + ButtonConstants.climberSlow);
     new JoystickButton(m_leftJoystick,ButtonConstants.climberTime).whenPressed(new ClimberTimeCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedFast,Constants.kHookLiftTime));
+    new JoystickButton(m_xBox,ButtonConstants.climberTimeXB).whenPressed(new ClimberTimeCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedFast,Constants.kHookLiftTime));
     SmartDashboard.putString("Climber Time","Right-Button " + ButtonConstants.climberTime);
     new JoystickButton(m_leftJoystick,ButtonConstants.climberFast).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedFast));
+    new JoystickButton(m_xBox,ButtonConstants.climberFastXB).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedFast));
     SmartDashboard.putString("Climber Fast","Right-Button " + ButtonConstants.climberFast);
     //new JoystickButton(m_rightJoystick,ButtonConstants.climberBackJS).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedBack));
     //SmartDashboard.putString("Climber Back","Right-Button " + ButtonConstants.climberBackJS);
@@ -92,8 +102,11 @@ public class RobotContainer {
     //new JoystickButton(m_rightJoystick,ButtonConstants.intakeLiftUp).whenPressed(new IntakeLiftUpCommand(m_IntakeLiftSubsystem,IntakeLiftSpeeds.intakeLiftUpSpeedSlow));   
     SmartDashboard.putString("Intake Up","Right-Button " + ButtonConstants.intakeLiftUp);
     new JoystickButton(m_leftJoystick,ButtonConstants.intakeLiftUp).whenHeld(new RobotMoveTargetDistanceCommand(m_RobotDrive,m_LimeLight, (double) 120));
+    
     SmartDashboard.putString("Move Target","Left-Button " + ButtonConstants.intakeLiftUp);
     
+    
+
   }
 
   /**
@@ -112,8 +125,11 @@ public class RobotContainer {
     case AutoModes.autoMoveBackward:
       autoCommand= new AutoMoveCommand(m_RobotDrive,.3,2);
       break;
-    case AutoModes.autoMoveShoot:
+      case AutoModes.autoMoveShoot:
       autoCommand= new AutoMoveShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,true);
+      break;
+    case AutoModes.autoMoveShootFromRight:
+      autoCommand= new AutoMoveRightShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,true);
       break;
     case AutoModes.autoMoveToShoot:
       autoCommand= new AutoMoveShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,false);

@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoModes;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode.PixelFormat;
-
+import edu.wpi.first.cameraserver.CameraServer;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   private int m_driveMode;
   private RobotContainer m_robotContainer;
   private SendableChooser<Integer> m_autoChooser = new SendableChooser();
+  private UsbCamera m_TopCamera;
+  private UsbCamera m_FrontCamera;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot {
     m_autoChooser.addOption("Move Back", AutoModes.autoMoveBackward);
     m_autoChooser.addOption("Move to Goal", AutoModes.autoMoveToShoot);
     m_autoChooser.addOption("Move/Score", AutoModes.autoMoveShoot);
+    m_autoChooser.addOption("Right Move/Score", AutoModes.autoMoveShootFromRight);
     m_autoChooser.addOption("Nothing", AutoModes.autoNothing);
 
     SmartDashboard.putData("Auto Selector", m_autoChooser);

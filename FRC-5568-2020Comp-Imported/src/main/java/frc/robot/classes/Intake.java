@@ -68,8 +68,9 @@ public class Intake {
     public void outtake(double speed) {
         speed = Math.abs(speed);
         if (speed > maxOuttakeSpeed) {
-            speed = maxOuttakeSpeed;
+            speed=maxOuttakeSpeed;
         }
+        
         speed *= -1;
         m_IntakeMotor.set(ControlMode.PercentOutput, speed);
     }

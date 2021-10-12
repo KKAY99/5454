@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.robot.classes.AutoEnumeration;
 import frc.robot.classes.AutoModes;
 import frc.robot.classes.BinarySwitch;
@@ -44,6 +45,8 @@ import frc.robot.classes.SwerveGyroAdapter;
 import frc.robot.classes.UtilFuncs;
 import frc.robot.classes.Vision;
 import frc.robot.classes.Limelight;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 
         // Create Joysticks
@@ -110,7 +113,6 @@ public class Robot extends TimedRobot {
         double gyroAngle = 0.0;
         boolean shuffleboardRecording = false;
         double m_LongShotSpeed=Constants.kShootingTrench;
-
         Timer shooterPneumaticTimer;
         Timer shooterPneumaticResetTimer;
         boolean shooterPneumaticTimerSet;
@@ -188,7 +190,7 @@ public class Robot extends TimedRobot {
         boolean on = true;
         boolean off = false;
 
-        private final Limelight m_LimeLight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,Constants.kTrenchShootingDistance);
+        private final Limelight m_LimeLight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,Constants.kShootingTrench);
   
         // #region Shuffleboard
         // #region Create Shuffleboard Widgets for Angles
@@ -206,6 +208,8 @@ public class Robot extends TimedRobot {
         private static ShuffleboardTab SubSystems = Shuffleboard.getTab("SubSystems");
         // #endregion
 
+        PowerDistributionPanel m_robotPDP = new PowerDistributionPanel(0);
+
         // #region NetworkEntries
         // Create Network Table Entries
 
@@ -216,7 +220,7 @@ public class Robot extends TimedRobot {
                 .withWidget(BuiltInWidgets.kBooleanBox).withSize(2, 2).getEntry();
         
         static NetworkTableEntry networkTableEntryShooterPower = AutoTab.add("Shooter Power", 0)
-                        .withWidget(BuiltInWidgets.kNumberBar).withSize(2, 2).getEntry();
+                        .withWidget(BuiltInWidgets.kNumberSlider).withSize(2, 2).withProperties(Map.of("min", 0, "max", 1,"block increment",0.05)).getEntry();
 
         static NetworkTableEntry networkTableEntryVisionDistance = AutoTab.add("Vision Distance", 0)
                         .withWidget(BuiltInWidgets.kNumberBar).withSize(2, 2).getEntry();
@@ -429,7 +433,12 @@ public class Robot extends TimedRobot {
         @Override
         public void robotPeriodic() {
                 boolean onSonarTarget=false;
-                
+                if(m_robotPDP.getTotalCurrent()>2){
+           //     System.out.println(m_robotPDP.getCurrent(1));
+                if(m_robotPDP.getCurrent(1)<10.0 && m_robotPDP.getCurrent(1)>6.0){
+                System.out.println("FULL SPEED");
+                }
+                }       
                 m_LimeLight.update();
                 m_ShooterLights.set(on);
                 m_ledStrip.update();
@@ -927,6 +936,7 @@ public class Robot extends TimedRobot {
                 boolean gamepadLeftTriggerPulled = false;
                 double gamepadRightTrigger = 0.0;
                 boolean gamepadRightTriggerPulled = false;
+                
                 double gamepadRightJoystickY = 0.0;
                 double gamepadLeftJoystickY = 0.0;
                 int gamepadPOV = 0;
@@ -960,16 +970,30 @@ public class Robot extends TimedRobot {
                         m_LongShotSpeed=.700;
                 
                 }
+                //KK 07/09/20
+                m_LongShotSpeed=networkTableEntryShooterPower.getNumber(1.0).doubleValue();
+                //KK 07/10/20 shoot from InitLine
+                m_LongShotSpeed=Constants.kAutoShootSpeed;
                 if(m_joystickRight.getRawButton(10)|| gamepadPOV==0){
-                        m_Drive.targetAlign(m_LimeLight,Constants.kTrenchShootingDistance,Constants.LimeLightValues.targetXPosTrench);
+                        //start shooter
+                      
+                        m_Drive.targetAlign(m_LimeLight,Constants.kInitLineShootingDistance,Constants.LimeLightValues.targetXPosShoot,false,false);
+                       
                 }
+                if(m_joystickRight.getRawButton(11)|| gamepadPOV==90){
+                        m_Drive.targetAlign(m_LimeLight,Constants.kSafeZoneShootingDistance,Constants.LimeLightValues.targetXPosSafeZone,false,false);
+                }
+                
                 if(gamepadPOV==180){
                         m_Drive.targetTurn(m_LimeLight);
                 }
-                isShootingLong = m_joystickRight.getRawButton(1) || gamepadRightTriggerPulled;
+                SmartDashboard.putBoolean("is Ready to shoot", m_Drive.isReadyToShoot());
+        
+                isShootingLong = m_joystickRight.getRawButton(1) || gamepadRightTriggerPulled || m_Drive.isAutoShootLong();
                 isShootingShort = m_joystickLeft.getRawButton(2) || gamepadLeftTriggerPulled;
 
                 if (gamepadStart) {
+                
                         m_ahrs.calibrate();
                         m_ahrs.zeroYaw();
                         ;
@@ -991,8 +1015,7 @@ public class Robot extends TimedRobot {
                 }
 
                 // Run Drive
-                // if you change joysticks or want to pull different Axis change them here
-                // KK 2/20/2021
+                // if you changs
                 final double strafe = m_joystickLeft.getRawAxis(0);
                 final double forward = m_joystickLeft.getRawAxis(1);
                 final double rotateClockwise = -m_joystickRight.getRawAxis(0);
@@ -1036,9 +1059,9 @@ public class Robot extends TimedRobot {
                         // Shooter Motor
                         //m_Shooter.voltageRun(Constants.kShooting20);
                         m_Shooter.voltageRun(m_LongShotSpeed);
-                        // Pneumatics
                         m_LongShooterSolenoid.set(LongUp); // this is actually up
                         m_ShortShooterSolenoid.set(ShortDown);
+                       
                 } else if (isShootingShort) {
                         // Leds
                         m_ledStrip.setMode(LEDStrip.MODE_SOLID);
@@ -1102,7 +1125,7 @@ public class Robot extends TimedRobot {
                 }
 
                 m_ledStrip.setColor(LED_Color);
-
+                
                 // if (isShootingLong && Vision.getIsValid() && false) {
                 // m_Drive.drive(Vision.getTurnValue(), forward, strafe, fieldCentric,
                 // isShootingLong);
@@ -1157,8 +1180,8 @@ public class Robot extends TimedRobot {
                 // if (conveyorSensorTriggered) {
                 // conveyorIsLoaded = true;
                 // }
-
-                if (m_joystickRight.getRawButton(2) || gamepadRightBumper) {
+              
+                if (m_joystickRight.getRawButton(2) || gamepadRightBumper ) {
                         m_Conveyor.feedShooter();
                 } else if (m_joystickLeft.getRawButton(7) || gamepadLeftBumper) {
                         m_Conveyor.runReverse();
