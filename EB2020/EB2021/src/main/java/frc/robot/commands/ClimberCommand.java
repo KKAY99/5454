@@ -27,7 +27,9 @@ public class ClimberCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
+  public void execute() 
+  { 
+    System.out.println("Setting climber speed = "+ m_targetSpeed);
     m_subsystem.setSpeed(m_targetSpeed);
 
   }

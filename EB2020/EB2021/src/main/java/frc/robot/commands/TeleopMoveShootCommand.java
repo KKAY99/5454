@@ -23,6 +23,10 @@ private boolean m_autoShoot;
 @Override
   public void execute() {
     m_drive.commandDrive(TeleOpAutomationConstants.moveLeftSpeed,TeleOpAutomationConstants.moveRightSpeed,TeleOpAutomationConstants.moveGoalTime);
+    m_intakeLift.setSpeed(Constants.IntakeLiftSpeeds.intakeLiftUpSpeedSlow);
+    Timer.delay(.5);     
+    //move half speed for last part of driving forward
+    m_drive.commandDrive(TeleOpAutomationConstants.moveLeftSpeed/2,TeleOpAutomationConstants.moveRightSpeed/2,TeleOpAutomationConstants.moveLastGoalTime);
     if (m_autoShoot){
       m_intakeLift.setSpeed(Constants.IntakeLiftSpeeds.intakeLiftUpSpeedSlow);
       Timer.delay(.5);     

@@ -47,6 +47,7 @@ import frc.robot.classes.Vision;
 import frc.robot.classes.Limelight;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class Robot extends TimedRobot {
 
         // Create Joysticks
@@ -147,6 +148,8 @@ public class Robot extends TimedRobot {
         Timer autoTimer;
         double time;
 
+        private SendableChooser<Integer> m_autoChooser = new SendableChooser();
+ 
         int currentState = AutoEnumeration.Delay;
 
         boolean shouldRun = true;
@@ -423,6 +426,18 @@ public class Robot extends TimedRobot {
                                 .withProperties(Map.of("Starting angle", 0)).withPosition(9, 5).withSize(5, 5);
                 // #endregion
                 m_LimeLight.update();
+
+                m_autoChooser.addOption("1-Drive Forward", AutoModes.OnlyDriveForward);
+                m_autoChooser.addOption("2-Drive Back", AutoModes.OnlyDriveBackward);
+                m_autoChooser.addOption("3-Only Shoot ", AutoModes.OnlyShoot);
+                m_autoChooser.addOption("4=Shoot/Drive Forward", AutoModes.ShootAndDriveForward);
+                m_autoChooser.addOption("5=Shoot/Drive Backward", AutoModes.ShootAndDriveBackward);
+                m_autoChooser.addOption("6-Shoot/Push PartnerOne", AutoModes.ShootAndPushPartnerOne);
+                m_autoChooser.addOption("7-Shoot/Push PartnerTwo ", AutoModes.ShootAndPushPartnerTwo);
+                m_autoChooser.addOption("8-Shoot/Push BothPartner ", AutoModes.ShootAndPushBothPartners);
+                m_autoChooser.addOption("9-Push Only-PartnerOne ", AutoModes.PushOnlyPartnerOne);
+
+                SmartDashboard.putData("Auto Selector", m_autoChooser);
         }
 
         /**
@@ -530,9 +545,12 @@ public class Robot extends TimedRobot {
 
                 autoTimerHasBeenSet = false;
                 //KK 5/29 SWITCH issue delay harcoded to 5 and using delay for auto
-                System.out.println("Auto Value Set to " + delaySwitch.getValue());
+                System.out.println("Auto Value Set to " + m_autoChooser.getSelected());
+                //KK 10/29 only using the  auto mode 5
+                
                 //switch (autoChooserSwitch.getValue()) {
-                switch (delaySwitch.getValue()) {
+                //switch (delaySwitch.getValue()) {
+                switch (m_autoChooser.getSelected()){
                 
                         case AutoModes.AutoNav1:
                         shouldRun = false;
@@ -594,7 +612,8 @@ public class Robot extends TimedRobot {
                         shouldMoveFirstPartner = false;
                         shouldMoveSecondPartner = false;
                         break;
-                case AutoModes.ShootAndDriveBackward:
+                
+                        case AutoModes.ShootAndDriveBackward:
                         shouldRun = true;
                         shouldShoot = true;
                         shouldDriveForward = false;
@@ -643,6 +662,7 @@ public class Robot extends TimedRobot {
                         shouldMoveSecondPartner = false;
                         break;
                 }
+                
                 //KK 5/29 SWITCH issue delay harcoded to 2
                 //delay = delaySwitch.getValue();
                 delay=2;
@@ -1156,13 +1176,13 @@ public class Robot extends TimedRobot {
                 // #region Intake control
 
                 if (m_joystickRight.getRawButton(3) || gamepadX) {
-                        m_Intake.intake(1.0); //KK was .75 
+                        m_Intake.intake(Constants.kIntakeSpeed); //KK was .75 
                         m_Intake.lower();
                 } else if (m_joystickRight.getRawButton(4) ) {
                         m_Intake.intake(.5);
                         m_Intake.lower();
                 } else if (m_joystickLeft.getRawButton(3) || gamepadB) {
-                        m_Intake.outtake(1.0);
+                        m_Intake.outtake(Constants.kOutakeSpeed);
                         m_Intake.lower();
                 } else if (m_joystickRight.getRawButton(9) || gamepadY || m_joystickLeft.getRawButton(4)
                                 || m_joystickLeft.getRawButton(5)) {

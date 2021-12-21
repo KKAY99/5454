@@ -571,9 +571,13 @@ public class SwerveDrive {
                 FWD=driveSpeedFWD;
             }
           }
-         if(!(FWD+STR+RCW==0.0)){
+         if((FWD+STR+RCW==0.0)){
           System.out.println("F is " + FWD +" STR is " + STR  +" RCW is " + RCW);
           m_isAligned = true;
+          //KK 11/1/21
+          driveKill();
+          m_autoDrive=false;
+    
 
           }
           else{

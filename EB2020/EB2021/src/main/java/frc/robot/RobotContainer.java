@@ -44,6 +44,7 @@ public class RobotContainer {
   
   
   private XboxController m_xBox = new XboxController(InputControllers.kXboxMain);
+  private XboxController m_xBoxPit = new XboxController(InputControllers.kXboxPit);
   /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -91,7 +92,7 @@ public class RobotContainer {
     SmartDashboard.putString("Climber Fast","Right-Button " + ButtonConstants.climberFast);
     //new JoystickButton(m_rightJoystick,ButtonConstants.climberBackJS).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedBack));
     //SmartDashboard.putString("Climber Back","Right-Button " + ButtonConstants.climberBackJS);
-    new JoystickButton(m_xBox,ButtonConstants.climberBackXB).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedBack));
+    new JoystickButton(m_xBoxPit,ButtonConstants.climberBackXB).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedBack));
     SmartDashboard.putString("Climber Back","Xbox-Button " + ButtonConstants.climberBackXB);
     
     new JoystickButton(m_leftJoystick,ButtonConstants.intakeLiftDown).whenHeld(new IntakeLiftMoveCommand(m_IntakeLiftSubsystem,-IntakeLiftSpeeds.intakeLiftDownSpeedSlow));   
@@ -101,9 +102,9 @@ public class RobotContainer {
     new JoystickButton(m_leftJoystick,ButtonConstants.intakeLiftUp).whenHeld(new IntakeLiftMoveCommand(m_IntakeLiftSubsystem,IntakeLiftSpeeds.intakeLiftUpSpeedSlow));
     //new JoystickButton(m_rightJoystick,ButtonConstants.intakeLiftUp).whenPressed(new IntakeLiftUpCommand(m_IntakeLiftSubsystem,IntakeLiftSpeeds.intakeLiftUpSpeedSlow));   
     SmartDashboard.putString("Intake Up","Right-Button " + ButtonConstants.intakeLiftUp);
-    new JoystickButton(m_leftJoystick,ButtonConstants.intakeLiftUp).whenHeld(new RobotMoveTargetDistanceCommand(m_RobotDrive,m_LimeLight, (double) 120));
     
-    SmartDashboard.putString("Move Target","Left-Button " + ButtonConstants.intakeLiftUp);
+    SmartDashboard.putString("Move Target","Xbox Button " + ButtonConstants.telopAutoShoot);
+    new JoystickButton(m_xBox,ButtonConstants.telopAutoShoot).whenPressed(new TeleopMoveShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,false));
     
     
 
@@ -129,7 +130,7 @@ public class RobotContainer {
       autoCommand= new AutoMoveShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,true);
       break;
     case AutoModes.autoMoveShootFromRight:
-      autoCommand= new AutoMoveRightShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,true);
+      autoCommand= new AutoMoveFromRightShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,true);
       break;
     case AutoModes.autoMoveToShoot:
       autoCommand= new AutoMoveShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,false);

@@ -9,12 +9,15 @@ public class Constants {
 	 * or 3. Only the first two (0,1) are visible in web-based configuration.
 	 */
 	public static final int kSlotIdx = 0;
-	public static final double kShootingTrench=.6599;
+	public static final double kShootingTrench=.66;
 	public static final double kShooting10=.85;
 	public static final double kShootingUpClose=.50;
 	public static final double kAutoShootSpeed=0.55;
 	public static final double kshortShotRangeLow=28;
 	public static final double kshortShotRangeHigh=33; 
+
+    public static final double kIntakeSpeed=1.0	;
+	public static final double kOutakeSpeed=1.0;
 	/*
 	 * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now
 	 * we just want the primary one.
@@ -53,7 +56,7 @@ public class Constants {
 	/* Constants for AutoDrive Targeting Mode driven by Vision*/
 	public static double kVisionDriveSpeedFast=.25;
 	public static double kVisionDriveSpeedSlow=.15;
-	public static double kInitLineShootingDistance=197;
+	public static double kInitLineShootingDistance=180;
 	public static double kSafeZoneShootingDistance=78;
 	public static double kVisionDistanceTolerance=5; 
 	public static double kVisionXTolerance=.75; //changed from 0.5 
@@ -64,7 +67,7 @@ public class Constants {
 	*/
 	public static final class LimeLightValues{
 		public static final double targetHeight=98.03; // 249 cm
-		public static final double targetXPosShoot=5;
+		public static final double targetXPosShoot=3.83;
 		public static final double targetXPosSafeZone=5;
         public static final double limelightHeight=21;
         public static final double limelightAngle=38;

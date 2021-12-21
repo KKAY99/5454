@@ -18,8 +18,8 @@ import java.io.File;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double kSpeedMultiplier=1.0;  // change to fraction to slow robot down
-    public static final double kHookLiftTime=2.0;
+    public static final double kSpeedMultiplier=.80;  // change to fraction to slow robot down
+    public static final double kHookLiftTime=2.5;
     public static final double kSlowMoveLeft=0.25;
     public static final double kSlowMoveRight=0.20;
     public static final double kSlowMoveTurn=0.35;
@@ -31,7 +31,8 @@ public final class Constants {
     public static final class InputControllers{
         public static final int kJoystickLeft=0;
        // public static final int kJoystickRight=1;
-        public static final int kXboxMain=2;
+        public static final int kXboxMain=1;
+        public static final int kXboxPit=3;
 	}
     public static final class DriveConstants {
         public static final int kLeftMotor1Port = 0;
@@ -40,32 +41,32 @@ public final class Constants {
         public static final int kRightMotor2Port = 9;
     }
    public static final class IntakeConstants {
-       public static int intakeLiftMotorPort=2;
+       public static int intakeLiftMotorPort=4;
        public static int intakeMotorPort=3;
     
        public static double intakeSpeed=0.95;
    }
    public static final class ClimberConstants {
-       public static int climberMotorPort=7;
+       public static int climberMotorPort=2;
    }
    public static final class DriveMode {
        public static int forwardMode=0;
        public static int reverseMode=1;
    }
    public static final class IntakeLiftSpeeds{
-       public static double intakeLiftUpSpeedSlow=.40;
+       public static double intakeLiftUpSpeedSlow=.65;
        public static double intakeLiftDownSpeedSlow=.2;
    }
    public static final class ClimberSpeeds{
-       public static double ClimberSpeedSlow =-0.2;
-       public static double ClimberSpeedFast =-0.9;
-       public static double ClimberSpeedBack =0.3;
+       public static double ClimberSpeedSlow =-0.80;
+       public static double ClimberSpeedFast =-0.98;
+       public static double ClimberSpeedBack =.80;
        
        
 
    }  
    public static final class ColorWheel{
-       public static int wheelMotorPort=4;
+       public static int wheelMotorPort=5;
        public static double RightSpeed=.9;
        public static double LeftSpeed=-.9;
    }
@@ -79,9 +80,13 @@ public final class Constants {
      public static int climberTime=8;
      public static int CameraSwitch=9;
      public static int climberBackJS=7;
+     
 
-     public static int climberBackXB=7;//xbox controls
+     //back should be 7 and slow should be 1 - testing
+
+     public static int climberBackXB=1;//xbox controls
      public static int climberSlowXB=1;
+     public static int telopAutoShoot=2;
      public static int intakeInXB=5;   
      public static int intakeOutXB=6;
      public static int climberFastXB=4;
@@ -112,12 +117,13 @@ public final class Constants {
        public static double moveSpeed=0.28; // adjust on carpet
        public static double moveLeftSpeed=-0.25;
        public static double moveRightSpeed=0.28;
+       public static double moveTurnSpeed=0.45;
        public static double moveOnlyTime=2;
        public static double moveGoalTime=4.0;
-       public static double moveRightStep1=1.4;
-       public static double moveRightStep2=0.2;
-       public static double moveRightStep3=0.3;
-       public static double moveRightStep4=0.2;
+       public static double moveRightStep1=0.4;
+       public static double moveRightStep2=1.0;
+       public static double moveRightStep3=2.5;
+       public static double moveRightStep4=0.85;
        public static double moveRightStep5=2.0;    
        
        public static double moveLastGoalTime=4.0;
@@ -125,12 +131,12 @@ public final class Constants {
        public static double moveBackup=3;
    }
    public static final class TeleOpAutomationConstants{
-    public static double moveSpeed=0.28; // adjust on carpet
+    public static double moveSpeed=0.50; // adjust on carpet
     public static double moveLeftSpeed=-0.50;
     public static double moveRightSpeed=0.56;
     public static double moveOnlyTime=2;
-    public static double moveGoalTime=2.0;
-    public static double moveLastGoalTime=4.0;
+    public static double moveGoalTime=1.0;
+    public static double moveLastGoalTime=0.6;
     public static double moveOffWall=1;
     public static double moveBackup=3;
 }

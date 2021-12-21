@@ -28,11 +28,11 @@ private boolean m_autoShoot;
     //move forward one robot
     m_drive.commandDrive(AutoConstants.moveLeftSpeed,AutoConstants.moveRightSpeed,AutoConstants.moveRightStep1);
     //turn left
-    m_drive.commandDrive(0,AutoConstants.moveRightSpeed,AutoConstants.moveRightStep2);
+    m_drive.commandDrive(-AutoConstants.moveTurnSpeed,-AutoConstants.moveTurnSpeed,AutoConstants.moveRightStep2);
     //move forward
     m_drive.commandDrive(AutoConstants.moveLeftSpeed,AutoConstants.moveRightSpeed,AutoConstants.moveRightStep3);
     //turn right to straigten out
-    m_drive.commandDrive(AutoConstants.moveLeftSpeed,0,AutoConstants.moveRightStep4);
+    m_drive.commandDrive(AutoConstants.moveTurnSpeed,AutoConstants.moveTurnSpeed,AutoConstants.moveRightStep4);
     //runn into wall
     m_drive.commandDrive(AutoConstants.moveLeftSpeed,AutoConstants.moveRightSpeed,AutoConstants.moveRightStep5);
     
