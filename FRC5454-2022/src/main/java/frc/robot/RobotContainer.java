@@ -3,12 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.AutoDoNothingCommand;
+import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants.AutoModes;
+import frc.robot.Constants.InputControllers;
+import com.kauailabs.navx.frc.AHRS;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,14 +22,21 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private AHRS m_ahrs = new AHRS(SPI.Port.kMXP);  
+  private final DriveSubsystem m_RobotDrive = new DriveSubsystem(m_ahrs);
+ 
+  //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
+  private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    //Default Drive    
+    //m_RobotDrive.setDefaultCommand(new DefaultDriveCommand(m_RobotDrive,()->m_xBoxDriver.getY(InputControllers.xBoxJoystickDrive),m_xBoxDriver.getX(InputControllers.xBoxJoystickDrive),m_xBoxDriver.getY(InputControllers.xBoxJoystickRotate));    
+    m_RobotDrive.setDefaultCommand(new DefaultDriveCommand(m_RobotDrive,()->m_xBoxDriver.getX(InputControllers.xBoxJoystickDrive),()->m_xBoxDriver.getY(InputControllers.xBoxJoystickDrive),()->m_xBoxDriver.getX(InputControllers.xBoxJoystickRotate)));    
+    
   }
 
   /**
@@ -41,8 +52,20 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+  public Command getAutonomousCommand(Integer selectedMode) {
+    Command autoCommand = new AutoDoNothingCommand(); // Default Command is DoNothing
+    System.out.println("Autonomouse Selected Mode = " + selectedMode);
+    switch (selectedMode){
+      case AutoModes.autoMoveForward:
+      //autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+      break;   
+    case AutoModes.autoMoveBackward:
+      //autoCommand= new AutoMoveCommand(m_RobotDrive,.3,2);
+      break;      
+    default:
+      autoCommand = new AutoDoNothingCommand() ;
+    }   
+    return autoCommand;
+    //return m_autoCommand;
   }
 }
