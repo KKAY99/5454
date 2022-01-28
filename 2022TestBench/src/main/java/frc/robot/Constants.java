@@ -31,7 +31,7 @@ public final class Constants {
         public final static String M2Speed="Motor 2 Speed";
         public final static String M3Speed="Motor 3 Speed";
         public final static String M4Speed="Motor 4 Speed";
-        
+        public final static String T1Speed="Talon 1 Speed";
     }
     public final static class ButtonMaps {
         //X Box Y Button =4
