@@ -6,17 +6,20 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-public class MotorSubsystem extends SubsystemBase {
+import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+public class TalonMotorSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  private CANSparkMax m_Motor;
-  public MotorSubsystem(int motor,boolean brushless) {
+  private WPI_TalonFX m_Motor;
+  public TalonMotorSubsystem(int motor,boolean brushless) {
     if(brushless){
-      m_Motor=new CANSparkMax(motor,CANSparkMaxLowLevel.MotorType.kBrushless);
+      m_Motor=new WPI_TalonFX(motor);
+     
     }
     else {
-      m_Motor=new CANSparkMax(motor,CANSparkMaxLowLevel.MotorType.kBrushed);
+      m_Motor=new WPI_TalonFX(motor);
+      
     }
   }
   
@@ -28,7 +31,7 @@ public class MotorSubsystem extends SubsystemBase {
   {
     System.out.println("Speeds " + speed );
    
-     m_Motor.set(speed);  
+     m_Motor.set(ControlMode.PercentOutput,speed);  
   }
   
   @Override

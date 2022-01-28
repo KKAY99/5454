@@ -19,6 +19,8 @@ public final class Constants {
         public final static int Motor2=22;
         public final static int Motor3=23;
         public final static int Motor4=24;
+        public final static int Shooter1=26;
+        public final static int Shooter2=25;
     }
     public final static class InputControllers{
         public final static int kXboxLeft=0;
