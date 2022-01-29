@@ -22,10 +22,23 @@ public final class Constants {
     public static final double kSpeedMultiplier = 1.0;
 
     public static final class AutoModes {
+        public static final String autoMode0="Do Nothing";
+        public static final String autoMode1="Move Foward";
+        public static final String autoMode2="Move / Shoot";
+        public static final String autoMode3="Outake / Move Backwars";
+        public static final String autoMode4="";
+        public static final String autoMode5="";
+        public static final String autoMode6="";
+        public static final String autoMode7="";
+        public static final String autoMode8="";
+        public static final String autoMode9="";
+        public static final String autoMode10="";
+        public static final int defaultAutoMode=1;
+
         public static final int autoNothing = 0;
         public static final int autoMoveForward = 1;
         public static final int autoMoveBackward = 2;
-
+        
     }
 
     public static final class InputControllers {

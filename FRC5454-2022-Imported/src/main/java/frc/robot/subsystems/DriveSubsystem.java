@@ -16,7 +16,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  public void swerveDrive(double fwd, double strafe, double rcw) {
+  public void drive(double fwd, double strafe, double rcw) {
     m_drive.drive(fwd, strafe, rcw, true);
   }
 

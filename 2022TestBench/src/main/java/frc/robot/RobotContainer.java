@@ -63,13 +63,13 @@ public class RobotContainer {
      //  new JoystickButton(m_xBoxLeft,ButtonMaps.SM1ForwardHighSpeed).whenHeld(new MotorCommand(m_Motor1Subsystem,.75,SmartDashboardLabels.M1Speed));  
     // new JoystickButton(m_xBoxLeft,ButtonMaps.SM2ForwardHighSpeed).whenHeld(new MotorCommand(m_Motor2Subsystem,.75,SmartDashboardLabels.M2Speed));
     //   new JoystickButton(m_xBoxLeft,ButtonMaps.SM3ForwardHighSpeed).whenHeld(new MotorCommand(m_Motor3Subsystem,.75,SmartDashboardLabels.M3Speed));
-      new JoystickButton(m_xBoxLeft,ButtonMaps.SM4ForwardHighSpeed).whenHeld(new MotorCommand(m_Motor4Subsystem,.75,SmartDashboardLabels.M4Speed));
+      new JoystickButton(m_xBoxLeft,ButtonMaps.SM4ForwardHighSpeed).whenHeld(new MotorCommand(m_Motor4Subsystem,1.0,SmartDashboardLabels.M4Speed));
 
       // new JoystickButton(m_xBoxRight,ButtonMaps.SM1ReverseHighSpeed).whenHeld(new MotorCommand(m_Motor1Subsystem,-0.75,SmartDashboardLabels.M1Speed));  
       // new JoystickButton(m_xBoxRight,ButtonMaps.SM2ReverseHighSpeed).whenHeld(new MotorCommand(m_Motor2Subsystem,-0.75,SmartDashboardLabels.M2Speed));  
       // new JoystickButton(m_xBoxRight,ButtonMaps.SM3ReverseHighSpeed).whenHeld(new MotorCommand(m_Motor3Subsystem,-0.75,SmartDashboardLabels.M3Speed));  
       // new JoystickButton(m_xBoxRight,ButtonMaps.SM4ReverseHighSpeed).whenHeld(new MotorCommand(m_Motor4Subsystem,-0.75,SmartDashboardLabels.M4Speed));
-      double kSpeed=0.15;  
+      double kSpeed=0.70;  
        new JoystickButton(m_xBoxLeft,ButtonMaps.SM1ForwardHighSpeed).whenHeld(new TalonMotorCommand(m_Shooter1Subsystem,kSpeed,SmartDashboardLabels.T1Speed));
   }
 

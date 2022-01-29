@@ -316,6 +316,11 @@ public class SwerveDriveGB {
                 Constants.SwerveDriveGB.kTimeoutMs);
         m_SrxBackRightSteering.config_kD(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kD,
                 Constants.SwerveDriveGB.kTimeoutMs);
+
+        m_SrxFrontLeftSteering.configSelectedFeedbackCoefficient(1.0);
+        m_SrxFrontRightSteering.configSelectedFeedbackCoefficient(1.0);
+        m_SrxBackLeftSteering.configSelectedFeedbackCoefficient(1.0);
+        m_SrxBackRightSteering.configSelectedFeedbackCoefficient(1.0);
     }
 
     /**
@@ -389,6 +394,7 @@ public class SwerveDriveGB {
         m_BackLeftDrive.set(backLeftSpeed * kSpeedModifier);
         m_BackRightDrive.set(-backRightSpeed * kSpeedModifier);
 
+        
         steer(m_SrxFrontLeftSteering, frontLeft360Angle, frontLeftOffset);
         steer(m_SrxFrontRightSteering, frontRight360Angle, frontRightOffset);
         steer(m_SrxBackLeftSteering, backLeft360Angle, backLeftOffset);
@@ -636,7 +642,8 @@ public class SwerveDriveGB {
      */
 
     public void steer(TalonSRX controller, double targetAngle, int offset) {
-        final int ticksPerRotation = 1024; // in encoder counts
+    
+        final double ticksPerRotation = 1024; // in encoder counts
         final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveGB.kSlotIdx);
         final double desired = (int) Math.round(targetAngle * ticksPerRotation / 360.0) + offset;
 
