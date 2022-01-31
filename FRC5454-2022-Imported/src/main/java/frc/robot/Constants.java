@@ -26,19 +26,36 @@ public final class Constants {
         public static final String autoMode1="Move Foward";
         public static final String autoMode2="Move / Shoot";
         public static final String autoMode3="Outake / Move Backwars";
-        public static final String autoMode4="";
-        public static final String autoMode5="";
-        public static final String autoMode6="";
-        public static final String autoMode7="";
-        public static final String autoMode8="";
-        public static final String autoMode9="";
+        public static final String autoMode4="Shot / Move Backwards";
+        public static final String autoMode5="Shot Move Grab";
+        public static final String autoMode6="Shot Move Grab Shot 1";
+        public static final String autoMode7="Shot Move Grab move Left Grab Shot 2";
+        public static final String autoMode8="Shot Move Grab Move Right Grab Shot";
+        public static final String autoMode9="Move Grab Shot 2";
         public static final String autoMode10="";
         public static final int defaultAutoMode=1;
 
         public static final int autoNothing = 0;
         public static final int autoMoveForward = 1;
-        public static final int autoMoveBackward = 2;
+        public static final int autoMoveBackwardshoot = 2;
+        public static final int autoMoveBackwardsOutake = 3;
+        public static final int autoMoveBackwardsShot = 4;
+        public static final int autoMoveShootMoveGrab = 5;
+        public static final int autoMoveShootMoveGrabShot1 = 6;
+        public static final int autoMoveShotMoveGrabmoveLeftGrabShot2 = 7;
+        public static final int autoMoveShotMoveGrabMoveRightGrabShot = 8;
+        public static final int autoMoveGrabShot2 = 9;
         
+        public static final String delayMode0="0 Seconds";
+        public static final String delayMode1="3 Seconds";
+        public static final String delayMode2="5 Seconds";
+        public static final String delayMode3="8 Seconds";
+        public static final int delayValMode0=0;
+        public static final int delayValMode1=3;
+        public static final int delayValMode2=5;
+        public static final int delayValMode3=8;
+        public static final int defaultDelayMode=0;
+ 
     }
 
     public static final class InputControllers {

@@ -241,14 +241,14 @@ public class RobotContainer {
         Command autoCommand = new AutoDoNothingCommand(); // Default Command is DoNothing
         System.out.println("Autonomouse Selected Mode = " + selectedMode);
         switch (selectedMode) {
-            case AutoModes.autoMoveForward:
-                // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
-                break;
-            case AutoModes.autoMoveBackward:
-                // autoCommand= new AutoMoveCommand(m_RobotDrive,.3,2);
-                break;
-            default:
-                autoCommand = new AutoDoNothingCommand();
+          case AutoModes.autoMoveForward:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;
+          //case AutoModes.autoMoveBackward:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,.3,2);
+          //  break;
+          default:
+            autoCommand = new AutoDoNothingCommand();
         }
         return autoCommand;
         // return m_autoCommand;
