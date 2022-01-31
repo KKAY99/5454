@@ -82,6 +82,9 @@ public class SwerveSubsystem extends SubsystemBase {
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
         m_frontRight.setDesiredState(swerveModuleStates[1]);
         m_backLeft.setDesiredState(swerveModuleStates[2]);
+        System.out.print("Swerve-" + swerveModuleStates[3].angle.toString());
+        System.out.print("Swerve-" + swerveModuleStates[3].speedMetersPerSecond);
+       
         m_backRight.setDesiredState(swerveModuleStates[3]);
         updateOdometry();
     }

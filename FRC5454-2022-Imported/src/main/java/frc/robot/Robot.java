@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoModes;
 
@@ -24,7 +25,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private SendableChooser<Integer> m_autoChooser = new SendableChooser<Integer>();
-
+  private SendableChooser<Integer> m_delayChooser = new SendableChooser<Integer>();
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -46,7 +47,14 @@ public class Robot extends TimedRobot {
     m_autoChooser.addOption(AutoModes.autoMode7, AutoModes.autoMoveShotMoveGrabmoveLeftGrabShot2);
     m_autoChooser.addOption(AutoModes.autoMode8, AutoModes.autoMoveShotMoveGrabMoveRightGrabShot);
     m_autoChooser.addOption(AutoModes.autoMode9, AutoModes.autoMoveGrabShot2);
-    
+    m_autoChooser.setDefaultOption(AutoModes.autoMode1,AutoModes.autoNothing);
+    m_delayChooser.addOption(AutoModes.delayMode0,AutoModes.delayValMode0);
+    m_delayChooser.addOption(AutoModes.delayMode1,AutoModes.delayValMode1);
+    m_delayChooser.addOption(AutoModes.delayMode2,AutoModes.delayValMode2);
+    m_delayChooser.addOption(AutoModes.delayMode3,AutoModes.delayValMode3);
+    SmartDashboard.putData("Auto Selector", m_autoChooser);
+    SmartDashboard.putData("Delay Time", m_delayChooser);
+
 
   }
 

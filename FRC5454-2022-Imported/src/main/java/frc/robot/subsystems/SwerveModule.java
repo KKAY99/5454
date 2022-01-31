@@ -35,11 +35,11 @@ public class SwerveModule {
 
     // Gains are for example purposes only - must be determined for your own robot!
     // TODO: Tune these for driving accurately.
-    private final PIDController m_drivePIDController = new PIDController(1, 0, 10);
+    private final PIDController m_drivePIDController = new PIDController(0, 0, 0);
 
     // Gains are for example purposes only - must be determined for your own robot!
     // TODO: Make sure it steers accurately.
-    private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(20, 0, 200,
+    private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(0, 0, 0,
             new TrapezoidProfile.Constraints(
                     kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
@@ -95,7 +95,9 @@ public class SwerveModule {
         m_turningMotor.configNominalOutputReverse(0, Constants.SwerveDriveGB.kTimeoutMs);
         m_turningMotor.configPeakOutputForward(1, Constants.SwerveDriveGB.kTimeoutMs);
         m_turningMotor.configPeakOutputReverse(-1, Constants.SwerveDriveGB.kTimeoutMs);
-
+        //KK add 1/30
+        m_turningMotor.configSelectedFeedbackCoefficient(1.0);
+    
         m_driveMotor.setIdleMode(IdleMode.kBrake);
 
         m_driveMotor.setOpenLoopRampRate(0.5);

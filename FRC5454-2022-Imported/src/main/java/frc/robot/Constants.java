@@ -46,6 +46,16 @@ public final class Constants {
         public static final int autoMoveShotMoveGrabMoveRightGrabShot = 8;
         public static final int autoMoveGrabShot2 = 9;
         
+        public static final String delayMode0="0 Seconds";
+        public static final String delayMode1="3 Seconds";
+        public static final String delayMode2="5 Seconds";
+        public static final String delayMode3="8 Seconds";
+        public static final int delayValMode0=0;
+        public static final int delayValMode1=3;
+        public static final int delayValMode2=5;
+        public static final int delayValMode3=8;
+        public static final int defaultDelayMode=0;
+ 
     }
 
     public static final class InputControllers {
