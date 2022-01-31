@@ -51,10 +51,10 @@ public final class Constants {
      */
     public static final class LimeLightValues {
         //TODO: Tune these values
-        public static final double steeringP = 0.1;
+        public static final double steeringP = 0.035;
         public static final double steeringI = 0;
-        public static final double steeringD = 0;
-        public static final double steeringFeedForward = 0.2;
+        public static final double steeringD = 0.0055;
+        public static final double steeringFeedForward = 0.0;
 
         public static final double targetHeight = 98.03; // 249 cm
         public static final double targetXPosShoot = 3.83;

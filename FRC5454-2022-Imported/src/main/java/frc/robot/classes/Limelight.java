@@ -63,7 +63,9 @@ public class Limelight {
     }
 
     public double getRotationPower(double measurement) {
-        return getRotationPower(measurement, 0.0);
+        double returnVal = getRotationPower(measurement, 0.0);
+        // System.out.println("LL Steer: " + returnVal);
+        return returnVal;
     }
 
     public double getRotationPower(double measurement, double setpoint) {
