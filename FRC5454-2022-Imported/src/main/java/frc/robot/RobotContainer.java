@@ -216,9 +216,9 @@ public class RobotContainer {
       case AutoModes.autoMoveForward:
         // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
         break;
-      case AutoModes.autoMoveBackward:
+      //case AutoModes.autoMoveBackward:
         // autoCommand= new AutoMoveCommand(m_RobotDrive,.3,2);
-        break;
+      //  break;
       default:
         autoCommand = new AutoDoNothingCommand();
     }

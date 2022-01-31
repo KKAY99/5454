@@ -36,9 +36,18 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_autoChooser.addOption("Move Forward", AutoModes.autoMoveForward);
-    m_autoChooser.addOption("Move Back", AutoModes.autoMoveBackward);
-    m_autoChooser.addOption("Nothing", AutoModes.autoNothing);
+    m_autoChooser.addOption(AutoModes.autoMode0, AutoModes.autoNothing);
+    m_autoChooser.addOption(AutoModes.autoMode1, AutoModes.autoMoveForward);
+    m_autoChooser.addOption(AutoModes.autoMode2, AutoModes.autoMoveBackwardshoot);
+    m_autoChooser.addOption(AutoModes.autoMode3, AutoModes.autoMoveBackwardsOutake);
+    m_autoChooser.addOption(AutoModes.autoMode4, AutoModes.autoMoveBackwardsShot);
+    m_autoChooser.addOption(AutoModes.autoMode5, AutoModes.autoMoveShootMoveGrab);
+    m_autoChooser.addOption(AutoModes.autoMode6, AutoModes.autoMoveShootMoveGrabShot1);
+    m_autoChooser.addOption(AutoModes.autoMode7, AutoModes.autoMoveShotMoveGrabmoveLeftGrabShot2);
+    m_autoChooser.addOption(AutoModes.autoMode8, AutoModes.autoMoveShotMoveGrabMoveRightGrabShot);
+    m_autoChooser.addOption(AutoModes.autoMode9, AutoModes.autoMoveGrabShot2);
+    
+
   }
 
   /**
