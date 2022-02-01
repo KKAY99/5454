@@ -1,32 +1,36 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ConveyorSubsystem extends SubsystemBase {
-    CANSparkMax m_ConveyorMotor;
+    VictorSPX m_ConveyorMotor;
 
     /** Creates a new ExampleSubsystem. */
     public ConveyorSubsystem(Integer ConveryorPort) {
-        m_ConveyorMotor = new CANSparkMax(ConveryorPort, MotorType.kBrushless);
+        //1/31 Switched to Victor
+        // m_ConveyorMotor = new CANSparkMax(ConveryorPort, MotorType.kBrushless);
+        m_ConveyorMotor= new VictorSPX(ConveryorPort);
         m_ConveyorMotor.setInverted(false);
-        m_ConveyorMotor.setOpenLoopRampRate(0.25);
+        //m_ConveyorMotor.setOpenLoopRampRate(0.25);
     }
 
     public void load(double speed) {
-        m_ConveyorMotor.set(speed);
+        m_ConveyorMotor.set(VictorSPXControlMode.PercentOutput,speed);
     }
 
     public void unload(double speed) {
-        m_ConveyorMotor.set(-speed);
+        m_ConveyorMotor.set(VictorSPXControlMode.PercentOutput,-speed);
     }
 
     public void stop() {
-        m_ConveyorMotor.set(0.0);
+        m_ConveyorMotor.set(VictorSPXControlMode.PercentOutput,0.0);
     }
 
     @Override

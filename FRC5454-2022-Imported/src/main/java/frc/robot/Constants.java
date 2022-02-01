@@ -20,7 +20,7 @@ import frc.robot.classes.Gains;
  */
 public final class Constants {
     public static final double kSpeedMultiplier = 1.0;
-
+    public static final int ConveyorPort=10;
     public static final class AutoModes {
         public static final String autoMode0="Do Nothing";
         public static final String autoMode1="Move Foward";

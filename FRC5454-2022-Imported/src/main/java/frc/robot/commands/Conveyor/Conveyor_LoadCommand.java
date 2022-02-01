@@ -12,7 +12,7 @@ public class Conveyor_LoadCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final ConveyorSubsystem m_ConveyorSubsystem;
 
-    private final double loadSpeed = 0.5;
+    private final double loadSpeed = 0.9;
 
     /**
      * Creates a new ExampleCommand.

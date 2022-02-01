@@ -48,7 +48,7 @@ public class RobotContainer {
 
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem(25, 26);
-    private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(24);
+    private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
 
     // #region Shuffleboard
 
@@ -206,9 +206,7 @@ public class RobotContainer {
                     () -> m_xBoxDriver.getLeftY(),
                     () -> m_xBoxDriver.getLeftX()));
 
-    private final Conveyor_LoadCommand loadCommand = new Conveyor_LoadCommand(m_Conveyor);
-    private final Conveyor_UnloadCommand unloadCommand = new Conveyor_UnloadCommand(m_Conveyor);
-
+    
     /**
      * Use this method to define your button->command mappings. Buttons can be
      * created by
@@ -218,6 +216,16 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+
+        final ParallelCommandGroup aimAndSpinCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter),
+        new DefaultDriveCommand(m_RobotDrive,
+                () -> m_Limelight.getRotationPower(m_Limelight.getX(), 15.0 * m_xBoxDriver.getLeftX()),
+                () -> m_xBoxDriver.getLeftY(),
+                () -> m_xBoxDriver.getLeftX()));
+
+      
+        final Conveyor_LoadCommand loadCommand = new Conveyor_LoadCommand(m_Conveyor);
+        final Conveyor_UnloadCommand unloadCommand = new Conveyor_UnloadCommand(m_Conveyor);
 
         // Creates a new JoystickButton object for button 1 (xBox A) on m_RobotDrive
         JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, 1);
