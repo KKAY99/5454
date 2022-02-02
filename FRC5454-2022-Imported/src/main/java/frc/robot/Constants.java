@@ -22,9 +22,10 @@ public final class Constants {
     public static final double kSpeedMultiplier = 1.0;
     public static final int ConveyorPort=10;
     public static final int IntakePort=13;
+    public static final int TurretPort=14;
     public static final double intakeSpeed=.60;
-    public static final double conveyorUpSpeed=9.90;
-    public static final double conveyorDownSpeed=-0.5;
+    public static final double conveyorUpSpeed=-0.9;
+    public static final double conveyorDownSpeed=0.5;
     public static final class ButtonConstants{
        public static final int ManualShoot=1;
        public static final int AimandShoot=5;
