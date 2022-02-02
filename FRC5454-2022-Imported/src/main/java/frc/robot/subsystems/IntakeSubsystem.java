@@ -4,25 +4,29 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Intake extends SubsystemBase {
-  CANSparkMax IntakeMotor;
+public class IntakeSubsystem extends SubsystemBase {
+  VictorSPX m_IntakeMotor;
 
   /** Creates a new ExampleSubsystem. */
-  public Intake(Integer IntakeMotorPort) {
-    IntakeMotor = new CANSparkMax(IntakeMotorPort, MotorType.kBrushless);
+  public IntakeSubsystem(Integer IntakeMotorPort) {
+    m_IntakeMotor= new VictorSPX(Constants.IntakePort);
   }
-
   public void runIntake(double power) {
-    IntakeMotor.set(power);
+    m_IntakeMotor.set(VictorSPXControlMode.PercentOutput,power);
+    
   }
 
   public void stopIntake() {
-    IntakeMotor.set(0.0);
+    m_IntakeMotor.set(VictorSPXControlMode.PercentOutput,0);
   }
 
   @Override

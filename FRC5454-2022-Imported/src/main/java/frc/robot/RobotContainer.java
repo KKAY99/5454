@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoDoNothingCommand;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.Conveyor.Conveyor_LoadCommand;
 import frc.robot.commands.Conveyor.Conveyor_UnloadCommand;
@@ -21,7 +22,9 @@ import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.Constants.AutoModes;
+import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.classes.Limelight;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -29,7 +32,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import com.kauailabs.navx.frc.AHRS;
-
+import edu.wpi.first.wpilibj.smartdashboard.*;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -49,7 +52,7 @@ public class RobotContainer {
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem(25, 26);
     private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
-
+    private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
     // #region Shuffleboard
 
     // #region Create Shuffleboard Tabs
@@ -224,21 +227,39 @@ public class RobotContainer {
                 () -> m_xBoxDriver.getLeftX()));
 
       
-        final Conveyor_LoadCommand loadCommand = new Conveyor_LoadCommand(m_Conveyor);
-        final Conveyor_UnloadCommand unloadCommand = new Conveyor_UnloadCommand(m_Conveyor);
-
+        final Conveyor_LoadCommand conveyorUpCommand = new Conveyor_LoadCommand(m_Conveyor);
+        final Conveyor_UnloadCommand conveyorDownCommand = new Conveyor_UnloadCommand(m_Conveyor);
+        final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake,Constants.intakeSpeed);
+        final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake,-Constants.intakeSpeed);
+        final ShooterCommand shootCommand = new ShooterCommand(m_Shooter);
         // Creates a new JoystickButton object for button 1 (xBox A) on m_RobotDrive
-        JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, 1);
+        JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, ButtonConstants.AimandShoot);
+        SmartDashboard.putString("Aim and Spin ","Left-Button " + ButtonConstants.AimandShoot);
+      
+        JoystickButton manualShoot = new JoystickButton(m_xBoxDriver, ButtonConstants.ManualShoot);
+        SmartDashboard.putString("Manual Shoot","Left-Button " + ButtonConstants.ManualShoot);
+      
         // Creates a new JoystickButton object for button 6 (xBox rightBumper) on
         // m_RobotDrive
-        JoystickButton sendIt = new JoystickButton(m_xBoxDriver, 6);
+        JoystickButton conveyorUpButton = new JoystickButton(m_xBoxDriver, ButtonConstants.ConveyerIn);
+        SmartDashboard.putString("Conveyer Up","Left-Button " + ButtonConstants.ConveyerIn);
+      
         // Creates a new JoystickButton object for button 2 (xBox B) on m_RobotDrive
-        JoystickButton unload = new JoystickButton(m_xBoxDriver, 2);
+        JoystickButton conveyorDownButton = new JoystickButton(m_xBoxDriver, ButtonConstants.ConveyerOut);
+        SmartDashboard.putString("Shooting","Left-Button " + ButtonConstants.ConveyerOut);
+
+        JoystickButton intakeInButton= new JoystickButton(m_xBoxDriver, ButtonConstants.IntakeIn);
+        SmartDashboard.putString("Intake In","Left-Button " + ButtonConstants.IntakeIn);
+
+        JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, ButtonConstants.IntakeOut);
+        SmartDashboard.putString("Intake Out","Left-Button " + ButtonConstants.IntakeOut);
 
         aimAndSpin.whenHeld(aimAndSpinCommand);
-        sendIt.whenHeld(loadCommand);
-        unload.whenHeld(unloadCommand);
-    }
+        manualShoot.whenHeld(shootCommand);
+        conveyorUpButton.whenHeld(conveyorUpCommand);
+        conveyorDownButton.whenHeld(conveyorDownCommand);
+        intakeOutButton.whenHeld(intakeOutCommand);
+        intakeInButton.whenHeld(intakeInCommand);    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

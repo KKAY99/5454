@@ -21,6 +21,17 @@ import frc.robot.classes.Gains;
 public final class Constants {
     public static final double kSpeedMultiplier = 1.0;
     public static final int ConveyorPort=10;
+    public static final int IntakePort=13;
+    public static final double intakeSpeed=.60;
+    public static final class ButtonConstants{
+       public static final int ManualShoot=1;
+       public static final int AimandShoot=5;
+       public static final int ConveyerIn=6;
+       public static final int ConveyerOut=2;
+       public static final int IntakeIn=3;
+       public static final int IntakeOut=4;
+    }
+
     public static final class AutoModes {
         public static final String autoMode0="Do Nothing";
         public static final String autoMode1="Move Foward";
