@@ -21,13 +21,11 @@ public class ConveyorSubsystem extends SubsystemBase {
         //m_ConveyorMotor.setOpenLoopRampRate(0.25);
     }
 
-    public void load(double speed) {
+    public void run(double speed) {
         m_ConveyorMotor.set(VictorSPXControlMode.PercentOutput,speed);
     }
 
-    public void unload(double speed) {
-        m_ConveyorMotor.set(VictorSPXControlMode.PercentOutput,-speed);
-    }
+    
 
     public void stop() {
         m_ConveyorMotor.set(VictorSPXControlMode.PercentOutput,0.0);

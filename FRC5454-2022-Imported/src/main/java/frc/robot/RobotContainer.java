@@ -12,17 +12,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.AutoDoNothingCommand;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.Conveyor.Conveyor_LoadCommand;
-import frc.robot.commands.Conveyor.Conveyor_UnloadCommand;
-import frc.robot.subsystems.ConveyorSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.InputControllers;
@@ -220,8 +211,8 @@ public class RobotContainer {
                 () -> m_xBoxDriver.getLeftX()));
 
       
-        final Conveyor_LoadCommand conveyorUpCommand = new Conveyor_LoadCommand(m_Conveyor);
-        final Conveyor_UnloadCommand conveyorDownCommand = new Conveyor_UnloadCommand(m_Conveyor);
+        final ConveyorCommand conveyorUpCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
+        final ConveyorCommand conveyorDownCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
         final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake,Constants.intakeSpeed);
         final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake,-Constants.intakeSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter);
