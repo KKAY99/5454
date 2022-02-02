@@ -202,13 +202,6 @@ public class RobotContainer {
                         () -> m_xBoxDriver.getLeftX()));
 
     }
-
-    private final ParallelCommandGroup aimAndSpinCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter),
-            new DefaultDriveCommand(m_RobotDrive,
-                    () -> m_Limelight.getRotationPower(m_Limelight.getX(), 15.0 * m_xBoxDriver.getLeftX()),
-                    () -> m_xBoxDriver.getLeftY(),
-                    () -> m_xBoxDriver.getLeftX()));
-
     
     /**
      * Use this method to define your button->command mappings. Buttons can be
