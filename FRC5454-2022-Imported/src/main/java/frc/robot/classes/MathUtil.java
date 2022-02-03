@@ -72,6 +72,16 @@ public final class MathUtil {
 		return abs(minChange(a, b, wrap));
 	}
 
+	public static double clamp(double input, double min, double max) {
+		if(input < min) {
+			return min;
+		}
+		if(input > max) {
+			return max;
+		}
+		return input;
+	}
+
 	/**
 	 *
 	 * @param wpilibDegrees The degrees to remap to the correct way

@@ -12,17 +12,16 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import frc.robot.Constants;
+import frc.robot.classes.MathUtil;
 
 public class SwerveModule {
         private static final double kWheelRadius = 2.0 / 39.37; // 2in to meters
@@ -34,15 +33,10 @@ public class SwerveModule {
         private ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
         private NetworkTableEntry m_driveOutput;
         private NetworkTableEntry m_steerOutput;
+        private NetworkTableEntry m_error;
 
         // TODO: Adjust this
-        private static final double accelAndVelocAdjust = 0.1;
-
-        private static final double kModuleMaxAngularVelocity = SwerveSubsystem.kMaxAngularSpeed * accelAndVelocAdjust; // radians
-                                                                                                                        // per
-                                                                                                                        // second
-        private static final double kModuleMaxAngularAcceleration = 2 * Math.PI * accelAndVelocAdjust; // radians per
-                                                                                                       // second squared
+        // private static final double accelAndVelocAdjust = 0.1;
 
         private final CANSparkMax m_driveMotor;
         private final TalonSRX m_turningMotor;
@@ -55,8 +49,8 @@ public class SwerveModule {
 
         // Gains are for example purposes only - must be determined for your own robot!
         // TODO: Make sure it steers accurately.
-        private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0,
-                        new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+        // private final PIDController m_turningPIDController = new PIDController(2, 0,
+        // 100);
 
         // Gains are for example purposes only - must be determined for your own robot!
         private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
@@ -91,7 +85,8 @@ public class SwerveModule {
                 // Limit the PID Controller's input range between -pi and pi and set the input
                 // to be continuous.
 
-                m_turningPIDController.enableContinuousInput(0.0, 2.0 * Math.PI);
+                // m_turningPIDController.enableContinuousInput(0.0, kSteerEncoderResolution);
+                // m_turningPIDController.setTolerance(kSteerEncoderResolution / 2.0);
 
                 m_turningMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGB.kPIDLoopIdx,
                                 Constants.SwerveDriveGB.kTimeoutMs);
@@ -120,6 +115,7 @@ public class SwerveModule {
 
                 m_driveOutput = tab.add(name + " drive", 0.0).getEntry();
                 m_steerOutput = tab.add(name + " steer", 0.0).getEntry();
+                m_error = tab.add(name + "encoder error", 0.0).getEntry();
         }
 
         private final double rpmToMetersPerSecond(double RPM) {
@@ -134,6 +130,11 @@ public class SwerveModule {
                 double radianValue = (counts / 1024.0) * 2.0 * Math.PI;
                 double tightenedRadianValue = radianValue % (2 * Math.PI);
                 return tightenedRadianValue * steeringCoeff;
+        }
+
+        private final double radiansToTicks(double radians) {
+                System.out.println((radians / (2.0 * Math.PI)) * kSteerEncoderResolution);
+                return (radians / (2.0 * Math.PI)) * kSteerEncoderResolution;
         }
 
         /**
@@ -163,18 +164,30 @@ public class SwerveModule {
 
                 final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
+                // m_error.setDouble(m_turningPIDController.getPositionError());
+
                 // Calculate the turning motor output from the turning PID controller.
-                final double turnOutput = m_turningPIDController.calculate(
-                                countsToAdjustedRadians(m_turningMotor.getSelectedSensorPosition()),
-                                state.angle.getRadians());
+                // final double turnOutput = m_turningPIDController.calculate(
+                // m_turningMotor.getSelectedSensorPosition(),
+                // radiansToTicks(state.angle.getRadians()));
 
                 double driveVoltage = MathUtil.clamp(driveOutput + driveFeedforward, -12.0, 12.0);
-                double steerVoltage = MathUtil.clamp(turnOutput + m_turnFeedforward, -12.0, 12.0);
+                // double steerVoltage = MathUtil.clamp(turnOutput + m_turnFeedforward, -1.0,
+                // 1.0);
 
                 m_driveOutput.setDouble(driveVoltage);
-                m_steerOutput.setDouble(steerVoltage);
+                // m_steerOutput.setDouble(steerVoltage);
 
                 m_driveMotor.setVoltage(driveVoltage);
-                m_turningMotor.set(ControlMode.PercentOutput, steerVoltage / 12.0);
+
+                final double current = m_turningMotor.getSelectedSensorPosition(Constants.SwerveDriveGB.kSlotIdx);
+                final double desired = (int) Math
+                                .round(radiansToTicks(state.angle.getRadians()) * kSteerEncoderResolution / 360.0);
+                // + offset;
+
+                final double newPosition = (int) MathUtil.minChange(desired, current, kSteerEncoderResolution)
+                                + current;
+
+                m_turningMotor.set(ControlMode.Position, newPosition);
         }
 }
