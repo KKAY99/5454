@@ -204,7 +204,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        final ParallelCommandGroup aimAndSpinCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter),
+        final ParallelCommandGroup aimAndSpinCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false),
         new DefaultDriveCommand(m_RobotDrive,
                 () -> m_Limelight.getRotationPower(m_Limelight.getX(), 15.0 * m_xBoxDriver.getLeftX()),
                 () -> m_xBoxDriver.getLeftY(),
@@ -215,7 +215,7 @@ public class RobotContainer {
         final ConveyorCommand conveyorDownCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
         final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake,Constants.intakeSpeed);
         final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake,-Constants.intakeSpeed);
-        final ShooterCommand shootCommand = new ShooterCommand(m_Shooter);
+        final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         // Creates a new JoystickButton object for button 1 (xBox A) on m_RobotDrive
         JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, ButtonConstants.AimandShoot);
         SmartDashboard.putString("Aim and Spin ","Left-Button " + ButtonConstants.AimandShoot);
@@ -255,11 +255,35 @@ public class RobotContainer {
         System.out.println("Autonomouse Selected Mode = " + selectedMode);
         switch (selectedMode) {
           case AutoModes.autoMoveForward:
+             autoCommand= new AutoMoveForwardCommand(m_RobotDrive);
+            break;
+          case AutoModes.autoMoveShoot:
             // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
             break;
-          //case AutoModes.autoMoveBackward:
-            // autoCommand= new AutoMoveCommand(m_RobotDrive,.3,2);
-          //  break;
+          case AutoModes.autoMoveBackwardsOutake:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;
+          case AutoModes.autoMoveBackwardsShot:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;
+          case AutoModes.autoMoveShootMoveGrab:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;
+          case AutoModes.autoMoveShootMoveGrabShot1:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;
+          case AutoModes.autoMoveShotMoveGrabMoveLeftGrabShot2:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;
+          case AutoModes.autoMoveShotMoveGrabMoveRightGrabShot2:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;
+          case AutoModes.autoMoveGrabTrackRightShoot:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;
+          case AutoModes.autoMoveGrabTrackLeftShoot:
+            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+            break;        
           default:
             autoCommand = new AutoDoNothingCommand();
         }

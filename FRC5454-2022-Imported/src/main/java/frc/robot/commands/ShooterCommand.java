@@ -6,26 +6,29 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.classes.Limelight;
 /** An example command that uses an example subsystem. */
 public class ShooterCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final ShooterSubsystem m_shooterSubsystem;
-
-  private final double topSpeed = 0.5;
-  private final double bottomSpeed = 0.5;
-  // private final double topSpeed = 0.0;
-  // private final double bottomSpeed = 0.0;
+  private final Limelight m_limelight;
+  private final double m_topSpeed;
+  private final double m_bottomSpeed;
+  private final boolean m_useDistance;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterCommand(ShooterSubsystem shooter) {
+  public ShooterCommand(ShooterSubsystem shooter,Limelight limelight, double defaultTopSpeed,double defaultBottomSpeed,boolean useDistance) {
     m_shooterSubsystem = shooter;
+    m_limelight=limelight;
+    m_topSpeed=defaultTopSpeed;
+    m_bottomSpeed=defaultBottomSpeed;
+    m_useDistance=useDistance;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_shooterSubsystem);
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -36,7 +39,12 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooterSubsystem.shoot(topSpeed, bottomSpeed);
+    if(m_useDistance) {
+      //Calculate Distance using Limelight
+
+    }else {
+      m_shooterSubsystem.shoot(m_topSpeed, m_bottomSpeed);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -26,6 +26,7 @@ public final class Constants {
     public static final double intakeSpeed=.60;
     public static final double conveyorUpSpeed=-0.9;
     public static final double conveyorDownSpeed=0.5;
+  
     public static final class ButtonConstants{
        public static final int ManualShoot=1;
        public static final int AimandShoot=5;
@@ -40,25 +41,26 @@ public final class Constants {
         public static final String autoMode1="Move Foward";
         public static final String autoMode2="Move / Shoot";
         public static final String autoMode3="Outake / Move Backwars";
-        public static final String autoMode4="Shot / Move Backwards";
-        public static final String autoMode5="Shot Move Grab";
-        public static final String autoMode6="Shot Move Grab Shot 1";
-        public static final String autoMode7="Shot Move Grab move Left Grab Shot 2";
-        public static final String autoMode8="Shot Move Grab Move Right Grab Shot";
-        public static final String autoMode9="Move Grab Shot 2";
-        public static final String autoMode10="";
+        public static final String autoMode4="Shoot / Move Backwards";
+        public static final String autoMode5="Shoot Move Grab";
+        public static final String autoMode6="Shoot Move Grab Shot 1";
+        public static final String autoMode7="Shoot Move Grab Move Left Grab Shoot 2";
+        public static final String autoMode8="Shoot Move Grab Move Right Grab Shoot 2";
+        public static final String autoMode9="Move Grab Track Right / Shoot";
+        public static final String autoMode10="Move Grab Track Left / Shoot";
         public static final int defaultAutoMode=1;
 
         public static final int autoNothing = 0;
         public static final int autoMoveForward = 1;
-        public static final int autoMoveBackwardshoot = 2;
+        public static final int autoMoveShoot = 2;
         public static final int autoMoveBackwardsOutake = 3;
         public static final int autoMoveBackwardsShot = 4;
         public static final int autoMoveShootMoveGrab = 5;
         public static final int autoMoveShootMoveGrabShot1 = 6;
-        public static final int autoMoveShotMoveGrabmoveLeftGrabShot2 = 7;
-        public static final int autoMoveShotMoveGrabMoveRightGrabShot = 8;
-        public static final int autoMoveGrabShot2 = 9;
+        public static final int autoMoveShotMoveGrabMoveLeftGrabShot2 = 7;
+        public static final int autoMoveShotMoveGrabMoveRightGrabShot2 = 8;
+        public static final int autoMoveGrabTrackRightShoot = 9;
+        public static final int autoMoveGrabTrackLeftShoot = 10;
         
         public static final String delayMode0="0 Seconds";
         public static final String delayMode1="3 Seconds";
@@ -69,7 +71,16 @@ public final class Constants {
         public static final int delayValMode2=5;
         public static final int delayValMode3=8;
         public static final int defaultDelayMode=0;
- 
+
+        public static final double LeaveTarmacDistance=5;
+        public static final double DistanceToBall1=7;
+        public static final double MoveSpeed=.30;
+        public static final double AutoShotTopSpeed=0.5;
+        public static final double AutoShotBottomSpeed=0.5;
+    }
+    public static final class zAutomation{
+        public static final double shooterSpinUp=2;
+        public static final double conveyorfeedBall=2;
     }
 
     public static final class InputControllers {

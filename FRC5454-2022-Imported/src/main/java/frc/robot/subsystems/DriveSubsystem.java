@@ -18,6 +18,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(double fwd, double strafe, double rcw) {
     m_drive.drive(fwd, strafe, rcw, true);
+    
   }
+
+  public void move (double direction, double speed, double distance, boolean stopAtFalse)
+{
+  m_drive.move(direction,speed,distance,stopAtFalse);
+}
+
 
 }
