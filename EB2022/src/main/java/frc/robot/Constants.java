@@ -35,19 +35,19 @@ public final class Constants {
         public static final int kXboxPit=3;
 	}
     public static final class DriveConstants {
-        public static final int kLeftMotor1Port = 0;
-        public static final int kLeftMotor2Port = 1;
+        public static final int kLeftMotor1Port = 1;
+        public static final int kLeftMotor2Port = 2;
         public static final int kRightMotor1Port = 8;
         public static final int kRightMotor2Port = 9;
     }
    public static final class IntakeConstants {
        public static int intakeLiftMotorPort=4;
-       public static int intakeMotorPort=3;
+       public static int intakeMotorPort=0;
     
        public static double intakeSpeed=0.95;
    }
    public static final class ClimberConstants {
-       public static int climberMotorPort=2;
+       public static int climberMotorPort=3;
    }
    public static final class DriveMode {
        public static int forwardMode=0;
@@ -59,7 +59,7 @@ public final class Constants {
    }
    public static final class ClimberSpeeds{
        public static double ClimberSpeedSlow =-0.80;
-       public static double ClimberSpeedFast =-0.98;
+       public static double ClimberSpeedFast =0.80;
        public static double ClimberSpeedBack =.80;
        
        

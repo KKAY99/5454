@@ -6,12 +6,14 @@ import frc.robot.Constants;
 public class AutoMoveCommand extends CommandBase {
   private final DriveSubsystem m_drive;
   private final double m_direction;
+  private final double m_distance;
   private boolean m_isFinished=false;
 
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})    
-  public AutoMoveCommand(DriveSubsystem subsystem,double direction) {
+  public AutoMoveCommand(DriveSubsystem subsystem,double direction,double distance) {
     m_drive=subsystem;
     m_direction=direction;
+    m_distance=distance;
     addRequirements(subsystem);
   }
 
@@ -23,7 +25,7 @@ public class AutoMoveCommand extends CommandBase {
   @Override
   public void execute() {
     m_isFinished=false;
-    m_drive.move(m_direction ,Constants.AutoModes.MoveSpeed,Constants.AutoModes.LeaveTarmacDistance,true);
+    m_drive.move(m_direction ,Constants.AutoModes.MoveSpeed,m_distance,true);
     m_isFinished=true;
   }
 

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -16,13 +17,36 @@ public class ShooterSubsystem extends SubsystemBase {
 
     Bottom_ShooterMotor.configOpenloopRamp(0.5);
     Top_ShooterMotor.configOpenloopRamp(0.5);
-
+    
     Bottom_ShooterMotor.setInverted(true);
-  }
 
-  public void shoot(double topPower, double bottomPower) {
-    Bottom_ShooterMotor.set(ControlMode.PercentOutput, bottomPower);
-    Top_ShooterMotor.set(ControlMode.PercentOutput, bottomPower);
+
+    Bottom_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
+    Bottom_ShooterMotor.selectProfileSlot(0,0);
+    Bottom_ShooterMotor.config_kP(0,0);
+    Bottom_ShooterMotor.config_kI(0,0);
+    Bottom_ShooterMotor.config_kD(0,0);
+    Bottom_ShooterMotor.config_kF(0,.5);
+    
+    Top_ShooterMotor.setInverted(false);
+    Top_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
+    Top_ShooterMotor.selectProfileSlot(0,0);
+    Top_ShooterMotor.config_kP(0,0);
+    Top_ShooterMotor.config_kI(0,0);
+    Top_ShooterMotor.config_kD(0,0);
+    Top_ShooterMotor.config_kF(0,.5);
+    
+  }
+  public double getTopMotorVelocity(){ 
+    return Top_ShooterMotor.getSelectedSensorVelocity(0);
+  }
+  public double getBottomMotorVelocity(){
+    return Top_ShooterMotor.getSelectedSensorVelocity(0);
+  }
+  public void shoot(double topVelocity, double bottomVelocity) {
+    Bottom_ShooterMotor.set(ControlMode.Velocity, bottomVelocity);
+    Top_ShooterMotor.set(ControlMode.Velocity, bottomVelocity);
+ 
   }
 
   public void stop() {

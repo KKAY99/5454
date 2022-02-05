@@ -10,6 +10,7 @@ public class ClimberSubsystem extends SubsystemBase {
  
     public ClimberSubsystem() {
         m_LiftMotor=new PWMVictorSPX(ClimberConstants.climberMotorPort);
+        
     }
     public void setSpeed(double speed){
         m_LiftMotor.set(speed);

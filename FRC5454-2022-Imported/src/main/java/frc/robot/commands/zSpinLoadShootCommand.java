@@ -12,13 +12,15 @@ public class zSpinLoadShootCommand extends CommandBase {
   private final ConveyorSubsystem m_conveyor;
   private double m_topSpeed;
   private double m_bottomSpeed;
+  private double m_minVelocity;
   private boolean m_isFinished=false;
     
-  public zSpinLoadShootCommand(ShooterSubsystem shooter, ConveyorSubsystem conveyor,double topSpeed,double bottomSpeed) {
+  public zSpinLoadShootCommand(ShooterSubsystem shooter, ConveyorSubsystem conveyor,double topSpeed,double bottomSpeed,double minVelocity) {
     m_shooter=shooter;
     m_conveyor=conveyor;
     m_topSpeed=topSpeed;
     m_bottomSpeed=bottomSpeed;
+    m_minVelocity=minVelocity;
     addRequirements(shooter);
     addRequirements(conveyor);
   }
@@ -32,14 +34,14 @@ public class zSpinLoadShootCommand extends CommandBase {
   public void execute() {
     
     double startTime=Timer.getFPGATimestamp();
-    double currentTime;
+    double currentTime=Timer.getFPGATimestamp();
     m_isFinished=false;
-       
+    System.out.println("before speed loop");
     do {
       m_shooter.shoot(m_topSpeed, m_bottomSpeed);
       currentTime=Timer.getFPGATimestamp();
      
-    }while(currentTime<startTime + Constants.zAutomation.shooterSpinUp);
+    }while(m_shooter.getBottomMotorVelocity()<=m_minVelocity |  m_shooter.getBottomMotorVelocity()<=m_minVelocity);
     System.out.println("outside shot loop");
 
     startTime=Timer.getFPGATimestamp();

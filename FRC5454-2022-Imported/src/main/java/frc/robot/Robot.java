@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     m_autoChooser.addOption(AutoModes.autoMode8, AutoModes.autoMoveShotMoveGrabMoveRightGrabShot2);
     m_autoChooser.addOption(AutoModes.autoMode9, AutoModes.autoMoveGrabTrackLeftShoot);
     m_autoChooser.addOption(AutoModes.autoMode10, AutoModes.autoMoveGrabTrackRightShoot);
-    m_autoChooser.setDefaultOption(AutoModes.autoMode1,AutoModes.autoNothing);
+    m_autoChooser.setDefaultOption(AutoModes.autoMode1,AutoModes.autoMoveForward);
     m_delayChooser.addOption(AutoModes.delayMode0,AutoModes.delayValMode0);
     m_delayChooser.addOption(AutoModes.delayMode1,AutoModes.delayValMode1);
     m_delayChooser.addOption(AutoModes.delayMode2,AutoModes.delayValMode2);
@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    m_robotContainer.resetDriveModes();
   }
 
   @Override
@@ -97,8 +98,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    m_robotContainer.resetDriveModes();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_autoChooser.getSelected());
-
+    
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -116,6 +118,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    m_robotContainer.resetDriveModes();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

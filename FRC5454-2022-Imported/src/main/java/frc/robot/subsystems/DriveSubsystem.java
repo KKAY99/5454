@@ -25,6 +25,8 @@ public class DriveSubsystem extends SubsystemBase {
 {
   m_drive.move(direction,speed,distance,stopAtFalse);
 }
-
+public void resetDriveMode(){
+  m_drive.resetDriveModes();
+}
 
 }

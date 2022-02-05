@@ -23,7 +23,7 @@ public final class Constants {
     public static final int ConveyorPort=10;
     public static final int IntakePort=13;
     public static final int TurretPort=14;
-    public static final double intakeSpeed=.60;
+    public static final double intakeSpeed=-.45;
     public static final double conveyorUpSpeed=-0.9;
     public static final double conveyorDownSpeed=0.5;
   
@@ -39,7 +39,7 @@ public final class Constants {
     public static final class AutoModes {
         public static final String autoMode0="Do Nothing";
         public static final String autoMode1="Move Foward";
-        public static final String autoMode2="Move / Shoot";
+        public static final String autoMode2="Shoot /  Move";
         public static final String autoMode3="Outake / Move Backwars";
         public static final String autoMode4="Shoot / Move Backwards";
         public static final String autoMode5="Shoot Move Grab";
@@ -72,15 +72,20 @@ public final class Constants {
         public static final int delayValMode3=8;
         public static final int defaultDelayMode=0;
 
-        public static final double LeaveTarmacDistance=5;
+        public static final double LeaveTarmacDistance=1.0;
+        public static final double ball2Distance=.5;
+            
+        
         public static final double DistanceToBall1=7;
         public static final double MoveSpeed=.30;
-        public static final double AutoShotTopSpeed=0.5;
-        public static final double AutoShotBottomSpeed=0.5;
+        public static final double AutoShotTopSpeed=800;
+        public static final double AutoShotBottomSpeed=800;
+        public static final double AutoMinVelocity=800;
     }
     public static final class zAutomation{
         public static final double shooterSpinUp=2;
         public static final double conveyorfeedBall=2;
+        public static final double intakeTime=1;
     }
 
     public static final class InputControllers {

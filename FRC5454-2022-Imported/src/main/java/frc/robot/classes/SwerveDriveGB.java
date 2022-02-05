@@ -111,6 +111,7 @@ public class SwerveDriveGB {
     public double degreesToTicks = 1024.0 / 360.0;
     public double ticksToDegrees = 360.0 / 1024.0;
 
+    private boolean m_drivemode=false;
     // AutDrive by Limelight
     private boolean m_autoDrive = false;
     private boolean m_isShootingLong = false;
@@ -805,6 +806,7 @@ public class SwerveDriveGB {
         double startPosition;
         double targetPosition;
         double directionRadians;
+        m_drivemode=true;
         directionRadians = Math.toRadians(direction);
         xSpeedPercent = Math.cos(directionRadians);
         ySpeedPercent = Math.sin(directionRadians);
@@ -816,7 +818,7 @@ public class SwerveDriveGB {
         System.out.println("targetdistance=" + targetPosition + "  currentdistance="
                 + m_FrontLeftDrive.getEncoder().getPosition());
         System.out.println("xSpeedPer=" + xSpeedPercent + " ySpeedPer=" + ySpeedPercent);
-        while (targetPosition > m_FrontLeftDrive.getEncoder().getPosition()) {
+        while (targetPosition > m_FrontLeftDrive.getEncoder().getPosition() && m_drivemode) {
             drive((double) 0, xSpeedPercent * speed, ySpeedPercent * speed, false);
         }
         if (stopAtEnd) {
@@ -824,9 +826,13 @@ public class SwerveDriveGB {
             driveKill();
 
         }
+        m_drivemode=false;
 
     }
-
+    public void resetDriveModes(){
+        m_autoDrive=false;
+        m_drivemode=false;
+    }
     public boolean isAutoShootLong() {
         return m_isShootingLong;
     }
