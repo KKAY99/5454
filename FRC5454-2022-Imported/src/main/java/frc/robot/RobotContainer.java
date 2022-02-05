@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -255,16 +256,24 @@ public class RobotContainer {
         System.out.println("Autonomouse Selected Mode = " + selectedMode);
         switch (selectedMode) {
           case AutoModes.autoMoveForward:
-             autoCommand= new AutoMoveForwardCommand(m_RobotDrive);
+             autoCommand= new AutoMoveCommand(m_RobotDrive,0);
             break;
           case AutoModes.autoMoveShoot:
+            autoCommand=new SequentialCommandGroup(
+                    new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed),
+                    new AutoMoveCommand(m_RobotDrive,0));
+
             // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
             break;
           case AutoModes.autoMoveBackwardsOutake:
             // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
             break;
           case AutoModes.autoMoveBackwardsShot:
-            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+          
+                  autoCommand=new SequentialCommandGroup(
+                new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed),
+                new AutoMoveCommand(m_RobotDrive,180));
+
             break;
           case AutoModes.autoMoveShootMoveGrab:
             // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);

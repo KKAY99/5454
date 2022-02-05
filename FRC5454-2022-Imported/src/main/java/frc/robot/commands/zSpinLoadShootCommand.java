@@ -12,7 +12,7 @@ public class zSpinLoadShootCommand extends CommandBase {
   private final ConveyorSubsystem m_conveyor;
   private double m_topSpeed;
   private double m_bottomSpeed;
-  
+  private boolean m_isFinished=false;
     
   public zSpinLoadShootCommand(ShooterSubsystem shooter, ConveyorSubsystem conveyor,double topSpeed,double bottomSpeed) {
     m_shooter=shooter;
@@ -30,22 +30,27 @@ public class zSpinLoadShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     double startTime=Timer.getFPGATimestamp();
     double currentTime;
-
+    m_isFinished=false;
        
     do {
       m_shooter.shoot(m_topSpeed, m_bottomSpeed);
       currentTime=Timer.getFPGATimestamp();
+     
     }while(currentTime<startTime + Constants.zAutomation.shooterSpinUp);
-    
+    System.out.println("outside shot loop");
+
     startTime=Timer.getFPGATimestamp();
     do {
       m_conveyor.run(Constants.conveyorUpSpeed);
       currentTime=Timer.getFPGATimestamp();
     }while(currentTime<startTime+Constants.zAutomation.conveyorfeedBall);
+    System.out.println("outside conveyeor loop");
     m_conveyor.stop();
     m_shooter.stop();
+    m_isFinished=true;
   }
 
   // Called once the command ends or is interrupted.
@@ -55,7 +60,7 @@ public class zSpinLoadShootCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_isFinished;
   }
 }
 

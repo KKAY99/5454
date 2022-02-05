@@ -3,11 +3,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.*;
 import frc.robot.Constants;
 /** An example command that uses an example subsystem. */
-public class AutoMoveForwardCommand extends CommandBase {
-  private DriveSubsystem m_drive;
+public class AutoMoveCommand extends CommandBase {
+  private final DriveSubsystem m_drive;
+  private final double m_direction;
+  private boolean m_isFinished=false;
+
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})    
-  public AutoMoveForwardCommand(DriveSubsystem subsystem) {
+  public AutoMoveCommand(DriveSubsystem subsystem,double direction) {
     m_drive=subsystem;
+    m_direction=direction;
     addRequirements(subsystem);
   }
 
@@ -18,7 +22,9 @@ public class AutoMoveForwardCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.move(0,Constants.AutoModes.MoveSpeed,Constants.AutoModes.LeaveTarmacDistance,true);
+    m_isFinished=false;
+    m_drive.move(m_direction ,Constants.AutoModes.MoveSpeed,Constants.AutoModes.LeaveTarmacDistance,true);
+    m_isFinished=true;
   }
 
   // Called once the command ends or is interrupted.
@@ -28,7 +34,7 @@ public class AutoMoveForwardCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_isFinished;
   }
 }
 
