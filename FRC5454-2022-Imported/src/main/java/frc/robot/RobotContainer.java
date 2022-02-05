@@ -39,7 +39,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
     private final DriveSubsystem m_RobotDrive = new DriveSubsystem(m_ahrs);
-    // private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();
+    //private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();
     private final Limelight m_Limelight = new Limelight();
 
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
@@ -279,13 +279,16 @@ public class RobotContainer {
           case AutoModes.autoMoveShootMoveGrab:
                 autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
+                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,zAutomation.intakeTime));
+                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,zAutomation.intakeTime,false)
+                );
             break;
           case AutoModes.autoMoveShootMoveGrabShot1:
             System.out.println("Auto Shot Move Grab Shoot Pay Executing");
             autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
+                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
                 new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,zAutomation.intakeTime),
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity));
@@ -324,6 +327,6 @@ public class RobotContainer {
         // return m_autoCommand;
     }
     public void resetDriveModes(){
-        m_RobotDrive.resetDriveMode();
+//        m_RobotDrive.resetDriveMode();
     }
 }

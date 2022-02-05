@@ -9,6 +9,7 @@ package frc.robot.classes;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
@@ -322,6 +323,11 @@ public class SwerveDriveGB {
         m_SrxFrontRightSteering.configSelectedFeedbackCoefficient(1.0);
         m_SrxBackLeftSteering.configSelectedFeedbackCoefficient(1.0);
         m_SrxBackRightSteering.configSelectedFeedbackCoefficient(1.0);
+
+        m_SrxFrontLeftSteering.setNeutralMode(NeutralMode.Brake);
+        m_SrxFrontRightSteering.setNeutralMode(NeutralMode.Brake);
+        m_SrxBackLeftSteering.setNeutralMode(NeutralMode.Brake);
+        m_SrxBackRightSteering.setNeutralMode(NeutralMode.Brake);
     }
 
     /**

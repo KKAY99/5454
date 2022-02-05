@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -29,6 +30,9 @@ public class SwerveModule {
         private static final int kSteerEncoderResolution = 1024;
 
         private static final double steeringCoeff = 2.0 * Math.PI / kSteerEncoderResolution;
+
+        private double m_offset;
+        private String m_name;
 
         private ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
         private NetworkTableEntry m_driveOutput;
@@ -67,9 +71,11 @@ public class SwerveModule {
          * @param turningEncoderChannelA DIO input for the turning encoder channel A
          * @param turningEncoderChannelB DIO input for the turning encoder channel B
          */
-        public SwerveModule(int driveMotorID, int turningMotorID, String name) {
+        public SwerveModule(int driveMotorID, int turningMotorID, String name, double offset) {
                 m_driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
                 m_turningMotor = new TalonSRX(turningMotorID);
+
+                m_name = name;
 
                 m_driveEncoder = m_driveMotor.getEncoder();
 
@@ -105,6 +111,9 @@ public class SwerveModule {
                 m_turningMotor.configPeakOutputForward(1, Constants.SwerveDriveGB.kTimeoutMs);
                 m_turningMotor.configPeakOutputReverse(-1, Constants.SwerveDriveGB.kTimeoutMs);
 
+                m_turningMotor.configAllowableClosedloopError(Constants.SwerveDriveGB.kPIDLoopIdx, 20);
+                m_turningMotor.setNeutralMode(NeutralMode.Brake);
+
                 m_driveMotor.setIdleMode(IdleMode.kBrake);
 
                 m_driveMotor.setOpenLoopRampRate(0.5);
@@ -116,6 +125,8 @@ public class SwerveModule {
                 m_driveOutput = tab.add(name + " drive", 0.0).getEntry();
                 m_steerOutput = tab.add(name + " steer", 0.0).getEntry();
                 m_error = tab.add(name + "encoder error", 0.0).getEntry();
+
+                m_offset = offset;
         }
 
         private final double rpmToMetersPerSecond(double RPM) {
@@ -133,7 +144,7 @@ public class SwerveModule {
         }
 
         private final double radiansToTicks(double radians) {
-                System.out.println((radians / (2.0 * Math.PI)) * kSteerEncoderResolution);
+                // System.out.println((radians / (2.0 * Math.PI)) * kSteerEncoderResolution);
                 return (radians / (2.0 * Math.PI)) * kSteerEncoderResolution;
         }
 
@@ -178,16 +189,18 @@ public class SwerveModule {
                 m_driveOutput.setDouble(driveVoltage);
                 // m_steerOutput.setDouble(steerVoltage);
 
-                m_driveMotor.setVoltage(driveVoltage);
+                // m_driveMotor.setVoltage(driveVoltage);
 
                 final double current = m_turningMotor.getSelectedSensorPosition(Constants.SwerveDriveGB.kSlotIdx);
                 final double desired = (int) Math
-                                .round(radiansToTicks(state.angle.getRadians()) * kSteerEncoderResolution / 360.0);
-                // + offset;
+                                .round(state.angle.getDegrees() * kSteerEncoderResolution / 360.0)
+                                + m_offset;
 
                 final double newPosition = (int) MathUtil.minChange(desired, current, kSteerEncoderResolution)
                                 + current;
 
                 m_turningMotor.set(ControlMode.Position, newPosition);
+
+                System.out.println(m_name + ": " + m_turningMotor.getSelectedSensorPosition());
         }
 }

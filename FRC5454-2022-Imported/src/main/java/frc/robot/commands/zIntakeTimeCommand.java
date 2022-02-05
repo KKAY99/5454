@@ -13,17 +13,27 @@ public class zIntakeTimeCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem m_IntakeSubsystem;
   private final double m_speed;
-  private final double m_Duration;
+  private final double m_duration;
+  private final boolean m_keepRunning;
   private boolean m_isFinished=false;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
+  public zIntakeTimeCommand(IntakeSubsystem intake,double speed,double duration,boolean keepRunning){ 
+    m_IntakeSubsystem = intake;
+    m_speed=speed;
+    m_duration=duration;
+    m_keepRunning=keepRunning;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_IntakeSubsystem);
+  }
   public zIntakeTimeCommand(IntakeSubsystem intake,double speed,double duration){ 
     m_IntakeSubsystem = intake;
     m_speed=speed;
-    m_Duration=duration;
+    m_duration=duration;
+    m_keepRunning=false;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_IntakeSubsystem);
   }
@@ -43,14 +53,16 @@ public class zIntakeTimeCommand extends CommandBase {
       m_IntakeSubsystem.runIntake(m_speed);
       currentTime=Timer.getFPGATimestamp();
       System.out.println(startTime + " - " + currentTime);
-    }while(currentTime<startTime+Constants.zAutomation.intakeTime);
+    }while(currentTime<startTime+m_duration);
      m_isFinished=true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_IntakeSubsystem.stopIntake();
+    if(m_keepRunning==false){
+      m_IntakeSubsystem.stopIntake();
+    }
   }
 
   // Returns true when the command should end.

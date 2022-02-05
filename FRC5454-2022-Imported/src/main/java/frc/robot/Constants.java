@@ -85,7 +85,7 @@ public final class Constants {
     public static final class zAutomation{
         public static final double shooterSpinUp=2;
         public static final double conveyorfeedBall=2;
-        public static final double intakeTime=1;
+        public static final double intakeTime=.1;
     }
 
     public static final class InputControllers {

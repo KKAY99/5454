@@ -21,6 +21,17 @@ public class SwerveSubsystem extends SubsystemBase {
         public static final double kMaxSpeed = 3.0; // 3 meters per second
         public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
+        // public static final int frontLeftOffset = -513;
+        // public static final int frontRightOffset = -253;
+        // public static final int backLeftOffset = -640;
+        // public static final int backRightOffset = -914;
+
+        public static final int frontLeftOffset = 0;
+        public static final int frontRightOffset = 0;
+    
+        public static final int backLeftOffset = -10;
+        public static final int backRightOffset = 256;
+
         // TODO: Measure this (it's in meters);
         // Note the signs
         // FL: + +
@@ -43,13 +54,13 @@ public class SwerveSubsystem extends SubsystemBase {
         private NetworkTableEntry backRightAngle = Shuffleboard.getTab("Swerve").add("BR_A", 0.0).getEntry();
 
         private final SwerveModule m_frontLeft = new SwerveModule(Constants.SwerveDriveGB.kFrontLeftDrive,
-                        Constants.SwerveDriveGB.kFrontLeftSteering, "Front Left");
+                        Constants.SwerveDriveGB.kFrontLeftSteering, "Front Left", frontLeftOffset);
         private final SwerveModule m_frontRight = new SwerveModule(Constants.SwerveDriveGB.kFrontRightDrive,
-                        Constants.SwerveDriveGB.kFrontRightSteering, "Front Right");
+                        Constants.SwerveDriveGB.kFrontRightSteering, "Front Right", frontRightOffset);
         private final SwerveModule m_backLeft = new SwerveModule(Constants.SwerveDriveGB.kBackLeftDrive,
-                        Constants.SwerveDriveGB.kBackLeftSteering, "Back Left");
+                        Constants.SwerveDriveGB.kBackLeftSteering, "Back Left", backLeftOffset);
         private final SwerveModule m_backRight = new SwerveModule(Constants.SwerveDriveGB.kBackRightDrive,
-                        Constants.SwerveDriveGB.kBackRightSteering, "Back Right");
+                        Constants.SwerveDriveGB.kBackRightSteering, "Back Right", backRightOffset);
 
         private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -119,5 +130,9 @@ public class SwerveSubsystem extends SubsystemBase {
                                 m_frontRight.getState(),
                                 m_backLeft.getState(),
                                 m_backRight.getState());
+        }
+
+        public void move(double direction, double speed, double distance, boolean stopAtFalse) {
+                // TODO - Nothing Currently
         }
 }
