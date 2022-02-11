@@ -218,6 +218,7 @@ public class RobotContainer {
         final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake,Constants.intakeSpeed);
         final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake,-Constants.intakeSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
+        final zSpinLoadShootCommand autoLoadShoot = new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity); 
         // Creates a new JoystickButton object for button 1 (xBox A) on m_RobotDrive
         JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, ButtonConstants.AimandShoot);
         SmartDashboard.putString("Aim and Spin ","Left-Button " + ButtonConstants.AimandShoot);
@@ -241,7 +242,8 @@ public class RobotContainer {
         SmartDashboard.putString("Intake Out","Left-Button " + ButtonConstants.IntakeOut);
 
         aimAndSpin.whenHeld(aimAndSpinCommand);
-        manualShoot.whenHeld(shootCommand);
+        //manualShoot.whenHeld(shootCommand);
+        manualShoot.whenHeld(autoLoadShoot);
         conveyorUpButton.whenHeld(conveyorUpCommand);
         conveyorDownButton.whenHeld(conveyorDownCommand);
         intakeOutButton.whenHeld(intakeOutCommand);
@@ -263,11 +265,12 @@ public class RobotContainer {
             autoCommand=new SequentialCommandGroup(
                     new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
                     new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance));
-
-            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
             break;
           case AutoModes.autoMoveBackwardsOutake:
-            // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
+          autoCommand=new SequentialCommandGroup(
+                new zIntakeTimeCommand(m_Intake, -Constants.intakeSpeed,0,true),
+                new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance)           
+                );
             break;
           case AutoModes.autoMoveBackwardsShot:
           

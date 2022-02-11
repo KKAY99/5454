@@ -170,6 +170,75 @@ public final class Constants {
         public static int kBackRightDrive = 6;
         // #endr
     }
+    public static final class SwerveDriveNEO {
+        public static final int kSlotIdx = 0;
+        /*
+         * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now
+         * we just want the primary one.
+         */
+        public static final int kPIDLoopIdx = 0;
+
+        /*
+         * Set to zero to skip waiting for confirmation, set to nonzero to wait and
+         * report to DS if action fails.
+         */
+        public static final int kTimeoutMs = 30;
+
+        /* Choose so that Talon does not report sensor out of phase */
+        public static boolean kSensorPhase = true;
+
+        /*
+         * Choose if feedback is non-continuous true: 1023 -> 0 false: 1023 -> 1024
+         */
+        public static boolean kNonContinuousFeedback = false;
+
+        /* The amount of allowed error in the pid loop */
+        public static int kAlloweedError = 7;
+
+        /*
+         * Choose based on what direction you want to be positive, this does not affect
+         * motor invert.
+         */
+        public static boolean kMotorInvert = false;
+
+        /*
+         * Gains used in Positon Closed Loop, to be adjusted accordingly Gains(kp, ki,
+         * kd, kf, izone, peak output);
+         */
+        public static final Gains kGains = new Gains(20, 0.0, 200, 0.0, 0, 1.0);
+
+        /* Constants for AutoDrive Targeting Mode driven by Vision */
+        public static double kVisionDriveSpeedFast = .25;
+        public static double kVisionDriveSpeedSlow = .15;
+        public static double kInitLineShootingDistance = 180;
+        public static double kSafeZoneShootingDistance = 78;
+        public static double kVisionDistanceTolerance = 5;
+        public static double kVisionXTolerance = .75; // changed from 0.5
+        public static double kVisionXToleranceRCW = .5;
+        public static double kVisionGyroTolerance = 0.5;
+
+        /* Motor Controllers */
+        public static int kFrontLeftSteering = 25;
+        public static int kFrontRightSteering = 26;
+        public static int kBackLeftSteering = 27;
+        public static int kBackRightSteering = 28;
+        public static int kFrontLeftDrive = 20;
+        public static int kFrontRightDrive = 21;
+        public static int kBackLeftDrive = 22;
+        public static int kBackRightDrive = 23;
+        // #endr
+        public static int smartMotionSlot=0;
+        public static int kMaxOutput = 1; 
+        public static int kMinOutput = -1;
+        public static int maxRPM = 5700;
+        public static double allowedErr=1; //GUESSSSSSS
+
+        // Smart Motion Coefficients
+        public static double maxVel = 2000; // rpm
+        public static double minVel = 0; // rpm
+        public static double maxAcc = 1500;
+        
+    }
 
     public static final class SwerveDriveIV {
         public static final int kSlotIdx = 0;

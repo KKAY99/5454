@@ -5,14 +5,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.classes.SwerveDriveGB;
+import frc.robot.classes.SwerveDriveNEO;
 import com.kauailabs.navx.frc.AHRS;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private SwerveDriveGB m_drive;
-
+ // private SwerveDriveGB m_drive;
+ private SwerveDriveNEO m_drive;
   public DriveSubsystem(AHRS ahrs) {
-    m_drive = new SwerveDriveGB(ahrs);
+    m_drive = new SwerveDriveNEO(ahrs);
 
   }
 
