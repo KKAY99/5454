@@ -1,0 +1,3 @@
+[submodule "FRC5454-2022-Imported/common"]
+	path = FRC5454-2022-Imported/common
+	url = https://github.com/FRCTeam2910/Common.git

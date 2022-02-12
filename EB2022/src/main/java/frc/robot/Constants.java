@@ -53,6 +53,12 @@ public final class Constants {
        public static int forwardMode=0;
        public static int reverseMode=1;
    }
+   public static final class Pneumatics {
+       public static int CompressorNode=0;
+       public static int LatchPort=0;
+   }
+
+   
    public static final class IntakeLiftSpeeds{
        public static double intakeLiftUpSpeedSlow=.65;
        public static double intakeLiftDownSpeedSlow=.2;

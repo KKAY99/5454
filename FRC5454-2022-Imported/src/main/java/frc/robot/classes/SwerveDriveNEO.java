@@ -28,19 +28,20 @@ public class SwerveDriveNEO {
 
     private final double trackWidth = 20.625;
     private final double wheelBase = 24.375;
+    private final double ticksPerRotation =42; // in encoder counts
     // KK Speed Adjustment 02/2021
     private final double kSpeedModifier = 0.8;
     private AHRS gyro;
     private double gyroAngle;
 
-    private SparkMaxPIDController m_canFrontLeftSteeringpid;
-    private SparkMaxPIDController m_canFrontRightSteeringpid;
-    private SparkMaxPIDController m_canBackLeftSteeringpid;
-    private SparkMaxPIDController m_canBackRightSteeringpid;
-    private CANSparkMax m_canFrontLeftSteering;
-    private CANSparkMax m_canFrontRightSteering;
-    private CANSparkMax m_canBackLeftSteering;
-    private CANSparkMax m_canBackRightSteering;
+    private SparkMaxPIDController m_FrontLeftSteeringpid;
+    private SparkMaxPIDController m_FrontRightSteeringpid;
+    private SparkMaxPIDController m_BackLeftSteeringpid;
+    private SparkMaxPIDController m_BackRightSteeringpid;
+    private CANSparkMax m_FrontLeftSteering;
+    private CANSparkMax m_FrontRightSteering;
+    private CANSparkMax m_BackLeftSteering;
+    private CANSparkMax m_BackRightSteering;
 
     // Create SpeedControllers
     private CANSparkMax m_FrontLeftDrive;
@@ -82,17 +83,11 @@ public class SwerveDriveNEO {
     // Make sure wheels are straight with each other using a straight ...
     // ... edge like the yardstick
 
-    public static final int frontLeftOffset = -533;
-    public static final int frontRightOffset = -764;
+    public static final int frontLeftOffset = 0;
+    public static final int frontRightOffset=0;
 
-    public static final int backLeftOffset = -639;
-    public static final int backRightOffset = -406;
-
-    // Offset backup 5/19/21 3:04pm
-    // public static final int frontLeftOffset = 513;
-    // public static final int frontRightOffset = 272;
-    // public static final int backLeftOffset = 396;
-    // public static final int backRightOffset =-400;
+    public static final int backLeftOffset = 0;
+    public static final int backRightOffset = 0;
 
     public double m_FWD = 0;
     public double m_STR = 0;
@@ -111,9 +106,10 @@ public class SwerveDriveNEO {
     public final double defaultRotationDeadzone = 0.2;
     public boolean isZero = false;
 
+
     public double degreesToRadians = Math.PI / 180.00;
-    public double degreesToTicks = 1024.0 / 360.0;
-    public double ticksToDegrees = 360.0 / 1024.0;
+    public double degreesToTicks = ticksPerRotation / 360.0;
+    public double ticksToDegrees = 360.0 / ticksPerRotation;
 
     private boolean m_drivemode=false;
     // AutDrive by Limelight
@@ -132,26 +128,18 @@ public class SwerveDriveNEO {
         // Moved all of setup / init to the contained in the class
         // needs the gyro passed in
         // Create Drive Motors
-        CANSparkMax FrontLeftSteering;
-        CANSparkMax FrontRightSteering;
-        CANSparkMax BackLeftSteering;
-        CANSparkMax BackRightSteering;
-        CANSparkMax FrontLeftDrive;
-        CANSparkMax FrontRightDrive;
-        CANSparkMax BackLeftDrive;
-        CANSparkMax BackRightDrive;
+         
         // #region Initialize Drive Motors
-        FrontLeftSteering = new CANSparkMax(Constants.SwerveDriveNEO.kFrontLeftSteering, MotorType.kBrushless);
-        FrontRightSteering = new CANSparkMax(Constants.SwerveDriveNEO.kFrontRightSteering, MotorType.kBrushless);
-        BackLeftSteering = new CANSparkMax(Constants.SwerveDriveNEO.kBackLeftSteering, MotorType.kBrushless);
-        BackRightSteering = new CANSparkMax(Constants.SwerveDriveNEO.kBackRightSteering, MotorType.kBrushless);
-        FrontLeftDrive = new CANSparkMax(Constants.SwerveDriveNEO.kFrontLeftDrive, MotorType.kBrushless);
-        FrontRightDrive = new CANSparkMax(Constants.SwerveDriveNEO.kFrontRightDrive, MotorType.kBrushless);
-        BackLeftDrive = new CANSparkMax(Constants.SwerveDriveNEO.kBackLeftDrive, MotorType.kBrushless);
-        BackRightDrive = new CANSparkMax(Constants.SwerveDriveNEO.kBackRightDrive, MotorType.kBrushless);
+        m_FrontLeftSteering = new CANSparkMax(Constants.SwerveDriveNEO.kFrontLeftSteering, MotorType.kBrushless);
+        m_FrontRightSteering = new CANSparkMax(Constants.SwerveDriveNEO.kFrontRightSteering, MotorType.kBrushless);
+        m_BackLeftSteering = new CANSparkMax(Constants.SwerveDriveNEO.kBackLeftSteering, MotorType.kBrushless);
+        m_BackRightSteering = new CANSparkMax(Constants.SwerveDriveNEO.kBackRightSteering, MotorType.kBrushless);
+        m_FrontLeftDrive = new CANSparkMax(Constants.SwerveDriveNEO.kFrontLeftDrive, MotorType.kBrushless);
+        m_FrontRightDrive = new CANSparkMax(Constants.SwerveDriveNEO.kFrontRightDrive, MotorType.kBrushless);
+        m_BackLeftDrive = new CANSparkMax(Constants.SwerveDriveNEO.kBackLeftDrive, MotorType.kBrushless);
+        m_BackRightDrive = new CANSparkMax(Constants.SwerveDriveNEO.kBackRightDrive, MotorType.kBrushless);
         // #endregion
-        SwerveDriveInit(FrontLeftSteering, FrontRightSteering, BackLeftSteering, BackRightSteering, FrontLeftDrive,
-                FrontRightDrive, BackLeftDrive, BackRightDrive, ahrs);
+        SwerveDriveInit(ahrs);
     }
 
     /**
@@ -170,9 +158,7 @@ public class SwerveDriveNEO {
      * @param defaultDeadzone         The default for Switchboard deadzone value
      */
 
-    private void SwerveDriveInit(CANSparkMax motorFrontLeftSteering, CANSparkMax motorFrontRightSteering,
-            CANSparkMax motorBackLeftSteering, CANSparkMax motorBackRightSteering, CANSparkMax FrontLeftDrive,
-            CANSparkMax FrontRightDrive, CANSparkMax BackLeftDrive, CANSparkMax BackRightDrive, AHRS ahrs) {
+    private void SwerveDriveInit( AHRS ahrs) {
 
         gyro = ahrs;
 
@@ -182,207 +168,44 @@ public class SwerveDriveNEO {
         } catch (Exception ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
-
-        m_canFrontLeftSteering = motorFrontLeftSteering;
-        m_canFrontRightSteering = motorFrontRightSteering;
-        m_canBackLeftSteering = motorBackLeftSteering;
-        m_canBackRightSteering = motorBackRightSteering;
-
-        m_FrontLeftDrive = FrontLeftDrive;
-        m_FrontRightDrive = FrontRightDrive;
-        m_BackLeftDrive = BackLeftDrive;
-        m_BackRightDrive = BackRightDrive;
-
-        m_FrontLeftDrive.setIdleMode(IdleMode.kBrake);
-        m_FrontRightDrive.setIdleMode(IdleMode.kBrake);
-        m_BackLeftDrive.setIdleMode(IdleMode.kBrake);
-        m_BackRightDrive.setIdleMode(IdleMode.kBrake);
-
-        m_FrontLeftDrive.setOpenLoopRampRate(0.5);
-        m_FrontRightDrive.setOpenLoopRampRate(0.5);
-        m_BackLeftDrive.setOpenLoopRampRate(0.5);
-        m_BackRightDrive.setOpenLoopRampRate(0.5);
-
-        m_FrontLeftDrive.setSmartCurrentLimit(40);
-        m_FrontRightDrive.setSmartCurrentLimit(40);
-        m_BackLeftDrive.setSmartCurrentLimit(40);
-        m_BackRightDrive.setSmartCurrentLimit(40);
-
-        m_FrontLeftDrive.burnFlash();
-        m_FrontRightDrive.burnFlash();
-        m_BackLeftDrive.burnFlash();
-        m_BackRightDrive.burnFlash();
-
-        // Configure Feedback Sensors for Drive
-        m_canFrontLeftSteeringpid=motorFrontLeftSteering.getPIDController();
-        m_canFrontRightSteeringpid=motorFrontRightSteering.getPIDController();
-        m_canBackRightSteeringpid=motorBackRightSteering.getPIDController();
-        m_canBackLeftSteeringpid=motorBackLeftSteering.getPIDController();
-        /*m_canFrontLeftSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveNEO.kPIDLoopIdx,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveNEO.kPIDLoopIdx,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveNEO.kPIDLoopIdx,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveNEO.kPIDLoopIdx,
-                Constants.SwerveDriveNEO.kTimeoutMs);*/
-
-        // Tell the talon to not report if the sensor is out of Phase
-        /*m_canFrontLeftSteering.setSensorPhase(Constants.SwerveDriveNEO.kSensorPhase);
-        m_canFrontRightSteering.setSensorPhase(Constants.SwerveDriveNEO.kSensorPhase);
-        m_canBackLeftSteering.setSensorPhase(Constants.SwerveDriveNEO.kSensorPhase);
-        m_canBackRightSteering.setSensorPhase(Constants.SwerveDriveNEO.kSensorPhase);*/
-
-        /*
-         * Set based on what direction you want forward/positive to be. This does not
-         * affect sensor phase.
-         */
-        m_canFrontLeftSteering.setInverted(Constants.SwerveDriveNEO.kMotorInvert);
-        m_canFrontRightSteering.setInverted(Constants.SwerveDriveNEO.kMotorInvert);
-        m_canBackLeftSteering.setInverted(Constants.SwerveDriveNEO.kMotorInvert);
-        m_canBackRightSteering.setInverted(Constants.SwerveDriveNEO.kMotorInvert);
-
-        /* Config the peak and nominal outputs, 12V means full */
-        // Front Left
-        /*m_canFrontLeftSteering.configNominalOutputForward(0, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontLeftSteering.configNominalOutputReverse(0, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontLeftSteering.configPeakOutputForward(1, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontLeftSteering.configPeakOutputReverse(-1, Constants.SwerveDriveNEO.kTimeoutMs);
-        // Front Right
-        m_canFrontRightSteering.configNominalOutputForward(0, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteering.configNominalOutputReverse(0, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteering.configPeakOutputForward(1, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteering.configPeakOutputReverse(-1, Constants.SwerveDriveNEO.kTimeoutMs);
-        // Back Left
-        m_canBackLeftSteering.configNominalOutputForward(0, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.configNominalOutputReverse(0, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.configPeakOutputForward(1, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.configPeakOutputReverse(-1, Constants.SwerveDriveNEO.kTimeoutMs);
-        // Back Right
-        m_canBackRightSteering.configNominalOutputForward(0, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.configNominalOutputReverse(0, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.configPeakOutputForward(1, Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.configPeakOutputReverse(-1, Constants.SwerveDriveNEO.kTimeoutMs);*/
-
-        // Configure the amount of allowable error in the loop
-        /*m_canFrontLeftSteering.configAllowableClosedloopError(Constants.SwerveDriveNEO.kAlloweedError,
-                Constants.SwerveDriveNEO.kPIDLoopIdx,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteering.configAllowableClosedloopError(Constants.SwerveDriveNEO.kAlloweedError,
-                Constants.SwerveDriveNEO.kPIDLoopIdx,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.configAllowableClosedloopError(Constants.SwerveDriveNEO.kAlloweedError,
-                Constants.SwerveDriveNEO.kPIDLoopIdx,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.configAllowableClosedloopError(Constants.SwerveDriveNEO.kAlloweedError,
-                Constants.SwerveDriveNEO.kPIDLoopIdx,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-
-        // Configure the overloop behavior of the encoders
-        m_canFrontLeftSteering.configFeedbackNotContinuous(Constants.SwerveDriveNEO.kNonContinuousFeedback,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteering.configFeedbackNotContinuous(Constants.SwerveDriveNEO.kNonContinuousFeedback,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.configFeedbackNotContinuous(Constants.SwerveDriveNEO.kNonContinuousFeedback,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.configFeedbackNotContinuous(Constants.SwerveDriveNEO.kNonContinuousFeedback,
-                Constants.SwerveDriveNEO.kTimeoutMs);*/
-
-        /* Config Position Closed Loop gains in slot0, typically kF stays zero. */
-        // Front Left
-        m_canBackLeftSteeringpid.setFF(Constants.SwerveDriveNEO.kGains.kF);
-        //m_canFrontLeftSteering.config_kF(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kF,
-        //        Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteeringpid.setP(Constants.SwerveDriveNEO.kGains.kP);
-        //m_canFrontLeftSteering.config_kP(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kP,
-                //Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteeringpid.setI(Constants.SwerveDriveNEO.kGains.kI);
-        //m_canFrontLeftSteering.config_kI(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kI,
-                //Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteeringpid.setD(Constants.SwerveDriveNEO.kGains.kD);
-        //m_canFrontLeftSteering.config_kD(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kD,
-                //Constants.SwerveDriveNEO.kTimeoutMs);
-        // Front Right
-        m_canFrontRightSteeringpid.setFF(Constants.SwerveDriveNEO.kGains.kF);
-        //m_canFrontRightSteering.config_kF(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kF,
-                //Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteeringpid.setP(Constants.SwerveDriveNEO.kGains.kP);
-        //m_canFrontRightSteering.config_kP(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kP,
-                //Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteeringpid.setI(Constants.SwerveDriveNEO.kGains.kI);
-        //m_canFrontRightSteering.config_kI(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kI,
-                //Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canFrontRightSteeringpid.setD(Constants.SwerveDriveNEO.kGains.kD);
-        //m_canFrontRightSteering.config_kD(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kD,
-                //Constants.SwerveDriveNEO.kTimeoutMs);
-        // Back Left
-        m_canBackLeftSteeringpid.setFF(Constants.SwerveDriveNEO.kGains.kF);
-        m_canBackLeftSteeringpid.setP(Constants.SwerveDriveNEO.kGains.kP);
-        m_canBackLeftSteeringpid.setI(Constants.SwerveDriveNEO.kGains.kI);
-        m_canBackLeftSteeringpid.setD(Constants.SwerveDriveNEO.kGains.kD);
-        /*
-        m_canBackLeftSteering.config_kF(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kF,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.config_kP(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kP,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.config_kI(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kI,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackLeftSteering.config_kD(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kD,
-                Constants.SwerveDriveNEO.kTimeoutMs); */
-        // Back Right
-        m_canBackLeftSteeringpid.setFF(Constants.SwerveDriveNEO.kGains.kF);
-        m_canBackLeftSteeringpid.setP(Constants.SwerveDriveNEO.kGains.kP);
-        m_canBackLeftSteeringpid.setI(Constants.SwerveDriveNEO.kGains.kI);
-        m_canBackLeftSteeringpid.setD(Constants.SwerveDriveNEO.kGains.kD);
-        /*m_canBackRightSteering.config_kF(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kF,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.config_kP(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kP,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.config_kI(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kI,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        m_canBackRightSteering.config_kD(Constants.SwerveDriveNEO.kPIDLoopIdx, Constants.SwerveDriveNEO.kGains.kD,
-                Constants.SwerveDriveNEO.kTimeoutMs);
-        */
-        //FIX - Need to find replacement
-        /*
-        m_canFrontLeftSteering.configSelectedFeedbackCoefficient(1.0);
-        m_canFrontRightSteering.configSelectedFeedbackCoefficient(1.0);
-        m_canBackLeftSteering.configSelectedFeedbackCoefficient(1.0);
-        m_canBackRightSteering.configSelectedFeedbackCoefficient(1.0);
-        */ 
-      
-        m_canFrontRightSteeringpid.setSmartMotionMaxVelocity(Constants.SwerveDriveNEO.maxVel,Constants.SwerveDriveNEO.smartMotionSlot );
-        m_canFrontRightSteeringpid.setSmartMotionMinOutputVelocity(Constants.SwerveDriveNEO.minVel, Constants.SwerveDriveNEO.smartMotionSlot);
-        m_canFrontRightSteeringpid.setSmartMotionMaxAccel(Constants.SwerveDriveNEO.maxAcc, Constants.SwerveDriveNEO.smartMotionSlot);
-        m_canFrontRightSteeringpid.setSmartMotionAllowedClosedLoopError(Constants.SwerveDriveNEO.allowedErr, Constants.SwerveDriveNEO.smartMotionSlot);
-       
-        m_canFrontLeftSteeringpid.setSmartMotionMaxVelocity(Constants.SwerveDriveNEO.maxVel,Constants.SwerveDriveNEO.smartMotionSlot );
-        m_canFrontLeftSteeringpid.setSmartMotionMinOutputVelocity(Constants.SwerveDriveNEO.minVel, Constants.SwerveDriveNEO.smartMotionSlot);
-        m_canFrontLeftSteeringpid.setSmartMotionMaxAccel(Constants.SwerveDriveNEO.maxAcc, Constants.SwerveDriveNEO.smartMotionSlot);
-        m_canFrontLeftSteeringpid.setSmartMotionAllowedClosedLoopError(Constants.SwerveDriveNEO.allowedErr, Constants.SwerveDriveNEO.smartMotionSlot);
-       
-        m_canBackRightSteeringpid.setSmartMotionMaxVelocity(Constants.SwerveDriveNEO.maxVel,Constants.SwerveDriveNEO.smartMotionSlot );
-        m_canBackRightSteeringpid.setSmartMotionMinOutputVelocity(Constants.SwerveDriveNEO.minVel, Constants.SwerveDriveNEO.smartMotionSlot);
-        m_canBackRightSteeringpid.setSmartMotionMaxAccel(Constants.SwerveDriveNEO.maxAcc, Constants.SwerveDriveNEO.smartMotionSlot);
-        m_canBackRightSteeringpid.setSmartMotionAllowedClosedLoopError(Constants.SwerveDriveNEO.allowedErr, Constants.SwerveDriveNEO.smartMotionSlot);
-       
-        m_canBackLeftSteeringpid.setSmartMotionMaxVelocity(Constants.SwerveDriveNEO.maxVel,Constants.SwerveDriveNEO.smartMotionSlot );
-        m_canBackLeftSteeringpid.setSmartMotionMinOutputVelocity(Constants.SwerveDriveNEO.minVel, Constants.SwerveDriveNEO.smartMotionSlot);
-        m_canBackLeftSteeringpid.setSmartMotionMaxAccel(Constants.SwerveDriveNEO.maxAcc, Constants.SwerveDriveNEO.smartMotionSlot);
-        m_canBackLeftSteeringpid.setSmartMotionAllowedClosedLoopError(Constants.SwerveDriveNEO.allowedErr, Constants.SwerveDriveNEO.smartMotionSlot);
-      
-        m_canFrontLeftSteering.setIdleMode(IdleMode.kBrake);
-        m_canFrontRightSteering.setIdleMode(IdleMode.kBrake);
-        m_canBackLeftSteering.setIdleMode(IdleMode.kBrake);
-        m_canBackRightSteering.setIdleMode(IdleMode.kBrake);
+          
+        initDrivingMotor(m_FrontLeftDrive);
+        initDrivingMotor(m_BackLeftDrive);
+        initDrivingMotor(m_BackLeftDrive);
+        initDrivingMotor(m_BackRightDrive);
+        m_FrontLeftSteeringpid=m_FrontLeftSteering.getPIDController();
+        m_FrontRightSteeringpid=m_FrontRightSteering.getPIDController();
+        m_BackRightSteeringpid=m_BackRightSteering.getPIDController();
+        m_BackLeftSteeringpid=m_BackLeftSteering.getPIDController();
+          
         
-      /*  m_canFrontLeftSteering.setNeutralMode(NeutralMode.Brake);
-        m_canFrontRightSteering.setNeutralMode(NeutralMode.Brake);
-        m_canBackLeftSteering.setNeutralMode(NeutralMode.Brake);
-        m_canBackRightSteering.setNeutralMode(NeutralMode.Brake);
-        */
+        initSteeringMotor(m_BackLeftSteering,m_BackLeftSteeringpid);
+        initSteeringMotor(m_BackRightSteering,m_BackRightSteeringpid);
+        initSteeringMotor(m_FrontRightSteering,m_FrontRightSteeringpid);
+        initSteeringMotor(m_FrontLeftSteering,m_FrontLeftSteeringpid);
+        
     }
+    private void initDrivingMotor (CANSparkMax motor){
+        motor.setIdleMode(IdleMode.kBrake);
+        motor.setOpenLoopRampRate(0.5);
+        motor.setSmartCurrentLimit(40);         
+        motor.burnFlash();
 
+    }
+    private void initSteeringMotor(CANSparkMax motor,SparkMaxPIDController encoder)
+    {   motor.restoreFactoryDefaults();
+        motor.setInverted(Constants.SwerveDriveNEO.kMotorInvert);
+        motor.setIdleMode(IdleMode.kBrake);
+        encoder.setP(Constants.SwerveDriveNEO.kGains.kP);
+        encoder.setI(Constants.SwerveDriveNEO.kGains.kI);
+        encoder.setD(Constants.SwerveDriveNEO.kGains.kD);
+        encoder.setIZone(Constants.SwerveDriveNEO.kGains.kIzone);
+        encoder.setFF(Constants.SwerveDriveNEO.kGains.kF);
+        encoder.setOutputRange(Constants.SwerveDriveNEO.minVel, Constants.SwerveDriveNEO.maxVel);
+        encoder.setSmartMotionMaxAccel(Constants.SwerveDriveNEO.maxACC, Constants.SwerveDriveNEO.smartMotionSlot);
+        encoder.setSmartMotionAllowedClosedLoopError(Constants.SwerveDriveNEO.allowedErr, Constants.SwerveDriveNEO.smartMotionSlot);
+       
+    }
     /**
      * Drives the Robot
      * 
@@ -455,10 +278,10 @@ public class SwerveDriveNEO {
         m_BackRightDrive.set(-backRightSpeed * kSpeedModifier);
 
         
-        steer(m_canFrontLeftSteering, frontLeft360Angle, frontLeftOffset);
-        steer(m_canFrontRightSteering, frontRight360Angle, frontRightOffset);
-        steer(m_canBackLeftSteering, backLeft360Angle, backLeftOffset);
-        steer(m_canBackRightSteering, backRight360Angle, backRightOffset);
+        steer(m_FrontLeftSteering, frontLeft360Angle, frontLeftOffset);
+        steer(m_FrontRightSteering, frontRight360Angle, frontRightOffset);
+        steer(m_BackLeftSteering, backLeft360Angle, backLeftOffset);
+        steer(m_BackRightSteering, backRight360Angle, backRightOffset);
 
         // frontLeftTargetPosition = -1 * ((ConvertAngleToPosition(frontLeft360Angle) +
         // Math.abs(frontLeftOffset)) % 1024);
@@ -470,10 +293,10 @@ public class SwerveDriveNEO {
         // backRightTargetPosition = -1 * ((ConvertAngleToPosition(backRight360Angle) +
         // Math.abs(backRightOffset)) % 1024);
 
-        // m_canFrontRightSteering.set(ControlMode.Position, frontRightTargetPosition);
-        // m_canFrontLeftSteering.set(ControlMode.Position, frontLeftTargetPosition);
-        // m_canBackLeftSteering.set(ControlMode.Position, backLeftTargetPosition);
-        // m_canBackRightSteering.set(ControlMode.Position, backRightTargetPosition);
+        // m_FrontRightSteering.set(ControlMode.Position, frontRightTargetPosition);
+        // m_FrontLeftSteering.set(ControlMode.Position, frontLeftTargetPosition);
+        // m_BackLeftSteering.set(ControlMode.Position, backLeftTargetPosition);
+        // m_BackRightSteering.set(ControlMode.Position, backRightTargetPosition);
 
     }
 
@@ -694,30 +517,31 @@ public class SwerveDriveNEO {
 
     /*
      * private void steer0() {
-     * quickSteer(m_canFrontRightSteering, 0, false);
-     * quickSteer(m_canFrontLeftSteering, 0, false);
-     * quickSteer(m_canBackRightSteering, 0, false);
-     * quickSteer(m_canBackRightSteering, 0, false);
+     * quickSteer(m_FrontRightSteering, 0, false);
+     * quickSteer(m_FrontLeftSteering, 0, false);
+     * quickSteer(m_BackRightSteering, 0, false);
+     * quickSteer(m_BackRightSteering, 0, false);
      * }
      */
 
     public void steer(CANSparkMax controller, double targetAngle, int offset) {
     
-        final double ticksPerRotation = 1024; // in encoder counts
+    
         //final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveNEO.kSlotIdx);
         final double current = controller.getEncoder().getPosition();
         final double desired = (int) Math.round(targetAngle * ticksPerRotation / 360.0) + offset;
 
         final double newPosition = (int) MathUtil.minChange(desired, current, ticksPerRotation) + current;
-        System.out.println(controller.getDeviceId() + " - " +  current + " move to " + newPosition);
-        controller.getPIDController().setReference(newPosition, CANSparkMax.ControlType.kSmartMotion);
+        if (current != desired ) {
+          System.out.println(controller.getDeviceId() + " - " +  current + " move to " + newPosition);
+        }
+          controller.getPIDController().setReference(newPosition, CANSparkMax.ControlType.kSmartMotion);
         
     }
 
     public double quickSteer(CANSparkMax controller, double targetAngle, boolean quickReverseAllowed) {
         double speedMultiplier = 1;
-        final int ticksPerRotation = 1024; // in encoder counts
-        //final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveNEO.kSlotIdx);
+         //final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveNEO.kSlotIdx);
         final double current = controller.getEncoder().getPosition();
         final double desired = (int) Math.round(targetAngle * ticksPerRotation / 360.0) - Math.abs(frontLeftOffset);
 
@@ -746,15 +570,15 @@ public class SwerveDriveNEO {
     }
 
     public void driveZero() {
-        m_canFrontRightSteering.getPIDController().setReference(frontLeftTargetPosition, CANSparkMax.ControlType.kSmartMotion);
-        m_canFrontLeftSteering.getPIDController().setReference(frontLeftTargetPosition, CANSparkMax.ControlType.kSmartMotion);
-        m_canBackLeftSteering.getPIDController().setReference(backLeftTargetPosition, CANSparkMax.ControlType.kSmartMotion);
-        m_canBackRightSteering.getPIDController().setReference(backRightTargetPosition, CANSparkMax.ControlType.kSmartMotion);
+        m_FrontRightSteering.getPIDController().setReference(frontLeftTargetPosition, CANSparkMax.ControlType.kSmartMotion);
+        m_FrontLeftSteering.getPIDController().setReference(frontLeftTargetPosition, CANSparkMax.ControlType.kSmartMotion);
+        m_BackLeftSteering.getPIDController().setReference(backLeftTargetPosition, CANSparkMax.ControlType.kSmartMotion);
+        m_BackRightSteering.getPIDController().setReference(backRightTargetPosition, CANSparkMax.ControlType.kSmartMotion);
 
-     /*   m_canFrontRightSteering.set(ControlMode.Position, frontRightTargetPosition);
-        m_canFrontLeftSteering.set(ControlMode.Position, frontLeftTargetPosition);
-        m_canBackLeftSteering.set(ControlMode.Position, backLeftTargetPosition);
-        m_canBackRightSteering.set(ControlMode.Position, backRightTargetPosition);*/
+     /*   m_FrontRightSteering.set(ControlMode.Position, frontRightTargetPosition);
+        m_FrontLeftSteering.set(ControlMode.Position, frontLeftTargetPosition);
+        m_BackLeftSteering.set(ControlMode.Position, backLeftTargetPosition);
+        m_BackRightSteering.set(ControlMode.Position, backRightTargetPosition);*/
     }
 
     public double ConvertTo360Angle(double Angle) {
@@ -772,7 +596,7 @@ public class SwerveDriveNEO {
     }
 
     public double ConvertAngleToPosition(double Angle) {
-        double TargetPosition = (1024.0 / 360.0) * Angle;
+        double TargetPosition = (ticksPerRotation / 360.0) * Angle;
 
         return TargetPosition;
     }
@@ -879,7 +703,7 @@ public class SwerveDriveNEO {
         xSpeedPercent = Math.cos(directionRadians);
         ySpeedPercent = Math.sin(directionRadians);
         // Convert distance robot travels from inches
-        distance = distance / 42;
+        distance = distance / ticksPerRotation;
         startPosition = m_FrontLeftDrive.getEncoder().getPosition();
         targetPosition = distance + startPosition;
         System.out.println("direction=" + direction + "(" + directionRadians + ")");

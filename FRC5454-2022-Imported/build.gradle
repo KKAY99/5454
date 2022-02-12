@@ -49,8 +49,8 @@ def includeDesktopSupport = true
 // Also defines JUnit 4.
 dependencies {
     implementation wpi.java.deps.wpilib()
-    implementation wpi.java.vendor.java()
-
+    implementation wpi.java.vendor.java()      
+ 
     roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
     roborioDebug wpi.java.vendor.jniDebug(wpi.platforms.roborio)
 
@@ -66,6 +66,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'junit:junit:4.12'
+  
 }
 
 // Simulation configuration (e.g. environment variables).

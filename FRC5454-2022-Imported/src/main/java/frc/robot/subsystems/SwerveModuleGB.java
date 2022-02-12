@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants;
 import frc.robot.classes.MathUtil;
 
-public class SwerveModule {
+public class SwerveModuleGB {
         private static final double kWheelRadius = 2.0 / 39.37; // 2in to meters
         private static final int kDriveEncoderResolution = 1024;
         private static final int kSteerEncoderResolution = 1024;
@@ -71,7 +71,7 @@ public class SwerveModule {
          * @param turningEncoderChannelA DIO input for the turning encoder channel A
          * @param turningEncoderChannelB DIO input for the turning encoder channel B
          */
-        public SwerveModule(int driveMotorID, int turningMotorID, String name, double offset) {
+        public SwerveModuleGB(int driveMotorID, int turningMotorID, String name, double offset) {
                 m_driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
                 m_turningMotor = new TalonSRX(turningMotorID);
 

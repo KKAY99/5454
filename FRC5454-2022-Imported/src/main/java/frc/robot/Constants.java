@@ -205,8 +205,16 @@ public final class Constants {
          * Gains used in Positon Closed Loop, to be adjusted accordingly Gains(kp, ki,
          * kd, kf, izone, peak output);
          */
-        public static final Gains kGains = new Gains(20, 0.0, 200, 0.0, 0, 1.0);
+        public static final Gains kGains = new Gains(5e-5,1e-6,0,0.000156,0,1.0);
+        public static final int kMaxOutput=1;
+        public static final int kMinOutput=-1;
+        public static final int maxVel=2500;
+        public static final int maxACC=1500;
+        public static int smartMotionSlot=0;
+        public static double allowedErr=1; //GUESSSSSSS
 
+        public static double minVel = 0; // rpm
+         
         /* Constants for AutoDrive Targeting Mode driven by Vision */
         public static double kVisionDriveSpeedFast = .25;
         public static double kVisionDriveSpeedSlow = .15;
@@ -227,16 +235,6 @@ public final class Constants {
         public static int kBackLeftDrive = 22;
         public static int kBackRightDrive = 23;
         // #endr
-        public static int smartMotionSlot=0;
-        public static int kMaxOutput = 1; 
-        public static int kMinOutput = -1;
-        public static int maxRPM = 5700;
-        public static double allowedErr=1; //GUESSSSSSS
-
-        // Smart Motion Coefficients
-        public static double maxVel = 2000; // rpm
-        public static double minVel = 0; // rpm
-        public static double maxAcc = 1500;
         
     }
 
@@ -275,7 +273,7 @@ public final class Constants {
          * Gains used in Positon Closed Loop, to be adjusted accordingly Gains(kp, ki,
          * kd, kf, izone, peak output);
          */
-        public static final Gains kGains = new Gains(20, 0.0, 200, 0.0, 0, 1.0);
+        public static final Gains kGains = new Gains(0.5, 0.0, 0.0001, 0.0, 0, 1.0);
 
         /* Constants for AutoDrive Targeting Mode driven by Vision */
         public static double kVisionDriveSpeedFast = .25;
@@ -298,4 +296,27 @@ public final class Constants {
         public static int kBackRightDrive = 13;
         // #endr
     }
+    
+public static class RobotMap {
+    public static final int DRIVETRAIN_FRONT_LEFT_MODULE_ANGLE_ENCODER = 0;
+    public static final int DRIVETRAIN_FRONT_LEFT_MODULE_ANGLE_MOTOR = 4;
+    public static final double DRIVETRAIN_FRONT_LEFT_MODULE_ANGLE_OFFSET = -Math.toRadians(154.3);
+    public static final int DRIVETRAIN_FRONT_LEFT_MODULE_DRIVE_MOTOR = 10;
+
+    public static final int DRIVETRAIN_FRONT_RIGHT_MODULE_ANGLE_ENCODER = 3;
+    public static final int DRIVETRAIN_FRONT_RIGHT_MODULE_ANGLE_MOTOR = 7;
+    public static final double DRIVETRAIN_FRONT_RIGHT_MODULE_ANGLE_OFFSET = -Math.toRadians(329.0);
+    public static final int DRIVETRAIN_FRONT_RIGHT_MODULE_DRIVE_MOTOR = 6;
+
+    public static final int DRIVETRAIN_BACK_LEFT_MODULE_ANGLE_ENCODER = 1;
+    public static final int DRIVETRAIN_BACK_LEFT_MODULE_ANGLE_MOTOR = 5;
+    public static final double DRIVETRAIN_BACK_LEFT_MODULE_ANGLE_OFFSET = -Math.toRadians(218.1);
+    public static final int DRIVETRAIN_BACK_LEFT_MODULE_DRIVE_MOTOR = 9;
+
+    public static final int DRIVETRAIN_BACK_RIGHT_MODULE_ANGLE_ENCODER = 2;
+    public static final int DRIVETRAIN_BACK_RIGHT_MODULE_ANGLE_MOTOR = 6;
+    public static final double DRIVETRAIN_BACK_RIGHT_MODULE_ANGLE_OFFSET = -Math.toRadians(268.9);
+    public static final int DRIVETRAIN_BACK_RIGHT_MODULE_DRIVE_MOTOR = 7;
+    }
+
 }

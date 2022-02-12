@@ -35,8 +35,7 @@ public class RobotContainer {
   private final IntakeLiftSubsystem m_IntakeLiftSubsystem =new IntakeLiftSubsystem();
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  private final ColorWheelSubsystem m_ColorWheel = new ColorWheelSubsystem();
-  
+  private final PneumaticsSubsystem m_Pneumatics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorNode);
   private final Limelight m_LimeLight = new Limelight(LimeLightValues.targetHeight, LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle);
 //  private Joystick m_rightJoystick = new Joystick(InputControllers.kJoystickRight);
   private Joystick m_leftJoystick = new Joystick(InputControllers.kJoystickLeft);
@@ -103,8 +102,8 @@ public class RobotContainer {
     //new JoystickButton(m_rightJoystick,ButtonConstants.intakeLiftUp).whenPressed(new IntakeLiftUpCommand(m_IntakeLiftSubsystem,IntakeLiftSpeeds.intakeLiftUpSpeedSlow));   
     SmartDashboard.putString("Intake Up","Right-Button " + ButtonConstants.intakeLiftUp);
     
-    SmartDashboard.putString("Move Target","Xbox Button " + ButtonConstants.telopAutoShoot);
-    new JoystickButton(m_xBox,ButtonConstants.telopAutoShoot).whenPressed(new TeleopMoveShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,false));
+    SmartDashboard.putString("Fire Latch","Xbox Button " + ButtonConstants.telopAutoShoot);
+    new JoystickButton(m_xBox,ButtonConstants.telopAutoShoot).whenPressed(new LatchCommand(m_Pneumatics));
     
     
 

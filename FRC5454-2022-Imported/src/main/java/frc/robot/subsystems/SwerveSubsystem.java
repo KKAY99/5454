@@ -53,13 +53,13 @@ public class SwerveSubsystem extends SubsystemBase {
         private NetworkTableEntry backLeftAngle = Shuffleboard.getTab("Swerve").add("BL_A", 0.0).getEntry();
         private NetworkTableEntry backRightAngle = Shuffleboard.getTab("Swerve").add("BR_A", 0.0).getEntry();
 
-        private final SwerveModule m_frontLeft = new SwerveModule(Constants.SwerveDriveGB.kFrontLeftDrive,
+        private final SwerveModuleGB m_frontLeft = new SwerveModuleGB(Constants.SwerveDriveGB.kFrontLeftDrive,
                         Constants.SwerveDriveGB.kFrontLeftSteering, "Front Left", frontLeftOffset);
-        private final SwerveModule m_frontRight = new SwerveModule(Constants.SwerveDriveGB.kFrontRightDrive,
+        private final SwerveModuleGB m_frontRight = new SwerveModuleGB(Constants.SwerveDriveGB.kFrontRightDrive,
                         Constants.SwerveDriveGB.kFrontRightSteering, "Front Right", frontRightOffset);
-        private final SwerveModule m_backLeft = new SwerveModule(Constants.SwerveDriveGB.kBackLeftDrive,
+        private final SwerveModuleGB m_backLeft = new SwerveModuleGB(Constants.SwerveDriveGB.kBackLeftDrive,
                         Constants.SwerveDriveGB.kBackLeftSteering, "Back Left", backLeftOffset);
-        private final SwerveModule m_backRight = new SwerveModule(Constants.SwerveDriveGB.kBackRightDrive,
+        private final SwerveModuleGB m_backRight = new SwerveModuleGB(Constants.SwerveDriveGB.kBackRightDrive,
                         Constants.SwerveDriveGB.kBackRightSteering, "Back Right", backRightOffset);
 
         private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
