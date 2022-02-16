@@ -20,20 +20,23 @@ import frc.robot.classes.Gains;
  */
 public final class Constants {
     public static final double kSpeedMultiplier = 1.0;
-    public static final int ConveyorPort=10;
+    public static final int ConveyorPort=33;
     public static final int IntakePort=13;
     public static final int TurretPort=14;
+    public static final int FeederPort=15;
     public static final double intakeSpeed=-.45;
-    public static final double conveyorUpSpeed=-0.9;
-    public static final double conveyorDownSpeed=0.5;
+    public static final double FeederSpeed=.5;
+    public static final double conveyorUpSpeed=0.9;
+    public static final double conveyorDownSpeed=-0.5;
   
     public static final class ButtonConstants{
        public static final int ManualShoot=1;
-       public static final int AimandShoot=5;
+       public static final int AimandShoot=2;
        public static final int ConveyerIn=6;
-       public static final int ConveyerOut=2;
+       public static final int ConveyerOut=5;
        public static final int IntakeIn=3;
        public static final int IntakeOut=4;
+       public static final int FeederUp=8;
     }
 
     public static final class AutoModes {
@@ -208,8 +211,8 @@ public final class Constants {
         public static final Gains kGains = new Gains(5e-5,1e-6,0,0.000156,0,1.0);
         public static final int kMaxOutput=1;
         public static final int kMinOutput=-1;
-        public static final int maxVel=2500;
-        public static final int maxACC=1500;
+        public static final int maxVel=5000;
+        public static final int maxACC=2500;
         public static int smartMotionSlot=0;
         public static double allowedErr=1; //GUESSSSSSS
 
@@ -228,13 +231,18 @@ public final class Constants {
         /* Motor Controllers */
         public static int kFrontLeftSteering = 25;
         public static int kFrontRightSteering = 26;
-        public static int kBackLeftSteering = 27;
-        public static int kBackRightSteering = 28;
+        public static int kBackLeftSteering = 28;
+        public static int kBackRightSteering = 27;
         public static int kFrontLeftDrive = 20;
         public static int kFrontRightDrive = 21;
         public static int kBackLeftDrive = 22;
         public static int kBackRightDrive = 23;
         // #endr
+        
+        public static int kFrontLeftSensor=0;
+        public static int kFrontRightSensor=1;
+        public static int kBackLeftSensor=2;
+        public static int kBackRightSensor=3;
         
     }
 

@@ -6,10 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.classes;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+ 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
@@ -28,7 +26,7 @@ public class SwerveDriveNEO {
 
     private final double trackWidth = 20.625;
     private final double wheelBase = 24.375;
-    private final double ticksPerRotation =42; // in encoder counts
+    private final double ticksPerRotation =18; // in encoder counts - NEO with gearing
     // KK Speed Adjustment 02/2021
     private final double kSpeedModifier = 0.8;
     private AHRS gyro;
@@ -78,16 +76,17 @@ public class SwerveDriveNEO {
     // How to get offsets
     // Point all gears towards the inside of the robot, facing forwards.
     // Ex: Front left bevel gear faces front right bevel gear
-    // Spin all wheels 1 rotation at a time until the value is between 0 and -1024
+    // Spin all wheels 1 rotation at a time until the value is between 0 and 42
     // Check Actual encoder values on Swerve shuffleboard tab
     // Make sure wheels are straight with each other using a straight ...
     // ... edge like the yardstick
 
-    public static final int frontLeftOffset = 0;
-    public static final int frontRightOffset=0;
+    public static final double frontLeftOffset = 10.11;
+    public static final double frontRightOffset=8.40;
 
-    public static final int backLeftOffset = 0;
-    public static final int backRightOffset = 0;
+    public static final double backLeftOffset = 12.5;
+    public static final double backRightOffset = 14.8;
+    
 
     public double m_FWD = 0;
     public double m_STR = 0;
@@ -201,10 +200,12 @@ public class SwerveDriveNEO {
         encoder.setD(Constants.SwerveDriveNEO.kGains.kD);
         encoder.setIZone(Constants.SwerveDriveNEO.kGains.kIzone);
         encoder.setFF(Constants.SwerveDriveNEO.kGains.kF);
-        encoder.setOutputRange(Constants.SwerveDriveNEO.minVel, Constants.SwerveDriveNEO.maxVel);
+        encoder.setOutputRange(Constants.SwerveDriveNEO.kMinOutput, Constants.SwerveDriveNEO.kMaxOutput);
+        encoder.setSmartMotionMaxVelocity(Constants.SwerveDriveNEO.maxVel, Constants.SwerveDriveNEO.smartMotionSlot);
+        encoder.setSmartMotionMinOutputVelocity(Constants.SwerveDriveNEO.minVel, Constants.SwerveDriveNEO.smartMotionSlot);
         encoder.setSmartMotionMaxAccel(Constants.SwerveDriveNEO.maxACC, Constants.SwerveDriveNEO.smartMotionSlot);
         encoder.setSmartMotionAllowedClosedLoopError(Constants.SwerveDriveNEO.allowedErr, Constants.SwerveDriveNEO.smartMotionSlot);
-       
+        
     }
     /**
      * Drives the Robot
@@ -524,19 +525,46 @@ public class SwerveDriveNEO {
      * }
      */
 
-    public void steer(CANSparkMax controller, double targetAngle, int offset) {
+    public void JIBSteer(CANSparkMax motor, double targetAngle) {
+        double reduction=18;
+        
+        motor.getEncoder().setPositionConversionFactor(2.0 * Math.PI / reduction);        
+        double currentAngle = motor.getEncoder().getPosition();
+        // Calculate the current angle in the range [0, 2pi)
+        double currentAngleMod = currentAngle % (2.0 * Math.PI);
+        if (currentAngleMod < 0.0) {
+            currentAngleMod += 2.0 * Math.PI;
+        }
+        // Figure out target to send to Spark MAX because the encoder is continuous
+        double newTarget = targetAngle + currentAngle - currentAngleMod;
+        if (targetAngle - currentAngleMod > Math.PI) {
+            newTarget -= 2.0 * Math.PI;
+        } else if (targetAngle - currentAngleMod < -Math.PI) {
+            newTarget += 2.0 * Math.PI;
+        }
+            motor.getPIDController().setReference(newTarget, CANSparkMax.ControlType.kPosition);
+        };
+      
+
+ 
+
+    public void steer(CANSparkMax controller, double targetAngle, double offset) {
     
-    
+        
         //final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveNEO.kSlotIdx);
         final double current = controller.getEncoder().getPosition();
         final double desired = (int) Math.round(targetAngle * ticksPerRotation / 360.0) + offset;
-
-        final double newPosition = (int) MathUtil.minChange(desired, current, ticksPerRotation) + current;
-        if (current != desired ) {
-          System.out.println(controller.getDeviceId() + " - " +  current + " move to " + newPosition);
-        }
-          controller.getPIDController().setReference(newPosition, CANSparkMax.ControlType.kSmartMotion);
         
+      final double newPosition = (int) MathUtil.minChange(desired, current, ticksPerRotation) + current;
+        if (current != desired ) {
+           
+            System.out.println(controller.getDeviceId() + " * " + targetAngle + " - " +  current + " move to " + desired + " via " + newPosition);
+            
+        }   
+          //controller.getPIDController().setReference(desired, CANSparkMax.ControlType.kSmartMotion);
+         // controller.getPIDController().setReference(desired, CANSparkMax.ControlType.kPosition);
+          System.out.println("current - " + controller.getOutputCurrent());
+            
     }
 
     public double quickSteer(CANSparkMax controller, double targetAngle, boolean quickReverseAllowed) {

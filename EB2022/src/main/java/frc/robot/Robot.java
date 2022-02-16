@@ -16,6 +16,8 @@ import frc.robot.Constants.AutoModes;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Counter;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -30,6 +32,7 @@ public class Robot extends TimedRobot {
   private SendableChooser<Integer> m_autoChooser = new SendableChooser();
   private UsbCamera m_TopCamera;
   private UsbCamera m_FrontCamera;
+   
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -74,7 +77,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("Limelight Distance",  m_robotContainer.getLimelightDistance());
+       
   }
 
   /**

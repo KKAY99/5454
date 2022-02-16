@@ -24,8 +24,8 @@ public final class Constants {
     public static final double kSlowMoveRight=0.20;
     public static final double kSlowMoveTurn=0.35;
     public static final class LimitSwitches{
-        public static final int ArmDown=1;
-        public static final int ArmUp=0;
+        public static final int ArmDown=0;
+        public static final int ArmUp=1;
 
     }
     public static final class InputControllers{
@@ -64,9 +64,9 @@ public final class Constants {
        public static double intakeLiftDownSpeedSlow=.2;
    }
    public static final class ClimberSpeeds{
-       public static double ClimberSpeedSlow =-0.80;
-       public static double ClimberSpeedFast =0.80;
-       public static double ClimberSpeedBack =.80;
+       public static double ClimberSpeedSlow =0.80;
+       public static double ClimberSpeedFast =0.99;
+       public static double ClimberSpeedBack =-0.80;
        
        
 
@@ -87,18 +87,18 @@ public final class Constants {
      public static int CameraSwitch=9;
      public static int climberBackJS=7;
      
-
      //back should be 7 and slow should be 1 - testing
 
      public static int climberBackXB=1;//xbox controls
-     public static int climberSlowXB=1;
+     public static int climberSlowXB=4;
      public static int telopAutoShoot=2;
      public static int intakeInXB=5;   
      public static int intakeOutXB=6;
+     public static int FlipLatchXB=8;
+
      public static int climberFastXB=4;
      public static int climberTimeXB=3;
-     public static int CameraSwitchXB=8;
-     public static int intakeLiftUpXB=3;
+    public static int intakeLiftUpXB=3;
      public static int intakeLiftDownXB=4;
      
      public static int ReverseDriveMode=8;

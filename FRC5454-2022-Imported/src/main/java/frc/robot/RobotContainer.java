@@ -45,6 +45,7 @@ public class RobotContainer {
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem(25, 26);
     private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
+    private final FeederSubsystem m_Feeder= new FeederSubsystem(Constants.FeederPort);
     private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
     // #region Shuffleboard
 
@@ -214,11 +215,12 @@ public class RobotContainer {
 
       
         final ConveyorCommand conveyorUpCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
-        final ConveyorCommand conveyorDownCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
+        final ConveyorCommand conveyorDownCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorDownSpeed);
         final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake,Constants.intakeSpeed);
         final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake,-Constants.intakeSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         final zSpinLoadShootCommand autoLoadShoot = new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity); 
+        final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
         // Creates a new JoystickButton object for button 1 (xBox A) on m_RobotDrive
         JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, ButtonConstants.AimandShoot);
         SmartDashboard.putString("Aim and Spin ","Left-Button " + ButtonConstants.AimandShoot);
@@ -241,13 +243,18 @@ public class RobotContainer {
         JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, ButtonConstants.IntakeOut);
         SmartDashboard.putString("Intake Out","Left-Button " + ButtonConstants.IntakeOut);
 
+        JoystickButton feederUpButton = new JoystickButton(m_xBoxDriver, ButtonConstants.FeederUp);
+        SmartDashboard.putString("Intake Out","Left-Button " + ButtonConstants.FeederUp);
+
         aimAndSpin.whenHeld(aimAndSpinCommand);
         //manualShoot.whenHeld(shootCommand);
         manualShoot.whenHeld(autoLoadShoot);
         conveyorUpButton.whenHeld(conveyorUpCommand);
         conveyorDownButton.whenHeld(conveyorDownCommand);
         intakeOutButton.whenHeld(intakeOutCommand);
-        intakeInButton.whenHeld(intakeInCommand);    }
+        intakeInButton.whenHeld(intakeInCommand); 
+        feederUpButton.whenHeld(feedUpCommand);
+   }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
