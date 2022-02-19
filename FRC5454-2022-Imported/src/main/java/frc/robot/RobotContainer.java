@@ -8,12 +8,16 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.classes.SpectrumAxisButton;
 import frc.robot.commands.*;
+import frc.robot.common.drivers.NavX;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.ButtonConstants;
@@ -37,16 +41,21 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
-    private final DriveSubsystem m_RobotDrive = new DriveSubsystem(m_ahrs);
-    //private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();
+  //  private AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
+    private NavX m_NavX = new NavX(SPI.Port.kMXP);
+   // private final DriveSubsystem m_RobotDrive = new DriveSubsystem(m_ahrs);
+   private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
+   //private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();
     private final Limelight m_Limelight = new Limelight();
 
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
-    private final ShooterSubsystem m_Shooter = new ShooterSubsystem(25, 26);
+    private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.TopShooterPort,Constants.BottomShooterPort);
     private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
     private final FeederSubsystem m_Feeder= new FeederSubsystem(Constants.FeederPort);
     private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
+    private final ClimbSubsystem m_Climb = new ClimbSubsystem(Constants.ClimberPort);
+    //private final PneumaticsSubsystem m_Pnuematics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorID);
+    private final TurretSubsystem m_turret = new TurretSubsystem(Constants.TurretPort,Constants.LimitSwitches.TurretLeft,Constants.LimitSwitches.TurretRight);
     // #region Shuffleboard
 
     // #region Create Shuffleboard Tabs
@@ -55,6 +64,7 @@ public class RobotContainer {
     private static ShuffleboardTab SwerveEncoders = Shuffleboard.getTab("SwerveEncoders");
     private static ShuffleboardTab AutoTab = Shuffleboard.getTab("Auto");
     private static ShuffleboardTab SubSystems = Shuffleboard.getTab("SubSystems");
+    private static ShuffleboardTab ControlTab = Shuffleboard.getTab("Controls");
     // #endregion
 
     // #region NetworkEntries
@@ -164,6 +174,26 @@ public class RobotContainer {
     static NetworkTableEntry shuffleboardGyroFused = SubSystems.add("Gyro - Fused Heading", 0)
             .withWidget(BuiltInWidgets.kTextView).getEntry();
 
+    static NetworkTableEntry shuffleboardDrive=ControlTab.add("Drive Control","Left Stick")
+        .withWidget(BuiltInWidgets.kTextView).withSize(2, 4).withPosition(0, 0).getEntry();
+    static NetworkTableEntry shuffleboarRotate=ControlTab.add("Swerve Control","Right Stick")
+        .withWidget(BuiltInWidgets.kTextView).withSize(2, 4).withPosition(0, 6).getEntry();
+    static NetworkTableEntry shuffleboardIntakeIn=ControlTab.add("Intake In","").getEntry();
+    static NetworkTableEntry shuffleboardIntakeOut=ControlTab.add("Intake Out","").getEntry();
+    static NetworkTableEntry shuffleboardConveyorIn=ControlTab.add("Conveyor In","").getEntry();
+    static NetworkTableEntry shuffleboardConveyorOut=ControlTab.add("Conveyor Out","").getEntry();
+    static NetworkTableEntry shuffleboardBallFeedUp=ControlTab.add("Ball Feed Up","").getEntry();
+    static NetworkTableEntry shuffleboardBallFeedDown=ControlTab.add("Ball Feed Down","").getEntry();
+    static NetworkTableEntry shuffleboardManualShoot=ControlTab.add("Manual Shoot","").getEntry();
+    static NetworkTableEntry shuffleboardAutoShoot=ControlTab.add("Auto Shoot","").getEntry();
+    static NetworkTableEntry shuffleboardAimAndShoot=ControlTab.add("Aim and Shoot","").getEntry();
+    static NetworkTableEntry shuffleboardTurretTurn=ControlTab.add("Turret Turn","").getEntry();
+    static NetworkTableEntry shuffleboardClimbLift=ControlTab.add("Climb Lift","").getEntry();
+    static NetworkTableEntry shuffleboardClimbLower=ControlTab.add("Climb Down","").getEntry();
+    static NetworkTableEntry shuffleboardIntakeArm=ControlTab.add("Intake Arm","").getEntry();
+    static NetworkTableEntry shuffleboardLatch=ControlTab.add("Latch","").getEntry();
+    
+    
     static String ShuffleboardLogString;
     // #endregion
     // #endregion
@@ -221,32 +251,49 @@ public class RobotContainer {
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         final zSpinLoadShootCommand autoLoadShoot = new zSpinLoadShootCommand(m_Shooter, m_Conveyor, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity); 
         final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
-        // Creates a new JoystickButton object for button 1 (xBox A) on m_RobotDrive
+        final ClimbCommand climbUpCommand=new ClimbCommand(m_Climb,Constants.climbUpSpeed);
+       // final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
+        final TurretCommand turretLeftCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
+        final TurretCommand turretRightCommand = new TurretCommand(m_turret,Constants.turretSpeed);
+        //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
+         
         JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, ButtonConstants.AimandShoot);
-        SmartDashboard.putString("Aim and Spin ","Left-Button " + ButtonConstants.AimandShoot);
-      
-        JoystickButton manualShoot = new JoystickButton(m_xBoxDriver, ButtonConstants.ManualShoot);
-        SmartDashboard.putString("Manual Shoot","Left-Button " + ButtonConstants.ManualShoot);
+        shuffleboardAimAndShoot.setString("Left-Button " + ButtonConstants.ManualShoot);
+        JoystickButton manualShoot = new JoystickButton(m_xBoxDriver, ButtonConstants.ManualShoot);        
+        shuffleboardManualShoot.setString("Left-Button " + ButtonConstants.ManualShoot);
       
         // Creates a new JoystickButton object for button 6 (xBox rightBumper) on
         // m_RobotDrive
-        JoystickButton conveyorUpButton = new JoystickButton(m_xBoxDriver, ButtonConstants.ConveyerIn);
-        SmartDashboard.putString("Conveyer Up","Left-Button " + ButtonConstants.ConveyerIn);
-      
-        // Creates a new JoystickButton object for button 2 (xBox B) on m_RobotDrive
-        JoystickButton conveyorDownButton = new JoystickButton(m_xBoxDriver, ButtonConstants.ConveyerOut);
-        SmartDashboard.putString("Shooting","Left-Button " + ButtonConstants.ConveyerOut);
-
+   
         JoystickButton intakeInButton= new JoystickButton(m_xBoxDriver, ButtonConstants.IntakeIn);
-        SmartDashboard.putString("Intake In","Left-Button " + ButtonConstants.IntakeIn);
+        shuffleboardIntakeIn.setString("Left-Button " + ButtonConstants.IntakeIn);
 
         JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, ButtonConstants.IntakeOut);
-        SmartDashboard.putString("Intake Out","Left-Button " + ButtonConstants.IntakeOut);
+        shuffleboardIntakeOut.setString("Left-Button " + ButtonConstants.IntakeOut);
 
         JoystickButton feederUpButton = new JoystickButton(m_xBoxDriver, ButtonConstants.FeederUp);
-        SmartDashboard.putString("Intake Out","Left-Button " + ButtonConstants.FeederUp);
+        shuffleboardBallFeedUp.setString("Left-Button " + ButtonConstants.FeederUp);
 
-        aimAndSpin.whenHeld(aimAndSpinCommand);
+        JoystickButton climbUpButton = new JoystickButton(m_xBoxDriver,ButtonConstants.ClimberUp);
+        shuffleboardClimbLift.setString("Left-Button " + ButtonConstants.ClimberUp);
+        
+        JoystickButton intakeArmButton = new JoystickButton(m_xBoxDriver,ButtonConstants.IntakeArm);
+        shuffleboardIntakeArm.setString("Left-Button " + ButtonConstants.IntakeArm);
+        
+
+        JoystickButton latchButton = new JoystickButton(m_xBoxDriver,ButtonConstants.Latch);
+        shuffleboardLatch.setString("Left-Button " + ButtonConstants.Latch);
+
+        SpectrumAxisButton conveyorUpButton = new SpectrumAxisButton(m_xBoxDriver,ButtonConstants.ConveyerUpAxis,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
+        shuffleboardConveyorIn.setString("Left-Trigger " + ButtonConstants.ConveyerUpAxis);
+     
+        SpectrumAxisButton conveyorDownButton = new SpectrumAxisButton(m_xBoxDriver,ButtonConstants.ConveyerDownAxis,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
+        shuffleboardConveyorOut.setString("Left-Trigger " + ButtonConstants.ConveyerDownAxis);
+        POVButton turretLeftButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretLeftPOV);
+        POVButton turretRightButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretRightPOV); 
+     // new POVButton(m_leftJoystick,0).whenHeld(new RobotMoveCommand(m_RobotDrive,-Constants.kSlowMoveLeft,Constants.kSlowMoveRight));    
+     
+   aimAndSpin.whenHeld(aimAndSpinCommand);
         //manualShoot.whenHeld(shootCommand);
         manualShoot.whenHeld(autoLoadShoot);
         conveyorUpButton.whenHeld(conveyorUpCommand);
@@ -254,6 +301,11 @@ public class RobotContainer {
         intakeOutButton.whenHeld(intakeOutCommand);
         intakeInButton.whenHeld(intakeInCommand); 
         feederUpButton.whenHeld(feedUpCommand);
+        climbUpButton.whenHeld(climbUpCommand);
+        turretLeftButton.whenHeld(turretLeftCommand);
+        turretRightButton.whenHeld(turretRightCommand);
+        //intakeArmButton.whenHeld(intakeArmCommand);        
+        //latchButton.whenPressed(latchCommand);
    }
 
     /**

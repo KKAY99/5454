@@ -1,0 +1,85 @@
+plugins {
+    id 'java'
+    id 'edu.wpi.first.GradleRIO' version '2020.1.2'
+}
+
+def ROBOT_MAIN_CLASS = "com.swervedrivespecialties.exampleswerve.Main"
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+
+    // CTRE maven repository for Phoenix library (Talon SRX drivers, Victor SPX, etc.)
+    maven {
+        url = 'http://devsite.ctr-electronics.com/maven/release/'
+    }
+
+    maven {
+        url = "http://www.revrobotics.com/content/sw/max/sdk/maven/"
+    }
+
+    maven {
+        url = 'https://frcmaven.wpi.edu/artifactory/release/'
+    }
+
+    maven {
+        url = "https://jitpack.io"
+    }
+
+    String frcYear = '2020'
+    File frcHome
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        String publicFolder = System.getenv('PUBLIC')
+        if (publicFolder == null) {
+            publicFolder = "C:\\Users\\Public"
+        }
+        def homeRoot = new File(publicFolder, "wpilib")
+        frcHome = new File(homeRoot, frcYear)
+    } else {
+        def userFolder = System.getProperty("user.home")
+        def homeRoot = new File(userFolder, "wpilib")
+        frcHome = new File(homeRoot, frcYear)
+    }
+    def frcHomeMaven = new File(frcHome, 'maven')
+    maven {
+        name 'frcHome'
+        url frcHomeMaven
+    }
+}
+
+deploy {
+    targets {
+        roboRIO('roborio') {
+            team = frc.getTeamOrDefault(5454)
+        }
+    }
+    artifacts {
+        frcJavaArtifact('frcJava') {
+            targets << 'roborio'
+
+            debug = frc.getDebugOrDefault(false)
+        }
+    }
+}
+
+dependencies {
+    implementation wpi.deps.wpilib()
+    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+
+    implementation wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+
+    // In Java for now, the argument must be false
+    simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
+
+    implementation "com.github.FRCTeam2910.Common:robot:6456e9c82e"
+}
+
+jar {
+    from configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+}

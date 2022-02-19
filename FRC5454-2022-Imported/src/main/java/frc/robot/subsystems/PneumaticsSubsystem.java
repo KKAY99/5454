@@ -5,27 +5,58 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.hal.REVPHStickyFaults;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.Constants;
+
 public class PneumaticsSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private static Compressor m_Compressor;
   private static boolean m_pressureSwitch;
+  private static Solenoid m_solenoidArm1;
+  private static Solenoid m_solenoidArm2;
+  private static Solenoid m_solenoidLatch;
+  public static PneumaticsModuleType pModule = PneumaticsModuleType.REVPH;
   public PneumaticsSubsystem(int nodeID) {
-    Compressor c = new Compressor(nodeID,PneumaticsModuleType.CTREPCM);
-    setEnabled();    
-    m_Compressor=c;
+    
+   // m_Compressor = new Compressor(nodeID,pModule);
+    
+   // m_solenoidArm1 = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort1); 
+   // m_solenoidArm2 = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort1);   
+  //  m_solenoidLatch=new Solenoid(pModule,Constants.Pneumatics.LatchPort);   
+  //setEnabled();      
 
   }
 
+  public void setLatch(boolean status){
+    m_solenoidLatch.set(status);
+ 
+  }
+  public boolean getLatchStatus(){
+      return m_solenoidLatch.get();
+  }
+  public void setArms(boolean status){
+    m_solenoidArm1.set(status);
+    m_solenoidArm2.set(status);
+
+  }
+  public boolean getArmStatus(){
+      return m_solenoidArm1.get();
+  }
+  
   public void setEnabled(){
-    m_Compressor.enableDigital();
+    //m_Compressor.enableDigital();
+    
   }
+  
   public void setDisabled(){
     m_Compressor.disable();
   }
   public boolean getEnabled(){
     return m_Compressor.enabled();
+   
   }
   public double getCurrent(){
     return m_Compressor.getCurrent();
@@ -33,7 +64,7 @@ public class PneumaticsSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-     m_pressureSwitch = m_Compressor.getPressureSwitchValue();
+    m_pressureSwitch = m_Compressor.getPressureSwitchValue();
    
   }
 

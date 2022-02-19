@@ -4,13 +4,13 @@ import frc.robot.subsystems.*;
 import frc.robot.Constants;
 /** An example command that uses an example subsystem. */
 public class AutoMoveCommand extends CommandBase {
-  private final DriveSubsystem m_drive;
+  private final DrivetrainSubsystem m_drive;
   private final double m_direction;
   private final double m_distance;
   private boolean m_isFinished=false;
 
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})    
-  public AutoMoveCommand(DriveSubsystem subsystem,double direction,double distance) {
+  public AutoMoveCommand(DrivetrainSubsystem subsystem,double direction,double distance) {
     m_drive=subsystem;
     m_direction=direction;
     m_distance=distance;

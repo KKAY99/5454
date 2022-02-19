@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.Constants.AutoModes;
-import frc.robot.common.drivers.MA3AnalogEncoder;
+import frc.robot.Constants.AutoModes; 
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
     m_delayChooser.addOption(AutoModes.delayMode1,AutoModes.delayValMode1);
     m_delayChooser.addOption(AutoModes.delayMode2,AutoModes.delayValMode2);
     m_delayChooser.addOption(AutoModes.delayMode3,AutoModes.delayValMode3);
+    
     SmartDashboard.putData("Auto Selector", m_autoChooser);
     SmartDashboard.putData("Delay Time", m_delayChooser);
 
@@ -128,15 +129,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-  /*MA3AnalogEncoder enc0= new MA3AnalogEncoder(0);
-  MA3AnalogEncoder enc1 = new MA3AnalogEncoder(1);
-  MA3AnalogEncoder enc2 = new MA3AnalogEncoder(2);
-  MA3AnalogEncoder enc3 = new MA3AnalogEncoder(3);
-  SmartDashboard.putNumber("Encoder 0",enc0.getCalibratedAngle().getDegrees());
-  SmartDashboard.putNumber("Encoder 1",enc1.getCalibratedAngle().getDegrees());
-  SmartDashboard.putNumber("Encoder 2",enc2.getCalibratedAngle().getDegrees());
-  SmartDashboard.putNumber("Encoder 3",enc3.getCalibratedAngle().getDegrees());
-  */}
+  }
 
   @Override
   public void testInit() {

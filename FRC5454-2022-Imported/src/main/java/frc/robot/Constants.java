@@ -20,23 +20,47 @@ import frc.robot.classes.Gains;
  */
 public final class Constants {
     public static final double kSpeedMultiplier = 1.0;
-    public static final int ConveyorPort=33;
+    public static final int TopShooterPort=31;
+    public static final int BottomShooterPort=30;
+    public static final int ConveyorPort=33; //33
     public static final int IntakePort=13;
-    public static final int TurretPort=14;
+    public static final int TurretPort=32;
     public static final int FeederPort=15;
+    public static final int ClimberPort=36;//36
     public static final double intakeSpeed=-.45;
     public static final double FeederSpeed=.5;
     public static final double conveyorUpSpeed=0.9;
     public static final double conveyorDownSpeed=-0.5;
-  
+    public static final double climbUpSpeed=.9;
+    public static final double climbDownSpeed=-.4;
+    public static final double turretSpeed=0.3;
+    
+    public static final class Pneumatics {
+        public static final int CompressorID=1; 
+        public static final int LatchPort=13;
+        public static final int IntakeArmPort1=14;
+        public static final int IntakeArmPort2=15;
+    }
     public static final class ButtonConstants{
        public static final int ManualShoot=1;
        public static final int AimandShoot=2;
-       public static final int ConveyerIn=6;
-       public static final int ConveyerOut=5;
-       public static final int IntakeIn=3;
-       public static final int IntakeOut=4;
-       public static final int FeederUp=8;
+       public static final int IntakeIn=5;
+       public static final int IntakeOut=6;
+       public static final int IntakeArm=3;
+       public static final int FeederUp=4;
+       public static final int Latch=8;
+       public static final int ClimberUp=7;
+       public static final int ClimberDown=10;
+       public static final int ConveyerUpAxis=2;
+       public static final int ConveyerDownAxis=3;
+       public static final double TriggerThreshold=.5;
+       public static final int TurretLeftPOV=90;
+       public static final int TurretRightPOV=270;
+    }
+    public static final class LimitSwitches{
+        public static final int ClimberBottom=3;
+        public static final int TurretLeft=0;
+        public static final int TurretRight=1;
     }
 
     public static final class AutoModes {
@@ -306,25 +330,26 @@ public final class Constants {
     }
     
 public static class RobotMap {
-    public static final int DRIVETRAIN_FRONT_LEFT_MODULE_ANGLE_ENCODER = 0;
-    public static final int DRIVETRAIN_FRONT_LEFT_MODULE_ANGLE_MOTOR = 4;
+    public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 25; // CAN
+    public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 0; // Analog
+    public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 20; // CAN
+
+    public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 26; // CAN
+    public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER = 1; // Analog
+    public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 21; // CAN
+
+    public static final int DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 28; // CAN
+    public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 3; // Analog
+    public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 22; // CAN
+
+    public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 27; // CAN
+    public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER = 2; // Analog
+    public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 23; // CAN
+
     public static final double DRIVETRAIN_FRONT_LEFT_MODULE_ANGLE_OFFSET = -Math.toRadians(154.3);
-    public static final int DRIVETRAIN_FRONT_LEFT_MODULE_DRIVE_MOTOR = 10;
-
-    public static final int DRIVETRAIN_FRONT_RIGHT_MODULE_ANGLE_ENCODER = 3;
-    public static final int DRIVETRAIN_FRONT_RIGHT_MODULE_ANGLE_MOTOR = 7;
     public static final double DRIVETRAIN_FRONT_RIGHT_MODULE_ANGLE_OFFSET = -Math.toRadians(329.0);
-    public static final int DRIVETRAIN_FRONT_RIGHT_MODULE_DRIVE_MOTOR = 6;
-
-    public static final int DRIVETRAIN_BACK_LEFT_MODULE_ANGLE_ENCODER = 1;
-    public static final int DRIVETRAIN_BACK_LEFT_MODULE_ANGLE_MOTOR = 5;
     public static final double DRIVETRAIN_BACK_LEFT_MODULE_ANGLE_OFFSET = -Math.toRadians(218.1);
-    public static final int DRIVETRAIN_BACK_LEFT_MODULE_DRIVE_MOTOR = 9;
-
-    public static final int DRIVETRAIN_BACK_RIGHT_MODULE_ANGLE_ENCODER = 2;
-    public static final int DRIVETRAIN_BACK_RIGHT_MODULE_ANGLE_MOTOR = 6;
     public static final double DRIVETRAIN_BACK_RIGHT_MODULE_ANGLE_OFFSET = -Math.toRadians(268.9);
-    public static final int DRIVETRAIN_BACK_RIGHT_MODULE_DRIVE_MOTOR = 7;
     }
 
 }

@@ -33,6 +33,8 @@ public class TurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+
     m_TurretSubsystem.turn(m_speed);
   }
 
@@ -42,9 +44,22 @@ public class TurretCommand extends CommandBase {
     m_TurretSubsystem.stop();
   }
 
+  private boolean isMovingLeft(){
+     return m_speed<0;
+  }
+  private boolean isMovingRight(){
+      return m_speed>0;
+  }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    boolean returnValue=false;
+    if (m_TurretSubsystem.hitLeftLimit() && isMovingLeft()){
+        returnValue= true;
+    } else if (m_TurretSubsystem.hitRightLimit() && isMovingRight()){
+        returnValue= true;
+    }
+    return returnValue;
   }
 }
+

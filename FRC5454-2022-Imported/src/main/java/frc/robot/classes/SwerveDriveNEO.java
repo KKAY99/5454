@@ -15,7 +15,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants;
-
+import frc.robot.common.drivers.MA3SwerveEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -40,7 +40,12 @@ public class SwerveDriveNEO {
     private CANSparkMax m_FrontRightSteering;
     private CANSparkMax m_BackLeftSteering;
     private CANSparkMax m_BackRightSteering;
-
+    private MA3SwerveEncoder m_frontLeftEncoder= new MA3SwerveEncoder(0,4042);
+    private MA3SwerveEncoder m_frontRightEncoder= new MA3SwerveEncoder(1,1284);
+    private MA3SwerveEncoder m_backRightEncoder= new MA3SwerveEncoder(2,575);
+    private MA3SwerveEncoder m_backLeftEncoder= new MA3SwerveEncoder(3,3560);
+    
+    
     // Create SpeedControllers
     private CANSparkMax m_FrontLeftDrive;
     private CANSparkMax m_FrontRightDrive;
@@ -279,10 +284,10 @@ public class SwerveDriveNEO {
         m_BackRightDrive.set(-backRightSpeed * kSpeedModifier);
 
         
-        steer(m_FrontLeftSteering, frontLeft360Angle, frontLeftOffset);
-        steer(m_FrontRightSteering, frontRight360Angle, frontRightOffset);
-        steer(m_BackLeftSteering, backLeft360Angle, backLeftOffset);
-        steer(m_BackRightSteering, backRight360Angle, backRightOffset);
+        steer(m_FrontLeftSteering, frontLeft360Angle, m_frontLeftEncoder);
+        steer(m_FrontRightSteering, frontRight360Angle, m_frontRightEncoder);
+        steer(m_BackLeftSteering, backLeft360Angle, m_backLeftEncoder);
+        steer(m_BackRightSteering, backRight360Angle, m_backRightEncoder);
 
         // frontLeftTargetPosition = -1 * ((ConvertAngleToPosition(frontLeft360Angle) +
         // Math.abs(frontLeftOffset)) % 1024);
@@ -548,23 +553,26 @@ public class SwerveDriveNEO {
 
  
 
-    public void steer(CANSparkMax controller, double targetAngle, double offset) {
+    public void steer(CANSparkMax controller, double targetAngle, MA3SwerveEncoder absEncoder ){
     
         
         //final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveNEO.kSlotIdx);
-        final double current = controller.getEncoder().getPosition();
-        final double desired = (int) Math.round(targetAngle * ticksPerRotation / 360.0) + offset;
-        
-      final double newPosition = (int) MathUtil.minChange(desired, current, ticksPerRotation) + current;
-        if (current != desired ) {
+        final double currentAngle = absEncoder.GetRelativeAngle();  
+        final double moveAngle=absEncoder.GetActualAngle()-currentAngle+targetAngle;
+        final double desired = Math.round(moveAngle * ticksPerRotation / 360.0);
+       // final double desired = Math.round(targetAngle * ticksPerRotation / 360.0);
+        System.out.println(currentAngle + " --" + desired);
+      final double newPosition = (int) MathUtil.minChange(desired, currentAngle, ticksPerRotation) + currentAngle;
+        if (currentAngle != desired ) {
            
-            System.out.println(controller.getDeviceId() + " * " + targetAngle + " - " +  current + " move to " + desired + " via " + newPosition);
+            System.out.println(controller.getDeviceId() + " * " + targetAngle + " - " +  currentAngle + " move to " + desired + " via " + newPosition);
             
         }   
           //controller.getPIDController().setReference(desired, CANSparkMax.ControlType.kSmartMotion);
-         // controller.getPIDController().setReference(desired, CANSparkMax.ControlType.kPosition);
-          System.out.println("current - " + controller.getOutputCurrent());
-            
+          controller.getPIDController().setReference(desired, CANSparkMax.ControlType.kPosition);
+        
+         System.out.println("Motor current - " + controller.getOutputCurrent());
+        
     }
 
     public double quickSteer(CANSparkMax controller, double targetAngle, boolean quickReverseAllowed) {
