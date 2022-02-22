@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
   TalonFX Bottom_ShooterMotor;
@@ -48,7 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
     Top_ShooterMotor.set(ControlMode.Velocity, bottomVelocity);
  
   }
-
+  
   public void stop() {
     Bottom_ShooterMotor.set(ControlMode.PercentOutput, 0.0);
     Top_ShooterMotor.set(ControlMode.PercentOutput, 0.0);

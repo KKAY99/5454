@@ -4,13 +4,14 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//FIXME
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Constants;
+import frc.robot.common.Utilities;
 
 public class DefaultDriveCommand extends CommandBase {
-  // FIXME
+   
   private final DrivetrainSubsystem m_drive;
   //private final SwerveSubsystem m_drive;
   private final DoubleSupplier m_drive_fwd;
@@ -37,12 +38,21 @@ public class DefaultDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    // System.out.println("FWD - " + m_drive_fwd.getAsDouble() + " STR - " + m_drive_strafe.getAsDouble() + "  RCW"
-    //     + m_drive_rcw.getAsDouble());
+    double forward = Utilities.deadband(m_drive_fwd.getAsDouble());
+    // Square the forward stick
+    forward = Math.copySign(Math.pow(forward, 2.0), forward);
 
-//    m_drive.drive(m_drive_fwd.getAsDouble() * Constants.kSpeedMultiplier,
-//        m_drive_strafe.getAsDouble() * Constants.kSpeedMultiplier,
-//        m_drive_rcw.getAsDouble() * Constants.kSpeedMultiplier);
+    double strafe = Utilities.deadband(m_drive_strafe.getAsDouble());
+    strafe = Utilities.deadband(strafe);
+    // Square the strafe stick
+    strafe = Math.copySign(Math.pow(strafe, 2.0), strafe);
+    System.out.println("Straffing - " + strafe);
+    double rotation = Utilities.deadband(m_drive_rcw.getAsDouble());
+    rotation = Utilities.deadband(rotation);
+    // Square the rotation stick
+    rotation = Math.copySign(Math.pow(rotation, 2.0), rotation);
+
+    DrivetrainSubsystem.getInstance().drive(new Translation2d(forward, strafe), rotation, true);
 
   }
 }

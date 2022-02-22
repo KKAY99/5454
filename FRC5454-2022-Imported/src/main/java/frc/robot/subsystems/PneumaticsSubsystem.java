@@ -22,12 +22,12 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public PneumaticsSubsystem(int nodeID) {
     
    // m_Compressor = new Compressor(nodeID,pModule);
-    
-   // m_solenoidArm1 = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort1); 
-   // m_solenoidArm2 = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort1);   
-  //  m_solenoidLatch=new Solenoid(pModule,Constants.Pneumatics.LatchPort);   
-  //setEnabled();      
-
+   // setEnabled();      
+    //m_solenoidArm1 = new Solenoid(1, moduleType, channel)
+    m_solenoidArm1 = new Solenoid(1,pModule, Constants.Pneumatics.IntakeArmPort1); 
+    //m_solenoidArm2 = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort2);   
+   // m_solenoidLatch=new Solenoid(pModule,Constants.Pneumatics.LatchPort);   
+  
   }
 
   public void setLatch(boolean status){
@@ -45,8 +45,8 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public boolean getArmStatus(){
       return m_solenoidArm1.get();
   }
-  
-  public void setEnabled(){
+  /*
+    public void setEnabled(){
     //m_Compressor.enableDigital();
     
   }
@@ -61,10 +61,11 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public double getCurrent(){
     return m_Compressor.getCurrent();
   }
+  */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_pressureSwitch = m_Compressor.getPressureSwitchValue();
+  //  m_pressureSwitch = m_Compressor.getPressureSwitchValue();
    
   }
 

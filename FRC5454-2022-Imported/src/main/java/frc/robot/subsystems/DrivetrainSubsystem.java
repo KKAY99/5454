@@ -19,16 +19,17 @@ import frc.robot.common.drivers.SwerveModule;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.drivers.Mk2SwerveModuleBuilder;
 import frc.robot.common.drivers.NavX;
+import frc.robot.common.util.HolonomicFeedforward;
+import frc.robot.common.control.HolonomicMotionProfiledTrajectoryFollower;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 20;
     private static final double WHEELBASE = 25;
 
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(180.37);
-    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(72.5);
+    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(161.8);
+    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(67.8);
     private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(46.3);
-   // private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(179.43);
-   private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(307.2);
+    private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(307.2);
 
     private static DrivetrainSubsystem instance;
 
@@ -73,7 +74,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0)
     );
 
-     
+        
     public DrivetrainSubsystem(NavX navX) {
         m_gyroscope = navX;
         m_gyroscope.calibrate();
@@ -85,7 +86,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         backRightModule.setName("Back Right");
     }
 
-   /* 
+
     public static DrivetrainSubsystem getInstance() {
         if (instance == null) {
             instance = new DrivetrainSubsystem(new NavX(SPI.Port.kMXP));
@@ -93,13 +94,41 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         return instance;
     }
- */
- //FIXME Need to implement
-    public void move (double direction, double speed, double distance, boolean stopAtFalse)
-{
-  //m_drive.move(direction,speed,distance,stopAtFalse);
-}
+ 
 
+    public void move (double direction, double speed, double distance, boolean stopAtFalse)
+{       double startDistance;
+        double forward=0;
+        double strafe=0;
+        double rotation=0;
+        Translation2d targetTranslation;
+        startDistance=backLeftModule.getCurrentDistance();
+        switch ((int) direction){
+                case 0:
+                        forward=1*speed;
+                        strafe=0;
+                        break;
+                case 90:
+                        forward=0;
+                        strafe=1*speed;
+                        break;
+                case 180:
+                        forward=-1*speed;
+                        strafe=0;
+                        break;
+                case 270:
+                        forward=0;
+                        strafe=-1*speed;
+                        break;
+                
+        }
+        double distanceTravelled=backLeftModule.getCurrentDistance()-startDistance;
+        do {
+              drive(new Translation2d(forward, strafe), rotation, true);
+              distanceTravelled=backLeftModule.getCurrentDistance()-startDistance;
+        } while(distanceTravelled<=distance);
+                
+}
     @Override
     public void periodic() {
         frontLeftModule.updateSensors();
@@ -140,6 +169,4 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void resetGyroscope() {
         m_gyroscope.setAdjustmentAngle(m_gyroscope.getUnadjustedAngle());
     }
-
-   
 }

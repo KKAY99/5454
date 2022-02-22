@@ -146,6 +146,7 @@ public abstract class SwerveModule {
             targetAngle = velocity.getAngle().toRadians();
         }
     }
+    
 
     public final void setTargetVelocity(double speed, double angle) {
         if (speed < 0.0) {
