@@ -19,7 +19,7 @@ public class ShooterSubsystem extends SubsystemBase {
     Bottom_ShooterMotor.configOpenloopRamp(0.5);
     Top_ShooterMotor.configOpenloopRamp(0.5);
     
-    Bottom_ShooterMotor.setInverted(true);
+    Bottom_ShooterMotor.setInverted(false);
 
 
     Bottom_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
@@ -29,7 +29,7 @@ public class ShooterSubsystem extends SubsystemBase {
     Bottom_ShooterMotor.config_kD(0,0);
     Bottom_ShooterMotor.config_kF(0,.5);
     
-    Top_ShooterMotor.setInverted(false);
+    Top_ShooterMotor.setInverted(true);
     Top_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
     Top_ShooterMotor.selectProfileSlot(0,0);
     Top_ShooterMotor.config_kP(0,0);

@@ -26,7 +26,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 20;
     private static final double WHEELBASE = 25;
 
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(161.8);
+    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(359.9); //161.8
     private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(67.8);
     private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(46.3);
     private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(307.2);
@@ -165,7 +165,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
         backLeftModule.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());
         backRightModule.setTargetVelocity(states[3].speedMetersPerSecond, states[3].angle.getRadians());
     }
-
+    public double getFrontLeftAngle(){
+        return frontLeftModule.getCurrentAngle();
+    }
+    public double getFrontRightAngle(){
+        return frontRightModule.getCurrentAngle();
+    }
+    public double getBackLeftAngle(){
+        return backLeftModule.getCurrentAngle();
+    }
+    public double getbackRightAngle(){
+        return backRightModule.getCurrentAngle();
+        }
     public void resetGyroscope() {
         m_gyroscope.setAdjustmentAngle(m_gyroscope.getUnadjustedAngle());
     }

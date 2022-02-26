@@ -37,8 +37,9 @@ public class ClimbCommand extends CommandBase {
      // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() 
-  {  
-    if(m_ClimbSubsystem.hitLimit()==false) {
+  {     
+  //stop on limit only when going down
+    if((m_ClimbSubsystem.hitLimit()==false) || (m_speed>0)) {
       m_ClimbSubsystem.run(m_speed);
     } else {
         System.out.println("Limit Switch Hitch" );

@@ -2,8 +2,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Constants.*;
-import frc.robot.commands.*;
+
 import frc.robot.subsystems.*;
 /** An example command that uses an example subsystem. */
 public class zSpinLoadShootCommand extends CommandBase {
@@ -28,6 +27,23 @@ public class zSpinLoadShootCommand extends CommandBase {
     addRequirements(feeder);
   }
 
+  public void changeSpeeds(double topSpeed, double bottomSpeed,double minVelocity){
+     m_topSpeed=topSpeed;
+     m_bottomSpeed=bottomSpeed;
+     m_minVelocity=minVelocity;
+  }
+  
+  public double getTopSpeed(){
+    return m_topSpeed;
+ }
+
+ public double getBottomSpeed(){
+  return m_bottomSpeed;
+}
+
+public double getMinVelocity(){
+  return m_minVelocity;
+}
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}

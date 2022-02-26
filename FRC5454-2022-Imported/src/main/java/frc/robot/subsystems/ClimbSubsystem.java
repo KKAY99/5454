@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import com.revrobotics.CANSparkMax.IdleMode;
 public class ClimbSubsystem extends SubsystemBase {
     private CANSparkMax m_ClimbMotor;
     private DigitalInput m_ClimbLimitSwitch;
@@ -12,7 +12,9 @@ public class ClimbSubsystem extends SubsystemBase {
     /** Creates a new ExampleSubsystem. */
     public ClimbSubsystem(Integer ClimbPort, Integer limitSwitchPort) {
         m_ClimbMotor = new CANSparkMax(ClimbPort, MotorType.kBrushed);   
-        m_ClimbMotor.setInverted(false);
+        m_ClimbMotor.setInverted(true);
+        m_ClimbMotor.setIdleMode(IdleMode.kBrake);
+   
         m_ClimbMotor.setOpenLoopRampRate(0.25);
         m_ClimbLimitSwitch=new DigitalInput(limitSwitchPort);
         m_ClimbLimitSwitchCounter=new Counter(m_ClimbLimitSwitch);

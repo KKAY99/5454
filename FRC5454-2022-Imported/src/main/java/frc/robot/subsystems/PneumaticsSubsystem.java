@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.hal.REVPHStickyFaults;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -15,20 +15,20 @@ public class PneumaticsSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private static Compressor m_Compressor;
   private static boolean m_pressureSwitch;
-  private static Solenoid m_solenoidArm1;
-  private static Solenoid m_solenoidArm2;
+  private static Solenoid m_solenoidArm;
+ 
   private static Solenoid m_solenoidLatch;
-  public static PneumaticsModuleType pModule = PneumaticsModuleType.REVPH;
+  public static PneumaticsModuleType pModule = PneumaticsModuleType.CTREPCM;
   public PneumaticsSubsystem(int nodeID) {
     
-   // m_Compressor = new Compressor(nodeID,pModule);
-   // setEnabled();      
-    //m_solenoidArm1 = new Solenoid(1, moduleType, channel)
-    m_solenoidArm1 = new Solenoid(1,pModule, Constants.Pneumatics.IntakeArmPort1); 
-    //m_solenoidArm2 = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort2);   
-   // m_solenoidLatch=new Solenoid(pModule,Constants.Pneumatics.LatchPort);   
+    m_Compressor = new Compressor(nodeID,pModule);      
+    m_solenoidArm = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort); 
+    setEnabled();
+    // m_solenoidLatch=new Solenoid(pModule,Constants.Pneumatics.LatchPort);   
   
   }
+
+
 
   public void setLatch(boolean status){
     m_solenoidLatch.set(status);
@@ -38,16 +38,18 @@ public class PneumaticsSubsystem extends SubsystemBase {
       return m_solenoidLatch.get();
   }
   public void setArms(boolean status){
-    m_solenoidArm1.set(status);
-    m_solenoidArm2.set(status);
-
+    System.out.println("Setting Arm " + status);
+    m_solenoidArm.set(status);
+  
+ 
   }
   public boolean getArmStatus(){
-      return m_solenoidArm1.get();
+    System.out.println("Status - " + m_solenoidArm.get());
+    return m_solenoidArm.get();
   }
-  /*
+  
     public void setEnabled(){
-    //m_Compressor.enableDigital();
+    m_Compressor.enableDigital();
     
   }
   
@@ -61,11 +63,11 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public double getCurrent(){
     return m_Compressor.getCurrent();
   }
-  */
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  //  m_pressureSwitch = m_Compressor.getPressureSwitchValue();
+    m_pressureSwitch = m_Compressor.getPressureSwitchValue();
    
   }
 

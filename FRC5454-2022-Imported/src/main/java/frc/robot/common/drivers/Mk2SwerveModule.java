@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.common.control.PidConstants;
 import frc.robot.common.control.PidController;
-import frc.robot.common.drivers.SwerveModule;
 import frc.robot.common.math.Vector2;
 
 public class Mk2SwerveModule extends SwerveModule {

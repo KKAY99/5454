@@ -94,6 +94,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    m_robotContainer.disableLimelights();
   }
 
   /**
@@ -102,6 +103,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_autoChooser.getSelected());
     
@@ -122,6 +124,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

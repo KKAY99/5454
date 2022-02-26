@@ -1,6 +1,5 @@
 package frc.robot.common.math;
 
-import frc.robot.common.math.MathUtils;
 
 import java.text.DecimalFormat;
 import java.util.Objects;
