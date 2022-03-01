@@ -209,7 +209,9 @@ public class RobotContainer {
     static NetworkTableEntry shuffleboardShooterTop=ShooterTab.add("Top Speed",Constants.AutoModes.AutoShotTopSpeed).getEntry();
     static NetworkTableEntry shuffleboardShooterBottom=ShooterTab.add("Bottom Speed",Constants.AutoModes.AutoShotBottomSpeed).getEntry();
 
-    
+    static NetworkTableEntry shuffleboardShooterTopVel=ShooterTab.add("Top Velocity","").getEntry();
+    static NetworkTableEntry shuffleboardShooterBottomVel=ShooterTab.add("Bottom Velocity","").getEntry();
+
 
     static String ShuffleboardLogString;
     // #endregion
@@ -251,14 +253,19 @@ public class RobotContainer {
                 () -> m_Limelight.getRotationPower(m_Limelight.getX(), 15.0 * m_xBoxDriver.getLeftX()),
                 () -> m_xBoxDriver.getLeftY(),
                 () -> m_xBoxDriver.getLeftX()));
-
-      
+        
+        //FIXIt when done getting shooter values
+        double topSpeed=shuffleboardShooterTop.getDouble(0);
+        double bottomSpeed=shuffleboardShooterBottom.getDouble(0);
+        final ParallelCommandGroup ShootandLoadManualCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,topSpeed,bottomSpeed,true),
+                new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
+                new FeederCommand(m_Feeder,Constants.FeederSpeed));
         final ConveyorCommand conveyorUpCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
         final ConveyorCommand conveyorDownCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorDownSpeed);
         //final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake,Constants.intakeSpeed);
         //final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake,-Constants.intakeSpeed);
         final zIntakeConveyCommand intakeInCommand = new zIntakeConveyCommand(m_Intake,Constants.intakeSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed);
-        final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake,-Constants.intakeSpeed,m_Conveyor,Constants.conveyorDownSpeed,m_Feeder,Constants.FeederSpeed);
+        final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake,-Constants.intakeSpeed,m_Conveyor,Constants.conveyorDownSpeed,m_Feeder,-Constants.FeederSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
         final ClimbCommand climbUpCommand=new ClimbCommand(m_Climb,Constants.climbUpSpeed);
@@ -267,6 +274,7 @@ public class RobotContainer {
         final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
         final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
         final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
+        final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
          
         JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, ButtonConstants.AimandShoot);
@@ -303,10 +311,13 @@ public class RobotContainer {
         shuffleboardBallFeedUp.setString("Right-Button " + ButtonConstants.FeederUp);
 
 
-        JoystickButton climbUpButton = new JoystickButton(m_xBoxDriver,ButtonConstants.ClimberUp);
-        shuffleboardClimbLift.setString("Left-Button " + ButtonConstants.ClimberUp);
+        JoystickButton gyroReset = new JoystickButton(m_xBoxDriver,ButtonConstants.GyroReset);
+        JoystickButton gyroReset2 = new JoystickButton(m_xBoxDriver,ButtonConstants.GyroReset);
+        shuffleboardClimbLift.setString("Right-Button " + ButtonConstants.GyroReset);
         
         JoystickButton intakeArmButton = new JoystickButton(m_xBoxDriver,ButtonConstants.IntakeArm);
+        JoystickButton intakeArm2Button = new JoystickButton(m_xBoxOperator,ButtonConstants.IntakeArm);
+        
         shuffleboardIntakeArm.setString("Left-Button " + ButtonConstants.IntakeArm);
         
 
@@ -328,7 +339,10 @@ public class RobotContainer {
 
         POVButton turretLeftButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretLeftPOV);
         POVButton turretRightButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretRightPOV); 
+        POVButton turretLeft2Button=new POVButton(m_xBoxOperator,ButtonConstants.TurretLeftPOV);
+        POVButton turretRight2Button=new POVButton(m_xBoxOperator,ButtonConstants.TurretRightPOV); 
   
+
         POVButton climbUpPOV=new POVButton(m_xBoxOperator,ButtonConstants.ClimbUpPOV);
         POVButton climbDownPOV=new POVButton(m_xBoxOperator,ButtonConstants.ClimbDownPOV); 
   
@@ -338,8 +352,8 @@ public class RobotContainer {
         aimAndSpin2.whenHeld(aimAndSpinCommand);
         
         //manualShoot.whenHeld(shootCommand);
-        manualShoot.whenHeld(autoLoadShoot);
-        manualShoot2.whenHeld(autoLoadShoot);
+        manualShoot.whenHeld(ShootandLoadManualCommand);
+        manualShoot2.whenHeld(ShootandLoadManualCommand);
         
         conveyorUpButton.whenHeld(conveyorUpCommand);
         conveyorDownButton.whenHeld(conveyorDownCommand);
@@ -352,14 +366,21 @@ public class RobotContainer {
         intakeIn2Button.whenHeld(intakeInCommand); 
         feederUpButton.whenHeld(feedUpCommand);
         feederUp2Button.whenHeld(feedUpCommand);
-        climbUpButton.whenHeld(climbUpCommand);
+       
         turretLeftButton.whenHeld(turretLeftCommand);
         turretRightButton.whenHeld(turretRightCommand);
+        turretLeft2Button.whenHeld(turretLeftCommand);
+        turretRight2Button.whenHeld(turretRightCommand);
+        
         climbUpPOV.whenHeld(climbUpCommand);
         climbDownPOV.whenHeld(climbDownCommand);
         
         intakeArmButton.whenHeld(intakeArmCommand);    
+        intakeArm2Button.whenHeld(intakeArmCommand);    
     
+        gyroReset.whenPressed(gyroResetCommand);
+        gyroReset2.whenPressed(gyroResetCommand);
+
         //latchButton.whenPressed(latchCommand);
    }
 
@@ -491,6 +512,8 @@ public class RobotContainer {
         }else {
                 networkTableEntryVisionDistance.setDouble(0);
         }
+        shuffleboardShooterTopVel.setDouble(m_Shooter.getTopMotorVelocity());
+        shuffleboardShooterBottomVel.setDouble(m_Shooter.getBottomMotorVelocity());
         shuffleboardTurretPos.setString(" " + m_turret.getPosition());
         shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
         shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
@@ -499,6 +522,7 @@ public class RobotContainer {
         double bottomSpeed=shuffleboardShooterBottom.getDouble(0);
         if((topSpeed!=0) || (bottomSpeed!=0)){
                 autoLoadShoot.changeSpeeds(topSpeed, bottomSpeed, topSpeed);
+                
         }
 
         

@@ -28,7 +28,7 @@ public final class Constants {
     public static final int FeederPort=34;
     public static final int ClimberPort=36;//36
     public static final double intakeSpeed=-.65;
-    public static final double FeederSpeed=-.5;
+    public static final double FeederSpeed=-1.0;
     public static final double conveyorUpSpeed=0.9;
     public static final double conveyorDownSpeed=-0.5;
     public static final double climbUpSpeed=.9;
@@ -49,15 +49,15 @@ public final class Constants {
        public static final int IntakeArm=3;
        public static final int FeederUp=4;
        public static final int Latch=8;
-       public static final int ClimberUp=7;
        public static final int ClimberDown=10;
        public static final int ConveyerUpAxis=2;
        public static final int ConveyerDownAxis=3;
        public static final double TriggerThreshold=.5;
-       public static final int TurretLeftPOV=90;
-       public static final int TurretRightPOV=270;
+       public static final int TurretLeftPOV=270;
+       public static final int TurretRightPOV=90;
        public static final int ClimbUpPOV=0;
        public static final int ClimbDownPOV=180;
+       public static final int GyroReset=7;
     }
     public static final class LimitSwitches{
         public static final int ClimberBottom=9;
@@ -136,7 +136,7 @@ public final class Constants {
         public static final double targetXPosShoot = 3.83;
         public static final double targetXPosSafeZone = 5;
         public static final double limelightHeight = 37;
-        public static final double limelightAngle = 38;
+        public static final double limelightAngle = 40;
         public static final double kVisionDistanceTolerance = 5;
         public static final double kVisionXTolerance = 5;
     }

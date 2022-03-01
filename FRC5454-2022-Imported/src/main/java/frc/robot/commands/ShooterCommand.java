@@ -40,7 +40,39 @@ public class ShooterCommand extends CommandBase {
   @Override
   public void execute() {
     if(m_useDistance) {
+      double topSpeed=0;
+      double bottomSpeed=0;
       //Calculate Distance using Limelight
+      double distance=m_limelight.getDistance();
+      if (distance<40){
+        topSpeed=650;
+        bottomSpeed=750;
+      }else if(distance<70){
+        topSpeed=700;
+        bottomSpeed=750;
+      }else if(distance<90){
+        topSpeed=750;
+        bottomSpeed=800;
+      }else if(distance<110){
+        topSpeed=850;
+        bottomSpeed=950;
+      }else if(distance<130){
+        topSpeed=1000;
+        bottomSpeed=1050;
+      }else if(distance<140){
+        topSpeed=1100;
+        bottomSpeed=1150;
+      }else if(distance<150){
+        topSpeed=1150;
+        bottomSpeed=1200;
+      }else if(distance<160){
+        topSpeed=1250;
+        bottomSpeed=1200;
+      }else{
+        topSpeed=800;
+        bottomSpeed=800;
+      } 
+      m_shooterSubsystem.shoot(topSpeed, bottomSpeed);
 
     }else {
       m_shooterSubsystem.shoot(m_topSpeed, m_bottomSpeed);

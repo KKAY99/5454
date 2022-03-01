@@ -47,6 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shoot(double topVelocity, double bottomVelocity) {
     Bottom_ShooterMotor.set(ControlMode.Velocity, bottomVelocity);
     Top_ShooterMotor.set(ControlMode.Velocity, bottomVelocity);
+    
  
   }
   
