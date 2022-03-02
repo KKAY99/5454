@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.classes.Limelight;
+
 /** An example command that uses an example subsystem. */
 public class ShooterCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -16,17 +17,96 @@ public class ShooterCommand extends CommandBase {
   private final double m_bottomSpeed;
   private final boolean m_useDistance;
 
+  public static double[] powerTopValues = {
+      650,
+      700,
+      700,
+      700,
+      750,
+      750,
+      800,
+      850,
+      1000,
+      1000,
+      1100,
+      1150,
+      1200,
+      1300,
+      1400,
+      25
+  };
+
+  public static double[] powerBottomValues = {
+      750,
+      750,
+      750,
+      750,
+      800,
+      800,
+      900,
+      950,
+      1050,
+      1050,
+      1150,
+      1200,
+      1250,
+      1350,
+      1450,
+      1050
+  };
+
+  public static double[] distanceValues = {
+      39.5,
+      49.6,
+      59.5,
+      69.5,
+      79.5,
+      89.5,
+      99.5,
+      109.5,
+      119.5,
+      129.5,
+      139.5,
+      149.5,
+      159.5,
+      169.5,
+      179.5,
+      189.5,
+  };
+
+  public static double getPower(double powerValues[], double distance) {
+    distance = Math.max(distance, 0);
+    for (int i = 0; i < distanceValues.length; i++) {
+      if (distanceValues[i] == distance) {
+        return powerValues[i];
+      } else if (distanceValues[i] > distance) {
+        return getEquation(distance, distanceValues[i], powerValues[i], distanceValues[i - 1],
+            powerValues[i - 1]);
+      }
+      else if (distance > distanceValues[distanceValues.length]) {
+        return distanceValues[distanceValues.length];
+      }
+    }
+    return 0;
+  }
+
+  private static double getEquation(double value, double xOne, double yOne, double xTwo, double yTwo) {
+    double slope = (yTwo - yOne) / (xTwo - xOne);
+    return (slope * (value - xOne)) + yOne;
+  }
+
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterCommand(ShooterSubsystem shooter,Limelight limelight, double defaultTopSpeed,double defaultBottomSpeed,boolean useDistance) {
+  public ShooterCommand(ShooterSubsystem shooter, Limelight limelight, double defaultTopSpeed,
+      double defaultBottomSpeed, boolean useDistance) {
     m_shooterSubsystem = shooter;
-    m_limelight=limelight;
-    m_topSpeed=defaultTopSpeed;
-    m_bottomSpeed=defaultBottomSpeed;
-    m_useDistance=useDistance;
+    m_limelight = limelight;
+    m_topSpeed = defaultTopSpeed;
+    m_bottomSpeed = defaultBottomSpeed;
+    m_useDistance = useDistance;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
   }
@@ -39,42 +119,17 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_useDistance) {
-      double topSpeed=0;
-      double bottomSpeed=0;
-      //Calculate Distance using Limelight
-      double distance=m_limelight.getDistance();
-      if (distance<40){
-        topSpeed=650;
-        bottomSpeed=750;
-      }else if(distance<70){
-        topSpeed=700;
-        bottomSpeed=750;
-      }else if(distance<90){
-        topSpeed=750;
-        bottomSpeed=800;
-      }else if(distance<110){
-        topSpeed=850;
-        bottomSpeed=950;
-      }else if(distance<130){
-        topSpeed=1000;
-        bottomSpeed=1050;
-      }else if(distance<140){
-        topSpeed=1100;
-        bottomSpeed=1150;
-      }else if(distance<150){
-        topSpeed=1150;
-        bottomSpeed=1200;
-      }else if(distance<160){
-        topSpeed=1250;
-        bottomSpeed=1200;
-      }else{
-        topSpeed=800;
-        bottomSpeed=800;
-      } 
+    if (m_useDistance) {
+      double distance =m_limelight.getDistance();
+      double topSpeed = getPower(powerTopValues, distance);
+      double bottomSpeed = getPower(powerBottomValues, distance);
+      //Default shooting if calculation is outside range
+      if(topSpeed<=1 || bottomSpeed <=1){
+        topSpeed=m_topSpeed;
+        bottomSpeed=m_bottomSpeed;
+      }
       m_shooterSubsystem.shoot(topSpeed, bottomSpeed);
-
-    }else {
+    } else {
       m_shooterSubsystem.shoot(m_topSpeed, m_bottomSpeed);
     }
   }

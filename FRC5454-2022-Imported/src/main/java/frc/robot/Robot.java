@@ -105,6 +105,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
+    m_robotContainer.resetTurret();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_autoChooser.getSelected());
     
     // schedule the autonomous command (example)
@@ -126,6 +127,7 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
+    m_robotContainer.resetTurret();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

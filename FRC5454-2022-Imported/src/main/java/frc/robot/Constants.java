@@ -34,11 +34,15 @@ public final class Constants {
     public static final double climbUpSpeed=.9;
     public static final double climbDownSpeed=-.4;
     public static final double turretSpeed=0.35;
+    public static final double turretInitSpeed=-.30;
+    public static final double turretHomeSpeed=0.5;
+    public static final double turretHomePos=8000;
+
     
     public static final class Pneumatics {
         public static final int CompressorID=0; 
-        public static final int LatchPort=3;
-        public static final int IntakeArmPort=2;
+        public static final int LatchPort=4;
+        public static final int IntakeArmPort=3;
        // public static final int IntakeArmPort2=2;
     }
     public static final class ButtonConstants{

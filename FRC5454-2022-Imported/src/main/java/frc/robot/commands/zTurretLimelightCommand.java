@@ -6,20 +6,22 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.classes.Limelight;
 
 /** An example command that uses an example subsystem. */
-public class TurretCommand extends CommandBase {
+public class zTurretLimelightCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final TurretSubsystem m_TurretSubsystem;
-  private final double m_speed;
-
+  private final Limelight m_limelight;
+  private double m_speed;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TurretCommand(TurretSubsystem subsystem,double speed) {
+  public zTurretLimelightCommand(TurretSubsystem subsystem,Limelight limelight, double speed) {
     m_TurretSubsystem = subsystem;
+    m_limelight=limelight;
     m_speed=speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_TurretSubsystem);
@@ -33,11 +35,16 @@ public class TurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("setting turret speed" + m_speed);
-
-    m_TurretSubsystem.turn(m_speed);
+    if(m_limelight.getX()>.2){
+      m_TurretSubsystem.turn(m_speed);
+    }else if (m_limelight.getX()<-2){
+      m_TurretSubsystem.turn(-m_speed);
+    }
+    else{
+      m_TurretSubsystem.stop();
+    }
   }
-
+  
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

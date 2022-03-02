@@ -223,6 +223,7 @@ public class RobotContainer {
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   
+    private boolean m_turretHasReset =false;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -275,6 +276,7 @@ public class RobotContainer {
         final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
         final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
+        final zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed);
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
          
         JoystickButton aimAndSpin = new JoystickButton(m_xBoxDriver, ButtonConstants.AimandShoot);
@@ -341,13 +343,16 @@ public class RobotContainer {
         POVButton turretRightButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretRightPOV); 
         POVButton turretLeft2Button=new POVButton(m_xBoxOperator,ButtonConstants.TurretLeftPOV);
         POVButton turretRight2Button=new POVButton(m_xBoxOperator,ButtonConstants.TurretRightPOV); 
-  
+        
 
         POVButton climbUpPOV=new POVButton(m_xBoxOperator,ButtonConstants.ClimbUpPOV);
         POVButton climbDownPOV=new POVButton(m_xBoxOperator,ButtonConstants.ClimbDownPOV); 
-  
-        // new POVButton(m_leftJoystick,0).whenHeld(new RobotMoveCommand(m_RobotDrive,-Constants.kSlowMoveLeft,Constants.kSlowMoveRight));    
-     
+        
+        //FIXIt
+        SpectrumAxisButton turretAutoFind = new SpectrumAxisButton(m_xBoxOperator,0,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
+        turretAutoFind.whenHeld(turretAutoCommand);
+        
+        
         aimAndSpin.whenHeld(aimAndSpinCommand);
         aimAndSpin2.whenHeld(aimAndSpinCommand);
         
@@ -532,6 +537,13 @@ public class RobotContainer {
     }
     public void enableLimelights(){
             m_Limelight.turnLEDOn();
+    }
+    public void resetTurret(){
+            if(m_turretHasReset==false){
+                zTurretResetCommand resetTurret = new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos); 
+                resetTurret.execute();
+                m_turretHasReset=true;
+        }
     }
     public void resetDriveModes(){
 //        m_RobotDrive.resetDriveMode();

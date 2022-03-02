@@ -42,13 +42,22 @@ public class TurretSubsystem extends SubsystemBase {
     System.out.println("setting turret power "+ power);
     m_turretMotor.set(power);
   }
-  
+  public void setEncoderPosition(double position){
+    m_turretEncoder.setPosition(position);
+  }
   public void stop() {
     System.out.println("stopping turret");
 
     m_turretMotor.set(0);
   }
-  
+  public boolean isMovingLeft(){
+    return m_turretEncoder.getVelocity() <0;
+ }
+ public boolean isMovingRight(){
+     return m_turretEncoder.getVelocity()>0;
+ }
+
+
   public double getPosition(){
     return m_turretEncoder.getPosition();
      }

@@ -8,19 +8,27 @@ import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class TurretCommand extends CommandBase {
+public class zTurretResetCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final TurretSubsystem m_TurretSubsystem;
-  private final double m_speed;
+  private double m_speed;
+  private final double m_leftSpeed;
+  private final double m_rightSpeed;
+  private final double m_targetPos;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TurretCommand(TurretSubsystem subsystem,double speed) {
+  public zTurretResetCommand(TurretSubsystem subsystem,double leftSpeed,double rightSpeed, double targetPos) {
     m_TurretSubsystem = subsystem;
-    m_speed=speed;
+    m_leftSpeed=leftSpeed;
+    m_rightSpeed=rightSpeed;
+    m_targetPos=targetPos;
+
+    //Start moving left
+    m_speed=leftSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_TurretSubsystem);
   }
@@ -32,9 +40,7 @@ public class TurretCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    System.out.println("setting turret speed" + m_speed);
-
+  public void execute() {     
     m_TurretSubsystem.turn(m_speed);
   }
 
@@ -49,15 +55,14 @@ public class TurretCommand extends CommandBase {
   public boolean isFinished() {
     boolean returnValue=false;
     if (m_TurretSubsystem.hitLeftLimit() && m_TurretSubsystem.isMovingLeft()){
-      System.out.println("Left Limit");  
+      m_TurretSubsystem.setEncoderPosition(0);
+      m_speed=m_rightSpeed;
+      m_TurretSubsystem.turn(m_speed);
       returnValue= true;
-
-    } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingRight()){
-      System.out.println("Right Limit");  
-     
+     } else if (m_TurretSubsystem.hitRightLimit() || m_TurretSubsystem.getPosition()>m_targetPos){
       returnValue= true;
-    }
-    return returnValue;
+  }
+     return returnValue;
   }
 }
 
