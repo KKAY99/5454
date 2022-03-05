@@ -24,24 +24,31 @@ public final class Constants {
     public static final int BottomShooterPort=30;
     public static final int ConveyorPort=33; //33
     public static final int IntakePort=35;
+    public static final int IntakeInnerPort=37;
+    
     public static final int TurretPort=32;
     public static final int FeederPort=34;
     public static final int ClimberPort=36;//36
     public static final double intakeSpeed=-.65;
+    public static final double intakeInnerSpeed=0.65;
     public static final double FeederSpeed=-1.0;
     public static final double conveyorUpSpeed=0.9;
     public static final double conveyorDownSpeed=-0.5;
     public static final double climbUpSpeed=.9;
-    public static final double climbDownSpeed=-.4;
+    public static final double climbDownSpeed=-.9;
     public static final double turretSpeed=0.35;
-    public static final double turretInitSpeed=-.30;
-    public static final double turretHomeSpeed=0.5;
-    public static final double turretHomePos=8000;
+    public static final double turretInitSpeed=-.25;
+    public static final double turretHomeSpeed=0.25;
+    public static final double turretHomePos=-4.51;
 
-    
+    public static final double turretOuterLimit=.4;
+    public static final double turretInnerLimit=.2;
+    public static final double driveDeadband=0.05;
+
     public static final class Pneumatics {
         public static final int CompressorID=0; 
-        public static final int LatchPort=4;
+        public static final int LatchPort=5;
+        public static final int ClimbArmPort=2;
         public static final int IntakeArmPort=3;
        // public static final int IntakeArmPort2=2;
     }
@@ -62,11 +69,15 @@ public final class Constants {
        public static final int ClimbUpPOV=0;
        public static final int ClimbDownPOV=180;
        public static final int GyroReset=7;
+       public static final int LeftStick=1;
     }
     public static final class LimitSwitches{
         public static final int ClimberBottom=9;
-        public static final int TurretLeft=1;
-        public static final int TurretRight=0;
+        public static final int TurretLeft=0;
+        public static final int TurretRight=1;
+        public static final int ClimberTop=2;
+        public static final double TurretRightEncoder=-0.5;
+        public static final double TurretLeftEncoder=-9.3;
     }
 
     public static final class AutoModes {
@@ -139,10 +150,11 @@ public final class Constants {
         public static final double targetHeight = 103; // 249 cm
         public static final double targetXPosShoot = 3.83;
         public static final double targetXPosSafeZone = 5;
-        public static final double limelightHeight = 37;
-        public static final double limelightAngle = 40;
+        public static final double limelightHeight = 44; //37
+        public static final double limelightAngle = 36; //40
         public static final double kVisionDistanceTolerance = 5;
         public static final double kVisionXTolerance = 5;
+        public static final double kVisionXOffset=-2;
     }
 
     public static final class SwerveDriveGB {

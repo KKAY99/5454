@@ -18,41 +18,41 @@ public class ShooterCommand extends CommandBase {
   private final boolean m_useDistance;
 
   public static double[] powerTopValues = {
-      650,
-      700,
-      700,
-      700,
-      750,
-      750,
-      800,
-      850,
-      1000,
-      1000,
-      1100,
-      1150,
-      1200,
-      1300,
-      1400,
+      675,
+      725,
+      725,
+      725,
+      775,
+      775,
+      825,
+      875,
+      1025,
+      1025,
+      1125,
+      1175,
+      1225,
+      1325,
+      1425,
       25
   };
 
   public static double[] powerBottomValues = {
-      750,
-      750,
-      750,
-      750,
-      800,
-      800,
-      900,
-      950,
-      1050,
-      1050,
-      1150,
-      1200,
-      1250,
-      1350,
-      1450,
-      1050
+      775,
+      775,
+      775,
+      775,
+      825,
+      825,
+      925,
+      975,
+      1075,
+      1075,
+      1175,
+      1225,
+      1275,
+      1375,
+      1475,
+      1075
   };
 
   public static double[] distanceValues = {
@@ -75,19 +75,24 @@ public class ShooterCommand extends CommandBase {
   };
 
   public static double getPower(double powerValues[], double distance) {
-    distance = Math.max(distance, 0);
-    for (int i = 0; i < distanceValues.length; i++) {
-      if (distanceValues[i] == distance) {
-        return powerValues[i];
-      } else if (distanceValues[i] > distance) {
-        return getEquation(distance, distanceValues[i], powerValues[i], distanceValues[i - 1],
-            powerValues[i - 1]);
+    try{
+      distance = Math.max(distance, 0);
+      for (int i = 0; i < distanceValues.length; i++) {
+        if (distanceValues[i] == distance) {
+          return powerValues[i];
+        } else if (distanceValues[i] > distance) {
+          return getEquation(distance, distanceValues[i], powerValues[i], distanceValues[i - 1],
+              powerValues[i - 1]);
+        }
+        else if (distance > distanceValues[distanceValues.length-1]) {
+          return powerValues[distanceValues.length-1];
+        }
       }
-      else if (distance > distanceValues[distanceValues.length]) {
-        return distanceValues[distanceValues.length];
-      }
+      return 0;
+    } catch(Exception e){
+      System.out.println("Exception Error in getpower " + e.getMessage());
+      return 0;
     }
-    return 0;
   }
 
   private static double getEquation(double value, double xOne, double yOne, double xTwo, double yTwo) {

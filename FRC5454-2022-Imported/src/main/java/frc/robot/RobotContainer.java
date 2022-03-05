@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -47,8 +49,9 @@ public class RobotContainer {
     private NavX m_NavX = new NavX(SPI.Port.kMXP);
    // private final DriveSubsystem m_RobotDrive = new DriveSubsystem(m_ahrs);
    private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
-   //private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();
-    private final Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle);
+   //private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();+
+
+    private final Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,Constants.LimeLightValues.kVisionXOffset);
   
 
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
@@ -56,7 +59,9 @@ public class RobotContainer {
     private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
     private final FeederSubsystem m_Feeder= new FeederSubsystem(Constants.FeederPort);
     private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
-    private final ClimbSubsystem m_Climb = new ClimbSubsystem(Constants.ClimberPort,Constants.LimitSwitches.ClimberBottom);
+    private final IntakeSubsystem m_IntakeInner = new IntakeSubsystem(Constants.IntakeInnerPort);
+   
+    private final ClimbSubsystem m_Climb = new ClimbSubsystem(Constants.ClimberPort,Constants.LimitSwitches.ClimberBottom,Constants.LimitSwitches.ClimberTop);
     private final PneumaticsSubsystem m_Pnuematics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorID);
     private final TurretSubsystem m_turret = new TurretSubsystem(Constants.TurretPort,Constants.LimitSwitches.TurretLeft,Constants.LimitSwitches.TurretRight);
     // #region Shuffleboard
@@ -65,6 +70,8 @@ public class RobotContainer {
        
 
     private final PowerDistribution m_robotPDH = new PowerDistribution(1, PowerDistribution.ModuleType.kRev);
+
+
 
     // #region Create Shuffleboard Tabs
     private static ShuffleboardTab SwerveTab = Shuffleboard.getTab("Swerve");
@@ -261,18 +268,24 @@ public class RobotContainer {
         final ParallelCommandGroup ShootandLoadManualCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,topSpeed,bottomSpeed,true),
                 new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder,Constants.FeederSpeed));
-        final ConveyorCommand conveyorUpCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
-        final ConveyorCommand conveyorDownCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorDownSpeed);
+        //final ConveyorCommand conveyorUpCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
+        //final ConveyorCommand conveyorDownCommand = new ConveyorCommand(m_Conveyor,Constants.conveyorDownSpeed);
+        final ParallelCommandGroup conveyorUpCommand = new ParallelCommandGroup(new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
+                new IntakeCommand(m_IntakeInner,Constants.intakeInnerSpeed));
+        final ParallelCommandGroup conveyorDownCommand = new ParallelCommandGroup(new ConveyorCommand(m_Conveyor,Constants.conveyorDownSpeed),
+                new IntakeCommand(m_IntakeInner,-Constants.intakeInnerSpeed));
         //final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake,Constants.intakeSpeed);
         //final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake,-Constants.intakeSpeed);
-        final zIntakeConveyCommand intakeInCommand = new zIntakeConveyCommand(m_Intake,Constants.intakeSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed);
-        final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake,-Constants.intakeSpeed,m_Conveyor,Constants.conveyorDownSpeed,m_Feeder,-Constants.FeederSpeed);
+        final zIntakeConveyCommand intakeInCommand = new zIntakeConveyCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed);
+        final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake,m_IntakeInner,-Constants.intakeSpeed,m_Conveyor,Constants.conveyorDownSpeed,m_Feeder,-Constants.FeederSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
         final ClimbCommand climbUpCommand=new ClimbCommand(m_Climb,Constants.climbUpSpeed);
         final ClimbCommand climbDownCommand=new ClimbCommand(m_Climb,Constants.climbDownSpeed);
        
         final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
+        final ClimbArmCommand climbArmsCommand = new ClimbArmCommand(m_Pnuematics);
+     
         final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
         final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
@@ -347,9 +360,11 @@ public class RobotContainer {
 
         POVButton climbUpPOV=new POVButton(m_xBoxOperator,ButtonConstants.ClimbUpPOV);
         POVButton climbDownPOV=new POVButton(m_xBoxOperator,ButtonConstants.ClimbDownPOV); 
-        
+      
+        POVButton climbArmPOV=new POVButton(m_xBoxDriver,ButtonConstants.ClimbUpPOV);
+      
         //FIXIt
-        SpectrumAxisButton turretAutoFind = new SpectrumAxisButton(m_xBoxOperator,0,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
+        SpectrumAxisButton turretAutoFind = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.LeftStick,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
         turretAutoFind.whenHeld(turretAutoCommand);
         
         
@@ -377,6 +392,7 @@ public class RobotContainer {
         turretLeft2Button.whenHeld(turretLeftCommand);
         turretRight2Button.whenHeld(turretRightCommand);
         
+        climbArmPOV.whenHeld(climbArmsCommand);
         climbUpPOV.whenHeld(climbUpCommand);
         climbDownPOV.whenHeld(climbDownCommand);
         
@@ -465,7 +481,7 @@ public class RobotContainer {
         }
         return autoCommand;
         // return m_autoCommand;
-    }
+    }   
     public void refreshSmartDashboard()
     {  
         shuffleboardPDPStickyCANFaults.setBoolean(m_robotPDH.getStickyFaults().CanWarning);
@@ -498,19 +514,6 @@ public class RobotContainer {
         frontRightAngle.setDouble(m_RobotDrive.getFrontRightAngle());
         backLeftAngle.setDouble(m_RobotDrive.getBackLeftAngle());
         backRightAngle.setDouble(m_RobotDrive.getbackRightAngle());
-        if (m_turret.hitLeftLimit()){
-                shuffleboardLeftLimit.setString("True");                                
-        }else
-        {
-                shuffleboardLeftLimit.setString("False");
-
-        }
-        if (m_turret.hitRightLimit()){
-                shuffleboardRightLimit.setString("True");                                
-        }else
-        {
-                shuffleboardRightLimit.setString("False");
-        }
         m_Limelight.update();
         if(m_Limelight.isTargetAvailible()){              
                 networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());
@@ -520,17 +523,12 @@ public class RobotContainer {
         shuffleboardShooterTopVel.setDouble(m_Shooter.getTopMotorVelocity());
         shuffleboardShooterBottomVel.setDouble(m_Shooter.getBottomMotorVelocity());
         shuffleboardTurretPos.setString(" " + m_turret.getPosition());
-        shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
-        shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
-        // allow user to update shooter spped
-        double topSpeed=shuffleboardShooterTop.getDouble(0);
-        double bottomSpeed=shuffleboardShooterBottom.getDouble(0);
-        if((topSpeed!=0) || (bottomSpeed!=0)){
-                autoLoadShoot.changeSpeeds(topSpeed, bottomSpeed, topSpeed);
-                
-        }
-
+        //shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
+        //shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
         
+    }
+    public void disabledPerioidicUpdates(){
+       
     }
     public void disableLimelights(){
             m_Limelight.turnLEDOff();
@@ -541,7 +539,7 @@ public class RobotContainer {
     public void resetTurret(){
             if(m_turretHasReset==false){
                 zTurretResetCommand resetTurret = new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos); 
-                resetTurret.execute();
+                CommandScheduler.getInstance().schedule(resetTurret);
                 m_turretHasReset=true;
         }
     }

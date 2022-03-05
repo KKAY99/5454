@@ -12,8 +12,8 @@ public class zTurretResetCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final TurretSubsystem m_TurretSubsystem;
   private double m_speed;
-  private final double m_leftSpeed;
-  private final double m_rightSpeed;
+  private final double m_centerSpeed;
+  private final double m_homeSpeed;
   private final double m_targetPos;
 
   /**
@@ -21,14 +21,14 @@ public class zTurretResetCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public zTurretResetCommand(TurretSubsystem subsystem,double leftSpeed,double rightSpeed, double targetPos) {
+  public zTurretResetCommand(TurretSubsystem subsystem,double homeSpeed,double centerSpeed, double targetPos) {
     m_TurretSubsystem = subsystem;
-    m_leftSpeed=leftSpeed;
-    m_rightSpeed=rightSpeed;
+    m_homeSpeed=homeSpeed;
+    m_centerSpeed=centerSpeed;
     m_targetPos=targetPos;
 
     //Start moving left
-    m_speed=leftSpeed;
+    m_speed=homeSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_TurretSubsystem);
   }
@@ -36,6 +36,8 @@ public class zTurretResetCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Init Turet");
+   
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,12 +56,15 @@ public class zTurretResetCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
-    if (m_TurretSubsystem.hitLeftLimit() && m_TurretSubsystem.isMovingLeft()){
-      m_TurretSubsystem.setEncoderPosition(0);
-      m_speed=m_rightSpeed;
+    if (m_TurretSubsystem.hitRightPhysicalLimit() && (m_speed==m_homeSpeed)) {
+      System.out.println("Hit Right Limit");
+      m_TurretSubsystem.stop();
+      m_TurretSubsystem.setHomeforTurret();
+      m_speed=m_centerSpeed;
       m_TurretSubsystem.turn(m_speed);
-      returnValue= true;
-     } else if (m_TurretSubsystem.hitRightLimit() || m_TurretSubsystem.getPosition()>m_targetPos){
+      
+     } else if ((m_speed==m_centerSpeed) && (m_TurretSubsystem.hitLeftLimit() || m_TurretSubsystem.getPosition()<m_targetPos)){
+      System.out.println("Hit Left Limit");
       returnValue= true;
   }
      return returnValue;

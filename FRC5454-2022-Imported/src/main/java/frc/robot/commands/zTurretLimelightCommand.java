@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.classes.Limelight;
+import frc.robot.Constants;
 
 /** An example command that uses an example subsystem. */
 public class zTurretLimelightCommand extends CommandBase {
@@ -35,12 +36,16 @@ public class zTurretLimelightCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_limelight.getX()>.2){
-      m_TurretSubsystem.turn(m_speed);
-    }else if (m_limelight.getX()<-2){
+    System.out.println("auto turet - " + m_limelight.getX());
+    if(m_limelight.getX()>Constants.turretOuterLimit){
       m_TurretSubsystem.turn(-m_speed);
-    }
-    else{
+    }else if (m_limelight.getX()>Constants.turretInnerLimit){
+      m_TurretSubsystem.turn(-m_speed/2);
+    }else if (m_limelight.getX()<(0-Constants.turretInnerLimit)){
+      m_TurretSubsystem.turn(m_speed/2);
+    }else if (m_limelight.getX()<(0-Constants.turretOuterLimit)){
+      m_TurretSubsystem.turn(m_speed);
+    }else{
       m_TurretSubsystem.stop();
     }
   }
@@ -55,11 +60,11 @@ public class zTurretLimelightCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
-    if (m_TurretSubsystem.hitLeftLimit() && m_TurretSubsystem.isMovingLeft()){
+    if (m_TurretSubsystem.hitLeftLimit() && m_TurretSubsystem.isMovingLeft(m_speed)){
       System.out.println("Left Limit");  
       returnValue= true;
 
-    } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingRight()){
+    } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingRight(m_speed)){
       System.out.println("Right Limit");  
      
       returnValue= true;

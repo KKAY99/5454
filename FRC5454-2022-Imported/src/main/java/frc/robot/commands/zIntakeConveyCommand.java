@@ -10,20 +10,23 @@ public class zIntakeConveyCommand extends CommandBase {
   private final ConveyorSubsystem m_conveyor;
   private final FeederSubsystem m_feeder;
   private final IntakeSubsystem m_intake;
+  private final IntakeSubsystem m_intakeInner;
   private final double m_conveyorSpeed;
   private final double m_intakeSpeed;
   private final double m_feederSpeed;
 
-  public zIntakeConveyCommand(IntakeSubsystem intake, double intakeSpeed,ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed){
+  public zIntakeConveyCommand(IntakeSubsystem intake, IntakeSubsystem intakeInner,double intakeSpeed,ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed){
     m_conveyor=conveyor;
     m_feeder=feeder;
     m_intake=intake;
+    m_intakeInner=intakeInner;
     m_conveyorSpeed=conveyorSpeed;
     m_feederSpeed=feederSpeed;
     m_intakeSpeed=intakeSpeed;
     addRequirements(conveyor);
     addRequirements(feeder);
     addRequirements(intake);
+    addRequirements(intakeInner);
   }
   
   // Called when the command is initially scheduled.
@@ -35,6 +38,7 @@ public class zIntakeConveyCommand extends CommandBase {
   public void execute() {
     m_conveyor.run(m_conveyorSpeed);
     m_intake.runIntake(m_intakeSpeed);
+    m_intakeInner.runIntake(-m_intakeSpeed);
     m_feeder.run(m_feederSpeed);
   }
  
@@ -44,6 +48,7 @@ public class zIntakeConveyCommand extends CommandBase {
     m_conveyor.stop();
     m_feeder.stop();
     m_intake.stopIntake();
+    m_intakeInner.stopIntake();
    }
 
   // Returns true when the command should end.

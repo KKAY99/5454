@@ -12,7 +12,7 @@ public class ClimbCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final ClimbSubsystem m_ClimbSubsystem;
     private final double m_speed;
-   
+    
     /**
      * Creates a new ExampleCommand.
      *
@@ -29,7 +29,7 @@ public class ClimbCommand extends CommandBase {
     @Override
     public void initialize() {
         
-        m_ClimbSubsystem.resetlimitCounter();
+        
     }
     
  
@@ -39,11 +39,12 @@ public class ClimbCommand extends CommandBase {
   public void execute() 
   {     
   //stop on limit only when going down
-    if((m_ClimbSubsystem.hitLimit()==false) || (m_speed>0)) {
+    if(m_ClimbSubsystem.stopForLimit(m_speed)==false){
+      System.out.println("running Climb - " + m_speed);
       m_ClimbSubsystem.run(m_speed);
     } else {
         System.out.println("Limit Switch Hitch" );
-         m_ClimbSubsystem.run(0);
+         m_ClimbSubsystem.stop();
     }
 
   }
@@ -56,7 +57,7 @@ public class ClimbCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-    //if counter has incremented then move up
-        return (m_ClimbSubsystem.getLimitCounter()>0);     
-        }
+      return m_ClimbSubsystem.stopForLimit(m_speed);
+    
+  }
 }

@@ -22,6 +22,7 @@ public class Limelight {
     private double m_limeLightHeight;
     private double m_mountingAngle;
     private double m_targetDistance = 0;
+    private double m_xOffset=0;
     private boolean m_LimelightLEDOn = false;
 
     private double kP = Constants.LimeLightValues.steeringP;
@@ -42,11 +43,19 @@ public class Limelight {
         m_limeLightHeight = limeLightHeight;
         m_mountingAngle = mountingAngle;
     };
-
-    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double targetDistance) {
+    
+    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet) {
         m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
         m_mountingAngle = mountingAngle;
+        m_xOffset=xoffSet;
+    };
+
+    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle,double xoffSet, double targetDistance) {
+        m_targetHeight = targetHeight;
+        m_limeLightHeight = limeLightHeight;
+        m_mountingAngle = mountingAngle;
+        m_xOffset=xoffSet;
         m_targetDistance = targetDistance;
     };
 
@@ -86,6 +95,10 @@ public class Limelight {
     // }
 
     public double getX() {
+        
+        return tx.getDouble(0.0)-m_xOffset;
+    }
+    public double getactualX() {
         return tx.getDouble(0.0);
     }
 

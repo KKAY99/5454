@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.common.Utilities;
-
+import frc.robot.Constants;
 public class DefaultDriveCommand extends CommandBase {
    
   private final DrivetrainSubsystem m_drive;
@@ -35,17 +35,17 @@ public class DefaultDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    double forward = Utilities.deadband(m_drive_fwd.getAsDouble());
+    double forward = Utilities.deadband(m_drive_fwd.getAsDouble(),Constants.driveDeadband);
     // Square the forward stick
     forward = Math.copySign(Math.pow(forward, 2.0), forward);
     
     double strafe = Utilities.deadband(m_drive_strafe.getAsDouble());
-    strafe = Utilities.deadband(strafe);
+    strafe = Utilities.deadband(strafe,Constants.driveDeadband);
     // Square the strafe stick
     strafe = Math.copySign(Math.pow(strafe, 2.0), strafe);
     //System.out.println("Straffing - " + strafe);
     double rotation = Utilities.deadband(m_drive_rcw.getAsDouble());
-    rotation = Utilities.deadband(rotation);
+    rotation = Utilities.deadband(rotation,Constants.driveDeadband);
     // Square the rotation stick
     rotation = Math.copySign(Math.pow(rotation, 2.0), rotation);
     //System.out.println(forward + " -- " + strafe + " -- " + rotation);

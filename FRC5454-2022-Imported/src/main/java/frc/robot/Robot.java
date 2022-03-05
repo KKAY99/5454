@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoModes; 
-
+import edu.wpi.first.cameraserver.CameraServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putData("Auto Selector", m_autoChooser);
     SmartDashboard.putData("Delay Time", m_delayChooser);
-
+    CameraServer.startAutomaticCapture();
 
   }
 
@@ -83,7 +83,6 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     //KK - Update dashboard
-    m_robotContainer.refreshSmartDashboard();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -95,6 +94,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     m_robotContainer.disableLimelights();
+    m_robotContainer.disabledPerioidicUpdates();
   }
 
   /**
@@ -136,6 +136,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    m_robotContainer.refreshSmartDashboard();
+  
   }
 
   @Override
