@@ -31,6 +31,21 @@ public final class NavX extends Gyroscope {
         return Math.toRadians(navX.getRate());
     }
 
+    public float getVelocityX(){
+        return navX.getVelocityX();
+    }
+    public float getVelocityY(){
+        return navX.getVelocityX();
+    }
+    public float getVelocityZ(){
+        return navX.getVelocityX();
+    }
+    
+    public boolean isMoving(float threshold){
+        return ((getVelocityX()+getVelocityY()+getVelocityZ())>=threshold);
+    }
+
+
     public double getAxis(Axis axis) {
         switch (axis) {
             case PITCH:

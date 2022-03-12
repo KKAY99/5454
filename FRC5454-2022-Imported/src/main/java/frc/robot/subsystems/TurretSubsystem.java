@@ -40,13 +40,12 @@ public class TurretSubsystem extends SubsystemBase {
   
       }
   public void turn(double power) {
-   // m_turretMotor.set(power);
+  // m_turretMotor.set(power);
   }
   public void setEncoderPosition(double position){
-   // m_turretEncoder.setPosition(position);
+    m_turretEncoder.setPosition(position);
   }
   public void stop() {
- 
    // m_turretMotor.set(0);
   }
   public boolean isMovingLeft(double targetspeed){
@@ -92,6 +91,9 @@ public class TurretSubsystem extends SubsystemBase {
     }
   }
   
+  public boolean hasHomed(){
+    return encoderHasHomed;
+  }
   public void setHomeforTurret()
   {
     m_turretEncoder.setPosition(0);

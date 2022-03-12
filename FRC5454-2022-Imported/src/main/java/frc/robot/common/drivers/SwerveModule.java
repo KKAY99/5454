@@ -261,7 +261,6 @@ public abstract class SwerveModule {
         if (targetAngle < 0.0) {
             targetAngle += 2.0 * Math.PI;
         }
-
         setTargetAngle(targetAngle);
         setDriveOutput(targetSpeed);
     }

@@ -85,8 +85,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         backLeftModule.setName("Back Left");
         backRightModule.setName("Back Right");
     }
-
-
+ 
     public static DrivetrainSubsystem getInstance() {
         if (instance == null) {
             instance = new DrivetrainSubsystem(new NavX(SPI.Port.kMXP));
@@ -96,7 +95,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
  
 
-    public void move (double direction, double speed, double distance, boolean stopAtFalse)
+    public void move (double direction, double speed, double distance, boolean stopAtEnd)
 {       double startDistance;
         double forward=0;
         double strafe=0;
@@ -125,9 +124,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         double distanceTravelled=backLeftModule.getCurrentDistance()-startDistance;
         do {
               drive(new Translation2d(forward, strafe), rotation, true);
-              distanceTravelled=backLeftModule.getCurrentDistance()-startDistance;
+              periodic();
+              distanceTravelled=Math.abs(backLeftModule.getCurrentDistance()-startDistance);
+              System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
         } while(distanceTravelled<=distance);
-                
+        if (stopAtEnd) {
+                drive(new Translation2d(0,0), 0, true);
+                periodic();                
+        }
 }
     @Override
     public void periodic() {
@@ -160,6 +164,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         }
 
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
+
         frontLeftModule.setTargetVelocity(states[0].speedMetersPerSecond, states[0].angle.getRadians());
         frontRightModule.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
         backLeftModule.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());

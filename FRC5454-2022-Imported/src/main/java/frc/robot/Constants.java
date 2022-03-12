@@ -34,13 +34,14 @@ public final class Constants {
     public static final double FeederSpeed=-1.0;
     public static final double conveyorUpSpeed=0.9;
     public static final double conveyorDownSpeed=-0.5;
-    public static final double climbUpSpeed=.9;
+    public static final double climbUpSpeed=.5;
     public static final double climbDownSpeed=-.9;
     public static final double turretSpeed=0.35;
+    public static final double turretMinSpeed=0.20;
     public static final double turretInitSpeed=-.25;
     public static final double turretHomeSpeed=0.25;
     public static final double turretHomePos=-4.51;
-
+    public static final double TurretTargetRange=5;
     public static final double turretOuterLimit=.4;
     public static final double turretInnerLimit=.2;
     public static final double driveDeadband=0.05;
@@ -50,26 +51,63 @@ public final class Constants {
         public static final int LatchPort=5;
         public static final int ClimbArmPort=2;
         public static final int IntakeArmPort=3;
-       // public static final int IntakeArmPort2=2;
+        public static final int HookCablesPort=1;
+        
     }
     public static final class ButtonConstants{
-       public static final int ManualShoot=1;
-       public static final int AimandShoot=2;
-       public static final int IntakeIn=6;
-       public static final int IntakeOut=5;
-       public static final int IntakeArm=3;
-       public static final int FeederUp=4;
-       public static final int Latch=8;
+       public static final int DriverAutoShoot=1;
+       public static final int DriverIntakeIn=2;
+       public static final int DriverIntakeOut=3;
+       public static final int DriverIntakeArm=4;
+       public static final int DriverGyroReset=7;
+       public static final int DriverGyroReset2=8;
+       public static final int DriverTurretLeftPOV=270;
+       public static final int DriverTurretRightPOV=90;
+      
+       public static final int OperatorPivotArm=2;
+       public static final int OperatorShootManual=1;
+       public static final int OperatorClimbHook=3;
+       public static final int OperatorIntakeArm=4;
+       public static final int OperatorIntakeOut=5;
+       public static final int OperatorIntakeIn=6;
+    
+       public static final int OperatorTurretAxis=0;
+       public static final int OperatorTurretFindAxis=1;
+       public static final int OperatorClimbAxis=5;
+       public static final int OperatorGyroReset=7;
+       public static final int OperatorGyroReset2=8;
+       public static final int OperatorAutoShootAxis=3;
+       public static final int OperatorShooter1POV=270;
+       public static final int OperatorShooter2POV=90;
+       public static final int OperatorShooter3POV=270;
+       public static final int OperatorShooter4POV=90;
+       
        public static final int ClimberDown=10;
        public static final int ConveyerUpAxis=2;
        public static final int ConveyerDownAxis=3;
        public static final double TriggerThreshold=.5;
+       public static final double JoystickUpThreshold=-0.25;
+       public static final double JoystickDownThreshold=0.25;
+       public static final double JoystickLeftThreshold=.50;
+       public static final double JoystickRightThreshold=-0.50;
        public static final int TurretLeftPOV=270;
        public static final int TurretRightPOV=90;
        public static final int ClimbUpPOV=0;
        public static final int ClimbDownPOV=180;
        public static final int GyroReset=7;
        public static final int LeftStick=1;
+    }
+
+    public static final class ManualShots{
+        public final static double Shot1Top=700;
+        public final static double Shot1Bottom=750;
+        public final static double Shot2Top=750;
+        public final static double Shot2Bottom=800;
+        public final static double Shot3Top=100;
+        public final static double Shot3Bottom=1050;
+        public final static double Shot4Top=1400;
+        public final static double Shot4Bottom=1450;
+
     }
     public static final class LimitSwitches{
         public static final int ClimberBottom=9;
@@ -116,7 +154,7 @@ public final class Constants {
         public static final int delayValMode3=8;
         public static final int defaultDelayMode=0;
 
-        public static final double LeaveTarmacDistance=1.0;
+        public static final double LeaveTarmacDistance=100;
         public static final double ball2Distance=.5;
             
         
@@ -150,6 +188,7 @@ public final class Constants {
         public static final double targetHeight = 103; // 249 cm
         public static final double targetXPosShoot = 3.83;
         public static final double targetXPosSafeZone = 5;
+        public static final double targetXPosRange=50;
         public static final double limelightHeight = 44; //37
         public static final double limelightAngle = 36; //40
         public static final double kVisionDistanceTolerance = 5;
