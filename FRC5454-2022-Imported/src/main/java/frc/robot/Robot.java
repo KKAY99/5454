@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
-    m_robotContainer.resetTurret();
+    //m_robotContainer.resetTurret(); move to command groups
     m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_autoChooser.getSelected());
     
     // schedule the autonomous command (example)

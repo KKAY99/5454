@@ -8,14 +8,10 @@ package frc.robot;
 import java.util.Map;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -32,8 +28,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.PowerDistribution;
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -64,7 +58,11 @@ public class RobotContainer {
    
     private final ClimbSubsystem m_Climb = new ClimbSubsystem(Constants.ClimberPort,Constants.LimitSwitches.ClimberBottom,Constants.LimitSwitches.ClimberTop);
     private final PneumaticsSubsystem m_Pnuematics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorID);
-    private final TurretSubsystem m_turret = new TurretSubsystem(Constants.TurretPort,Constants.LimitSwitches.TurretLeft,Constants.LimitSwitches.TurretRight);
+    private final TurretSubsystem m_turret = new TurretSubsystem(Constants.TurretPort,
+                                                                Constants.LimitSwitches.TurretLeft,
+                                                                Constants.LimitSwitches.TurretRight,
+                                                                Constants.turretHomePos,
+                                                                Constants.turretHomeSpeed);
     // #region Shuffleboard
 
     private final zSpinLoadShootCommand autoLoadShoot = new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity); 
@@ -82,7 +80,8 @@ public class RobotContainer {
     private static ShuffleboardTab ControlTab = Shuffleboard.getTab("Controls");
     private static ShuffleboardTab PDPTab = Shuffleboard.getTab("PDP");
     // #endregion
-
+    
+   
     // #region NetworkEntries
     // Create Network Table Entries
 
@@ -273,7 +272,11 @@ public class RobotContainer {
                 new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder,Constants.FeederSpeed));
     
-        final ParallelCommandGroup ManualShooter1Command = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,Constants.ManualShots.Shot1Top,Constants.ManualShots.Shot1Bottom,false),
+        final SequentialCommandGroup releaseAndResetClimb = new SequentialCommandGroup( 
+                new HookCablesReleaseCommand(m_Pnuematics),
+                new ClimbArmResetCommand(m_Pnuematics));
+        final ParallelCommandGroup ManualShooter1Command = new ParallelCommandGroup(
+                new ShooterCommand(m_Shooter,m_Limelight,Constants.ManualShots.Shot1Top,Constants.ManualShots.Shot1Bottom,false),
                 new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder,Constants.FeederSpeed));
     
@@ -301,8 +304,8 @@ public class RobotContainer {
         final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake,m_IntakeInner,-Constants.intakeSpeed,m_Conveyor,Constants.conveyorDownSpeed,m_Feeder,-Constants.FeederSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
-        final ClimbCommand climbUpCommand=new ClimbCommand(m_Climb,Constants.climbUpSpeed);
-        final ClimbCommand climbDownCommand=new ClimbCommand(m_Climb,Constants.climbDownSpeed);
+        final ClimbCommand climbUpCommand=new ClimbCommand(m_Climb,m_Pnuematics,m_turret,Constants.climbUpSpeed);
+        final ClimbCommand climbDownCommand=new ClimbCommand(m_Climb,m_Pnuematics,m_turret,Constants.climbDownSpeed);
        
         final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
         final ClimbArmCommand climbArmsCommand = new ClimbArmCommand(m_Pnuematics);
@@ -402,7 +405,7 @@ public class RobotContainer {
         
         operatorPivotArm.whenHeld(climbArmsCommand);
         operatorClimbHooks.whenHeld(climbHooksCommand);
-        operatorClimbHooks.whenReleased(new HookCablesReleaseCommand(m_Pnuematics));
+        operatorClimbHooks.whenReleased(releaseAndResetClimb);
         operatorManualShoot.whenHeld(ManualShootCommand);
 
         operatorShoot1Button.whenHeld(ManualShooter1Command);
@@ -453,12 +456,16 @@ public class RobotContainer {
           case AutoModes.autoMoveShootMoveGrabShot1:
             System.out.println("Auto Shot Move Grab Shoot Pay Executing");
             autoCommand=new SequentialCommandGroup(
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,0,true),
+                new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos),    
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,zAutomation.intakeTime),
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity));
-            break;
+                new IntakeArmCommand(m_Pnuematics),
+                new IntakeArmCommand(m_Pnuematics),
+                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,0,true), 
+                new zIntakeConveyCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed), 
+                new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance),              
+                new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
+                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,0,false));
+                break;
           case AutoModes.autoMoveShotMoveGrabMoveLeftGrabShot2:
             autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
@@ -535,6 +542,9 @@ public class RobotContainer {
         
     }
     public void disabledPerioidicUpdates(){
+         shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
+        shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
+            
        
     }
     public void disableLimelights(){

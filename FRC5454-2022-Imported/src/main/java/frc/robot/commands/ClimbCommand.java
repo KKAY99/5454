@@ -5,12 +5,16 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class ClimbCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     private final ClimbSubsystem m_ClimbSubsystem;
+    private final PneumaticsSubsystem m_pnuematicsSubsystem;
+    private final TurretSubsystem m_turret;
     private final double m_speed;
     
     /**
@@ -18,9 +22,11 @@ public class ClimbCommand extends CommandBase {
      *
      * @param subsystem The subsystem used by this command.
      */
-    public ClimbCommand(ClimbSubsystem Climb,double speed) {
-        m_ClimbSubsystem = Climb;
+    public ClimbCommand(ClimbSubsystem climb,PneumaticsSubsystem pneumatics,TurretSubsystem turret, double speed) {
+        m_ClimbSubsystem = climb;
+        m_pnuematicsSubsystem=pneumatics;
         m_speed=speed;
+        m_turret=turret;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_ClimbSubsystem);
     }
@@ -39,19 +45,31 @@ public class ClimbCommand extends CommandBase {
   public void execute() 
   {     
   //stop on limit only when going down
-    if(m_ClimbSubsystem.stopForLimit(m_speed)==false){
-      System.out.println("running Climb - " + m_speed);
-      m_ClimbSubsystem.run(m_speed);
-    } else {
-        System.out.println("Limit Switch Hitch" );
-         m_ClimbSubsystem.stop();
-    }
+    //make sure turret is out of way
+    m_turret.setLocked(); // disable auto targeting mode
+    if(m_turret.isClearofClimber()==false){
+        m_turret.movePastSafetyPosition(); // start turret moving left
+      } else {
+        m_turret.stop(); // make sure turret is not moving before climbing either way
+        if(m_ClimbSubsystem.stopForLimit(m_speed)==false){
+          System.out.println("running Climb - " + m_speed);
+          m_ClimbSubsystem.run(m_speed);
+        } else {
+            System.out.println("Limit Switch Hit" );
+            //auto deploy pivot arms when climb bottom is hit
+            if (m_ClimbSubsystem.hitBottomLimit()){
+              m_pnuematicsSubsystem.setArms(true);
+            }
+            m_ClimbSubsystem.stop();
+        }
+      }
 
   }
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         m_ClimbSubsystem.stop();
+        m_turret.stop();
     }
 
     // Returns true when the command should end.

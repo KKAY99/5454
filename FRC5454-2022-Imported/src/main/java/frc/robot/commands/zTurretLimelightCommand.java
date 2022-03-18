@@ -7,8 +7,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.classes.Limelight;
-import frc.robot.Constants;
-
+ 
 /** An example command that uses an example subsystem. */
 public class zTurretLimelightCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -61,16 +60,18 @@ public class zTurretLimelightCommand extends CommandBase {
         }
       }
       else  {//Find Target 
-        System.out.println("Turret Seeking");
-        double currentPos=m_TurretSubsystem.getPosition();
         if(m_TurretSubsystem.hasHomed()){
           if(m_TurretSubsystem.hitLeftLimit()){
-            m_TurretSubsystem.turn(m_speed);
-          }else if (m_TurretSubsystem.hitRightLimit()){
-            m_TurretSubsystem.turn(-m_speed);
-          }else {
-            m_TurretSubsystem.turn(m_speed);
-          }
+            m_TurretSubsystem.stop();
+            System.out.println("Turn Right");
+             m_speed=-m_maxSpeed;
+           }else if (m_TurretSubsystem.hitRightLimit()){
+            m_TurretSubsystem.stop();
+            System.out.println("Turn Left");           
+            m_speed=m_maxSpeed;
+         }
+          System.out.println("Turret Seeking " + m_speed);
+          m_TurretSubsystem.turn(m_speed);
         }
 
       }
@@ -89,16 +90,9 @@ public class zTurretLimelightCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
-    if (m_TurretSubsystem.hitLeftLimit() && m_TurretSubsystem.isMovingLeft(m_speed)){
-      System.out.println("Left Limit");  
-      returnValue= true;
-
-    } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingRight(m_speed)){
-      System.out.println("Right Limit");  
-     
-      returnValue= true;
-    } else if (onTarget()){
-      returnValue=false;  
+    //if turret is locked exit auto find
+    if(m_TurretSubsystem.isLocked()){
+      returnValue=true;
     }
     return returnValue;
   }

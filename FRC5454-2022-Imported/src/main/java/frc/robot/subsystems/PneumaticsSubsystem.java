@@ -75,6 +75,9 @@ public class PneumaticsSubsystem extends SubsystemBase {
     return m_Compressor.getCurrent();
   }
 
+  public boolean getPressureSwitch(){
+    return m_pressureSwitch;
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

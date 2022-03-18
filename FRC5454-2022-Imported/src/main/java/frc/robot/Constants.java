@@ -36,11 +36,11 @@ public final class Constants {
     public static final double conveyorDownSpeed=-0.5;
     public static final double climbUpSpeed=.5;
     public static final double climbDownSpeed=-.9;
-    public static final double turretSpeed=0.35;
+    public static final double turretSpeed=0.40;
     public static final double turretMinSpeed=0.20;
     public static final double turretInitSpeed=-.25;
     public static final double turretHomeSpeed=0.25;
-    public static final double turretHomePos=-4.51;
+    public static final double turretHomePos=-4.12;
     public static final double TurretTargetRange=5;
     public static final double turretOuterLimit=.4;
     public static final double turretInnerLimit=.2;
@@ -49,8 +49,8 @@ public final class Constants {
     public static final class Pneumatics {
         public static final int CompressorID=0; 
         public static final int LatchPort=5;
-        public static final int ClimbArmPort=2;
-        public static final int IntakeArmPort=3;
+        public static final int ClimbArmPort=3;
+        public static final int IntakeArmPort=2;
         public static final int HookCablesPort=1;
         
     }
@@ -115,7 +115,7 @@ public final class Constants {
         public static final int TurretRight=1;
         public static final int ClimberTop=2;
         public static final double TurretRightEncoder=-0.5;
-        public static final double TurretLeftEncoder=-9.3;
+        public static final double TurretLeftEncoder=-8.00;
     }
 
     public static final class AutoModes {
@@ -125,7 +125,7 @@ public final class Constants {
         public static final String autoMode3="Outake / Move Backwars";
         public static final String autoMode4="Shoot / Move Backwards";
         public static final String autoMode5="Shoot Move Grab";
-        public static final String autoMode6="Shoot Move Grab Shot 1";
+        public static final String autoMode6="xxMove Grab Shot 2";
         public static final String autoMode7="Shoot Move Grab Move Left Grab Shoot 2";
         public static final String autoMode8="Shoot Move Grab Move Right Grab Shoot 2";
         public static final String autoMode9="Move Grab Track Right / Shoot";
@@ -155,6 +155,7 @@ public final class Constants {
         public static final int defaultDelayMode=0;
 
         public static final double LeaveTarmacDistance=100;
+        public static final double GetBallDistance=10;
         public static final double ball2Distance=.5;
             
         
@@ -192,8 +193,10 @@ public final class Constants {
         public static final double limelightHeight = 44; //37
         public static final double limelightAngle = 36; //40
         public static final double kVisionDistanceTolerance = 5;
-        public static final double kVisionXTolerance = 5;
+        public static final double kVisionXTolerance = 1;
         public static final double kVisionXOffset=-2;
+        //public static final double kVisionXTolerance = 5;
+        //public static final double kVisionXOffset=-2;
     }
 
     public static final class SwerveDriveGB {

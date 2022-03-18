@@ -163,7 +163,9 @@ public class Limelight {
         if (isTargetAvailible()) {
             if ((Math.abs(getX()
                     - Constants.LimeLightValues.targetXPosShoot) < Constants.LimeLightValues.kVisionXTolerance)) {
-                returnValue = true;
+                System.out.println("On Target -" + Math.abs(getX()- Constants.LimeLightValues.targetXPosShoot
+                    ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+                        returnValue = true;
             }
         }
         return returnValue;

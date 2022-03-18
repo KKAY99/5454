@@ -75,9 +75,10 @@ public class ShooterCommand extends CommandBase {
   };
 
   public static double getPower(double powerValues[], double distance) {
+    int i=0;
     try{
       distance = Math.max(distance, 0);
-      for (int i = 0; i < distanceValues.length; i++) {
+      for (i = 0; i < distanceValues.length; i++) {
         if (distanceValues[i] == distance) {
           return powerValues[i];
         } else if (distanceValues[i] > distance) {
@@ -90,7 +91,7 @@ public class ShooterCommand extends CommandBase {
       }
       return 0;
     } catch(Exception e){
-      System.out.println("Exception Error in getpower " + e.getMessage());
+      System.out.println("Exception Error in getpower value i (" + i +  ") " + e.getMessage());
       return 0;
     }
   }
