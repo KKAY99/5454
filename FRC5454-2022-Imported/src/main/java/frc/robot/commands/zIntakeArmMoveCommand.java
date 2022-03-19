@@ -5,16 +5,15 @@ import frc.robot.subsystems.PneumaticsSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeArmCommand extends CommandBase {
+public class zIntakeArmMoveCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final PneumaticsSubsystem m_subsystem;
+  private final boolean m_status;
+  private boolean m_executed=false;
   
-  
-  /**
-    * @param targetSpeed The speed we are setting in execute
-   */
-  public IntakeArmCommand(PneumaticsSubsystem PneumaticsSystem) {
+   public zIntakeArmMoveCommand(PneumaticsSubsystem PneumaticsSystem,boolean status) {
     m_subsystem=PneumaticsSystem;
+    m_status=status;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
@@ -27,11 +26,8 @@ public class IntakeArmCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_subsystem.getIntakeArmStatus()){
-      m_subsystem.setIntakeArms(false);
-    } else {
-      m_subsystem.setIntakeArms(true);
-    }
+     m_subsystem.setIntakeArms(m_status);
+     m_executed=true;
   }
 
   // Called once the command ends or is interrupted.
@@ -43,7 +39,7 @@ public class IntakeArmCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+     return m_executed;
   }
 }
 

@@ -28,7 +28,7 @@ public class ClimbArmResetCommand extends CommandBase {
   @Override
   public void execute() {
     
-      m_subsystem.setArms(false);
+      m_subsystem.setClimbArms(false);
   }
 
   // Called once the command ends or is interrupted.

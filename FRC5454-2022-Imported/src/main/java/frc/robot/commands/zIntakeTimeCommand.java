@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class zIntakeTimeCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem m_IntakeSubsystem;
+  private final IntakeSubsystem m_InnerIntakeSubsystem;
   private final double m_speed;
   private final double m_duration;
   private final boolean m_keepRunning;
@@ -21,21 +22,24 @@ public class zIntakeTimeCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public zIntakeTimeCommand(IntakeSubsystem intake,double speed,double duration,boolean keepRunning){ 
+  public zIntakeTimeCommand(IntakeSubsystem intake,IntakeSubsystem innerIntake, double speed,double duration,boolean keepRunning){ 
     m_IntakeSubsystem = intake;
+    m_InnerIntakeSubsystem=innerIntake;
     m_speed=speed;
     m_duration=duration;
     m_keepRunning=keepRunning;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_IntakeSubsystem);
   }
-  public zIntakeTimeCommand(IntakeSubsystem intake,double speed,double duration){ 
+  public zIntakeTimeCommand(IntakeSubsystem intake,IntakeSubsystem innerIntake,double speed,double duration){ 
     m_IntakeSubsystem = intake;
+    m_InnerIntakeSubsystem=innerIntake;
     m_speed=speed;
     m_duration=duration;
     m_keepRunning=false;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_IntakeSubsystem);
+    addRequirements(m_InnerIntakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -51,6 +55,7 @@ public class zIntakeTimeCommand extends CommandBase {
     startTime=Timer.getFPGATimestamp();
     do {
       m_IntakeSubsystem.runIntake(m_speed);
+      m_InnerIntakeSubsystem.runIntake(m_speed);
       currentTime=Timer.getFPGATimestamp();
       System.out.println(startTime + " - " + currentTime);
     }while(currentTime<startTime+m_duration);
@@ -62,6 +67,7 @@ public class zIntakeTimeCommand extends CommandBase {
   public void end(boolean interrupted) {
     if(m_keepRunning==false){
       m_IntakeSubsystem.stopIntake();
+      m_InnerIntakeSubsystem.stopIntake();
     }
   }
 

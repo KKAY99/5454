@@ -15,14 +15,14 @@ public class PneumaticsSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private static Compressor m_Compressor;
   private static boolean m_pressureSwitch;
-  private static Solenoid m_solenoidArm;
+  private static Solenoid m_solenoidIntakeArm;
   private static Solenoid m_solenoidClimb;
   private static Solenoid m_solenoidHookCables;
   public static PneumaticsModuleType pModule = PneumaticsModuleType.CTREPCM;
   public PneumaticsSubsystem(int nodeID) {
     
     m_Compressor = new Compressor(nodeID,pModule);      
-    m_solenoidArm = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort); 
+    m_solenoidIntakeArm = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort); 
     m_solenoidClimb = new Solenoid (pModule,Constants.Pneumatics.ClimbArmPort);
     m_solenoidHookCables= new Solenoid (pModule,Constants.Pneumatics.HookCablesPort);
     setEnabled();
@@ -39,15 +39,15 @@ public class PneumaticsSubsystem extends SubsystemBase {
   public boolean getHookCableStatus(){
       return m_solenoidHookCables.get();
   }
-  public void setArms(boolean status){
+  public void setIntakeArms(boolean status){
     System.out.println("Setting Arm " + status);
-    m_solenoidArm.set(status);
+    m_solenoidIntakeArm.set(status);
   
  
   }
-  public boolean getArmStatus(){
-    System.out.println("Status - " + m_solenoidArm.get());
-    return m_solenoidArm.get();
+  public boolean getIntakeArmStatus(){
+    System.out.println("Status - " + m_solenoidIntakeArm.get());
+    return m_solenoidIntakeArm.get();
   }
   
   public boolean getClimbArmStatus(){

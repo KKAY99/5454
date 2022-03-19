@@ -58,7 +58,7 @@ public class ClimbCommand extends CommandBase {
             System.out.println("Limit Switch Hit" );
             //auto deploy pivot arms when climb bottom is hit
             if (m_ClimbSubsystem.hitBottomLimit()){
-              m_pnuematicsSubsystem.setArms(true);
+              m_pnuematicsSubsystem.setClimbArms(true);
             }
             m_ClimbSubsystem.stop();
         }

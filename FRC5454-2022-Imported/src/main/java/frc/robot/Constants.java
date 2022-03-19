@@ -34,11 +34,11 @@ public final class Constants {
     public static final double FeederSpeed=-1.0;
     public static final double conveyorUpSpeed=0.9;
     public static final double conveyorDownSpeed=-0.5;
-    public static final double climbUpSpeed=.5;
+    public static final double climbUpSpeed=.7;
     public static final double climbDownSpeed=-.9;
-    public static final double turretSpeed=0.40;
+    public static final double turretSpeed=0.50;
     public static final double turretMinSpeed=0.20;
-    public static final double turretInitSpeed=-.25;
+    public static final double turretInitSpeed=-.30;
     public static final double turretHomeSpeed=0.25;
     public static final double turretHomePos=-4.12;
     public static final double TurretTargetRange=5;
@@ -49,8 +49,8 @@ public final class Constants {
     public static final class Pneumatics {
         public static final int CompressorID=0; 
         public static final int LatchPort=5;
-        public static final int ClimbArmPort=3;
-        public static final int IntakeArmPort=2;
+        public static final int ClimbArmPort=2;
+        public static final int IntakeArmPort=3;
         public static final int HookCablesPort=1;
         
     }
@@ -154,8 +154,8 @@ public final class Constants {
         public static final int delayValMode3=8;
         public static final int defaultDelayMode=0;
 
-        public static final double LeaveTarmacDistance=100;
-        public static final double GetBallDistance=10;
+        public static final double LeaveTarmacDistance=90;
+        public static final double GetBallDistance=20;
         public static final double ball2Distance=.5;
             
         
@@ -187,14 +187,14 @@ public final class Constants {
         public static final double steeringFeedForward = 0.0;
 
         public static final double targetHeight = 103; // 249 cm
-        public static final double targetXPosShoot = 3.83;
+        public static final double targetXPosShoot = -1.5;
         public static final double targetXPosSafeZone = 5;
         public static final double targetXPosRange=50;
         public static final double limelightHeight = 44; //37
         public static final double limelightAngle = 36; //40
         public static final double kVisionDistanceTolerance = 5;
-        public static final double kVisionXTolerance = 1;
-        public static final double kVisionXOffset=-2;
+        public static final double kVisionXTolerance = 1.7;
+        public static final double kVisionXOffset=1.7;
         //public static final double kVisionXTolerance = 5;
         //public static final double kVisionXOffset=-2;
     }

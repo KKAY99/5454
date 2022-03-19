@@ -96,7 +96,7 @@ public class Limelight {
 
     public double getX() {
         
-        return tx.getDouble(0.0)-m_xOffset;
+        return tx.getDouble(0.0)+ m_xOffset;
     }
     public double getactualX() {
         return tx.getDouble(0.0);
@@ -158,16 +158,25 @@ public class Limelight {
         return returnValue;
     }
 
-    private boolean isOnTargetX() {
+    public boolean isOnTargetX() {
         boolean returnValue = false;
         if (isTargetAvailible()) {
-            if ((Math.abs(getX()
-                    - Constants.LimeLightValues.targetXPosShoot) < Constants.LimeLightValues.kVisionXTolerance)) {
-                System.out.println("On Target -" + Math.abs(getX()- Constants.LimeLightValues.targetXPosShoot
+            if ((Math.abs(getX())< Constants.LimeLightValues.kVisionXTolerance)) {
+                System.out.println("On Target -" + Math.abs(getX()
                     ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
                         returnValue = true;
+            } else {
+                System.out.println("Off Target -" + Math.abs(getX()
+            ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+       
             }
+
+        }else {
+            System.out.println("Off Target -" + Math.abs(getX()
+            ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+       
         }
+
         return returnValue;
 
     }

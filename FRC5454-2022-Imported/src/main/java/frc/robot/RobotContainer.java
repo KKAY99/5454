@@ -218,8 +218,12 @@ public class RobotContainer {
 
     static NetworkTableEntry shuffleboardShooterTopVel=ShooterTab.add("Top Velocity","").getEntry();
     static NetworkTableEntry shuffleboardShooterBottomVel=ShooterTab.add("Bottom Velocity","").getEntry();
+    static NetworkTableEntry shuffleobardShooterMultipler=ShooterTab.add("Shooter Adjustment",1.0)
+                                .withWidget(BuiltInWidgets.kNumberSlider)
+                                .withProperties(Map.of("min",-1,"max",5))
+                                .getEntry();
 
-
+ 
     static String ShuffleboardLogString;
     // #endregion
     // #endregion
@@ -235,6 +239,8 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        //force default shoot multiplier 
+        shuffleobardShooterMultipler.setDouble(1.0); 
         // Configure the button bindings
         configureButtonBindings();
 
@@ -313,6 +319,8 @@ public class RobotContainer {
 
         final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
         final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
+        final TurretCommand turretStopCommand = new TurretCommand(m_turret,0); 
+     
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
         final zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
@@ -353,6 +361,7 @@ public class RobotContainer {
         SpectrumAxisButton operatorTurretLeft = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretAxis,ButtonConstants.JoystickLeftThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
         SpectrumAxisButton operatorTurretRight = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretAxis,ButtonConstants.JoystickRightThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
         SpectrumAxisButton operatorTurretAutoFind = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretFindAxis,ButtonConstants.JoystickUpThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
+        SpectrumAxisButton operatorTurretAutoFindStop = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretFindAxis,ButtonConstants.JoystickDownThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
 
         SpectrumAxisButton operatorClimbUp = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorClimbAxis,ButtonConstants.JoystickUpThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
         SpectrumAxisButton operatorClimbDown = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorClimbAxis,ButtonConstants.JoystickDownThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
@@ -400,6 +409,7 @@ public class RobotContainer {
         operatorTurretLeft.whenHeld(turretLeftCommand);
         operatorTurretRight.whenHeld(turretRightCommand);
         operatorTurretAutoFind.whenHeld(turretAutoCommand);
+        operatorTurretAutoFindStop.whenHeld(turretStopCommand); // should force auto command to stop since same subsystem requirements
         operatorClimbUp.whenHeld(climbUpCommand);
         operatorClimbDown.whenHeld(climbDownCommand);
         
@@ -434,7 +444,7 @@ public class RobotContainer {
             break;
           case AutoModes.autoMoveBackwardsOutake:
           autoCommand=new SequentialCommandGroup(
-                new zIntakeTimeCommand(m_Intake, -Constants.intakeSpeed,0,true),
+                new zIntakeTimeCommand(m_Intake,m_IntakeInner, -Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance)           
                 );
             break;
@@ -448,29 +458,30 @@ public class RobotContainer {
           case AutoModes.autoMoveShootMoveGrab:
                 autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,0,true),
+                new zIntakeTimeCommand(m_Intake,m_IntakeInner, Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,zAutomation.intakeTime,false)
+                new zIntakeTimeCommand(m_Intake,m_IntakeInner, Constants.intakeSpeed,zAutomation.intakeTime,false)
                 );
             break;
           case AutoModes.autoMoveShootMoveGrabShot1:
             System.out.println("Auto Shot Move Grab Shoot Pay Executing");
-            autoCommand=new SequentialCommandGroup(
+            ParallelCommandGroup resetAndMoveCommand = new ParallelCommandGroup(
                 new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos),    
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new IntakeArmCommand(m_Pnuematics),
-                new IntakeArmCommand(m_Pnuematics),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,0,true), 
-                new zIntakeConveyCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed), 
+                new zIntakeArmMoveCommand(m_Pnuematics,true)
+                );
+            autoCommand=new SequentialCommandGroup(
+                resetAndMoveCommand,
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance),              
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,0,false));
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,false));
                 break;
           case AutoModes.autoMoveShotMoveGrabMoveLeftGrabShot2:
             autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,zAutomation.intakeTime),
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,zAutomation.intakeTime),
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
                 new AutoMoveCommand(m_RobotDrive,270,AutoModes.ball2Distance),
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity));            break;
@@ -478,7 +489,7 @@ public class RobotContainer {
           autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake, Constants.intakeSpeed,zAutomation.intakeTime),
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,zAutomation.intakeTime),
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
                 new AutoMoveCommand(m_RobotDrive,90,AutoModes.ball2Distance),
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity));
@@ -539,7 +550,7 @@ public class RobotContainer {
         shuffleboardTurretPos.setString(" " + m_turret.getPosition());
         shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
         shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
-        
+        m_Shooter.setMultipler(shuffleobardShooterMultipler.getDouble(1.0));
     }
     public void disabledPerioidicUpdates(){
          shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());

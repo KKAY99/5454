@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.hal.ThreadsJNI;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -23,9 +24,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 20;
     private static final double WHEELBASE = 25;
 
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(359.9); //161.8
-    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(67.8);
-    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(46.3);
+    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(6.5); //161.8
+    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(56.2);
+    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(49.5);
     private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(307.2);
 
     private static DrivetrainSubsystem instance;
@@ -91,7 +92,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return instance;
     }
  
-
+    public boolean wheelsHavePower(){
+            if((backLeftModule.getCurrentVelocity()+
+                backRightModule.getCurrentVelocity()+
+                frontLeftModule.getCurrentVelocity()+
+                frontRightModule.getCurrentVelocity())==0) {
+                        return false;
+                }else {
+                        return true;
+                }
+    }
     public void move (double direction, double speed, double distance, boolean stopAtEnd)
 {       double startDistance;
         double forward=0;
