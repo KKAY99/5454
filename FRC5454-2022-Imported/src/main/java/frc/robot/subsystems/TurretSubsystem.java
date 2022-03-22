@@ -30,8 +30,10 @@ public class TurretSubsystem extends SubsystemBase {
   private boolean m_turretLockedMode=false;
   /** Creates a new ExampleSubsystem. */
   public TurretSubsystem(Integer turretMotorPort,int leftSwitch, int rightSwitch,double safePositionforClimb,double safetyMoveSpeed) {    
-       m_turretMotor = new CANSparkMax(turretMotorPort, MotorType.kBrushed);  
-       m_turretMotor.setIdleMode(IdleMode.kBrake);
+       
+      m_turretMotor = new CANSparkMax(turretMotorPort, MotorType.kBrushed);  
+      
+      m_turretMotor.setIdleMode(IdleMode.kBrake);
        //m_turretEncoder = m_turretMotor.getAlternateEncoder(klAtEncType,kCPR);
        m_turretEncoder = m_turretMotor.getEncoder(Type.kQuadrature,kCPR);
        m_turretMotor.setInverted(false);

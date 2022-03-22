@@ -228,9 +228,7 @@ public class RobotContainer {
     // #endregion
     // #endregion
 
-    // private final ExampleCommand m_autoCommand = new
-    // ExampleCommand(m_exampleSubsystem);
-
+    // 
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   
@@ -414,6 +412,8 @@ public class RobotContainer {
         operatorClimbDown.whenHeld(climbDownCommand);
         
         operatorPivotArm.whenHeld(climbArmsCommand);
+        
+        //operatorClimbHooks.whenPressed(releaseAndResetClimb);
         operatorClimbHooks.whenHeld(climbHooksCommand);
         operatorClimbHooks.whenReleased(releaseAndResetClimb);
         operatorManualShoot.whenHeld(ManualShootCommand);
@@ -474,17 +474,35 @@ public class RobotContainer {
                 resetAndMoveCommand,
                 new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance),              
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,false));
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,false),
+                new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
+                     AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));
                 break;
           case AutoModes.autoMoveShotMoveGrabMoveLeftGrabShot2:
-            autoCommand=new SequentialCommandGroup(
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
-                new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,zAutomation.intakeTime),
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
-                new AutoMoveCommand(m_RobotDrive,270,AutoModes.ball2Distance),
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity));            break;
+          System.out.println("Auto Shot Move Grab Shoot Got Left");
+          ParallelCommandGroup resetAndMove2Command = new ParallelCommandGroup(
+              new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos),    
+              new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
+              new zIntakeArmMoveCommand(m_Pnuematics,true)
+              );
+          autoCommand=new SequentialCommandGroup(
+              resetAndMove2Command,
+              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true),
+              new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance),              
+              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,false),
+              new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
+                   AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
+              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true),
+              new AutoMoveCommand(m_RobotDrive,45,AutoModes.GetBall2Distance),
+              new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,
+                   Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
+                   Constants.TurretTargetRange),
+              new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
+                   AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
+              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true));
+                
+              break;
+       
           case AutoModes.autoMoveShotMoveGrabMoveRightGrabShot2:
           autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
@@ -509,6 +527,7 @@ public class RobotContainer {
     }   
     public void refreshSmartDashboard()
     {  
+
         shuffleboardPDPStickyCANFaults.setBoolean(m_robotPDH.getStickyFaults().CanWarning);
         shuffleboardPDPTotalCurrent.setDouble(m_robotPDH.getTotalCurrent());
         shuffleboardPDPCurrentC0.setDouble(m_robotPDH.getCurrent(0));

@@ -89,6 +89,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.resetDriveModes();
+    
   }
 
   @Override
@@ -103,6 +104,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+  }
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
     //m_robotContainer.resetTurret(); move to command groups
@@ -125,12 +129,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    m_robotContainer.enableLimelights();
-    m_robotContainer.resetDriveModes();
-    m_robotContainer.resetTurret();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.enableLimelights();
+    m_robotContainer.resetDriveModes();
+    m_robotContainer.resetTurret();
+    
   }
 
   /** This function is called periodically during operator control. */

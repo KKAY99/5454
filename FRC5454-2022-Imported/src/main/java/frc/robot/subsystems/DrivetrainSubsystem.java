@@ -114,16 +114,33 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         forward=1*speed;
                         strafe=0;
                         break;
+                case 45:
+                        forward=1*speed;
+                        strafe=1*speed;
+                        break;
+               
                 case 90:
                         forward=0;
+                        strafe=1*speed;
+                        break;
+                case 135:
+                        forward=-1*speed;
                         strafe=1*speed;
                         break;
                 case 180:
                         forward=-1*speed;
                         strafe=0;
                         break;
+                case 225:
+                        forward=-1*speed;
+                        strafe=-1*speed;
+                        break;
                 case 270:
                         forward=0;
+                        strafe=-1*speed;
+                        break;
+                case 315:
+                        forward=1*speed;
                         strafe=-1*speed;
                         break;
                 

@@ -154,8 +154,10 @@ public final class Constants {
         public static final int delayValMode3=8;
         public static final int defaultDelayMode=0;
 
-        public static final double LeaveTarmacDistance=90;
-        public static final double GetBallDistance=20;
+        public static final double LeaveTarmacDistance=80;
+        public static final double GetBallDistance=30;
+        public static final double GetBall2Distance=50;
+        
         public static final double ball2Distance=.5;
             
         
