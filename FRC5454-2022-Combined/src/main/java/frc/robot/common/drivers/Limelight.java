@@ -67,7 +67,7 @@ public final class Limelight {
 
     /**
      * Checks if the method has a target.
-     * @returns Whether the Limelight has a target.
+     * @return Whether the Limelight has a target.
      */
     public boolean hasTarget() {
         return MathUtils.epsilonEquals(tv.getDouble(0), 1);
@@ -75,7 +75,7 @@ public final class Limelight {
 
     /**
      * Gets the area of the target divided by the size of the image.
-     * @returns A value from 0.0 to 1.0 representing the target area.
+     * @return A value from 0.0 to 1.0 representing the target area.
      */
     public double getTargetArea() {
         return ta.getDouble(0);
@@ -83,7 +83,7 @@ public final class Limelight {
 
     /**
      * Gets the position of the target in radians within the image.
-     * @returns The position of the target.
+     * @return The position of the target.
      */
     public Vector2 getTargetPosition() {
         return new Vector2(Math.toRadians(tx.getDouble(0)), Math.toRadians(ty.getDouble(0)));
@@ -91,7 +91,7 @@ public final class Limelight {
 
     /**
      * Gets the target's skew or rotation in degrees.
-     * @returns The target's skew from -90 to 0 in degrees.
+     * @return The target's skew from -90 to 0 in degrees.
      */
     public double getTargetSkew() {
         return ts.getDouble(0);
@@ -99,7 +99,7 @@ public final class Limelight {
 
     /**
      * Gets the latency of the pipeline in ms (milliseconds).
-     * @returns The latency of the pipeline in ms.
+     * @return The latency of the pipeline in ms.
      */
     public double getPipelineLatency() {
         return tl.getDouble(0.0);
@@ -107,7 +107,7 @@ public final class Limelight {
 
     /**
      * Gets the vertices of the target.
-     * @returns The vertices of the target.
+     * @return The vertices of the target.
      */
     public double[][] getCorners() {
         double[] x = tcornx.getDoubleArray(new double[]{0.0, 0.0});

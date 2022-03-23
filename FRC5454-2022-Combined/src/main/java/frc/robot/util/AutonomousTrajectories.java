@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class AutonomousTrajectories {
-    private final static int X = 0;
-    private final static int Y = 1;
-    private final static int A = 2;
+    // Use Constants below to manually retrieve values from an auto point
+    // private final static int X = 0;
+    // private final static int Y = 1;
+    // private final static int A = 2;
 
     // Angles:
     // 0 = front away front drivers
