@@ -21,33 +21,117 @@ public class AutonomousChooser {
         ShuffleboardTab autoTab = Shuffleboard.getTab("Autonomous settings");
 
         autonomousModeChooser = new SendableChooser<>();
-        autonomousModeChooser.setDefaultOption("Single Line Auto", AutonomousMode.SINGLE_LINE);
+        autonomousModeChooser.setDefaultOption("Wall Transit", AutonomousMode.W_TRANSIT);
+        autonomousModeChooser.addOption("Center Transit", AutonomousMode.C_TRANSIT);
+        autonomousModeChooser.addOption("Edge Transit", AutonomousMode.E_TRANSIT);
+
+        autonomousModeChooser.addOption("Human Player Wall to Friendly 1", AutonomousMode.HP_W_F1);
+        autonomousModeChooser.addOption("Human Player Wall to Friendly 2", AutonomousMode.HP_W_F2);
+
+        autonomousModeChooser.addOption("Climb Station Wall to Friendly 4", AutonomousMode.CL_W_F4);
         autoTab.add("Mode", autonomousModeChooser)
-                .withSize(3, 1);
+                .withSize(5, 1);
     }
 
     public AutonomousChooser(AutonomousTrajectories trajectories) {
         this.trajectories = trajectories;
     }
 
-    private SequentialCommandGroup getSingleLineAuto(RobotContainer container) {
+    private SequentialCommandGroup get_W_Transit_Auto(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         // reset robot pose
-        // resetRobotPose(command, container, trajectories.getSingleLine());
-        // follow first trajectory and shoot
-        // follow(command, container, trajectories.getSingleLine());
+        resetRobotPose(command, container, trajectories.get_Wall_Transit_Trajectory());
+        // follow trajectory
+        follow(command, container, trajectories.get_Wall_Transit_Trajectory());
+
+        return command;
+    }
+
+    private SequentialCommandGroup get_E_Transit_Auto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        // reset robot pose
+        resetRobotPose(command, container, trajectories.get_Edge_Transit_Trajectory());
+        // follow trajectory
+        follow(command, container, trajectories.get_Edge_Transit_Trajectory());
+
+        return command;
+    }
+
+    private SequentialCommandGroup get_C_Transit_Auto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        // reset robot pose
+        resetRobotPose(command, container, trajectories.get_Center_Transit_Trajectory());
+        // follow trajectory
+        follow(command, container, trajectories.get_Center_Transit_Trajectory());
+
+        return command;
+    }
+
+    private SequentialCommandGroup get_HP_W_F1_Auto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        // reset robot pose
+        resetRobotPose(command, container, trajectories.get_HP_W_F1_Trajectory());
+
+        // follow trajectory and grab the ball
+        // followAndIntake(command, container, trajectories.get_HP_W_F1_Trajectory());
+
+        // shoot both balls
+        // shootAtTarget(command, container);
+
+        return command;
+    }
+
+    private SequentialCommandGroup get_HP_W_F2_Auto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        // reset robot pose
+        resetRobotPose(command, container, trajectories.get_HP_W_F2_Trajectory());
+
+        // follow trajectory and grab the ball
+        // followAndIntake(command, container, trajectories.get_HP_W_F2_Trajectory());
+
+        // shoot both balls
+        // shootAtTarget(command, container);
+
+        return command;
+    }
+
+    private SequentialCommandGroup get_CL_W_F4_Auto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        // reset robot pose
+        resetRobotPose(command, container, trajectories.get_CL_W_F4_Trajectory());
+
+        // follow trajectory and grab the ball
+        // followAndIntake(command, container, trajectories.get_CL_W_F4_Trajectory());
+
+        // shoot both balls
+        // shootAtTarget(command, container);
 
         return command;
     }
 
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
-            case SINGLE_LINE:
-                return getSingleLineAuto(container);
+            case W_TRANSIT:
+                return get_W_Transit_Auto(container);
+            case C_TRANSIT:
+                return get_C_Transit_Auto(container);
+            case E_TRANSIT:
+                return get_E_Transit_Auto(container);
+            case HP_W_F1:
+                return get_HP_W_F1_Auto(container);
+            case HP_W_F2:
+                return get_HP_W_F2_Auto(container);
+            case CL_W_F4:
+                return get_CL_W_F4_Auto(container);
         }
 
-        return getSingleLineAuto(container);
+        return get_W_Transit_Auto(container);
     }
 
     private void follow(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
@@ -62,6 +146,11 @@ public class AutonomousChooser {
     }
 
     private enum AutonomousMode {
-        SINGLE_LINE,
+        W_TRANSIT,
+        C_TRANSIT,
+        E_TRANSIT,
+        HP_W_F1,
+        HP_W_F2,
+        CL_W_F4
     }
 }

@@ -20,6 +20,12 @@ public final class SimplePathBuilder {
         rotationMap.put(0.0, initialRotation);
     }
 
+    public SimplePathBuilder(double[] position) {
+        this.lastPosition = new Vector2(position[0], position[1]);
+
+        rotationMap.put(0.0, Rotation2.fromDegrees(position[2]));
+    }
+
     private void addSegment(PathSegment segment) {
         segmentList.add(segment);
         length += segment.getLength();
@@ -78,9 +84,9 @@ public final class SimplePathBuilder {
             return new State(
                     center.add(deltaStart.rotateBy(Rotation2.fromRadians(angle))),
                     // TODO: Use cross product instead of just adding 90deg when calculating heading
-                    deltaStart.rotateBy(Rotation2.fromRadians(angle + (clockwise ? -1.0 : 1.0) * 0.5 * Math.PI)).getAngle(),
-                    1.0 / deltaStart.length
-            );
+                    deltaStart.rotateBy(Rotation2.fromRadians(angle + (clockwise ? -1.0 : 1.0) * 0.5 * Math.PI))
+                            .getAngle(),
+                    1.0 / deltaStart.length);
         }
 
         @Override
@@ -103,8 +109,7 @@ public final class SimplePathBuilder {
             return new State(
                     start.add(delta.scale(distance / getLength())),
                     delta.getAngle(),
-                    0.0
-            );
+                    0.0);
         }
 
         @Override
