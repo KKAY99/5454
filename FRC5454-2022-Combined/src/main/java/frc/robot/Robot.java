@@ -1,103 +1,157 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.common.Logger;
+import frc.robot.common.math.RigidTransform2;
+import frc.robot.common.math.Rotation2;
+import frc.robot.common.UpdateManager;
+import frc.robot.common.drivers.Limelight;
 
-/**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
- */
+import java.io.IOException;
+import java.net.NetworkInterface;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+    private static final Logger LOGGER = new Logger(Robot.class);
 
-  private RobotContainer m_robotContainer;
+    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[]{
+            0x00, (byte) 0x80, 0x2f, 0x28, (byte) 0xc3, 0x33
+    };
+    private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[]{
+            0x00, (byte) 0x80, 0x2f, 0x22, (byte) 0xd7, (byte) 0xba
+    };
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-  }
+    private static boolean competitionBot;
+    private static boolean practiceBot;
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
-  }
+    private RobotContainer robotContainer = new RobotContainer();
+    private UpdateManager updateManager = new UpdateManager(
+            robotContainer.getDrivetrainSubsystem()
+    );
 
-  /** This function is called once each time the robot enters Disabled mode. */
-  @Override
-  public void disabledInit() {}
+    static {
+        List<byte[]> macAddresses;
+        try {
+            macAddresses = getMacAddresses();
+        } catch (IOException e) {
+            // Don't crash, just log the stacktrace and continue without any mac addresses.
+            LOGGER.error(e);
+            macAddresses = List.of();
+        }
 
-  @Override
-  public void disabledPeriodic() {}
+        for (byte[] macAddress : macAddresses) {
+            // First check if we are the competition bot
+            if (Arrays.compare(COMPETITION_BOT_MAC_ADDRESS, macAddress) == 0) {
+                competitionBot = true;
+                break;
+            }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+            // Next check if we are the practice bot
+            if (Arrays.compare(PRACTICE_BOT_MAC_ADDRESS, macAddress) == 0) {
+                practiceBot = true;
+                break;
+            }
+        }
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+        if (!competitionBot && !practiceBot) {
+            String[] macAddressStrings = macAddresses.stream()
+                    .map(Robot::macToString)
+                    .toArray(String[]::new);
+
+            SmartDashboard.putStringArray("MAC Addresses", macAddressStrings);
+            SmartDashboard.putString("Competition Bot MAC Address", macToString(COMPETITION_BOT_MAC_ADDRESS));
+            SmartDashboard.putString("Practice Bot MAC Address", macToString(PRACTICE_BOT_MAC_ADDRESS));
+
+            // If something goes terribly wrong we still want to use the competition bot stuff in competition.
+            competitionBot = true;
+        }
+
+        SmartDashboard.putBoolean("Competition Bot", competitionBot);
     }
-  }
 
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
-
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    public static boolean isCompetitionBot() {
+        return competitionBot;
     }
-  }
 
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {}
+    public static boolean isPracticeBot() {
+        return practiceBot;
+    }
 
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-  }
+    /**
+     * Gets the MAC addresses of all present network adapters.
+     *
+     * @return the MAC addresses of all network adapters.
+     */
+    private static List<byte[]> getMacAddresses() throws IOException {
+        List<byte[]> macAddresses = new ArrayList<>();
 
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
+        NetworkInterface networkInterface;
+        while (networkInterfaces.hasMoreElements()) {
+            networkInterface = networkInterfaces.nextElement();
 
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
+            byte[] address = networkInterface.getHardwareAddress();
+            if (address == null) {
+                continue;
+            }
+
+            macAddresses.add(address);
+        }
+
+        return macAddresses;
+    }
+
+    private static String macToString(byte[] address) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < address.length; i++) {
+            if (i != 0) {
+                builder.append(':');
+            }
+            builder.append(String.format("%02X", address[i]));
+        }
+        return builder.toString();
+    }
+
+    @Override
+    public void robotInit() {
+        updateManager.startLoop(5.0e-3);
+    }
+
+    @Override
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+    }
+
+    @Override
+    public void autonomousInit() {
+        robotContainer.getVisionSubsystem().setLedMode(Limelight.LedMode.DEFAULT);
+        robotContainer.getDrivetrainSubsystem().resetPose(RigidTransform2.ZERO);
+        robotContainer.getDrivetrainSubsystem().resetGyroAngle(Rotation2.ZERO);
+
+        robotContainer.getAutonomousCommand().schedule();
+    }
+
+    @Override
+    public void testInit() {
+    }
+
+    @Override
+    public void testPeriodic() {
+    }
+
+    @Override
+    public void disabledPeriodic() {
+        robotContainer.getVisionSubsystem().setLedMode(Limelight.LedMode.OFF);
+    }
+
+    @Override
+    public void teleopInit() {
+        robotContainer.getVisionSubsystem().setLedMode(Limelight.LedMode.DEFAULT);
+    }
 }
