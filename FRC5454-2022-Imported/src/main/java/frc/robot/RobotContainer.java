@@ -304,8 +304,8 @@ public class RobotContainer {
                 new IntakeCommand(m_IntakeInner,-Constants.intakeInnerSpeed));
         //final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake,Constants.intakeSpeed);
         //final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake,-Constants.intakeSpeed);
-        final zIntakeConveyCommand intakeInCommand = new zIntakeConveyCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed);
-        final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake,m_IntakeInner,-Constants.intakeSpeed,m_Conveyor,Constants.conveyorDownSpeed,m_Feeder,-Constants.FeederSpeed);
+        final zIntakeConveyCommand intakeInCommand = new zIntakeConveyCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed);
+        final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake,m_IntakeInner,-Constants.intakeSpeed,-Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorDownSpeed,m_Feeder,-Constants.FeederSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
         final ClimbCommand climbUpCommand=new ClimbCommand(m_Climb,m_Pnuematics,m_turret,Constants.climbUpSpeed);

@@ -10,17 +10,19 @@ public class zIntakeConveyCommand extends CommandBase {
   private final IntakeSubsystem m_intake;
   private final IntakeSubsystem m_intakeInner;
   private final double m_conveyorSpeed;
-  private final double m_intakeSpeed;
+  private final double m_intakeOutSpeed;
+  private final double m_intakeInnerSpeed;
   private final double m_feederSpeed;
 
-  public zIntakeConveyCommand(IntakeSubsystem intake, IntakeSubsystem intakeInner,double intakeSpeed,ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed){
+  public zIntakeConveyCommand(IntakeSubsystem intake, IntakeSubsystem intakeInner,double intakeOutSpeed,double intakeInnerSpeed, ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed){
     m_conveyor=conveyor;
     m_feeder=feeder;
     m_intake=intake;
     m_intakeInner=intakeInner;
     m_conveyorSpeed=conveyorSpeed;
     m_feederSpeed=feederSpeed;
-    m_intakeSpeed=intakeSpeed;
+    m_intakeOutSpeed=intakeOutSpeed;
+    m_intakeInnerSpeed=intakeInnerSpeed;
     addRequirements(conveyor);
     addRequirements(feeder);
     addRequirements(intake);
@@ -35,8 +37,8 @@ public class zIntakeConveyCommand extends CommandBase {
   @Override
   public void execute() {
     m_conveyor.run(m_conveyorSpeed);
-    m_intake.runIntake(m_intakeSpeed);
-    m_intakeInner.runIntake(-m_intakeSpeed);
+    m_intake.runIntake(m_intakeOutSpeed);
+    m_intakeInner.runIntake(m_intakeInnerSpeed);
     m_feeder.run(m_feederSpeed);
   }
  
