@@ -38,7 +38,7 @@ public class AutonomousTrajectories {
     private final Trajectory Wall_Transit_Trajectory;
     // Move distance to edge + Length of robot
     private static final Path Wall_Transit_Path = new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
-            .lineTo(new Vector2(50 + 38, 0)).build();
+            .lineTo(new Vector2(36, 36), Rotation2.fromDegrees(45)).build();
 
     // * C -> Transit (Don't do anything but move off the tarmac)
     private final Trajectory Center_Transit_Trajectory;
@@ -88,9 +88,9 @@ public class AutonomousTrajectories {
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) throws IOException {
         TrajectoryConstraint[] slowConstraints = Arrays.copyOf(trajectoryConstraints, trajectoryConstraints.length + 1);
         slowConstraints[slowConstraints.length - 1] = new MaxVelocityConstraint(6.0 * 12.0);
-        slowConstraints[slowConstraints.length - 2] = new MaxAccelerationConstraint(4.0 * 12.0);
+        slowConstraints[slowConstraints.length - 2] = new MaxAccelerationConstraint(4 * 12.0);
 
-        Wall_Transit_Trajectory = new Trajectory(Wall_Transit_Path, trajectoryConstraints);
+        Wall_Transit_Trajectory = new Trajectory(Wall_Transit_Path, slowConstraints);
         Center_Transit_Trajectory = new Trajectory(Center_Transit_Path, trajectoryConstraints);
         Edge_Transit_Trajectory = new Trajectory(Edge_Transit_Path, trajectoryConstraints);
         HP_W_F1_Trajectory = new Trajectory(HP_W_F1_Path, trajectoryConstraints);
