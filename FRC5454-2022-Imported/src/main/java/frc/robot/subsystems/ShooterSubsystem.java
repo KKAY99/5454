@@ -4,102 +4,103 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class ShooterSubsystem extends SubsystemBase {
-  private TalonFX Bottom_ShooterMotor;
-  private TalonFX Top_ShooterMotor;
+public class ShooterSubsystem implements Subsystem {
+  private TalonFX m_Bottom_ShooterMotor;
+  private TalonFX m_Top_ShooterMotor;
   private double m_VelocityMultiplier=1;
   private static double m_defaultTopSpeed=775;
   private static double m_defaultBottomSpeed=775;
+  private static double kGearRatio=6;
   private static double[] powerTopValues = {
-    682,//1
-    682,//2
-    775,//3
-    775,//4
-    775,//5
-    825,//6
-    925,//7
-    903,//8
-    957,//9
-    1182,//10
-    1182,//11
+    775,
+    775,
+    775,
+    775,
+    825,
+    825,
+    925,
+    1075,
+    1182,
+    1182,
+    1182,
     1670,
     1670,
     1375,
     1475,
-    2500
+    25
 };
 
 private static double[] powerBottomValues = {
-    682,//1
-    682,//2
-    775,//3
-    775,//4
-    775,//5
-    825,//6
-    925,//7
-    903,//8
-    957,//9
-    1182,//10
+    775,
+    775,
+    775,
+    775,
+    825,
+    825,
+    925,
+    1075,
+    1182,
+    1182,
     1182,
     1470,
     1470,
     1375,
     1475,
-    1990
+    1075
 };
 
 private static double[] distanceValues = {
-    39.5,//1
-    49.6,//2
-    59.5,//3
-    69.5,//4
-    79.5,//5
-    89.5,//6
-    99.5,//7
-    109.5,//8
-    119.5,//9
-    129.5,//10
+    39.5,
+    49.6,
+    59.5,
+    69.5,
+    79.5,
+    89.5,
+    99.5,
+    109.5,
+    119.5,
+    129.5,
     139.5,
     149.5,
     159.5,
     169.5,
-    175.0,
+    179.5,
     189.5,
 };
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem(Integer BottomPort, Integer TopPort) {
-    Bottom_ShooterMotor = new TalonFX(BottomPort);
-    Top_ShooterMotor = new TalonFX(TopPort);
-
-    Bottom_ShooterMotor.configOpenloopRamp(0.5);
-    Top_ShooterMotor.configOpenloopRamp(0.5);
+    m_Bottom_ShooterMotor = new TalonFX(BottomPort);
+    m_Top_ShooterMotor = new TalonFX(TopPort);
+   
+    m_Bottom_ShooterMotor.configOpenloopRamp(0.5);
+    m_Top_ShooterMotor.configOpenloopRamp(0.5);
     
-    Bottom_ShooterMotor.setInverted(false);
+    m_Bottom_ShooterMotor.setInverted(false);
 
 
-    Bottom_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
-    Bottom_ShooterMotor.selectProfileSlot(0,0);
-    Bottom_ShooterMotor.config_kP(0,0);
-    Bottom_ShooterMotor.config_kI(0,0);
-    Bottom_ShooterMotor.config_kD(0,0);
-    Bottom_ShooterMotor.config_kF(0,.5);
+    m_Bottom_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
+    m_Bottom_ShooterMotor.selectProfileSlot(0,0);
+    m_Bottom_ShooterMotor.config_kP(0,0);
+    m_Bottom_ShooterMotor.config_kI(0,0);
+    m_Bottom_ShooterMotor.config_kD(0,0);
+    m_Bottom_ShooterMotor.config_kF(0,.5);
     
-    Top_ShooterMotor.setInverted(true);
-    Top_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
-    Top_ShooterMotor.selectProfileSlot(0,0);
-    Top_ShooterMotor.config_kP(0,0);
-    Top_ShooterMotor.config_kI(0,0);
-    Top_ShooterMotor.config_kD(0,0);
-    Top_ShooterMotor.config_kF(0,.5);
+    m_Top_ShooterMotor.setInverted(true);
+    m_Top_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
+    m_Top_ShooterMotor.selectProfileSlot(0,0);
+    m_Top_ShooterMotor.config_kP(0,0);
+    m_Top_ShooterMotor.config_kI(0,0);
+    m_Top_ShooterMotor.config_kD(0,0);
+    m_Top_ShooterMotor.config_kF(0,.5);
     
   }
   public double getTopMotorVelocity(){ 
-    return Top_ShooterMotor.getSelectedSensorVelocity(0);
+    return m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
   }
   public double getBottomMotorVelocity(){
-    return Top_ShooterMotor.getSelectedSensorVelocity(0);
+    return m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
   }
   public double getMultiplier(){
     return m_VelocityMultiplier;
@@ -107,27 +108,38 @@ private static double[] distanceValues = {
   public void setMultipler(double newValue){
     m_VelocityMultiplier=newValue;
   }
-  public void shootbyDistance(double distance, double defaultTopSpeed, double defaultBottomSpeed){
+  
+  public boolean isUptoSpeedbyDistance(double distance){
+    boolean returnvalue=false;
     double topSpeed = getPower(powerTopValues, distance);
     double bottomSpeed = getPower(powerBottomValues, distance);
     //Default shooting if calculation is outside range
     if(topSpeed<=1 || bottomSpeed <=1){
-      if(defaultTopSpeed==0){
         topSpeed=m_defaultTopSpeed;
-        bottomSpeed=m_defaultBottomSpeed;
-      }else {
-        topSpeed=defaultTopSpeed;
-        bottomSpeed=defaultBottomSpeed;
+        bottomSpeed=m_defaultBottomSpeed;      
       }
+    if ((getTopMotorVelocity()>=topSpeed) && (getBottomMotorVelocity()>=bottomSpeed)){
+        returnvalue=true;
     }
+    return returnvalue;
+  }
+
+  public void shootbyDistance(double distance){
+    double topSpeed = getPower(powerTopValues, distance);
+    double bottomSpeed = getPower(powerBottomValues, distance);
+    //Default shooting if calculation is outside range
+    if(topSpeed<=1 || bottomSpeed <=1){
+        topSpeed=m_defaultTopSpeed;
+        bottomSpeed=m_defaultBottomSpeed;      
+      }
     //system.out.println("Shoot By Distance - d=" + distance + " top:"+ topSpeed + " bottom:" + bottomSpeed);
     shoot(topSpeed,bottomSpeed);
   }
   public void shoot(double topVelocity, double bottomVelocity) {
     bottomVelocity=bottomVelocity*m_VelocityMultiplier;
     topVelocity=topVelocity*m_VelocityMultiplier;
-    Bottom_ShooterMotor.set(ControlMode.Velocity, bottomVelocity);
-    Top_ShooterMotor.set(ControlMode.Velocity, topVelocity);
+    m_Bottom_ShooterMotor.set(ControlMode.Velocity, bottomVelocity);
+    m_Top_ShooterMotor.set(ControlMode.Velocity, topVelocity);
     
  
   }
@@ -160,8 +172,8 @@ private static double[] distanceValues = {
   }
   
   public void stop() {
-    Bottom_ShooterMotor.set(ControlMode.PercentOutput, 0.0);
-    Top_ShooterMotor.set(ControlMode.PercentOutput, 0.0);
+    m_Bottom_ShooterMotor.set(ControlMode.PercentOutput, 0.0);
+    m_Top_ShooterMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
   @Override

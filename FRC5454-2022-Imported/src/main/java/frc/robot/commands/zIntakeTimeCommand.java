@@ -13,7 +13,8 @@ public class zIntakeTimeCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem m_IntakeSubsystem;
   private final IntakeSubsystem m_InnerIntakeSubsystem;
-  private final double m_speed;
+  private final double m_OuterSpeed;
+  private final double m_InnerSpeed;
   private final double m_duration;
   private final boolean m_keepRunning;
   private boolean m_isFinished=false;
@@ -22,10 +23,11 @@ public class zIntakeTimeCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public zIntakeTimeCommand(IntakeSubsystem intake,IntakeSubsystem innerIntake, double speed,double duration,boolean keepRunning){ 
+  public zIntakeTimeCommand(IntakeSubsystem intake,IntakeSubsystem innerIntake, double innerSpeed,double outerSpeed,double duration,boolean keepRunning){ 
     m_IntakeSubsystem = intake;
     m_InnerIntakeSubsystem=innerIntake;
-    m_speed=speed;
+    m_InnerSpeed=innerSpeed;
+    m_OuterSpeed=outerSpeed;
     m_duration=duration;
     m_keepRunning=keepRunning;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -34,7 +36,8 @@ public class zIntakeTimeCommand extends CommandBase {
   public zIntakeTimeCommand(IntakeSubsystem intake,IntakeSubsystem innerIntake,double speed,double duration){ 
     m_IntakeSubsystem = intake;
     m_InnerIntakeSubsystem=innerIntake;
-    m_speed=speed;
+    m_InnerSpeed=speed;
+    m_OuterSpeed=speed;
     m_duration=duration;
     m_keepRunning=false;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -54,11 +57,11 @@ public class zIntakeTimeCommand extends CommandBase {
     double currentTime=Timer.getFPGATimestamp();
     startTime=Timer.getFPGATimestamp();
     do {
-      m_IntakeSubsystem.runIntake(m_speed);
-      m_InnerIntakeSubsystem.runIntake(m_speed);
+      m_IntakeSubsystem.runIntake(m_OuterSpeed);
+      m_InnerIntakeSubsystem.runIntake(m_InnerSpeed);
       currentTime=Timer.getFPGATimestamp();
       System.out.println(startTime + " - " + currentTime);
-    }while(currentTime<startTime+m_duration);
+    }while(currentTime<=startTime+m_duration);
      m_isFinished=true;
   }
 

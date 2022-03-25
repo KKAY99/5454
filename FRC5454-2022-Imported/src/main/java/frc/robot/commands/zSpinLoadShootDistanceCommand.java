@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 
+import javax.lang.model.util.ElementScanner6;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -18,7 +20,7 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
   private double m_bottomSpeed;
   private double m_minVelocity;
   private boolean m_isFinished=false;
-    
+   
   public zSpinLoadShootDistanceCommand(ShooterSubsystem shooter, ConveyorSubsystem conveyor,FeederSubsystem feeder,Limelight limelight) {
     m_shooter=shooter;
     m_conveyor=conveyor;
@@ -37,68 +39,32 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
   @Override
   public void execute() {
     
-    double startTime=Timer.getFPGATimestamp();
-    double currentTime=Timer.getFPGATimestamp();
-    m_isFinished=false;
-    getSpeedsByDistance(); // SETS module level speed info
-    System.out.println("before speed loop");
-    do {
-      m_shooter.shoot(m_topSpeed, m_bottomSpeed);    
-    }while(m_shooter.getTopMotorVelocity()<=m_minVelocity |  m_shooter.getTopMotorVelocity()<=m_minVelocity);
-    System.out.println("outside shot loop");
+    if (m_shooter.isUptoSpeedbyDistance(m_limelight.getDistance())==false){
+        System.out.println("B-" + m_shooter.getBottomMotorVelocity() + " T-" + m_shooter.getTopMotorVelocity());
+        m_shooter.shootbyDistance(m_limelight.getDistance()); 
+        m_feeder.stop();
+        m_conveyor.stop();
+    } else {
+        m_shooter.shootbyDistance(m_limelight.getDistance()); 
+        m_feeder.run(Constants.FeederSpeed);
+        m_conveyor.run(Constants.conveyorUpSpeed);
 
-    startTime=Timer.getFPGATimestamp();
-    do {
-      m_feeder.run(Constants.FeederSpeed);
-      m_conveyor.run(Constants.conveyorUpSpeed);
-      currentTime=Timer.getFPGATimestamp();
-    }while(currentTime<startTime+Constants.zAutomation.conveyorfeedBall);
-    System.out.println("outside conveyeor loop");
+    }
+     }
+  
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    System.out.println("Stopping zAutoLoadShoot");
     m_conveyor.stop();
     m_feeder.stop();
     m_shooter.stop();
-    m_isFinished=true;
   }
-  
-  private void getSpeedsByDistance(){
-    double distance=0;
-    double topVelocity=0;
-    double bottomVelocity=0;
-
-    distance=m_limelight.getDistance();
-    if (distance>0 && distance<10){
-      topVelocity=800;
-      bottomVelocity=800;
-    }else if(distance>10 && distance<12){
-      topVelocity=1200;
-      bottomVelocity=800;
-    }else if(distance>=12 && distance<15){
-      topVelocity=1600;
-      bottomVelocity=800;
-    }else if(distance>=12 && distance<15){
-      topVelocity=2000;
-      bottomVelocity=800;
-    }else if(distance>=12 && distance<15){
-      topVelocity=2400;
-      bottomVelocity=800;
-    }else {
-      //replace with derived forumla
-      topVelocity=Constants.AutoModes.AutoShotTopSpeed;
-      bottomVelocity=Constants.AutoModes.AutoShotBottomSpeed;
-    }    
-    m_topSpeed=topVelocity;
-    m_bottomSpeed=bottomVelocity;
-    m_minVelocity=topVelocity*.98; //allow a little variance in speed
-    
-  }
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_isFinished;
+    return false;
   }
 }
 

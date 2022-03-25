@@ -219,8 +219,6 @@ public class RobotContainer {
     static NetworkTableEntry shuffleboardShooterTopVel=ShooterTab.add("Top Velocity","").getEntry();
     static NetworkTableEntry shuffleboardShooterBottomVel=ShooterTab.add("Bottom Velocity","").getEntry();
     static NetworkTableEntry shuffleobardShooterMultipler=ShooterTab.add("Shooter Adjustment",1.0)
-                                .withWidget(BuiltInWidgets.kNumberSlider)
-                                .withProperties(Map.of("min",-1,"max",5))
                                 .getEntry();
 
  
@@ -269,10 +267,11 @@ public class RobotContainer {
         //FIXIt when done getting shooter values
         double topSpeed=shuffleboardShooterTop.getDouble(0);
         double bottomSpeed=shuffleboardShooterBottom.getDouble(0);
-        final ParallelCommandGroup LoadandShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,topSpeed,bottomSpeed,true),
-                new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
-                new FeederCommand(m_Feeder,Constants.FeederSpeed));
-        final ParallelCommandGroup ManualShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,Constants.ManualShots.Shot1Top,Constants.ManualShots.Shot1Bottom,false),
+        //final ParallelCommandGroup LoadandShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,topSpeed,bottomSpeed,true),
+        //        new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
+        //        new FeederCommand(m_Feeder,Constants.FeederSpeed));
+       final zSpinLoadShootDistanceCommand LoadandShootCommand = new zSpinLoadShootDistanceCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight);
+       final ParallelCommandGroup ManualShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,Constants.ManualShots.Shot1Top,Constants.ManualShots.Shot1Bottom,false),
                 new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder,Constants.FeederSpeed));
     
@@ -444,7 +443,7 @@ public class RobotContainer {
             break;
           case AutoModes.autoMoveBackwardsOutake:
           autoCommand=new SequentialCommandGroup(
-                new zIntakeTimeCommand(m_Intake,m_IntakeInner, -Constants.intakeSpeed,0,true),
+                new zIntakeTimeCommand(m_Intake,m_IntakeInner,-Constants.intakeInnerSpeed, -Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance)           
                 );
             break;
@@ -458,9 +457,9 @@ public class RobotContainer {
           case AutoModes.autoMoveShootMoveGrab:
                 autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
-                new zIntakeTimeCommand(m_Intake,m_IntakeInner, Constants.intakeSpeed,0,true),
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake,m_IntakeInner, Constants.intakeSpeed,zAutomation.intakeTime,false)
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false)
                 );
             break;
           case AutoModes.autoMoveShootMoveGrabShot1:
@@ -472,9 +471,9 @@ public class RobotContainer {
                 );
             autoCommand=new SequentialCommandGroup(
                 resetAndMoveCommand,
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true),
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance),              
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,false),
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
                      AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));
                 break;
@@ -487,19 +486,19 @@ public class RobotContainer {
               );
           autoCommand=new SequentialCommandGroup(
               resetAndMove2Command,
-              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true),
+              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
               new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance),              
-              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,false),
+              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),
               new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
                    AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
-              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true),
+              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
               new AutoMoveCommand(m_RobotDrive,45,AutoModes.GetBall2Distance),
               new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,
                    Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
                    Constants.TurretTargetRange),
               new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
                    AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
-              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,0,true));
+              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true));
                 
               break;
        

@@ -47,7 +47,7 @@ public class ShooterCommand extends CommandBase {
   public void execute() {
     if (m_useDistance) {
       double distance =m_limelight.getDistance();     
-      m_shooterSubsystem.shootbyDistance(distance, m_topSpeed,m_bottomSpeed);
+      m_shooterSubsystem.shootbyDistance(distance);
       
     } else {
       m_shooterSubsystem.shoot(m_topSpeed, m_bottomSpeed);

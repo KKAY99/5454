@@ -162,18 +162,18 @@ public class Limelight {
         boolean returnValue = false;
         if (isTargetAvailible()) {
             if ((Math.abs(getX())< Constants.LimeLightValues.kVisionXTolerance)) {
-                System.out.println("On Target -" + Math.abs(getX()
-                    ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+           //     System.out.println("On Target -" + Math.abs(getX()
+           //         ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
                         returnValue = true;
             } else {
-                System.out.println("Off Target -" + Math.abs(getX()
-            ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+             //   System.out.println("Off Target -" + Math.abs(getX()
+            //) + " - " + Constants.LimeLightValues.kVisionXTolerance);
        
             }
 
         }else {
-            System.out.println("Off Target -" + Math.abs(getX()
-            ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+        //    System.out.println("Off Target -" + Math.abs(getX()
+        //    ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
        
         }
 
