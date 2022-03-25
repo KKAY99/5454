@@ -4,37 +4,25 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.classes.Limelight;
 
 /** An example command that uses an example subsystem. */
-public class ShooterCommand extends CommandBase {
+public class IntakeCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final ShooterSubsystem m_shooterSubsystem;
-  private final Limelight m_limelight;
-  private final double m_topSpeed;
-  private final double m_bottomSpeed;
-  private final boolean m_useDistance;
-
-  
-
-  
+  private final IntakeSubsystem m_IntakeSubsystem;
+  private final double m_speed;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterCommand(ShooterSubsystem shooter, Limelight limelight, double defaultTopSpeed,
-      double defaultBottomSpeed, boolean useDistance) {
-    m_shooterSubsystem = shooter;
-    m_limelight = limelight;
-    m_topSpeed = defaultTopSpeed;
-    m_bottomSpeed = defaultBottomSpeed;
-    m_useDistance = useDistance;
+  public IntakeCommand(IntakeSubsystem intake,double speed) {
+    m_IntakeSubsystem = intake;
+    m_speed=speed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(m_IntakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -45,19 +33,13 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_useDistance) {
-      double distance =m_limelight.getDistance();     
-      m_shooterSubsystem.shootbyDistance(distance);
-      
-    } else {
-      m_shooterSubsystem.shoot(m_topSpeed, m_bottomSpeed);
-    }
+    m_IntakeSubsystem.runIntake(m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooterSubsystem.stop();
+    m_IntakeSubsystem.stopIntake();
   }
 
   // Returns true when the command should end.

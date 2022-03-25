@@ -12,7 +12,6 @@ public class ShooterSubsystem implements Subsystem {
   private double m_VelocityMultiplier=1;
   private static double m_defaultTopSpeed=775;
   private static double m_defaultBottomSpeed=775;
-  private static double kGearRatio=6;
   private static double[] powerTopValues = {
     775,
     775,
@@ -97,10 +96,10 @@ private static double[] distanceValues = {
     
   }
   public double getTopMotorVelocity(){ 
-    return m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
+    return m_Top_ShooterMotor.getSelectedSensorVelocity(0);
   }
   public double getBottomMotorVelocity(){
-    return m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
+    return m_Top_ShooterMotor.getSelectedSensorVelocity(0);
   }
   public double getMultiplier(){
     return m_VelocityMultiplier;
@@ -118,7 +117,7 @@ private static double[] distanceValues = {
         topSpeed=m_defaultTopSpeed;
         bottomSpeed=m_defaultBottomSpeed;      
       }
-    if ((getTopMotorVelocity()>=topSpeed) && (getBottomMotorVelocity()>=bottomSpeed)){
+    if ((getTopMotorVelocity()>=topSpeed) && (getBottomMotorVelocity()<=bottomSpeed){
         returnvalue=true;
     }
     return returnvalue;

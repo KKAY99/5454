@@ -3,9 +3,12 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.*;
 import frc.robot.common.control.Trajectory;
@@ -77,10 +80,10 @@ public class AutonomousChooser {
         resetRobotPose(command, container, trajectories.get_HP_W_F1_Trajectory());
 
         // follow trajectory and grab the ball
-        // followAndIntake(command, container, trajectories.get_HP_W_F1_Trajectory());
+        followAndIntake(command, container, trajectories.get_HP_W_F1_Trajectory());
 
         // shoot both balls
-        // shootAtTarget(command, container);
+        shootAtTarget(command, container);
 
         return command;
     }
@@ -92,10 +95,10 @@ public class AutonomousChooser {
         resetRobotPose(command, container, trajectories.get_HP_W_F2_Trajectory());
 
         // follow trajectory and grab the ball
-        // followAndIntake(command, container, trajectories.get_HP_W_F2_Trajectory());
+        followAndIntake(command, container, trajectories.get_HP_W_F2_Trajectory());
 
         // shoot both balls
-        // shootAtTarget(command, container);
+        shootAtTarget(command, container);
 
         return command;
     }
@@ -107,10 +110,10 @@ public class AutonomousChooser {
         resetRobotPose(command, container, trajectories.get_CL_W_F4_Trajectory());
 
         // follow trajectory and grab the ball
-        // followAndIntake(command, container, trajectories.get_CL_W_F4_Trajectory());
+        followAndIntake(command, container, trajectories.get_CL_W_F4_Trajectory());
 
         // shoot both balls
-        // shootAtTarget(command, container);
+        shootAtTarget(command, container);
 
         return command;
     }
@@ -136,6 +139,45 @@ public class AutonomousChooser {
 
     private void follow(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory));
+    }
+
+    private void followAndIntake(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
+        command.addCommands(new InstantCommand(() -> container.getPneumaticsSubsystem().setIntakeArms(true)));
+
+        command.addCommands(
+                new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
+                        .deadlineWith(
+                                new zIntakeConveyCommand(
+                                        container.getIntakeSubsystems()[0],
+                                        container.getIntakeSubsystems()[1],
+                                        Constants.intakeSpeed,
+                                        container.getConveyorSubsystem(),
+                                        Constants.conveyorUpSpeed,
+                                        container.getFeederSubsystem(),
+                                        -Constants.FeederSpeed)
+                                                .withTimeout(0.25)));
+
+        command.addCommands(new InstantCommand(() -> container.getPneumaticsSubsystem().setIntakeArms(false)));
+    }
+
+    private void shootAtTarget(SequentialCommandGroup command, RobotContainer container) {
+        shootAtTarget(command, container, 2.5);
+    }
+
+    private void shootAtTarget(SequentialCommandGroup command, RobotContainer container, double timeToWait) {
+        command.addCommands(
+                new ParallelCommandGroup(
+                    new zTurretLimelightCommand(container.getTurretSubsystem(), container.getVisionSubsystem(),
+                    Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange,
+                    Constants.TurretTargetRange)
+                                .alongWith(
+                                        new WaitCommand(1).andThen(
+                                            new ParallelCommandGroup(
+                                                new ShooterCommand(container.getShooterSubsystem(), container.getVisionSubsystem(), 800, 800, true),
+                                            new ConveyorCommand(container.getConveyorSubsystem(), Constants.conveyorUpSpeed),
+                                            new FeederCommand(container.getFeederSubsystem(), Constants.FeederSpeed)
+                                                )))
+                                .withTimeout(timeToWait)));
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {

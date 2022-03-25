@@ -3,15 +3,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.common.math.Vector2;
-import frc.robot.common.input.Axis;
 
 public class DriveCommand extends CommandBase {
     private DrivetrainSubsystem drivetrainSubsystem;
-    private Axis forward;
-    private Axis strafe;
-    private Axis rotation;
+    private Double forward;
+    private Double strafe;
+    private Double rotation;
 
-    public DriveCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, Axis rotation) {
+    public DriveCommand(DrivetrainSubsystem drivetrain, Double forward, Double strafe, Double rotation) {
         this.forward = forward;
         this.strafe = strafe;
         this.rotation = rotation;
@@ -23,7 +22,7 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.drive(new Vector2(forward.get(true), strafe.get(true)), rotation.get(true), true);
+        drivetrainSubsystem.drive(new Vector2(forward, strafe), rotation, true);
     }
 
     @Override

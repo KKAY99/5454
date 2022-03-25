@@ -4,37 +4,25 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.classes.Limelight;
 
 /** An example command that uses an example subsystem. */
-public class ShooterCommand extends CommandBase {
+public class TurretCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final ShooterSubsystem m_shooterSubsystem;
-  private final Limelight m_limelight;
-  private final double m_topSpeed;
-  private final double m_bottomSpeed;
-  private final boolean m_useDistance;
-
-  
-
-  
+  private final TurretSubsystem m_TurretSubsystem;
+  private final double m_speed;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterCommand(ShooterSubsystem shooter, Limelight limelight, double defaultTopSpeed,
-      double defaultBottomSpeed, boolean useDistance) {
-    m_shooterSubsystem = shooter;
-    m_limelight = limelight;
-    m_topSpeed = defaultTopSpeed;
-    m_bottomSpeed = defaultBottomSpeed;
-    m_useDistance = useDistance;
+  public TurretCommand(TurretSubsystem subsystem,double speed) {
+    m_TurretSubsystem = subsystem;
+    m_speed=speed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(m_TurretSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -45,24 +33,35 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_useDistance) {
-      double distance =m_limelight.getDistance();     
-      m_shooterSubsystem.shootbyDistance(distance);
-      
-    } else {
-      m_shooterSubsystem.shoot(m_topSpeed, m_bottomSpeed);
+    System.out.println("setting turret speed" + m_speed + " -" + hitLimit());
+    if(hitLimit()==false){
+      m_TurretSubsystem.turn(m_speed);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooterSubsystem.stop();
+    m_TurretSubsystem.stop();
   }
+  
+  private boolean hitLimit(){
+    boolean returnValue=false;
+    if (m_TurretSubsystem.hitLeftLimit() && m_TurretSubsystem.isMovingLeft(m_speed)){
+      System.out.println("Left Limit");  
+      returnValue= true;
 
+    } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingRight(m_speed)){
+      System.out.println("Right Limit");  
+     
+      returnValue= true;
+    }
+    return returnValue;
+  }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return hitLimit();
   }
 }
+

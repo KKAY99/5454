@@ -29,7 +29,7 @@ public final class Constants {
     public static final int TurretPort=32;
     public static final int FeederPort=34;
     public static final int ClimberPort=36;//36
-    public static final double intakeSpeed=-.65;
+    public static final double intakeSpeed=-.85; //.65
     public static final double intakeInnerSpeed=0.65;
     public static final double FeederSpeed=-1.0;
     public static final double conveyorUpSpeed=0.9;
@@ -196,7 +196,7 @@ public final class Constants {
         public static final double limelightAngle = 36; //40
         public static final double kVisionDistanceTolerance = 5;
         public static final double kVisionXTolerance = 1.7;
-        public static final double kVisionXOffset=1.7;
+        public static final double kVisionXOffset=3.7; // was 1.7
         //public static final double kVisionXTolerance = 5;
         //public static final double kVisionXOffset=-2;
     }

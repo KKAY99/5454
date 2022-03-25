@@ -1,6 +1,7 @@
 package frc.robot.classes;
 
 import frc.robot.Constants;
+import frc.robot.common.drivers.Limelight.LedMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -22,7 +23,7 @@ public class Limelight {
     private double m_limeLightHeight;
     private double m_mountingAngle;
     private double m_targetDistance = 0;
-    private double m_xOffset=0;
+    private double m_xOffset = 0;
     private boolean m_LimelightLEDOn = false;
 
     private double kP = Constants.LimeLightValues.steeringP;
@@ -43,19 +44,20 @@ public class Limelight {
         m_limeLightHeight = limeLightHeight;
         m_mountingAngle = mountingAngle;
     };
-    
+
     public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet) {
         m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
         m_mountingAngle = mountingAngle;
-        m_xOffset=xoffSet;
+        m_xOffset = xoffSet;
     };
 
-    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle,double xoffSet, double targetDistance) {
+    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet,
+            double targetDistance) {
         m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
         m_mountingAngle = mountingAngle;
-        m_xOffset=xoffSet;
+        m_xOffset = xoffSet;
         m_targetDistance = targetDistance;
     };
 
@@ -79,7 +81,7 @@ public class Limelight {
 
     public double getRotationPower(double measurement, double setpoint) {
         if (isTargetAvailible()) {
-            return limeLightSteeringController.calculate(measurement, setpoint) + kFeedForward;     
+            return limeLightSteeringController.calculate(measurement, setpoint) + kFeedForward;
         }
         return 0.0;
     }
@@ -95,9 +97,10 @@ public class Limelight {
     // }
 
     public double getX() {
-        
-        return tx.getDouble(0.0)+ m_xOffset;
+
+        return tx.getDouble(0.0) + m_xOffset;
     }
+
     public double getactualX() {
         return tx.getDouble(0.0);
     }
@@ -120,12 +123,30 @@ public class Limelight {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(mode);
     }
 
-    public enum VisionModes {
-        LOW(0),
-        LEFT(1),
-        RIGHT(2);
+    public void setLedMode(LedMode mode) {
+        int val = 0;
+        switch (mode) {
+            case DEFAULT:
+                val = 0;
+                break;
+            case OFF:
+                val = 1;
+                break;
+            case BLINK:
+                val = 2;
+                break;
+            case ON:
+                val = 3;
+                break;
+        }
 
-        public double mode;
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(val);
+    }
+
+    public enum VisionModes {
+        LOW(0), LEFT(1), RIGHT(2);
+
+        public final double mode;
 
         VisionModes(double mode) {
             this.mode = mode;
@@ -161,20 +182,21 @@ public class Limelight {
     public boolean isOnTargetX() {
         boolean returnValue = false;
         if (isTargetAvailible()) {
-            if ((Math.abs(getX())< Constants.LimeLightValues.kVisionXTolerance)) {
-           //     System.out.println("On Target -" + Math.abs(getX()
-           //         ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-                        returnValue = true;
-            } else {
-             //   System.out.println("Off Target -" + Math.abs(getX()
-            //) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-       
+            if ((Math.abs(getX()) < Constants.LimeLightValues.kVisionXTolerance)) {
+                System.out.println(
+                        "On Target -" + Math.abs(getX()) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+                returnValue = true;
+            }
+            else {
+                System.out.println(
+                        "Off Target -" + Math.abs(getX()) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+
             }
 
-        }else {
-        //    System.out.println("Off Target -" + Math.abs(getX()
-        //    ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-       
+        }
+        else {
+            System.out.println("Off Target -" + Math.abs(getX()) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+
         }
 
         return returnValue;

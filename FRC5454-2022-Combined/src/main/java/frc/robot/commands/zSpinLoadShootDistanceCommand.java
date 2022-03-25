@@ -40,10 +40,7 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
   public void execute() {
     
     if (m_shooter.isUptoSpeedbyDistance(m_limelight.getDistance())==false){
-        System.out.println("B-" + m_shooter.getBottomMotorVelocity() + " T-" + m_shooter.getTopMotorVelocity());
         m_shooter.shootbyDistance(m_limelight.getDistance()); 
-        m_feeder.stop();
-        m_conveyor.stop();
     } else {
         m_shooter.shootbyDistance(m_limelight.getDistance()); 
         m_feeder.run(Constants.FeederSpeed);
@@ -55,7 +52,6 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Stopping zAutoLoadShoot");
     m_conveyor.stop();
     m_feeder.stop();
     m_shooter.stop();

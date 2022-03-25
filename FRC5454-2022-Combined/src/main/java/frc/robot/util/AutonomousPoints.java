@@ -23,7 +23,7 @@ public class AutonomousPoints {
         public static final double[] HumanPlayer_Edge_Start = { 298.886, 269.238 };
 
         /** Against Hub on side of climb station */
-        public static final double[] Climber_Wall_Start = { 257.030, 133.106 };
+        public static final double[] Climber_Wall_Start = { 257.030, 133.106, 201 };
 
         /**
          * On corner of climb station side tarmac,
