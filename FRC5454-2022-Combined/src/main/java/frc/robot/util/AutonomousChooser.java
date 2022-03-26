@@ -151,6 +151,7 @@ public class AutonomousChooser {
                                         container.getIntakeSubsystems()[0],
                                         container.getIntakeSubsystems()[1],
                                         Constants.intakeSpeed,
+                                        Constants.intakeInnerSpeed,
                                         container.getConveyorSubsystem(),
                                         Constants.conveyorUpSpeed,
                                         container.getFeederSubsystem(),
@@ -168,8 +169,7 @@ public class AutonomousChooser {
         command.addCommands(
                 new ParallelCommandGroup(
                     new zTurretLimelightCommand(container.getTurretSubsystem(), container.getVisionSubsystem(),
-                    Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange,
-                    Constants.TurretTargetRange)
+                    Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange) 
                                 .alongWith(
                                         new WaitCommand(1).andThen(
                                             new ParallelCommandGroup(

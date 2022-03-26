@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -12,72 +13,74 @@ public class ShooterSubsystem implements Subsystem {
   private double m_VelocityMultiplier=1;
   private static double m_defaultTopSpeed=775;
   private static double m_defaultBottomSpeed=775;
+  private static double kGearRatio=6;
   private static double[] powerTopValues = {
-    775,
-    775,
-    775,
-    775,
-    825,
-    825,
-    925,
-    1075,
-    1182,
-    1182,
-    1182,
-    1670,
-    1670,
-    1375,
-    1475,
+    775,//1
+    775,//2
+    775,//3
+    775,//4
+    866,//5
+    875,//6
+    1000,//7
+    1202,//8
+    1322,//9
+    1550,//10
+    1600,//11
+    1700,//12
+    1800,//13
+    1900,//14
+    2000,//15
     25
 };
 
 private static double[] powerBottomValues = {
-    775,
-    775,
-    775,
-    775,
-    825,
-    825,
-    925,
-    1075,
-    1182,
-    1182,
-    1182,
-    1470,
-    1470,
-    1375,
-    1475,
-    1075
+    775,//1
+    775,//2
+    775,//3
+    775,//4
+    866,//5
+    875,//6
+    1000,//7
+    1202,//8
+    1322,//9
+    1550,//10
+    1600,//11
+    1700,//12
+    1800,//13
+    1900,//14
+    2000,//15
+    1110 //16
 };
 
 private static double[] distanceValues = {
-    39.5,
-    49.6,
-    59.5,
-    69.5,
-    79.5,
-    89.5,
-    99.5,
-    109.5,
-    119.5,
-    129.5,
-    139.5,
-    149.5,
-    159.5,
-    169.5,
-    179.5,
-    189.5,
+    39.5, //1
+    49.6, //2
+    59.5, //3
+    69.5, //4
+    79.5,//5
+    89.5,//6
+    99.5,//7
+    109.5,//8
+    119.5,//9
+    129.5,//10
+    139.5,//11
+    149.5,//12
+    159.5,//13
+    169.5,//14
+    179.5,//15
+    189.5,//16
 };
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem(Integer BottomPort, Integer TopPort) {
     m_Bottom_ShooterMotor = new TalonFX(BottomPort);
     m_Top_ShooterMotor = new TalonFX(TopPort);
-   
+    
     m_Bottom_ShooterMotor.configOpenloopRamp(0.5);
     m_Top_ShooterMotor.configOpenloopRamp(0.5);
     
     m_Bottom_ShooterMotor.setInverted(false);
-
+    m_Bottom_ShooterMotor.setNeutralMode(NeutralMode.Coast);
+    m_Top_ShooterMotor.setNeutralMode(NeutralMode.Coast);
 
     m_Bottom_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
     m_Bottom_ShooterMotor.selectProfileSlot(0,0);
@@ -96,10 +99,10 @@ private static double[] distanceValues = {
     
   }
   public double getTopMotorVelocity(){ 
-    return m_Top_ShooterMotor.getSelectedSensorVelocity(0);
+    return m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
   }
   public double getBottomMotorVelocity(){
-    return m_Top_ShooterMotor.getSelectedSensorVelocity(0);
+    return m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
   }
   public double getMultiplier(){
     return m_VelocityMultiplier;
@@ -112,12 +115,15 @@ private static double[] distanceValues = {
     boolean returnvalue=false;
     double topSpeed = getPower(powerTopValues, distance);
     double bottomSpeed = getPower(powerBottomValues, distance);
+    
     //Default shooting if calculation is outside range
     if(topSpeed<=1 || bottomSpeed <=1){
         topSpeed=m_defaultTopSpeed;
         bottomSpeed=m_defaultBottomSpeed;      
       }
-    if ((getTopMotorVelocity()>=topSpeed) && (getBottomMotorVelocity()<=bottomSpeed){
+      bottomSpeed=bottomSpeed*m_VelocityMultiplier;
+      topSpeed=topSpeed*m_VelocityMultiplier;
+      if ((getTopMotorVelocity()>=topSpeed) && (getBottomMotorVelocity()>=bottomSpeed)){
         returnvalue=true;
     }
     return returnvalue;

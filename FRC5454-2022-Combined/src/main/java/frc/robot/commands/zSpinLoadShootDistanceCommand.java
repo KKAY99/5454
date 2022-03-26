@@ -1,9 +1,5 @@
 package frc.robot.commands;
 
-
-import javax.lang.model.util.ElementScanner6;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.classes.Limelight;
@@ -16,10 +12,6 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
   private final ConveyorSubsystem m_conveyor;
   private final FeederSubsystem m_feeder;
   private final Limelight m_limelight;
-  private double m_topSpeed;
-  private double m_bottomSpeed;
-  private double m_minVelocity;
-  private boolean m_isFinished=false;
    
   public zSpinLoadShootDistanceCommand(ShooterSubsystem shooter, ConveyorSubsystem conveyor,FeederSubsystem feeder,Limelight limelight) {
     m_shooter=shooter;

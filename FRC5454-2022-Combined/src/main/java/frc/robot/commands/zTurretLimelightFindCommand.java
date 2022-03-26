@@ -5,12 +5,11 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.TurretSubsystem;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.classes.Limelight;
  
 /** An example command that uses an example subsystem. */
-public class zTurretLimelightCommand extends CommandBase {
+public class zTurretLimelightFindCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final TurretSubsystem m_TurretSubsystem;
   private final Limelight m_limelight;
@@ -18,7 +17,6 @@ public class zTurretLimelightCommand extends CommandBase {
   private double m_speed;
   private double m_maxSpeed;
   private double m_minSpeed;
-
   private double m_maxRange;
   private CommandState m_state;
   public static enum CommandState
@@ -31,7 +29,7 @@ public class zTurretLimelightCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public zTurretLimelightCommand(TurretSubsystem turret,Limelight limelight, double speed,double minSpeed, double range) {
+  public zTurretLimelightFindCommand(TurretSubsystem turret,Limelight limelight, double speed,double minSpeed, double range) {
     m_TurretSubsystem = turret;
 //    m_ShooterSubsystem= shooter;
 //    m_drive=drive;
@@ -40,6 +38,8 @@ public class zTurretLimelightCommand extends CommandBase {
     m_maxSpeed=speed;
     m_minSpeed=minSpeed;
     m_maxRange=range;
+  
+    
   
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_TurretSubsystem);
@@ -135,12 +135,7 @@ public class zTurretLimelightCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean returnValue=false;
-    //if turret is locked exit auto find
-    if(m_TurretSubsystem.isLocked()){
-      returnValue=true;
-    }
-    return returnValue;
+    return m_limelight.isOnTargetX();
   }
 }
 

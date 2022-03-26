@@ -298,10 +298,10 @@ public class RobotContainer {
         // IntakeCommand(m_Intake,-Constants.intakeSpeed);
 
         final zIntakeConveyCommand intakeInCommand = new zIntakeConveyCommand(m_Intake, m_IntakeInner,
-                Constants.intakeSpeed, m_Conveyor, Constants.conveyorUpSpeed, m_Feeder, -Constants.FeederSpeed);
+                Constants.intakeSpeed, Constants.intakeInnerSpeed, m_Conveyor,Constants.conveyorUpSpeed, m_Feeder, -Constants.FeederSpeed);
 
         final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake, m_IntakeInner,
-                -Constants.intakeSpeed, m_Conveyor, Constants.conveyorDownSpeed, m_Feeder, -Constants.FeederSpeed);
+                -Constants.intakeSpeed,-Constants.intakeInnerSpeed, m_Conveyor, Constants.conveyorDownSpeed, m_Feeder, -Constants.FeederSpeed);
 
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter, m_Limelight, AutoModes.AutoShotTopSpeed,
                 AutoModes.AutoShotBottomSpeed, false);
@@ -328,8 +328,7 @@ public class RobotContainer {
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(getDrivetrainSubsystem(), m_Limelight);
 
         final zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight,
-                Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange,
-                Constants.TurretTargetRange);
+                Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange);
 
         // final LatchCommand latchCommand = new LatchCommand(m_Pnuematics);
 
