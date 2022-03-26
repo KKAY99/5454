@@ -473,10 +473,11 @@ public class RobotContainer {
                 new zIntakeArmMoveCommand(m_Pnuematics,true), 
                 new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),      
                 resetAndMoveCommand,         
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),  
+                new AutoMoveCommand(m_RobotDrive,180,AutoModes.GetBallDistance/2),
                 new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
                    Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
-                   Constants.TurretTargetRange),    
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),  
+                   Constants.TurretTargetRange),                       
                 new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,2));
                 //new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
                 //     AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));
