@@ -50,10 +50,6 @@ public class SwerveKinematics {
      */
     public Vector2[] toModuleVelocities(ChassisVelocity velocity) {
 
-        System.out.println("X: " + velocity.getTranslationalVelocity().x);
-        System.out.println("Y: " + velocity.getTranslationalVelocity().y);
-        System.out.println("A: " + velocity.getAngularVelocity());
-        
         SimpleMatrix chassisVelocityVector = new SimpleMatrix(3, 1);
         chassisVelocityVector.setColumn(0, 0,
                 velocity.getTranslationalVelocity().x,

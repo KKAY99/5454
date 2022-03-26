@@ -1,10 +1,9 @@
 package frc.robot.common.util;
 
-import java.io.Serializable;
 import java.util.TreeMap;
 
 public class InterpolatingTreeMap<K extends InverseInterpolable<K> & Comparable<K>, V extends Interpolable<V>>
-        extends TreeMap<K, V> implements Serializable {
+        extends TreeMap<K, V> {
     private static final long serialVersionUID = -2284755214507163440L;
 
     private final int maxSize;

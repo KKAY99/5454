@@ -13,10 +13,6 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
     private final ConveyorSubsystem m_conveyor;
     private final FeederSubsystem m_feeder;
     private final Limelight m_limelight;
-    private double m_topSpeed;
-    private double m_bottomSpeed;
-    private double m_minVelocity;
-    private boolean m_isFinished = false;
 
     public zSpinLoadShootDistanceCommand(ShooterSubsystem shooter, ConveyorSubsystem conveyor, FeederSubsystem feeder,
             Limelight limelight) {

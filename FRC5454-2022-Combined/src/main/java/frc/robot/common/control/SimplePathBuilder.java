@@ -83,7 +83,6 @@ public final class SimplePathBuilder {
                     (clockwise ? -1.0 : 1.0) * percentage;
             return new State(
                     center.add(deltaStart.rotateBy(Rotation2.fromRadians(angle))),
-                    // TODO: Use cross product instead of just adding 90deg when calculating heading
                     deltaStart.rotateBy(Rotation2.fromRadians(angle + (clockwise ? -1.0 : 1.0) * 0.5 * Math.PI))
                             .getAngle(),
                     1.0 / deltaStart.length);
