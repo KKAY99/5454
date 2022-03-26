@@ -14,7 +14,7 @@ import frc.robot.Constants;
 public class PneumaticsSubsystem extends SubsystemBase {
     /** Creates a new ExampleSubsystem. */
     private static Compressor m_Compressor;
-    private static boolean m_pressureSwitch;
+    // private static boolean m_pressureSwitch;
     private static Solenoid m_solenoidIntakeArm;
     private static Solenoid m_solenoidClimb;
     private static Solenoid m_solenoidHookCables;
@@ -78,14 +78,14 @@ public class PneumaticsSubsystem extends SubsystemBase {
         return m_Compressor.getCurrent();
     }
 
-    public boolean getPressureSwitch() {
-        return m_pressureSwitch;
-    }
+    // public boolean getPressureSwitch() {
+    //     return m_pressureSwitch;
+    // }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        m_pressureSwitch = m_Compressor.getPressureSwitchValue();
+        // m_pressureSwitch = m_Compressor.getPressureSwitchValue();
 
     }
 

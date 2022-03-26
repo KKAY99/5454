@@ -49,6 +49,7 @@ public class SwerveKinematics {
      * {@link #normalizeModuleVelocities(Vector2[], double) normalizeModuleVelocities} method to resolve this issue.
      */
     public Vector2[] toModuleVelocities(ChassisVelocity velocity) {
+
         SimpleMatrix chassisVelocityVector = new SimpleMatrix(3, 1);
         chassisVelocityVector.setColumn(0, 0,
                 velocity.getTranslationalVelocity().x,

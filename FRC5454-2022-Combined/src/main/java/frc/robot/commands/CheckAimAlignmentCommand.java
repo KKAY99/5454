@@ -1,13 +1,17 @@
 package frc.robot.commands;
 
+import frc.robot.classes.Limelight;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/** An example command that uses an example subsystem. */
-public class AutoDoNothingCommand extends CommandBase {
+public class CheckAimAlignmentCommand extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+    private final Limelight m_VisionSubsystem;
+    private final TurretSubsystem m_TurretSubsystem;
 
-    public AutoDoNothingCommand() {
-
+    public CheckAimAlignmentCommand(Limelight visionSubsystem, TurretSubsystem TurretSubsystem) {
+        m_VisionSubsystem = visionSubsystem;
+        m_TurretSubsystem = TurretSubsystem;
     }
 
     // Called when the command is initially scheduled.
@@ -28,6 +32,7 @@ public class AutoDoNothingCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        // TODO: Check this value
+        return m_TurretSubsystem.hasHomed() && m_VisionSubsystem.isOnTargetX() && m_TurretSubsystem.getPower() < 0.05;
     }
 }

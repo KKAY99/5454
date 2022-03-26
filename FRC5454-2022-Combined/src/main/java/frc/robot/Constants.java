@@ -188,7 +188,6 @@ public final class Constants {
      * Constant Values for Limelight based on target and mounting
      */
     public static final class LimeLightValues {
-        // TODO: Tune these values
         public static final double steeringP = 0.035;
         public static final double steeringI = 0;
         public static final double steeringD = 0.0055;

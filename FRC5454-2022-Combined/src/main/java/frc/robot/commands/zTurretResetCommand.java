@@ -9,65 +9,67 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class zTurretResetCommand extends CommandBase {
-  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final TurretSubsystem m_TurretSubsystem;
-  private double m_speed;
-  private final double m_centerSpeed;
-  private final double m_homeSpeed;
-  private final double m_targetPos;
+    @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+    private final TurretSubsystem m_TurretSubsystem;
+    private double m_speed;
+    private final double m_centerSpeed;
+    private final double m_homeSpeed;
+    private final double m_targetPos;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public zTurretResetCommand(TurretSubsystem subsystem,double homeSpeed,double centerSpeed, double targetPos) {
-    m_TurretSubsystem = subsystem;
-    m_homeSpeed=homeSpeed;
-    m_centerSpeed=centerSpeed;
-    m_targetPos=targetPos;
+    /**
+     * Creates a new ExampleCommand.
+     *
+     * @param subsystem
+     *            The subsystem used by this command.
+     */
+    public zTurretResetCommand(TurretSubsystem subsystem, double homeSpeed, double centerSpeed, double targetPos) {
+        m_TurretSubsystem = subsystem;
+        m_homeSpeed = homeSpeed;
+        m_centerSpeed = centerSpeed;
+        m_targetPos = targetPos;
 
-    //Start moving left
-    m_speed=homeSpeed;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_TurretSubsystem);
-  }
+        // Start moving left
+        m_speed = homeSpeed;
+        // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(m_TurretSubsystem);
+    }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    System.out.println("Init Turet");
-   
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        System.out.println("Init Turet");
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {     
-    m_TurretSubsystem.turn(m_speed);
-  }
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    m_TurretSubsystem.stop();
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        m_TurretSubsystem.turn(m_speed);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    boolean returnValue=false;
-    if (m_TurretSubsystem.hitRightPhysicalLimit() && (m_speed==m_homeSpeed)) {
-      System.out.println("Hit Right Limit");
-      m_TurretSubsystem.stop();
-      m_TurretSubsystem.setHomeforTurret();
-      m_speed=m_centerSpeed;
-      m_TurretSubsystem.turn(m_speed);
-      
-     } else if ((m_speed==m_centerSpeed) && (m_TurretSubsystem.hitLeftLimit() || m_TurretSubsystem.getPosition()<m_targetPos)){
-      System.out.println("Hit Left Limit");
-      returnValue= true;
-  }
-     return returnValue;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        m_TurretSubsystem.stop();
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        boolean returnValue = false;
+        if (m_TurretSubsystem.hitRightPhysicalLimit() && (m_speed == m_homeSpeed)) {
+            System.out.println("Hit Right Limit");
+            m_TurretSubsystem.stop();
+            m_TurretSubsystem.setHomeforTurret();
+            m_speed = m_centerSpeed;
+            m_TurretSubsystem.turn(m_speed);
+
+        }
+        else if ((m_speed == m_centerSpeed)
+                && (m_TurretSubsystem.hitLeftLimit() || m_TurretSubsystem.getPosition() < m_targetPos)) {
+            System.out.println("Hit Left Limit");
+            returnValue = true;
+        }
+        return returnValue;
+    }
 }
-

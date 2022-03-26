@@ -78,7 +78,7 @@ public class Trajectory {
                     maxStartingAcceleration = Math.min(constraint.getMaxAcceleration(startingState, startingVelocity),
                             maxStartingAcceleration);
                     maxEndingAcceleration = Math.min(constraint.getMaxAcceleration(endingState, startingVelocity),
-                            maxEndingAcceleration); // TODO: Use endingVelocity instead of startingVelocity
+                            maxEndingAcceleration);
                 }
 
                 // Take the lower of the two accelerations

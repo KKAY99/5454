@@ -1,8 +1,6 @@
 package frc.robot.common.motion;
 
-import java.io.Serializable;
-
-public final class TrapezoidalMotionProfile extends MotionProfile implements Serializable {
+public final class TrapezoidalMotionProfile extends MotionProfile {
 	private static final long serialVersionUID = 6593296352896093663L;
 
 	private final int direction;

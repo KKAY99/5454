@@ -17,11 +17,12 @@ public class ConveyorCommand extends CommandBase {
     /**
      * Creates a new ExampleCommand.
      *
-     * @param subsystem The subsystem used by this command.
+     * @param subsystem
+     *            The subsystem used by this command.
      */
-    public ConveyorCommand(ConveyorSubsystem conveyor,double speed) {
+    public ConveyorCommand(ConveyorSubsystem conveyor, double speed) {
         m_ConveyorSubsystem = conveyor;
-        m_speed=speed;
+        m_speed = speed;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_ConveyorSubsystem);
     }
