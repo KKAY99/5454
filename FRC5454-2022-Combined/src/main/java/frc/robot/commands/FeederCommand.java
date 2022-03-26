@@ -16,11 +16,12 @@ public class FeederCommand extends CommandBase {
     /**
      * Creates a new ExampleCommand.
      *
-     * @param subsystem The subsystem used by this command.
+     * @param subsystem
+     *            The subsystem used by this command.
      */
-    public FeederCommand(FeederSubsystem feeder,double speed) {
+    public FeederCommand(FeederSubsystem feeder, double speed) {
         m_FeederSubsystem = feeder;
-        m_speed=speed;
+        m_speed = speed;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_FeederSubsystem);
     }

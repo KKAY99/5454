@@ -117,7 +117,7 @@ private static double[] distanceValues = {
         topSpeed=m_defaultTopSpeed;
         bottomSpeed=m_defaultBottomSpeed;      
       }
-    if ((getTopMotorVelocity()>=topSpeed) && (getBottomMotorVelocity()<=bottomSpeed){
+    if ((getTopMotorVelocity()>=topSpeed) && (getBottomMotorVelocity()<=bottomSpeed)){
         returnvalue=true;
     }
     return returnvalue;

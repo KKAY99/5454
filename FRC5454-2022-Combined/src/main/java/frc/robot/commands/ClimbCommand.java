@@ -16,17 +16,18 @@ public class ClimbCommand extends CommandBase {
     private final PneumaticsSubsystem m_pnuematicsSubsystem;
     private final TurretSubsystem m_turret;
     private final double m_speed;
-    
+
     /**
      * Creates a new ExampleCommand.
      *
-     * @param subsystem The subsystem used by this command.
+     * @param subsystem
+     *            The subsystem used by this command.
      */
-    public ClimbCommand(ClimbSubsystem climb,PneumaticsSubsystem pneumatics,TurretSubsystem turret, double speed) {
+    public ClimbCommand(ClimbSubsystem climb, PneumaticsSubsystem pneumatics, TurretSubsystem turret, double speed) {
         m_ClimbSubsystem = climb;
-        m_pnuematicsSubsystem=pneumatics;
-        m_speed=speed;
-        m_turret=turret;
+        m_pnuematicsSubsystem = pneumatics;
+        m_speed = speed;
+        m_turret = turret;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_ClimbSubsystem);
     }
@@ -34,37 +35,36 @@ public class ClimbCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        
-        
-    }
-    
- 
-    
-     // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() 
-  {     
-  //stop on limit only when going down
-    //make sure turret is out of way
-    m_turret.setLocked(); // disable auto targeting mode
-    if(m_turret.isClearofClimber()==false){
-        m_turret.movePastSafetyPosition(); // start turret moving left
-      } else {
-        m_turret.stop(); // make sure turret is not moving before climbing either way
-        if(m_ClimbSubsystem.stopForLimit(m_speed)==false){
-          System.out.println("running Climb - " + m_speed);
-          m_ClimbSubsystem.run(m_speed);
-        } else {
-            System.out.println("Limit Switch Hit" );
-            //auto deploy pivot arms when climb bottom is hit
-            if (m_ClimbSubsystem.hitBottomLimit()){
-              m_pnuematicsSubsystem.setClimbArms(true);
-            }
-            m_ClimbSubsystem.stop();
-        }
-      }
 
-  }
+    }
+
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        // stop on limit only when going down
+        // make sure turret is out of way
+        m_turret.setLocked(); // disable auto targeting mode
+        if (m_turret.isClearofClimber() == false) {
+            m_turret.movePastSafetyPosition(); // start turret moving left
+        }
+        else {
+            m_turret.stop(); // make sure turret is not moving before climbing either way
+            if (m_ClimbSubsystem.stopForLimit(m_speed) == false) {
+                System.out.println("running Climb - " + m_speed);
+                m_ClimbSubsystem.run(m_speed);
+            }
+            else {
+                System.out.println("Limit Switch Hit");
+                // auto deploy pivot arms when climb bottom is hit
+                if (m_ClimbSubsystem.hitBottomLimit()) {
+                    m_pnuematicsSubsystem.setClimbArms(true);
+                }
+                m_ClimbSubsystem.stop();
+            }
+        }
+
+    }
+
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
@@ -75,7 +75,7 @@ public class ClimbCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-      return m_ClimbSubsystem.stopForLimit(m_speed);
-    
-  }
+        return m_ClimbSubsystem.stopForLimit(m_speed);
+
+    }
 }

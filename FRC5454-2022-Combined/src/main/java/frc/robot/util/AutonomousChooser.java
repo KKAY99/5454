@@ -46,7 +46,10 @@ public class AutonomousChooser {
         // reset robot pose
         resetRobotPose(command, container, trajectories.get_Wall_Transit_Trajectory());
         // follow trajectory
-        follow(command, container, trajectories.get_Wall_Transit_Trajectory());
+        followAndIntake(command, container, trajectories.get_Wall_Transit_Trajectory());
+
+        // shoot both balls
+        shootAtTarget(command, container);
 
         return command;
     }
@@ -154,8 +157,7 @@ public class AutonomousChooser {
                                         container.getConveyorSubsystem(),
                                         Constants.conveyorUpSpeed,
                                         container.getFeederSubsystem(),
-                                        -Constants.FeederSpeed)
-                                                .withTimeout(0.25)));
+                                        -Constants.FeederSpeed)));
 
         command.addCommands(new InstantCommand(() -> container.getPneumaticsSubsystem().setIntakeArms(false)));
     }
@@ -167,17 +169,25 @@ public class AutonomousChooser {
     private void shootAtTarget(SequentialCommandGroup command, RobotContainer container, double timeToWait) {
         command.addCommands(
                 new ParallelCommandGroup(
-                    new zTurretLimelightCommand(container.getTurretSubsystem(), container.getVisionSubsystem(),
-                    Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange,
-                    Constants.TurretTargetRange)
-                                .alongWith(
-                                        new WaitCommand(1).andThen(
-                                            new ParallelCommandGroup(
-                                                new ShooterCommand(container.getShooterSubsystem(), container.getVisionSubsystem(), 800, 800, true),
-                                            new ConveyorCommand(container.getConveyorSubsystem(), Constants.conveyorUpSpeed),
-                                            new FeederCommand(container.getFeederSubsystem(), Constants.FeederSpeed)
-                                                )))
-                                .withTimeout(timeToWait)));
+                        new zTurretLimelightCommand(container.getTurretSubsystem(), container.getVisionSubsystem(),
+                                Constants.turretSpeed, Constants.turretMinSpeed,
+                                Constants.LimeLightValues.targetXPosRange,
+                                Constants.TurretTargetRange)
+                                        .alongWith(
+                                                new CheckAimAlignmentCommand(container.getVisionSubsystem(),
+                                                        container.getTurretSubsystem()).andThen(
+                                                                new ParallelCommandGroup(
+                                                                        new ShooterCommand(
+                                                                                container.getShooterSubsystem(),
+                                                                                container.getVisionSubsystem(), 800,
+                                                                                800, true),
+                                                                        new ConveyorCommand(
+                                                                                container.getConveyorSubsystem(),
+                                                                                Constants.conveyorUpSpeed),
+                                                                        new FeederCommand(
+                                                                                container.getFeederSubsystem(),
+                                                                                Constants.FeederSpeed))))
+                                        .withTimeout(timeToWait)));
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
@@ -185,14 +195,18 @@ public class AutonomousChooser {
                 new InstantCommand(() -> container.getDrivetrainSubsystem().resetGyroAngle(Rotation2.ZERO)));
         command.addCommands(new InstantCommand(() -> container.getDrivetrainSubsystem().resetPose(
                 new RigidTransform2(trajectory.calculate(0.0).getPathState().getPosition(), Rotation2.ZERO))));
+
+        if (!container.getTurretSubsystem().hasHomed()) {
+            Command turretResetCommand = new zTurretResetCommand(container.getTurretSubsystem(),
+                    Constants.turretInitSpeed,
+                    Constants.turretHomeSpeed, Constants.turretHomePos);
+
+            command.alongWith(turretResetCommand);
+        }
+
     }
 
     private enum AutonomousMode {
-        W_TRANSIT,
-        C_TRANSIT,
-        E_TRANSIT,
-        HP_W_F1,
-        HP_W_F2,
-        CL_W_F4
+        W_TRANSIT, C_TRANSIT, E_TRANSIT, HP_W_F1, HP_W_F2, CL_W_F4
     }
 }

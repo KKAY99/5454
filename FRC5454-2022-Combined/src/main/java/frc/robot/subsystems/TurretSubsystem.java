@@ -47,6 +47,10 @@ public class TurretSubsystem extends SubsystemBase {
         m_turretMotor.set(power);
     }
 
+    public double getPower() {
+        return m_turretMotor.getAppliedOutput();
+    }
+
     public void setEncoderPosition(double position) {
         m_turretEncoder.setPosition(position);
     }

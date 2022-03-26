@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants;
+import frc.robot.Constants.RobotMap;
 import frc.robot.common.control.*;
 import frc.robot.common.drivers.Gyroscope;
 import frc.robot.common.drivers.SwerveModule;
@@ -34,17 +34,13 @@ import frc.robot.common.util.HolonomicFeedforward;
 import java.util.Optional;
 
 public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
-    private static final double TRACKWIDTH = 20.75;
+    private static final double TRACKWIDTH = 20;
     private static final double WHEELBASE = 25;
 
     public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-        0.0584,
-        0.00519,
-        0.665);
-
-    private static final double GEAR_REDUCTION = 8.31 / 1.0;
-    private static final double WHEEL_DIAMETER = 4.0;
-    private static final PidConstants MODULE_ANGLE_PID_CONSTANTS = new PidConstants(0.5, 0.0, 0.0001);
+            0.0584,
+            0.00519,
+            0.665);
 
     public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
             new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
@@ -57,67 +53,65 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final SwerveModule frontLeftModule = new Mk2SwerveModuleBuilder(
             new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0))
+                    .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER),
+                            RobotMap.DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET)
                     .angleMotor(
-                            new CANSparkMax(Constants.RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, MotorType.kBrushless),
-                            MODULE_ANGLE_PID_CONSTANTS)
+                            new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
+                                    CANSparkMaxLowLevel.MotorType.kBrushless),
+                            Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(Constants.RobotMap.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR, MotorType.kBrushless),
-                            GEAR_REDUCTION,
-                            WHEEL_DIAMETER)
-                    .angleEncoder(
-                            new AnalogInput(Constants.RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER),
-                            Constants.RobotMap.DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET)
+                            new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
+                                    CANSparkMaxLowLevel.MotorType.kBrushless),
+                            Mk2SwerveModuleBuilder.MotorType.NEO)
                     .build();
 
     private final SwerveModule frontRightModule = new Mk2SwerveModuleBuilder(
             new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
+                    .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER),
+                            RobotMap.DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET)
                     .angleMotor(
-                            new CANSparkMax(Constants.RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
-                                    MotorType.kBrushless),
-                            MODULE_ANGLE_PID_CONSTANTS)
+                            new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
+                                    CANSparkMaxLowLevel.MotorType.kBrushless),
+                            Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(Constants.RobotMap.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
-                                    MotorType.kBrushless),
-                            GEAR_REDUCTION,
-                            WHEEL_DIAMETER)
-                    .angleEncoder(
-                            new AnalogInput(Constants.RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER),
-                            Constants.RobotMap.DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET)
+                            new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
+                                    CANSparkMaxLowLevel.MotorType.kBrushless),
+                            Mk2SwerveModuleBuilder.MotorType.NEO)
                     .build();
 
     private final SwerveModule backLeftModule = new Mk2SwerveModuleBuilder(
             new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0))
+                    .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER),
+                            RobotMap.DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET)
                     .angleMotor(
-                            new CANSparkMax(Constants.RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR, MotorType.kBrushless),
-                            MODULE_ANGLE_PID_CONSTANTS)
+                            new CANSparkMax(RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
+                                    CANSparkMaxLowLevel.MotorType.kBrushless),
+                            Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(Constants.RobotMap.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR, MotorType.kBrushless),
-                            GEAR_REDUCTION,
-                            WHEEL_DIAMETER)
-                    .angleEncoder(
-                            new AnalogInput(Constants.RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER),
-                            Constants.RobotMap.DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET)
+                            new CANSparkMax(RobotMap.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
+                                    CANSparkMaxLowLevel.MotorType.kBrushless),
+                            Mk2SwerveModuleBuilder.MotorType.NEO)
                     .build();
 
     private final SwerveModule backRightModule = new Mk2SwerveModuleBuilder(
             new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
+                    .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER),
+                            RobotMap.DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET)
                     .angleMotor(
-                            new CANSparkMax(Constants.RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR, MotorType.kBrushless),
-                            MODULE_ANGLE_PID_CONSTANTS)
+                            new CANSparkMax(RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
+                                    CANSparkMaxLowLevel.MotorType.kBrushless),
+                            Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(Constants.RobotMap.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR, MotorType.kBrushless),
-                            GEAR_REDUCTION,
-                            WHEEL_DIAMETER)
-                    .angleEncoder(
-                            new AnalogInput(Constants.RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER),
-                            Constants.RobotMap.DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET)
+                            new CANSparkMax(RobotMap.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
+                                    CANSparkMaxLowLevel.MotorType.kBrushless),
+                            Mk2SwerveModuleBuilder.MotorType.NEO)
                     .build();
 
     private final SwerveModule[] modules = { frontLeftModule, frontRightModule, backLeftModule, backRightModule };
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
             new PidConstants(0.4, 0.0, 0.025),
-            new PidConstants(5.0, 0.0, 0.0),
+            new PidConstants(-0.5, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveKinematics swerveKinematics = new SwerveKinematics(
@@ -291,7 +285,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         if (stopAtEnd) {
             drive(new Vector2(0, 0), 0, true);
             periodic();
-                    periodic();                
+            periodic();
             periodic();
         }
     }
