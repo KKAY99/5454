@@ -27,7 +27,6 @@ public class DefaultDriveCommand extends CommandBase {
      * @param rotation
      *            The control input for driving right
      */
-    // FIXME SwerveSubsystem to DriveSubsystem
     public DefaultDriveCommand(DrivetrainSubsystem subsystem, DoubleSupplier drive_rcw, DoubleSupplier drive_fwd,
             DoubleSupplier drive_strafe) {
         m_drive = subsystem;

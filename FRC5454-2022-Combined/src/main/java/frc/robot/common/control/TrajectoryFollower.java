@@ -111,6 +111,8 @@ public abstract class TrajectoryFollower<DriveSignalType> {
             timeSinceStart = time - startTime;
         }
 
+        System.out.println("Rotational Velocity: " + rotationalVelocity);
+
         DriveSignalType signal = calculateDriveSignal(currentPose, velocity, rotationalVelocity, trajectory,
                 timeSinceStart, dt);
 

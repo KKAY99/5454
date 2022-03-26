@@ -219,8 +219,8 @@ public class RobotContainer {
         ;
 
         CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem,
-                new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(),
-                        getDriveRotationAxis()));
+                new DriveCommand(drivetrainSubsystem, () -> getDriveForwardAxis(), () -> getDriveStrafeAxis(),
+                        () -> getDriveRotationAxis()));
 
         // force default shoot multiplier
         shuffleobardShooterMultipler.setDouble(1.0);

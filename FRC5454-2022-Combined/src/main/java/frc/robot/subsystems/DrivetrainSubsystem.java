@@ -34,15 +34,15 @@ import frc.robot.common.util.HolonomicFeedforward;
 import java.util.Optional;
 
 public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
-    public static final double TRACKWIDTH = 1.0;
-    public static final double WHEELBASE = 1.0;
+    private static final double TRACKWIDTH = 20.75;
+    private static final double WHEELBASE = 25;
 
     public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-            0.0584,
-            0.00519,
-            0.665);
+        0.0584,
+        0.00519,
+        0.665);
 
-    private static final double GEAR_REDUCTION = 190.0 / 27.0;
+    private static final double GEAR_REDUCTION = 8.31 / 1.0;
     private static final double WHEEL_DIAMETER = 4.0;
     private static final PidConstants MODULE_ANGLE_PID_CONSTANTS = new PidConstants(0.5, 0.0, 0.0001);
 
@@ -235,63 +235,65 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
         synchronized (stateLock) {
-            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, isFieldOriented);
+            driveSignal = new HolonomicDriveSignal(translationalVelocity, -rotationalVelocity, isFieldOriented);
         }
     }
 
-    public void move (double direction, double speed, double distance, boolean stopAtEnd)
-    {       double startDistance;
-            double forward=0;
-            double strafe=0;
-            double rotation=0;
-            startDistance=backLeftModule.getCurrentDistance();
-            switch ((int) direction){
-                    case 0:
-                            forward=1*speed;
-                            strafe=0;
-                            break;
-                    case 45:
-                            forward=1*speed;
-                            strafe=1*speed;
-                            break;
-                   
-                    case 90:
-                            forward=0;
-                            strafe=1*speed;
-                            break;
-                    case 135:
-                            forward=-1*speed;
-                            strafe=1*speed;
-                            break;
-                    case 180:
-                            forward=-1*speed;
-                            strafe=0;
-                            break;
-                    case 225:
-                            forward=-1*speed;
-                            strafe=-1*speed;
-                            break;
-                    case 270:
-                            forward=0;
-                            strafe=-1*speed;
-                            break;
-                    case 315:
-                            forward=1*speed;
-                            strafe=-1*speed;
-                            break;
-                    
-            }
-            double distanceTravelled=backLeftModule.getCurrentDistance()-startDistance;
-            do {
-                  drive(new Vector2(forward, strafe), rotation, true);
-                  periodic();
-                  distanceTravelled=Math.abs(backLeftModule.getCurrentDistance()-startDistance);
-                  System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
-            } while(distanceTravelled<=distance);
-            if (stopAtEnd) {
-                    drive(new Vector2(0,0), 0, true);
+    public void move(double direction, double speed, double distance, boolean stopAtEnd) {
+        double startDistance;
+        double forward = 0;
+        double strafe = 0;
+        double rotation = 0;
+        startDistance = backLeftModule.getCurrentDistance();
+        switch ((int) direction) {
+            case 0:
+                forward = 1 * speed;
+                strafe = 0;
+                break;
+            case 45:
+                forward = 1 * speed;
+                strafe = 1 * speed;
+                break;
+
+            case 90:
+                forward = 0;
+                strafe = 1 * speed;
+                break;
+            case 135:
+                forward = -1 * speed;
+                strafe = 1 * speed;
+                break;
+            case 180:
+                forward = -1 * speed;
+                strafe = 0;
+                break;
+            case 225:
+                forward = -1 * speed;
+                strafe = -1 * speed;
+                break;
+            case 270:
+                forward = 0;
+                strafe = -1 * speed;
+                break;
+            case 315:
+                forward = 1 * speed;
+                strafe = -1 * speed;
+                break;
+
+        }
+        double distanceTravelled = backLeftModule.getCurrentDistance() - startDistance;
+        do {
+            drive(new Vector2(forward, strafe), rotation, true);
+            periodic();
+            distanceTravelled = Math.abs(backLeftModule.getCurrentDistance() - startDistance);
+            System.out.print("(" + forward + ", " + strafe + ") " + distanceTravelled + " / " + distance);
+        } while (distanceTravelled <= distance);
+        if (stopAtEnd) {
+            drive(new Vector2(0, 0), 0, true);
+            periodic();
                     periodic();                
-            }
+            periodic();
+        }
     }
 
     public void resetGyroscope() {
@@ -346,11 +348,13 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
-        } else if (driveSignal.isFieldOriented()) {
+        }
+        else if (driveSignal.isFieldOriented()) {
             chassisVelocity = new ChassisVelocity(
                     driveSignal.getTranslation().rotateBy(getPose().rotation.inverse()),
                     driveSignal.getRotation());
-        } else {
+        }
+        else {
             chassisVelocity = new ChassisVelocity(
                     driveSignal.getTranslation(),
                     driveSignal.getRotation());
@@ -391,7 +395,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
                     driveSignal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
                     driveSignal.getRotation() / RobotController.getBatteryVoltage(),
                     driveSignal.isFieldOriented());
-        } else {
+        }
+        else {
             synchronized (stateLock) {
                 driveSignal = this.driveSignal;
             }
