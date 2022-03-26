@@ -29,7 +29,8 @@ public class TimeDelayCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!m_timerStarted){
+     if (!m_timerStarted){
+      m_timerStarted=true;
       m_timeStart=Timer.getFPGATimestamp();
       m_timeEnd=m_timeStart+m_timeDelay;
       
@@ -45,6 +46,7 @@ public class TimeDelayCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println(Timer.getFPGATimestamp() +  " --" + m_timeEnd);
     if(Timer.getFPGATimestamp()>=m_timeEnd){
       return true;
     }

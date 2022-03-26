@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
     m_autoChooser.addOption(AutoModes.autoMode8, AutoModes.autoMoveShotMoveGrabMoveRightGrabShot2);
     m_autoChooser.addOption(AutoModes.autoMode9, AutoModes.autoMoveGrabTrackLeftShoot);
     m_autoChooser.addOption(AutoModes.autoMode10, AutoModes.autoMoveGrabTrackRightShoot);
-    m_autoChooser.setDefaultOption(AutoModes.autoMode1,AutoModes.autoMoveForward);
+    m_autoChooser.setDefaultOption(AutoModes.autoMode6, AutoModes.autoMoveShootMoveGrabShot1);
     m_delayChooser.addOption(AutoModes.delayMode0,AutoModes.delayValMode0);
     m_delayChooser.addOption(AutoModes.delayMode1,AutoModes.delayValMode1);
     m_delayChooser.addOption(AutoModes.delayMode2,AutoModes.delayValMode2);

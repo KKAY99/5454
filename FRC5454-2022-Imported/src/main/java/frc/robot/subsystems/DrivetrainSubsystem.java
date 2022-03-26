@@ -147,7 +147,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         }
         double distanceTravelled=backLeftModule.getCurrentDistance()-startDistance;
         do {
-              drive(new Translation2d(forward, strafe), rotation, true);
+              drive(new Translation2d(forward, strafe), rotation, false);
               periodic();
               distanceTravelled=Math.abs(backLeftModule.getCurrentDistance()-startDistance);
               System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );

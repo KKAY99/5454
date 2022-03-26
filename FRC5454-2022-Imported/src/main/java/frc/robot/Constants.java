@@ -40,7 +40,7 @@ public final class Constants {
     public static final double turretMinSpeed=0.20;
     public static final double turretInitSpeed=-.30;
     public static final double turretHomeSpeed=0.25;
-    public static final double turretHomePos=-4.12;
+    public static final double turretHomePos=-4.00;
     public static final double TurretTargetRange=5;
     public static final double turretOuterLimit=.4;
     public static final double turretInnerLimit=.2;
@@ -155,7 +155,7 @@ public final class Constants {
         public static final int defaultDelayMode=0;
 
         public static final double LeaveTarmacDistance=80;
-        public static final double GetBallDistance=30;
+        public static final double GetBallDistance=110;
         public static final double GetBall2Distance=50;
         
         public static final double ball2Distance=.5;

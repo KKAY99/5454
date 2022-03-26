@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.classes.SpectrumAxisButton;
@@ -463,20 +465,22 @@ public class RobotContainer {
                 );
             break;
           case AutoModes.autoMoveShootMoveGrabShot1:
-            System.out.println("Auto Shot Move Grab Shoot Pay Executing");
+            System.out.println("xx Auto Shot Move Grab Shoot Pay Executing");
             ParallelCommandGroup resetAndMoveCommand = new ParallelCommandGroup(
-                new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos),    
-                new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeArmMoveCommand(m_Pnuematics,true)
-                );
+                new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos),
+                new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance));
             autoCommand=new SequentialCommandGroup(
-                resetAndMoveCommand,
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
-                new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance),              
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
-                     AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));
-                break;
+                new zIntakeArmMoveCommand(m_Pnuematics,true), 
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),      
+                resetAndMoveCommand,         
+                new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
+                   Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
+                   Constants.TurretTargetRange),    
+                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),  
+                new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,2));
+                //new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
+                //     AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));
+              break;
           case AutoModes.autoMoveShotMoveGrabMoveLeftGrabShot2:
           System.out.println("Auto Shot Move Grab Shoot Got Left");
           ParallelCommandGroup resetAndMove2Command = new ParallelCommandGroup(
