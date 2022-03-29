@@ -12,6 +12,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.InputControllers;
+import frc.robot.classes.LEDStrip;
 import frc.robot.classes.Limelight;
 import frc.robot.classes.SpectrumAxisButton;
 import frc.robot.commands.*;
@@ -31,6 +32,8 @@ public class RobotContainer {
     private final Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,
             Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,
             Constants.LimeLightValues.kVisionXOffset);
+
+    private final LEDStrip m_ledStrip = new LEDStrip(Constants.LEDS.PORT, Constants.LEDS.COUNT);
 
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.TopShooterPort,
@@ -211,8 +214,7 @@ public class RobotContainer {
     public RobotContainer() {
         try {
             autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         autonomousChooser = new AutonomousChooser(autonomousTrajectories);
@@ -229,115 +231,104 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+
+        final ParallelCommandGroup aimAndSpinCommand = new ParallelCommandGroup(
+                new ShooterCommand(m_Shooter, m_Limelight, AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,
+                        false),
+                new DefaultDriveCommand(getDrivetrainSubsystem(),
+                        () -> m_Limelight.getRotationPower(m_Limelight.getX(), 15.0 * m_xBoxDriver.getLeftX()),
+                        () -> m_xBoxDriver.getLeftY(),
+                        () -> m_xBoxDriver.getLeftX()));
+
         // FIXIt when done getting shooter values
         double topSpeed = shuffleboardShooterTop.getDouble(0);
         double bottomSpeed = shuffleboardShooterBottom.getDouble(0);
-
-        final ParallelCommandGroup LoadandShootCommand = new ParallelCommandGroup(
-                new ShooterCommand(m_Shooter, m_Limelight, topSpeed, bottomSpeed, true),
-                new ConveyorCommand(m_Conveyor, Constants.conveyorUpSpeed),
-                new FeederCommand(m_Feeder, Constants.FeederSpeed));
-
+        // final ParallelCommandGroup LoadandShootCommand = new ParallelCommandGroup(new
+        // ShooterCommand(m_Shooter,m_Limelight,topSpeed,bottomSpeed,true),
+        // new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
+        // new FeederCommand(m_Feeder,Constants.FeederSpeed));
+        final zSpinLoadShootDistanceCommand LoadandShootCommand = new zSpinLoadShootDistanceCommand(m_Shooter,
+                m_Conveyor, m_Feeder, m_Limelight);
         final ParallelCommandGroup ManualShootCommand = new ParallelCommandGroup(
                 new ShooterCommand(m_Shooter, m_Limelight, Constants.ManualShots.Shot1Top,
-                        Constants.ManualShots.Shot1Bottom,
-                        false),
+                        Constants.ManualShots.Shot1Bottom, false),
                 new ConveyorCommand(m_Conveyor, Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder, Constants.FeederSpeed));
 
         final SequentialCommandGroup releaseAndResetClimb = new SequentialCommandGroup(
                 new HookCablesReleaseCommand(m_Pnuematics),
                 new ClimbArmResetCommand(m_Pnuematics));
-
         final ParallelCommandGroup ManualShooter1Command = new ParallelCommandGroup(
                 new ShooterCommand(m_Shooter, m_Limelight, Constants.ManualShots.Shot1Top,
-                        Constants.ManualShots.Shot1Bottom,
-                        false),
+                        Constants.ManualShots.Shot1Bottom, false),
                 new ConveyorCommand(m_Conveyor, Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder, Constants.FeederSpeed));
 
         final ParallelCommandGroup ManualShooter2Command = new ParallelCommandGroup(
                 new ShooterCommand(m_Shooter, m_Limelight, Constants.ManualShots.Shot2Top,
-                        Constants.ManualShots.Shot2Bottom,
-                        false),
+                        Constants.ManualShots.Shot2Bottom, false),
                 new ConveyorCommand(m_Conveyor, Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder, Constants.FeederSpeed));
 
         final ParallelCommandGroup ManualShooter3Command = new ParallelCommandGroup(
                 new ShooterCommand(m_Shooter, m_Limelight, Constants.ManualShots.Shot3Top,
-                        Constants.ManualShots.Shot3Bottom,
-                        false),
+                        Constants.ManualShots.Shot3Bottom, false),
                 new ConveyorCommand(m_Conveyor, Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder, Constants.FeederSpeed));
 
         final ParallelCommandGroup ManualShooter4Command = new ParallelCommandGroup(
                 new ShooterCommand(m_Shooter, m_Limelight, Constants.ManualShots.Shot4Top,
-                        Constants.ManualShots.Shot4Bottom,
-                        false),
+                        Constants.ManualShots.Shot4Bottom, false),
                 new ConveyorCommand(m_Conveyor, Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder, Constants.FeederSpeed));
 
         // final ConveyorCommand conveyorUpCommand = new
         // ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed);
-
         // final ConveyorCommand conveyorDownCommand = new
         // ConveyorCommand(m_Conveyor,Constants.conveyorDownSpeed);
-
         final ParallelCommandGroup conveyorUpCommand = new ParallelCommandGroup(
                 new ConveyorCommand(m_Conveyor, Constants.conveyorUpSpeed),
                 new IntakeCommand(m_IntakeInner, Constants.intakeInnerSpeed));
-
         final ParallelCommandGroup conveyorDownCommand = new ParallelCommandGroup(
                 new ConveyorCommand(m_Conveyor, Constants.conveyorDownSpeed),
                 new IntakeCommand(m_IntakeInner, -Constants.intakeInnerSpeed));
-
         // final IntakeCommand intakeInCommand = new
         // IntakeCommand(m_Intake,Constants.intakeSpeed);
-
         // final IntakeCommand intakeOutCommand = new
         // IntakeCommand(m_Intake,-Constants.intakeSpeed);
-
         final zIntakeConveyCommand intakeInCommand = new zIntakeConveyCommand(m_Intake, m_IntakeInner,
-                Constants.intakeSpeed, Constants.intakeInnerSpeed, m_Conveyor,Constants.conveyorUpSpeed, m_Feeder, -Constants.FeederSpeed);
-
+                Constants.intakeSpeed, Constants.intakeInnerSpeed, m_Conveyor, Constants.conveyorUpSpeed, m_Feeder,
+                -Constants.FeederSpeed);
         final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake, m_IntakeInner,
-                -Constants.intakeSpeed,-Constants.intakeInnerSpeed, m_Conveyor, Constants.conveyorDownSpeed, m_Feeder, -Constants.FeederSpeed);
-
+                -Constants.intakeSpeed, -Constants.intakeInnerSpeed, m_Conveyor, Constants.conveyorDownSpeed, m_Feeder,
+                -Constants.FeederSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter, m_Limelight, AutoModes.AutoShotTopSpeed,
                 AutoModes.AutoShotBottomSpeed, false);
-
         final FeederCommand feedUpCommand = new FeederCommand(m_Feeder, Constants.FeederSpeed);
-
         final ClimbCommand climbUpCommand = new ClimbCommand(m_Climb, m_Pnuematics, m_turret, Constants.climbUpSpeed);
-
         final ClimbCommand climbDownCommand = new ClimbCommand(m_Climb, m_Pnuematics, m_turret,
                 Constants.climbDownSpeed);
 
         final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
-
         final ClimbArmCommand climbArmsCommand = new ClimbArmCommand(m_Pnuematics);
-
         final HookCablesCommand climbHooksCommand = new HookCablesCommand(m_Pnuematics);
 
         final TurretCommand turretLeftCommand = new TurretCommand(m_turret, Constants.turretSpeed);
-
         final TurretCommand turretRightCommand = new TurretCommand(m_turret, -Constants.turretSpeed);
-
         final TurretCommand turretStopCommand = new TurretCommand(m_turret, 0);
 
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(getDrivetrainSubsystem(), m_Limelight);
-
         final zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight,
-                Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange);
-
-        // final LatchCommand latchCommand = new LatchCommand(m_Pnuematics);
+                Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange,
+                Constants.TurretTargetRange);
+        // final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
 
         JoystickButton driverAutoShoot = new JoystickButton(m_xBoxDriver, ButtonConstants.DriverAutoShoot);
         shuffleboardAutoShootD.setString("D-Button " + ButtonConstants.DriverAutoShoot);
 
         SpectrumAxisButton operatorAutoShoot = new SpectrumAxisButton(m_xBoxOperator,
-                ButtonConstants.OperatorAutoShootAxis,
-                ButtonConstants.TriggerThreshold, SpectrumAxisButton.ThresholdType.GREATER_THAN);
+                ButtonConstants.OperatorAutoShootAxis, ButtonConstants.TriggerThreshold,
+                SpectrumAxisButton.ThresholdType.GREATER_THAN);
         shuffleboardAutoShootO.setString("Right Trigger");
 
         JoystickButton driverIntakeIn = new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeIn);
@@ -368,11 +359,11 @@ public class RobotContainer {
         POVButton driverTurretRightButton = new POVButton(m_xBoxDriver, ButtonConstants.TurretRightPOV);
 
         SpectrumAxisButton operatorTurretLeft = new SpectrumAxisButton(m_xBoxOperator,
-                ButtonConstants.OperatorTurretAxis,
-                ButtonConstants.JoystickLeftThreshold, SpectrumAxisButton.ThresholdType.GREATER_THAN);
+                ButtonConstants.OperatorTurretAxis, ButtonConstants.JoystickLeftThreshold,
+                SpectrumAxisButton.ThresholdType.GREATER_THAN);
         SpectrumAxisButton operatorTurretRight = new SpectrumAxisButton(m_xBoxOperator,
-                ButtonConstants.OperatorTurretAxis,
-                ButtonConstants.JoystickRightThreshold, SpectrumAxisButton.ThresholdType.LESS_THAN);
+                ButtonConstants.OperatorTurretAxis, ButtonConstants.JoystickRightThreshold,
+                SpectrumAxisButton.ThresholdType.LESS_THAN);
         SpectrumAxisButton operatorTurretAutoFind = new SpectrumAxisButton(m_xBoxOperator,
                 ButtonConstants.OperatorTurretFindAxis, ButtonConstants.JoystickUpThreshold,
                 SpectrumAxisButton.ThresholdType.GREATER_THAN);
@@ -427,8 +418,7 @@ public class RobotContainer {
         operatorTurretRight.whenHeld(turretRightCommand);
         operatorTurretAutoFind.whenHeld(turretAutoCommand);
         operatorTurretAutoFindStop.whenHeld(turretStopCommand); // should force auto command to stop since same
-                                                                // subsystem
-                                                                // requirements
+                                                                // subsystem requirements
         operatorClimbUp.whenHeld(climbUpCommand);
         operatorClimbDown.whenHeld(climbDownCommand);
 
@@ -511,8 +501,7 @@ public class RobotContainer {
         m_Limelight.update();
         if (m_Limelight.isTargetAvailible()) {
             networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());
-        }
-        else {
+        } else {
             networkTableEntryVisionDistance.setDouble(0);
         }
         shuffleboardShooterTopVel.setDouble(m_Shooter.getTopMotorVelocity());
@@ -521,6 +510,8 @@ public class RobotContainer {
         shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
         shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
         m_Shooter.setMultipler(shuffleobardShooterMultipler.getDouble(1.0));
+
+        getLedSubsystem().update();
     }
 
     public void disabledPerioidicUpdates() {
@@ -559,5 +550,9 @@ public class RobotContainer {
 
     public FeederSubsystem getFeederSubsystem() {
         return m_Feeder;
+    }
+
+    public LEDStrip getLedSubsystem() {
+        return m_ledStrip;
     }
 }

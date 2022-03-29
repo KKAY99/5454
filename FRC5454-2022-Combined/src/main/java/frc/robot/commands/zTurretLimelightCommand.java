@@ -4,8 +4,11 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
-
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.classes.Limelight;
  
@@ -18,9 +21,12 @@ public class zTurretLimelightCommand extends CommandBase {
   private double m_speed;
   private double m_maxSpeed;
   private double m_minSpeed;
-
+  private double m_xTolerance;
   private double m_maxRange;
   private CommandState m_state;
+  private double m_shooterStart;
+  private double m_shooterEnd;
+  private double shooterDelay=1;
   public static enum CommandState
     {
         SEARCHING, ONTARGET, SHOOTING;	
@@ -31,7 +37,7 @@ public class zTurretLimelightCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public zTurretLimelightCommand(TurretSubsystem turret,Limelight limelight, double speed,double minSpeed, double range) {
+  public zTurretLimelightCommand(TurretSubsystem turret,Limelight limelight, double speed,double minSpeed, double range, double tolerance) {
     m_TurretSubsystem = turret;
 //    m_ShooterSubsystem= shooter;
 //    m_drive=drive;
@@ -40,6 +46,10 @@ public class zTurretLimelightCommand extends CommandBase {
     m_maxSpeed=speed;
     m_minSpeed=minSpeed;
     m_maxRange=range;
+    m_xTolerance=tolerance;
+    
+
+    
   
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_TurretSubsystem);

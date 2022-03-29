@@ -33,6 +33,6 @@ public class CheckAimAlignmentCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Check this value
-        return m_TurretSubsystem.hasHomed() && m_VisionSubsystem.isOnTargetX() && m_TurretSubsystem.getPower() < 0.05;
+        return m_TurretSubsystem.hasHomed() && m_VisionSubsystem.isOnTargetX() && m_TurretSubsystem.getPower() <= 0.01;
     }
 }

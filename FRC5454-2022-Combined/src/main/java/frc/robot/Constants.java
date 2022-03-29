@@ -33,8 +33,8 @@ public final class Constants {
     public static final int TurretPort = 32;
     public static final int FeederPort = 34;
     public static final int ClimberPort = 36;// 36
-    public static final double intakeSpeed = -.65;
-    public static final double intakeInnerSpeed = 0.65;
+    public static final double intakeSpeed = -.95;
+    public static final double intakeInnerSpeed = 0.95;
     public static final double FeederSpeed = -1.0;
     public static final double conveyorUpSpeed = 0.9;
     public static final double conveyorDownSpeed = -0.5;
@@ -385,6 +385,22 @@ public final class Constants {
         public static double kVisionXToleranceRCW = .5;
         public static double kVisionGyroTolerance = 0.5;
         // #endregion
+    }
+
+    public class LEDS {
+        public static final int PORT = 0;
+        public static final int COUNT = 200;
+
+        public class Colors {
+            public static final int RED = 0;
+            public static final int PINK = 1;
+            public static final int PURPLE = 2;
+            public static final int BLUE = 3;
+            public static final int CYAN = 4;
+            public static final int GREEN = 5;
+            public static final int YELLOW = 6;
+            public static final int ORANGE = 7;
+        }
     }
 
     public static class RobotMap {

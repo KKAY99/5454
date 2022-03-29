@@ -35,7 +35,11 @@ public class AutonomousTrajectories {
 
     private final Trajectory intakeTrajectory;
     private final Path intakeTrajectoryPath = new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
-    .lineTo(new Vector2(18, 0)).build();
+            .lineTo(new Vector2(18, 0)).build();
+
+    private final Trajectory backTrajectory;
+    private final Path backTrajectoryPath = new SimplePathBuilder(new Vector2(70, 0), Rotation2.ZERO)
+            .lineTo(new Vector2(0, 0)).build();
 
     // Possible Auto Paths: (* Represents High Priority)
     // * W -> Transit (Don't do anything but move off the tarmac)
@@ -73,6 +77,10 @@ public class AutonomousTrajectories {
     // HP_W -> F2 -> F3
 
     // HP_E -> F1
+    private final Trajectory HP_E_F1_Trajectory;
+    private static final Path HP_E_F1_Path = new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
+            .lineTo(new Vector2(70, 0)).build();
+
     // HP_E -> F1 -> F2
 
     // HP_C -> F2
@@ -102,6 +110,9 @@ public class AutonomousTrajectories {
         HP_W_F1_Trajectory = new Trajectory(HP_W_F1_Path, trajectoryConstraints);
         HP_W_F2_Trajectory = new Trajectory(HP_W_F2_Path, trajectoryConstraints);
         CL_W_F4_Trajectory = new Trajectory(CL_W_F4_Path, trajectoryConstraints);
+        HP_E_F1_Trajectory = new Trajectory(HP_E_F1_Path, slowConstraints);
+
+        backTrajectory = new Trajectory(backTrajectoryPath, slowConstraints);
     }
 
     public Trajectory get_Intake_Trajectory() {
@@ -130,5 +141,13 @@ public class AutonomousTrajectories {
 
     public Trajectory get_CL_W_F4_Trajectory() {
         return CL_W_F4_Trajectory;
+    }
+
+    public Trajectory get_HP_E_F1_Trajectory() {
+        return HP_E_F1_Trajectory;
+    }
+
+    public Trajectory getBackTrajectory() {
+        return backTrajectory;
     }
 }

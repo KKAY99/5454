@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.commands.*;
 import frc.robot.common.control.Trajectory;
@@ -28,10 +29,14 @@ public class AutonomousChooser {
         autonomousModeChooser.addOption("Center Transit", AutonomousMode.C_TRANSIT);
         autonomousModeChooser.addOption("Edge Transit", AutonomousMode.E_TRANSIT);
 
-        autonomousModeChooser.addOption("Human Player Wall to Friendly 1", AutonomousMode.HP_W_F1);
-        autonomousModeChooser.addOption("Human Player Wall to Friendly 2", AutonomousMode.HP_W_F2);
+        // autonomousModeChooser.addOption("Human Player Wall to Friendly 1",
+        // AutonomousMode.HP_W_F1);
+        // autonomousModeChooser.addOption("Human Player Wall to Friendly 2",
+        // AutonomousMode.HP_W_F2);
 
-        autonomousModeChooser.addOption("Climb Station Wall to Friendly 4", AutonomousMode.CL_W_F4);
+        // autonomousModeChooser.addOption("Climb Station Wall to Friendly 4",
+        // AutonomousMode.CL_W_F4);
+        autonomousModeChooser.addOption("Human Player Edge to Friendly 1", AutonomousMode.HP_E_F1);
         autoTab.add("Mode", autonomousModeChooser)
                 .withSize(5, 1);
     }
@@ -46,7 +51,9 @@ public class AutonomousChooser {
         // reset robot pose
         resetRobotPose(command, container, trajectories.get_Wall_Transit_Trajectory());
         // follow trajectory
-        follow(command, container, trajectories.get_Wall_Transit_Trajectory());
+        // follow(command, container, trajectories.get_Wall_Transit_Trajectory());
+
+        turnToAngle(command, container, 45);
 
         return command;
     }
@@ -118,6 +125,26 @@ public class AutonomousChooser {
         return command;
     }
 
+    private SequentialCommandGroup get_HP_E_F1_Auto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        // reset robot pose
+        resetRobotPose(command, container, trajectories.get_HP_E_F1_Trajectory());
+
+        // follow trajectory and grab the ball
+        followAndIntake(command, container, trajectories.get_HP_E_F1_Trajectory());
+
+        // reset robot pose
+        // resetRobotPose(command, container, trajectories.getBackTrajectory());
+
+        follow(command, container, trajectories.getBackTrajectory());
+
+        // shoot both balls
+        shootAtTarget(command, container);
+
+        return command;
+    }
+
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
             case W_TRANSIT:
@@ -132,13 +159,25 @@ public class AutonomousChooser {
                 return get_HP_W_F2_Auto(container);
             case CL_W_F4:
                 return get_CL_W_F4_Auto(container);
+            case HP_E_F1:
+                return get_HP_E_F1_Auto(container);
         }
 
         return get_W_Transit_Auto(container);
     }
 
     private void follow(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
-        command.addCommands(new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory));
+
+        Command followCommand = new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory);
+
+        if (container.getTurretSubsystem().hasHomed()) {
+            command.addCommands(followCommand);
+        } else {
+            Command turretResetCommand = new zTurretResetCommand(container.getTurretSubsystem(),
+                    Constants.turretInitSpeed,
+                    Constants.turretHomeSpeed, Constants.turretHomePos);
+            command.addCommands(followCommand.alongWith(turretResetCommand));
+        }
     }
 
     private void followAndIntake(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
@@ -147,44 +186,52 @@ public class AutonomousChooser {
         command.addCommands(
                 new FollowTrajectoryCommand(container.getDrivetrainSubsystem(), trajectory)
                         .deadlineWith(
-                                new zIntakeConveyCommand(
+                                new IntakeCommand(
                                         container.getIntakeSubsystems()[0],
-                                        container.getIntakeSubsystems()[1],
-                                        Constants.intakeSpeed,
-                                        Constants.intakeInnerSpeed,
-                                        container.getConveyorSubsystem(),
-                                        Constants.conveyorUpSpeed,
-                                        container.getFeederSubsystem(),
-                                        -Constants.FeederSpeed)
-                                                .withTimeout(0.25)));
+                                        Constants.intakeSpeed)
+                                                .alongWith(new IntakeCommand(container.getIntakeSubsystems()[1],
+                                                        Constants.intakeInnerSpeed))));
 
         command.addCommands(new InstantCommand(() -> container.getPneumaticsSubsystem().setIntakeArms(false)));
     }
 
     private void shootAtTarget(SequentialCommandGroup command, RobotContainer container) {
-        shootAtTarget(command, container, 2.5);
+        shootAtTarget(command, container, 3.5);
+    }
+
+    private void turnToAngle(SequentialCommandGroup command, RobotContainer container, double Angle) {
+        command.addCommands(new TurnToAngleCommand(container.getDrivetrainSubsystem(), Angle));
     }
 
     private void shootAtTarget(SequentialCommandGroup command, RobotContainer container, double timeToWait) {
         command.addCommands(
-                new ParallelCommandGroup(
-                    new zTurretLimelightCommand(container.getTurretSubsystem(), container.getVisionSubsystem(),
-                    Constants.turretSpeed, Constants.turretMinSpeed, Constants.LimeLightValues.targetXPosRange) 
+                new zTurretLimelightCommand(container.getTurretSubsystem(), container.getVisionSubsystem(),
+                        Constants.turretSpeed, Constants.turretMinSpeed,
+                        Constants.LimeLightValues.targetXPosRange,
+                        Constants.TurretTargetRange)
                                 .alongWith(
-                                        new WaitCommand(1).andThen(
-                                            new ParallelCommandGroup(
-                                                new ShooterCommand(container.getShooterSubsystem(), container.getVisionSubsystem(), 800, 800, true),
-                                            new ConveyorCommand(container.getConveyorSubsystem(), Constants.conveyorUpSpeed),
-                                            new FeederCommand(container.getFeederSubsystem(), Constants.FeederSpeed)
-                                                )))
-                                .withTimeout(timeToWait)));
+                                        new CheckAimAlignmentCommand(container.getVisionSubsystem(),
+                                                container.getTurretSubsystem())
+                                                        .andThen(
+                                                                new zSpinLoadShootDistanceCommand(
+                                                                        container.getShooterSubsystem(),
+                                                                        container.getConveyorSubsystem(),
+                                                                        container.getFeederSubsystem(),
+                                                                        container.getVisionSubsystem())
+                                                                                .alongWith(new IntakeCommand(container
+                                                                                        .getIntakeSubsystems()[1],
+                                                                                        Constants.intakeInnerSpeed))))
+                                .withTimeout(timeToWait));
     }
 
     private void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
-        command.addCommands(
-                new InstantCommand(() -> container.getDrivetrainSubsystem().resetGyroAngle(Rotation2.ZERO)));
-        command.addCommands(new InstantCommand(() -> container.getDrivetrainSubsystem().resetPose(
-                new RigidTransform2(trajectory.calculate(0.0).getPathState().getPosition(), Rotation2.ZERO))));
+        // command.addCommands(
+        // new InstantCommand(() ->
+        // container.getDrivetrainSubsystem().resetGyroAngle(Rotation2.ZERO)));
+        // command.addCommands(new InstantCommand(() ->
+        // container.getDrivetrainSubsystem().resetPose(
+        // new RigidTransform2(trajectory.calculate(0.0).getPathState().getPosition(),
+        // Rotation2.ZERO))));
     }
 
     private enum AutonomousMode {
@@ -193,6 +240,7 @@ public class AutonomousChooser {
         E_TRANSIT,
         HP_W_F1,
         HP_W_F2,
-        CL_W_F4
+        CL_W_F4,
+        HP_E_F1,
     }
 }

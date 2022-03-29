@@ -1,11 +1,17 @@
 package frc.robot.classes;
 
 import frc.robot.Constants;
+
+import java.util.Map;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class Limelight {
     private static NetworkTable llTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -22,7 +28,7 @@ public class Limelight {
     private double m_limeLightHeight;
     private double m_mountingAngle;
     private double m_targetDistance = 0;
-    private double m_xOffset=0;
+    private double m_xStaticOffset = 0;
     private boolean m_LimelightLEDOn = false;
 
     private double kP = Constants.LimeLightValues.steeringP;
@@ -32,31 +38,35 @@ public class Limelight {
 
     PIDController limeLightSteeringController = new PIDController(kP, kI, kD);
 
+    boolean dynamicEnabled = true;
+
     public Limelight() {
-        m_targetHeight = 0;
-        m_limeLightHeight = 0;
-        m_mountingAngle = 0;
+        this(0.0, 0.0, 0.0);
     };
 
     public Limelight(double targetHeight, double limeLightHeight, double mountingAngle) {
-        m_targetHeight = targetHeight;
-        m_limeLightHeight = limeLightHeight;
-        m_mountingAngle = mountingAngle;
-    };
-    
-    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet) {
-        m_targetHeight = targetHeight;
-        m_limeLightHeight = limeLightHeight;
-        m_mountingAngle = mountingAngle;
-        m_xOffset=xoffSet;
+        this(targetHeight, limeLightHeight, mountingAngle, Constants.LimeLightValues.kVisionXOffset);
     };
 
-    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle,double xoffSet, double targetDistance) {
+    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet) {
+        this(targetHeight, limeLightHeight, mountingAngle, xoffSet, 0.0);
+    };
+
+    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet,
+            double targetDistance) {
         m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
         m_mountingAngle = mountingAngle;
-        m_xOffset=xoffSet;
+        m_xStaticOffset = xoffSet;
         m_targetDistance = targetDistance;
+
+        if (dynamicEnabled) {
+            System.out.println("Hello");
+            Shuffleboard.getTab("Shooter")
+                    .add("EnableDyamic", true)
+                    .withWidget(BuiltInWidgets.kToggleSwitch)
+                    .getEntry();
+        }
     };
 
     public double getDistance() {
@@ -79,7 +89,7 @@ public class Limelight {
 
     public double getRotationPower(double measurement, double setpoint) {
         if (isTargetAvailible()) {
-            return limeLightSteeringController.calculate(measurement, setpoint) + kFeedForward;     
+            return limeLightSteeringController.calculate(measurement, setpoint) + kFeedForward;
         }
         return 0.0;
     }
@@ -94,16 +104,46 @@ public class Limelight {
     // return 0.115*Math.pow(Math.abs(error), 0.5);
     // }
 
-    public setOffset(double newOffSet) {
-        m_xOffset=newOffSet;
+    private static double[] distanceValues = new double[] { ShooterSubsystem.distanceValues[0],
+            ShooterSubsystem.distanceValues[ShooterSubsystem.distanceValues.length - 1] };
+
+    public double getOffset(double offsetValues[], double distance) {
+        int i = 0;
+        try {
+            distance = Math.max(distance, 0);
+            for (i = 0; i < distanceValues.length; i++) {
+                if (distanceValues[i] == distance) {
+                    return offsetValues[i];
+                } else if (distanceValues[i] > distance) {
+                    return getEquation(distance, distanceValues[i], offsetValues[i], distanceValues[i - 1],
+                            offsetValues[i - 1]);
+                } else if (distance > distanceValues[distanceValues.length - 1]) {
+                    return offsetValues[distanceValues.length - 1];
+                }
+            }
+            return m_xStaticOffset;
+        } catch (Exception e) {
+            System.out.println("Exception Error in getOffset value i (" + i + ") " + e.getMessage());
+            return m_xStaticOffset;
+        }
     }
-    public double getOffSet(){
-        return m_xOffset;
+
+    private static double getEquation(double value, double xOne, double yOne, double xTwo, double yTwo) {
+        double slope = (yTwo - yOne) / (xTwo - xOne);
+        return (slope * (value - xOne)) + yOne;
     }
+
+    private static double[] offsetValues = new double[] { Constants.LimeLightValues.kVisionXMinDistanceOffset,
+            Constants.LimeLightValues.kVisionXMaxDistanceOffset };
+
     public double getX() {
-        
-        return tx.getDouble(0.0)+ m_xOffset;
+        if (dynamicEnabled) {
+            return tx.getDouble(0.0) + getOffset(offsetValues, getDistance());
+        } else {
+            return tx.getDouble(0.0) + m_xStaticOffset;
+        }
     }
+
     public double getactualX() {
         return tx.getDouble(0.0);
     }
@@ -167,20 +207,20 @@ public class Limelight {
     public boolean isOnTargetX() {
         boolean returnValue = false;
         if (isTargetAvailible()) {
-            if ((Math.abs(getX())< Constants.LimeLightValues.kVisionXTolerance)) {
-           //     System.out.println("On Target -" + Math.abs(getX()
-           //         ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-                        returnValue = true;
+            if ((Math.abs(getX()) < Constants.LimeLightValues.kVisionXTolerance)) {
+                // System.out.println("On Target -" + Math.abs(getX()
+                // ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+                returnValue = true;
             } else {
-             //   System.out.println("Off Target -" + Math.abs(getX()
-            //) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-       
+                // System.out.println("Off Target -" + Math.abs(getX()
+                // ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+
             }
 
-        }else {
-        //    System.out.println("Off Target -" + Math.abs(getX()
-        //    ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-       
+        } else {
+            // System.out.println("Off Target -" + Math.abs(getX()
+            // ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
+
         }
 
         return returnValue;

@@ -197,8 +197,8 @@ public final class Constants {
         public static final double kVisionDistanceTolerance = 5;
         public static final double kVisionXTolerance = 1.7;
         public static final double kVisionXOffset=3.7; // was 1.7
-        //public static final double kVisionXTolerance = 5;
-        //public static final double kVisionXOffset=-2;
+        public static final double kVisionXMaxDistanceOffset=4.31; // was 1.7
+        public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
     public static final class SwerveDriveGB {
