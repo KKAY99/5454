@@ -52,7 +52,7 @@ private static double[] powerBottomValues = {
     1110 //16
 };
 
-private static double[] distanceValues = {
+public static double[] distanceValues = {
     39.5, //1
     49.6, //2
     59.5, //3

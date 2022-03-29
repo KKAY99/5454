@@ -259,12 +259,6 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-
-        final ParallelCommandGroup aimAndSpinCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false),
-              new DefaultDriveCommand(m_RobotDrive,
-                () -> m_Limelight.getRotationPower(m_Limelight.getX(), 15.0 * m_xBoxDriver.getLeftX()),
-                () -> m_xBoxDriver.getLeftY(),
-                () -> m_xBoxDriver.getLeftX()));
         
         //FIXIt when done getting shooter values
         double topSpeed=shuffleboardShooterTop.getDouble(0);
