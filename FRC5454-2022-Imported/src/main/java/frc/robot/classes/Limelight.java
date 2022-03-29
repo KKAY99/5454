@@ -94,6 +94,12 @@ public class Limelight {
     // return 0.115*Math.pow(Math.abs(error), 0.5);
     // }
 
+    public setOffset(double newOffSet) {
+        m_xOffset=newOffSet;
+    }
+    public double getOffSet(){
+        return m_xOffset;
+    }
     public double getX() {
         
         return tx.getDouble(0.0)+ m_xOffset;
