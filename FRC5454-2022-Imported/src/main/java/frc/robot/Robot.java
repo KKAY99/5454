@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.resetDriveModes();
-    
+    m_robotContainer.LEDDisableMode();
   }
 
   @Override
@@ -109,6 +109,7 @@ public class Robot extends TimedRobot {
   }
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
+    m_robotContainer.LEDTAutoMode();
     //m_robotContainer.resetTurret(); move to command groups
     m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_autoChooser.getSelected());
     
@@ -134,6 +135,7 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
+    m_robotContainer.LEDTeleopMode();
     m_robotContainer.resetTurret();
     
   }

@@ -29,15 +29,15 @@ public final class Constants {
     public static final int TurretPort=32;
     public static final int FeederPort=34;
     public static final int ClimberPort=36;//36
-    public static final double intakeSpeed=-.85; //.65
-    public static final double intakeInnerSpeed=0.65;
+    public static final double intakeSpeed=-.95; //.65
+    public static final double intakeInnerSpeed=0.95;
     public static final double FeederSpeed=-1.0;
     public static final double conveyorUpSpeed=0.9;
     public static final double conveyorDownSpeed=-0.5;
     public static final double climbUpSpeed=.7;
     public static final double climbDownSpeed=-.9;
     public static final double turretSpeed=0.50;
-    public static final double turretMinSpeed=0.20;
+    public static final double turretMinSpeed=0.15;
     public static final double turretInitSpeed=-.30;
     public static final double turretHomeSpeed=0.25;
     public static final double turretHomePos=-4.00;
@@ -195,12 +195,15 @@ public final class Constants {
         public static final double limelightHeight = 44; //37
         public static final double limelightAngle = 36; //40
         public static final double kVisionDistanceTolerance = 5;
-        public static final double kVisionXTolerance = 1.7;
-        public static final double kVisionXOffset=3.7; // was 1.7
+        public static final double kVisionXTolerance = 1.5;
+        //public static final double kVisionXOffset=3.7; // was 1.7
+        public static final double kVisionXOffset=4;
         public static final double kVisionXMaxDistanceOffset=4.31; // was 1.7
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
+    public static final double shooterSweetSpotLow=60;
+    public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGB {
         public static final int kSlotIdx = 0;
         /*
@@ -259,6 +262,22 @@ public final class Constants {
         public static int kBackRightDrive = 6;
         // #endr
     }
+    public class LEDS {
+        public static final int PORT = 0;
+        public static final int COUNT = 250;
+
+        public class Colors {
+            public static final int RED = 0;
+            public static final int PINK = 1;
+            public static final int PURPLE = 2;
+            public static final int BLUE = 3;
+            public static final int CYAN = 4;
+            public static final int GREEN = 5;
+            public static final int YELLOW = 6;
+            public static final int ORANGE = 7;
+        }
+    }
+
     public static final class SwerveDriveNEO {
         public static final int kSlotIdx = 0;
         /*

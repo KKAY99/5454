@@ -25,7 +25,9 @@ import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.zAutomation;
+import frc.robot.Constants.LEDS.Colors;
 import frc.robot.classes.Limelight;
+import frc.robot.classes.LEDStrip;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -49,8 +51,19 @@ public class RobotContainer {
    //private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();+
 
     private final Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,Constants.LimeLightValues.kVisionXOffset);
-  
-
+    
+     private final LEDStrip m_ledStrip = new LEDStrip(Constants.LEDS.PORT, Constants.LEDS.COUNT);
+     private static enum LEDMode
+     {
+                     DISBLED, AUTOMODE, OFFTARGET, ONTARGETSWEET,ONTARGET,SHOOTING,CLIMBING,TELEOP;	
+     }
+     private LEDMode m_LEDMode=LEDMode.DISBLED;
+     private static final int LEDMODE_WAVE = 0;
+     private static final int LEDMODE_BAR = 1;
+     private static final int LEDMODE_RAINBOW = 2;
+     private static final int LEDMODE_SOLID = 3;
+     private static final int LEDMODE_OFF = 4;
+     
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.TopShooterPort,Constants.BottomShooterPort);
     private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
@@ -223,6 +236,8 @@ public class RobotContainer {
     static NetworkTableEntry shuffleobardShooterMultipler=ShooterTab.add("Shooter Adjustment",1.0)
                                 .getEntry();
 
+    static NetworkTableEntry shuffleobardLimelightAdj=ShooterTab.add("Limelight Adjustment",Constants.LimeLightValues.kVisionXOffset)
+                                .getEntry();
  
     static String ShuffleboardLogString;
     // #endregion
@@ -237,8 +252,6 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        //force default shoot multiplier 
-        shuffleobardShooterMultipler.setDouble(1.0); 
         // Configure the button bindings
         configureButtonBindings();
 
@@ -557,18 +570,31 @@ public class RobotContainer {
         backLeftAngle.setDouble(m_RobotDrive.getBackLeftAngle());
         backRightAngle.setDouble(m_RobotDrive.getbackRightAngle());
         m_Limelight.update();
+
         if(m_Limelight.isTargetAvailible()){              
-                networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());
+                networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());                
+                if((m_Limelight.getDistance()>=Constants.shooterSweetSpotLow) && (m_Limelight.getDistance()<=Constants.shooterSweetSpotHigh)){
+                        m_LEDMode=LEDMode.ONTARGETSWEET;                       
+                }else{
+                        m_LEDMode=LEDMode.ONTARGET;
+                }
         }else {
+               m_LEDMode=LEDMode.OFFTARGET;
                 networkTableEntryVisionDistance.setDouble(0);
         }
         shuffleboardShooterTopVel.setDouble(m_Shooter.getTopMotorVelocity());
         shuffleboardShooterBottomVel.setDouble(m_Shooter.getBottomMotorVelocity());
+        //if shooter is spinning more than just basic moving
+        if(m_Shooter.getBottomMotorVelocity()>300){
+                m_LEDMode=LEDMode.SHOOTING;
+        }
         shuffleboardTurretPos.setString(" " + m_turret.getPosition());
         shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
         shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
         m_Shooter.setMultipler(shuffleobardShooterMultipler.getDouble(1.0));
-    }
+        m_Limelight.setOffSet((shuffleobardLimelightAdj.getDouble(Constants.LimeLightValues.kVisionXOffset)));
+        LEDUpdate();
+}
     public void disabledPerioidicUpdates(){
          shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
         shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
@@ -590,5 +616,52 @@ public class RobotContainer {
     }
     public void resetDriveModes(){
 //        m_RobotDrive.resetDriveMode();
+    }
+    private void LEDUpdate(){
+            if(m_LEDMode==LEDMode.ONTARGET){
+                m_ledStrip.setColor(Colors.GREEN);
+                m_ledStrip.setMode(LEDMODE_SOLID);
+            }
+            if(m_LEDMode==LEDMode.ONTARGETSWEET){
+                m_ledStrip.setColor(Colors.ORANGE);
+                m_ledStrip.setMode(LEDMODE_SOLID);
+            }
+            if(m_LEDMode==LEDMode.OFFTARGET){
+                m_ledStrip.setColor(Colors.RED);
+                m_ledStrip.setMode(LEDMODE_SOLID);
+            }
+            if(m_LEDMode==LEDMode.SHOOTING){
+                m_ledStrip.setColor(Colors.BLUE);
+                m_ledStrip.setMode(LEDMODE_WAVE);
+            }
+            if(m_LEDMode==LEDMode.CLIMBING){
+                m_ledStrip.setColor(Colors.ORANGE);
+                m_ledStrip.setMode(LEDMODE_SOLID);
+            }
+            if(m_LEDMode==LEDMode.AUTOMODE){
+                m_ledStrip.setMode(LEDMODE_RAINBOW);
+            }
+            if(m_LEDMode==LEDMode.DISBLED){
+                m_ledStrip.setMode(LEDMODE_WAVE);
+                m_ledStrip.setColor(Colors.PURPLE);
+            }
+            if(m_LEDMode==LEDMode.TELEOP){
+                m_ledStrip.setMode(LEDMODE_WAVE);
+                m_ledStrip.setColor(Colors.YELLOW);
+            }
+//          System.out.println(m_LEDMode.toString() + " - " + m_ledStrip.getMode() + " -- " + m_ledStrip.getColor());
+            m_ledStrip.update();
+    }
+    public void LEDTeleopMode(){
+            m_LEDMode=LEDMode.TELEOP;
+            LEDUpdate();
+    }
+    public void LEDTAutoMode(){
+        m_LEDMode=LEDMode.AUTOMODE;
+        LEDUpdate();
+        }
+    public void LEDDisableMode(){
+        m_LEDMode=LEDMode.DISBLED;
+        LEDUpdate();
     }
 }

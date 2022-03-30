@@ -38,7 +38,7 @@ public class Limelight {
 
     PIDController limeLightSteeringController = new PIDController(kP, kI, kD);
 
-    boolean dynamicEnabled = true;
+    boolean m_dynamicEnabled = false;
 
     public Limelight() {
         this(0.0, 0.0, 0.0);
@@ -59,16 +59,14 @@ public class Limelight {
         m_mountingAngle = mountingAngle;
         m_xStaticOffset = xoffSet;
         m_targetDistance = targetDistance;
-
-        if (dynamicEnabled) {
-            System.out.println("Hello");
-            Shuffleboard.getTab("Shooter")
-                    .add("EnableDyamic", true)
-                    .withWidget(BuiltInWidgets.kToggleSwitch)
-                    .getEntry();
-        }
     };
 
+    public double getOffset(){
+        return m_xStaticOffset;
+    }
+    public void setOffSet(double newValue){
+        m_xStaticOffset=newValue;
+    }
     public double getDistance() {
         double distance = 0;
         // FROM Limelight Docs
@@ -137,7 +135,7 @@ public class Limelight {
             Constants.LimeLightValues.kVisionXMaxDistanceOffset };
 
     public double getX() {
-        if (dynamicEnabled) {
+        if (m_dynamicEnabled) {
             return tx.getDouble(0.0) + getOffset(offsetValues, getDistance());
         } else {
             return tx.getDouble(0.0) + m_xStaticOffset;
