@@ -49,6 +49,7 @@ public class LEDStrip {
     }
 
     public void update() {
+        System.out.println("mode - " + this.mode);
         if (this.mode == 0 || this.mode == 3) {
             this.wave();
         } else if (this.mode == 1) {
@@ -81,6 +82,7 @@ public class LEDStrip {
 
     private void wave() {
         // set the hue to the selected color
+        
         int hue = 0;
         switch (color) {
             case Colors.RED:
@@ -115,7 +117,7 @@ public class LEDStrip {
                 hue = 11;
                 break;
         }
-
+        System.out.println("LED H" + hue + " - " + color );
         if (this.mode == 0) {
             // draw leds as animation
             if (this.entering) {
@@ -197,8 +199,8 @@ public class LEDStrip {
         m_led.setData(m_ledBuffer);
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public void setColor(int newcolor) {
+        this.color = newcolor;
     }
     public int getColor(){
         return this.color;
@@ -208,8 +210,8 @@ public class LEDStrip {
         this.percentage = percentage;
     }
 
-    public void setMode(int mode) {
-        this.mode = mode;
+    public void setMode(int newmode) {
+        this.mode = newmode;
     }
 
     public int getMode() {

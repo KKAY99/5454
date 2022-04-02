@@ -4,45 +4,45 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
 
 /** An example command that uses an example subsystem. */
 public class zIntakeTimeCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final IntakeSubsystem m_IntakeSubsystem;
-  private final IntakeSubsystem m_InnerIntakeSubsystem;
-  private final double m_OuterSpeed;
-  private final double m_InnerSpeed;
-  private final double m_duration;
+  private final ConveyorSubsystem m_conveyor;
+  private final FeederSubsystem m_feeder;
+  private final IntakeSubsystem m_intake;
+  private final IntakeSubsystem m_intakeInner;
+  private final double m_conveyorSpeed;
+  private final double m_intakeOutSpeed;
+  private final double m_intakeInnerSpeed;
+  private final double m_feederSpeed;
+
   private final boolean m_keepRunning;
-  private boolean m_isFinished=false;
+ 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public zIntakeTimeCommand(IntakeSubsystem intake,IntakeSubsystem innerIntake, double innerSpeed,double outerSpeed,double duration,boolean keepRunning){ 
-    m_IntakeSubsystem = intake;
-    m_InnerIntakeSubsystem=innerIntake;
-    m_InnerSpeed=innerSpeed;
-    m_OuterSpeed=outerSpeed;
-    m_duration=duration;
+   
+  public zIntakeTimeCommand(IntakeSubsystem intake, IntakeSubsystem intakeInner,double intakeOutSpeed,double intakeInnerSpeed, ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed,boolean keepRunning){ 
+    m_conveyor=conveyor;
+    m_feeder=feeder;
+    m_intake=intake;
+    m_intakeInner=intakeInner;
+    m_conveyorSpeed=conveyorSpeed;
+    m_feederSpeed=feederSpeed;
+    m_intakeOutSpeed=intakeOutSpeed;
+    m_intakeInnerSpeed=intakeInnerSpeed;
     m_keepRunning=keepRunning;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_IntakeSubsystem);
-  }
-  public zIntakeTimeCommand(IntakeSubsystem intake,IntakeSubsystem innerIntake,double speed,double duration){ 
-    m_IntakeSubsystem = intake;
-    m_InnerIntakeSubsystem=innerIntake;
-    m_InnerSpeed=speed;
-    m_OuterSpeed=speed;
-    m_duration=duration;
-    m_keepRunning=false;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_IntakeSubsystem);
-    addRequirements(m_InnerIntakeSubsystem);
+    addRequirements(m_intake);
+    addRequirements(m_intakeInner);
+    addRequirements(m_conveyor);
+    addRequirements(m_feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -53,30 +53,28 @@ public class zIntakeTimeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double startTime=Timer.getFPGATimestamp();
-    double currentTime=Timer.getFPGATimestamp();
-    startTime=Timer.getFPGATimestamp();
-    do {
-      m_IntakeSubsystem.runIntake(m_OuterSpeed);
-      m_InnerIntakeSubsystem.runIntake(m_InnerSpeed);
-      currentTime=Timer.getFPGATimestamp();
-      System.out.println(startTime + " - " + currentTime);
-    }while(currentTime<=startTime+m_duration);
-     m_isFinished=true;
+
+      m_conveyor.run(m_conveyorSpeed);
+      m_intake.runIntake(m_intakeOutSpeed);
+      m_intakeInner.runIntake(m_intakeInnerSpeed);
+      m_feeder.run(m_feederSpeed);
+ 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     if(m_keepRunning==false){
-      m_IntakeSubsystem.stopIntake();
-      m_InnerIntakeSubsystem.stopIntake();
+      m_conveyor.stop();
+      m_feeder.stop();
+      m_intake.stopIntake();
+      m_intakeInner.stopIntake();
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_isFinished;
+    return true;
   }
 }

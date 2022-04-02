@@ -30,7 +30,7 @@ public final class Constants {
     public static final int FeederPort=34;
     public static final int ClimberPort=36;//36
     public static final double intakeSpeed=-.95; //.65
-    public static final double intakeInnerSpeed=0.95;
+    public static final double intakeInnerSpeed=0.70;
     public static final double FeederSpeed=-1.0;
     public static final double conveyorUpSpeed=0.9;
     public static final double conveyorDownSpeed=-0.5;
@@ -155,7 +155,7 @@ public final class Constants {
         public static final int defaultDelayMode=0;
 
         public static final double LeaveTarmacDistance=80;
-        public static final double GetBallDistance=110;
+        public static final double GetBallDistance=100;
         public static final double GetBall2Distance=50;
         
         public static final double ball2Distance=.5;
@@ -215,7 +215,7 @@ public final class Constants {
         /*
          * Set to zero to skip waiting for confirmation, set to nonzero to wait and
          * report to DS if action fails.
-         */
+         */                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
         public static final int kTimeoutMs = 30;
 
         /* Choose so that Talon does not report sensor out of phase */
@@ -264,7 +264,8 @@ public final class Constants {
     }
     public class LEDS {
         public static final int PORT = 0;
-        public static final int COUNT = 250;
+        public static final int COUNT = 215;
+        ;
 
         public class Colors {
             public static final int RED = 0;

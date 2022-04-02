@@ -38,6 +38,16 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    // Make sure you only configure port forwarding once in your robot code.
+    // Do not place these function calls in any periodic functions
+    PortForwarder.add(5800, "limelight.local", 5800);
+    PortForwarder.add(5801, "limelight.local", 5801);
+    PortForwarder.add(5802, "limelight.local", 5802);
+    PortForwarder.add(5803, "limelight.local", 5803);
+    PortForwarder.add(5804, "limelight.local", 5804);
+    PortForwarder.add(5805, "limelight.local", 5805);
+    
     m_autoChooser.addOption(AutoModes.autoMode0, AutoModes.autoNothing);
     m_autoChooser.addOption(AutoModes.autoMode1, AutoModes.autoMoveForward);
     m_autoChooser.addOption(AutoModes.autoMode2, AutoModes.autoMoveShoot);
@@ -109,7 +119,7 @@ public class Robot extends TimedRobot {
   }
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
-    m_robotContainer.LEDTAutoMode();
+    m_robotContainer.LEDAutoMode();
     //m_robotContainer.resetTurret(); move to command groups
     m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_autoChooser.getSelected());
     

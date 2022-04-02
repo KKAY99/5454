@@ -452,7 +452,7 @@ public class RobotContainer {
             break;
           case AutoModes.autoMoveBackwardsOutake:
           autoCommand=new SequentialCommandGroup(
-                new zIntakeTimeCommand(m_Intake,m_IntakeInner,-Constants.intakeInnerSpeed, -Constants.intakeSpeed,0,true),
+        //        new zIntakeTimeCommandm_Intake,m_IntakeInner,-Constants.intakeSpeed, -Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance)           
                 );
             break;
@@ -466,9 +466,9 @@ public class RobotContainer {
           case AutoModes.autoMoveShootMoveGrab:
                 autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
-                new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false)
+           //     new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
+                new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance)
+           //     new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false)
                 );
             break;
           case AutoModes.autoMoveShootMoveGrabShot1:
@@ -478,14 +478,15 @@ public class RobotContainer {
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance));
             autoCommand=new SequentialCommandGroup(
                 new zIntakeArmMoveCommand(m_Pnuematics,true), 
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),      
+                new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
                 resetAndMoveCommand,         
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),  
-                new AutoMoveCommand(m_RobotDrive,180,AutoModes.GetBallDistance/2),
-                new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
-                   Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
-                   Constants.TurretTargetRange),                       
-                new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,2));
+                new WaitCommand(1),
+                new AutoMoveCommand(m_RobotDrive,180,AutoModes.GetBallDistance/1.5),
+                new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
+               // new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
+               //    Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
+               //    Constants.TurretTargetRange),                       
+                new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,5));
                 //new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
                 //     AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));
               break;
@@ -498,27 +499,27 @@ public class RobotContainer {
               );
           autoCommand=new SequentialCommandGroup(
               resetAndMove2Command,
-              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
+  //            new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
               new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance),              
-              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),
+    //          new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,false),
               new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
                    AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
-              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
+      //        new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true),
               new AutoMoveCommand(m_RobotDrive,45,AutoModes.GetBall2Distance),
               new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,
                    Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
                    Constants.TurretTargetRange),
               new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
-                   AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity),
-              new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true));
-                
+                   AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity)
+        //      new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeInnerSpeed,Constants.intakeSpeed,0,true));
+          );
               break;
        
           case AutoModes.autoMoveShotMoveGrabMoveRightGrabShot2:
           autoCommand=new SequentialCommandGroup(
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-                new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,zAutomation.intakeTime),
+             //   new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,zAutomation.intakeTime),
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
                 new AutoMoveCommand(m_RobotDrive,90,AutoModes.ball2Distance),
                 new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity));
@@ -623,7 +624,7 @@ public class RobotContainer {
                 m_ledStrip.setMode(LEDMODE_SOLID);
             }
             if(m_LEDMode==LEDMode.ONTARGETSWEET){
-                m_ledStrip.setColor(Colors.ORANGE);
+                m_ledStrip.setColor(Colors.PURPLE);
                 m_ledStrip.setMode(LEDMODE_SOLID);
             }
             if(m_LEDMode==LEDMode.OFFTARGET){
@@ -632,31 +633,32 @@ public class RobotContainer {
             }
             if(m_LEDMode==LEDMode.SHOOTING){
                 m_ledStrip.setColor(Colors.BLUE);
-                m_ledStrip.setMode(LEDMODE_WAVE);
+                m_ledStrip.setMode(LEDMODE_SOLID);
             }
             if(m_LEDMode==LEDMode.CLIMBING){
                 m_ledStrip.setColor(Colors.ORANGE);
                 m_ledStrip.setMode(LEDMODE_SOLID);
             }
             if(m_LEDMode==LEDMode.AUTOMODE){
+                m_ledStrip.setColor(Colors.PURPLE);
                 m_ledStrip.setMode(LEDMODE_RAINBOW);
             }
             if(m_LEDMode==LEDMode.DISBLED){
-                m_ledStrip.setMode(LEDMODE_WAVE);
+                m_ledStrip.setMode(LEDMODE_SOLID);
                 m_ledStrip.setColor(Colors.PURPLE);
             }
             if(m_LEDMode==LEDMode.TELEOP){
                 m_ledStrip.setMode(LEDMODE_WAVE);
-                m_ledStrip.setColor(Colors.YELLOW);
+                m_ledStrip.setColor(Colors.PINK);
             }
-//          System.out.println(m_LEDMode.toString() + " - " + m_ledStrip.getMode() + " -- " + m_ledStrip.getColor());
+          System.out.println(m_LEDMode.toString() + " - " + m_ledStrip.getMode() + " -- " + m_ledStrip.getColor());
             m_ledStrip.update();
     }
     public void LEDTeleopMode(){
             m_LEDMode=LEDMode.TELEOP;
             LEDUpdate();
     }
-    public void LEDTAutoMode(){
+    public void LEDAutoMode(){
         m_LEDMode=LEDMode.AUTOMODE;
         LEDUpdate();
         }

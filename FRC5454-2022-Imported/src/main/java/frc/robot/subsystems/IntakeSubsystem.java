@@ -16,7 +16,8 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem(Integer IntakeMotorPort) {
     m_IntakeMotor = new CANSparkMax(IntakeMotorPort, MotorType.kBrushed);   
     m_IntakeMotor.setOpenLoopRampRate(0.25);
-   
+    m_IntakeMotor.setSmartCurrentLimit(30);  // likely gets ignored due to brushed motor
+    m_IntakeMotor.setSecondaryCurrentLimit(30); //Set as well at 30
   }
   public void runIntake(double power) {
     m_IntakeMotor.set(power);
