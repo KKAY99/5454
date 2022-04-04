@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.*;
@@ -99,7 +100,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.resetDriveModes();
-    m_robotContainer.LEDDisableMode();
+    m_robotContainer.DisableMode();
   }
 
   @Override
@@ -145,7 +146,7 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
-    m_robotContainer.LEDTeleopMode();
+    m_robotContainer.TeleopMode();
     m_robotContainer.resetTurret();
     
   }

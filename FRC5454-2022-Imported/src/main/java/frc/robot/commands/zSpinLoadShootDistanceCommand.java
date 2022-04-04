@@ -59,7 +59,7 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
     //allow shooter to keep running for auto
           m_conveyor.stop();
       m_feeder.stop();
-      m_shooter.stop();
+      m_shooter.stopShooting();
     
     }
 

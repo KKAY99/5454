@@ -65,7 +65,7 @@ public class RobotContainer {
      private static final int LEDMODE_OFF = 4;
      
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
-    private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.TopShooterPort,Constants.BottomShooterPort);
+    private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.TopShooterPort,Constants.BottomShooterPort,Constants.shooterPrimedSpeed);
     private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
     private final FeederSubsystem m_Feeder= new FeederSubsystem(Constants.FeederPort);
     private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
@@ -483,9 +483,9 @@ public class RobotContainer {
                 new WaitCommand(1),
                 new AutoMoveCommand(m_RobotDrive,180,AutoModes.GetBallDistance/1.5),
                 new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
-               // new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
-               //    Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
-               //    Constants.TurretTargetRange),                       
+                new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
+                   Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
+                   Constants.TurretTargetRange),                       
                 new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,5));
                 //new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
                 //     AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));
@@ -654,16 +654,19 @@ public class RobotContainer {
           System.out.println(m_LEDMode.toString() + " - " + m_ledStrip.getMode() + " -- " + m_ledStrip.getColor());
             m_ledStrip.update();
     }
-    public void LEDTeleopMode(){
-            m_LEDMode=LEDMode.TELEOP;
-            LEDUpdate();
-    }
+  
     public void LEDAutoMode(){
         m_LEDMode=LEDMode.AUTOMODE;
         LEDUpdate();
         }
-    public void LEDDisableMode(){
-        m_LEDMode=LEDMode.DISBLED;
+    public void TeleopMode(){
+        m_Shooter.stopShooting(); // set to primed value
+        m_LEDMode=LEDMode.TELEOP;
         LEDUpdate();
+}
+    public void DisableMode(){
+            m_Shooter.stopShooter();
+            m_LEDMode=LEDMode.DISBLED;
+            LEDUpdate();
     }
 }

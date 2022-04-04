@@ -72,7 +72,7 @@ public double getMinVelocity(){
     System.out.println("outside conveyeor loop");
     m_conveyor.stop();
     m_feeder.stop();
-    m_shooter.stop();
+    m_shooter.stopShooting();
     m_isFinished=true;
   }
 

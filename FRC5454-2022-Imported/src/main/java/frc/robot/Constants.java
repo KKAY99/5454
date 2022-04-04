@@ -202,6 +202,7 @@ public final class Constants {
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
+    public static final double shooterPrimedSpeed=500;
     public static final double shooterSweetSpotLow=60;
     public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGB {

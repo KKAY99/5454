@@ -14,6 +14,7 @@ public class ShooterSubsystem implements Subsystem {
   private static double m_defaultTopSpeed=775;
   private static double m_defaultBottomSpeed=775;
   private static double kGearRatio=6;
+  private static double m_PrimeSpeed;
   private static double[] powerTopValues = {
     775,//1
     775,//2
@@ -71,7 +72,8 @@ public static double[] distanceValues = {
     189.5,//16
 };
   /** Creates a new ExampleSubsystem. */
-  public ShooterSubsystem(Integer BottomPort, Integer TopPort) {
+  public ShooterSubsystem(Integer BottomPort, Integer TopPort,double primeSpeed) {
+    m_PrimeSpeed=primeSpeed;
     m_Bottom_ShooterMotor = new TalonFX(BottomPort);
     m_Top_ShooterMotor = new TalonFX(TopPort);
     
@@ -176,9 +178,14 @@ public static double[] distanceValues = {
     return (slope * (value - xOne)) + yOne;
   }
   
-  public void stop() {
-    m_Bottom_ShooterMotor.set(ControlMode.PercentOutput, 0.0);
-    m_Top_ShooterMotor.set(ControlMode.PercentOutput, 0.0);
+  public void stopShooting() {
+    m_Bottom_ShooterMotor.set(ControlMode.Velocity, m_PrimeSpeed);
+    m_Top_ShooterMotor.set(ControlMode.Velocity, m_PrimeSpeed);
+  }
+
+  public void stopShooter(){
+    m_Bottom_ShooterMotor.set(ControlMode.PercentOutput,0);
+    m_Top_ShooterMotor.set(ControlMode.PercentOutput, 0);
   }
 
   @Override
