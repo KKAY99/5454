@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -55,7 +56,7 @@ public class RobotContainer {
      private final LEDStrip m_ledStrip = new LEDStrip(Constants.LEDS.PORT, Constants.LEDS.COUNT);
      private static enum LEDMode
      {
-                     DISBLED, AUTOMODE, OFFTARGET, ONTARGETSWEET,ONTARGET,SHOOTING,CLIMBING,TELEOP;	
+                     NOTSET,DISBLED, AUTOMODE, OFFTARGET, ONTARGETSWEET,ONTARGET,SHOOTING,CLIMBING,TELEOP;	
      }
      private LEDMode m_LEDMode=LEDMode.DISBLED;
      private static final int LEDMODE_WAVE = 0;
@@ -63,6 +64,7 @@ public class RobotContainer {
      private static final int LEDMODE_RAINBOW = 2;
      private static final int LEDMODE_SOLID = 3;
      private static final int LEDMODE_OFF = 4;
+     private LEDMode m_oldLEDmode=LEDMode.NOTSET;  
      
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.TopShooterPort,Constants.BottomShooterPort,Constants.shooterPrimedSpeed);
@@ -247,6 +249,9 @@ public class RobotContainer {
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   
+    //leveraged in multiple functions
+    private zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
+        
     private boolean m_turretHasReset =false;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -279,7 +284,8 @@ public class RobotContainer {
         //final ParallelCommandGroup LoadandShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,topSpeed,bottomSpeed,true),
         //        new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
         //        new FeederCommand(m_Feeder,Constants.FeederSpeed));
-       final zSpinLoadShootDistanceCommand LoadandShootCommand = new zSpinLoadShootDistanceCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight);
+        final zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
+        final zSpinLoadShootDistanceCommand LoadandShootCommand = new zSpinLoadShootDistanceCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight);
        final ParallelCommandGroup ManualShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,Constants.ManualShots.Shot1Top,Constants.ManualShots.Shot1Bottom,false),
                 new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder,Constants.FeederSpeed));
@@ -328,7 +334,7 @@ public class RobotContainer {
         final TurretCommand turretStopCommand = new TurretCommand(m_turret,0); 
      
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
-        final zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
+        
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
          
         JoystickButton driverAutoShoot = new JoystickButton(m_xBoxDriver, ButtonConstants.DriverAutoShoot);
@@ -516,15 +522,25 @@ public class RobotContainer {
               break;
        
           case AutoModes.autoMoveShotMoveGrabMoveRightGrabShot2:
+          System.out.println("zz 3 Ball Auto");
+          ParallelCommandGroup resetAndMoveCommand8 = new ParallelCommandGroup(
+              new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos),
+              new AutoMoveCommand(m_RobotDrive,0,AutoModes.GetBallDistance));
           autoCommand=new SequentialCommandGroup(
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
-                new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance),
-             //   new zIntakeTimeCommand(m_Intake, m_IntakeInner,Constants.intakeSpeed,zAutomation.intakeTime),
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
-                new AutoMoveCommand(m_RobotDrive,90,AutoModes.ball2Distance),
-                new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity));
-
-             break;
+              new zIntakeArmMoveCommand(m_Pnuematics,true), 
+              new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
+              resetAndMoveCommand8,         
+              new AutoMoveCommand(m_RobotDrive,180,AutoModes.GetBallDistance/1.5),
+              new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
+              new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
+                 Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
+                 Constants.TurretTargetRange),                       
+              new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,5),
+              new AutoMoveCommand(m_RobotDrive,270,.3,AutoModes.Get3BallDistance)
+              );
+              //new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
+              //     AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));
+            break;
           case AutoModes.autoMoveGrabTrackRightShoot:
             // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
             break;
@@ -585,8 +601,9 @@ public class RobotContainer {
         }
         shuffleboardShooterTopVel.setDouble(m_Shooter.getTopMotorVelocity());
         shuffleboardShooterBottomVel.setDouble(m_Shooter.getBottomMotorVelocity());
-        //if shooter is spinning more than just basic moving
-        if(m_Shooter.getBottomMotorVelocity()>300){
+        //if feeder is spinning at target speed
+        if(m_Feeder.getFeederSpeed()<Constants.FeederThresholdForLED){
+             
                 m_LEDMode=LEDMode.SHOOTING;
         }
         shuffleboardTurretPos.setString(" " + m_turret.getPosition());
@@ -618,41 +635,44 @@ public class RobotContainer {
     public void resetDriveModes(){
 //        m_RobotDrive.resetDriveMode();
     }
-    private void LEDUpdate(){
-            if(m_LEDMode==LEDMode.ONTARGET){
-                m_ledStrip.setColor(Colors.GREEN);
-                m_ledStrip.setMode(LEDMODE_SOLID);
-            }
-            if(m_LEDMode==LEDMode.ONTARGETSWEET){
-                m_ledStrip.setColor(Colors.PURPLE);
-                m_ledStrip.setMode(LEDMODE_SOLID);
-            }
-            if(m_LEDMode==LEDMode.OFFTARGET){
-                m_ledStrip.setColor(Colors.RED);
-                m_ledStrip.setMode(LEDMODE_SOLID);
-            }
-            if(m_LEDMode==LEDMode.SHOOTING){
-                m_ledStrip.setColor(Colors.BLUE);
-                m_ledStrip.setMode(LEDMODE_SOLID);
-            }
-            if(m_LEDMode==LEDMode.CLIMBING){
-                m_ledStrip.setColor(Colors.ORANGE);
-                m_ledStrip.setMode(LEDMODE_SOLID);
-            }
-            if(m_LEDMode==LEDMode.AUTOMODE){
-                m_ledStrip.setColor(Colors.PURPLE);
-                m_ledStrip.setMode(LEDMODE_RAINBOW);
-            }
-            if(m_LEDMode==LEDMode.DISBLED){
-                m_ledStrip.setMode(LEDMODE_SOLID);
-                m_ledStrip.setColor(Colors.PURPLE);
-            }
-            if(m_LEDMode==LEDMode.TELEOP){
-                m_ledStrip.setMode(LEDMODE_WAVE);
-                m_ledStrip.setColor(Colors.PINK);
-            }
-          System.out.println(m_LEDMode.toString() + " - " + m_ledStrip.getMode() + " -- " + m_ledStrip.getColor());
-            m_ledStrip.update();
+    private void LEDUpdate(){            
+        if(m_LEDMode!=m_oldLEDmode){            
+                if(m_LEDMode==LEDMode.ONTARGET){
+                        m_ledStrip.setColor(Colors.GREEN);
+                        m_ledStrip.setMode(LEDMODE_SOLID);
+                }
+                if(m_LEDMode==LEDMode.ONTARGETSWEET){
+                        m_ledStrip.setColor(Colors.PURPLE);
+                        m_ledStrip.setMode(LEDMODE_SOLID);
+                }
+                if(m_LEDMode==LEDMode.OFFTARGET){
+                        m_ledStrip.setColor(Colors.RED);
+                        m_ledStrip.setMode(LEDMODE_SOLID);
+                }
+                if(m_LEDMode==LEDMode.SHOOTING){
+                        m_ledStrip.setColor(Colors.BLUE);
+                        m_ledStrip.setMode(LEDMODE_SOLID);
+                }
+                if(m_LEDMode==LEDMode.CLIMBING){
+                        m_ledStrip.setColor(Colors.ORANGE);
+                        m_ledStrip.setMode(LEDMODE_SOLID);
+                }
+                if(m_LEDMode==LEDMode.AUTOMODE){
+                        m_ledStrip.setColor(Colors.PURPLE);
+                        m_ledStrip.setMode(LEDMODE_RAINBOW);
+                }
+                if(m_LEDMode==LEDMode.DISBLED){
+                        m_ledStrip.setMode(LEDMODE_SOLID);
+                        m_ledStrip.setColor(Colors.PURPLE);
+                }
+                if(m_LEDMode==LEDMode.TELEOP){
+                        m_ledStrip.setMode(LEDMODE_WAVE);
+                        m_ledStrip.setColor(Colors.PINK);
+                }
+        }
+        m_ledStrip.update();
+        m_oldLEDmode=m_LEDMode;
+            
     }
   
     public void LEDAutoMode(){
@@ -662,7 +682,21 @@ public class RobotContainer {
     public void TeleopMode(){
         m_Shooter.stopShooting(); // set to primed value
         m_LEDMode=LEDMode.TELEOP;
+        if(m_turretHasReset==false){
+                zTurretResetCommand resetTurret = new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos); 
+                //CommandScheduler.getInstance().schedule(m_turretAutoCommand);
+                SequentialCommandGroup resetandAim = new SequentialCommandGroup(
+                        resetTurret,
+                        new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange));
+
+                CommandScheduler.getInstance().schedule(resetandAim); 
+                m_turretHasReset=true;
+        }else{
+                CommandScheduler.getInstance().schedule(new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange));
+        }
+      
         LEDUpdate();
+        
 }
     public void DisableMode(){
             m_Shooter.stopShooter();

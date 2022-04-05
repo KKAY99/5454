@@ -22,6 +22,10 @@ public class FeederSubsystem extends SubsystemBase {
     public void stop() {
         m_FeederMotor.set(0.0);
     }
+    public double getFeederSpeed()
+    {
+        return m_FeederMotor.get();
+    }
 
     @Override
     public void periodic() {

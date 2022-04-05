@@ -32,6 +32,7 @@ public final class Constants {
     public static final double intakeSpeed=-.95; //.65
     public static final double intakeInnerSpeed=0.70;
     public static final double FeederSpeed=-1.0;
+    public static final double FeederThresholdForLED=-.7;
     public static final double conveyorUpSpeed=0.9;
     public static final double conveyorDownSpeed=-0.5;
     public static final double climbUpSpeed=.7;
@@ -127,7 +128,7 @@ public final class Constants {
         public static final String autoMode5="Shoot Move Grab";
         public static final String autoMode6="xxMove Grab Shot 2";
         public static final String autoMode7="Shoot Move Grab Move Left Grab Shoot 2";
-        public static final String autoMode8="Shoot Move Grab Move Right Grab Shoot 2";
+        public static final String autoMode8="zzShoot Move Grab Move Right Grab Shoot 2";
         public static final String autoMode9="Move Grab Track Right / Shoot";
         public static final String autoMode10="Move Grab Track Left / Shoot";
         public static final int defaultAutoMode=1;
@@ -157,7 +158,7 @@ public final class Constants {
         public static final double LeaveTarmacDistance=80;
         public static final double GetBallDistance=100;
         public static final double GetBall2Distance=50;
-        
+        public static final double Get3BallDistance=50;
         public static final double ball2Distance=.5;
             
         

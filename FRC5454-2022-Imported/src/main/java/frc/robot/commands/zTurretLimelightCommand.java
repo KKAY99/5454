@@ -64,7 +64,8 @@ public class zTurretLimelightCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {   
-      switch(m_state){
+    System.out.println("AutoFinding");
+     switch(m_state){
         case ONTARGET:
          if(onTarget() && m_limelight.isTargetAvailible()){ //make sure we are stil on target
           //  System.out.println("Wheelse have Power " + m_drive.wheelsHavePower());

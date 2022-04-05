@@ -102,11 +102,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         return true;
                 }
     }
-    public void move (double direction, double speed, double distance, boolean stopAtEnd)
+    public void move (double direction, double rotation,double speed, double distance, boolean stopAtEnd)
 {       double startDistance;
         double forward=0;
         double strafe=0;
-        double rotation=0;
         Translation2d targetTranslation;
         startDistance=backLeftModule.getCurrentDistance();
         switch ((int) direction){
@@ -145,6 +144,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         break;
                 
         }
+
         double distanceTravelled=backLeftModule.getCurrentDistance()-startDistance;
         do {
               drive(new Translation2d(forward, strafe), rotation, false);
