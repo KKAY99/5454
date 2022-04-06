@@ -535,8 +535,15 @@ public class RobotContainer {
               new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
                  Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
                  Constants.TurretTargetRange),                       
-              new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,5),
-              new AutoMoveCommand(m_RobotDrive,270,.3,AutoModes.Get3BallDistance)
+              new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,2),
+              new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
+              new AutoMoveCommand(m_RobotDrive,270,-.2,AutoModes.Get3BallDistanceRotate),
+              new AutoMoveCommand(m_RobotDrive,0,0,AutoModes.Get3BallDistance),              
+              new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
+              new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
+                 Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
+                 Constants.TurretTargetRange),                       
+              new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,2)  
               );
               //new zSpinLoadShootCommand(m_Shooter, m_Conveyor,m_Feeder, 
               //     AutoModes.AutoShotTopSpeed*1.4, AutoModes.AutoShotBottomSpeed*1.4,AutoModes.AutoMinVelocity));

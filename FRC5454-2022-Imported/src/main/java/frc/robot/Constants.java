@@ -122,15 +122,15 @@ public final class Constants {
     public static final class AutoModes {
         public static final String autoMode0="Do Nothing";
         public static final String autoMode1="Move Foward";
-        public static final String autoMode2="Shoot /  Move";
-        public static final String autoMode3="Outake / Move Backwars";
-        public static final String autoMode4="Shoot / Move Backwards";
-        public static final String autoMode5="Shoot Move Grab";
-        public static final String autoMode6="xxMove Grab Shot 2";
-        public static final String autoMode7="Shoot Move Grab Move Left Grab Shoot 2";
-        public static final String autoMode8="zzShoot Move Grab Move Right Grab Shoot 2";
-        public static final String autoMode9="Move Grab Track Right / Shoot";
-        public static final String autoMode10="Move Grab Track Left / Shoot";
+        //public static final String autoMode2="Shoot /  Move";
+        //public static final String autoMode3="Outake / Move Backwars";
+        //public static final String autoMode4="Shoot / Move Backwards";
+        //public static final String autoMode5="Shoot Move Grab";
+        public static final String autoMode6="2 Ball (Move Staight)";
+        //public static final String autoMode7="Shoot Move Grab Move Left Grab Shoot 2";
+        public static final String autoMode8="3 Ball (Move Straight Then Right)";
+        //public static final String autoMode9="Move Grab Track Right / Shoot";
+        //public static final String autoMode10="Move Grab Track Left / Shoot";
         public static final int defaultAutoMode=1;
 
         public static final int autoNothing = 0;
@@ -156,9 +156,11 @@ public final class Constants {
         public static final int defaultDelayMode=0;
 
         public static final double LeaveTarmacDistance=80;
-        public static final double GetBallDistance=100;
+        public static final double GetBallDistance=65;
         public static final double GetBall2Distance=50;
-        public static final double Get3BallDistance=50;
+        public static final double Get3BallDistanceRotate=19;
+        public static final double Get3BallDistance=75;
+        
         public static final double ball2Distance=.5;
             
         
