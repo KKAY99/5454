@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.hal.ThreadsJNI;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;     
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,7 +24,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 20;
     private static final double WHEELBASE = 25;
 
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(6.5); //161.8
+    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(7.8); //30.6 last 6.5 - was 161.8
     private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(56.2);
     private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(49.5);
     private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(307.2);

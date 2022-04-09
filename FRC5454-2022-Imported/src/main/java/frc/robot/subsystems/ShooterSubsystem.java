@@ -159,10 +159,14 @@ public static double[] distanceValues = {
         if (distanceValues[i] == distance) {
           return powerValues[i];
         } else if (distanceValues[i] > distance) {
-          return getEquation(distance, distanceValues[i], powerValues[i], distanceValues[i - 1],
-              powerValues[i - 1]);
+          if(i>0){
+            return getEquation(distance, distanceValues[i], powerValues[i], distanceValues[i - 1],
+                powerValues[i - 1]);
+          }else {
+            return powerValues[0];
+          }  
         }
-        else if (distance > distanceValues[distanceValues.length-1]) {
+        else if (distance > distanceValues[distanceValues.length-1]) {          
           return powerValues[distanceValues.length-1];
         }
       }

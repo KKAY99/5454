@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
@@ -15,8 +14,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
+
 public class TurretSubsystem extends SubsystemBase {
-  
+
   CANSparkMax m_turretMotor;
   RelativeEncoder m_turretEncoder;
   private static final SparkMaxAlternateEncoder.Type kAltEncType = SparkMaxAlternateEncoder.Type.kQuadrature;
@@ -24,102 +24,120 @@ public class TurretSubsystem extends SubsystemBase {
 
   private DigitalInput m_limitLeftSwitch;
   private DigitalInput m_limitRightSwitch;
-  private boolean m_encoderHasHomed=false;
+  private boolean m_encoderHasHomed = false;
   private double m_safePositionforClimb;
   private double m_turretSafeMoveSpeed;
-  private boolean m_turretLockedMode=false;
+  private boolean m_turretLockedMode = false;
+
   /** Creates a new ExampleSubsystem. */
-  public TurretSubsystem(Integer turretMotorPort,int leftSwitch, int rightSwitch,double safePositionforClimb,double safetyMoveSpeed) {    
-       
-      m_turretMotor = new CANSparkMax(turretMotorPort, MotorType.kBrushed);  
-      
-      m_turretMotor.setIdleMode(IdleMode.kBrake);
-       //m_turretEncoder = m_turretMotor.getAlternateEncoder(klAtEncType,kCPR);
-       m_turretEncoder = m_turretMotor.getEncoder(Type.kQuadrature,kCPR);
-       m_turretMotor.setInverted(false);
-       m_limitRightSwitch=new DigitalInput(rightSwitch);
-       m_limitLeftSwitch=new DigitalInput(leftSwitch);
-       m_safePositionforClimb=safePositionforClimb;
-       m_turretSafeMoveSpeed=safetyMoveSpeed;
-      }
-  public void turn(double power) {
-   m_turretMotor.set(power);
+  public TurretSubsystem(Integer turretMotorPort, int leftSwitch, int rightSwitch, double safePositionforClimb,
+      double safetyMoveSpeed) {
+
+    m_turretMotor = new CANSparkMax(turretMotorPort, MotorType.kBrushed);
+
+    m_turretMotor.setIdleMode(IdleMode.kBrake);
+    // m_turretEncoder = m_turretMotor.getAlternateEncoder(klAtEncType,kCPR);
+    m_turretEncoder = m_turretMotor.getEncoder(Type.kQuadrature, kCPR);
+    m_turretMotor.setInverted(false);
+    m_limitRightSwitch = new DigitalInput(rightSwitch);
+    m_limitLeftSwitch = new DigitalInput(leftSwitch);
+    m_safePositionforClimb = safePositionforClimb;
+    m_turretSafeMoveSpeed = safetyMoveSpeed;
   }
-  public void setEncoderPosition(double position){
+
+  public void turn(double power) {
+    System.out.println("Turn- Power is " + power);
+    m_turretMotor.set(power);
+  }
+
+  public void setEncoderPosition(double position) {
     m_turretEncoder.setPosition(position);
   }
+
   public void stop() {
-   m_turretMotor.set(0);
+
+    System.out.println("stopping turret");
+    m_turretMotor.set(0);
   }
-  public boolean isMovingLeft(double targetspeed){
-    return m_turretEncoder.getVelocity() >0 || targetspeed>0;
- }
- public boolean isMovingRight(double targetspeed){
-     return m_turretEncoder.getVelocity()<0 || targetspeed<0;
- }
 
- public boolean isClearofClimber(){
-  if(m_encoderHasHomed){
-    double currentPos=Math.abs(m_turretEncoder.getPosition());
-    return (currentPos>=Math.abs(m_safePositionforClimb));
-  } else {
-    return false; // if encoder has not homed we can not check for falcon safety
+  public boolean isMovingLeft(double targetspeed) {
+    return m_turretEncoder.getVelocity() > 0 || targetspeed > 0;
   }
- }
 
- public void movePastSafetyPosition(){
-   turn(m_turretSafeMoveSpeed);
- }
+  public boolean isMovingRight(double targetspeed) {
+    return m_turretEncoder.getVelocity() < 0 || targetspeed < 0;
+  }
 
-  public double getPosition(){
+  public boolean isClearofClimber() {
+    if (m_encoderHasHomed) {
+      double currentPos = Math.abs(m_turretEncoder.getPosition());
+      return (currentPos >= Math.abs(m_safePositionforClimb));
+    } else {
+      return false; // if encoder has not homed we can not check for falcon safety
+    }
+  }
+
+  public void movePastSafetyPosition() {
+    turn(m_turretSafeMoveSpeed);
+  }
+
+  public double getPosition() {
     return m_turretEncoder.getPosition();
-     }
-  public boolean hitLeftLimit()
-  {  
-    boolean returnValue=false;
-    if (m_encoderHasHomed){
-  //    System.out.println("Checking Left - " + m_limitLeftSwitch.get() + "-" + m_turretEncoder.getPosition());
-      returnValue=(m_limitLeftSwitch.get() || 
-        (m_turretEncoder.getPosition()<Constants.LimitSwitches.TurretLeftEncoder));
-    }else {
-      returnValue=(m_limitLeftSwitch.get());
-    }    
- //   System.out.println(isMovingLeft());
- //   System.out.println("turret Left Check " + encoderHasHomed + " - " + m_turretEncoder.getPosition() + " - " + returnValue);
+  }
+
+  public boolean hitLeftLimit() {
+    boolean returnValue = false;
+    if (m_encoderHasHomed) {
+      // System.out.println("Checking Left - " + m_limitLeftSwitch.get() + "-" +
+      // m_turretEncoder.getPosition());
+      returnValue = (m_limitLeftSwitch.get() ||
+          (m_turretEncoder.getPosition() < Constants.LimitSwitches.TurretLeftEncoder));
+    } else {
+      returnValue = (m_limitLeftSwitch.get());
+    }
+    // System.out.println(isMovingLeft());
+    // System.out.println("turret Left Check " + encoderHasHomed + " - " +
+    // m_turretEncoder.getPosition() + " - " + returnValue);
     return returnValue;
   }
-  public boolean hitRightPhysicalLimit()
-  {  
+
+  public boolean hitRightPhysicalLimit() {
     return (m_limitRightSwitch.get());
-    
   }
-  public void setLocked(){
-    m_turretLockedMode=true;
+
+  public void setLocked() {
+    m_turretLockedMode = true;
   }
-  public boolean isLocked(){
+
+  public void overlockTuretLock() {
+    m_turretLockedMode = false;
+  }
+
+  public boolean isLocked() {
     return m_turretLockedMode;
   }
 
-  public boolean hitRightLimit()
-  {
-    if (m_encoderHasHomed){
-   //   System.out.println("Checking Right - " + m_limitLeftSwitch.get() + "-" + m_turretEncoder.getPosition());
- 
-      return (m_limitRightSwitch.get() || 
-         (m_turretEncoder.getPosition()>Constants.LimitSwitches.TurretRightEncoder));
-    }else {
-    return (m_limitRightSwitch.get());
+  public boolean hitRightLimit() {
+    if (m_encoderHasHomed) {
+      // System.out.println("Checking Right - " + m_limitLeftSwitch.get() + "-" +
+      // m_turretEncoder.getPosition());
+
+      return (m_limitRightSwitch.get() ||
+          (m_turretEncoder.getPosition() > Constants.LimitSwitches.TurretRightEncoder));
+    } else {
+      return (m_limitRightSwitch.get());
     }
   }
-  
-  public boolean hasHomed(){
+
+  public boolean hasHomed() {
     return m_encoderHasHomed;
   }
-  public void setHomeforTurret()
-  {
+
+  public void setHomeforTurret() {
     m_turretEncoder.setPosition(0);
-    m_encoderHasHomed=true;
+    m_encoderHasHomed = true;
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

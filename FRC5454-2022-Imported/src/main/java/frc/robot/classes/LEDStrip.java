@@ -49,7 +49,7 @@ public class LEDStrip {
     }
 
     public void update() {
-        System.out.println("mode - " + this.mode);
+       // System.out.println("mode - " + this.mode);
         if (this.mode == 0 || this.mode == 3) {
             this.wave();
         } else if (this.mode == 1) {
@@ -117,7 +117,7 @@ public class LEDStrip {
                 hue = 11;
                 break;
         }
-        System.out.println("LED H" + hue + " - " + color );
+        //System.out.println("LED H" + hue + " - " + color );
         if (this.mode == 0) {
             // draw leds as animation
             if (this.entering) {

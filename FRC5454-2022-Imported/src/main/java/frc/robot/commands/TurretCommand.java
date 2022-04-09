@@ -12,6 +12,7 @@ public class TurretCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final TurretSubsystem m_TurretSubsystem;
   private final double m_speed;
+  private boolean m_interupted=false;
 
   /**
    * Creates a new ExampleCommand.
@@ -33,15 +34,19 @@ public class TurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("setting turret speed" + m_speed + " -" + hitLimit());
+   System.out.println("setting turret speed" + m_speed + " -" + hitLimit());
     if(hitLimit()==false){
       m_TurretSubsystem.turn(m_speed);
+    }else {
+      System.out.println("turret limit hit");
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Turret Command End  " + interrupted);
+    m_interupted=true;
     m_TurretSubsystem.stop();
   }
   
@@ -55,13 +60,20 @@ public class TurretCommand extends CommandBase {
       System.out.println("Right Limit");  
      
       returnValue= true;
+    } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingLeft(m_speed)){
+      System.out.println("Right Liimit but moving left so not returning false on it limit");
     }
     return returnValue;
   }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return hitLimit();
+    if(hitLimit()) {
+      return true;
+
+    } else {
+    return false;
+    }
   }
 }
 

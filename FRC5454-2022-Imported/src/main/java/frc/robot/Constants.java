@@ -50,7 +50,7 @@ public final class Constants {
     public static final class Pneumatics {
         public static final int CompressorID=0; 
         public static final int LatchPort=5;
-        public static final int ClimbArmPort=2;
+        public static final int ClimbArmPort=0;
         public static final int IntakeArmPort=3;
         public static final int HookCablesPort=1;
         
@@ -66,7 +66,8 @@ public final class Constants {
        public static final int DriverTurretRightPOV=90;
       
        public static final int OperatorPivotArm=2;
-       public static final int OperatorShootManual=1;
+       //public static final int OperatorShootManual=1;
+       public static final int OperatorAutoTurretMode=1;
        public static final int OperatorClimbHook=3;
        public static final int OperatorIntakeArm=4;
        public static final int OperatorIntakeOut=5;
@@ -78,6 +79,7 @@ public final class Constants {
        public static final int OperatorGyroReset=7;
        public static final int OperatorGyroReset2=8;
        public static final int OperatorAutoShootAxis=3;
+       public static final int OperatorOverrideAxis=2;
        public static final int OperatorShooter1POV=270;
        public static final int OperatorShooter2POV=90;
        public static final int OperatorShooter3POV=270;
@@ -87,8 +89,8 @@ public final class Constants {
        public static final int ConveyerUpAxis=2;
        public static final int ConveyerDownAxis=3;
        public static final double TriggerThreshold=.5;
-       public static final double JoystickUpThreshold=-0.25;
-       public static final double JoystickDownThreshold=0.25;
+       public static final double JoystickUpThreshold=-0.50;
+       public static final double JoystickDownThreshold=0.50;
        public static final double JoystickLeftThreshold=.50;
        public static final double JoystickRightThreshold=-0.50;
        public static final int TurretLeftPOV=270;
@@ -116,7 +118,7 @@ public final class Constants {
         public static final int TurretRight=1;
         public static final int ClimberTop=2;
         public static final double TurretRightEncoder=-0.5;
-        public static final double TurretLeftEncoder=-8.00;
+        public static final double TurretLeftEncoder=-7.93;
     }
 
     public static final class AutoModes {
@@ -156,11 +158,14 @@ public final class Constants {
         public static final int defaultDelayMode=0;
 
         public static final double LeaveTarmacDistance=80;
-        public static final double GetBallDistance=65;
+        public static final double Get3BallDistanceOne=74;
+        public static final double Get3BallDistanceReturn=36;
+        public static final double Get2BallDistance=75;
+        public static final double Get2BallDistanceReturn=38;
         public static final double GetBall2Distance=50;
         public static final double Get3BallDistanceRotate=19;
         public static final double Get3BallDistance=75;
-        
+        public static final double MoveTowardsPlayerShort=30;
         public static final double ball2Distance=.5;
             
         
@@ -206,7 +211,7 @@ public final class Constants {
     }
 
     public static final double shooterPrimedSpeed=500;
-    public static final double shooterSweetSpotLow=60;
+    public static final double shooterSweetSpotLow=70; //was 60
     public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGB {
         public static final int kSlotIdx = 0;

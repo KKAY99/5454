@@ -95,6 +95,7 @@ public class zTurretLimelightCommand extends CommandBase {
         case SEARCHING:
           if (m_limelight.isTargetAvailible()){
             if(onTarget()){
+                
                 m_TurretSubsystem.stop();
                 m_speed=0;
                 System.out.println("Setting State to ON TARGET");
