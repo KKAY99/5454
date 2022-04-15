@@ -15,6 +15,7 @@ public class ShooterSubsystem implements Subsystem {
   private static double m_defaultBottomSpeed=775;
   private static double kGearRatio=6;
   private static double m_PrimeSpeed;
+  
   private static double[] powerTopValues = {
     775,//1
     775,//2
@@ -31,7 +32,7 @@ public class ShooterSubsystem implements Subsystem {
     1800,//13
     1900,//14
     2000,//15
-    25
+    25 //16
 };
 
 private static double[] powerBottomValues = {
@@ -69,7 +70,7 @@ public static double[] distanceValues = {
     159.5,//13
     169.5,//14
     179.5,//15
-    189.5,//16
+    189.5//16
 };
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem(Integer BottomPort, Integer TopPort,double primeSpeed) {

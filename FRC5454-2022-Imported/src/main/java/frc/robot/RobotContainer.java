@@ -7,6 +7,7 @@ package frc.robot;
  
 import java.util.Map;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -240,6 +241,9 @@ public class RobotContainer {
 
     static NetworkTableEntry shuffleobardLimelightAdj=ShooterTab.add("Limelight Adjustment",Constants.LimeLightValues.kVisionXOffset)
                                 .getEntry();
+
+    static NetworkTableEntry shuffleboardRobotMoving=SwerveTab.add("Robot Moving","")
+                               .getEntry();
  
     static String ShuffleboardLogString;
     // #endregion
@@ -632,13 +636,27 @@ public class RobotContainer {
         m_Shooter.setMultipler(shuffleobardShooterMultipler.getDouble(1.0));
         m_Limelight.setOffSet((shuffleobardLimelightAdj.getDouble(Constants.LimeLightValues.kVisionXOffset)));
         LEDUpdate();
+        updateRobotMoving();
+      
 }
-    public void disabledPerioidicUpdates(){
+    
+     private void updateRobotMoving(){
+                if (m_RobotDrive.IsRobotMoving()){
+                        shuffleboardRobotMoving.setString("True");
+                }
+                else{
+                        shuffleboardRobotMoving.setString("False");     
+                }
+        }
+
+     public void disabledPerioidicUpdates(){
          shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
         shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
-            
-       
+        LEDUpdate();
+        updateRobotMoving();
+
     }
+
     public void disableLimelights(){
             m_Limelight.turnLEDOff();
     }
@@ -682,7 +700,7 @@ public class RobotContainer {
                         m_ledStrip.setMode(LEDMODE_RAINBOW);
                 }
                 if(m_LEDMode==LEDMode.DISBLED){
-                        m_ledStrip.setMode(LEDMODE_SOLID);
+                        m_ledStrip.setMode(LEDMODE_WAVE);
                         m_ledStrip.setColor(Colors.PURPLE);
                 }
                 if(m_LEDMode==LEDMode.TELEOP){

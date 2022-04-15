@@ -92,7 +92,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return instance;
     }
  
-    public boolean wheelsHavePower(){
+    public boolean IsRobotMoving(){
             if((backLeftModule.getCurrentVelocity()+
                 backRightModule.getCurrentVelocity()+
                 frontLeftModule.getCurrentVelocity()+
