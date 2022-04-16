@@ -57,9 +57,12 @@ public class RobotContainer {
      private final LEDStrip m_ledStrip = new LEDStrip(Constants.LEDS.PORT, Constants.LEDS.COUNT);
      private static enum LEDMode
      {
-                     NOTSET,DISBLED, AUTOMODE, OFFTARGET, ONTARGETSWEET,ONTARGET,SHOOTING,CLIMBING,TELEOP;	
+                     NOTSET,DISBLED, AUTOMODE, OFFTARGET, OFFTARGETSWEET, ONTARGETSWEET,ONTARGET,SHOOTING,CLIMBING,TELEOP;	
      }
      private LEDMode m_LEDMode=LEDMode.DISBLED;
+     private boolean m_ledFlash=false;
+     private boolean m_ledFlashMode=false;
+     private int m_ledFlashDelayCount=0;
      private static final int LEDMODE_WAVE = 0;
      private static final int LEDMODE_BAR = 1;
      private static final int LEDMODE_RAINBOW = 2;
@@ -611,7 +614,8 @@ public class RobotContainer {
         backLeftAngle.setDouble(m_RobotDrive.getBackLeftAngle());
         backRightAngle.setDouble(m_RobotDrive.getbackRightAngle());
         m_Limelight.update();
-
+        //KK REplacing on 4/15
+        /*
         if(m_Limelight.isTargetAvailible()){              
                 networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());                
                 if((m_Limelight.getDistance()>=Constants.shooterSweetSpotLow) && (m_Limelight.getDistance()<=Constants.shooterSweetSpotHigh)){
@@ -623,6 +627,29 @@ public class RobotContainer {
                m_LEDMode=LEDMode.OFFTARGET;
                 networkTableEntryVisionDistance.setDouble(0);
         }
+        */
+        if(m_Limelight.isOnTargetX()){
+                networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());                
+                if((m_Limelight.getDistance()>=Constants.shooterSweetSpotLow) && (m_Limelight.getDistance()<=Constants.shooterSweetSpotHigh)){
+                        m_LEDMode=LEDMode.ONTARGETSWEET;                       
+                }else{
+                        m_LEDMode=LEDMode.ONTARGET;
+                }
+        }else{
+                if(m_Limelight.isTargetAvailible()){              
+                        networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());                
+                        if((m_Limelight.getDistance()>=Constants.shooterSweetSpotLow) && (m_Limelight.getDistance()<=Constants.shooterSweetSpotHigh)){
+                                m_LEDMode=LEDMode.OFFTARGETSWEET;                       
+                        }else{
+                                m_LEDMode=LEDMode.ONTARGET;
+                        }
+                }else {
+                        m_LEDMode=LEDMode.OFFTARGET;
+                        networkTableEntryVisionDistance.setDouble(0);
+                }
+                
+        }
+        //END or Replacement
         shuffleboardShooterTopVel.setDouble(m_Shooter.getTopMotorVelocity());
         shuffleboardShooterBottomVel.setDouble(m_Shooter.getBottomMotorVelocity());
         //if feeder is spinning at target speed
@@ -676,39 +703,73 @@ public class RobotContainer {
     private void LEDUpdate(){            
         if(m_LEDMode!=m_oldLEDmode){            
                 if(m_LEDMode==LEDMode.ONTARGET){
-                        m_ledStrip.setColor(Colors.GREEN);
+                        m_ledStrip.setColor(Colors.YELLOW);
                         m_ledStrip.setMode(LEDMODE_SOLID);
+                        m_ledFlash=false;
                 }
                 if(m_LEDMode==LEDMode.ONTARGETSWEET){
                         m_ledStrip.setColor(Colors.PURPLE);
                         m_ledStrip.setMode(LEDMODE_SOLID);
+                        m_ledFlash=true;
+                }
+                if(m_LEDMode==LEDMode.OFFTARGETSWEET){
+                        m_ledStrip.setColor(Colors.PURPLE);
+                        m_ledStrip.setMode(LEDMODE_SOLID);
+                        m_ledFlash=false;
                 }
                 if(m_LEDMode==LEDMode.OFFTARGET){
                         m_ledStrip.setColor(Colors.RED);
                         m_ledStrip.setMode(LEDMODE_SOLID);
+                        m_ledFlash=false;
                 }
                 if(m_LEDMode==LEDMode.SHOOTING){
-                        m_ledStrip.setColor(Colors.BLUE);
+                        m_ledStrip.setColor(Colors.GREEN);
                         m_ledStrip.setMode(LEDMODE_SOLID);
+                        m_ledFlash=false;
                 }
                 if(m_LEDMode==LEDMode.CLIMBING){
                         m_ledStrip.setColor(Colors.ORANGE);
                         m_ledStrip.setMode(LEDMODE_SOLID);
+                        m_ledFlash=false;
                 }
                 if(m_LEDMode==LEDMode.AUTOMODE){
                         m_ledStrip.setColor(Colors.PURPLE);
                         m_ledStrip.setMode(LEDMODE_RAINBOW);
+                        m_ledFlash=false;
                 }
                 if(m_LEDMode==LEDMode.DISBLED){
                         m_ledStrip.setMode(LEDMODE_WAVE);
                         m_ledStrip.setColor(Colors.PURPLE);
+                        m_ledFlash=false;
                 }
                 if(m_LEDMode==LEDMode.TELEOP){
                         m_ledStrip.setMode(LEDMODE_WAVE);
                         m_ledStrip.setColor(Colors.PINK);
+                        m_ledFlash=false;
                 }
         }
-        m_ledStrip.update();
+        if(m_ledFlash){
+                m_ledFlashDelayCount++;
+                if(m_ledFlashMode==false){
+                        if(m_ledFlashDelayCount>10) {
+                                m_ledStrip.setMode(LEDMODE_OFF);
+                                m_ledFlashMode=true;
+                                m_ledStrip.update();
+                                m_ledFlashDelayCount=0;
+                        }
+                } else{
+                        if(m_ledFlashDelayCount>10) {                       
+                                m_ledStrip.setMode(LEDMODE_SOLID);                        
+                                m_ledFlashMode=false;
+                                m_ledStrip.update();
+                                m_ledFlashDelayCount=0;
+                        }
+                }
+
+        } else {
+                m_ledStrip.update();
+       
+        }
         m_oldLEDmode=m_LEDMode;
             
     }

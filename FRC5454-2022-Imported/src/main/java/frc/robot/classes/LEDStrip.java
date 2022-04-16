@@ -111,7 +111,9 @@ public class LEDStrip {
 
             case Colors.YELLOW:
                 hue = 20;
-                break;
+                break
+                
+                ;
 
             case Colors.ORANGE:
                 hue = 11;
