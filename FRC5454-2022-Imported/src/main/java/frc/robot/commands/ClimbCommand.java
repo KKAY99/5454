@@ -55,27 +55,46 @@ public class ClimbCommand extends CommandBase {
           System.out.println("running Climb - " + m_speed);
           m_ClimbSubsystem.run(m_speed);
         } else {
-            System.out.println("Limit Switch Hit" );
-            //auto deploy pivot arms when climb bottom is hit
-            if (m_ClimbSubsystem.hitBottomLimit()){
-              m_pnuematicsSubsystem.setClimbArms(true);
-            }
-            m_ClimbSubsystem.stop();
-        }
-      }
+                 System.out.println("Checking For Bottom Limit");
+                 AutoDeployOnBottomSwitch();          
+                 m_ClimbSubsystem.stop();
+                  }
 
+                 
+        }
   }
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        System.out.println("Climb Command Ending / Stopping - Interrupted:" + interrupted);
+        AutoDeployOnBottomSwitch();
         m_ClimbSubsystem.stop();
         m_turret.stop();
     }
 
+    private void AutoDeployOnBottomSwitch(){
+      System.out.println("Checking For Limit Switch Hit");
+      //auto deploy pivot arms when climb bottom is hit
+      if (m_ClimbSubsystem.hitBottomLimit()){
+        System.out.println("Auto deploy arm");
+        m_pnuematicsSubsystem.setClimbArms(true);
+      }else {
+        System.out.println("Bottom Limit-" + m_ClimbSubsystem.hitBottomLimit());
+        System.out.println("Top Limit-" + m_ClimbSubsystem.hitTopLimit());    
+      }
+
+    }
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-      return m_ClimbSubsystem.stopForLimit(m_speed);
+      boolean stopForLimit=false;
+      
+      stopForLimit=m_ClimbSubsystem.stopForLimit(m_speed);
+      System.out.println("Climber Is Finished check* " + m_speed + " * "  + stopForLimit);
+      if (stopForLimit){
+          AutoDeployOnBottomSwitch();
+      }
+      return stopForLimit;
     
   }
 }

@@ -47,7 +47,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        System.out.println("setting climb speed to 0");
+        System.out.println("setting climb speed to 0 - STOP function");
 
         m_ClimbMotor.set(0.0);
     }

@@ -77,7 +77,6 @@ public class RobotContainer {
     private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
     private final IntakeSubsystem m_IntakeInner = new IntakeSubsystem(Constants.IntakeInnerPort);
    
-    private final ClimbSubsystem m_Climb = new ClimbSubsystem(Constants.ClimberPort,Constants.LimitSwitches.ClimberBottom,Constants.LimitSwitches.ClimberTop);
     private final PneumaticsSubsystem m_Pnuematics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorID);
     private final TurretSubsystem m_turret = new TurretSubsystem(Constants.TurretPort,
                                                                 Constants.LimitSwitches.TurretLeft,
@@ -299,9 +298,6 @@ public class RobotContainer {
                 new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
                 new FeederCommand(m_Feeder,Constants.FeederSpeed));
     
-        final SequentialCommandGroup releaseAndResetClimb = new SequentialCommandGroup( 
-                new HookCablesReleaseCommand(m_Pnuematics),
-                new ClimbArmResetCommand(m_Pnuematics));
         final ParallelCommandGroup ManualShooter1Command = new ParallelCommandGroup(
                 new ShooterCommand(m_Shooter,m_Limelight,Constants.ManualShots.Shot1Top,Constants.ManualShots.Shot1Bottom,false),
                 new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
@@ -331,13 +327,9 @@ public class RobotContainer {
         final zIntakeConveyCommand intakeOutCommand = new zIntakeConveyCommand(m_Intake,m_IntakeInner,-Constants.intakeSpeed,-Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorDownSpeed,m_Feeder,-Constants.FeederSpeed);
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
-        final ClimbCommand climbUpCommand=new ClimbCommand(m_Climb,m_Pnuematics,m_turret,Constants.climbUpSpeed);
-        final ClimbCommand climbDownCommand=new ClimbCommand(m_Climb,m_Pnuematics,m_turret,Constants.climbDownSpeed);
-       
+        
         final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
-        final ClimbArmCommand climbArmsCommand = new ClimbArmCommand(m_Pnuematics);
-        final HookCablesCommand climbHooksCommand = new HookCablesCommand(m_Pnuematics); 
-
+       
         final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
         final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
         final TurretCommand turretStopCommand = new TurretCommand(m_turret,0); 
@@ -437,16 +429,8 @@ public class RobotContainer {
         operatorTurretAutoFind.whenPressed(turretAutoCommand);
         operatorAutoFind.whenPressed(turretAutoCommand);
         operatorTurretAutoFindStop.whenPressed(turretStopCommand); // should force auto command to stop since same subsystem requirements
-        operatorClimbUp.whenHeld(climbUpCommand);
-        operatorClimbDown.whenHeld(climbDownCommand);
         
-        operatorPivotArm.whenHeld(climbArmsCommand);
-        
-        //operatorClimbHooks.whenPressed(releaseAndResetClimb);
-        operatorClimbHooks.whenHeld(climbHooksCommand);
-        operatorClimbHooks.whenReleased(releaseAndResetClimb);
-       // operatorManualShoot.whenHeld(ManualShootCommand);
-
+       
         operatorShoot1Button.whenHeld(ManualShooter1Command);
         operatorShoot2Button.whenHeld(ManualShooter2Command);
         operatorShoot3Button.whenHeld(ManualShooter3Command);
@@ -582,34 +566,6 @@ public class RobotContainer {
     }   
     public void refreshSmartDashboard()
     {  
- /* Disabled on at OK Regional
-        shuffleboardPDPStickyCANFaults.setBoolean(m_robotPDH.getStickyFaults().CanWarning);
-        shuffleboardPDPTotalCurrent.setDouble(m_robotPDH.getTotalCurrent());
-        shuffleboardPDPCurrentC0.setDouble(m_robotPDH.getCurrent(0));
-        shuffleboardPDPCurrentC1.setDouble(m_robotPDH.getCurrent(1));
-        shuffleboardPDPCurrentC2.setDouble(m_robotPDH.getCurrent(2));
-        shuffleboardPDPCurrentC3.setDouble(m_robotPDH.getCurrent(3));
-        shuffleboardPDPCurrentC4.setDouble(m_robotPDH.getCurrent(4));      
-        shuffleboardPDPCurrentC5.setDouble(m_robotPDH.getCurrent(5));
-        shuffleboardPDPCurrentC6.setDouble(m_robotPDH.getCurrent(6));
-        shuffleboardPDPCurrentC7.setDouble(m_robotPDH.getCurrent(7));
-        shuffleboardPDPCurrentC8.setDouble(m_robotPDH.getCurrent(8));
-        shuffleboardPDPCurrentC9.setDouble(m_robotPDH.getCurrent(9));
-        shuffleboardPDPCurrentC10.setDouble(m_robotPDH.getCurrent(10));
-        shuffleboardPDPCurrentC11.setDouble(m_robotPDH.getCurrent(11));
-        shuffleboardPDPCurrentC12.setDouble(m_robotPDH.getCurrent(12));
-        shuffleboardPDPCurrentC13.setDouble(m_robotPDH.getCurrent(13));
-        shuffleboardPDPCurrentC14.setDouble(m_robotPDH.getCurrent(14));
-        shuffleboardPDPCurrentC15.setDouble(m_robotPDH.getCurrent(15));
-        shuffleboardPDPCurrentC16.setDouble(m_robotPDH.getCurrent(16));
-        shuffleboardPDPCurrentC17.setDouble(m_robotPDH.getCurrent(17));
-        shuffleboardPDPCurrentC18.setDouble(m_robotPDH.getCurrent(18));
-        shuffleboardPDPCurrentC19.setDouble(m_robotPDH.getCurrent(19));
-        shuffleboardPDPCurrentC20.setDouble(m_robotPDH.getCurrent(20));
-        shuffleboardPDPCurrentC21.setDouble(m_robotPDH.getCurrent(21));
-        shuffleboardPDPCurrentC22.setDouble(m_robotPDH.getCurrent(22));        
-        shuffleboardPDPCurrentC23.setDouble(m_robotPDH.getCurrent(23)); 
- */
         frontLeftAngle.setDouble(m_RobotDrive.getFrontLeftAngle());
         frontRightAngle.setDouble(m_RobotDrive.getFrontRightAngle());
         backLeftAngle.setDouble(m_RobotDrive.getBackLeftAngle());
