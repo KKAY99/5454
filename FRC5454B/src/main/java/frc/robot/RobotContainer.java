@@ -26,6 +26,7 @@ import frc.robot.subsystems.*;
 import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.InputControllers;
+import frc.robot.Constants.SwerveDriveGB;
 import frc.robot.Constants.zAutomation;
 import frc.robot.Constants.LEDS.Colors;
 import frc.robot.classes.Limelight;
@@ -49,9 +50,8 @@ public class RobotContainer {
   //  private AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
     private NavX m_NavX = new NavX(SPI.Port.kMXP);
    // private final DriveSubsystem m_RobotDrive = new DriveSubsystem(m_ahrs);
-   private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
-   //private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();+
-
+   //private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
+   private final SwerveDriveGB m_RobotDrive= new SwerveDriveGB();
     private final Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,Constants.LimeLightValues.kVisionXOffset);
     
      private final LEDStrip m_ledStrip = new LEDStrip(Constants.LEDS.PORT, Constants.LEDS.COUNT);

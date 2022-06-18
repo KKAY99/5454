@@ -8,9 +8,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.common.Utilities;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveDriveGB;
 public class DefaultDriveCommand extends CommandBase {
    
-  private final DrivetrainSubsystem m_drive;
+  private final SwerveDriveGB m_drive;
   //private final SwerveSubsystem m_drive;
   private final DoubleSupplier m_drive_fwd;
   private final DoubleSupplier m_drive_strafe;
@@ -24,13 +25,13 @@ public class DefaultDriveCommand extends CommandBase {
    * @param rotation  The control input for driving right
    */
   // FIXME SwerveSubsystem to DriveSubsystem
-  public DefaultDriveCommand(DrivetrainSubsystem subsystem, DoubleSupplier drive_rcw, DoubleSupplier drive_fwd,
+  public DefaultDriveCommand(SwerveDriveGB subsystem, DoubleSupplier drive_rcw, DoubleSupplier drive_fwd,
       DoubleSupplier drive_strafe) {
     m_drive = subsystem;
     m_drive_fwd = drive_fwd;
     m_drive_strafe = drive_strafe;
     m_drive_rcw = drive_rcw;
-    addRequirements(m_drive);
+   // addRequirements(m_drive);
   }
 
   @Override
