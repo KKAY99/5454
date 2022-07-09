@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.classes;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -15,8 +15,11 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.classes.Limelight;
+import frc.robot.classes.MathUtil;
+import frc.robot.common.drivers.NavX;
 //import jdk.jfr.events.ActiveRecordingEvent;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
@@ -24,13 +27,14 @@ import edu.wpi.first.wpilibj.SPI;
 /**
  * This class is used to run swerve drive.
  */
-public class SwerveDriveGB {
+public class SwerveDriveGB extends SubsystemBase{
 
     private final double trackWidth = 20.625;
     private final double wheelBase = 24.375;
     // KK Speed Adjustment 02/2021
     private final double kSpeedModifier = 0.8;
-    private AHRS gyro;
+   // private AHRS gyro;
+    private NavX gyro;
     private double gyroAngle;
 
     // Create TalonSRX Speed Controllers
@@ -125,10 +129,11 @@ public class SwerveDriveGB {
     private boolean gyroAlignedZero = false;
     private double gyroAngleError;
 
-    public SwerveDriveGB(AHRS ahrs) {
+    public SwerveDriveGB(NavX navX) {
         // Moved all of setup / init to the contained in the class
         // needs the gyro passed in
         // Create Drive Motors
+        
         TalonSRX FrontLeftSteering;
         TalonSRX FrontRightSteering;
         TalonSRX BackLeftSteering;
@@ -138,17 +143,17 @@ public class SwerveDriveGB {
         CANSparkMax BackLeftDrive;
         CANSparkMax BackRightDrive;
         // #region Initialize Drive Motors
-        FrontLeftSteering = new TalonSRX(Constants.SwerveDriveGB.kFrontLeftSteering);
-        FrontRightSteering = new TalonSRX(Constants.SwerveDriveGB.kFrontRightSteering);
-        BackLeftSteering = new TalonSRX(Constants.SwerveDriveGB.kBackLeftSteering);
-        BackRightSteering = new TalonSRX(Constants.SwerveDriveGB.kBackRightSteering);
-        FrontLeftDrive = new CANSparkMax(Constants.SwerveDriveGB.kFrontLeftDrive, MotorType.kBrushless);
-        FrontRightDrive = new CANSparkMax(Constants.SwerveDriveGB.kFrontRightDrive, MotorType.kBrushless);
-        BackLeftDrive = new CANSparkMax(Constants.SwerveDriveGB.kBackLeftDrive, MotorType.kBrushless);
-        BackRightDrive = new CANSparkMax(Constants.SwerveDriveGB.kBackRightDrive, MotorType.kBrushless);
+        FrontLeftSteering = new TalonSRX(Constants.SwerveDriveGBConfig.kFrontLeftSteering);
+        FrontRightSteering = new TalonSRX(Constants.SwerveDriveGBConfig.kFrontRightSteering);
+        BackLeftSteering = new TalonSRX(Constants.SwerveDriveGBConfig.kBackLeftSteering);
+        BackRightSteering = new TalonSRX(Constants.SwerveDriveGBConfig.kBackRightSteering);
+        FrontLeftDrive = new CANSparkMax(Constants.SwerveDriveGBConfig.kFrontLeftDrive, MotorType.kBrushless);
+        FrontRightDrive = new CANSparkMax(Constants.SwerveDriveGBConfig.kFrontRightDrive, MotorType.kBrushless);
+        BackLeftDrive = new CANSparkMax(Constants.SwerveDriveGBConfig.kBackLeftDrive, MotorType.kBrushless);
+        BackRightDrive = new CANSparkMax(Constants.SwerveDriveGBConfig.kBackRightDrive, MotorType.kBrushless);
         // #endregion
         SwerveDriveInit(FrontLeftSteering, FrontRightSteering, BackLeftSteering, BackRightSteering, FrontLeftDrive,
-                FrontRightDrive, BackLeftDrive, BackRightDrive, ahrs);
+                FrontRightDrive, BackLeftDrive, BackRightDrive, navX);
     }
 
     /**
@@ -169,16 +174,11 @@ public class SwerveDriveGB {
 
     private void SwerveDriveInit(TalonSRX motorFrontLeftSteering, TalonSRX motorFrontRightSteering,
             TalonSRX motorBackLeftSteering, TalonSRX motorBackRightSteering, CANSparkMax FrontLeftDrive,
-            CANSparkMax FrontRightDrive, CANSparkMax BackLeftDrive, CANSparkMax BackRightDrive, AHRS ahrs) {
+            CANSparkMax FrontRightDrive, CANSparkMax BackLeftDrive, CANSparkMax BackRightDrive, NavX ahrs) {
 
         gyro = ahrs;
 
-        try {
-            gyro = new AHRS(SPI.Port.kMXP);
-            gyro.zeroYaw();
-        } catch (Exception ex) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
+        
 
         m_SrxFrontLeftSteering = motorFrontLeftSteering;
         m_SrxFrontRightSteering = motorFrontRightSteering;
@@ -211,113 +211,113 @@ public class SwerveDriveGB {
         m_BackRightDrive.burnFlash();
 
         // Configure Feedback Sensors for Drive
-        m_SrxFrontLeftSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGB.kPIDLoopIdx,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGB.kPIDLoopIdx,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGB.kPIDLoopIdx,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGB.kPIDLoopIdx,
-                Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxFrontLeftSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
 
         // Tell the talon to not report if the sensor is out of Phase
-        m_SrxFrontLeftSteering.setSensorPhase(Constants.SwerveDriveGB.kSensorPhase);
-        m_SrxFrontRightSteering.setSensorPhase(Constants.SwerveDriveGB.kSensorPhase);
-        m_SrxBackLeftSteering.setSensorPhase(Constants.SwerveDriveGB.kSensorPhase);
-        m_SrxBackRightSteering.setSensorPhase(Constants.SwerveDriveGB.kSensorPhase);
+        m_SrxFrontLeftSteering.setSensorPhase(Constants.SwerveDriveGBConfig.kSensorPhase);
+        m_SrxFrontRightSteering.setSensorPhase(Constants.SwerveDriveGBConfig.kSensorPhase);
+        m_SrxBackLeftSteering.setSensorPhase(Constants.SwerveDriveGBConfig.kSensorPhase);
+        m_SrxBackRightSteering.setSensorPhase(Constants.SwerveDriveGBConfig.kSensorPhase);
 
         /*
          * Set based on what direction you want forward/positive to be. This does not
          * affect sensor phase.
          */
-        m_SrxFrontLeftSteering.setInverted(Constants.SwerveDriveGB.kMotorInvert);
-        m_SrxFrontRightSteering.setInverted(Constants.SwerveDriveGB.kMotorInvert);
-        m_SrxBackLeftSteering.setInverted(Constants.SwerveDriveGB.kMotorInvert);
-        m_SrxBackRightSteering.setInverted(Constants.SwerveDriveGB.kMotorInvert);
+        m_SrxFrontLeftSteering.setInverted(Constants.SwerveDriveGBConfig.kMotorInvert);
+        m_SrxFrontRightSteering.setInverted(Constants.SwerveDriveGBConfig.kMotorInvert);
+        m_SrxBackLeftSteering.setInverted(Constants.SwerveDriveGBConfig.kMotorInvert);
+        m_SrxBackRightSteering.setInverted(Constants.SwerveDriveGBConfig.kMotorInvert);
 
         /* Config the peak and nominal outputs, 12V means full */
         // Front Left
-        m_SrxFrontLeftSteering.configNominalOutputForward(0, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontLeftSteering.configNominalOutputReverse(0, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontLeftSteering.configPeakOutputForward(1, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontLeftSteering.configPeakOutputReverse(-1, Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxFrontLeftSteering.configNominalOutputForward(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontLeftSteering.configNominalOutputReverse(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontLeftSteering.configPeakOutputForward(1, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontLeftSteering.configPeakOutputReverse(-1, Constants.SwerveDriveGBConfig.kTimeoutMs);
         // Front Right
-        m_SrxFrontRightSteering.configNominalOutputForward(0, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.configNominalOutputReverse(0, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.configPeakOutputForward(1, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.configPeakOutputReverse(-1, Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxFrontRightSteering.configNominalOutputForward(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.configNominalOutputReverse(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.configPeakOutputForward(1, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.configPeakOutputReverse(-1, Constants.SwerveDriveGBConfig.kTimeoutMs);
         // Back Left
-        m_SrxBackLeftSteering.configNominalOutputForward(0, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.configNominalOutputReverse(0, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.configPeakOutputForward(1, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.configPeakOutputReverse(-1, Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxBackLeftSteering.configNominalOutputForward(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.configNominalOutputReverse(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.configPeakOutputForward(1, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.configPeakOutputReverse(-1, Constants.SwerveDriveGBConfig.kTimeoutMs);
         // Back Right
-        m_SrxBackRightSteering.configNominalOutputForward(0, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.configNominalOutputReverse(0, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.configPeakOutputForward(1, Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.configPeakOutputReverse(-1, Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxBackRightSteering.configNominalOutputForward(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.configNominalOutputReverse(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.configPeakOutputForward(1, Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.configPeakOutputReverse(-1, Constants.SwerveDriveGBConfig.kTimeoutMs);
 
         // Configure the amount of allowable error in the loop
-        m_SrxFrontLeftSteering.configAllowableClosedloopError(Constants.SwerveDriveGB.kAlloweedError,
-                Constants.SwerveDriveGB.kPIDLoopIdx,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.configAllowableClosedloopError(Constants.SwerveDriveGB.kAlloweedError,
-                Constants.SwerveDriveGB.kPIDLoopIdx,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.configAllowableClosedloopError(Constants.SwerveDriveGB.kAlloweedError,
-                Constants.SwerveDriveGB.kPIDLoopIdx,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.configAllowableClosedloopError(Constants.SwerveDriveGB.kAlloweedError,
-                Constants.SwerveDriveGB.kPIDLoopIdx,
-                Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxFrontLeftSteering.configAllowableClosedloopError(Constants.SwerveDriveGBConfig.kAlloweedError,
+                Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.configAllowableClosedloopError(Constants.SwerveDriveGBConfig.kAlloweedError,
+                Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.configAllowableClosedloopError(Constants.SwerveDriveGBConfig.kAlloweedError,
+                Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.configAllowableClosedloopError(Constants.SwerveDriveGBConfig.kAlloweedError,
+                Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
 
         // Configure the overloop behavior of the encoders
-        m_SrxFrontLeftSteering.configFeedbackNotContinuous(Constants.SwerveDriveGB.kNonContinuousFeedback,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.configFeedbackNotContinuous(Constants.SwerveDriveGB.kNonContinuousFeedback,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.configFeedbackNotContinuous(Constants.SwerveDriveGB.kNonContinuousFeedback,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.configFeedbackNotContinuous(Constants.SwerveDriveGB.kNonContinuousFeedback,
-                Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxFrontLeftSteering.configFeedbackNotContinuous(Constants.SwerveDriveGBConfig.kNonContinuousFeedback,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.configFeedbackNotContinuous(Constants.SwerveDriveGBConfig.kNonContinuousFeedback,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.configFeedbackNotContinuous(Constants.SwerveDriveGBConfig.kNonContinuousFeedback,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.configFeedbackNotContinuous(Constants.SwerveDriveGBConfig.kNonContinuousFeedback,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
 
         /* Config Position Closed Loop gains in slot0, typically kF stays zero. */
         // Front Left
-        m_SrxFrontLeftSteering.config_kF(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kF,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontLeftSteering.config_kP(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kP,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontLeftSteering.config_kI(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kI,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontLeftSteering.config_kD(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kD,
-                Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxFrontLeftSteering.config_kF(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kF,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontLeftSteering.config_kP(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kP,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontLeftSteering.config_kI(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kI,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontLeftSteering.config_kD(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kD,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
         // Front Right
-        m_SrxFrontRightSteering.config_kF(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kF,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.config_kP(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kP,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.config_kI(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kI,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxFrontRightSteering.config_kD(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kD,
-                Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxFrontRightSteering.config_kF(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kF,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.config_kP(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kP,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.config_kI(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kI,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxFrontRightSteering.config_kD(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kD,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
         // Back Left
-        m_SrxBackLeftSteering.config_kF(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kF,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.config_kP(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kP,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.config_kI(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kI,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackLeftSteering.config_kD(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kD,
-                Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxBackLeftSteering.config_kF(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kF,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.config_kP(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kP,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.config_kI(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kI,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackLeftSteering.config_kD(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kD,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
         // Back Right
-        m_SrxBackRightSteering.config_kF(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kF,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.config_kP(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kP,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.config_kI(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kI,
-                Constants.SwerveDriveGB.kTimeoutMs);
-        m_SrxBackRightSteering.config_kD(Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kGains.kD,
-                Constants.SwerveDriveGB.kTimeoutMs);
+        m_SrxBackRightSteering.config_kF(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kF,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.config_kP(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kP,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.config_kI(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kI,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
+        m_SrxBackRightSteering.config_kD(Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kGains.kD,
+                Constants.SwerveDriveGBConfig.kTimeoutMs);
 
         m_SrxFrontLeftSteering.configSelectedFeedbackCoefficient(1.0);
         m_SrxFrontRightSteering.configSelectedFeedbackCoefficient(1.0);
@@ -350,7 +350,7 @@ public class SwerveDriveGB {
      *                     calculated from them
      */
 
-    private void driveRobot(double FWD, double STR, double RCW) {
+    public void driveRobot(double FWD, double STR, double RCW) {
         m_FWD = FWD;
         m_STR = STR;
         // Math
@@ -449,9 +449,12 @@ public class SwerveDriveGB {
         // less bad
         if (fieldCentric) {
 
-            gyroAngle = gyro.getFusedHeading();
+            //using ahrs
+            // gyro.getFusedHeading();
 
-            gyroAngle *= degreesToRadians;
+            //gyroAngle *= degreesToRadians;
+           
+            gyroAngle = gyro.getAngle().toRadians();
             double temp = STR * Math.cos(gyroAngle) + FWD * Math.sin(gyroAngle);
             FWD = -STR * Math.sin(gyroAngle) + FWD * Math.cos(gyroAngle);
             STR = temp;
@@ -507,7 +510,7 @@ public class SwerveDriveGB {
                 }
             } else {
                 gyroAngleError = (gyroAngle) * 50.0 / 180.0;
-                if (Math.abs(gyroAngleError) > Constants.SwerveDriveGB.kVisionGyroTolerance) {
+                if (Math.abs(gyroAngleError) > Constants.SwerveDriveGBConfig.kVisionGyroTolerance) {
                     driveRobot(0, 0, m_Limelight.getRotationPower(gyroAngleError));
                 } else {
                     gyroAlignedZero = true;
@@ -525,18 +528,18 @@ public class SwerveDriveGB {
      * double STR = 0;
      * double RCW = 0;
      * 
-     * if (Math.abs(xGap) > Constants.SwerveDriveGB.kVisionXTolerance) {
+     * if (Math.abs(xGap) > Constants.SwerveDriveGBConfig.kVisionXTolerance) {
      * if (xGap > 0) {
-     * STR = Constants.SwerveDriveGB.kVisionDriveSpeedSlow;
+     * STR = Constants.SwerveDriveGBConfig.kVisionDriveSpeedSlow;
      * } else {
-     * STR = -Constants.SwerveDriveGB.kVisionDriveSpeedSlow;
+     * STR = -Constants.SwerveDriveGBConfig.kVisionDriveSpeedSlow;
      * }
      * } else if (Math.abs(distanceGap) >
-     * Constants.SwerveDriveGB.kVisionDistanceTolerance) {
+     * Constants.SwerveDriveGBConfig.kVisionDistanceTolerance) {
      * if (distanceGap > 0) {
-     * FWD = -Constants.SwerveDriveGB.kVisionDriveSpeedSlow;
+     * FWD = -Constants.SwerveDriveGBConfig.kVisionDriveSpeedSlow;
      * } else {
-     * FWD = Constants.SwerveDriveGB.kVisionDriveSpeedSlow;
+     * FWD = Constants.SwerveDriveGBConfig.kVisionDriveSpeedSlow;
      * }
      * 
      * }
@@ -552,12 +555,12 @@ public class SwerveDriveGB {
      * double driveSpeed;
      * // hack instead of PID
      * if (Math.abs(xGap) > 3) {
-     * driveSpeed = Constants.SwerveDriveGB.kVisionDriveSpeedFast;
+     * driveSpeed = Constants.SwerveDriveGBConfig.kVisionDriveSpeedFast;
      * } else {
-     * driveSpeed = Constants.SwerveDriveGB.kVisionDriveSpeedSlow;
+     * driveSpeed = Constants.SwerveDriveGBConfig.kVisionDriveSpeedSlow;
      * }
      * 
-     * if (Math.abs(xGap) > Constants.SwerveDriveGB.kVisionXTolerance) {
+     * if (Math.abs(xGap) > Constants.SwerveDriveGBConfig.kVisionXTolerance) {
      * if (xGap > 0) {
      * STR = driveSpeed;
      * } else {
@@ -566,12 +569,12 @@ public class SwerveDriveGB {
      * }
      * // hack instead of PID
      * if (Math.abs(distanceGap) > 3) {
-     * driveSpeed = Constants.SwerveDriveGB.kVisionDriveSpeedFast;
+     * driveSpeed = Constants.SwerveDriveGBConfig.kVisionDriveSpeedFast;
      * } else {
-     * driveSpeed = Constants.SwerveDriveGB.kVisionDriveSpeedSlow;
+     * driveSpeed = Constants.SwerveDriveGBConfig.kVisionDriveSpeedSlow;
      * }
      * 
-     * if (Math.abs(distanceGap) > Constants.SwerveDriveGB.kVisionDistanceTolerance)
+     * if (Math.abs(distanceGap) > Constants.SwerveDriveGBConfig.kVisionDistanceTolerance)
      * {
      * if (distanceGap > 0) {
      * FWD = -driveSpeed;
@@ -600,7 +603,7 @@ public class SwerveDriveGB {
         if ((driveSpeedSTR < 0.05) && (driveSpeedSTR > 0.0)) {
             driveSpeedSTR += 0.05;
         }
-        if (Math.abs(xGap) > Constants.SwerveDriveGB.kVisionXTolerance) {
+        if (Math.abs(xGap) > Constants.SwerveDriveGBConfig.kVisionXTolerance) {
             if (xGap > 0) {
                 STR = driveSpeedSTR;
             } else {
@@ -613,7 +616,7 @@ public class SwerveDriveGB {
             driveSpeedFWD += 0.05;
         }
 
-        if (Math.abs(distanceGap) > Constants.SwerveDriveGB.kVisionDistanceTolerance) {
+        if (Math.abs(distanceGap) > Constants.SwerveDriveGBConfig.kVisionDistanceTolerance) {
             if (distanceGap > 0) {
                 FWD = -driveSpeedFWD;
             } else {
@@ -651,7 +654,7 @@ public class SwerveDriveGB {
     public void steer(TalonSRX controller, double targetAngle, int offset) {
     
         final double ticksPerRotation = 1024; // in encoder counts
-        final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveGB.kSlotIdx);
+        final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveGBConfig.kSlotIdx);
         final double desired = (int) Math.round(targetAngle * ticksPerRotation / 360.0) + offset;
 
         final double newPosition = (int) MathUtil.minChange(desired, current, ticksPerRotation) + current;
@@ -661,7 +664,7 @@ public class SwerveDriveGB {
     public double quickSteer(TalonSRX controller, double targetAngle, boolean quickReverseAllowed) {
         double speedMultiplier = 1;
         final int ticksPerRotation = 1024; // in encoder counts
-        final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveGB.kSlotIdx);
+        final double current = controller.getSelectedSensorPosition(Constants.SwerveDriveGBConfig.kSlotIdx);
         final double desired = (int) Math.round(targetAngle * ticksPerRotation / 360.0) - Math.abs(frontLeftOffset);
 
         if (quickReverseAllowed) {
@@ -784,7 +787,7 @@ public class SwerveDriveGB {
         m_autoDrive = true;
         // xGap=m_Limelight.getX() + offset;
         // xGap += 15;
-        // while(Math.abs(xGap)>Constants.SwerveDriveGB.kVisionXToleranceRCW){
+        // while(Math.abs(xGap)>Constants.SwerveDriveGBConfig.kVisionXToleranceRCW){
         // RCW = m_Limelight.getRotationPower(xGap);
         // driveRobot(0,0,RCW);
         // xGap=m_Limelight.getX() + offset;
@@ -793,7 +796,7 @@ public class SwerveDriveGB {
             xGap = m_Limelight.getX() + offset;
             RCW = m_Limelight.getRotationPower(xGap);
             driveRobot(0, 0, RCW);
-        } while (Math.abs(xGap) > Constants.SwerveDriveGB.kVisionXToleranceRCW);
+        } while (Math.abs(xGap) > Constants.SwerveDriveGBConfig.kVisionXToleranceRCW);
         driveKill();
         m_autoDrive = false;
     }
@@ -850,5 +853,21 @@ public class SwerveDriveGB {
     public boolean isReadyToShoot() {
         return m_isAligned && m_autoDrive;
     }
+    public double getFrontLeftAngle(){
+        return frontLeftModule.getCurrentAngle();
+    }
+    public double getFrontRightAngle(){
+        return frontRightModule.getCurrentAngle();
+    }
+    public double getBackLeftAngle(){
+        return backLeftModule.getCurrentAngle();
+    }
+    public double getbackRightAngle(){
+        return backRightModule.getCurrentAngle();
+        }
+    public void resetGyroscope() {
+        m_gyroscope.setAdjustmentAngle(m_gyroscope.getUnadjustedAngle());
+    }
+
 
 }

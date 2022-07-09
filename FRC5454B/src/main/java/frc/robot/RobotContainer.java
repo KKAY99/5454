@@ -26,7 +26,7 @@ import frc.robot.subsystems.*;
 import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.InputControllers;
-import frc.robot.Constants.SwerveDriveGB;
+import frc.robot.Constants.SwerveDriveGBConfig;
 import frc.robot.Constants.zAutomation;
 import frc.robot.Constants.LEDS.Colors;
 import frc.robot.classes.Limelight;
@@ -51,10 +51,11 @@ public class RobotContainer {
     private NavX m_NavX = new NavX(SPI.Port.kMXP);
    // private final DriveSubsystem m_RobotDrive = new DriveSubsystem(m_ahrs);
    //private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
-   private final SwerveDriveGB m_RobotDrive= new SwerveDriveGB();
+   private final SwerveDriveGB m_RobotDrive= new SwerveDriveGB(m_NavX);
     private final Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,Constants.LimeLightValues.kVisionXOffset);
     
      private final LEDStrip m_ledStrip = new LEDStrip(Constants.LEDS.PORT, Constants.LEDS.COUNT);
+     //KK Clean up Disbled
      private static enum LEDMode
      {
                      NOTSET,DISBLED, AUTOMODE, OFFTARGET, OFFTARGETSWEET, ONTARGETSWEET,ONTARGET,SHOOTING,CLIMBING,TELEOP;	
@@ -63,6 +64,7 @@ public class RobotContainer {
      private boolean m_ledFlash=false;
      private boolean m_ledFlashMode=false;
      private int m_ledFlashDelayCount=0;
+     //KK Clean Up
      private static final int LEDMODE_WAVE = 0;
      private static final int LEDMODE_BAR = 1;
      private static final int LEDMODE_RAINBOW = 2;
@@ -256,7 +258,8 @@ public class RobotContainer {
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   
     //leveraged in multiple functions
-    private zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
+    //KK need to research duplicate
+    //private zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
         
     private boolean m_turretHasReset =false;
     /**
@@ -401,7 +404,6 @@ public class RobotContainer {
          
         //aimAndSpin.whenHeld(aimAndSpinCommand);
         //aimAndSpin2.whenHeld(aimAndSpinCommand);
-        
         driverAutoShoot.whenHeld(LoadandShootCommand);
         operatorAutoShoot.whenHeld(LoadandShootCommand);
 

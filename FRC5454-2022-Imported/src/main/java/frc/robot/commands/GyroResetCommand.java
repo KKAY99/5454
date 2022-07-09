@@ -11,6 +11,7 @@ public class GyroResetCommand extends CommandBase {
    
   private final DrivetrainSubsystem m_drive;
   private final Limelight m_limelight;
+  private boolean m_isFinished=false;
   public GyroResetCommand(DrivetrainSubsystem subsystem, Limelight limelight) {
     m_drive = subsystem;
     m_limelight=limelight;
@@ -19,13 +20,23 @@ public class GyroResetCommand extends CommandBase {
 
   @Override
   public void execute() {
-     m_limelight.turnLEDOff();
+
+    System.out.println("Resetting Gyro");
+    m_limelight.turnLEDOff();
      m_drive.resetGyroscope();
      m_limelight.turnLEDOn();
      m_limelight.turnLEDOff();
      m_limelight.turnLEDOn();
      m_limelight.turnLEDOff();
      m_limelight.turnLEDOn();
-     
-  }
+     System.out.println("Resetting Gyro Complete");
+     m_isFinished=true;
+    }
+    // Returns true when the command should end.
+ 
+    @Override
+    public boolean isFinished() {
+      return m_isFinished;
+    }
+    
 }

@@ -213,7 +213,7 @@ public final class Constants {
     public static final double shooterPrimedSpeed=500;
     public static final double shooterSweetSpotLow=70; //was 60
     public static final double shooterSweetSpotHigh=90;
-    public static final class SwerveDriveGB {
+    public static final class SwerveDriveGBConfig {
         public static final int kSlotIdx = 0;
         /*
          * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now

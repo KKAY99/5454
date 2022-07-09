@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.SwerveDriveGB;
 import frc.robot.common.Utilities;
 import frc.robot.Constants;
-import frc.robot.Constants.SwerveDriveGB;
+import frc.robot.Constants.SwerveDriveGBConfig;
 public class DefaultDriveCommand extends CommandBase {
    
   private final SwerveDriveGB m_drive;
@@ -50,7 +51,8 @@ public class DefaultDriveCommand extends CommandBase {
     // Square the rotation stick
     rotation = Math.copySign(Math.pow(rotation, 2.0), rotation);
     //System.out.println(forward + " -- " + strafe + " -- " + rotation);
-    m_drive.drive(new Translation2d(forward, strafe), rotation, true);
-
+    //MK2 Serve Drive
+    // m_drive.drive(new Translation2d(forward, strafe), rotation, true);
+    m_drive.driveRobot(forward,strafe,rotation);  
   }
 }

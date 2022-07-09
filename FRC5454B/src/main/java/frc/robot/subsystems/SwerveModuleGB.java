@@ -94,24 +94,24 @@ public class SwerveModuleGB {
                 // m_turningPIDController.enableContinuousInput(0.0, kSteerEncoderResolution);
                 // m_turningPIDController.setTolerance(kSteerEncoderResolution / 2.0);
 
-                m_turningMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGB.kPIDLoopIdx,
-                                Constants.SwerveDriveGB.kTimeoutMs);
+                m_turningMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, Constants.SwerveDriveGBConfig.kPIDLoopIdx,
+                                Constants.SwerveDriveGBConfig.kTimeoutMs);
 
                 m_turningMotor.configSelectedFeedbackCoefficient(1.0,
-                                Constants.SwerveDriveGB.kPIDLoopIdx, Constants.SwerveDriveGB.kTimeoutMs);
+                                Constants.SwerveDriveGBConfig.kPIDLoopIdx, Constants.SwerveDriveGBConfig.kTimeoutMs);
 
-                m_turningMotor.configFeedbackNotContinuous(false, Constants.SwerveDriveGB.kTimeoutMs);
+                m_turningMotor.configFeedbackNotContinuous(false, Constants.SwerveDriveGBConfig.kTimeoutMs);
 
-                m_turningMotor.setSensorPhase(Constants.SwerveDriveGB.kSensorPhase);
+                m_turningMotor.setSensorPhase(Constants.SwerveDriveGBConfig.kSensorPhase);
 
-                m_turningMotor.setInverted(Constants.SwerveDriveGB.kMotorInvert);
+                m_turningMotor.setInverted(Constants.SwerveDriveGBConfig.kMotorInvert);
 
-                m_turningMotor.configNominalOutputForward(0, Constants.SwerveDriveGB.kTimeoutMs);
-                m_turningMotor.configNominalOutputReverse(0, Constants.SwerveDriveGB.kTimeoutMs);
-                m_turningMotor.configPeakOutputForward(1, Constants.SwerveDriveGB.kTimeoutMs);
-                m_turningMotor.configPeakOutputReverse(-1, Constants.SwerveDriveGB.kTimeoutMs);
+                m_turningMotor.configNominalOutputForward(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+                m_turningMotor.configNominalOutputReverse(0, Constants.SwerveDriveGBConfig.kTimeoutMs);
+                m_turningMotor.configPeakOutputForward(1, Constants.SwerveDriveGBConfig.kTimeoutMs);
+                m_turningMotor.configPeakOutputReverse(-1, Constants.SwerveDriveGBConfig.kTimeoutMs);
 
-                m_turningMotor.configAllowableClosedloopError(Constants.SwerveDriveGB.kPIDLoopIdx, 20);
+                m_turningMotor.configAllowableClosedloopError(Constants.SwerveDriveGBConfig.kPIDLoopIdx, 20);
                 m_turningMotor.setNeutralMode(NeutralMode.Brake);
 
                 m_driveMotor.setIdleMode(IdleMode.kBrake);
@@ -191,7 +191,7 @@ public class SwerveModuleGB {
 
                 // m_driveMotor.setVoltage(driveVoltage);
 
-                final double current = m_turningMotor.getSelectedSensorPosition(Constants.SwerveDriveGB.kSlotIdx);
+                final double current = m_turningMotor.getSelectedSensorPosition(Constants.SwerveDriveGBConfig.kSlotIdx);
                 final double desired = (int) Math
                                 .round(state.angle.getDegrees() * kSteerEncoderResolution / 360.0)
                                 + m_offset;
