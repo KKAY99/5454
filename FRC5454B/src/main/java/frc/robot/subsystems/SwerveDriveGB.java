@@ -43,7 +43,6 @@ public class SwerveDriveGB extends SubsystemBase{
     private TalonSRX m_SrxBackLeftSteering;
     private TalonSRX m_SrxBackRightSteering;
 
-    // Create SpeedControllers
     private CANSparkMax m_FrontLeftDrive;
     private CANSparkMax m_FrontRightDrive;
     private CANSparkMax m_BackLeftDrive;
@@ -809,7 +808,7 @@ public class SwerveDriveGB extends SubsystemBase{
      * For Autonomouse code this moves the boot the specified direction, speed, and
      * distnace
      */
-    public void move(double direction, double speed, double distance, boolean stopAtEnd) {
+    public void move(double direction, double rotation, double speed, double distance, boolean stopAtEnd) {
         double xSpeedPercent;
         double ySpeedPercent;
         double startPosition;
@@ -854,19 +853,19 @@ public class SwerveDriveGB extends SubsystemBase{
         return m_isAligned && m_autoDrive;
     }
     public double getFrontLeftAngle(){
-        return frontLeftModule.getCurrentAngle();
+        return frontLeft360Angle;
     }
     public double getFrontRightAngle(){
-        return frontRightModule.getCurrentAngle();
+        return frontRight360Angle;
     }
     public double getBackLeftAngle(){
-        return backLeftModule.getCurrentAngle();
+        return backLeft360Angle;
     }
     public double getbackRightAngle(){
-        return backRightModule.getCurrentAngle();
+        return backRight360Angle;
         }
     public void resetGyroscope() {
-        m_gyroscope.setAdjustmentAngle(m_gyroscope.getUnadjustedAngle());
+        gyro.setAdjustmentAngle(gyro.getUnadjustedAngle());
     }
 
 

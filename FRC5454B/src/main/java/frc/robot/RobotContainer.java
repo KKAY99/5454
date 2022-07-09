@@ -627,12 +627,7 @@ public class RobotContainer {
 }
     
      private void updateRobotMoving(){
-                if (m_RobotDrive.IsRobotMoving()){
-                        shuffleboardRobotMoving.setString("True");
-                }
-                else{
-                        shuffleboardRobotMoving.setString("False");     
-                }
+            
         }
 
      public void disabledPerioidicUpdates(){
