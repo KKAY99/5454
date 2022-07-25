@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
+  private final ADXRS450_Gyro m_gyro=new ADXRS450_Gyro();
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem(m_gyro);
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem, 0, 0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -38,11 +38,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    final ExampleSubsystem TestSystem = new ExampleSubsystem();
-    final ExampleCommand TestCommandForward= new ExampleCommand(TestSystem, 0.5, -0.5);
-    final ExampleCommand TestCommandBackward= new ExampleCommand(TestSystem, -0.5, 0.5);
-    final ExampleCommand TestCommandLeft= new ExampleCommand(TestSystem, 0.5, 0.2);
-    final ExampleCommand TestCommandRight= new ExampleCommand(TestSystem, -0.2, -0.5);
+    final ExampleCommand TestCommandForward= new ExampleCommand(m_exampleSubsystem, 0.5, -0.5);
+    final ExampleCommand TestCommandBackward= new ExampleCommand(m_exampleSubsystem, -0.5, 0.5);
+    final ExampleCommand TestCommandLeft= new ExampleCommand(m_exampleSubsystem, 0.5, 0.2);
+    final ExampleCommand TestCommandRight= new ExampleCommand(m_exampleSubsystem, -0.2, -0.5);
     final XboxController m_driver = new XboxController(0);
     final JoystickButton testbuttonF = new JoystickButton(m_driver, 4);
     final JoystickButton testbuttonB = new JoystickButton(m_driver, 1);
@@ -63,5 +62,21 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
-  }
+   }
+public void updategyro() {
+  System.out.println(m_gyro.getAngle());
+}
+private final DriveSubsystem m_RobotDrive = new DriveSubsystem();
+  
+ public RobotContainer() {
+    // Configure the button bindings
+
+    configureButtonBindings();
+    //m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_rightJoystick.getY() , ()-> m_leftJoystick.getY()));
+    //KK moved to one joystick for arcade
+    
+    m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_leftJoystick.getY() , ()-> m_leftJoystick.getX()));
+    
+  } 
+
 }

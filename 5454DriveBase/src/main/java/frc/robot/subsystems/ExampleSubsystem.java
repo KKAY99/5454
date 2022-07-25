@@ -4,8 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import java.lang.Math;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
@@ -17,12 +18,14 @@ public class ExampleSubsystem extends SubsystemBase {
   private VictorSPX m_TalonFx11;
   private VictorSPX m_TalonFx12;
   private VictorSPX m_TalonFx13;
+  private ADXRS450_Gyro m_gyro;
   /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {
+  public ExampleSubsystem(ADXRS450_Gyro gyro) {
     m_TalonFx10 = new VictorSPX(10);
     m_TalonFx11 = new VictorSPX(11);
     m_TalonFx12 = new VictorSPX(12);
     m_TalonFx13 = new VictorSPX(13);
+    m_gyro=gyro;
   }
  
   @Override
@@ -30,7 +33,15 @@ public class ExampleSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void setSpeed(double leftspeed, double rightspeed){
+    if(Math.abs(leftspeed)== Math.abs(rightspeed)){
+    if(m_gyro.getAngle()>2)  {
+      leftspeed+=0.1;
+    } else if(m_gyro.getAngle()<-2){
+      rightspeed+=-0.1;
+    }
+  } 
     System.out.println("Setting Speed " + leftspeed);
+
     m_TalonFx10.set(VictorSPXControlMode.PercentOutput,leftspeed);
     m_TalonFx11.set(VictorSPXControlMode.PercentOutput,leftspeed);
     m_TalonFx12.set(VictorSPXControlMode.PercentOutput,rightspeed);
