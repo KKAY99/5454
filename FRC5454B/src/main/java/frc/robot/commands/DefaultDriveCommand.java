@@ -32,7 +32,7 @@ public class DefaultDriveCommand extends CommandBase {
     m_drive_fwd = drive_fwd;
     m_drive_strafe = drive_strafe;
     m_drive_rcw = drive_rcw;
-   // addRequirements(m_drive);
+   addRequirements(m_drive);
   }
 
   @Override

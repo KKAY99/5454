@@ -6,9 +6,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+//import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import javax.lang.model.util.ElementScanner6;
-
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 //import edu.wpi.first.wpilibj.VictorSPX;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,14 +19,14 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class DriveSubsystem extends SubsystemBase {
   // The motors on the left side of the drive.
-  private final SpeedControllerGroup m_leftMotors =
-      new SpeedControllerGroup(new VictorSPX(DriveConstants.),
-                               new VictorSPX(DriveConstants.kLeftMotor2Port));
+  private final MotorControllerGroup m_leftMotors =
+      new MotorControllerGroup(new WPI_VictorSPX(DriveConstants.kLeftMotor1Port),
+                               new WPI_VictorSPX(DriveConstants.kLeftMotor2Port));
 
   // The motors on the right side of the drive.
-  private final SpeedControllerGroup m_rightMotors =
-      new SpeedControllerGroup(new VictorSPX(DriveConstants.kRightMotor1Port),
-                               new VictorSPX(DriveConstants.kRightMotor2Port));
+  private final MotorControllerGroup m_rightMotors =
+      new MotorControllerGroup(new WPI_VictorSPX(DriveConstants.kRightMotor1Port), 
+      new WPI_VictorSPX(DriveConstants.kRightMotor2Port));
 
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
@@ -62,6 +64,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
   public void arcadeDrive (double leftSpeed, double  rightSpeed) {  
+     System.out.println(leftSpeed+ " " +rightSpeed);    
      m_drive.arcadeDrive(leftSpeed, rightSpeed); 
   }
   public void commandDriveStraight (double speed,double duration){

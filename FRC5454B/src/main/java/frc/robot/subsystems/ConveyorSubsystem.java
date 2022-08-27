@@ -10,8 +10,7 @@ public class ConveyorSubsystem extends SubsystemBase {
 
     /** Creates a new ExampleSubsystem. */
     public ConveyorSubsystem(Integer ConveryorPort) {
-        //1/31 Switched to Victor
-        m_ConveyorMotor = new CANSparkMax(ConveryorPort, MotorType.kBrushless);
+        m_ConveyorMotor = new CANSparkMax(ConveryorPort, MotorType.kBrushed);
         
         m_ConveyorMotor.setInverted(false);
         m_ConveyorMotor.setOpenLoopRampRate(0.25);

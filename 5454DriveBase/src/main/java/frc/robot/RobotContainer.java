@@ -12,7 +12,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
-/**
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.DefaultDrive;
+import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Constants.InputControllers;
+
+/*
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
@@ -23,13 +28,9 @@ public class RobotContainer {
   private final ADXRS450_Gyro m_gyro=new ADXRS450_Gyro();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem(m_gyro);
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem, 0, 0);
+  private Joystick m_leftJoystick = new Joystick(InputControllers.kJoystickLeft);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-
-  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -38,22 +39,24 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    final ExampleCommand TestCommandForward= new ExampleCommand(m_exampleSubsystem, 0.5, -0.5);
-    final ExampleCommand TestCommandBackward= new ExampleCommand(m_exampleSubsystem, -0.5, 0.5);
-    final ExampleCommand TestCommandLeft= new ExampleCommand(m_exampleSubsystem, 0.5, 0.2);
-    final ExampleCommand TestCommandRight= new ExampleCommand(m_exampleSubsystem, -0.2, -0.5);
+    final ExampleCommand TestCommandSquare= new ExampleCommand(m_exampleSubsystem, 0.5, -0.5);
+    // final ExampleCommand TestCommandBackward= new ExampleCommand(m_exampleSubsystem, -0.5, 0.5);
+    // final ExampleCommand TestCommandLeft= new ExampleCommand(m_exampleSubsystem, 0.5, 0.2);
+    // final ExampleCommand TestCommandRight= new ExampleCommand(m_exampleSubsystem, -0.2, -0.5);
     final XboxController m_driver = new XboxController(0);
     final JoystickButton testbuttonF = new JoystickButton(m_driver, 4);
-    final JoystickButton testbuttonB = new JoystickButton(m_driver, 1);
-    final JoystickButton testbuttonL = new JoystickButton(m_driver, 3);
-    final JoystickButton testbuttonR = new JoystickButton(m_driver, 2);
-    testbuttonF.whenHeld(TestCommandForward);
-    testbuttonB.whenHeld(TestCommandBackward);
-    testbuttonL.whenHeld(TestCommandLeft);
-    testbuttonR.whenHeld(TestCommandRight);
-
+    // final JoystickButton testbuttonB = new JoystickButton(m_driver, 1);
+    // final JoystickButton testbuttonL = new JoystickButton(m_driver, 3);
+    // final JoystickButton testbuttonR = new JoystickButton(m_driver, 2);
+    testbuttonF.whenPressed(TestCommandSquare);
+    //testbuttonB.whenHeld(TestCommandBackward);
   }
-
+  
+  private void TestCommandSquare(){
+    for(int i = 0; i < 3; i++){
+    
+    }
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -75,7 +78,8 @@ private final DriveSubsystem m_RobotDrive = new DriveSubsystem();
     //m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_rightJoystick.getY() , ()-> m_leftJoystick.getY()));
     //KK moved to one joystick for arcade
     
-    m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_leftJoystick.getY() , ()-> m_leftJoystick.getX()));
+    m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_leftJoystick.getY() , ()->-m_leftJoystick.getX()));
+    
     
   } 
 

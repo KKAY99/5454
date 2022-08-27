@@ -20,14 +20,14 @@ import frc.robot.classes.Gains;
  */
 public final class Constants {
     public static final double kSpeedMultiplier = 1.0;
-    public static final int TopShooterPort=31;
-    public static final int BottomShooterPort=30;
-    public static final int ConveyorPort=33; //33
-    public static final int IntakePort=35;
+    public static final int TopShooterPort=17;
+    public static final int BottomShooterPort=16;
+    public static final int ConveyorPort=19; //33
+    public static final int IntakePort=11;
     public static final int IntakeInnerPort=37;
     
-    public static final int TurretPort=32;
-    public static final int FeederPort=34;
+    public static final int TurretPort=99;
+    public static final int FeederPort=98;
     public static final int ClimberPort=36;//36
     public static final double intakeSpeed=-.95; //.65
     public static final double intakeInnerSpeed=0.70;

@@ -33,7 +33,7 @@ public class TurretSubsystem extends SubsystemBase {
   public TurretSubsystem(Integer turretMotorPort, int leftSwitch, int rightSwitch, double safePositionforClimb,
       double safetyMoveSpeed) {
 
-    m_turretMotor = new CANSparkMax(turretMotorPort, MotorType.kBrushed);
+    m_turretMotor = new CANSparkMax(turretMotorPort, MotorType.kBrushless);
 
     m_turretMotor.setIdleMode(IdleMode.kBrake);
     // m_turretEncoder = m_turretMotor.getAlternateEncoder(klAtEncType,kCPR);

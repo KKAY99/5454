@@ -33,13 +33,7 @@ public class ExampleSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void setSpeed(double leftspeed, double rightspeed){
-    if(Math.abs(leftspeed)== Math.abs(rightspeed)){
-    if(m_gyro.getAngle()>2)  {
-      leftspeed+=0.1;
-    } else if(m_gyro.getAngle()<-2){
-      rightspeed+=-0.1;
-    }
-  } 
+    
     System.out.println("Setting Speed " + leftspeed);
 
     m_TalonFx10.set(VictorSPXControlMode.PercentOutput,leftspeed);

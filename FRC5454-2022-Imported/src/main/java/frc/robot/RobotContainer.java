@@ -610,6 +610,7 @@ public class RobotContainer {
         shuffleboardPDPCurrentC22.setDouble(m_robotPDH.getCurrent(22));        
         shuffleboardPDPCurrentC23.setDouble(m_robotPDH.getCurrent(23)); 
  */
+        System.out.println(m_Climb.getEncoderPosition());
         frontLeftAngle.setDouble(m_RobotDrive.getFrontLeftAngle());
         frontRightAngle.setDouble(m_RobotDrive.getFrontRightAngle());
         backLeftAngle.setDouble(m_RobotDrive.getBackLeftAngle());
@@ -803,5 +804,9 @@ public class RobotContainer {
             m_Shooter.stopShooter();
             m_LEDMode=LEDMode.DISBLED;
             LEDUpdate();
+    }
+
+    public void resetClimb(){
+        m_Climb.forceBottom();
     }
 }

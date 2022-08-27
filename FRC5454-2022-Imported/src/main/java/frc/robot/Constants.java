@@ -33,10 +33,12 @@ public final class Constants {
     public static final double intakeInnerSpeed=0.70;
     public static final double FeederSpeed=-1.0;
     public static final double FeederThresholdForLED=-.7;
-    public static final double conveyorUpSpeed=0.9;
+    public static final double conveyorUpSpeed=0.8;
     public static final double conveyorDownSpeed=-0.5;
     public static final double climbUpSpeed=.7;
     public static final double climbDownSpeed=-.9;
+    public static final double climbUpLimit = 17.65; //17.65
+    public static final double climbDownLimit = 0 ;//2.5;
     public static final double turretSpeed=0.50;
     public static final double turretMinSpeed=0.15;
     public static final double turretInitSpeed=-.30;
@@ -210,7 +212,7 @@ public final class Constants {
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
-    public static final double shooterPrimedSpeed=500;
+    public static final double shooterPrimedSpeed=500; //was 500 changed at stemposium
     public static final double shooterSweetSpotLow=70; //was 60
     public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGB {
