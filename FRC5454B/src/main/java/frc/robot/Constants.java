@@ -27,7 +27,7 @@ public final class Constants {
     public static final int IntakeInnerPort=37;
     
     public static final int TurretPort=99;
-    public static final int FeederPort=98;
+    public static final int FeederPort=13;
     public static final int ClimberPort=36;//36
     public static final double intakeSpeed=-.95; //.65
     public static final double intakeInnerSpeed=0.70;
@@ -102,14 +102,14 @@ public final class Constants {
     }
 
     public static final class ManualShots{
-        public final static double Shot1Top=700;
-        public final static double Shot1Bottom=750;
-        public final static double Shot2Top=750;
-        public final static double Shot2Bottom=800;
-        public final static double Shot3Top=100;
-        public final static double Shot3Bottom=1050;
-        public final static double Shot4Top=1400;
-        public final static double Shot4Bottom=1450;
+        public final static double Shot1Top=.7;
+        public final static double Shot1Bottom=.750;
+        public final static double Shot2Top=.750;
+        public final static double Shot2Bottom=.800;
+        public final static double Shot3Top=.100;
+        public final static double Shot3Bottom=.900;
+        public final static double Shot4Top=.300;
+        public final static double Shot4Bottom=.950;
 
     }
     public static final class LimitSwitches{
@@ -171,9 +171,9 @@ public final class Constants {
         
         public static final double DistanceToBall1=7;
         public static final double MoveSpeed=.30;
-        public static final double AutoShotTopSpeed=800;
-        public static final double AutoShotBottomSpeed=800;
-        public static final double AutoMinVelocity=800;
+        public static final double AutoShotTopSpeed=0.5;
+        public static final double AutoShotBottomSpeed=0.5;
+        public static final double AutoMinVelocity=0.5;
     }
     public static final class zAutomation{
         public static final double shooterSpinUp=2;
@@ -210,7 +210,7 @@ public final class Constants {
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
-    public static final double shooterPrimedSpeed=500;
+    public static final double shooterPrimedSpeed=.50;
     public static final double shooterSweetSpotLow=70; //was 60
     public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGBConfig {

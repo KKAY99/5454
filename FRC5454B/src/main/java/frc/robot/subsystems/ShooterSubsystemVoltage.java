@@ -4,25 +4,20 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxPIDController;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class ShooterSubsystem implements Subsystem {
+public class ShooterSubsystemVoltage implements Subsystem {
   private CANSparkMax m_Bottom_ShooterMotor;
   private CANSparkMax m_Top_ShooterMotor;
-  private SparkMaxPIDController m_BottomPIDController;
-  private SparkMaxPIDController m_TopPIDController;
   private double m_VelocityMultiplier=1;
   private static double m_defaultTopSpeed=775;
   private static double m_defaultBottomSpeed=775;
   private static double kGearRatio=6;
   private static double m_PrimeSpeed;
-  private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
-
-     
+  
   private static double[] powerTopValues = {
     775,//1
     775,//2
@@ -43,21 +38,21 @@ public class ShooterSubsystem implements Subsystem {
 };
 
 private static double[] powerBottomValues = {
-    775,//1
-    775,//2
-    775,//3
-    775,//4
-    866,//5
-    875,//6
-    1000,//7
-    1102,//8
-    1572,//9
-    1550,//10
-    1550,//11
-    1700,//12
-    1800,//13
-    1900,//14
-    2000,//15
+    .50,//1
+    .50,//2
+    .50,//3
+    .55,//4
+    .60,//5
+    .62,//6
+    .65,//7
+    .68,//8
+    .70,//9
+    .720,//10
+    .800,//11
+    .840,//12
+    .860,//13
+    .880,//14
+    .900,//15
     1110 //16
 };
 
@@ -80,41 +75,25 @@ public static double[] distanceValues = {
     189.5//16
 };
   /** Creates a new ExampleSubsystem. */
-  public ShooterSubsystem(Integer BottomPort, Integer TopPort,double primeSpeed) {
+  public ShooterSubsystemVoltage(Integer BottomPort, Integer TopPort,double primeSpeed) {
     m_PrimeSpeed=primeSpeed;
     m_Bottom_ShooterMotor = new CANSparkMax(BottomPort, MotorType.kBrushless);
-    m_BottomPIDController=m_Bottom_ShooterMotor.getPIDController();
     m_Top_ShooterMotor = new CANSparkMax(TopPort, MotorType.kBrushless);
-    m_TopPIDController=m_Top_ShooterMotor.getPIDController();
+    
    
     m_Bottom_ShooterMotor.setInverted(true);
-    m_Top_ShooterMotor.setInverted(false);
     //m_Bottom_ShooterMotor.setNeutralMode(NeutralMode.Coast);
-    //m_Top_ShooterMotor.setNeutralMode(NeutralMode.Coast); 
-     // PID coefficients
-    kP = 6e-5; 
-    kI = 0;
-    kD = 0; 
-    kIz = 0; 
-    kFF = 0.000015; 
-    kMaxOutput = 1; 
-    kMinOutput = -1;
-    maxRPM = 5700;
-
-    // set PID coefficients
-    m_TopPIDController.setP(kP);
-    m_TopPIDController.setI(kI);
-    m_TopPIDController.setD(kD);
-    m_TopPIDController.setIZone(kIz);
-    m_TopPIDController.setFF(kFF);
-    m_TopPIDController.setOutputRange(kMinOutput, kMaxOutput);
-    m_BottomPIDController.setP(kP);
-    m_BottomPIDController.setI(kI);
-    m_BottomPIDController.setD(kD);
-    m_BottomPIDController.setIZone(kIz);
-    m_BottomPIDController.setFF(kFF);
-    m_BottomPIDController.setOutputRange(kMinOutput, kMaxOutput);
-  
+    //m_Top_ShooterMotor.setNeutralMode(NeutralMode.Coast);
+     /*
+    m_Bottom_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
+    
+    m_Bottom_ShooterMotor.selectProfileSlot(0,0);
+    m_Bottom_ShooterMotor.config_kP(0,0);
+    m_Bottom_ShooterMotor.config_kI(0,0);
+    m_Bottom_ShooterMotor.config_kD(0,0);
+    m_Bottom_ShooterMotor.config_kF(0,.5);
+    */
+    m_Top_ShooterMotor.setInverted(false);
     /*
     m_Top_ShooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,0,30); 
     m_Top_ShooterMotor.selectProfileSlot(0,0);
@@ -170,10 +149,16 @@ public static double[] distanceValues = {
     bottomVelocity=bottomVelocity*m_VelocityMultiplier;
     topVelocity=topVelocity*m_VelocityMultiplier;
     //Adjust Motor to %
-    System.out.println("Shoooter Velocity " + " - " + bottomVelocity + " - " + topVelocity);
+    if(topVelocity>1.0){
+      topVelocity=1.0;
+    }
+    if (bottomVelocity>1.0){
+      bottomVelocity=1.0;
+    }
+    System.out.println("Shoooter " + " - " + bottomVelocity + " - " + topVelocity);
     //m_Bottom_ShooterMotor.set(bottomVelocity);
-    m_TopPIDController.setReference(topVelocity, CANSparkMax.ControlType.kVelocity);
-    m_BottomPIDController.setReference(bottomVelocity, CANSparkMax.ControlType.kVelocity);
+    m_Bottom_ShooterMotor.set(bottomVelocity);
+    m_Top_ShooterMotor.set(topVelocity);
     
  
   }

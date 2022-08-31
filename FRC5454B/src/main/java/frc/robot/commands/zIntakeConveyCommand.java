@@ -12,7 +12,7 @@ public class zIntakeConveyCommand extends CommandBase {
   private final double m_intakeOutSpeed;
   private final double m_feederSpeed;
 
-  public zIntakeConveyCommand(IntakeSubsystem intake, double intakeOutSpeed,double intakeInnerSpeed, ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed){
+  public zIntakeConveyCommand(IntakeSubsystem intake, double intakeOutSpeed, ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed){
     m_conveyor=conveyor;
     m_feeder=feeder;
     m_intake=intake;

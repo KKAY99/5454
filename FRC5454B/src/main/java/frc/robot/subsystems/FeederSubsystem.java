@@ -11,6 +11,7 @@ public class FeederSubsystem extends SubsystemBase {
     /** Creates a new ExampleSubsystem. */
     public FeederSubsystem(Integer FeederPort) {
         m_FeederMotor = new CANSparkMax(FeederPort, MotorType.kBrushless);
+        m_FeederMotor.setInverted(true);
         m_FeederMotor.setOpenLoopRampRate(0.25);
     }
 

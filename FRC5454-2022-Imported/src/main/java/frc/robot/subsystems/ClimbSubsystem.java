@@ -34,14 +34,14 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public boolean hitBottomLimit() {
-        return (m_ClimbBottomLimitSwitch.get());
-       /* if(m_ClimbEncoder.getPosition() <= Constants.climbDownLimit){
+      //  return (m_ClimbBottomLimitSwitch.get());
+        if(m_ClimbBottomLimitSwitch.get() ||(m_ClimbEncoder.getPosition() <= Constants.climbDownLimit)){
             return true;
         }else
         {
             return false;
         }
-    */
+    
     } 
 
     public boolean hitTopLimit() {
