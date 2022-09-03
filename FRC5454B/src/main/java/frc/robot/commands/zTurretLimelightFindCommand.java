@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystemVelocity;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;

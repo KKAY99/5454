@@ -14,10 +14,8 @@ public class zIntakeTimeCommand extends CommandBase {
   private final ConveyorSubsystem m_conveyor;
   private final FeederSubsystem m_feeder;
   private final IntakeSubsystem m_intake;
-  private final IntakeSubsystem m_intakeInner;
   private final double m_conveyorSpeed;
   private final double m_intakeOutSpeed;
-  private final double m_intakeInnerSpeed;
   private final double m_feederSpeed;
 
   private final boolean m_keepRunning;
@@ -28,19 +26,17 @@ public class zIntakeTimeCommand extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
    
-  public zIntakeTimeCommand(IntakeSubsystem intake, IntakeSubsystem intakeInner,double intakeOutSpeed,double intakeInnerSpeed, ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed,boolean keepRunning){ 
+  public zIntakeTimeCommand(IntakeSubsystem intake,double intakeOutSpeed, ConveyorSubsystem conveyor,double conveyorSpeed,FeederSubsystem feeder,double feederSpeed,boolean keepRunning){ 
     m_conveyor=conveyor;
     m_feeder=feeder;
     m_intake=intake;
-    m_intakeInner=intakeInner;
     m_conveyorSpeed=conveyorSpeed;
     m_feederSpeed=feederSpeed;
     m_intakeOutSpeed=intakeOutSpeed;
-    m_intakeInnerSpeed=intakeInnerSpeed;
+    
     m_keepRunning=keepRunning;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_intake);
-    addRequirements(m_intakeInner);
     addRequirements(m_conveyor);
     addRequirements(m_feeder);
   }
@@ -56,7 +52,6 @@ public class zIntakeTimeCommand extends CommandBase {
 
       m_conveyor.run(m_conveyorSpeed);
       m_intake.runIntake(m_intakeOutSpeed);
-      m_intakeInner.runIntake(m_intakeInnerSpeed);
       m_feeder.run(m_feederSpeed);
  
   }
@@ -68,7 +63,7 @@ public class zIntakeTimeCommand extends CommandBase {
       m_conveyor.stop();
       m_feeder.stop();
       m_intake.stopIntake();
-      m_intakeInner.stopIntake();
+    
     }
   }
 

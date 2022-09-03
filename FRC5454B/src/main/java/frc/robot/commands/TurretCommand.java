@@ -5,6 +5,9 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.TurretSubsystem;
+
+import java.util.Random;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -13,7 +16,7 @@ public class TurretCommand extends CommandBase {
   private final TurretSubsystem m_TurretSubsystem;
   private final double m_speed;
   private boolean m_interupted=false;
-
+  private double m_instanceid;
   /**
    * Creates a new ExampleCommand.
    *
@@ -22,6 +25,8 @@ public class TurretCommand extends CommandBase {
   public TurretCommand(TurretSubsystem subsystem,double speed) {
     m_TurretSubsystem = subsystem;
     m_speed=speed;
+    Random rand =new Random();
+    m_instanceid=rand.nextDouble();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_TurretSubsystem);
   }
@@ -64,6 +69,7 @@ public class TurretCommand extends CommandBase {
       System.out.println("Right Liimit but moving left so not returning false on it limit");
     }
     return returnValue;
+
   }
   // Returns true when the command should end.
   @Override

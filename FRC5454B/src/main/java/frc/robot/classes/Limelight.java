@@ -11,7 +11,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystemVelocity;
 
 public class Limelight {
     private static NetworkTable llTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -102,8 +102,8 @@ public class Limelight {
     // return 0.115*Math.pow(Math.abs(error), 0.5);
     // }
 
-    private static double[] distanceValues = new double[] { ShooterSubsystem.distanceValues[0],
-            ShooterSubsystem.distanceValues[ShooterSubsystem.distanceValues.length - 1] };
+    private static double[] distanceValues = new double[] { ShooterSubsystemVelocity.distanceValues[0],
+            ShooterSubsystemVelocity.distanceValues[ShooterSubsystemVelocity.distanceValues.length - 1] };
 
     public double getOffset(double offsetValues[], double distance) {
         int i = 0;

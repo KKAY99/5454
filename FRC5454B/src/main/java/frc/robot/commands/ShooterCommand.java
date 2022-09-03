@@ -4,14 +4,14 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystemVoltage;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.classes.Limelight;
 
 /** An example command that uses an example subsystem. */
 public class ShooterCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final ShooterSubsystem m_shooterSubsystem;
+  private final ShooterSubsystemVoltage m_shooterSubsystem;
   private final Limelight m_limelight;
   private final double m_topSpeed;
   private final double m_bottomSpeed;
@@ -26,7 +26,7 @@ public class ShooterCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterCommand(ShooterSubsystem shooter, Limelight limelight, double defaultTopSpeed,
+  public ShooterCommand(ShooterSubsystemVoltage shooter, Limelight limelight, double defaultTopSpeed,
       double defaultBottomSpeed, boolean useDistance) {
     m_shooterSubsystem = shooter;
     m_limelight = limelight;

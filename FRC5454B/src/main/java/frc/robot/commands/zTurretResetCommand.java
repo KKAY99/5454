@@ -56,6 +56,7 @@ public class zTurretResetCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
+    System.out.println("Homing");
     if (m_TurretSubsystem.hitRightPhysicalLimit() && (m_speed==m_homeSpeed)) {
       System.out.println("Hit Right Limit");
       m_TurretSubsystem.stop();

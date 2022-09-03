@@ -22,7 +22,6 @@ public class TurretSubsystem extends SubsystemBase {
   //private static final SparkMaxAlternateEncoder.Type kAltEncType = SparkMaxAlternateEncoder.Type.kQuadrature;
   private static final int kCPR = 8192;
 
-  private DigitalInput m_limitLeftSwitch;
   private DigitalInput m_limitRightSwitch;
   private boolean m_encoderHasHomed = false;
   private double m_safePositionforClimb;
@@ -30,17 +29,16 @@ public class TurretSubsystem extends SubsystemBase {
   private boolean m_turretLockedMode = false;
 
   /** Creates a new ExampleSubsystem. */
-  public TurretSubsystem(Integer turretMotorPort, int leftSwitch, int rightSwitch, double safePositionforClimb,
+  public TurretSubsystem(Integer turretMotorPort, int rightSwitch, double safePositionforClimb,
       double safetyMoveSpeed) {
 
     m_turretMotor = new CANSparkMax(turretMotorPort, MotorType.kBrushless);
 
     m_turretMotor.setIdleMode(IdleMode.kBrake);
-    // m_turretEncoder = m_turretMotor.getAlternateEncoder(klAtEncType,kCPR);
-    m_turretEncoder = m_turretMotor.getEncoder(Type.kQuadrature, kCPR);
+    //m_turretEncoder = m_turretMotor.getEncoder(Type.kQuadrature, kCPR);
+    m_turretEncoder=m_turretMotor.getEncoder(Type.kHallSensor,42);
     m_turretMotor.setInverted(false);
     m_limitRightSwitch = new DigitalInput(rightSwitch);
-    m_limitLeftSwitch = new DigitalInput(leftSwitch);
     m_safePositionforClimb = safePositionforClimb;
     m_turretSafeMoveSpeed = safetyMoveSpeed;
   }
@@ -66,6 +64,7 @@ public class TurretSubsystem extends SubsystemBase {
 
   public boolean isMovingRight(double targetspeed) {
     return m_turretEncoder.getVelocity() < 0 || targetspeed < 0;
+ 
   }
 
   public boolean isClearofClimber() {
@@ -90,11 +89,10 @@ public class TurretSubsystem extends SubsystemBase {
     if (m_encoderHasHomed) {
       // System.out.println("Checking Left - " + m_limitLeftSwitch.get() + "-" +
       // m_turretEncoder.getPosition());
-      returnValue = (m_limitLeftSwitch.get() ||
-          (m_turretEncoder.getPosition() < Constants.LimitSwitches.TurretLeftEncoder));
+      returnValue =
+          (m_turretEncoder.getPosition() < Constants.LimitSwitches.TurretLeftEncoder);
     } else {
-      returnValue = (m_limitLeftSwitch.get());
-    }
+      returnValue = true; }
     // System.out.println(isMovingLeft());
     // System.out.println("turret Left Check " + encoderHasHomed + " - " +
     // m_turretEncoder.getPosition() + " - " + returnValue);

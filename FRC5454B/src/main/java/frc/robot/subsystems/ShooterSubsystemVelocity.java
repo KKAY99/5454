@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class ShooterSubsystem implements Subsystem {
+public class ShooterSubsystemVelocity implements Subsystem {
   private CANSparkMax m_Bottom_ShooterMotor;
   private CANSparkMax m_Top_ShooterMotor;
   private SparkMaxPIDController m_BottomPIDController;
@@ -80,7 +80,7 @@ public static double[] distanceValues = {
     189.5//16
 };
   /** Creates a new ExampleSubsystem. */
-  public ShooterSubsystem(Integer BottomPort, Integer TopPort,double primeSpeed) {
+  public ShooterSubsystemVelocity(Integer BottomPort, Integer TopPort,double primeSpeed) {
     m_PrimeSpeed=primeSpeed;
     m_Bottom_ShooterMotor = new CANSparkMax(BottomPort, MotorType.kBrushless);
     m_BottomPIDController=m_Bottom_ShooterMotor.getPIDController();

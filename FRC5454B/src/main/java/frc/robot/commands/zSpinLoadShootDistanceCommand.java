@@ -12,7 +12,7 @@ import frc.robot.subsystems.*;
 /** An example command that uses an example subsystem. */
 public class zSpinLoadShootDistanceCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
-  private final ShooterSubsystem m_shooter;
+  private final ShooterSubsystemVoltage m_shooter;
   private final ConveyorSubsystem m_conveyor;
   private final FeederSubsystem m_feeder;
   private final Limelight m_limelight;
@@ -21,7 +21,7 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
   private double m_minVelocity;
   private boolean m_isFinished=false;
    
-  public zSpinLoadShootDistanceCommand(ShooterSubsystem shooter, ConveyorSubsystem conveyor,FeederSubsystem feeder,Limelight limelight) {
+  public zSpinLoadShootDistanceCommand(ShooterSubsystemVoltage shooter, ConveyorSubsystem conveyor,FeederSubsystem feeder,Limelight limelight) {
     m_shooter=shooter;
     m_conveyor=conveyor;
     m_feeder=feeder;

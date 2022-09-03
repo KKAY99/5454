@@ -24,9 +24,9 @@ public final class Constants {
     public static final int BottomShooterPort=16;
     public static final int ConveyorPort=19; //33
     public static final int IntakePort=11;
-    public static final int IntakeInnerPort=37;
+ //   public static final int IntakeInnerPort=37;
     
-    public static final int TurretPort=99;
+    public static final int TurretPort=14;
     public static final int FeederPort=13;
     public static final int ClimberPort=36;//36
     public static final double intakeSpeed=-.95; //.65
@@ -37,11 +37,11 @@ public final class Constants {
     public static final double conveyorDownSpeed=-0.5;
     public static final double climbUpSpeed=.7;
     public static final double climbDownSpeed=-.9;
-    public static final double turretSpeed=0.50;
+    public static final double turretSpeed=0.35;
     public static final double turretMinSpeed=0.15;
     public static final double turretInitSpeed=-.30;
-    public static final double turretHomeSpeed=0.25;
-    public static final double turretHomePos=-4.00;
+    public static final double turretHomeSpeed=0.20;
+    public static final double turretHomePos=-28.023;
     public static final double TurretTargetRange=5;
     public static final double turretOuterLimit=.4;
     public static final double turretInnerLimit=.2;
@@ -80,7 +80,7 @@ public final class Constants {
        public static final int OperatorGyroReset2=8;
        public static final int OperatorAutoShootAxis=3;
        public static final int OperatorOverrideAxis=2;
-       public static final int OperatorShooter1POV=270;
+       public static final int OperatorShooter1POV=0;
        public static final int OperatorShooter2POV=90;
        public static final int OperatorShooter3POV=270;
        public static final int OperatorShooter4POV=90;
@@ -102,23 +102,23 @@ public final class Constants {
     }
 
     public static final class ManualShots{
-        public final static double Shot1Top=.7;
-        public final static double Shot1Bottom=.750;
-        public final static double Shot2Top=.750;
-        public final static double Shot2Bottom=.800;
-        public final static double Shot3Top=.100;
-        public final static double Shot3Bottom=.900;
-        public final static double Shot4Top=.300;
-        public final static double Shot4Bottom=.950;
+        public final static double Shot1Top=1700;
+        public final static double Shot1Bottom=1750;
+        public final static double Shot2Top=1750;
+        public final static double Shot2Bottom=1800;
+        public final static double Shot3Top=2400;
+        public final static double Shot3Bottom=2400;
+        public final static double Shot4Top=3400;
+        public final static double Shot4Bottom=3000;
 
     }
     public static final class LimitSwitches{
         public static final int ClimberBottom=9;
-        public static final int TurretLeft=0;
+        
         public static final int TurretRight=1;
         public static final int ClimberTop=2;
         public static final double TurretRightEncoder=-0.5;
-        public static final double TurretLeftEncoder=-7.93;
+        public static final double TurretLeftEncoder=-28.93;
     }
 
     public static final class AutoModes {
@@ -210,7 +210,7 @@ public final class Constants {
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
-    public static final double shooterPrimedSpeed=.50;
+    public static final double shooterPrimedSpeed=0.5; //.5
     public static final double shooterSweetSpotLow=70; //was 60
     public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGBConfig {

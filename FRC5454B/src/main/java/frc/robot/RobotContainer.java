@@ -73,21 +73,20 @@ public class RobotContainer {
      private LEDMode m_oldLEDmode=LEDMode.NOTSET;  
      
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
-    private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.TopShooterPort,Constants.BottomShooterPort,Constants.shooterPrimedSpeed);
+    private final ShooterSubsystemVoltage m_Shooter = new ShooterSubsystemVoltage(Constants.TopShooterPort,Constants.BottomShooterPort,Constants.shooterPrimedSpeed);
      private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
      private final FeederSubsystem m_Feeder= new FeederSubsystem(Constants.FeederPort);
     private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
-    private final IntakeSubsystem m_IntakeInner = new IntakeSubsystem(Constants.IntakeInnerPort);
+   // private final IntakeSubsystem m_IntakeInner = new IntakeSubsystem(Constants.IntakeInnerPort);
    
     private final PneumaticsSubsystem m_Pnuematics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorID);
-   // private final TurretSubsystem m_turret = new TurretSubsystem(Constants.TurretPort,
-   //                                                             Constants.LimitSwitches.TurretLeft,
-   //                                                             Constants.LimitSwitches.TurretRight,
-   //                                                             Constants.turretHomePos,
-   //                                                             Constants.turretHomeSpeed);
+    private final TurretSubsystem m_turret = new TurretSubsystem(Constants.TurretPort,
+                                                                 Constants.LimitSwitches.TurretRight,
+                                                                Constants.turretHomePos,
+                                                                Constants.turretHomeSpeed);
     // #region Shuffleboard
 
-   // private final zSpinLoadShootCommand autoLoadShoot = new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity); 
+    private final zSpinLoadShootCommand autoLoadShoot = new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity); 
        
 
     private final PowerDistribution m_robotPDH = new PowerDistribution(1, PowerDistribution.ModuleType.kRev);
@@ -333,9 +332,9 @@ public class RobotContainer {
         
     //    final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
        
-    //    final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
-    //    final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
-    //    final TurretCommand turretStopCommand = new TurretCommand(m_turret,0); 
+        final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
+        final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
+        final TurretCommand turretStopCommand = new TurretCommand(m_turret,0); 
      
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
         
@@ -423,11 +422,11 @@ public class RobotContainer {
         operatorGyroReset.whenPressed(gyroResetCommand);
         operatorGyroReset2.whenPressed(gyroResetCommand);
 
-    //    driverTurretLeftButton.whenHeld(turretLeftCommand);
-    //    driverTurretRightButton.whenHeld(turretRightCommand);
+        driverTurretLeftButton.whenHeld(turretLeftCommand);
+      driverTurretRightButton.whenHeld(turretRightCommand);
         
-    //    operatorTurretLeft.whenHeld(turretLeftCommand);
-    //    operatorTurretRight.whenHeld(turretRightCommand);
+        operatorTurretLeft.whenHeld(turretLeftCommand);
+        operatorTurretRight.whenHeld(turretRightCommand);
     //    operatorTurretAutoFind.whenPressed(turretAutoCommand);
     //    operatorAutoFind.whenPressed(turretAutoCommand);
     //    operatorTurretAutoFindStop.whenPressed(turretStopCommand); // should force auto command to stop since same subsystem requirements
@@ -451,7 +450,7 @@ public class RobotContainer {
           case AutoModes.autoMoveForward:
              autoCommand= new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance);
             break;
-       /*
+       
             case AutoModes.autoMoveShoot:
             autoCommand=new SequentialCommandGroup(
                     new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity),
@@ -485,11 +484,11 @@ public class RobotContainer {
                 new AutoMoveCommand(m_RobotDrive,0,AutoModes.Get2BallDistance));
             autoCommand=new SequentialCommandGroup(
                 new zIntakeArmMoveCommand(m_Pnuematics,true), 
-                new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
+                new zIntakeTimeCommand(m_Intake,Constants.intakeSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
                 resetAndMoveCommand,         
                 new WaitCommand(1),
                 new AutoMoveCommand(m_RobotDrive,180,AutoModes.Get2BallDistanceReturn),
-                new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
+                new zIntakeTimeCommand(m_Intake,Constants.intakeSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
                 new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
                    Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
                    Constants.TurretTargetRange),                       
@@ -529,19 +528,19 @@ public class RobotContainer {
               new AutoMoveCommand(m_RobotDrive,0,AutoModes.Get3BallDistanceOne));
           autoCommand=new SequentialCommandGroup(
               new zIntakeArmMoveCommand(m_Pnuematics,true), 
-              new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
+              new zIntakeTimeCommand(m_Intake,Constants.intakeSpeed, m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
               resetAndMoveCommand8,         
               new AutoMoveCommand(m_RobotDrive,180,AutoModes.Get3BallDistanceReturn),
-              new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
+              new zIntakeTimeCommand(m_Intake,Constants.intakeSpeed, m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
               new zTurretLimelightFindCommand(m_turret, m_Limelight, Constants.turretSpeed,
                  Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,
                  Constants.TurretTargetRange),                       
               new zSpinLoadShootDistanceTimeCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight,2),
-              new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
+              new zIntakeTimeCommand(m_Intake,Constants.intakeSpeed, m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,true),      
               //rcw was originally -0.20 then -0.15 
               new AutoMoveCommand(m_RobotDrive,270,-.18,AutoModes.Get3BallDistanceRotate),
               new AutoMoveCommand(m_RobotDrive,0,0,AutoModes.Get3BallDistance),              
-              new zIntakeTimeCommand(m_Intake,m_IntakeInner,Constants.intakeSpeed, Constants.intakeInnerSpeed,m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
+              new zIntakeTimeCommand(m_Intake,Constants.intakeSpeed, m_Conveyor,Constants.conveyorUpSpeed,m_Feeder,-Constants.FeederSpeed,false),             
               //move back to goal
               new AutoMoveCommand(m_RobotDrive,180,0,AutoModes.MoveTowardsPlayerShort/1.5),              
               
@@ -560,7 +559,7 @@ public class RobotContainer {
           case AutoModes.autoMoveGrabTrackLeftShoot:
             // autoCommand= new AutoMoveCommand(m_RobotDrive,-AutoConstants.moveSpeed,2);
             break;
-        */        
+                
           default:
             autoCommand = new AutoDoNothingCommand();
         }
@@ -622,6 +621,7 @@ public class RobotContainer {
       //  shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
       //  shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
       //  m_Shooter.setMultipler(shuffleobardShooterMultipler.getDouble(1.0));
+      //  System.out.println("Physical Turret - "+  m_turret.hitRightPhysicalLimit() + " -- "+ m_turret.getPosition());
         m_Limelight.setOffSet((shuffleobardLimelightAdj.getDouble(Constants.LimeLightValues.kVisionXOffset)));
         LEDUpdate();
         updateRobotMoving();
@@ -648,9 +648,9 @@ public class RobotContainer {
     }
     public void resetTurret(){
             if(m_turretHasReset==false){
-   //             zTurretResetCommand resetTurret = new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos); 
-   //             CommandScheduler.getInstance().schedule(resetTurret);
-                m_turretHasReset=true;
+              zTurretResetCommand resetTurret = new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos); 
+              CommandScheduler.getInstance().schedule(resetTurret);
+                 m_turretHasReset=true;
         }
     }
     public void resetDriveModes(){
@@ -740,8 +740,9 @@ public class RobotContainer {
   //      m_Shooter.stopShooting(); // set to primed value
         m_LEDMode=LEDMode.TELEOP;
         if(m_turretHasReset==false){
-                //zTurretResetCommand resetTurret = new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos); 
-                //CommandScheduler.getInstance().schedule(m_turretAutoCommand);
+                zTurretResetCommand resetTurret = new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos); 
+                CommandScheduler.getInstance().schedule(resetTurret);
+                //         CommandScheduler.getInstance().schedule(m_turretAutoCommand);
  //               SequentialCommandGroup resetandAim = new SequentialCommandGroup(
 //                        resetTurret);
 //                        new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange));

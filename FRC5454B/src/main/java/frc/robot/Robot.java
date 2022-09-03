@@ -139,7 +139,10 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.enableLimelights();
     m_robotContainer.resetDriveModes();
+    System.out.println("Teleop Init 3");
     m_robotContainer.TeleopMode();
+    System.out.println("Teleop Init 4");
+  
     m_robotContainer.resetTurret();
     
   }
