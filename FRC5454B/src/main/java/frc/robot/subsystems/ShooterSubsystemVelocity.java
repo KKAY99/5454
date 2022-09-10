@@ -16,49 +16,49 @@ public class ShooterSubsystemVelocity implements Subsystem {
   private SparkMaxPIDController m_BottomPIDController;
   private SparkMaxPIDController m_TopPIDController;
   private double m_VelocityMultiplier=1;
-  private static double m_defaultTopSpeed=775;
-  private static double m_defaultBottomSpeed=775;
+  private static double m_defaultTopSpeed=600;
+  private static double m_defaultBottomSpeed=600;
   private static double kGearRatio=6;
   private static double m_PrimeSpeed;
   private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
 
      
   private static double[] powerTopValues = {
-    775,//1
-    775,//2
-    775,//3
-    775,//4
-    866,//5
-    875,//6
-    1000,//7
-    1102,//8
-    1272,//9
-    1550,//10
-    1550,//11
-    1700,//12
-    1800,//13
-    1900,//14
-    2000,//15
+    675,//1
+    675,//2
+    675,//3
+    675,//4
+    766,//5
+    775,//6
+    900,//7
+    1002,//8
+    1172,//9
+    1450,//10
+    1450,//11
+    1600,//12
+    1700,//13
+    1800,//14
+    1900,//15
     25 //16
 };
 
 private static double[] powerBottomValues = {
-    775,//1
-    775,//2
-    775,//3
-    775,//4
-    866,//5
-    875,//6
-    1000,//7
-    1102,//8
-    1572,//9
-    1550,//10
-    1550,//11
-    1700,//12
-    1800,//13
-    1900,//14
-    2000,//15
-    1110 //16
+    675,//1
+    675,//2
+    675,//3
+    675,//4
+    766,//5
+    775,//6
+    900,//7
+    1002,//8
+    1472,//9
+    1450,//10
+    1450,//11
+    1600,//12
+    1700,//13
+    1800,//14
+    1900,//15
+    1010 //16
 };
 
 public static double[] distanceValues = {
@@ -163,7 +163,7 @@ public static double[] distanceValues = {
         topSpeed=m_defaultTopSpeed;
         bottomSpeed=m_defaultBottomSpeed;      
       }
-    //system.out.println("Shoot By Distance - d=" + distance + " top:"+ topSpeed + " bottom:" + bottomSpeed);
+    System.out.println("Shoot By Distance - d=" + distance + " top:"+ topSpeed + " bottom:" + bottomSpeed);
     shoot(topSpeed,bottomSpeed);
   }
   public void shoot(double topVelocity, double bottomVelocity) {

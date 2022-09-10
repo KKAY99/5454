@@ -57,12 +57,12 @@ public class TurretCommand extends CommandBase {
   
   private boolean hitLimit(){
     boolean returnValue=false;
-    if (m_TurretSubsystem.hitLeftLimit() && m_TurretSubsystem.isMovingLeft(m_speed)){
-      System.out.println("Left Limit");  
+    if (m_TurretSubsystem.hitLeftLimit() && m_TurretSubsystem.isMovingRight(m_speed)){
+      System.out.println("Left Limit"  + " - *" + m_speed +  "--" + m_TurretSubsystem.getPosition());  
       returnValue= true;
 
-    } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingRight(m_speed)){
-      System.out.println("Right Limit");  
+    } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingLeft(m_speed)){
+      System.out.println("Right Limit" + " - *" + m_speed +  "--" + m_TurretSubsystem.getPosition());  
      
       returnValue= true;
     } else if (m_TurretSubsystem.hitRightLimit() && m_TurretSubsystem.isMovingLeft(m_speed)){

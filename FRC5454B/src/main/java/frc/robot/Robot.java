@@ -61,7 +61,8 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putData("Auto Selector", m_autoChooser);
     SmartDashboard.putData("Delay Time", m_delayChooser);
-    CameraServer.startAutomaticCapture();
+    //KK Disable USB Camera
+    //CameraServer.startAutomaticCapture();
 
   }
 

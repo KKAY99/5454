@@ -29,18 +29,18 @@ public final class Constants {
     public static final int TurretPort=14;
     public static final int FeederPort=13;
     public static final int ClimberPort=36;//36
-    public static final double intakeSpeed=-.95; //.65
-    public static final double intakeInnerSpeed=0.70;
+    public static final double intakeSpeed=-.99; //.65
+    public static final double intakeInnerSpeed=0.99;
     public static final double FeederSpeed=-1.0;
     public static final double FeederThresholdForLED=-.7;
     public static final double conveyorUpSpeed=0.9;
-    public static final double conveyorDownSpeed=-0.5;
+    public static final double conveyorDownSpeed=-0.6;
     public static final double climbUpSpeed=.7;
     public static final double climbDownSpeed=-.9;
     public static final double turretSpeed=0.35;
     public static final double turretMinSpeed=0.15;
-    public static final double turretInitSpeed=-.30;
-    public static final double turretHomeSpeed=0.20;
+    public static final double turretInitSpeed=-.20;
+    public static final double turretHomeSpeed=0.30;
     public static final double turretHomePos=-28.023;
     public static final double TurretTargetRange=5;
     public static final double turretOuterLimit=.4;
@@ -51,7 +51,7 @@ public final class Constants {
         public static final int CompressorID=0; 
         public static final int LatchPort=5;
         public static final int ClimbArmPort=0;
-        public static final int IntakeArmPort=3;
+        public static final int IntakeArmPort=4;
         public static final int HookCablesPort=1;
         
     }
@@ -118,7 +118,7 @@ public final class Constants {
         public static final int TurretRight=1;
         public static final int ClimberTop=2;
         public static final double TurretRightEncoder=-0.5;
-        public static final double TurretLeftEncoder=-28.93;
+        public static final double TurretLeftEncoder=-35;
     }
 
     public static final class AutoModes {
@@ -157,7 +157,7 @@ public final class Constants {
         public static final int delayValMode3=8;
         public static final int defaultDelayMode=0;
 
-        public static final double LeaveTarmacDistance=80;
+        public static final double LeaveTarmacDistance=15;
         public static final double Get3BallDistanceOne=74;
         public static final double Get3BallDistanceReturn=36;
         public static final double Get2BallDistance=75;
@@ -170,7 +170,7 @@ public final class Constants {
             
         
         public static final double DistanceToBall1=7;
-        public static final double MoveSpeed=.30;
+        public static final double MoveSpeed=.25;
         public static final double AutoShotTopSpeed=0.5;
         public static final double AutoShotBottomSpeed=0.5;
         public static final double AutoMinVelocity=0.5;
@@ -210,7 +210,7 @@ public final class Constants {
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
-    public static final double shooterPrimedSpeed=0.5; //.5
+    public static final double shooterPrimedSpeed=0.6; //.5
     public static final double shooterSweetSpotLow=70; //was 60
     public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGBConfig {

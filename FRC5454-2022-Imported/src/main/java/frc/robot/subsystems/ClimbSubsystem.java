@@ -35,7 +35,10 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public boolean hitBottomLimit() {
       //  return (m_ClimbBottomLimitSwitch.get());
-        if(m_ClimbBottomLimitSwitch.get() ||(m_ClimbEncoder.getPosition() <= Constants.climbDownLimit)){
+        //if(m_ClimbBottomLimitSwitch.get() ||(m_ClimbEncoder.getPosition() <= Constants.climbDownLimit)){
+            if(m_ClimbBottomLimitSwitch.get()){
+          
+            System.out.println("Hit Bottom Limit - " + m_ClimbBottomLimitSwitch.get() + " --" + m_ClimbEncoder.getPosition());
             return true;
         }else
         {
@@ -45,13 +48,17 @@ public class ClimbSubsystem extends SubsystemBase {
     } 
 
     public boolean hitTopLimit() {
-      //  return (m_ClimbTopLimitSwitch.get());
+        return false;
+      /*
+        //  return (m_ClimbTopLimitSwitch.get());
       if(m_ClimbEncoder.getPosition() >= Constants.climbUpLimit){
-         return true;
+        System.out.println("Top Bottom Limit - " + m_ClimbEncoder.getPosition());
+        return true;
       }else
       {
           return false;
       }
+      */
     }
 
     public void forceBottom() {

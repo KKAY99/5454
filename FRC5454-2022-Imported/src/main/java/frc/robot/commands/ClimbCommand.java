@@ -57,8 +57,8 @@ public class ClimbCommand extends CommandBase {
         } else {
                  System.out.println("Checking For Bottom Limit");
                  AutoDeployOnBottomSwitch();          
-                 m_ClimbSubsystem.stop();
-                  }
+                  m_ClimbSubsystem.stop();
+                               }
 
                  
         }

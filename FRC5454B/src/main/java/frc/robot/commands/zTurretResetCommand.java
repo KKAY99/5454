@@ -42,8 +42,9 @@ public class zTurretResetCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {     
-    m_TurretSubsystem.turn(m_speed);
+  public void execute() {
+    //fix turret finish function     
+   //m_TurretSubsystem.turn(m_speed);
   }
 
   // Called once the command ends or is interrupted.
@@ -55,7 +56,9 @@ public class zTurretResetCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean returnValue=false;
+       return true;
+    /* boolean returnValue=false;
+    
     System.out.println("Homing");
     if (m_TurretSubsystem.hitRightPhysicalLimit() && (m_speed==m_homeSpeed)) {
       System.out.println("Hit Right Limit");
@@ -66,9 +69,9 @@ public class zTurretResetCommand extends CommandBase {
       
      } else if ((m_speed==m_centerSpeed) && (m_TurretSubsystem.hitLeftLimit() || m_TurretSubsystem.getPosition()<m_targetPos)){
       System.out.println("Hit Left Limit");
-      returnValue= true;
-  }
-     return returnValue;
+      returnValue= true; 
+  } 
+     return returnValue; */
   }
 }
 

@@ -6,7 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
+import edu.wpi.first.wpilibj.Timer;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -20,6 +20,7 @@ import frc.robot.Constants;
 import frc.robot.classes.Limelight;
 import frc.robot.classes.MathUtil;
 import frc.robot.common.drivers.NavX;
+
 //import jdk.jfr.events.ActiveRecordingEvent;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
@@ -808,25 +809,31 @@ public class SwerveDriveGB extends SubsystemBase{
      * For Autonomouse code this moves the boot the specified direction, speed, and
      * distnace
      */
-    public void move(double direction, double rotation, double speed, double distance, boolean stopAtEnd) {
+    public void move(double direction, double rotation, double speed, double distance, double failTime, boolean stopAtEnd) {
         double xSpeedPercent;
         double ySpeedPercent;
         double startPosition;
         double targetPosition;
         double directionRadians;
+        double startTime=Timer.getFPGATimestamp();
+        double currentTime=Timer.getFPGATimestamp();
+        double endTime;
         m_drivemode=true;
         directionRadians = Math.toRadians(direction);
         xSpeedPercent = Math.cos(directionRadians);
         ySpeedPercent = Math.sin(directionRadians);
         // Convert distance robot travels from inches
         distance = distance / 42;
-        startPosition = m_FrontLeftDrive.getEncoder().getPosition();
+        startPosition = m_BackLeftDrive.getEncoder().getPosition();
         targetPosition = distance + startPosition;
         System.out.println("direction=" + direction + "(" + directionRadians + ")");
         System.out.println("targetdistance=" + targetPosition + "  currentdistance="
-                + m_FrontLeftDrive.getEncoder().getPosition());
+                + m_BackLeftDrive.getEncoder().getPosition());
         System.out.println("xSpeedPer=" + xSpeedPercent + " ySpeedPer=" + ySpeedPercent);
-        while (targetPosition > m_FrontLeftDrive.getEncoder().getPosition() && m_drivemode) {
+        endTime=currentTime+failTime;
+        while ((targetPosition > Math.abs(m_BackLeftDrive.getEncoder().getPosition())) && m_drivemode && currentTime<endTime) {
+            System.out.println("targetPos" + targetPosition + " --CurrentPosition" + m_BackLeftDrive.getEncoder().getPosition());
+             currentTime=Timer.getFPGATimestamp();
             drive((double) 0, xSpeedPercent * speed, ySpeedPercent * speed, false);
         }
         if (stopAtEnd) {

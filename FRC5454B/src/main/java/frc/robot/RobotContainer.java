@@ -258,7 +258,7 @@ public class RobotContainer {
   
     //leveraged in multiple functions
     //KK need to research duplicate
-    //private zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
+    private zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
         
     private boolean m_turretHasReset =false;
     /**
@@ -330,7 +330,7 @@ public class RobotContainer {
         final ShooterCommand shootCommand = new ShooterCommand(m_Shooter,m_Limelight,AutoModes.AutoShotTopSpeed,AutoModes.AutoShotBottomSpeed,false);
         final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
         
-    //    final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
+      final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
        
         final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
         final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
@@ -376,6 +376,7 @@ public class RobotContainer {
         POVButton driverTurretLeftButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretLeftPOV);
         POVButton driverTurretRightButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretRightPOV); 
        
+       
         SpectrumAxisButton operatorTurretLeft = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretAxis,ButtonConstants.JoystickLeftThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
         SpectrumAxisButton operatorTurretRight = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretAxis,ButtonConstants.JoystickRightThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
         SpectrumAxisButton operatorTurretAutoFind = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretFindAxis,ButtonConstants.JoystickUpThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
@@ -414,22 +415,22 @@ public class RobotContainer {
         driverIntakeOut.whenHeld(intakeOutCommand);
         operatorIntakeOut.whenHeld(intakeOutCommand);
      
-      //  driverIntakeArm.whenHeld(intakeArmCommand);    
-      //  operatorIntakeArm.whenHeld(intakeArmCommand);    
+        driverIntakeArm.whenHeld(intakeArmCommand);    
+        operatorIntakeArm.whenHeld(intakeArmCommand);    
 
         driverGyroReset.whenPressed(gyroResetCommand);
         driverGyroReset2.whenPressed(gyroResetCommand);
         operatorGyroReset.whenPressed(gyroResetCommand);
         operatorGyroReset2.whenPressed(gyroResetCommand);
 
-        driverTurretLeftButton.whenHeld(turretLeftCommand);
-      driverTurretRightButton.whenHeld(turretRightCommand);
+       // driverTurretLeftButton.whenHeld(turretLeftCommand);
+       // driverTurretRightButton.whenHeld(turretRightCommand);
         
-        operatorTurretLeft.whenHeld(turretLeftCommand);
-        operatorTurretRight.whenHeld(turretRightCommand);
-    //    operatorTurretAutoFind.whenPressed(turretAutoCommand);
-    //    operatorAutoFind.whenPressed(turretAutoCommand);
-    //    operatorTurretAutoFindStop.whenPressed(turretStopCommand); // should force auto command to stop since same subsystem requirements
+       // operatorTurretLeft.whenHeld(turretLeftCommand);
+       // operatorTurretRight.whenHeld(turretRightCommand);
+        //operatorTurretAutoFind.whenPressed(turretAutoCommand);
+        //operatorAutoFind.whenPressed(turretAutoCommand);
+        //operatorTurretAutoFindStop.whenPressed(turretStopCommand); // should force auto command to stop since same subsystem requirements
         
        
        operatorShoot1Button.whenHeld(ManualShooter1Command);
@@ -620,7 +621,7 @@ public class RobotContainer {
       //  shuffleboardTurretPos.setString(" " + m_turret.getPosition());
       //  shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
       //  shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
-      //  m_Shooter.setMultipler(shuffleobardShooterMultipler.getDouble(1.0));
+        m_Shooter.setMultipler(shuffleobardShooterMultipler.getDouble(1.0));
       //  System.out.println("Physical Turret - "+  m_turret.hitRightPhysicalLimit() + " -- "+ m_turret.getPosition());
         m_Limelight.setOffSet((shuffleobardLimelightAdj.getDouble(Constants.LimeLightValues.kVisionXOffset)));
         LEDUpdate();
@@ -737,7 +738,7 @@ public class RobotContainer {
         LEDUpdate();
         }
     public void TeleopMode(){
-  //      m_Shooter.stopShooting(); // set to primed value
+       m_Shooter.stopShooting(); // set to primed value
         m_LEDMode=LEDMode.TELEOP;
         if(m_turretHasReset==false){
                 zTurretResetCommand resetTurret = new zTurretResetCommand (m_turret,Constants.turretInitSpeed,Constants.turretHomeSpeed,Constants.turretHomePos); 

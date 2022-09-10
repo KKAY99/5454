@@ -9,6 +9,7 @@ public class AutoMoveCommand extends CommandBase {
   private final double m_direction;
   private final double m_distance;
   private final double m_rcw;
+  private final double m_time;
   private boolean m_isFinished=false;
 
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})    
@@ -17,6 +18,7 @@ public class AutoMoveCommand extends CommandBase {
     m_direction=direction;
     m_distance=distance;
     m_rcw=0; // default value - not passed in
+    m_time=1.5;
     addRequirements(subsystem);
   }
   public AutoMoveCommand(SwerveDriveGB subsystem,double direction,double rcw,double distance) {
@@ -24,6 +26,7 @@ public class AutoMoveCommand extends CommandBase {
     m_direction=direction;
     m_distance=distance;
     m_rcw=rcw;
+    m_time=1.5;
     addRequirements(subsystem);
   }
 
@@ -35,7 +38,7 @@ public class AutoMoveCommand extends CommandBase {
   @Override
   public void execute() {
     m_isFinished=false;
-    m_drive.move(m_direction ,m_rcw,Constants.AutoModes.MoveSpeed,m_distance,true);
+    m_drive.move(m_direction ,m_rcw,Constants.AutoModes.MoveSpeed,m_distance,m_time,true);
     m_isFinished=true;
   }
 

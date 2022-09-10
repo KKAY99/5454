@@ -159,8 +159,8 @@ public static double[] distanceValues = {
     //m_Bottom_ShooterMotor.set(bottomVelocity);
    // m_Bottom_ShooterMotor.set(bottomVelocity);
    // m_Top_ShooterMotor.set(topVelocity);
-    m_Bottom_ShooterMotor.set(.59);
-    m_Top_ShooterMotor.set(.50);
+    m_Bottom_ShooterMotor.set(.50 * m_VelocityMultiplier);
+    m_Top_ShooterMotor.set(.45 * m_VelocityMultiplier);
  
   }
 
