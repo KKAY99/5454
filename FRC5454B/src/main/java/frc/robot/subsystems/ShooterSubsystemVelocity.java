@@ -47,11 +47,11 @@ private static double[] powerBottomValues = {
     675,//2
     675,//3
     675,//4
-    766,//5
-    775,//6
-    900,//7
-    1002,//8
-    1472,//9
+    2000,//5
+    2000,//6
+    2000,//7
+    2400,//8
+    2800,//9
     1450,//10
     1450,//11
     1600,//12
@@ -125,10 +125,12 @@ public static double[] distanceValues = {
     */
   }
   public double getTopMotorVelocity(){ 
-    return 0; // m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
+    return m_Top_ShooterMotor.getEncoder().getVelocity();
+   // return 0; // m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
   }
   public double getBottomMotorVelocity(){
-    return 0; //m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
+    return m_Bottom_ShooterMotor.getEncoder().getVelocity();
+    //return 0; //m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
   }
   public double getMultiplier(){
     return m_VelocityMultiplier;

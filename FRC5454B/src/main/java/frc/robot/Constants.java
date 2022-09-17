@@ -33,7 +33,7 @@ public final class Constants {
     public static final double intakeInnerSpeed=0.99;
     public static final double FeederSpeed=-1.0;
     public static final double FeederThresholdForLED=-.7;
-    public static final double conveyorUpSpeed=0.9;
+    public static final double conveyorUpSpeed=0.7;
     public static final double conveyorDownSpeed=-0.6;
     public static final double climbUpSpeed=.7;
     public static final double climbDownSpeed=-.9;
@@ -200,7 +200,7 @@ public final class Constants {
         public static final double targetXPosShoot = -1.5;
         public static final double targetXPosSafeZone = 5;
         public static final double targetXPosRange=50;
-        public static final double limelightHeight = 44; //37
+        public static final double limelightHeight = 41.5; //37
         public static final double limelightAngle = 36; //40
         public static final double kVisionDistanceTolerance = 5;
         public static final double kVisionXTolerance = 1.5;
@@ -210,7 +210,8 @@ public final class Constants {
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
-    public static final double shooterPrimedSpeed=0.6; //.5
+//    public static final double shooterPrimedSpeed=0.4; //.5
+    public static final double shooterPrimedSpeed=.4; //.5
     public static final double shooterSweetSpotLow=70; //was 60
     public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGBConfig {

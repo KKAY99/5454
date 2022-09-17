@@ -45,6 +45,7 @@ public class zSpinLoadShootDistanceCommand extends CommandBase {
         m_feeder.run(-Constants.FeederSpeed); // Push balls down
         m_conveyor.stop();
     } else {
+        System.out.println("Shooting Now");
         m_shooter.shootbyDistance(m_limelight.getDistance()); 
         m_feeder.run(Constants.FeederSpeed);
         m_conveyor.run(Constants.conveyorUpSpeed);

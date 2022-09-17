@@ -19,41 +19,41 @@ public class ShooterSubsystemVoltage implements Subsystem {
   private static double m_PrimeSpeed;
   
   private static double[] powerTopValues = {
-    775,//1
-    775,//2
-    775,//3
-    775,//4
-    866,//5
-    875,//6
-    1000,//7
-    1102,//8
-    1272,//9
-    1550,//10
-    1550,//11
-    1700,//12
-    1800,//13
-    1900,//14
-    2000,//15
-    25 //16
+    .40,//1
+    .40,//2
+    .45,//3
+    .45,//4
+    .40,//5
+    .40,//6
+    .45,//7
+    .45,//8
+    .45,//9
+    .45,//10
+    .60,//11
+    .700,//12
+    .700,//13
+    .700,//14
+    .750,//15
+    .40 //16
 };
 
 private static double[] powerBottomValues = {
-    .50,//1
-    .50,//2
+    .45,//1
+    .45,//2
     .50,//3
-    .55,//4
-    .60,//5
-    .62,//6
-    .65,//7
-    .68,//8
-    .70,//9
-    .720,//10
+    .40,//4
+    .38,//5
+    .42,//6
+    .45,//7
+    .50,//8
+    .55,//9
+    .60,//10
     .800,//11
     .840,//12
     .860,//13
     .880,//14
     .900,//15
-    1110 //16
+    .990 //16
 };
 
 public static double[] distanceValues = {
@@ -78,7 +78,10 @@ public static double[] distanceValues = {
   public ShooterSubsystemVoltage(Integer BottomPort, Integer TopPort,double primeSpeed) {
     m_PrimeSpeed=primeSpeed;
     m_Bottom_ShooterMotor = new CANSparkMax(BottomPort, MotorType.kBrushless);
+    m_Bottom_ShooterMotor.enableVoltageCompensation(12);
+
     m_Top_ShooterMotor = new CANSparkMax(TopPort, MotorType.kBrushless);
+    m_Top_ShooterMotor.enableVoltageCompensation(12);
     
    
     m_Bottom_ShooterMotor.setInverted(true);
@@ -103,11 +106,13 @@ public static double[] distanceValues = {
     m_Top_ShooterMotor.config_kF(0,.5);
     */
   }
-  public double getTopMotorVelocity(){ 
-    return 0; // m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
+  public double getTopMotorVelocity(){
+    return m_Top_ShooterMotor.getEncoder().getVelocity() /5700;
+    //return 0; // m_TopShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
   }
   public double getBottomMotorVelocity(){
-    return 0; //m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
+    return m_Bottom_ShooterMotor.getEncoder().getVelocity() /5700; 
+    //return 0; //m_Top_ShooterMotor.getSelectedSensorVelocity(0)/kGearRatio;
   }
   public double getMultiplier(){
     return m_VelocityMultiplier;
@@ -120,17 +125,21 @@ public static double[] distanceValues = {
     boolean returnvalue=false;
     double topSpeed = getPower(powerTopValues, distance);
     double bottomSpeed = getPower(powerBottomValues, distance);
-    
+    double topCurrentSpeed;
     //Default shooting if calculation is outside range
-    if(topSpeed<=1 || bottomSpeed <=1){
+    if(topSpeed<=0.1 || bottomSpeed <=0.1){
         topSpeed=m_defaultTopSpeed;
         bottomSpeed=m_defaultBottomSpeed;      
       }
       bottomSpeed=bottomSpeed*m_VelocityMultiplier;
       topSpeed=topSpeed*m_VelocityMultiplier;
-      if ((getTopMotorVelocity()>=topSpeed) && (getBottomMotorVelocity()>=bottomSpeed)){
+      topCurrentSpeed=getTopMotorVelocity();
+      System.out.println("Checking if up to speed" + topCurrentSpeed + " / " + topSpeed);    
+      if ((topCurrentSpeed>=topSpeed) && (getBottomMotorVelocity()>=bottomSpeed)){
         returnvalue=true;
-    }
+    } 
+    System.out.println(" Up To Speed-" + returnvalue);
+    
     return returnvalue;
   }
 
@@ -138,7 +147,7 @@ public static double[] distanceValues = {
     double topSpeed = getPower(powerTopValues, distance);
     double bottomSpeed = getPower(powerBottomValues, distance);
     //Default shooting if calculation is outside range
-    if(topSpeed<=1 || bottomSpeed <=1){
+    if(topSpeed<=0.1 || bottomSpeed <=0.1){
         topSpeed=m_defaultTopSpeed;
         bottomSpeed=m_defaultBottomSpeed;      
       }
@@ -146,6 +155,7 @@ public static double[] distanceValues = {
     shoot(topSpeed,bottomSpeed);
   }
   public void shoot(double topVelocity, double bottomVelocity) {
+    System.out.println("Shoooter  Raw Values " + " Bottom: " + bottomVelocity + " - Top: " + topVelocity);
     bottomVelocity=bottomVelocity*m_VelocityMultiplier;
     topVelocity=topVelocity*m_VelocityMultiplier;
     //Adjust Motor to %
@@ -155,12 +165,12 @@ public static double[] distanceValues = {
     if (bottomVelocity>1.0){
       bottomVelocity=1.0;
     }
-    System.out.println("Shoooter " + " - " + bottomVelocity + " - " + topVelocity);
-    //m_Bottom_ShooterMotor.set(bottomVelocity);
-   // m_Bottom_ShooterMotor.set(bottomVelocity);
-   // m_Top_ShooterMotor.set(topVelocity);
-    m_Bottom_ShooterMotor.set(.50 * m_VelocityMultiplier);
-    m_Top_ShooterMotor.set(.45 * m_VelocityMultiplier);
+    System.out.println("Shoooter " + " Bottom: " + bottomVelocity + "- Top: " + topVelocity);
+     m_Bottom_ShooterMotor.set(bottomVelocity);
+
+     m_Top_ShooterMotor.set(topVelocity);
+    //m_Bottom_ShooterMotor.set(.50 * m_VelocityMultiplier);
+   // m_Top_ShooterMotor.set(.45 * m_VelocityMultiplier);
  
   }
 

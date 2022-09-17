@@ -73,9 +73,10 @@ public class RobotContainer {
      private LEDMode m_oldLEDmode=LEDMode.NOTSET;  
      
     // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
+    //private final ShooterSubsystemVoltage m_Shooter = new ShooterSubsystemVoltage(Constants.TopShooterPort,Constants.BottomShooterPort,Constants.shooterPrimedSpeed);
     private final ShooterSubsystemVoltage m_Shooter = new ShooterSubsystemVoltage(Constants.TopShooterPort,Constants.BottomShooterPort,Constants.shooterPrimedSpeed);
-     private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
-     private final FeederSubsystem m_Feeder= new FeederSubsystem(Constants.FeederPort);
+    private final ConveyorSubsystem m_Conveyor = new ConveyorSubsystem(Constants.ConveyorPort);
+    private final FeederSubsystem m_Feeder= new FeederSubsystem(Constants.FeederPort);
     private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
    // private final IntakeSubsystem m_IntakeInner = new IntakeSubsystem(Constants.IntakeInnerPort);
    
@@ -289,13 +290,14 @@ public class RobotContainer {
         //FIXIt when done getting shooter values
         double topSpeed=shuffleboardShooterTop.getDouble(0);
         double bottomSpeed=shuffleboardShooterBottom.getDouble(0);
-        final ParallelCommandGroup LoadandShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,topSpeed,bottomSpeed,true),
-                new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
-                new FeederCommand(m_Feeder,Constants.FeederSpeed));
+        //KK SIMPLE VERSION DISABLED
+        //final ParallelCommandGroup LoadandShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,topSpeed,bottomSpeed,true),
+         //       new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
+        //       new FeederCommand(m_Feeder,Constants.FeederSpeed));
         
    //     final zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
     //    final TurretUnlockCommand turretUnlockCommand = new TurretUnlockCommand(m_turret);
-    //    final zSpinLoadShootDistanceCommand LoadandShootCommand = new zSpinLoadShootDistanceCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight);
+        final zSpinLoadShootDistanceCommand LoadandShootCommand = new zSpinLoadShootDistanceCommand(m_Shooter,m_Conveyor,m_Feeder,m_Limelight);
     //   final ParallelCommandGroup ManualShootCommand = new ParallelCommandGroup(new ShooterCommand(m_Shooter,m_Limelight,Constants.ManualShots.Shot1Top,Constants.ManualShots.Shot1Bottom,false),
     //            new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
     //            new FeederCommand(m_Feeder,Constants.FeederSpeed));
@@ -636,7 +638,11 @@ public class RobotContainer {
      public void disabledPerioidicUpdates(){
    //      shuffleboardLeftLimit.setBoolean(m_turret.hitLeftLimit());
    //     shuffleboardRightLimit.setBoolean(m_turret.hitRightLimit());
-        LEDUpdate();
+        frontLeftAngle.setDouble(m_RobotDrive.getFrontLeftAngle());
+        frontRightAngle.setDouble(m_RobotDrive.getFrontRightAngle());
+        backLeftAngle.setDouble(m_RobotDrive.getBackLeftAngle());
+        backRightAngle.setDouble(m_RobotDrive.getbackRightAngle());
+             LEDUpdate();
         updateRobotMoving();
 
     }
