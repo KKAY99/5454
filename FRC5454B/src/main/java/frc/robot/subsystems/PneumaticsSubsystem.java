@@ -16,17 +16,25 @@ public class PneumaticsSubsystem extends SubsystemBase {
   private static Compressor m_Compressor;
   private static boolean m_pressureSwitch;
   private static Solenoid m_solenoidIntakeArm;
+  private static Solenoid m_solenoidClimb;
   public static PneumaticsModuleType pModule = PneumaticsModuleType.CTREPCM;
-  public PneumaticsSubsystem(int nodeID) {
+ 
+  public PneumaticsSubsystem(int nodeID,int intakeArmPort,int ClimbPort) {
     
     m_Compressor = new Compressor(nodeID,pModule);      
-    m_solenoidIntakeArm = new Solenoid(pModule, Constants.Pneumatics.IntakeArmPort); 
+    m_solenoidIntakeArm = new Solenoid(pModule, intakeArmPort); 
+    m_solenoidClimb=new Solenoid(pModule,ClimbPort);
     setEnabled();
     // m_solenoidLatch=new Solenoid(pModule,Constants.Pneumatics.LatchPort);   
   
   }
 
-  
+  public void setClimb(boolean status){
+    m_solenoidClimb.set(status);
+  }
+  public boolean getClimbStatus(){
+    return m_solenoidClimb.get();
+  }
   public void setIntakeArms(boolean status){
     System.out.println("Setting Arm " + status);
     m_solenoidIntakeArm.set(status);

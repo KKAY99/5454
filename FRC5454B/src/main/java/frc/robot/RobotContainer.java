@@ -80,12 +80,12 @@ public class RobotContainer {
     private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
    // private final IntakeSubsystem m_IntakeInner = new IntakeSubsystem(Constants.IntakeInnerPort);
    
-    private final PneumaticsSubsystem m_Pnuematics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorID);
+    private final PneumaticsSubsystem m_Pnuematics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorID,Constants.Pneumatics.IntakeArmPort,Constants.Pneumatics.ClimbPort);
     private final TurretSubsystem m_turret = new TurretSubsystem(Constants.TurretPort,
                                                                  Constants.LimitSwitches.TurretRight,
                                                                 Constants.turretHomePos,
                                                                 Constants.turretHomeSpeed);
-    // #region Shuffleboard
+    private ClimbSubsystem m_climber = new ClimbSubsystem(Constants.ClimbMotor1Port,Constants.ClimbMotor2Port);
 
     private final zSpinLoadShootCommand autoLoadShoot = new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity); 
        
@@ -256,7 +256,7 @@ public class RobotContainer {
     // 
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
-  
+       
     //leveraged in multiple functions
     //KK need to research duplicate
     private zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
@@ -333,13 +333,15 @@ public class RobotContainer {
         final FeederCommand feedUpCommand=new FeederCommand(m_Feeder,Constants.FeederSpeed);
         
       final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
-       
+        final ClimbLiftCommand climbLiftCommand = new ClimbLiftCommand(m_Pnuematics);
         final TurretCommand turretLeftCommand = new TurretCommand(m_turret,Constants.turretSpeed);
         final TurretCommand turretRightCommand = new TurretCommand(m_turret,-Constants.turretSpeed);
         final TurretCommand turretStopCommand = new TurretCommand(m_turret,0); 
      
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
         
+        final ClimberCommand climbUpCommand = new ClimberCommand(m_climber,.4);
+        final ClimberCommand climbDownCommand = new ClimberCommand(m_climber,-0.4);
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
          
         JoystickButton driverAutoShoot = new JoystickButton(m_xBoxDriver, ButtonConstants.DriverAutoShoot);
@@ -356,6 +358,9 @@ public class RobotContainer {
 
         JoystickButton operatorIntakeIn= new JoystickButton(m_xBoxOperator, ButtonConstants.OperatorIntakeIn );
         shuffleboardIntakeInO.setString("O-Button " + ButtonConstants.OperatorIntakeIn);
+
+        JoystickButton operatorClimbArm = new JoystickButton(m_xBoxOperator, ButtonConstants.OperatorClimbLift );
+       
 
         JoystickButton driverIntakeOut= new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeOut);
         shuffleboardIntakeOutD.setString("D-Button " + ButtonConstants.DriverIntakeOut);
@@ -382,7 +387,7 @@ public class RobotContainer {
         SpectrumAxisButton operatorTurretLeft = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretAxis,ButtonConstants.JoystickLeftThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
         SpectrumAxisButton operatorTurretRight = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretAxis,ButtonConstants.JoystickRightThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
         SpectrumAxisButton operatorTurretAutoFind = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretFindAxis,ButtonConstants.JoystickUpThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
-        SpectrumAxisButton operatorTurretAutoFindStop = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretFindAxis,ButtonConstants.JoystickDownThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
+        SpectrumAxisButton operatorTurretAutoFindStop = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretFindAxis,ButtonConstants.JoystickDownThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);    
 
         SpectrumAxisButton operatorClimbUp = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorClimbAxis,ButtonConstants.JoystickUpThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
         SpectrumAxisButton operatorClimbDown = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorClimbAxis,ButtonConstants.JoystickDownThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
@@ -393,7 +398,6 @@ public class RobotContainer {
       //  JoystickButton operatorManualShoot =new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorShootManual);
       //  shuffleboardOperatorManualShoot.setString("O-Button " + Constants.ButtonConstants.OperatorShootManual);
         JoystickButton operatorAutoFind =new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorAutoTurretMode);
-        JoystickButton operatorClimbHooks= new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorClimbHook);
          
 
         POVButton operatorShoot1Button=new POVButton(m_xBoxOperator,ButtonConstants.OperatorShooter1POV);
@@ -420,10 +424,15 @@ public class RobotContainer {
         driverIntakeArm.whenHeld(intakeArmCommand);    
         operatorIntakeArm.whenHeld(intakeArmCommand);    
 
+        operatorClimbArm.whenHeld(climbLiftCommand);
+
         driverGyroReset.whenPressed(gyroResetCommand);
         driverGyroReset2.whenPressed(gyroResetCommand);
         operatorGyroReset.whenPressed(gyroResetCommand);
         operatorGyroReset2.whenPressed(gyroResetCommand);
+
+        operatorClimbUp.whenHeld(climbUpCommand);
+        operatorClimbDown.whenHeld(climbDownCommand);
 
        // driverTurretLeftButton.whenHeld(turretLeftCommand);
        // driverTurretRightButton.whenHeld(turretRightCommand);

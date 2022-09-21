@@ -13,8 +13,8 @@ public class ShooterSubsystemVoltage implements Subsystem {
   private CANSparkMax m_Bottom_ShooterMotor;
   private CANSparkMax m_Top_ShooterMotor;
   private double m_VelocityMultiplier=1;
-  private static double m_defaultTopSpeed=775;
-  private static double m_defaultBottomSpeed=775;
+  private static double m_defaultTopSpeed=.4;
+  private static double m_defaultBottomSpeed=.5;
   private static double kGearRatio=6;
   private static double m_PrimeSpeed;
   

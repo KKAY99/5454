@@ -23,7 +23,17 @@ public class ClimbSubsystem extends SubsystemBase {
     public void periodic() {
       // This method will be called once per scheduler run
     }
-  
+
+    public void runClimb(double power){
+      m_ClimbMotor1.set(power);
+      m_ClimbMotor2.set(power);
+    }
+
+    public void stopClimb(){
+      m_ClimbMotor1.set(0);
+      m_ClimbMotor2.set(0);
+    }
+
     @Override
     public void simulationPeriodic() {
       // This method will be called once per scheduler run during simulation

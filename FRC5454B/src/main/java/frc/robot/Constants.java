@@ -24,7 +24,9 @@ public final class Constants {
     public static final int BottomShooterPort=16;
     public static final int ConveyorPort=19; //33
     public static final int IntakePort=11;
- //   public static final int IntakeInnerPort=37;
+    public static final int ClimbMotor1Port=20;
+    public static final int ClimbMotor2Port=21;
+    //   public static final int IntakeInnerPort=37;
     
     public static final int TurretPort=14;
     public static final int FeederPort=13;
@@ -49,11 +51,8 @@ public final class Constants {
 
     public static final class Pneumatics {
         public static final int CompressorID=0; 
-        public static final int LatchPort=5;
-        public static final int ClimbArmPort=0;
-        public static final int IntakeArmPort=4;
-        public static final int HookCablesPort=1;
-        
+        public static final int ClimbPort=1;
+        public static final int IntakeArmPort=4;     
     }
     public static final class ButtonConstants{
        public static final int DriverAutoShoot=1;
@@ -68,7 +67,7 @@ public final class Constants {
        public static final int OperatorPivotArm=2;
        //public static final int OperatorShootManual=1;
        public static final int OperatorAutoTurretMode=1;
-       public static final int OperatorClimbHook=3;
+       public static final int OperatorClimbLift=3;
        public static final int OperatorIntakeArm=4;
        public static final int OperatorIntakeOut=5;
        public static final int OperatorIntakeIn=6;
