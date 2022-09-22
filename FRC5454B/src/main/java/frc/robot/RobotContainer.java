@@ -340,8 +340,8 @@ public class RobotContainer {
      
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
         
-        final ClimberCommand climbUpCommand = new ClimberCommand(m_climber,.4);
-        final ClimberCommand climbDownCommand = new ClimberCommand(m_climber,-0.4);
+        final ClimberCommand climbUpCommand = new ClimberCommand(m_climber,Constants.ClimbHooksSpeed);
+        final ClimberCommand climbDownCommand = new ClimberCommand(m_climber,-Constants.ClimbHooksSpeed);
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
          
         JoystickButton driverAutoShoot = new JoystickButton(m_xBoxDriver, ButtonConstants.DriverAutoShoot);

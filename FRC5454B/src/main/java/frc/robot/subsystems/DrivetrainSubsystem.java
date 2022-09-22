@@ -24,7 +24,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 20;
     private static final double WHEELBASE = 25;
 
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(7); //30.6 last 6.5 - was 161.8
+    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(7);//7 //30.6 last 6.5 - was 161.8
     private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(126);
     private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(22.1);
     private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(201);
@@ -156,6 +156,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 drive(new Translation2d(0,0), 0, true);
                 periodic();                
         }
+}
+public void moveNavX (double direction, double rotation,double speed, double distance, boolean stopAtEnd)
+{       double startAngle;
+        double endAngle;
+        double forward=0;
+        double strafe=0;
+        Translation2d targetTranslation;
+        startAngle=m_gyroscope.getAngle().toDegrees();
+        endAngle=direction;
+   
+       /* double distanceTravelled=backLeftModule.getCurrentDistance()-startDistance;
+        do {
+              drive(new Translation2d(forward, strafe), rotation, false);
+              periodic();
+              distanceTravelled=Math.abs(backLeftModule.getCurrentDistance()-startDistance);
+              System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
+        } while(distanceTravelled<=distance);
+        if (stopAtEnd) {
+                drive(new Translation2d(0,0), 0, true);
+                periodic();                
+        
+        }*/
 }
     @Override
     public void periodic() {

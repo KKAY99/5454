@@ -24,8 +24,9 @@ public final class Constants {
     public static final int BottomShooterPort=16;
     public static final int ConveyorPort=19; //33
     public static final int IntakePort=11;
-    public static final int ClimbMotor1Port=20;
-    public static final int ClimbMotor2Port=21;
+    public static final int ClimbMotor1Port=21;
+    public static final int ClimbMotor2Port=23;
+    public static final double ClimbHooksSpeed=.4;
     //   public static final int IntakeInnerPort=37;
     
     public static final int TurretPort=14;
@@ -260,16 +261,27 @@ public final class Constants {
         public static double kVisionXToleranceRCW = .5;
         public static double kVisionGyroTolerance = 0.5;
 
-        /* Motor Controllers */
-        public static int kFrontLeftSteering = 1;
-        public static int kFrontRightSteering = 3;
-        public static int kBackLeftSteering = 2;
-        public static int kBackRightSteering = 0;
-        public static int kFrontLeftDrive = 7;
-        public static int kFrontRightDrive = 4;
-        public static int kBackLeftDrive = 5;
-        public static int kBackRightDrive = 6;
-        // #endr
+         /* Motor Controllers */
+       /* ORIGNAL 09/22
+       public static int kFrontLeftSteering = 1;
+       public static int kFrontRightSteering = 3;
+       public static int kBackLeftSteering = 2;
+       public static int kBackRightSteering = 0;
+       public static int kFrontLeftDrive = 7;
+       public static int kFrontRightDrive = 4;
+       public static int kBackLeftDrive = 5;
+       public static int kBackRightDrive = 6; 
+       */
+       public static int kFrontLeftSteering = 2;
+        public static int kFrontRightSteering = 0;
+        public static int kBackLeftSteering = 1;
+        public static int kBackRightSteering = 3;
+        public static int kFrontLeftDrive = 5;
+        public static int kFrontRightDrive = 6;
+        public static int kBackLeftDrive = 7;
+        public static int kBackRightDrive = 4;
+        
+
     }
     public class LEDS {
         public static final int PORT = 0;

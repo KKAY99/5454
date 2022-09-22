@@ -17,7 +17,8 @@ public class ClimbSubsystem extends SubsystemBase {
     public ClimbSubsystem(int ClimbMotor1Port, int ClimbMotor2Port){
         m_ClimbMotor1 = new CANSparkMax(ClimbMotor1Port, MotorType.kBrushed);   
         m_ClimbMotor2 = new CANSparkMax(ClimbMotor2Port, MotorType.kBrushed);      
-    }
+        
+      }
     
     @Override
     public void periodic() {
@@ -25,6 +26,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void runClimb(double power){
+      System.out.println("Setting Power on Climb - " + power);
       m_ClimbMotor1.set(power);
       m_ClimbMotor2.set(power);
     }

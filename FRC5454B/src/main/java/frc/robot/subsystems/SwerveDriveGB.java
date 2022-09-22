@@ -83,11 +83,11 @@ public class SwerveDriveGB extends SubsystemBase{
     // Make sure wheels are straight with each other using a straight ...
     // ... edge like the yardstick
 
-    public static final int frontLeftOffset = -533;
-    public static final int frontRightOffset = -764;
+    public static final int frontLeftOffset = -639;//3301;
+    public static final int frontRightOffset = -406;//-764;
 
-    public static final int backLeftOffset = -639;
-    public static final int backRightOffset = -406;
+    public static final int backLeftOffset = 269;// -639;
+    public static final int backRightOffset = -764;//-406;
 
     // Offset backup 5/19/21 3:04pm
     // public static final int frontLeftOffset = 513;
@@ -860,16 +860,24 @@ public class SwerveDriveGB extends SubsystemBase{
         return m_isAligned && m_autoDrive;
     }
     public double getFrontLeftAngle(){
-        return frontLeft360Angle;
+        double angle= m_SrxFrontLeftSteering.getSelectedSensorPosition(Constants.SwerveDriveGBConfig.kSlotIdx);
+   
+        return angle;
     }
     public double getFrontRightAngle(){
-        return frontRight360Angle;
+        double angle= m_SrxFrontRightSteering.getSelectedSensorPosition(Constants.SwerveDriveGBConfig.kSlotIdx);
+   
+        return angle;
     }
     public double getBackLeftAngle(){
-        return backLeft360Angle;
+        double angle= m_SrxBackLeftSteering.getSelectedSensorPosition(Constants.SwerveDriveGBConfig.kSlotIdx);
+        System.out.println("Back Left " + angle) ;
+        return angle;
     }
     public double getbackRightAngle(){
-        return backRight360Angle;
+        double angle= m_SrxBackRightSteering.getSelectedSensorPosition(Constants.SwerveDriveGBConfig.kSlotIdx);
+   
+        return angle;
         }
     public void resetGyroscope() {
         gyro.setAdjustmentAngle(gyro.getUnadjustedAngle());
