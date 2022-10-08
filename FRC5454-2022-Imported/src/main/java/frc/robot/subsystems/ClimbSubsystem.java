@@ -36,6 +36,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public boolean hitBottomLimit() {
       //  return (m_ClimbBottomLimitSwitch.get());
         //if(m_ClimbBottomLimitSwitch.get() ||(m_ClimbEncoder.getPosition() <= Constants.climbDownLimit)){
+            System.out.println("Hit Bottom Limit - " + m_ClimbBottomLimitSwitch.get() + " --" + m_ClimbEncoder.getPosition());
             if(m_ClimbBottomLimitSwitch.get()){
           
             System.out.println("Hit Bottom Limit - " + m_ClimbBottomLimitSwitch.get() + " --" + m_ClimbEncoder.getPosition());
