@@ -26,7 +26,7 @@ public final class Constants {
     public static final int IntakePort=11;
     public static final int ClimbMotor1Port=21;
     public static final int ClimbMotor2Port=23;
-    public static final double ClimbHooksSpeed=.4;
+    public static final double ClimbHooksSpeed=.40;
     //   public static final int IntakeInnerPort=37;
     
     public static final int TurretPort=14;
