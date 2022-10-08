@@ -169,7 +169,7 @@ public void spin (double direction,double speed)
         do {
               drive(new Translation2d(0, 0), 30,false);
               periodic();
-              / System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
+              // System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
         } while(m_gyroscope.getAngle().toDegrees()<=endAngle);
        //stop driving
         drive(new Translation2d(0,0), 0, true);
