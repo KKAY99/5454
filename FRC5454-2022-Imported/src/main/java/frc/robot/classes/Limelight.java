@@ -49,7 +49,7 @@ public class Limelight {
     };
 
     public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet) {
-        this(targetHeight, limeLightHeight, mountingAngle, xoffSet, 0.0);
+        this(targetHeight, limeLightHeight, mountingAngle, xoffSet,0 );
     };
 
     public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet,

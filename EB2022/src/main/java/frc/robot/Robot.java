@@ -30,8 +30,8 @@ public class Robot extends TimedRobot {
   private int m_driveMode;
   private RobotContainer m_robotContainer;
   private SendableChooser<Integer> m_autoChooser = new SendableChooser();
-  private UsbCamera m_TopCamera;
-  private UsbCamera m_FrontCamera;
+  //private UsbCamera m_TopCamera;
+  //private UsbCamera m_FrontCamera;
    
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -51,13 +51,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto Selector", m_autoChooser);
     m_driveMode=Constants.DriveMode.forwardMode;
     m_robotContainer = new RobotContainer(); 
+    /*
     m_FrontCamera=CameraServer.startAutomaticCapture(0);  
     m_FrontCamera.setResolution(160, 120);
     m_FrontCamera.setFPS(60);
     m_TopCamera=CameraServer.startAutomaticCapture(1);  
     m_TopCamera.setResolution(160,120);
     m_TopCamera.setFPS(30);
-  //  m_Gyro.calibrate();
+    */
+    //  m_Gyro.calibrate();
   //  m_Gyro.reset();
     
    // m_robotContainer.setGyro(m_Gyro);

@@ -406,7 +406,7 @@ public final class Constants {
         public static double kVisionDriveSpeedSlow = .15;
         public static double kInitLineShootingDistance = 180;
         public static double kSafeZoneShootingDistance = 78;
-        public static double kVisionDistanceTolerance = 5;
+        public static double kVisionDistanceTolerance = 10;
         public static double kVisionXTolerance = .75; // changed from 0.5
         public static double kVisionXToleranceRCW = .5;
         public static double kVisionGyroTolerance = 0.5;

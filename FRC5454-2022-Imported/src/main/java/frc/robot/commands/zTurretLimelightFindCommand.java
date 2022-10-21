@@ -103,7 +103,9 @@ public class zTurretLimelightFindCommand extends CommandBase {
               double speed=Math.min((Math.abs(m_limelight.getX())/m_maxRange)*m_maxSpeed,m_maxSpeed);  
               //limit value to min speed 
               speed=Math.max((Math.abs(m_limelight.getX())/m_maxRange)*m_maxSpeed,m_minSpeed);  
-
+              if(!m_limelight.isTargetAvailible()){
+                  speed=m_maxSpeed;
+              }
               if(m_limelight.getX()>0){
                   speed=0-speed; // reverse direction
               }                 

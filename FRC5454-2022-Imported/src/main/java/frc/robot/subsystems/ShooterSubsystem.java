@@ -25,14 +25,15 @@ public class ShooterSubsystem implements Subsystem {
     875,//6
     1000,//7
     1102,//8
-    1272,//9
-    1550,//10
+    1152,//9
+    1200,//10
     1550,//11
     1700,//12
     1800,//13
     1900,//14
     2000,//15
-    25 //16
+    500, //16
+    1800 //17
 };
 
 private static double[] powerBottomValues = {
@@ -44,14 +45,15 @@ private static double[] powerBottomValues = {
     875,//6
     1000,//7
     1102,//8
-    1572,//9
-    1550,//10
+    1452,//9
+    1500,//10
     1550,//11
     1700,//12
     1800,//13
     1900,//14
     2000,//15
-    1110 //16
+    500,//16
+    1121//17
 };
 
 public static double[] distanceValues = {
@@ -70,7 +72,8 @@ public static double[] distanceValues = {
     159.5,//13
     169.5,//14
     179.5,//15
-    189.5//16
+    180.5,//16
+    181.5//17
 };
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem(Integer BottomPort, Integer TopPort,double primeSpeed) {

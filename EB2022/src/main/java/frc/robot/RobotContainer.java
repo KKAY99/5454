@@ -32,13 +32,14 @@ public class RobotContainer {
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private final DriveSubsystem m_RobotDrive = new DriveSubsystem();
-  private final IntakeLiftSubsystem m_IntakeLiftSubsystem =new IntakeLiftSubsystem();
-  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  private final PneumaticsSubsystem m_Pneumatics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorNode);
-  private final Limelight m_LimeLight = new Limelight(LimeLightValues.targetHeight, LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle);
+  //private final IntakeLiftSubsystem m_IntakeLiftSubsystem =new IntakeLiftSubsystem();
+  //private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  //private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+  //private final PneumaticsSubsystem m_Pneumatics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorNode);
+  //private final Limelight m_LimeLight = new Limelight(LimeLightValues.targetHeight, LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle);
 //  private Joystick m_rightJoystick = new Joystick(InputControllers.kJoystickRight);
   private Joystick m_leftJoystick = new Joystick(InputControllers.kJoystickLeft);
+  private Joystick m_rightJoystick = new Joystick(InputControllers.kJoystickRight);
   
  
   
@@ -51,7 +52,7 @@ public class RobotContainer {
     // Configure the button bindings
 
     configureButtonBindings();
-    //m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_rightJoystick.getY() , ()-> m_leftJoystick.getY()));
+    m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_rightJoystick.getY() , ()-> m_leftJoystick.getY()));
     //KK moved to one joystick for arcade
     
    // m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_leftJoystick.getY() , ()-> m_leftJoystick.getX()));
@@ -75,18 +76,18 @@ public class RobotContainer {
     //new POVButton(m_xBox,270).whenHeld(new ColorWheelSpinCommand (m_ColorWheel,Constants.ColorWheel.LeftSpeed));   
     
     //new JoystickButton(m_leftJoystick,ButtonConstants.climberSlow).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedSlow));
-    new JoystickButton(m_xBox,ButtonConstants.climberSlowXB).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedSlow));
-    SmartDashboard.putString("Climber Slow","Right-Button " + ButtonConstants.climberSlow);
+    //new JoystickButton(m_xBox,ButtonConstants.climberSlowXB).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedSlow));
+    //SmartDashboard.putString("Climber Slow","Right-Button " + ButtonConstants.climberSlow);
      //new JoystickButton(m_leftJoystick,ButtonConstants.climberFast).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedFast));
-    new JoystickButton(m_xBox,ButtonConstants.climberFastXB).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedFast));
-    SmartDashboard.putString("Climber Fast","Right-Button " + ButtonConstants.climberFast);
+    //new JoystickButton(m_xBox,ButtonConstants.climberFastXB).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedFast));
+    //SmartDashboard.putString("Climber Fast","Right-Button " + ButtonConstants.climberFast);
     //new JoystickButton(m_rightJoystick,ButtonConstants.climberBackJS).whenHeld(new ClimberCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedBack));
     //SmartDashboard.putString("Climber Back","Right-Button " + ButtonConstants.climberBackJS);
-    new JoystickButton(m_xBox,ButtonConstants.climberBackXB).whenHeld(new ClimberLimitCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedBack));
-    SmartDashboard.putString("Climber Back","Xbox-Button " + ButtonConstants.climberBackXB);
+    //new JoystickButton(m_xBox,ButtonConstants.climberBackXB).whenHeld(new ClimberLimitCommand(m_ClimberSubsystem,ClimberSpeeds.ClimberSpeedBack));
+    //SmartDashboard.putString("Climber Back","Xbox-Button " + ButtonConstants.climberBackXB);
     
-    SmartDashboard.putString("Fire Latch","Xbox Button " + ButtonConstants.FlipLatchXB);
-    new JoystickButton(m_xBox,ButtonConstants.FlipLatchXB).whenPressed(new LatchCommand(m_Pneumatics));
+    //SmartDashboard.putString("Fire Latch","Xbox Button " + ButtonConstants.FlipLatchXB);
+    //new JoystickButton(m_xBox,ButtonConstants.FlipLatchXB).whenPressed(new LatchCommand(m_Pneumatics));
     
     
 
@@ -108,15 +109,7 @@ public class RobotContainer {
     case AutoModes.autoMoveBackward:
       autoCommand= new AutoMoveCommand(m_RobotDrive,.3,2);
       break;
-      case AutoModes.autoMoveShoot:
-      autoCommand= new AutoMoveShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,true);
-      break;
-    case AutoModes.autoMoveShootFromRight:
-      autoCommand= new AutoMoveFromRightShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,true);
-      break;
-    case AutoModes.autoMoveToShoot:
-      autoCommand= new AutoMoveShootCommand(m_RobotDrive,m_IntakeSubsystem,m_IntakeLiftSubsystem,false);
-      break;
+      
     default:
       autoCommand = new AutoDoNothing() ;
     }   
@@ -124,6 +117,6 @@ public class RobotContainer {
     //return m_autoCommand;
   }
    public double getLimelightDistance(){
-     return m_LimeLight.getDistance();
+     return 0;// m_LimeLight.getDistance();
    } 
 }

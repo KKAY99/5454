@@ -27,10 +27,11 @@ public class DriveSubsystem extends SubsystemBase {
                                new PWMVictorSPX(DriveConstants.kRightMotor2Port));
 
   // The robot's drive
+ 
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
   private boolean m_ReverseMode=false; 
   // The left-side drive encoder
-//  private final Encoder m_leftEncoder =
+//  private final Encoder m_leftEncoder 
     //  new Encoder(DriveConstants.kLeftEncoderPorts[0], DriveConstants.kLeftEncoderPorts[1],
       //            DriveConstants.kLeftEncoderReversed);
 

@@ -18,7 +18,7 @@ import java.io.File;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double kSpeedMultiplier=.80;  // change to fraction to slow robot down
+    public static final double kSpeedMultiplier=1.0;  // change to fraction to slow robot down
     public static final double kHookLiftTime=2.5;
     public static final double kSlowMoveLeft=0.25;
     public static final double kSlowMoveRight=0.20;
@@ -30,7 +30,7 @@ public final class Constants {
     }
     public static final class InputControllers{
         public static final int kJoystickLeft=0;
-       // public static final int kJoystickRight=1;
+        public static final int kJoystickRight=1;
         public static final int kXboxMain=1;
         public static final int kXboxPit=3;
 	}
