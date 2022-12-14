@@ -33,8 +33,10 @@ import frc.robot.classes.LEDStrip;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -108,145 +110,145 @@ public class RobotContainer {
     // Create Network Table Entries
 
    
-    static NetworkTableEntry networkTableEntryVisionDistance = ShooterTab.add("Vision Distance", 0)
+    static GenericEntry networkTableEntryVisionDistance = ShooterTab.add("Vision Distance", 0)
             .withWidget(BuiltInWidgets.kNumberBar).withSize(2, 2).getEntry();
 
     
-    static NetworkTableEntry networkTableEntryFrontLeftSpeed = SwerveTab.add("FL Speed", 0)
+    static GenericEntry networkTableEntryFrontLeftSpeed = SwerveTab.add("FL Speed", 0)
             .withWidget(BuiltInWidgets.kVoltageView)
             .withProperties(Map.of("Min", 0, "Max", 1, "Center", 0, "Orientation", "VERTICAL"))
             .withPosition(1, 0).withSize(2, 5).getEntry();
 
-    static NetworkTableEntry networkTableEntryFrontRightSpeed = SwerveTab.add("FR Speed", 0)
+    static GenericEntry networkTableEntryFrontRightSpeed = SwerveTab.add("FR Speed", 0)
             .withWidget(BuiltInWidgets.kVoltageView)
             .withProperties(Map.of("Min", 0, "Max", 1, "Center", 0, "Orientation", "VERTICAL"))
             .withPosition(14, 0).withSize(2, 5).getEntry();
 
-    static NetworkTableEntry networkTableEntryBackLeftSpeed = SwerveTab.add("BL Speed", 0)
+    static GenericEntry networkTableEntryBackLeftSpeed = SwerveTab.add("BL Speed", 0)
             .withWidget(BuiltInWidgets.kVoltageView)
             .withProperties(Map.of("Min", 0, "Max", 1, "Center", 0, "Orientation", "VERTICAL"))
             .withPosition(1, 5).withSize(2, 5).getEntry();
 
-    static NetworkTableEntry networkTableEntryBackRightSpeed = SwerveTab.add("BR Speed", 0)
+    static GenericEntry networkTableEntryBackRightSpeed = SwerveTab.add("BR Speed", 0)
             .withWidget(BuiltInWidgets.kVoltageView)
             .withProperties(Map.of("Min", 0, "Max", 1, "Center", 0, "Orientation", "VERTICAL"))
             .withPosition(14, 5).withSize(2, 5).getEntry();
 
-    static NetworkTableEntry networkTableEntryFrontLeftEncoderActual = SwerveEncoders.add("FL Encoder Actual", 0)
+    static GenericEntry networkTableEntryFrontLeftEncoderActual = SwerveEncoders.add("FL Encoder Actual", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(0, 0).withSize(2, 1).getEntry();
-
-    static NetworkTableEntry networkTableEntryFrontRightEncoderActual = SwerveEncoders.add("FR Encoder Actual", 0)
+ 
+    static GenericEntry networkTableEntryFrontRightEncoderActual = SwerveEncoders.add("FR Encoder Actual", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(2, 0).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry networkTableEntryBackLeftEncoderActual = SwerveEncoders.add("BL Encoder Actual", 0)
+    static GenericEntry networkTableEntryBackLeftEncoderActual = SwerveEncoders.add("BL Encoder Actual", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(0, 1).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry networkTableEntryBackRightEncoderActual = SwerveEncoders.add("BR Encoder Actual", 0)
+    static GenericEntry networkTableEntryBackRightEncoderActual = SwerveEncoders.add("BR Encoder Actual", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(2, 1).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry networkTableEntryFrontLeftEncoderTarget = SwerveEncoders.add("FL Encoder Target", 0)
+    static GenericEntry networkTableEntryFrontLeftEncoderTarget = SwerveEncoders.add("FL Encoder Target", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(5, 0).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry networkTableEntryFrontRightEncoderTarget = SwerveEncoders.add("FR Encoder Target", 0)
+    static GenericEntry networkTableEntryFrontRightEncoderTarget = SwerveEncoders.add("FR Encoder Target", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(7, 0).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry networkTableEntryBackLeftEncoderTarget = SwerveEncoders.add("BL Encoder Target", 0)
+    static GenericEntry networkTableEntryBackLeftEncoderTarget = SwerveEncoders.add("BL Encoder Target", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(5, 1).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry networkTableEntryBackRightEncoderTarget = SwerveEncoders.add("BR Encoder Target", 0)
+    static GenericEntry networkTableEntryBackRightEncoderTarget = SwerveEncoders.add("BR Encoder Target", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(7, 1).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry frontLeftAngle = SwerveEncoders.add("FL Angle", 0).withWidget(BuiltInWidgets.kTextView)
+    static GenericEntry frontLeftAngle = SwerveEncoders.add("FL Angle", 0).withWidget(BuiltInWidgets.kTextView)
             .withPosition(0, 3).withSize(2, 1).getEntry();
-    static NetworkTableEntry frontRightAngle = SwerveEncoders.add("FR Angle", 0)
+    static GenericEntry frontRightAngle = SwerveEncoders.add("FR Angle", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(2, 3).withSize(2, 1).getEntry();
-    static NetworkTableEntry backLeftAngle = SwerveEncoders.add("BL Angle", 0).withWidget(BuiltInWidgets.kTextView)
+    static GenericEntry backLeftAngle = SwerveEncoders.add("BL Angle", 0).withWidget(BuiltInWidgets.kTextView)
             .withPosition(0, 4).withSize(2, 1).getEntry();
-    static NetworkTableEntry backRightAngle = SwerveEncoders.add("BR Angle", 0).withWidget(BuiltInWidgets.kTextView)
+    static GenericEntry backRightAngle = SwerveEncoders.add("BR Angle", 0).withWidget(BuiltInWidgets.kTextView)
             .withPosition(2, 4).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry frontLeft360Angle = SwerveEncoders.add("FL 360 Angle", 0)
+    static GenericEntry frontLeft360Angle = SwerveEncoders.add("FL 360 Angle", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(4, 3).withSize(2, 1).getEntry();
-    static NetworkTableEntry frontRight360Angle = SwerveEncoders.add("FR 360 Angle", 0)
+    static GenericEntry frontRight360Angle = SwerveEncoders.add("FR 360 Angle", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(6, 3).withSize(2, 1).getEntry();
-    static NetworkTableEntry backLeft360Angle = SwerveEncoders.add("BL 360 Angle", 0)
+    static GenericEntry backLeft360Angle = SwerveEncoders.add("BL 360 Angle", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(4, 4).withSize(2, 1).getEntry();
-    static NetworkTableEntry backRight360Angle = SwerveEncoders.add("BR 360 Angle", 0)
+    static GenericEntry backRight360Angle = SwerveEncoders.add("BR 360 Angle", 0)
             .withWidget(BuiltInWidgets.kTextView).withPosition(6, 4).withSize(2, 1).getEntry();
 
-    static NetworkTableEntry ShuffleboardLog = SwerveEncoders.add("ShuffleboardLog", "")
+    static GenericEntry ShuffleboardLog = SwerveEncoders.add("ShuffleboardLog", "")
             .withWidget(BuiltInWidgets.kTextView).withSize(4, 2).withPosition(0, 6).getEntry();
 
-    static NetworkTableEntry shuffleboardGyroFused = SwerveTab.add("Gyro - Fused Heading", 0)
+    static GenericEntry shuffleboardGyroFused = SwerveTab.add("Gyro - Fused Heading", 0)
             .withWidget(BuiltInWidgets.kTextView).getEntry();
 
-    static NetworkTableEntry shuffleboardDrive=ControlTab.add("Drive Control","Left Stick").getEntry();
-    static NetworkTableEntry shuffleboarRotate=ControlTab.add("Swerve Control","Right Stick").getEntry();
-    static NetworkTableEntry shuffleboardBallFeedUp=ControlTab.add("Feed Up","").getEntry();
-    static NetworkTableEntry shuffleboardBallFeedDown=ControlTab.add("Feed Down","").getEntry();
-    static NetworkTableEntry shuffleboardIntakeInD=ControlTab.add("D-Intake In","").getEntry();
-    static NetworkTableEntry shuffleboardIntakeOutD=ControlTab.add("D-Intake Out","").getEntry();
-    static NetworkTableEntry shuffleboardIntakeInO=ControlTab.add("O-Intake In","").getEntry();
-    static NetworkTableEntry shuffleboardIntakeOutO=ControlTab.add("O-Intake Out","").getEntry();
-    static NetworkTableEntry shuffleboardIntakeArmD=ControlTab.add("D-Intake Arm","").getEntry();
-    static NetworkTableEntry shuffleboardIntakeArmO=ControlTab.add("O-Intake Arm","").getEntry();
+    static GenericEntry shuffleboardDrive=ControlTab.add("Drive Control","Left Stick").getEntry();
+    static GenericEntry shuffleboarRotate=ControlTab.add("Swerve Control","Right Stick").getEntry();
+    static GenericEntry shuffleboardBallFeedUp=ControlTab.add("Feed Up","").getEntry();
+    static GenericEntry shuffleboardBallFeedDown=ControlTab.add("Feed Down","").getEntry();
+    static GenericEntry shuffleboardIntakeInD=ControlTab.add("D-Intake In","").getEntry();
+    static GenericEntry shuffleboardIntakeOutD=ControlTab.add("D-Intake Out","").getEntry();
+    static GenericEntry shuffleboardIntakeInO=ControlTab.add("O-Intake In","").getEntry();
+    static GenericEntry shuffleboardIntakeOutO=ControlTab.add("O-Intake Out","").getEntry();
+    static GenericEntry shuffleboardIntakeArmD=ControlTab.add("D-Intake Arm","").getEntry();
+    static GenericEntry shuffleboardIntakeArmO=ControlTab.add("O-Intake Arm","").getEntry();
 
-    static NetworkTableEntry shuffleboardGyroResetD=ControlTab.add("D-Gyro Reset","").getEntry();
-    static NetworkTableEntry shuffleboardGyroResetO=ControlTab.add("O-Gyro Reset","").getEntry();
-    static NetworkTableEntry shuffleboardAutoShootD=ControlTab.add("D-Auto Shoot","").getEntry();
-    static NetworkTableEntry shuffleboardAutoShootO=ControlTab.add("O-Auto Shoot","").getEntry();
+    static GenericEntry shuffleboardGyroResetD=ControlTab.add("D-Gyro Reset","").getEntry();
+    static GenericEntry shuffleboardGyroResetO=ControlTab.add("O-Gyro Reset","").getEntry();
+    static GenericEntry shuffleboardAutoShootD=ControlTab.add("D-Auto Shoot","").getEntry();
+    static GenericEntry shuffleboardAutoShootO=ControlTab.add("O-Auto Shoot","").getEntry();
     
 
-    static NetworkTableEntry shuffleboardTurretTurn=ControlTab.add("Turret Turn","").getEntry();
-    static NetworkTableEntry shuffleboardClimbLift=ControlTab.add("Climb Lift","").getEntry();
-    static NetworkTableEntry shuffleboardClimbLower=ControlTab.add("Climb Down","").getEntry();
+    static GenericEntry shuffleboardTurretTurn=ControlTab.add("Turret Turn","").getEntry();
+    static GenericEntry shuffleboardClimbLift=ControlTab.add("Climb Lift","").getEntry();
+    static GenericEntry shuffleboardClimbLower=ControlTab.add("Climb Down","").getEntry();
    
-    static NetworkTableEntry shuffleboardOperatorPivotArm=ControlTab.add("Pivot Arms","").getEntry();
-    static NetworkTableEntry shuffleboardOperatorManualShoot=ControlTab.add("Manual Shoot","").getEntry();
+    static GenericEntry shuffleboardOperatorPivotArm=ControlTab.add("Pivot Arms","").getEntry();
+    static GenericEntry shuffleboardOperatorManualShoot=ControlTab.add("Manual Shoot","").getEntry();
    
-    static NetworkTableEntry shuffleboardPDPStickyCANFaults=PDPTab.add("Sticky CAN Faults","").getEntry();
-    static NetworkTableEntry shuffleboardPDPTotalCurrent=PDPTab.add("Total Current","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC0=PDPTab.add("Current C0","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC1=PDPTab.add("Current C1","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC2=PDPTab.add("Current C2","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC3=PDPTab.add("Current C3","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC4=PDPTab.add("Current C4","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC5=PDPTab.add("Current C5","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC6=PDPTab.add("Current C6","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC7=PDPTab.add("Current C7","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC8=PDPTab.add("Current C8","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC9=PDPTab.add("Current C9","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC10=PDPTab.add("Current C10","").getEntry();  
-    static NetworkTableEntry shuffleboardPDPCurrentC11=PDPTab.add("Current C11","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC12=PDPTab.add("Current C12","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC13=PDPTab.add("Current C13","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC14=PDPTab.add("Current C14","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC15=PDPTab.add("Current C15","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC16=PDPTab.add("Current C16","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC17=PDPTab.add("Current C17","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC18=PDPTab.add("Current C18","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC19=PDPTab.add("Current C19","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC20=PDPTab.add("Current C20","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC21=PDPTab.add("Current C21","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC22=PDPTab.add("Current C22","").getEntry();
-    static NetworkTableEntry shuffleboardPDPCurrentC23=PDPTab.add("Current C23","").getEntry();
+    static GenericEntry shuffleboardPDPStickyCANFaults=PDPTab.add("Sticky CAN Faults","").getEntry();
+    static GenericEntry shuffleboardPDPTotalCurrent=PDPTab.add("Total Current","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC0=PDPTab.add("Current C0","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC1=PDPTab.add("Current C1","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC2=PDPTab.add("Current C2","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC3=PDPTab.add("Current C3","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC4=PDPTab.add("Current C4","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC5=PDPTab.add("Current C5","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC6=PDPTab.add("Current C6","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC7=PDPTab.add("Current C7","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC8=PDPTab.add("Current C8","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC9=PDPTab.add("Current C9","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC10=PDPTab.add("Current C10","").getEntry();  
+    static GenericEntry shuffleboardPDPCurrentC11=PDPTab.add("Current C11","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC12=PDPTab.add("Current C12","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC13=PDPTab.add("Current C13","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC14=PDPTab.add("Current C14","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC15=PDPTab.add("Current C15","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC16=PDPTab.add("Current C16","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC17=PDPTab.add("Current C17","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC18=PDPTab.add("Current C18","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC19=PDPTab.add("Current C19","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC20=PDPTab.add("Current C20","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC21=PDPTab.add("Current C21","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC22=PDPTab.add("Current C22","").getEntry();
+    static GenericEntry shuffleboardPDPCurrentC23=PDPTab.add("Current C23","").getEntry();
     
-    static NetworkTableEntry shuffleboardTurretPos=ShooterTab.add("Turret Position","").getEntry();
+    static GenericEntry shuffleboardTurretPos=ShooterTab.add("Turret Position","").getEntry();
     
-    static NetworkTableEntry shuffleboardLeftLimit=ShooterTab.add("Left Limit","").getEntry();
-    static NetworkTableEntry shuffleboardRightLimit=ShooterTab.add("Right Limit","").getEntry();
-    static NetworkTableEntry shuffleboardShooterTop=ShooterTab.add("Top Speed",Constants.AutoModes.AutoShotTopSpeed).getEntry();
-    static NetworkTableEntry shuffleboardShooterBottom=ShooterTab.add("Bottom Speed",Constants.AutoModes.AutoShotBottomSpeed).getEntry();
+    static GenericEntry shuffleboardLeftLimit=ShooterTab.add("Left Limit","").getEntry();
+    static GenericEntry shuffleboardRightLimit=ShooterTab.add("Right Limit","").getEntry();
+    static GenericEntry shuffleboardShooterTop=ShooterTab.add("Top Speed",Constants.AutoModes.AutoShotTopSpeed).getEntry();
+    static GenericEntry shuffleboardShooterBottom=ShooterTab.add("Bottom Speed",Constants.AutoModes.AutoShotBottomSpeed).getEntry();
 
-    static NetworkTableEntry shuffleboardShooterTopVel=ShooterTab.add("Top Velocity","").getEntry();
-    static NetworkTableEntry shuffleboardShooterBottomVel=ShooterTab.add("Bottom Velocity","").getEntry();
-    static NetworkTableEntry shuffleobardShooterMultipler=ShooterTab.add("Shooter Adjustment",1.0)
+    static GenericEntry shuffleboardShooterTopVel=ShooterTab.add("Top Velocity","").getEntry();
+    static GenericEntry shuffleboardShooterBottomVel=ShooterTab.add("Bottom Velocity","").getEntry();
+    static GenericEntry shuffleobardShooterMultipler=ShooterTab.add("Shooter Adjustment",1.0)
                                 .getEntry();
 
-    static NetworkTableEntry shuffleobardLimelightAdj=ShooterTab.add("Limelight Adjustment",Constants.LimeLightValues.kVisionXOffset)
+    static GenericEntry shuffleobardLimelightAdj=ShooterTab.add("Limelight Adjustment",Constants.LimeLightValues.kVisionXOffset)
                                 .getEntry();
 
-    static NetworkTableEntry shuffleboardRobotMoving=SwerveTab.add("Robot Moving","")
+    static GenericEntry shuffleboardRobotMoving=SwerveTab.add("Robot Moving","")
                                .getEntry();
  
     static String ShuffleboardLogString;
@@ -355,8 +357,8 @@ public class RobotContainer {
 
         SpectrumAxisButton operatorTurretOveride= new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorOverrideAxis ,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
        
-
-        JoystickButton driverIntakeIn= new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeIn);
+        Trigger driverIntakeIn =  new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeIn);
+       
         shuffleboardIntakeInD.setString("D-Button " + ButtonConstants.DriverIntakeIn);
 
         JoystickButton operatorIntakeIn= new JoystickButton(m_xBoxOperator, ButtonConstants.OperatorIntakeIn );
@@ -416,15 +418,16 @@ public class RobotContainer {
 
         operatorTurretOveride.whenHeld(turretUnlockCommand);
 
-        driverIntakeIn.whenHeld(intakeInCommand);
+        driverIntakeIn.whileTrue(intakeInCommand);
+
         operatorIntakeIn.whenHeld(intakeInCommand);
      
         driverIntakeOut.whenHeld(intakeOutCommand);
         operatorIntakeOut.whenHeld(intakeOutCommand);
      
         driverIntakeArm.whenHeld(intakeArmCommand);    
-        operatorIntakeArm.whenHeld(intakeArmCommand);    
-
+       // operatorIntakeArm.whenHeld(intakeArmCommand);    
+        operatorIntakeArm.whileTrue(climbUpCommand);
         driverGyroReset.whenPressed(gyroResetCommand);
         driverGyroReset2.whenPressed(gyroResetCommand);
         operatorGyroReset.whenPressed(gyroResetCommand);
@@ -455,6 +458,8 @@ public class RobotContainer {
         //latchButton.whenPressed(latchCommand);
    }
 
+
+ 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -611,7 +616,7 @@ public class RobotContainer {
         shuffleboardPDPCurrentC22.setDouble(m_robotPDH.getCurrent(22));        
         shuffleboardPDPCurrentC23.setDouble(m_robotPDH.getCurrent(23)); 
  */
-        System.out.println(m_Climb.getEncoderPosition());
+       // System.out.println(m_Climb.getEncoderPosition());
         frontLeftAngle.setDouble(m_RobotDrive.getFrontLeftAngle());
         frontRightAngle.setDouble(m_RobotDrive.getFrontRightAngle());
         backLeftAngle.setDouble(m_RobotDrive.getBackLeftAngle());
