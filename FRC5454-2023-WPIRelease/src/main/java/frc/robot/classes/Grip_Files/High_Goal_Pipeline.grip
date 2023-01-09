@@ -1,0 +1,154 @@
+<grip:Pipeline>
+  <sources>
+    <grip:MultiImageFile>
+      <property name="path[2]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\FarLaunchpad7ft10in.png"/>
+      <property name="path[5]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\FarLaunchpad17ft2in.png"/>
+      <property name="path[8]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\NearLaunchpad8ft10in.png"/>
+      <property name="path[20]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Terminal10ft6in.png"/>
+      <property name="path[23]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Terminal16ft6in.png"/>
+      <property name="path[12]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\TarmacCenter2ft10in.png"/>
+      <property name="path[15]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\TarmacCenter5ft10in.png"/>
+      <property name="index" value="2"/>
+      <property name="path[18]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Terminal5ft6in.png"/>
+      <property name="path[0]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Chute8ft6in.png"/>
+      <property name="path[3]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\FarLaunchpad10ft10in.png"/>
+      <property name="path[6]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\NearLaunchpad5ft4in.png"/>
+      <property name="path[9]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\NearLaunchpad10ft10in.png"/>
+      <property name="path[21]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Terminal12ft6in.png"/>
+      <property name="path[24]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Terminal18ft6in.png"/>
+      <property name="path[10]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\NearLaunchpad12ft10in.png"/>
+      <property name="path[13]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\TarmacCenter3ft10in.png"/>
+      <property name="path[16]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\TarmacCenter6ft10in.png"/>
+      <property name="path[19]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Terminal8ft6in.png"/>
+      <property name="numImages" value="26"/>
+      <property name="path[1]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\FarLaunchpad6ft0in.png"/>
+      <property name="path[4]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\FarLaunchpad13ft10in.png"/>
+      <property name="path[7]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\NearLaunchpad6ft10in.png"/>
+      <property name="path[22]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Terminal14ft6in.png"/>
+      <property name="path[25]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\Terminal22ft6in.png"/>
+      <property name="path[11]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\NearLaunchpad13ft6in.png"/>
+      <property name="path[14]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\TarmacCenter4ft10in.png"/>
+      <property name="path[17]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Vision_Test\TarmacCenter7ft10in.png"/>
+    </grip:MultiImageFile>
+  </sources>
+  <steps>
+    <grip:Step name="CV resize">
+      <grip:Input step="0" socket="0"/>
+      <grip:Input step="0" socket="1"/>
+      <grip:Input step="0" socket="2">
+        <value>1.0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="3">
+        <value>1.0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="4">
+        <value>INTER_LINEAR</value>
+      </grip:Input>
+      <grip:Output step="0" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="HSV Threshold">
+      <grip:Input step="1" socket="0"/>
+      <grip:Input step="1" socket="1">
+        <value>
+          <double>56.1150976222196</double>
+          <double>100.13650705383093</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="1" socket="2">
+        <value>
+          <double>188.03956178452472</double>
+          <double>255.0</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="1" socket="3">
+        <value>
+          <double>68.79498480464058</double>
+          <double>255.0</double>
+        </value>
+      </grip:Input>
+      <grip:Output step="1" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Find Contours">
+      <grip:Input step="2" socket="0"/>
+      <grip:Input step="2" socket="1">
+        <value>true</value>
+      </grip:Input>
+      <grip:Output step="2" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Filter Contours">
+      <grip:Input step="3" socket="0"/>
+      <grip:Input step="3" socket="1">
+        <value>50.0</value>
+      </grip:Input>
+      <grip:Input step="3" socket="2">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="3" socket="3">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="3" socket="4">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Input step="3" socket="5">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="3" socket="6">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Input step="3" socket="7">
+        <value>
+          <double>64.74819929479695</double>
+          <int>100</int>
+        </value>
+      </grip:Input>
+      <grip:Input step="3" socket="8">
+        <value>1000000</value>
+      </grip:Input>
+      <grip:Input step="3" socket="9">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="3" socket="10">
+        <value>0.5</value>
+      </grip:Input>
+      <grip:Input step="3" socket="11">
+        <value>5.0</value>
+      </grip:Input>
+      <grip:Output step="3" socket="0" previewed="true"/>
+    </grip:Step>
+  </steps>
+  <connections>
+    <grip:Connection>
+      <grip:Output step="1" socket="0" previewed="false"/>
+      <grip:Input step="2" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="2" socket="0" previewed="false"/>
+      <grip:Input step="3" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="0" socket="0" previewed="true"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="0" socket="0" previewed="false"/>
+      <grip:Input step="0" socket="0"/>
+    </grip:Connection>
+  </connections>
+  <settings>
+    <teamNumber>0</teamNumber>
+    <publishAddress>roboRIO-0-FRC.local</publishAddress>
+    <deployAddress>roboRIO-0-FRC.local</deployAddress>
+    <deployDir>/home/lvuser</deployDir>
+    <deployUser>lvuser</deployUser>
+    <deployJavaHome>/usr/local/frc/JRE/</deployJavaHome>
+    <deployJvmOptions>-Xmx50m -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:MaxNewSize=16m</deployJvmOptions>
+  </settings>
+  <codeGenerationSettings>
+    <language>Java</language>
+    <className>GripPipeline</className>
+    <implementWpilibPipeline>false</implementWpilibPipeline>
+    <saveDir>C:\Users\Heyan\GRIP</saveDir>
+    <packageName></packageName>
+    <moduleName>grip</moduleName>
+  </codeGenerationSettings>
+</grip:Pipeline>
