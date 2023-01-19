@@ -199,12 +199,12 @@ public final class Constants {
         public static final double steeringD = 0.0055;
         public static final double steeringFeedForward = 0.0;
 
-        public static final double targetHeight = 103; // 249 cm
+        public static final double targetHeight = 18; // 249 cm
         public static final double targetXPosShoot = -1.5;
         public static final double targetXPosSafeZone = 5;
         public static final double targetXPosRange=50;
-        public static final double limelightHeight = 44; //37
-        public static final double limelightAngle = 36; //40
+        public static final double limelightHeight = 6.5; //37
+        public static final double limelightAngle = 0; //40
         public static final double kVisionDistanceTolerance = 5;
         public static final double kVisionXTolerance = 1.5;
         //public static final double kVisionXOffset=3.7; // was 1.7
@@ -213,7 +213,7 @@ public final class Constants {
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
-    public static final double shooterPrimedSpeed=500; //was 500 changed at stemposium
+    public static final double shooterPrimedSpeed=000; //was 500 changed at stemposium
     public static final double shooterSweetSpotLow=70; //was 60
     public static final double shooterSweetSpotHigh=90;
     public static final class SwerveDriveGB {

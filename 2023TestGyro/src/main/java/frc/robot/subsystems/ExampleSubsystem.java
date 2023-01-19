@@ -15,18 +15,19 @@ import frc.robot.Constants;
 
 public class ExampleSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
+  private PWMVictorSPX m_RightFrontDrive = new PWMVictorSPX(1);
+  private PWMVictorSPX m_RightBackDrive = new PWMVictorSPX(2);
+  private PWMVictorSPX m_LeftFrontDrive = new PWMVictorSPX(8);
+  private PWMVictorSPX m_LeftBackDrive = new PWMVictorSPX(9);
+
   public ExampleSubsystem() {
   }
-   private PWMVictorSPX m_RightFrontDrive = new PWMVictorSPX(1);
-   private PWMVictorSPX m_RightBackDrive = new PWMVictorSPX(2);
-   private PWMVictorSPX m_LeftFrontDrive = new PWMVictorSPX(8);
-   private PWMVictorSPX m_LeftBackDrive = new PWMVictorSPX(9);
 
-   public void run(double m_speed){
-    m_LeftFrontDrive.set(m_speed);
-    m_LeftBackDrive.set(m_speed);
-    m_RightFrontDrive.set(-m_speed);
-    m_RightBackDrive.set(-m_speed); 
+   public void run(double speed){
+    m_LeftFrontDrive.set(speed);
+    m_LeftBackDrive.set(speed);
+    m_RightFrontDrive.set(-speed);
+    m_RightBackDrive.set(-speed); 
    }
   
   

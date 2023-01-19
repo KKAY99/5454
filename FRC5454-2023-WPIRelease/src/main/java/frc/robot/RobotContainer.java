@@ -89,6 +89,7 @@ public class RobotContainer {
                                                                 Constants.turretHomeSpeed);
     // #region Shuffleboard
 
+
     private final zSpinLoadShootCommand autoLoadShoot = new zSpinLoadShootCommand(m_Shooter, m_Conveyor, m_Feeder,AutoModes.AutoShotTopSpeed, AutoModes.AutoShotBottomSpeed,AutoModes.AutoMinVelocity); 
        
 

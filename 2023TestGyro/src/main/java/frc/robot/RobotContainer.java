@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.testCommand;
+import frc.robot.commands.moveCommand;
+
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -26,7 +28,11 @@ import frc.robot.commands.testCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-  private testCommand m_command = new testCommand(m_gyro);
+  private ExampleSubsystem m_subsystem = new ExampleSubsystem();
+
+  private testCommand m_command = new testCommand(m_gyro,m_subsystem);
+  private moveCommand m_moveBack = new moveCommand(m_subsystem,-0.3);
+  private moveCommand m_moveForward = new moveCommand(m_subsystem,0.3);
   private XboxController m_xBox = new XboxController(0);
 
 
@@ -34,16 +40,26 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-  
+    m_gyro.reset();
+    m_gyro.zeroYaw();
     m_gyro.enableLogging(true);
+    while(m_gyro.isCalibrating()){
+      System.out.println("Calibrating");
+    }
+    System.out.println("setting roll zero to " + m_gyro.getRoll());
+    m_command.setLevel(m_gyro.getRoll());
   }
 
+  public void resetRoll(){
+    System.out.println("setting roll zero to " + m_gyro.getRoll());
+    m_command.setLevel(m_gyro.getRoll());
+  }
   public void updateDashboard(){
     SmartDashboard.putNumber("IMU_Yaw", m_gyro.getYaw());
     SmartDashboard.putNumber("IMU_Pitch", m_gyro.getPitch());
     SmartDashboard.putNumber("IMU_Roll", m_gyro.getRoll());
 
-  }
+  } 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -57,7 +73,9 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    new JoystickButton(m_xBox, 1).whileTrue(m_command);
+    new JoystickButton(m_xBox, 2).whileTrue(m_command);
+    new JoystickButton(m_xBox, 1).whileTrue(m_moveForward);
+    new JoystickButton(m_xBox, 4).whileTrue(m_moveBack);
   }
 
   /**
