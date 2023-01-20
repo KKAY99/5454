@@ -80,6 +80,12 @@ public class Limelight {
 
         return distance;
     }
+    public void setPipeline(int pipeline){
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+
+        inst.getTable("limelight").getEntry("pipeline").setNumber(pipeline);
+        
+    }
 
     public double getRotationPower(double measurement) {
         double returnVal = getRotationPower(measurement, 0.0);

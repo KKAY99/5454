@@ -6,8 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.classes.Limelight;
-import NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+
+
 public class PipelineSwap extends CommandBase {
   private final Limelight m_limelight;
   private final int m_pipeline;
