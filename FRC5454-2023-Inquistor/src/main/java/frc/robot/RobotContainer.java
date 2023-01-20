@@ -26,7 +26,6 @@ import frc.robot.subsystems.*;
 import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.InputControllers;
-import frc.robot.Constants.zAutomation;
 import frc.robot.Constants.LEDS.Colors;
 import frc.robot.classes.Limelight;
 import frc.robot.classes.LEDStrip;
@@ -227,10 +226,7 @@ public class RobotContainer {
         System.out.println("Autonomouse Selected Mode = " + selectedMode);
         switch (selectedMode) {
           case AutoModes.autoMoveForward:
-             autoCommand= new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance);
-            break;
-          case AutoModes.autoMoveShoot:
-            autoCommand=new SequentialCommandGroup( autoCommand= new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveTarmacDistance));
+             autoCommand= new AutoMoveCommand(m_RobotDrive,0,AutoModes.LeaveZoneDistance);
             break;
           default:
             autoCommand = new AutoDoNothingCommand();
@@ -245,27 +241,6 @@ public class RobotContainer {
         backLeftAngle.setDouble(m_RobotDrive.getBackLeftAngle());
         backRightAngle.setDouble(m_RobotDrive.getbackRightAngle());
         m_Limelight.update();
-        if(m_Limelight.isOnTargetX()){
-                networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());                
-                if((m_Limelight.getDistance()>=Constants.shooterSweetSpotLow) && (m_Limelight.getDistance()<=Constants.shooterSweetSpotHigh)){
-                        m_LEDMode=LEDMode.ONTARGETSWEET;                       
-                }else{
-                        m_LEDMode=LEDMode.ONTARGET;
-                }
-        }else{
-                if(m_Limelight.isTargetAvailible()){              
-                        networkTableEntryVisionDistance.setDouble(m_Limelight.getDistance());                
-                        if((m_Limelight.getDistance()>=Constants.shooterSweetSpotLow) && (m_Limelight.getDistance()<=Constants.shooterSweetSpotHigh)){
-                                m_LEDMode=LEDMode.OFFTARGETSWEET;                       
-                        }else{
-                                m_LEDMode=LEDMode.ONTARGET;
-                        }
-                }else {
-                        m_LEDMode=LEDMode.OFFTARGET;
-                        networkTableEntryVisionDistance.setDouble(0);
-                }
-                
-        }
         //override disabled led mode
         if(m_disabled){
                 m_LEDMode=LEDMode.DISBLED;

@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.classes.Gains;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -53,49 +51,19 @@ public final class Constants {
     public static final class ButtonConstants{
        public static final int DriverIntakeIn=2;
        public static final int DriverIntakeOut=3;
-       public static final int DriverIntakeArm=4;
        public static final int DriverGyroReset=7;
-       public static final int DriverGyroReset2=8;
-       public static final int DriverTurretLeftPOV=270;
-       public static final int DriverTurretRightPOV=90;
-      
-       public static final int OperatorPivotArm=2;
-       //public static final int OperatorShootManual=1;
-       public static final int OperatorAutoTurretMode=1;
-       public static final int OperatorClimbHook=3;
-       public static final int OperatorIntakeArm=4;
-       public static final int OperatorIntakeOut=5;
+ 
        public static final int OperatorIntakeIn=6;
+       public static final int OperatorIntakeOut=7;
     
        public static final int OperatorTurretAxis=0;
        public static final int OperatorTurretFindAxis=1;
        public static final int OperatorClimbAxis=5;
        public static final int OperatorGyroReset=7;
-       public static final int OperatorGyroReset2=8;
-       public static final int OperatorAutoShootAxis=3;
-       public static final int OperatorOverrideAxis=2;
-       public static final int OperatorShooter1POV=270;
-       public static final int OperatorShooter2POV=90;
-       public static final int OperatorShooter3POV=270;
-       public static final int OperatorShooter4POV=90;
-       
-       public static final int ClimberDown=10;
-       public static final int ConveyerUpAxis=2;
-       public static final int ConveyerDownAxis=3;
-       public static final double TriggerThreshold=.5;
-       public static final double JoystickUpThreshold=-0.50;
-       public static final double JoystickDownThreshold=0.50;
-       public static final double JoystickLeftThreshold=.50;
-       public static final double JoystickRightThreshold=-0.50;
-       public static final int TurretLeftPOV=270;
-       public static final int TurretRightPOV=90;
-       public static final int ClimbUpPOV=0;
-       public static final int ClimbDownPOV=180;
-       public static final int GyroReset=7;
-       public static final int LeftStick=1;
     }
 
     public static final class LimitSwitches{
+        public static final int ExampleSwitch=0;
     }
 
     public static final class AutoModes {
@@ -113,15 +81,12 @@ public final class Constants {
 
         public static final int autoNothing = 0;
         public static final int autoMoveForward = 1;
-        public static final int autoMoveShoot = 2;
-        public static final int autoMoveBackwardsOutake = 3;
-        public static final int autoMoveBackwardsShot = 4;
-        public static final int autoMoveShootMoveGrab = 5;
-        public static final int autoMoveShootMoveGrabShot1 = 6;
-        public static final int autoMoveShotMoveGrabMoveLeftGrabShot2 = 7;
-        public static final int autoMoveShotMoveGrabMoveRightGrabShot2 = 8;
-        public static final int autoMoveGrabTrackRightShoot = 9;
-        public static final int autoMoveGrabTrackLeftShoot = 10;
+        public static final int autoCubeLeave = 2;
+        public static final int autoConeLeave = 3;
+        public static final int autoCubeDock = 4;
+        public static final int autoConeDock = 5;
+        public static final int autoCubeEngage = 6;
+        public static final int autoConeEngage = 7;
         
         public static final String delayMode0="0 Seconds";
         public static final String delayMode1="3 Seconds";
@@ -132,35 +97,16 @@ public final class Constants {
         public static final int delayValMode2=5;
         public static final int delayValMode3=8;
         public static final int defaultDelayMode=0;
-
-        public static final double LeaveTarmacDistance=80;
-        public static final double Get3BallDistanceOne=74;
-        public static final double Get3BallDistanceReturn=36;
-        public static final double Get2BallDistance=75;
-        public static final double Get2BallDistanceReturn=38;
-        public static final double GetBall2Distance=50;
-        public static final double Get3BallDistanceRotate=19;
-        public static final double Get3BallDistance=75;
-        public static final double MoveTowardsPlayerShort=30;
-        public static final double ball2Distance=.5;
+        public static final double MoveSpeed=0.5;
+        public static final double LeaveZoneDistance=30;
+    }
             
         
-        public static final double DistanceToBall1=7;
-        public static final double MoveSpeed=.30;
-        public static final double AutoShotTopSpeed=800;
-        public static final double AutoShotBottomSpeed=800;
-        public static final double AutoMinVelocity=800;
-    }
-    public static final class zAutomation{
-        public static final double shooterSpinUp=2;
-        public static final double conveyorfeedBall=2;
-        public static final double intakeTime=.1;
-    }
-
     public static final class InputControllers {
         public static final int kXboxDrive = 0;
         public static final int kXboxOperator = 1;
     }
+
     public static final class PhotonVision{
         public static String camera="";
     }
@@ -183,20 +129,16 @@ public final class Constants {
         public static final double limelightAngle = 0; //40
         public static final double kVisionDistanceTolerance = 5;
         public static final double kVisionXTolerance = 1.5;
-        //public static final double kVisionXOffset=3.7; // was 1.7
         public static final double kVisionXOffset=4;
         public static final double kVisionXMaxDistanceOffset=4.31; // was 1.7
         public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
     }
 
-    public static final double shooterPrimedSpeed=000; //was 500 changed at stemposium
-    public static final double shooterSweetSpotLow=70; //was 60
-    public static final double shooterSweetSpotHigh=90;
     public class LEDS {
         public static final int PORT = 0;
         public static final int COUNT = 215;
         public static final int FLASH_DELAY=5;
-        ;
+        
 
         public class Colors {
             public static final int RED = 0;
@@ -209,139 +151,7 @@ public final class Constants {
             public static final int ORANGE = 7;
         }
     }
-
-    public static final class SwerveDriveNEO {
-        public static final int kSlotIdx = 0;
-        /*
-         * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now
-         * we just want the primary one.
-         */
-        public static final int kPIDLoopIdx = 0;
-
-        /*
-         * Set to zero to skip waiting for confirmation, set to nonzero to wait and
-         * report to DS if action fails.
-         */
-        public static final int kTimeoutMs = 30;
-
-        /* Choose so that Talon does not report sensor out of phase */
-        public static boolean kSensorPhase = true;
-
-        /*
-         * Choose if feedback is non-continuous true: 1023 -> 0 false: 1023 -> 1024
-         */
-        public static boolean kNonContinuousFeedback = false;
-
-        /* The amount of allowed error in the pid loop */
-        public static int kAlloweedError = 7;
-
-        /*
-         * Choose based on what direction you want to be positive, this does not affect
-         * motor invert.
-         */
-        public static boolean kMotorInvert = false;
-
-        /*
-         * Gains used in Positon Closed Loop, to be adjusted accordingly Gains(kp, ki,
-         * kd, kf, izone, peak output);
-         */
-        public static final Gains kGains = new Gains(5e-5,1e-6,0,0.000156,0,1.0);
-        public static final int kMaxOutput=1;
-        public static final int kMinOutput=-1;
-        public static final int maxVel=5000;
-        public static final int maxACC=2500;
-        public static int smartMotionSlot=0;
-        public static double allowedErr=1; //GUESSSSSSS
-
-        public static double minVel = 0; // rpm
-         
-        /* Constants for AutoDrive Targeting Mode driven by Vision */
-        public static double kVisionDriveSpeedFast = .25;
-        public static double kVisionDriveSpeedSlow = .15;
-        public static double kInitLineShootingDistance = 180;
-        public static double kSafeZoneShootingDistance = 78;
-        public static double kVisionDistanceTolerance = 5;
-        public static double kVisionXTolerance = .75; // changed from 0.5
-        public static double kVisionXToleranceRCW = .5;
-        public static double kVisionGyroTolerance = 0.5;
-
-        /* Motor Controllers */
-        public static int kFrontLeftSteering = 25;
-        public static int kFrontRightSteering = 26;
-        public static int kBackLeftSteering = 28;
-        public static int kBackRightSteering = 27;
-        public static int kFrontLeftDrive = 20;
-        public static int kFrontRightDrive = 21;
-        public static int kBackLeftDrive = 22;
-        public static int kBackRightDrive = 23;
-        // #endr
-        
-        public static int kFrontLeftSensor=0;
-        public static int kFrontRightSensor=1;
-        public static int kBackLeftSensor=2;
-        public static int kBackRightSensor=3;
-        
-    }
-
-    public static final class SwerveDriveIV {
-        public static final int kSlotIdx = 0;
-        /*
-         * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now
-         * we just want the primary one.
-         */
-        public static final int kPIDLoopIdx = 0;
-
-        /*
-         * Set to zero to skip waiting for confirmation, set to nonzero to wait and
-         * report to DS if action fails.
-         */
-        public static final int kTimeoutMs = 30;
-
-        /* Choose so that Talon does not report sensor out of phase */
-        public static boolean kSensorPhase = true;
-
-        /*
-         * Choose if feedback is non-continuous true: 1023 -> 0 false: 1023 -> 1024
-         */
-        public static boolean kNonContinuousFeedback = false;
-
-        /* The amount of allowed error in the pid loop */
-        public static int kAlloweedError = 7;
-
-        /*
-         * Choose based on what direction you want to be positive, this does not affect
-         * motor invert.
-         */
-        public static boolean kMotorInvert = false;
-
-        /*
-         * Gains used in Positon Closed Loop, to be adjusted accordingly Gains(kp, ki,
-         * kd, kf, izone, peak output);
-         */
-        public static final Gains kGains = new Gains(0.5, 0.0, 0.0001, 0.0, 0, 1.0);
-
-        /* Constants for AutoDrive Targeting Mode driven by Vision */
-        public static double kVisionDriveSpeedFast = .25;
-        public static double kVisionDriveSpeedSlow = .15;
-        public static double kInitLineShootingDistance = 180;
-        public static double kSafeZoneShootingDistance = 78;
-        public static double kVisionDistanceTolerance = 10;
-        public static double kVisionXTolerance = .75; // changed from 0.5
-        public static double kVisionXToleranceRCW = .5;
-        public static double kVisionGyroTolerance = 0.5;
-
-        /* Motor Controllers */
-        public static int kFrontLeftSteering = 14;
-        public static int kFrontRightSteering = 17;
-        public static int kBackLeftSteering = 11;
-        public static int kBackRightSteering = 12;
-        public static int kFrontLeftDrive = 15;
-        public static int kFrontRightDrive = 16;
-        public static int kBackLeftDrive = 10;
-        public static int kBackRightDrive = 13;
-        // #endr
-    }
-    
+       
 public static class RobotMap {
     public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 25; // CAN
     public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 0; // Analog
