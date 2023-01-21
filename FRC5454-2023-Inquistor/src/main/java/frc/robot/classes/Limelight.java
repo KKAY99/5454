@@ -8,10 +8,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.ShooterSubsystem;
+
 
 public class Limelight {
     private static NetworkTable llTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -102,30 +101,8 @@ public class Limelight {
     // return 0.115*Math.pow(Math.abs(error), 0.5);
     // }
 
-    private static double[] distanceValues = new double[] { ShooterSubsystem.distanceValues[0],
-            ShooterSubsystem.distanceValues[ShooterSubsystem.distanceValues.length - 1] };
-
-    public double getOffset(double offsetValues[], double distance) {
-        int i = 0;
-        try {
-            distance = Math.max(distance, 0);
-            for (i = 0; i < distanceValues.length; i++) {
-                if (distanceValues[i] == distance) {
-                    return offsetValues[i];
-                } else if (distanceValues[i] > distance) {
-                    return getEquation(distance, distanceValues[i], offsetValues[i], distanceValues[i - 1],
-                            offsetValues[i - 1]);
-                } else if (distance > distanceValues[distanceValues.length - 1]) {
-                    return offsetValues[distanceValues.length - 1];
-                }
-            }
-            return m_xStaticOffset;
-        } catch (Exception e) {
-            System.out.println("Exception Error in getOffset value i (" + i + ") " + e.getMessage());
-            return m_xStaticOffset;
-        }
-    }
-
+   
+   
     private static double getEquation(double value, double xOne, double yOne, double xTwo, double yTwo) {
         double slope = (yTwo - yOne) / (xTwo - xOne);
         return (slope * (value - xOne)) + yOne;
@@ -136,7 +113,7 @@ public class Limelight {
 
     public double getX() {
         if (m_dynamicEnabled) {
-            return tx.getDouble(0.0) + getOffset(offsetValues, getDistance());
+            return tx.getDouble(0.0) + m_xStaticOffset;
         } else {
             return tx.getDouble(0.0) + m_xStaticOffset;
         }

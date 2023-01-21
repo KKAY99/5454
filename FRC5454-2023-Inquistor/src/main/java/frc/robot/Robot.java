@@ -54,16 +54,13 @@ public class Robot extends TimedRobot {
     
     m_autoChooser.addOption(AutoModes.autoMode0, AutoModes.autoNothing);
     m_autoChooser.addOption(AutoModes.autoMode1, AutoModes.autoMoveForward);
-   // m_autoChooser.addOption(AutoModes.autoMode2, AutoModes.autoMoveShoot);
-   // m_autoChooser.addOption(AutoModes.autoMode3, AutoModes.autoMoveBackwardsOutake);
-   // m_autoChooser.addOption(AutoModes.autoMode4, AutoModes.autoMoveBackwardsShot);
-   // m_autoChooser.addOption(AutoModes.autoMode5, AutoModes.autoMoveShootMoveGrab);
-    m_autoChooser.addOption(AutoModes.autoMode6, AutoModes.autoMoveShootMoveGrabShot1);
-  //  m_autoChooser.addOption(AutoModes.autoMode7, AutoModes.autoMoveShotMoveGrabMoveLeftGrabShot2);
-    m_autoChooser.addOption(AutoModes.autoMode8, AutoModes.autoMoveShotMoveGrabMoveRightGrabShot2);
-    //m_autoChooser.addOption(AutoModes.autoMode9, AutoModes.autoMoveGrabTrackLeftShoot);
-    //m_autoChooser.addOption(AutoModes.autoMode10, AutoModes.autoMoveGrabTrackRightShoot);
-    m_autoChooser.setDefaultOption(AutoModes.autoMode6, AutoModes.autoMoveShootMoveGrabShot1);
+    m_autoChooser.addOption(AutoModes.autoMode2, AutoModes.autoCubeLeave);
+    m_autoChooser.addOption(AutoModes.autoMode3, AutoModes.autoConeLeave);
+    m_autoChooser.addOption(AutoModes.autoMode4, AutoModes.autoCubeDock);
+    m_autoChooser.addOption(AutoModes.autoMode5, AutoModes.autoConeDock);
+    m_autoChooser.addOption(AutoModes.autoMode6, AutoModes.autoCubeEngage);
+    m_autoChooser.addOption(AutoModes.autoMode7, AutoModes.autoConeEngage);
+    m_autoChooser.setDefaultOption(AutoModes.autoMode6, AutoModes.autoCubeEngage);
     m_delayChooser.addOption(AutoModes.delayMode0,AutoModes.delayValMode0);
     m_delayChooser.addOption(AutoModes.delayMode1,AutoModes.delayValMode1);
     m_delayChooser.addOption(AutoModes.delayMode2,AutoModes.delayValMode2);
