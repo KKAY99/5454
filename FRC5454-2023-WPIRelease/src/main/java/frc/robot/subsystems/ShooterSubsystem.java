@@ -197,10 +197,10 @@ public static double[] distanceValues = {
           topSpeed=m_defaultTopSpeed;
           bottomSpeed=m_defaultBottomSpeed;      
       }
-      m_TopPrimeSpeed = topSpeed;
-      m_BottomPrimeSpeed = bottomSpeed;
-      m_Bottom_ShooterMotor.set(ControlMode.Velocity, m_TopPrimeSpeed);
-      m_Top_ShooterMotor.set(ControlMode.Velocity, m_BottomPrimeSpeed);
+    //  m_TopPrimeSpeed = topSpeed;
+    //  m_BottomPrimeSpeed = bottomSpeed;
+    //  m_Bottom_ShooterMotor.set(ControlMode.Velocity, m_TopPrimeSpeed);
+    //  m_Top_ShooterMotor.set(ControlMode.Velocity, m_BottomPrimeSpeed);
     }
   }
   

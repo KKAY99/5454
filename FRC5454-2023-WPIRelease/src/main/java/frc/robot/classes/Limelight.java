@@ -72,11 +72,19 @@ public class Limelight {
         // FROM Limelight Docs
         // d = (h2-h1) / tan(a1+a2)
         double measuredAngle = getY();
+        System.out.println("our math -" + Math.toRadians(m_mountingAngle + measuredAngle));
+        System.out.println("LL math -  " + (m_mountingAngle + measuredAngle)*(3.14159 / 180.0));
         if (measuredAngle != 0) {
             distance = (m_targetHeight - m_limeLightHeight) / Math.tan(Math.toRadians(m_mountingAngle + measuredAngle));
         }
 
         return distance;
+    }
+    public void setPipeline(int pipeline){
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+
+        inst.getTable("limelight").getEntry("pipeline").setNumber(pipeline);
+        
     }
 
     public double getRotationPower(double measurement) {

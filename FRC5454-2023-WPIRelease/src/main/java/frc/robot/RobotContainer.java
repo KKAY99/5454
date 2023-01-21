@@ -87,6 +87,7 @@ public class RobotContainer {
                                                                 Constants.LimitSwitches.TurretRight,
                                                                 Constants.turretHomePos,
                                                                 Constants.turretHomeSpeed);
+                                                             
     // #region Shuffleboard
 
 
@@ -262,7 +263,10 @@ public class RobotContainer {
   
     //leveraged in multiple functions
     private zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
-        
+    
+    private PipelineSwap m_pipelineswap0 = new PipelineSwap(m_Limelight,0);
+    private PipelineSwap m_pipelineswap1 = new PipelineSwap(m_Limelight,1);
+    private PipelineSwap m_pipelineswap2 = new PipelineSwap(m_Limelight,2);
     private boolean m_turretHasReset =false;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.

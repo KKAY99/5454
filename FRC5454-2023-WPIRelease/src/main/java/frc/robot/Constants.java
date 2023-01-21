@@ -199,7 +199,7 @@ public final class Constants {
         public static final double steeringD = 0.0055;
         public static final double steeringFeedForward = 0.0;
 
-        public static final double targetHeight = 18; // 249 cm
+        public static final double targetHeight = 14.875; //  cm
         public static final double targetXPosShoot = -1.5;
         public static final double targetXPosSafeZone = 5;
         public static final double targetXPosRange=50;
