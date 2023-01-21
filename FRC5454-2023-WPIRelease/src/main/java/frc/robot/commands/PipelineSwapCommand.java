@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
+import frc.robot.common.control.PidController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.classes.Limelight;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -14,6 +14,8 @@ public class PipelineSwapCommand extends CommandBase {
   private double m_targetHeight;
   private boolean m_done=false;
   private DrivetrainSubsystem m_drive;
+  private PidController m_pid;
+
   /** Creates a new PipelineSwap. */
   public PipelineSwapCommand(Limelight limelight,DrivetrainSubsystem drive, int pipeline, double targetHeight) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -44,17 +46,15 @@ public class PipelineSwapCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     if(m_limelight.isTargetAvailible()){
-      if(Math.abs(m_limelight.getX())<0.1){
-        return true;
+      if(Math.abs(m_limelight.getXRaw())<0.15){
+        return true; 
       }else{
-        if(m_limelight.getX()>0){
+        if(m_limelight.getXRaw()>0){
           System.out.println("move right");
-          m_drive.move(270 ,0,.15,1,true);
+          m_drive.move(270 ,0,.05,1,true);
         }else{
           System.out.println("move left");
-          m_drive.move(90 ,0,.15,1,true);
-
-
+          m_drive.move(90 ,0,.05,1,true);
         }
         return false;
 

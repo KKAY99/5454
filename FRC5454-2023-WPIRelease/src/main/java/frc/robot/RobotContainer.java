@@ -4,7 +4,6 @@
 
 package frc.robot;
 
- 
 import java.util.Map;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
@@ -37,6 +36,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.common.control.PidController;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
