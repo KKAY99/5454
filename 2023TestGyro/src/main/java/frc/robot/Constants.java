@@ -20,5 +20,12 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
 
     public static final double speed = 0;
+
+    public static final class InputControllers{
+      public static final int kJoystickLeft=0;
+      public static final int kJoystickRight=1;
+      public static final int kXboxMain=1;
+      public static final int kXboxPit=3;
+}
   }
 }

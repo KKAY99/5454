@@ -19,6 +19,12 @@ import frc.robot.classes.Gains;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final class ChargedUp {
+        public static final double targetHeightAprilTag=18;     // middle of April Tag in Distance
+        public static final double targetHeighMLowTape=24.125;  // middle of low tape in inches
+        public static final double targetHeightHighTape=43.875; // middle of high tape in inches 
+    }
     public static final double kSpeedMultiplier = 1.0;
     public static final int TopShooterPort=31;
     public static final int BottomShooterPort=30;
@@ -59,9 +65,9 @@ public final class Constants {
         
     }
     public static final class ButtonConstants{
-       public static final int DriverAutoShoot=1;
-       public static final int DriverIntakeIn=2;
-       public static final int DriverIntakeOut=3;
+       public static final int DriverPipeline0=1;
+       public static final int DriverPipeline1=2;
+       public static final int DriverPipeline2=3;
        public static final int DriverIntakeArm=4;
        public static final int DriverGyroReset=7;
        public static final int DriverGyroReset2=8;
@@ -203,7 +209,7 @@ public final class Constants {
         public static final double targetXPosShoot = -1.5;
         public static final double targetXPosSafeZone = 5;
         public static final double targetXPosRange=50;
-        public static final double limelightHeight = 6.5; //37
+        public static final double limelightHeight = 27.5; //37
         public static final double limelightAngle = 0; //40
         public static final double kVisionDistanceTolerance = 5;
         public static final double kVisionXTolerance = 1.5;

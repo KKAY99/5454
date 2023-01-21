@@ -24,7 +24,6 @@ public class Limelight {
     // does the limelight have a target
     private static NetworkTableEntry tv = llTable.getEntry("tv");
 
-    private double m_targetHeight;
     private double m_limeLightHeight;
     private double m_mountingAngle;
     private double m_targetDistance = 0;
@@ -39,7 +38,7 @@ public class Limelight {
     PIDController limeLightSteeringController = new PIDController(kP, kI, kD);
 
     boolean m_dynamicEnabled = false;
-
+    double  m_targetHeight=0;
     public Limelight() {
         this(0.0, 0.0, 0.0);
     };
@@ -61,6 +60,7 @@ public class Limelight {
         m_targetDistance = targetDistance;
     };
 
+
     public double getOffset(){
         return m_xStaticOffset;
     }
@@ -72,12 +72,10 @@ public class Limelight {
         // FROM Limelight Docs
         // d = (h2-h1) / tan(a1+a2)
         double measuredAngle = getY();
-        System.out.println("our math -" + Math.toRadians(m_mountingAngle + measuredAngle));
-        System.out.println("LL math -  " + (m_mountingAngle + measuredAngle)*(3.14159 / 180.0));
         if (measuredAngle != 0) {
-            distance = (m_targetHeight - m_limeLightHeight) / Math.tan(Math.toRadians(m_mountingAngle + measuredAngle));
+            distance = (Math.abs(m_targetHeight - m_limeLightHeight)) / Math.tan(Math.toRadians(Math.abs(m_mountingAngle + measuredAngle)));
         }
-
+        //System.out.println(distance + " - " + m_targetHeight + " -- " + m_limeLightHeight + " --- " + measuredAngle);
         return distance;
     }
     public void setPipeline(int pipeline){
@@ -142,6 +140,9 @@ public class Limelight {
     private static double[] offsetValues = new double[] { Constants.LimeLightValues.kVisionXMinDistanceOffset,
             Constants.LimeLightValues.kVisionXMaxDistanceOffset };
 
+     public double getXRaw(){
+        return tx.getDouble(0.0);
+     }
     public double getX() {
         if (m_dynamicEnabled) {
             return tx.getDouble(0.0) + getOffset(offsetValues, getDistance());
@@ -198,6 +199,9 @@ public class Limelight {
 
     public void setTargetDistance(double distance) {
         m_targetDistance = distance;
+    }
+    public void setTargetHeight (double height){
+        m_targetHeight=height;
     }
 
     private boolean isAtTargetDistance() {

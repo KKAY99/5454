@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.testCommand;
 import frc.robot.commands.moveCommand;
-
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -18,7 +18,10 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.testCommand;
+import frc.robot.commands.DefaultDrive;
+import frc.robot.Constants.OperatorConstants.InputControllers;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -28,11 +31,14 @@ import frc.robot.commands.testCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  private Joystick m_leftJoystick = new Joystick(InputControllers.kJoystickLeft);
+  private Joystick m_rightJoystick = new Joystick(InputControllers.kJoystickRight);
   private ExampleSubsystem m_subsystem = new ExampleSubsystem();
+  private DriveSubsystem m_RobotDrive = new DriveSubsystem();
 
   private testCommand m_command = new testCommand(m_gyro,m_subsystem);
-  private moveCommand m_moveBack = new moveCommand(m_subsystem,-0.3);
-  private moveCommand m_moveForward = new moveCommand(m_subsystem,0.3);
+  // private moveCommand m_moveBack = new moveCommand(m_subsystem,-0.3);
+  // private moveCommand m_moveForward = new moveCommand(m_subsystem,0.3);
   private XboxController m_xBox = new XboxController(0);
 
 
@@ -48,6 +54,7 @@ public class RobotContainer {
     }
     System.out.println("setting roll zero to " + m_gyro.getRoll());
     m_command.setLevel(m_gyro.getRoll());
+    m_RobotDrive.setDefaultCommand(new DefaultDrive(m_RobotDrive,()->m_xBox.getLeftX()  , ()-> m_xBox.getLeftY()));
   }
 
   public void resetRoll(){
@@ -74,8 +81,8 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     new JoystickButton(m_xBox, 2).whileTrue(m_command);
-    new JoystickButton(m_xBox, 1).whileTrue(m_moveForward);
-    new JoystickButton(m_xBox, 4).whileTrue(m_moveBack);
+    //new JoystickButton(m_xBox, 1).whileTrue(m_moveForward);
+    //new JoystickButton(m_xBox, 4).whileTrue(m_moveBack);
   }
 
   /**

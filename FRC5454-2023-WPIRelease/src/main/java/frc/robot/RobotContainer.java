@@ -264,9 +264,9 @@ public class RobotContainer {
     //leveraged in multiple functions
     private zTurretLimelightCommand turretAutoCommand = new zTurretLimelightCommand(m_turret, m_Limelight, Constants.turretSpeed,Constants.turretMinSpeed,Constants.LimeLightValues.targetXPosRange,Constants.TurretTargetRange);
     
-    private PipelineSwap m_pipelineswap0 = new PipelineSwap(m_Limelight,0);
-    private PipelineSwap m_pipelineswap1 = new PipelineSwap(m_Limelight,1);
-    private PipelineSwap m_pipelineswap2 = new PipelineSwap(m_Limelight,2);
+    private PipelineSwapCommand m_pipelineswap0 = new PipelineSwapCommand(m_Limelight,m_RobotDrive ,0,Constants.ChargedUp.targetHeightAprilTag);
+    private PipelineSwapCommand m_pipelineswap1 = new PipelineSwapCommand(m_Limelight,m_RobotDrive ,1,Constants.ChargedUp.targetHeighMLowTape);
+    private PipelineSwapCommand m_pipelineswap2 = new PipelineSwapCommand(m_Limelight,m_RobotDrive ,2,Constants.ChargedUp.targetHeightHighTape);
     private boolean m_turretHasReset =false;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -354,23 +354,24 @@ public class RobotContainer {
         
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
          
-        JoystickButton driverAutoShoot = new JoystickButton(m_xBoxDriver, ButtonConstants.DriverAutoShoot);
-        shuffleboardAutoShootD.setString("D-Button " + ButtonConstants.DriverAutoShoot);
+        JoystickButton pipelineswitch0=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline0);
+        JoystickButton pipelineswitch1=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline1);
+        JoystickButton pipelineswitch2=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline2);
+        pipelineswitch0.toggleOnTrue(m_pipelineswap0);
+        pipelineswitch1.whileTrue(m_pipelineswap1);
+        pipelineswitch2.whileTrue(m_pipelineswap2);
+        
        
         SpectrumAxisButton operatorAutoShoot = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorAutoShootAxis ,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
         shuffleboardAutoShootO.setString("Right Trigger");
 
         SpectrumAxisButton operatorTurretOveride= new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorOverrideAxis ,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
        
-        Trigger driverIntakeIn =  new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeIn);
-       
-        shuffleboardIntakeInD.setString("D-Button " + ButtonConstants.DriverIntakeIn);
-
+    
         JoystickButton operatorIntakeIn= new JoystickButton(m_xBoxOperator, ButtonConstants.OperatorIntakeIn );
         shuffleboardIntakeInO.setString("O-Button " + ButtonConstants.OperatorIntakeIn);
 
-        JoystickButton driverIntakeOut= new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeOut);
-        shuffleboardIntakeOutD.setString("D-Button " + ButtonConstants.DriverIntakeOut);
+      
 
         JoystickButton operatorIntakeOut= new JoystickButton(m_xBoxOperator, ButtonConstants.OperatorIntakeOut );
         shuffleboardIntakeOutO.setString("O-Button " + ButtonConstants.OperatorIntakeOut);
@@ -418,16 +419,16 @@ public class RobotContainer {
         //aimAndSpin.whenHeld(aimAndSpinCommand);
         //aimAndSpin2.whenHeld(aimAndSpinCommand);
         
-        driverAutoShoot.whenHeld(LoadandShootCommand);
+        
         operatorAutoShoot.whenHeld(LoadandShootCommand);
 
         operatorTurretOveride.whenHeld(turretUnlockCommand);
 
-        driverIntakeIn.whileTrue(intakeInCommand);
+      
 
         operatorIntakeIn.whenHeld(intakeInCommand);
      
-        driverIntakeOut.whenHeld(intakeOutCommand);
+
         operatorIntakeOut.whenHeld(intakeOutCommand);
      
         driverIntakeArm.whenHeld(intakeArmCommand);    
