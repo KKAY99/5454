@@ -150,12 +150,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
               drive(new Translation2d(forward, strafe), rotation, false);
               periodic();
               distanceTravelled=Math.abs(backLeftModule.getCurrentDistance()-startDistance);
-              System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
+        //      System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
         } while(distanceTravelled<=distance);
         if (stopAtEnd) {
                 drive(new Translation2d(0,0), 0, true);
                 periodic();                
         }
+}
+public void stop(){
+        drive(new Translation2d(0,0), 0, true);
+        periodic();       
 }
 public void spin (double direction,double speed)
 {       double startAngle;

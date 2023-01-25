@@ -102,6 +102,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         return true;
                 }
     }
+    public void stop(){
+        drive(new Translation2d(0,0), 0, true);
+        periodic();       
+}
     public void move (double direction, double rotation,double speed, double distance, boolean stopAtEnd)
 {       double startDistance;
         double forward=0;
