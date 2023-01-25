@@ -16,6 +16,16 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public class intake{
+      public static final int motorPWM=4;
+      public static final double speedIn=.5;
+      public static final double speedOut=.5;
+  }
+  public class spindex{
+      public static final int motorPWM=5;
+      public static final double spinspeed=0.3;
+}
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
 
