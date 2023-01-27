@@ -2,17 +2,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
 
-public class ClimberCommand extends CommandBase {
+public class RotateCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private ClimbSubsystem m_subsystem;    
+    private LiftSubsystem m_subsystem;    
     private double m_speed;
     /**
       * @param targetSpeed The speed we are setting in execute
      */
-    public ClimberCommand(ClimbSubsystem climber,double speed) {
-      m_subsystem=climber;
+    public RotateCommand(LiftSubsystem lift,double speed) {
+      m_subsystem=lift;
       m_speed=speed;
       // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(m_subsystem);
@@ -26,13 +26,13 @@ public class ClimberCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_subsystem.runClimb(m_speed);
+        m_subsystem.rotate(m_speed);
     }
   
     // Called once the command ends or is interrupted.
     @Override
     public void end(final boolean interrupted) {
-        m_subsystem.stopClimb();
+        m_subsystem.stopRotate();
         
     }
   

@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import frc.robot.commands.RotateCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -72,10 +73,7 @@ public class RobotContainer {
      private static final int LEDMODE_OFF = 4;
      private LEDMode m_oldLEDmode=LEDMode.NOTSET;  
      
-    // Shooter(Integer BottomMotorPort, Integer TopMotorPort)
-    //private final ShooterSubsystemVoltage m_Shooter = new ShooterSubsystemVoltage(Constants.TopShooterPort,Constants.BottomShooterPort,Constants.shooterPrimedSpeed);
-    private final IntakeSubsystem m_Intake = new IntakeSubsystem(Constants.IntakePort);
-   
+    private final LiftSubsystem m_LiftSubsystem = new LiftSubsystem();
     private final PneumaticsSubsystem m_Pnuematics = new PneumaticsSubsystem(Constants.Pneumatics.CompressorID,Constants.Pneumatics.IntakeArmPort,Constants.Pneumatics.ClimbPort);
     
     private final PowerDistribution m_robotPDH = new PowerDistribution(1, PowerDistribution.ModuleType.kRev);
@@ -168,57 +166,6 @@ public class RobotContainer {
     static GenericEntry shuffleboardGyroFused = SwerveTab.add("Gyro - Fused Heading", 0)
             .withWidget(BuiltInWidgets.kTextView).getEntry();
 
-    static GenericEntry shuffleboardDrive=ControlTab.add("Drive Control","Left Stick").getEntry();
-    static GenericEntry shuffleboarRotate=ControlTab.add("Swerve Control","Right Stick").getEntry();
-    static GenericEntry shuffleboardBallFeedUp=ControlTab.add("Feed Up","").getEntry();
-    static GenericEntry shuffleboardBallFeedDown=ControlTab.add("Feed Down","").getEntry();
-    static GenericEntry shuffleboardIntakeInD=ControlTab.add("D-Intake In","").getEntry();
-    static GenericEntry shuffleboardIntakeOutD=ControlTab.add("D-Intake Out","").getEntry();
-    static GenericEntry shuffleboardIntakeInO=ControlTab.add("O-Intake In","").getEntry();
-    static GenericEntry shuffleboardIntakeOutO=ControlTab.add("O-Intake Out","").getEntry();
-    static GenericEntry shuffleboardIntakeArmD=ControlTab.add("D-Intake Arm","").getEntry();
-    static GenericEntry shuffleboardIntakeArmO=ControlTab.add("O-Intake Arm","").getEntry();
-
-    static GenericEntry shuffleboardGyroResetD=ControlTab.add("D-Gyro Reset","").getEntry();
-    static GenericEntry shuffleboardGyroResetO=ControlTab.add("O-Gyro Reset","").getEntry();
-    static GenericEntry shuffleboardAutoShootD=ControlTab.add("D-Auto Shoot","").getEntry();
-    static GenericEntry shuffleboardAutoShootO=ControlTab.add("O-Auto Shoot","").getEntry();
-    
-
-    static GenericEntry shuffleboardTurretTurn=ControlTab.add("Turret Turn","").getEntry();
-    static GenericEntry shuffleboardClimbLift=ControlTab.add("Climb Lift","").getEntry();
-    static GenericEntry shuffleboardClimbLower=ControlTab.add("Climb Down","").getEntry();
-   
-    static GenericEntry shuffleboardOperatorPivotArm=ControlTab.add("Pivot Arms","").getEntry();
-    static GenericEntry shuffleboardOperatorManualShoot=ControlTab.add("Manual Shoot","").getEntry();
-   
-    static GenericEntry shuffleboardPDPStickyCANFaults=PDPTab.add("Sticky CAN Faults","").getEntry();
-    static GenericEntry shuffleboardPDPTotalCurrent=PDPTab.add("Total Current","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC0=PDPTab.add("Current C0","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC1=PDPTab.add("Current C1","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC2=PDPTab.add("Current C2","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC3=PDPTab.add("Current C3","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC4=PDPTab.add("Current C4","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC5=PDPTab.add("Current C5","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC6=PDPTab.add("Current C6","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC7=PDPTab.add("Current C7","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC8=PDPTab.add("Current C8","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC9=PDPTab.add("Current C9","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC10=PDPTab.add("Current C10","").getEntry();  
-    static GenericEntry shuffleboardPDPCurrentC11=PDPTab.add("Current C11","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC12=PDPTab.add("Current C12","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC13=PDPTab.add("Current C13","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC14=PDPTab.add("Current C14","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC15=PDPTab.add("Current C15","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC16=PDPTab.add("Current C16","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC17=PDPTab.add("Current C17","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC18=PDPTab.add("Current C18","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC19=PDPTab.add("Current C19","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC20=PDPTab.add("Current C20","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC21=PDPTab.add("Current C21","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC22=PDPTab.add("Current C22","").getEntry();
-    static GenericEntry shuffleboardPDPCurrentC23=PDPTab.add("Current C23","").getEntry();
-    
     static GenericEntry shuffleboardTurretPos=ShooterTab.add("Turret Position","").getEntry();
     
     static GenericEntry shuffleboardLeftLimit=ShooterTab.add("Left Limit","").getEntry();
@@ -278,79 +225,23 @@ public class RobotContainer {
          //       new ConveyorCommand(m_Conveyor,Constants.conveyorUpSpeed),
         //       new FeederCommand(m_Feeder,Constants.FeederSpeed));
         
-        
-      final IntakeArmCommand intakeArmCommand = new IntakeArmCommand(m_Pnuematics);
-        final ClimbLiftCommand climbLiftCommand = new ClimbLiftCommand(m_Pnuematics);
-     
-        final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
-        
-       
-        SpectrumAxisButton operatorAutoShoot = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorAutoShootAxis ,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
-        shuffleboardAutoShootO.setString("Right Trigger");
+      final RotateCommand RotateForwardCommand = new RotateCommand (m_LiftSubsystem,0.50);
+      JoystickButton RotateForward=new JoystickButton(m_xBoxDriver,4);
+      RotateForward.whileTrue(RotateForwardCommand);
 
-        SpectrumAxisButton operatorTurretOveride= new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorOverrideAxis ,ButtonConstants.TriggerThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
-       
-        JoystickButton driverIntakeIn= new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeIn);
-        shuffleboardIntakeInD.setString("D-Button " + ButtonConstants.DriverIntakeIn);
+      final RotateCommand RotateBackwardCommand = new RotateCommand (m_LiftSubsystem,-0.50);
+      JoystickButton RotateBack=new JoystickButton(m_xBoxDriver,1);
+      RotateBack.whileTrue(RotateBackwardCommand);
 
-        JoystickButton operatorIntakeIn= new JoystickButton(m_xBoxOperator, ButtonConstants.OperatorIntakeIn );
-        shuffleboardIntakeInO.setString("O-Button " + ButtonConstants.OperatorIntakeIn);
+      final ElevateCommand ElevateForwardCommand = new ElevateCommand (m_LiftSubsystem,0.50);
+      JoystickButton ElevateForward=new JoystickButton(m_xBoxDriver,2);
+      ElevateForward.whileTrue(ElevateForwardCommand);
 
-        JoystickButton operatorClimbArm = new JoystickButton(m_xBoxOperator, ButtonConstants.OperatorClimbLift );
-       
+      final ElevateCommand ElevateBackwardCommand = new ElevateCommand (m_LiftSubsystem,-0.50);
+      JoystickButton ElevateBack=new JoystickButton(m_xBoxDriver,3);
+      ElevateBack.whileTrue(ElevateBackwardCommand);
 
-        JoystickButton driverIntakeOut= new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeOut);
-        shuffleboardIntakeOutD.setString("D-Button " + ButtonConstants.DriverIntakeOut);
 
-        JoystickButton operatorIntakeOut= new JoystickButton(m_xBoxOperator, ButtonConstants.OperatorIntakeOut );
-        shuffleboardIntakeOutO.setString("O-Button " + ButtonConstants.OperatorIntakeOut);
-
-        JoystickButton driverIntakeArm = new JoystickButton(m_xBoxDriver,ButtonConstants.DriverIntakeArm);
-        shuffleboardIntakeArmD.setString("D-Button" + ButtonConstants.DriverIntakeArm);
-        JoystickButton operatorIntakeArm = new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorIntakeArm);
-        shuffleboardIntakeArmO.setString("O-Button" + ButtonConstants.OperatorIntakeArm);
-        
-        JoystickButton driverGyroReset = new JoystickButton(m_xBoxDriver,ButtonConstants.DriverGyroReset);
-        shuffleboardGyroResetD.setString("D-Button " + Constants.ButtonConstants.DriverGyroReset);       
-        JoystickButton driverGyroReset2 = new JoystickButton(m_xBoxDriver,ButtonConstants.DriverGyroReset2);
-        JoystickButton operatorGyroReset = new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorGyroReset);
-        shuffleboardGyroResetO.setString("O-Button " + Constants.ButtonConstants.OperatorGyroReset);
-        JoystickButton operatorGyroReset2 = new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorGyroReset2);
-       
-        POVButton driverTurretLeftButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretLeftPOV);
-        POVButton driverTurretRightButton=new POVButton(m_xBoxDriver,ButtonConstants.TurretRightPOV); 
-       
-       
-        SpectrumAxisButton operatorTurretLeft = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretAxis,ButtonConstants.JoystickLeftThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
-        SpectrumAxisButton operatorTurretRight = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretAxis,ButtonConstants.JoystickRightThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
-        SpectrumAxisButton operatorTurretAutoFind = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretFindAxis,ButtonConstants.JoystickUpThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
-        SpectrumAxisButton operatorTurretAutoFindStop = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorTurretFindAxis,ButtonConstants.JoystickDownThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);    
-
-        SpectrumAxisButton operatorClimbUp = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorClimbAxis,ButtonConstants.JoystickUpThreshold,SpectrumAxisButton.ThresholdType.LESS_THAN);
-        SpectrumAxisButton operatorClimbDown = new SpectrumAxisButton(m_xBoxOperator,ButtonConstants.OperatorClimbAxis,ButtonConstants.JoystickDownThreshold,SpectrumAxisButton.ThresholdType.GREATER_THAN);
-       
-        JoystickButton operatorPivotArm = new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorPivotArm);
-        shuffleboardOperatorPivotArm.setString("O-Button " + Constants.ButtonConstants.OperatorPivotArm);
-       
-      //  JoystickButton operatorManualShoot =new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorShootManual);
-      //  shuffleboardOperatorManualShoot.setString("O-Button " + Constants.ButtonConstants.OperatorShootManual);
-        JoystickButton operatorAutoFind =new JoystickButton(m_xBoxOperator,ButtonConstants.OperatorAutoTurretMode);
-         
-
-        POVButton operatorShoot1Button=new POVButton(m_xBoxOperator,ButtonConstants.OperatorShooter1POV);
-        POVButton operatorShoot2Button=new POVButton(m_xBoxOperator,ButtonConstants.OperatorShooter2POV); 
-        POVButton operatorShoot3Button=new POVButton(m_xBoxOperator,ButtonConstants.OperatorShooter3POV);
-        POVButton operatorShoot4Button=new POVButton(m_xBoxOperator,ButtonConstants.OperatorShooter4POV); 
-       
-        //turretAutoFind.whenHeld(turretAutoCommand);
-        
-         
-        driverGyroReset.whenPressed(gyroResetCommand);
-        driverGyroReset2.whenPressed(gyroResetCommand);
-        operatorGyroReset.whenPressed(gyroResetCommand);
-        operatorGyroReset2.whenPressed(gyroResetCommand);
-
-     
    }
 
     /**
