@@ -17,38 +17,6 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-    public static final class ChargedUp {
-        public static final double targetHeightAprilTag=18;     // middle of April Tag in Distance
-        public static final double targetHeighMLowTape=24.125;  // middle of low tape in inches
-        public static final double targetHeightHighTape=43.875; // middle of high tape in inches 
-        public static final int GridPosUpperLeft=1;
-        public static final int GridPosMiddleLeft=2;
-        public static final int GridPosBottomLeft=3;
-        public static final int GridPosUpperCenter=4;
-        public static final int GridPosMiddleCenter=5;
-        public static final int GridPosBottomCenter=6;
-        public static final int GridPosUpperRight=7;
-        public static final int GridPosMiddleRight=8;
-        public static final int GridPosBottomRight=9;
-        public static final int GridPosUpperConeAny=10;
-        public static final int GridPosMiddleConeAny=11;
-        public static final int GridPosBottomConeAny=12;
-        public static final int GridPosUpperCubeAny=13;
-        public static final int GridPosMiddleCubeAny=14;
-        public static final int GridPosBottomCubeAny=15;
-    }
-    public static final class VisionPipelines{
-        public static final int AprilTag=0;
-        public static final int TopTape=1;
-        public static final int BottomTape=2;
-    }
-
-    public static enum TargetHeight
-    {
-                    TOP,MIDDLE,BOTTOM;	
-    }
-    
     public class Intake{
         public static final int intakePort=90;
         public static final double intakeInSpeed=0.50;
@@ -57,16 +25,12 @@ public final class Constants {
     public class Elevator{
         public static final int elevatorPort=91;
         public static final double elevatorSpeed=.50;
-
     }
     public class Claw{
         public static final int clawPort=92;
-        public static final double GrabSpeed=0.5;
-        public static final double ReleaseSpeed=0.5;
     }
-    public class pivotWheel{
+    public class pivotWheelPort{
         public static final int pivotWheelPort=93;
-        
     }
     public class swerveDrive{
         public static final double driveDeadband=0.05;
@@ -96,9 +60,6 @@ public final class Constants {
        public static final int OperatorTurretFindAxis=1;
        public static final int OperatorClimbAxis=5;
        public static final int OperatorGyroReset=7;
-    
-       public static final int TargetTopLeft=4;
-       public static final int TargetMiddleLeft=5;
     }
 
     public static final class LimitSwitches{
@@ -144,19 +105,10 @@ public final class Constants {
     public static final class InputControllers {
         public static final int kXboxDrive = 0;
         public static final int kXboxOperator = 1;
-        public static final int kCustomController = 1;
     }
 
     public static final class PhotonVision{
         public static String camera="";
-    }
-
-    public static final class PIDSteering{
-        public static final double rightKP=0.001;
-        public static final double leftKP=-0.001;
-        public static final double KI=0;  
-        public static final double KD=0;
-
     }
 
     /*

@@ -36,7 +36,6 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.Joystick;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -48,9 +47,12 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
+  //  private AHRS m_ahrs = new AHRS(SPI.Port.kMXP);
     private NavX m_NavX = new NavX(SPI.Port.kMXP);
-    private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
-    private final ClawSubsystem m_Claw = new ClawSubsystem(); 
+   // private final DriveSubsystem m_RobotDrive = new DriveSubsystem(m_ahrs);
+   private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
+   //private final SwerveSubsystem m_RobotDrive = new SwerveSubsystem();+
+
     private final Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,Constants.LimeLightValues.kVisionXOffset,80);
     
      private final LEDStrip m_ledStrip = new LEDStrip(Constants.LEDS.PORT, Constants.LEDS.COUNT);
@@ -159,8 +161,7 @@ public class RobotContainer {
      
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
-    private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
-
+  
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
@@ -186,18 +187,7 @@ public class RobotContainer {
         final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake, Constants.Intake.intakeOutSpeed);
         
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
-        final SequentialCommandGroup zAutoTargetTL= new SequentialCommandGroup(new zAutoTargetandMove(m_Limelight, m_RobotDrive ,Constants.ChargedUp.GridPosUpperLeft),
-                                                                              new zPivotAndExtend(Constants.TargetHeight.TOP),
-                                                                              new ClawCommand(m_Claw,Constants.Claw.ReleaseSpeed));
-        Trigger targetTopLeft= new JoystickButton(m_CustomController,ButtonConstants.TargetTopLeft);
-        targetTopLeft.toggleOnTrue(zAutoTargetTL);
-
-        final SequentialCommandGroup zAutoTargetML= new SequentialCommandGroup(new zAutoTargetandMove(m_Limelight, m_RobotDrive ,Constants.ChargedUp.GridPosMiddleLeft),
-                                                                              new zPivotAndExtend(Constants.TargetHeight.MIDDLE),
-                                                                              new ClawCommand(m_Claw,Constants.Claw.ReleaseSpeed));
-        Trigger targetMiddleLeft= new JoystickButton(m_CustomController,ButtonConstants.TargetMiddleLeft);
-        targetMiddleLeft.toggleOnTrue(zAutoTargetML);
-
+        
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
          
         

@@ -23,7 +23,6 @@ public class Limelight {
     private static NetworkTableEntry ta = llTable.getEntry("ta");
     // does the limelight have a target
     private static NetworkTableEntry tv = llTable.getEntry("tv");
-    private static NetworkTableEntry pipeline=llTable.getEntry("pipeline");
 
     private double m_limeLightHeight;
     private double m_mountingAngle;
@@ -84,10 +83,6 @@ public class Limelight {
 
         inst.getTable("limelight").getEntry("pipeline").setNumber(pipeline);
         
-    }
-    public int getPipeline(){
-        
-        return (int) pipeline.getInteger(99);
     }
 
     public double getRotationPower(double measurement) {
