@@ -269,6 +269,7 @@ public class RobotContainer {
     private PipelineSwapCommand m_pipelineswap1 = new PipelineSwapCommand(m_Limelight,m_RobotDrive ,1,Constants.ChargedUp.targetHeighMLowTape);
     private PipelineSwapCommand m_pipelineswap2 = new PipelineSwapCommand(m_Limelight,m_RobotDrive ,2,Constants.ChargedUp.targetHeightHighTape);
     private AlignMoveForward m_align = new AlignMoveForward(m_Limelight, m_RobotDrive,2,Constants.ChargedUp.targetHeighMLowTape);
+    private zAutoTargetandMove m_test = new zAutoTargetandMove(m_Limelight, m_RobotDrive, 2);
     private boolean m_turretHasReset =false;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -359,7 +360,7 @@ public class RobotContainer {
         JoystickButton pipelineswitch0=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline0);
         JoystickButton pipelineswitch1=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline1);
         JoystickButton pipelineswitch2=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline2);
-        pipelineswitch0.toggleOnTrue(m_align);
+      //  pipelineswitch0.toggleOnTrue(m_test);
         pipelineswitch1.toggleOnTrue(m_pipelineswap1);
         pipelineswitch2.toggleOnTrue(m_pipelineswap2);
         

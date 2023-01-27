@@ -16,8 +16,8 @@ private int m_pipeline=0;
 private double m_targetHeight;
 private DrivetrainSubsystem m_drive;
 private final MedianFilter m_filter = new MedianFilter(5);
-private PIDController m_pidRight = new PIDController(Constants.PIDSteering.rightKP,PIDSteering.KI,PIDSteering.KD);
-private PIDController m_pidLeft = new PIDController(Constants.PIDSteering.leftKP,PIDSteering.KI,PIDSteering.KD);
+private PIDController m_pidRight = new PIDController(Constants.PIDSteering.rightKP,PIDSteering.rightKI,PIDSteering.rightKD);
+private PIDController m_pidLeft = new PIDController(Constants.PIDSteering.leftKP,PIDSteering.leftKI,PIDSteering.leftKD);
 
 
 
@@ -30,27 +30,28 @@ public zAutoTargetandMove(Limelight limelight,DrivetrainSubsystem drive,int grid
         //GRID 13 (top cube  column) 14 (middle cube any column), 15 (bottom cube any column)
         switch (gridChoice)
         {
-            //fall thorugh cases for same pipelines and heights
-            case Constants.ChargedUp.GridPosUpperLeft:
-            case Constants.ChargedUp.GridPosUpperRight:
-            case Constants.ChargedUp.GridPosUpperConeAny:
-                m_pipeline=Constants.VisionPipelines.TopTape;
-                m_targetHeight=Constants.ChargedUp.targetHeightHighTape;
-                break;
-            case Constants.ChargedUp.GridPosMiddleLeft:
-            case Constants.ChargedUp.GridPosMiddleRight:
-            case Constants.ChargedUp.GridPosMiddleConeAny:
-            case Constants.ChargedUp.GridPosBottomLeft:
-            case Constants.ChargedUp.GridPosBottomRight:
-            case Constants.ChargedUp.GridPosBottomConeAny:
-                m_pipeline=Constants.VisionPipelines.BottomTape;
-                m_targetHeight=Constants.ChargedUp.targetHeighMLowTape;
-                break;
-            default:
-                // Assume AprilTag if not a Cone Position
-                m_pipeline=Constants.VisionPipelines.AprilTag;
-                m_targetHeight=Constants.ChargedUp.targetHeightAprilTag;
+        //     //fall thorugh cases for same pipelines and heights
+        //     case Constants.ChargedUp.GridPosUpperLeft:
+        //     case Constants.ChargedUp.GridPosUpperRight:
+        //     case Constants.ChargedUp.GridPosUpperConeAny:
+        //         m_pipeline=Constants.VisionPipelines.TopTape;
+        //         m_targetHeight=Constants.ChargedUp.targetHeightHighTape;
+        //         break;
+        //     case Constants.ChargedUp.GridPosMiddleLeft:
+        //     case Constants.ChargedUp.GridPosMiddleRight:
+        //     case Constants.ChargedUp.GridPosMiddleConeAny:
+        //     case Constants.ChargedUp.GridPosBottomLeft:
+        //     case Constants.ChargedUp.GridPosBottomRight:
+        //     case Constants.ChargedUp.GridPosBottomConeAny:
+        //         m_pipeline=Constants.VisionPipelines.BottomTape;
+        //         m_targetHeight=Constants.ChargedUp.targetHeighMLowTape;
+        //         break;
+        //     default:
+        //         // Assume AprilTag if not a Cone Position
+        //         m_pipeline=Constants.VisionPipelines.AprilTag;
+        //         m_targetHeight=Constants.ChargedUp.targetHeightAprilTag;
             
+        // }
         }
     }
     @Override

@@ -88,7 +88,8 @@ public final class Constants {
        public static final int DriverIntakeIn=2;
        public static final int DriverIntakeOut=3;
        public static final int DriverGyroReset=7;
- 
+       public static final int DriverDriveMode=1;
+       
        public static final int OperatorIntakeIn=6;
        public static final int OperatorIntakeOut=7;
     

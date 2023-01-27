@@ -28,6 +28,7 @@ import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.LEDS.Colors;
 import frc.robot.classes.Limelight;
+import frc.robot.classes.DriveControlMode;
 import frc.robot.classes.LEDStrip;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -50,7 +51,8 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private NavX m_NavX = new NavX(SPI.Port.kMXP);
     private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
-    private final ClawSubsystem m_Claw = new ClawSubsystem(); 
+    private final DriveControlMode m_DriveControlMode = new DriveControlMode();
+    private final ClawSubsystem m_Claw = new ClawSubsystem(Constants.Claw.clawPort); 
     private final Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight, Constants.LimeLightValues.limelightHeight, Constants.LimeLightValues.limelightAngle,Constants.LimeLightValues.kVisionXOffset,80);
     
      private final LEDStrip m_ledStrip = new LEDStrip(Constants.LEDS.PORT, Constants.LEDS.COUNT);
@@ -169,7 +171,8 @@ public class RobotContainer {
                 new DefaultDriveCommand(m_RobotDrive,
                         () -> -m_xBoxDriver.getRightX(),
                         () -> m_xBoxDriver.getLeftY(),
-                        () -> m_xBoxDriver.getLeftX()));
+                        () -> m_xBoxDriver.getLeftX(),
+                        () -> m_DriveControlMode.isFieldOrientated()));
 
     }
     
@@ -184,7 +187,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         final IntakeCommand intakeInCommand = new IntakeCommand(m_Intake, Constants.Intake.intakeInSpeed);
         final IntakeCommand intakeOutCommand = new IntakeCommand(m_Intake, Constants.Intake.intakeOutSpeed);
-        
         final GyroResetCommand gyroResetCommand = new GyroResetCommand(m_RobotDrive,m_Limelight);
         final SequentialCommandGroup zAutoTargetTL= new SequentialCommandGroup(new zAutoTargetandMove(m_Limelight, m_RobotDrive ,Constants.ChargedUp.GridPosUpperLeft),
                                                                               new zPivotAndExtend(Constants.TargetHeight.TOP),
@@ -199,7 +201,9 @@ public class RobotContainer {
         targetMiddleLeft.toggleOnTrue(zAutoTargetML);
 
         //final LatchCommand latchCommand =new LatchCommand(m_Pnuematics);
-         
+        final SwitchDriveModeCommand switchDriveCommand=new SwitchDriveModeCommand(m_DriveControlMode);       
+        Trigger driverMode=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverDriveMode);
+        driverMode.toggleOnTrue(switchDriveCommand);
         
         Trigger driverIntakeIn =  new JoystickButton(m_xBoxDriver, ButtonConstants.DriverIntakeIn);
         driverIntakeIn.whileTrue(intakeInCommand);

@@ -26,6 +26,11 @@ public final class NavX extends Gyroscope {
         return Rotation2.fromRadians(getAxis(Axis.YAW));
     }
 
+    //KK Added 1/26/23
+    public double getYaw() {
+        return getAxis(Axis.YAW);
+    }
+
     @Override
     public double getUnadjustedRate() {
         return Math.toRadians(navX.getRate());

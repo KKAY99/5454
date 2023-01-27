@@ -1,10 +1,11 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
-
+import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.BooleanSubscriber;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.common.Utilities;
 import frc.robot.Constants;
@@ -15,6 +16,7 @@ public class DefaultDriveCommand extends CommandBase {
   private final DoubleSupplier m_drive_fwd;
   private final DoubleSupplier m_drive_strafe;
   private final DoubleSupplier m_drive_rcw;
+  private final BooleanSupplier m_fieldMode;
 
   /**
    * Creates a new DefaultDrive.
@@ -24,11 +26,12 @@ public class DefaultDriveCommand extends CommandBase {
    * @param rotation  The control input for driving right
    */
   public DefaultDriveCommand(DrivetrainSubsystem subsystem, DoubleSupplier drive_rcw, DoubleSupplier drive_fwd,
-      DoubleSupplier drive_strafe) {
+      DoubleSupplier drive_strafe,BooleanSupplier isFieldMode) {
     m_drive = subsystem;
     m_drive_fwd = drive_fwd;
     m_drive_strafe = drive_strafe;
     m_drive_rcw = drive_rcw;
+    m_fieldMode=isFieldMode;
     addRequirements(m_drive);
   }
 
@@ -48,7 +51,9 @@ public class DefaultDriveCommand extends CommandBase {
     // Square the rotation stick
     rotation = Math.copySign(Math.pow(rotation, 2.0), rotation);
     //System.out.println(forward + " -- " + strafe + " -- " + rotation);
-    m_drive.drive(new Translation2d(forward, strafe), rotation, true);
-
+    //m_drive.drive(new Translation2d(forward, strafe), rotation, true);
+    m_drive.drive(new Translation2d(forward, strafe), rotation, m_fieldMode.getAsBoolean());
+    
+   
   }
 }

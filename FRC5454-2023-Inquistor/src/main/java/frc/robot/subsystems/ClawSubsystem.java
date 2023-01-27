@@ -1,14 +1,16 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 public class ClawSubsystem  extends SubsystemBase {
     CANSparkMax m_ClawMotor;
   
     /** Creates a new ExampleSubsystem. */
-    public IntakeSubsystem(Integer otorPort) {
+    public  ClawSubsystem(Integer MotorPort) {
       m_ClawMotor = new CANSparkMax(MotorPort, MotorType.kBrushed);   
       m_ClawMotor.setOpenLoopRampRate(0.25);
-      m_Clawotor.setSmartCurrentLimit(30);  // likely gets ignored due to brushed motor
+      m_ClawMotor.setSmartCurrentLimit(30);  // likely gets ignored due to brushed motor
       m_ClawMotor.setSecondaryCurrentLimit(30); //Set as well at 30
     }
     public void run(double power) {

@@ -64,6 +64,17 @@ public final class Constants {
         public static final int HookCablesPort=1;
         
     }
+
+    public static final class PIDSteering{
+        public static final double rightKP=-0.09;
+        public static final double leftKP=0.09;
+        public static final double rightKI=-0;  
+        public static final double leftKI=0;
+        public static final double rightKD=-0;
+        public static final double leftKD=0;
+
+    }
+
     public static final class ButtonConstants{
        public static final int DriverPipeline0=1;
        public static final int DriverPipeline1=2;

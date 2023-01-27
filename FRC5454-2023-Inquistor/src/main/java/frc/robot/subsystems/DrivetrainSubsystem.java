@@ -13,21 +13,29 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;     
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  import frc.robot.common.drivers.SwerveModule;
 import frc.robot.common.math.Vector2;
 import frc.robot.common.drivers.Mk2SwerveModuleBuilder;
 import frc.robot.common.drivers.NavX;
+import edu.wpi.first.math.geometry.Pose2d;
+
  
 public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 20;
     private static final double WHEELBASE = 25;
 
+
+  
     private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(349-180);//(164.53+180); //30.6 last 6.5 - was 161.8
     private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(299.54+180);
-    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(22.1);//+180
-    private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(69.84);//+180
+    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(22.1);//+180 22.1
+    private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(180+69.84);//+180
+
 
     private static DrivetrainSubsystem instance;
 
@@ -71,8 +79,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
             new Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0),
             new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0)
     );
-
-        
+  /*   private SwerveDrivePoseEstimator estimator = new SwerveDrivePoseEstimator(kinematics, getGyroscopeRotation(), 
+    new SwerveModulePosition[] {
+        frontLeftModule.getModulePosition(),
+        frontRightModule.getPosition(),
+        backLeftModule.getPosition(),
+        backRightModule.getPosition()
+    },new Pose2d()); // Vision (x, y, rotation) std-devs
+*/
+  
     public DrivetrainSubsystem(NavX navX) {
         m_gyroscope = navX;
         m_gyroscope.calibrate();
@@ -91,7 +106,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         return instance;
     }
- 
+
+    private Rotation2d getGyroscopeRotation() {
+        return Rotation2d.fromDegrees(m_gyroscope.getYaw());
+    }
+
     public boolean IsRobotMoving(){
             if((backLeftModule.getCurrentVelocity()+
                 backRightModule.getCurrentVelocity()+
