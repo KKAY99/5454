@@ -22,8 +22,7 @@ public class Limelight {
     private static NetworkTableEntry ta = llTable.getEntry("ta");
     // does the limelight have a target
     private static NetworkTableEntry tv = llTable.getEntry("tv");
-    private static NetworkTableEntry pipeline=llTable.getEntry("pipeline");
-    
+
     private double m_targetHeight;
     private double m_limeLightHeight;
     private double m_mountingAngle;
@@ -60,10 +59,6 @@ public class Limelight {
         m_xStaticOffset = xoffSet;
         m_targetDistance = targetDistance;
     };
-    
-    public void setTargetHeight (double height){
-        m_targetHeight=height;
-    }
 
     public double getOffset(){
         return m_xStaticOffset;
@@ -218,20 +213,7 @@ public class Limelight {
         SmartDashboard.putString("limelight mode", getVisionMode());
 
     }
-    public void setPipeline(int pipeline){
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
 
-        inst.getTable("limelight").getEntry("pipeline").setNumber(pipeline);
-        
-    }
-    public int getPipeline(){
-        
-        return (int) pipeline.getInteger(99);
-    }
-
-  public double getXRaw(){
-        return tx.getDouble(0.0);
-     }
     public void turnLEDOff() {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
         m_LimelightLEDOn = false;

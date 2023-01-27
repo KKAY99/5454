@@ -19,10 +19,12 @@ import frc.robot.classes.Gains;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final int ElevatorMotorPort=19;
+    public static final int RotateMotorPort=50;
     public static final double kSpeedMultiplier = 1.0;
     public static final int TopShooterPort=17;
     public static final int BottomShooterPort=16;
-    public static final int ConveyorPort=19; //33
+    public static final int ConveyorPort=99; //33
     public static final int IntakePort=11;
     public static final int ClimbMotor1Port=21;
     public static final int ClimbMotor2Port=23;
