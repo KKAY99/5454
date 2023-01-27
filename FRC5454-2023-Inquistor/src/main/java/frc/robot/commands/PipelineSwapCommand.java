@@ -5,6 +5,8 @@
 package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.Constants.PIDSteering;
 import frc.robot.classes.Limelight;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.filter.MedianFilter;
@@ -19,10 +21,9 @@ public class PipelineSwapCommand extends CommandBase {
   // so measurements are filtered with a 5-sample median filter
   private final MedianFilter m_filter = new MedianFilter(5);
   private PIDController m_pid = new PIDController(3.0,0.0,0.1, 0.05);
-  private PIDController m_pidRight = new PIDController(0.001,0,0);
-  private PIDController m_pidLeft = new PIDController(-0.001,0,0);
-  private double m_speed = 0.05;
-
+  private PIDController m_pidRight = new PIDController(Constants.PIDSteering.rightKP,PIDSteering.KI,PIDSteering.KD);
+  private PIDController m_pidLeft = new PIDController(Constants.PIDSteering.leftKP,PIDSteering.KI,PIDSteering.KD);
+  
   /** Creates a new PipelineSwap. */
   public PipelineSwapCommand(Limelight limelight,DrivetrainSubsystem drive, int pipeline, double targetHeight) {
     // Use addRequirements() here to declare subsystem dependencies.
