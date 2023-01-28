@@ -72,6 +72,12 @@ public final class Constants {
         public static final double leftKI=0;
         public static final double rightKD=-0;
         public static final double leftKD=0;
+        public static final double forwardKP= -0.15;
+        public static final double backwardKP = 0.15;
+        public static final double forwardKI = -0;
+        public static final double backwardKI = 0;
+        public static final double forwardKD = -0;
+        public static final double backwardKD = 0;
 
     }
 

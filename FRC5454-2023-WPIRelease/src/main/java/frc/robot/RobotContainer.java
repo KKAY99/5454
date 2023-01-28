@@ -360,7 +360,7 @@ public class RobotContainer {
         JoystickButton pipelineswitch0=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline0);
         JoystickButton pipelineswitch1=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline1);
         JoystickButton pipelineswitch2=new JoystickButton(m_xBoxDriver,ButtonConstants.DriverPipeline2);
-      //  pipelineswitch0.toggleOnTrue(m_test);
+        pipelineswitch0.toggleOnTrue(m_pipelineswap0);
         pipelineswitch1.toggleOnTrue(m_pipelineswap1);
         pipelineswitch2.toggleOnTrue(m_pipelineswap2);
         

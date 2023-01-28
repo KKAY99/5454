@@ -11,6 +11,7 @@ import edu.wpi.first.math.filter.MedianFilter;
 import frc.robot.Constants;
 import frc.robot.Constants.PIDSteering;
 
+
 public class PipelineSwapCommand extends CommandBase {
   private Limelight m_limelight;
   private int m_pipeline;
@@ -23,6 +24,9 @@ public class PipelineSwapCommand extends CommandBase {
   private PIDController m_pid = new PIDController(3.0,0.0,0.1, 0.05);
   private PIDController m_pidRight = new PIDController(Constants.PIDSteering.rightKP,PIDSteering.rightKI,PIDSteering.rightKD);
   private PIDController m_pidLeft = new PIDController(Constants.PIDSteering.leftKP,PIDSteering.leftKI,PIDSteering.leftKD);
+  private PIDController m_pidForward = new PIDController(Constants.PIDSteering.forwardKP,PIDSteering.forwardKI,PIDSteering.forwardKD);
+  private PIDController m_pidBackward = new PIDController(Constants.PIDSteering.backwardKP,PIDSteering.backwardKI,PIDSteering.backwardKD);
+  
   private double m_speed = 0.05;
 
   /** Creates a new PipelineSwap. */
@@ -56,7 +60,60 @@ public class PipelineSwapCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
     public boolean isFinished() {
-      double measurement = m_limelight.getXRaw();
+      /*double measurement = m_limelight.getXRaw();
+      double filteredMeasurement = m_filter.calculate(measurement);
+      if(m_limelight.isTargetAvailible()){
+        if(Math.abs(filteredMeasurement)<0.8){
+          System.out.println("stopping");
+            m_drive.stop();
+          return true; 
+        }else{
+          if(filteredMeasurement>0){
+            System.out.println("move right");
+            double pidOutput = m_pidRight.calculate(filteredMeasurement);
+            pidOutput=Math.min(Math.max(pidOutput,-0.10),.10);
+            System.out.println("Aligning - X is " + m_limelight.getXRaw() + " filtered is " + filteredMeasurement + " pidOutput is " + pidOutput);
+            m_drive.move(270 ,0,pidOutput,1,true);
+          }else{
+            System.out.println("move left");
+            double pidOutput = m_pidLeft.calculate(filteredMeasurement);
+            pidOutput=Math.min(Math.max(pidOutput,-0.10),.10);
+           
+            System.out.println("Aligning - X is " + m_limelight.getXRaw() + " filtered is " + filteredMeasurement + " pidOutput is " + pidOutput);
+            m_drive.move(90 ,0,pidOutput,1,true);*/
+
+
+            
+      double distanceErrorMeasurement = m_limelight.getYRaw();
+      double filteredDistanceErrorMeasurement = m_filter.calculate(distanceErrorMeasurement)+20;
+        if(m_limelight.isTargetAvailible()){
+          if(Math.abs(filteredDistanceErrorMeasurement)<0.1){
+            System.out.println("stopping");
+            m_drive.stop();
+            return true; 
+          }else{
+            if(filteredDistanceErrorMeasurement>0){
+            System.out.println("move Forward");
+            double pidOutputDistance = m_pidForward.calculate(filteredDistanceErrorMeasurement);
+            pidOutputDistance=Math.min(Math.max(pidOutputDistance,-0.10),.10);
+            System.out.println("Aligning - Y is " + distanceErrorMeasurement + " filtered is " + filteredDistanceErrorMeasurement + " pidOutput is " + pidOutputDistance);
+            m_drive.move(0 ,0,pidOutputDistance,1,true);
+          }else{
+            System.out.println("move Back");
+            double pidOutputDistance = m_pidBackward.calculate(filteredDistanceErrorMeasurement);
+            pidOutputDistance=Math.min(Math.max(pidOutputDistance,-0.10),.10);
+              
+            System.out.println("Aligning - Y is " + distanceErrorMeasurement + " filtered is " + filteredDistanceErrorMeasurement + " pidOutput is " + pidOutputDistance);
+            m_drive.move(180 ,0,pidOutputDistance,1,true);
+                 
+
+          }
+          return false;
+        
+        }
+
+          
+     /* double measurement = m_limelight.getXRaw();
       double filteredMeasurement = m_filter.calculate(measurement);
       if(m_limelight.isTargetAvailible()){
         if(Math.abs(filteredMeasurement)<0.8){
@@ -80,14 +137,15 @@ public class PipelineSwapCommand extends CommandBase {
             m_drive.move(90 ,0,pidOutput,1,true);
           }
           return false;
-  
-        }
-  
-  
+  */
       }else{
+
         return m_done; // done after first execution
-      }
-      
-    }
-  }
+      }   
+     }
+   }
+ /* }    
+ }
+}*/
+
 
