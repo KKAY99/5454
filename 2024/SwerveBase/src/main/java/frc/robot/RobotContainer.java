@@ -88,7 +88,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
         
-    return swerve.getPathCommand("Score 1 Mid Balance");
+    return swerve.getPathCommand("TestPathX");
   }
 
 
