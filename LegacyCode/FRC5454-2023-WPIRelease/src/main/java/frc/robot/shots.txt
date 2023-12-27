@@ -1,0 +1,15 @@
+39.5  = Bottom 750   Top 650
+49.6  = Bottom 750   Top 700
+59.5  = Bottom 750   Top 700
+69.5  = Bottom 750   Top 700
+79.5  = Bottom 800   Top 750
+89.5  = Bottom 800   Top 750
+99.5  = Bottom 900   Top 800
+109.5 = Bottom 950   Top 850
+119.5 = Bottom 1050  Top 1000
+129.5 = Bottom 1050  Top 1000
+139.5 = Bottom 1150  Top 1100
+149.5 = Bottom 1200  Top 1150
+159.5 = Bottom 1250  Top 1200
+169.5 = Bottom 1350  Top 1300 
+179.5 = Bottom 1450  Top 1400

@@ -1,0 +1,152 @@
+// DriverStation.reportWarning(Integer.toString(currentState), false);
+
+                // if (delayTimerHasBeenSet) {
+                // if (delayTimer.hasPeriodPassed((double) delay)) {
+                // if (shouldRun) {
+                // if (autoTimerHasBeenSet) {
+                // if (shouldShoot) {
+                // if (!isShootingDone) {
+                // if (autoSubTimerHasBeenSet) {
+                // if (subTime < 2.0) {
+                // DriverStation.reportWarning(
+                // "starting shooter",
+                // false);
+                // m_Shooter.voltageRun(.8);
+                // } else if (subTime > 2.0 && subTime < 7.0) {
+                // DriverStation.reportWarning(
+                // "starting conveyor",
+                // false);
+                // m_Conveyor.loadConveyor(.45);
+                // } else if (subTime > 7.0) {
+                // DriverStation.reportWarning(
+                // "stopping shooter",
+                // false);
+                // DriverStation.reportWarning(
+                // "stopping conveyor",
+                // false);
+                // m_Conveyor.conveyorKill();
+                // m_Shooter.shooterKill();
+                // autoSubTimerHasBeenSet = false;
+                // isShootingDone = true;
+                // }
+                // } else {
+                // autoSubTimer.reset();
+                // autoSubTimer.start();
+                // subTime = autoSubTimer.get();
+                // autoSubTimerHasBeenSet = true;
+                // }
+                // }
+                // } else {
+                // isShootingDone = true;
+                // DriverStation.reportWarning("skipping shooter", false);
+                // }
+                // if (shouldDrive && isShootingDone) {
+                // if (!isDriveDone) {
+                // if (shouldMoveFirstPartner || shouldMoveSecondPartner) {
+                // if (shouldMoveFirstPartner) {
+                // if (!isFirstPartnerMoved) {
+                // if (autoSubTimerHasBeenSet) {
+                // // backwards
+
+                // // if we need to move
+                // // the second partner
+                // // then that code will
+                // // move forward and
+                // // stop at different
+                // // times so we'll let
+                // // that section takecare
+                // // of it
+                // if (!shouldMoveSecondPartner) {
+                // // back forwards
+                // }
+                // isFirstPartnerMoved = true;
+                // } else {
+                // autoSubTimer.reset();
+                // autoSubTimer.start();
+                // subTime = autoSubTimer
+                // .get();
+                // autoSubTimerHasBeenSet = true;
+                // }
+
+                // }
+                // } else {
+                // isFirstPartnerMoved = true;
+                // }
+                // if (shouldMoveSecondPartner
+                // && isFirstPartnerMoved) {
+                // if (!isSecondPartnerMoved) {
+                // if (autoSubTimerHasBeenSet) {
+                // // We don't need to move
+                // // forward
+                // // because our other
+                // // function runs if we
+                // // move
+                // // either one or two
+                // // partners
+
+                // isSecondPartnerMoved = true;
+                // } else {
+                // autoSubTimer.reset();
+                // autoSubTimer.start();
+                // subTime = autoSubTimer
+                // .get();
+                // autoSubTimerHasBeenSet = true;
+                // }
+                // }
+                // } else {
+                // shouldMoveSecondPartner = true;
+                // }
+                // // we always need to drive forward
+                // if (isFirstPartnerMoved
+                // && isSecondPartnerMoved) {
+                // if (!isDriveForwardDone) {
+                // if (autoSubTimerHasBeenSet) {
+                // isDriveForwardDone = true;
+                // } else {
+                // autoSubTimer.reset();
+                // autoSubTimer.start();
+                // subTime = autoSubTimer
+                // .get();
+                // autoSubTimerHasBeenSet = true;
+                // }
+                // }
+                // }
+                // } else {
+                // // If we don't move either partner and
+                // // just drive then we can choose to
+                // // drive forwards or drive backwards
+                // double power = 0.5
+                // * (shouldDriveForward ? 1 : -1);
+                // m_Drive.drive(0, power, 0, fieldCentric,
+                // isShooting);
+                // }
+                // }
+
+                // } else {
+                // isDriveDone = true;
+                // }
+
+                // } else {
+                // autoTimer.reset();
+                // autoTimer.start();
+                // autoTimerHasBeenSet = true;
+                // }
+                // }
+                // }
+                // } else {
+                // delayTimer.reset();
+                // delayTimer.start();
+                // delayTimerHasBeenSet = true;
+                // }
+
+                /*
+                 * //region working Auto if (autoTimerHasBeenSet) { if (time > 0.0 && time <
+                 * 3.0) { m_Shooter.voltageRun(.8); } else if (time > 3.0 && time < 8.0) {
+                 * m_Conveyor.loadConveyor(.45); } else if (time > 8.0 && time < 9.5) {
+                 * m_Drive.drive(0, .25, 0, true, false); m_Conveyor.conveyorKill();
+                 * m_Shooter.shooterKill(); } else if (time > 9.5) { m_Drive.drive(0, 0, 0,
+                 * true, false); m_Conveyor.conveyorKill(); m_Intake.lower(); } else {
+                 * m_Drive.drive(0, 0, 0, true, false); m_Conveyor.conveyorKill();
+                 * m_Intake.lower(); } } else { autoTimer.reset(); autoTimer.start();
+                 * autoTimerHasBeenSet = true; } //endregion
+                 */

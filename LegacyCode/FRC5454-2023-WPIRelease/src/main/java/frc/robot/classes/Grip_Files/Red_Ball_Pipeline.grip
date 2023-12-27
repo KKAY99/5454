@@ -1,0 +1,202 @@
+<grip:Pipeline>
+  <sources>
+    <grip:MultiImageFile>
+      <property name="path[2]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163230.jpg"/>
+      <property name="path[5]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163232.jpg"/>
+      <property name="path[8]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163233__01.jpg"/>
+      <property name="path[12]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163236.jpg"/>
+      <property name="path[15]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163238.jpg"/>
+      <property name="index" value="14"/>
+      <property name="path[0]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163226.jpg"/>
+      <property name="path[3]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163230__01.jpg"/>
+      <property name="path[6]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163232__01.jpg"/>
+      <property name="path[9]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163234.jpg"/>
+      <property name="path[10]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163235.jpg"/>
+      <property name="path[13]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163236__01.jpg"/>
+      <property name="path[16]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163238__01.jpg"/>
+      <property name="numImages" value="17"/>
+      <property name="path[1]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163228.jpg"/>
+      <property name="path[4]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163231.jpg"/>
+      <property name="path[7]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163233.jpg"/>
+      <property name="path[11]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163235__01.jpg"/>
+      <property name="path[14]" value="C:\Users\Heyan\OneDrive\Pictures\FRC\2022\Test_GamePiece_Images\IMG_20220109_163237.jpg"/>
+    </grip:MultiImageFile>
+  </sources>
+  <steps>
+    <grip:Step name="Resize Image">
+      <grip:Input step="0" socket="0"/>
+      <grip:Input step="0" socket="1">
+        <value>320.0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="2">
+        <value>240.0</value>
+      </grip:Input>
+      <grip:Input step="0" socket="3">
+        <value>CUBIC</value>
+      </grip:Input>
+      <grip:Output step="0" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="HSV Threshold">
+      <grip:Input step="1" socket="0"/>
+      <grip:Input step="1" socket="1">
+        <value>
+          <double>0.0</double>
+          <double>10.034128472259832</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="1" socket="2">
+        <value>
+          <double>97.84171750648416</double>
+          <double>255.0</double>
+        </value>
+      </grip:Input>
+      <grip:Input step="1" socket="3">
+        <value>
+          <double>91.72661542463645</double>
+          <double>255.0</double>
+        </value>
+      </grip:Input>
+      <grip:Output step="1" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="CV erode">
+      <grip:Input step="2" socket="0"/>
+      <grip:Input step="2" socket="1"/>
+      <grip:Input step="2" socket="2"/>
+      <grip:Input step="2" socket="3">
+        <value>1.0</value>
+      </grip:Input>
+      <grip:Input step="2" socket="4">
+        <value>BORDER_CONSTANT</value>
+      </grip:Input>
+      <grip:Input step="2" socket="5"/>
+      <grip:Output step="2" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="CV dilate">
+      <grip:Input step="3" socket="0"/>
+      <grip:Input step="3" socket="1"/>
+      <grip:Input step="3" socket="2"/>
+      <grip:Input step="3" socket="3">
+        <value>1.0</value>
+      </grip:Input>
+      <grip:Input step="3" socket="4">
+        <value>BORDER_CONSTANT</value>
+      </grip:Input>
+      <grip:Input step="3" socket="5"/>
+      <grip:Output step="3" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="CV medianBlur">
+      <grip:Input step="4" socket="0"/>
+      <grip:Input step="4" socket="1">
+        <value>25.0</value>
+      </grip:Input>
+      <grip:Output step="4" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="Find Contours">
+      <grip:Input step="5" socket="0"/>
+      <grip:Input step="5" socket="1">
+        <value>true</value>
+      </grip:Input>
+      <grip:Output step="5" socket="0" previewed="false"/>
+    </grip:Step>
+    <grip:Step name="Filter Contours">
+      <grip:Input step="6" socket="0"/>
+      <grip:Input step="6" socket="1">
+        <value>200.0</value>
+      </grip:Input>
+      <grip:Input step="6" socket="2">
+        <value>100.0</value>
+      </grip:Input>
+      <grip:Input step="6" socket="3">
+        <value>0.0</value>
+      </grip:Input>
+      <grip:Input step="6" socket="4">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Input step="6" socket="5">
+        <value>0</value>
+      </grip:Input>
+      <grip:Input step="6" socket="6">
+        <value>1000</value>
+      </grip:Input>
+      <grip:Input step="6" socket="7">
+        <value>
+          <double>0.0</double>
+          <int>100</int>
+        </value>
+      </grip:Input>
+      <grip:Input step="6" socket="8">
+        <value>1000000</value>
+      </grip:Input>
+      <grip:Input step="6" socket="9">
+        <value>25.0</value>
+      </grip:Input>
+      <grip:Input step="6" socket="10">
+        <value>0.3</value>
+      </grip:Input>
+      <grip:Input step="6" socket="11">
+        <value>1.5</value>
+      </grip:Input>
+      <grip:Output step="6" socket="0" previewed="true"/>
+    </grip:Step>
+    <grip:Step name="Mask">
+      <grip:Input step="7" socket="0"/>
+      <grip:Input step="7" socket="1"/>
+      <grip:Output step="7" socket="0" previewed="false"/>
+    </grip:Step>
+  </steps>
+  <connections>
+    <grip:Connection>
+      <grip:Output step="1" socket="0" previewed="true"/>
+      <grip:Input step="2" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="2" socket="0" previewed="false"/>
+      <grip:Input step="3" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="0" socket="0" previewed="true"/>
+      <grip:Input step="1" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="4" socket="0" previewed="true"/>
+      <grip:Input step="7" socket="1"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="3" socket="0" previewed="false"/>
+      <grip:Input step="4" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="5" socket="0" previewed="false"/>
+      <grip:Input step="6" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="0" socket="0" previewed="true"/>
+      <grip:Input step="7" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output step="4" socket="0" previewed="true"/>
+      <grip:Input step="5" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
+      <grip:Output source="0" socket="0" previewed="false"/>
+      <grip:Input step="0" socket="0"/>
+    </grip:Connection>
+  </connections>
+  <settings>
+    <teamNumber>0</teamNumber>
+    <publishAddress>roboRIO-0-FRC.local</publishAddress>
+    <deployAddress>roboRIO-0-FRC.local</deployAddress>
+    <deployDir>/home/lvuser</deployDir>
+    <deployUser>lvuser</deployUser>
+    <deployJavaHome>/usr/local/frc/JRE/</deployJavaHome>
+    <deployJvmOptions>-Xmx50m -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:MaxNewSize=16m</deployJvmOptions>
+  </settings>
+  <codeGenerationSettings>
+    <language>Limelight</language>
+    <className>TestPipeline</className>
+    <implementWpilibPipeline>false</implementWpilibPipeline>
+    <saveDir>\\ANDREW-SURFACE\FRC Code\Karl_Code_Import\5454\FRC5454-2022-Imported\src\main\java\frc\robot\classes</saveDir>
+    <packageName></packageName>
+    <moduleName>grip</moduleName>
+  </codeGenerationSettings>
+</grip:Pipeline>
