@@ -1,0 +1,9 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Selector": "String Chooser",
+      "/SmartDashboard/Delay Time": "String Chooser"
+    }
+  }
+}
