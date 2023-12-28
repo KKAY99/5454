@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,8 +18,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.InputControllers;
-
+import frc.robot.Constants.Autos;
 
 
 import frc.robot.commands.*;
@@ -42,14 +44,18 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
-  
- 
+
  
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
- 
+    private SendableChooser<Command> m_autoChooser = new SendableChooser<>(); 
+    private DigitalInput m_brakeButton = new DigitalInput(Constants.LimitSwitches.brakeButtonPort);
+    private boolean m_isBrakeButtonToggled=false;
+    private boolean m_brakeButtonPressed=false;
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
+        //Create Auto Commands
+        createAutonomousCommandList();
         swerve.setDefaultCommand(
         swerve.drive(
             () -> -m_xBoxDriver.getRawAxis(translationAxis),
@@ -86,10 +92,51 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+
+  private void createAutonomousCommandList(){
+          m_autoChooser.setDefaultOption(Autos.autoMode0, new AutoDoNothingCommand());
+          m_autoChooser.addOption(Autos.autoMode1, swerve.getPathCommand("DoTheSquare"));
+          m_autoChooser.addOption(Autos.autoMode2, swerve.getPathCommand("TestPathX"));
+          SmartDashboard.putData("Auto Chooser",m_autoChooser);
+  }
   public Command getAutonomousCommand() {
-        
-    return swerve.getPathCommand("TestPathX");
+    return m_autoChooser.getSelected();
+  }
+  public void checkBrakeButton(){
+    if(m_brakeButton.get() && m_brakeButtonPressed==false){ 
+      m_brakeButtonPressed=true;
+      if(m_isBrakeButtonToggled==false){
+                    disableBrakeMode();
+                    m_isBrakeButtonToggled=true;
+            }else{
+                    resetBrakeModetoNormal();
+                    m_isBrakeButtonToggled=false;
+            }
+  }else{
+
+    if (m_brakeButton.get()==false){
+            m_brakeButtonPressed=false;
+    }
+  }
+  }
+  public void AutonMode(){
+  // m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.AUTOMODE);
+  // enableLimelights();
+    resetBrakeModetoNormal();
+    homeRobot();  
+  }  
+  public void TeleopMode(){
+    //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
+    resetBrakeModetoNormal();
+    homeRobot();
+    
+  }
+  private void resetBrakeModetoNormal(){
   }
 
+  private void disableBrakeMode(){
+  }
+  private void homeRobot(){
 
+  }
 }    

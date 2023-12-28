@@ -33,18 +33,15 @@ public class Swerve extends SubsystemBase {
   /** Subsystem class for the swerve drive. */
   public Swerve() {
   // TODO: ReplaceTuning Mode for Logging verbosity
-    // if (SpartanEntryManager.isTuningMode()) {
-      SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    //  if (SpartanEntryManager.isTuningMode()) {
+  //    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
   //  } else {
-  //    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
+      SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
   //  }
 
     try {
       swerve =
           new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve")).createSwerveDrive();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
       //KK Add AutoBuilder
       AutoBuilder.configureHolonomic(
       this::getPose, 
@@ -55,6 +52,10 @@ public class Swerve extends SubsystemBase {
       this
     );
 
+        } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+   
   }
 
   public Command drive(
