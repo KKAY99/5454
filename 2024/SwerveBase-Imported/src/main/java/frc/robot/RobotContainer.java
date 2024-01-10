@@ -62,9 +62,9 @@ public class RobotContainer {
         createAutonomousCommandList();
         swerve.setDefaultCommand(
         swerve.drive(
-            () -> -m_xBoxDriver.getRawAxis(translationAxis),
-            () -> -m_xBoxDriver.getRawAxis(strafeAxis),
-            () -> -m_xBoxDriver.getRawAxis(rotationAxis)));
+            () -> m_xBoxDriver.getRawAxis(translationAxis),
+            () -> m_xBoxDriver.getRawAxis(strafeAxis),
+            () -> m_xBoxDriver.getRawAxis(rotationAxis)));
 
     }
        
@@ -99,7 +99,7 @@ public class RobotContainer {
 
   private void createAutonomousCommandList(){
           m_autoChooser.setDefaultOption(Autos.autoMode0, new AutoDoNothingCommand());
-          m_autoChooser.addOption(Autos.autoMode1, swerve.getPathCommand("TestPathX"));
+          m_autoChooser.addOption(Autos.autoMode1, swerve.getPathCommand("StraightLine"));
           m_autoChooser.addOption(Autos.autoMode2, swerve.getPathCommand("StraightLine"));
           SmartDashboard.putData("Auto Chooser",m_autoChooser);
   }

@@ -6,12 +6,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import java.io.File;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -48,7 +50,8 @@ public class Swerve extends SubsystemBase {
       this::resetOdometry, 
       this::getRobotVelocity, 
       this::setChassisSpeeds, 
-      Constants.Swerve.pathFollowerConfig, 
+      Constants.Swerve.pathFollowerConfig,
+      this.FlipPath(),
       this
     );
 
@@ -84,6 +87,11 @@ public class Swerve extends SubsystemBase {
               false);
         })
         .withName("TeleopSwerve");
+  }
+
+  private BooleanSupplier FlipPath(){
+    BooleanSupplier supplier=()->;
+    return supplier;
   }
 
   public void drive(
@@ -134,7 +142,7 @@ public class Swerve extends SubsystemBase {
        System.out.println(path.getAllPathPoints().toString());
     }
     //   return null;
-    return AutoBuilder.followPathWithEvents(path);
+    return AutoBuilder.followPath(path);
   }
   catch(Exception e){
      System.out.println(e.toString());
