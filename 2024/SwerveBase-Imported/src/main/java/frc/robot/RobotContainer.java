@@ -4,7 +4,12 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -18,7 +23,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.InputControllers;
@@ -42,7 +49,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     
-    private Swerve swerve = new Swerve();
+    private Swerve m_swerve = new Swerve();
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
@@ -60,8 +67,8 @@ public class RobotContainer {
         configureButtonBindings();
         //Create Auto Commands
         createAutonomousCommandList();
-        swerve.setDefaultCommand(
-        swerve.drive(
+        m_swerve.setDefaultCommand(
+        m_swerve.drive(
             () -> m_xBoxDriver.getRawAxis(translationAxis),
             () -> m_xBoxDriver.getRawAxis(strafeAxis),
             () -> m_xBoxDriver.getRawAxis(rotationAxis)));
@@ -85,6 +92,7 @@ public class RobotContainer {
        
     public void refreshSmartDashboard()
     {  
+      m_swerve.getPose();
         
         
 }
@@ -99,9 +107,25 @@ public class RobotContainer {
 
   private void createAutonomousCommandList(){
           m_autoChooser.setDefaultOption(Autos.autoMode0, new AutoDoNothingCommand());
-          m_autoChooser.addOption(Autos.autoMode1, swerve.getPathCommand("StraightLine"));
-          m_autoChooser.addOption(Autos.autoMode2, swerve.getPathCommand("StraightLine"));
+          m_autoChooser.addOption(Autos.autoMode1, m_swerve.getPathCommand("StraightLine"));
           SmartDashboard.putData("Auto Chooser",m_autoChooser);
+          Rotation2d newRotation =  new Rotation2d(0);
+          Pose2d newPose = new Pose2d(2.0,7.0,newRotation);
+
+          List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+            new Pose2d(2.0, 7.0, Rotation2d.fromDegrees(0)),
+            new Pose2d(4.3, 7.0, Rotation2d.fromDegrees(0)),
+            new Pose2d(4.99, 5.81, Rotation2d.fromDegrees(0))
+          );
+
+          PathPlannerPath path = new PathPlannerPath(
+            bezierPoints,
+            new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+            new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+          );
+          m_autoChooser.addOption(Autos.autoMode2, m_swerve.createPathCommand(path));
+          
+          m_swerve.resetOdometry(newPose);
   }
   public Command getAutonomousCommand() {
     return m_autoChooser.getSelected();

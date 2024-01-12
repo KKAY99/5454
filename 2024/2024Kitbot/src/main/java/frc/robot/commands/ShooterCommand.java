@@ -9,17 +9,24 @@ public class ShooterCommand extends Command {
 
   public ShooterCommand(ShooterSubsystem shooter,double speed){
     m_Shooter=shooter;
+    m_speed=speed;
+    addRequirements(shooter);
   }
 
   @Override
   public void end(boolean interrupted){
+    System.out.println("Stop Shooting");
     m_Shooter.StopShootingMotors();
   }
 
-  @Override
-  public boolean isFinished(){
+  public void execute(){
+    System.out.println("Shooting at " + m_speed);       
     m_Shooter.RunShootingMotors(m_speed);
 
+  }
+  @Override
+  public boolean isFinished(){
+    
     return false;
   }
 }

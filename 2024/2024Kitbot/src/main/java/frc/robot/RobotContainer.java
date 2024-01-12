@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -16,6 +19,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.awt.Color;
+
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.Constants.*;
@@ -31,20 +38,22 @@ import frc.robot.Constants.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private DriveBase m_Drive=new DriveBase(Constants.DriveConstants.leftMotor1Port,Constants.DriveConstants.leftMotor2Port,Constants.DriveConstants.rightMotor1Port, 
-                                            Constants.DriveConstants.rightMotor2Port);
 
     private ShooterSubsystem m_Shooter=new ShooterSubsystem(Constants.ShooterConstants.shootingMotor1Port,Constants.ShooterConstants.shootingMotor2Port);
 
     private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
-
+    private WPI_VictorSPX m_LeftMotor1=new WPI_VictorSPX(DriveConstants.leftMotor1Port);
+    private WPI_VictorSPX m_LeftMotor2=new WPI_VictorSPX(DriveConstants.leftMotor2Port);
+    private WPI_VictorSPX m_RightMotor1=new WPI_VictorSPX(DriveConstants.rightMotor1Port);
+    private WPI_VictorSPX m_RightMotor2=new WPI_VictorSPX(DriveConstants.rightMotor2Port);
+    private MotorControllerGroup m_left = new MotorControllerGroup(m_LeftMotor1,m_LeftMotor2);
+    private MotorControllerGroup m_right = new MotorControllerGroup(m_RightMotor1,m_RightMotor2);
+    private DifferentialDrive m_drive=new DifferentialDrive(m_left,m_right);
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
-        m_Drive.setDefaultCommand(
-                new DefaultDriveCommand(m_Drive,
-                        () -> m_xBoxDriver.getLeftY(),
-                        () -> m_xBoxDriver.getLeftX()));
+    
+       
     }
     
     /**
@@ -56,10 +65,25 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        final ShooterCommand shooterCommand=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed);
+        final ShooterCommand shooter1Command=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed1);
 
-        JoystickButton shoot=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.xBoxDriverPort);
-        shoot.whileTrue(shooterCommand);
+        JoystickButton shoot1=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton1);
+        shoot1.whileTrue(shooter1Command);
+        
+        final ShooterCommand shooter2Command=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed2);
+
+        JoystickButton shoot2=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton2);
+        shoot2.whileTrue(shooter2Command);
+        
+        final ShooterCommand shooter3Command=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed3);
+
+        JoystickButton shoot3=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton3);
+        shoot3.whileTrue(shooter3Command);
+        
+        final ShooterCommand shooter4Command=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed4);
+
+        JoystickButton shoot4=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton4);
+        shoot4.whileTrue(shooter4Command);
     }
        
     public void refreshSmartDashboard(){  
@@ -100,7 +124,11 @@ public class RobotContainer {
   /*public Command getAutonomousCommand() {
         return autoChooser.get();
   }*/
-
+  
+  public void driveRobot(){
+        m_drive.arcadeDrive(m_xBoxDriver.getLeftY(),m_xBoxDriver.getLeftX());
+        m_drive.setDeadband(0.1);
+  }
   public void clearAllStickyFaults(){
         //m_robotPDH.clearStickyFaults();
   }

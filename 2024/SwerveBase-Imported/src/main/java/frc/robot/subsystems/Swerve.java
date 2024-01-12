@@ -90,7 +90,8 @@ public class Swerve extends SubsystemBase {
   }
 
   private BooleanSupplier FlipPath(){
-    BooleanSupplier supplier=()->;
+    BooleanSupplier supplier;
+    supplier=()->false;
     return supplier;
   }
 
@@ -133,6 +134,10 @@ public class Swerve extends SubsystemBase {
   public ChassisSpeeds getRobotVelocity(){
     return swerve.getRobotVelocity();
   }
+  public Command createPathCommand(PathPlannerPath path){
+    return AutoBuilder.followPath(path);
+  }
+
   public Command getPathCommand(String pathName){
     try{
     PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
