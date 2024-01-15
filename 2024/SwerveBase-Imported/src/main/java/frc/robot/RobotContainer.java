@@ -32,12 +32,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.Autos;
-import frc.robot.AutoCommands;
-
-
 import frc.robot.commands.*;
 
 import frc.robot.subsystems.*;
+import frc.robot.utilities.AutoCommands;
 
 
 /**

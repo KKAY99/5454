@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.RelativeEncoder;
@@ -14,13 +15,13 @@ import frc.robot.Constants;
 import com.revrobotics.RelativeEncoder;
 
 
-public class RotateArmSubsystem extends SubsystemBase {
-    private CANSparkMax m_RotateMotor;
+public class IntakeSubsystem extends SubsystemBase {
+    private CANSparkMax m_intakeMotor;
 
-    public RotateArmSubsystem(int motorPort1){
-        m_RotateMotor = new CANSparkMax(motorPort1,MotorType.kBrushed);  
-        m_RotateMotor.setSmartCurrentLimit(30); 
-        m_RotateMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    public IntakeSubsystem(int motorPort1){
+        m_intakeMotor = new CANSparkMax(motorPort1,CANSparkMaxLowLevel.MotorType.kBrushless);  
+        m_intakeMotor.setSmartCurrentLimit(30); 
+        m_intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
       }
     
 
@@ -31,13 +32,13 @@ public class RotateArmSubsystem extends SubsystemBase {
     }
 
     public void rotate(double power){
-        m_RotateMotor.set(power);
+        m_intakeMotor.set(power);
     }
  
     
 
     public void stopRotate(){
-      m_RotateMotor.set(0);
+      m_intakeMotor.set(0);
     }
     
 }

@@ -43,7 +43,16 @@ public final class Constants {
         public static final Pose2d locationRedShortLeftNote=new Pose2d(2.89,6.99,new Rotation2d(0));
         public static final Pose2d locationRedShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
         public static final Pose2d locationRedShortRightNote=new Pose2d(2.89,4.09,new Rotation2d(0));
-        public static final Pose2d locationRedLongRightNote=new Pose2d(8.24,  0.78,new Rotation2d(0));
+        public static final Pose2d locationBlueShortLeftNote=new Pose2d(13.67,4.09,new Rotation2d(0));
+        public static final Pose2d locationBlueShortCenterNote=new Pose2d(13.68,5.57,new Rotation2d(0));
+        public static final Pose2d locationBlueShortRightNote=new Pose2d(13.68,7.01,new Rotation2d(0));
+        
+        public static final Pose2d locationLongRightNote=new Pose2d(8.24,  0.78,new Rotation2d(0));
+        public static final Pose2d locationLongRight2Note=new Pose2d(8.24,  2.45,new Rotation2d(0));
+        public static final Pose2d locationLongCenterNote=new Pose2d(8.24,  4.09,new Rotation2d(0));
+        public static final Pose2d locationLongLeft2Note=new Pose2d(8.24,  5.76,new Rotation2d(0));
+        public static final Pose2d locationLongLeftNote=new Pose2d(8.24,  7.44,new Rotation2d(0));
+       
         public static final Pose2d locationRedLongRightWing=new Pose2d(5.28,  1.91,new Rotation2d(0));
        
         public static final Pose2d centerStartPos=new Pose2d(1.13,5.54,new Rotation2d(0));
@@ -122,5 +131,21 @@ public final class Constants {
     );
    
    }
+   public static final class Shooter{
+       //distance , speed, angle, shottime
+       public static final int columnDistance=0;
+       public static final int columnVelocity=1;
+       public static final int columnAngle=2;
+       public static final int columnShotTime=3;
+       public static final double [][]distanceLookup={
+          {10,100,10.5,4},
+          {20,200,10.5,5},
+          {30,300,10.5,6},
+          {40,400,10.5,7}
+      };
+
+    }
+       
+   
   }
   

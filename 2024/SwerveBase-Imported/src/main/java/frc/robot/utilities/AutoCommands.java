@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.utilities;
 import java.util.List;
 
 import com.pathplanner.lib.path.GoalEndState;
@@ -12,7 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.RotateArmSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.RotateArm;
+import frc.robot.Constants.AutoConstants.AutonomousRoutines;
+import frc.robot.Constants.AutoConstants.StartingLocations;
 //import frc.robot.Constants.Autos;
 import frc.robot.commands.AutoDoNothingCommand;
 import frc.robot.commands.MoveArmCommand;
@@ -136,9 +140,9 @@ public class AutoCommands {
                                                               Constants.AutoConstants.locationRedShortRightNote));
 
       Command rightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortRightNote,
-                                                              Constants.AutoConstants.locationRedLongRightNote));
+                                                              Constants.AutoConstants.locationLongRightNote));
 
-      Command note5toShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedLongRightNote,
+      Command note5toShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongRightNote,
                                                               Constants.AutoConstants.locationRedLongRightWing));
 
       SequentialCommandGroup score4Note=new SequentialCommandGroup(mockScore1,startToLeftNote,mockScore2,leftNoteToCenterNote,
