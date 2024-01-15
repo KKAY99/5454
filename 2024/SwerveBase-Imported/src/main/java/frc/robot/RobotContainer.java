@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -29,7 +30,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.InputControllers;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.Autos;
+import frc.robot.AutoCommands;
 
 
 import frc.robot.commands.*;
@@ -53,13 +56,17 @@ public class RobotContainer {
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
-
  
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private SendableChooser<Command> m_autoChooser = new SendableChooser<>(); 
+    private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
+    private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
+    private SendableChooser<AutoConstants.AutonomousRoutines> m_autoChosen = new SendableChooser<>(); 
     private DigitalInput m_brakeButton = new DigitalInput(Constants.LimitSwitches.brakeButtonPort);
+    private RotateArmSubsystem m_rotateArm=new RotateArmSubsystem(Constants.RotateArm.armRotatePort);
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
+
     public RobotContainer() {
       //Named Commands
       NamedCommands.registerCommand("autoscore",new AutoDoNothingCommand()); 
@@ -85,9 +92,6 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-
-      
-        
     }
        
     public void refreshSmartDashboard()
@@ -106,29 +110,23 @@ public class RobotContainer {
    */
 
   private void createAutonomousCommandList(){
-          m_autoChooser.setDefaultOption(Autos.autoMode0, new AutoDoNothingCommand());
-          m_autoChooser.addOption(Autos.autoMode1, m_swerve.getPathCommand("StraightLine"));
-          SmartDashboard.putData("Auto Chooser",m_autoChooser);
-          Rotation2d newRotation =  new Rotation2d(0);
-          Pose2d newPose = new Pose2d(2.0,7.0,newRotation);
-
-          List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-            new Pose2d(2.0, 7.0, Rotation2d.fromDegrees(0)),
-            new Pose2d(4.3, 7.0, Rotation2d.fromDegrees(0)),
-            new Pose2d(4.99, 5.81, Rotation2d.fromDegrees(0))
-          );
-
-          PathPlannerPath path = new PathPlannerPath(
-            bezierPoints,
-            new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-            new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-          );
-          m_autoChooser.addOption(Autos.autoMode2, m_swerve.createPathCommand(path));
-          
-          m_swerve.resetOdometry(newPose);
+      AutoCommands autoMaker = new AutoCommands(m_swerve,m_rotateArm);
+      int timeDelay=0;
+      m_autoChooser.setDefaultOption(Autos.autoMode0, new AutoDoNothingCommand());
+      m_autoChooser.addOption(Autos.autoMode1,autoMaker.createAutoCommand(AutoConstants.StartingLocations.LEFTAMP,AutoConstants.AutonomousRoutines.SCORENOTE4,timeDelay));
+      SmartDashboard.putData("Auto Chooser",m_autoChooser);          
+        m_swerve.resetOdometry(autoMaker.getStartingPose(AutoConstants.StartingLocations.LEFTAMP));
   }
   public Command getAutonomousCommand() {
-    return m_autoChooser.getSelected();
+    AutoCommands autoMaker = new AutoCommands(m_swerve,m_rotateArm);
+    AutoConstants.StartingLocations startLocation=m_autoStart.getSelected();
+    double delay=m_autoDelay.getSelected();
+    AutoConstants.AutonomousRoutines autoChosen=m_autoChosen.getSelected();
+    Command newCommand=null;
+
+    newCommand=autoMaker.createAutoCommand(startLocation,autoChosen,delay);
+
+    return newCommand;
   }
   public void checkBrakeButton(){
     if(m_brakeButton.get() && m_brakeButtonPressed==false){ 

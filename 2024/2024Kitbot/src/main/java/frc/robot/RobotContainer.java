@@ -126,7 +126,7 @@ public class RobotContainer {
   }*/
   
   public void driveRobot(){
-        m_drive.arcadeDrive(m_xBoxDriver.getLeftY(),m_xBoxDriver.getLeftX());
+        m_drive.arcadeDrive(m_xBoxDriver.getLeftX(),m_xBoxDriver.getLeftY());
         m_drive.setDeadband(0.1);
   }
   public void clearAllStickyFaults(){

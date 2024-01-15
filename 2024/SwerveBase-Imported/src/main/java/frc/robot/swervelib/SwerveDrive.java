@@ -309,7 +309,7 @@ public class SwerveDrive {
    * @return The robot's pose
    */
   public Pose2d getPose() {
-    System.out.println("gyro:" + swerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    //System.out.println("gyro:" + swerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees());
     return swerveDrivePoseEstimator.getEstimatedPosition();
   }
 
