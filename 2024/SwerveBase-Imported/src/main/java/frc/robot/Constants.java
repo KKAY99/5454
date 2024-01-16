@@ -21,9 +21,9 @@ public final class Constants {
         }
 
         public enum AutonomousRoutines {
-          SCORENOTE4,
-          SCORENOTE5R,
-          SCOREAMP,
+          REDSCORENOTE4,
+          REDSCORENOTE5R,
+          REDSCOREAMP,
         }
 
         public static final String TimeDelay0="No Delay";
@@ -36,9 +36,19 @@ public final class Constants {
         public static final double TimeDelayVal3=1;
         public static final double TimeDelayVal4=3;
         public static final double TimeDelayVal5=6;
-                
 
-
+        public static final String autoMode0="0-Do Nothing";
+        public static final String autoMode1="1=Score1,Move";
+        public static final String autoMode2="2=Score2,Amp";
+        public static final String autoMode3="3=Score2,Center";
+        public static final String autoMode4="4=Score2,Source";
+        public static final String autoMode5="5=Score3,Amp,Source";
+        public static final String autoMode6="6=Score3,Amp,Pause,Source";
+        public static final String autoMode7="7=Score3,Amp,Long Amp";
+        public static final String autoMode8="8=Score3,Source,Long Source";
+        public static final String autoMode9="9=Score3,Amp,Long Amp";
+        public static final String autoMode10="10=Score4,Source,Long Source";
+        public static final String autoMode11="11=Score4,Amp,Long Amp";
 
         public static final Pose2d locationRedShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
         public static final Pose2d locationRedShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
@@ -55,7 +65,17 @@ public final class Constants {
        
         public static final Pose2d locationRedLongRightWing=new Pose2d(5.28,  1.91,new Rotation2d(0));
        
-        public static final Pose2d centerStartPos=new Pose2d(1.13,5.54,new Rotation2d(0));
+        public static final Pose2d redCenterStartPos=new Pose2d(1.13,5.54,new Rotation2d(0));
+        public static final Pose2d blueCenterStartPos=new Pose2d(0,0,new Rotation2d(0));
+
+        public static final Pose2d redLeftAmpStartPos=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d blueLeftAmpStartPos=new Pose2d(0,0,new Rotation2d(0));
+
+        public static final Pose2d redLeftSpeakerStartPos=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d blueLeftSpeakerStartPos=new Pose2d(0,0,new Rotation2d(0));
+
+        public static final Pose2d redRightSpeakerStartPos=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d blueRightSpeakerStartPos=new Pose2d(0,0,new Rotation2d(0));
       }
         
     public static final class InputControllers {
@@ -68,23 +88,6 @@ public final class Constants {
       public static final int armRotatePort=11;
       
       public static final double armSpeed=0.3;
-    }
-
-    public static final class Autos{
-      public static final String autoMode0="0-Do Nothing";
-      public static final String autoMode1="1=TEST4NOTE";
-      public static final String autoMode2="2=Test Plan";
-    
-      
-      public static final String delayMode0="0 Seconds";
-      public static final String delayMode1="3 Seconds";
-      public static final String delayMode2="5 Seconds";
-      public static final String delayMode3="8 Seconds";
-      public static final int delayValMode0=0;
-      public static final int delayValMode1=3;
-      public static final int delayValMode2=5;
-      public static final int delayValMode3=8;
-    
     }
 
     public static final class LimitSwitches {
