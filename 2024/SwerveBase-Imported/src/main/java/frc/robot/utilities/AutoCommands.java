@@ -101,15 +101,15 @@ public class AutoCommands {
                                             
 
       Command startToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.centerStartPos,
-                                                              Constants.AutoConstants.locationRedShortLeftNote));
+                                                              Constants.AutoConstants.locationRedShortAmpNote));
 
-      Command leftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortLeftNote,
+      Command leftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                               Constants.AutoConstants.locationRedShortCenterNote));
 
       Command centerNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortCenterNote,
-                                                              Constants.AutoConstants.locationRedShortRightNote));
+                                                              Constants.AutoConstants.locationRedShortSourceNote));
 
-      Command rightNoteToStartPos=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortRightNote,
+      Command rightNoteToStartPos=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortSourceNote,
                                                               Constants.AutoConstants.centerStartPos));
 
       SequentialCommandGroup score4Note=new SequentialCommandGroup(mockScore1,startToLeftNote,mockScore2,leftNoteToCenterNote,
@@ -131,18 +131,18 @@ public class AutoCommands {
                                             
 
       Command startToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.centerStartPos,
-                                                              Constants.AutoConstants.locationRedShortLeftNote));
+                                                              Constants.AutoConstants.locationRedShortAmpNote));
 
-      Command leftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortLeftNote,
+      Command leftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                               Constants.AutoConstants.locationRedShortCenterNote));
 
       Command centerNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortCenterNote,
-                                                              Constants.AutoConstants.locationRedShortRightNote));
+                                                              Constants.AutoConstants.locationRedShortSourceNote));
 
-      Command rightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortRightNote,
-                                                              Constants.AutoConstants.locationLongRightNote));
+      Command rightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortSourceNote,
+                                                              Constants.AutoConstants.locationLongSourceNote));
 
-      Command note5toShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongRightNote,
+      Command note5toShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
                                                               Constants.AutoConstants.locationRedLongRightWing));
 
       SequentialCommandGroup score4Note=new SequentialCommandGroup(mockScore1,startToLeftNote,mockScore2,leftNoteToCenterNote,

@@ -120,13 +120,6 @@ public class SmartShooter extends Command {
 
         }
 
-        if (m_turret.closeToDeadzone()) {
-            m_driver.setRumble(RumbleType.kLeftRumble, 1.0);
-            m_driver.setRumble(RumbleType.kRightRumble, 1.0);
-        } else {
-            m_driver.setRumble(RumbleType.kLeftRumble, 0.0);
-            m_driver.setRumble(RumbleType.kRightRumble, 0.0);
-        }
  */
     }
 
