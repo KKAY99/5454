@@ -130,6 +130,8 @@ public class RobotContainer {
         m_drive.setDeadband(0.1);
   }
   public void clearAllStickyFaults(){
-        //m_robotPDH.clearStickyFaults();
+  Alliance alliance = DriverStation.getAlliance();
+    //m_robotPDH.clearStickyFaults();
   }
+  
 }    
