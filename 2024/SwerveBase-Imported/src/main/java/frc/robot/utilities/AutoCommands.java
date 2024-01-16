@@ -17,7 +17,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.RotateArm;
 import frc.robot.Constants.AutoConstants.AutonomousRoutines;
 import frc.robot.Constants.AutoConstants.StartingLocations;
-//import frc.robot.Constants.Autos;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDoNothingCommand;
 import frc.robot.commands.MoveArmCommand;
 
@@ -40,37 +40,110 @@ public class AutoCommands {
   private Pose2d createPose(double x, double y, double rotate){
     return new Pose2d(x,y,new Rotation2d(rotate));
   }
- public Command createAutoCommand(AutoConstants.StartingLocations startinglocation, AutoConstants.AutonomousRoutines routine, double startDelay){
+
+  public Command createAutoCommand(AutoConstants.StartingLocations startinglocation,String routine,double startDelay,Alliance currentAlliance){
     Command autoRoutine = new AutoDoNothingCommand();
     newCommand();
-    m_startingPose=getStartingPose(startinglocation);
-    switch (routine){
-      case SCOREAMP:
-        //autoRoutine= new AutoDoNothingCommand();
-        break;
-      case SCORENOTE4:
-       autoRoutine= autoScore4Notes();
-         break;
-      case SCORENOTE5R:
-        autoRoutine= autoScore4Notes();
-         break;
-    }
+    m_startingPose=getStartingPose(startinglocation,currentAlliance);
 
+    switch(routine){
+      case AutoConstants.autoMode0:
+        autoRoutine=new AutoDoNothingCommand();
+      break;
+      case AutoConstants.autoMode1:
+        if(currentAlliance==Alliance.Red){           
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode2:
+        if(currentAlliance==Alliance.Red){
+          autoRoutine=redAutoScore5NotesRight();         
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode3:
+        if(currentAlliance==Alliance.Red){       
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode4:
+        if(currentAlliance==Alliance.Red){       
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode5:
+        if(currentAlliance==Alliance.Red){       
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode6:
+        if(currentAlliance==Alliance.Red){       
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode7:
+        if(currentAlliance==Alliance.Red){       
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode8:
+        if(currentAlliance==Alliance.Red){       
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode9:
+        if(currentAlliance==Alliance.Red){       
+        }else{
+        }
+      break;
+      case AutoConstants.autoMode10:
+        if(currentAlliance==Alliance.Red){
+          autoRoutine=redAutoScore4Notes();      
+        }else{
+          autoRoutine=blueAutoScore4Notes(); 
+        }
+      break;
+      case AutoConstants.autoMode11:
+        if(currentAlliance==Alliance.Red){ 
+          autoRoutine=redAutoScore4Notes();       
+        }else{
+          autoRoutine=blueAutoScore4Notes();
+        }
+      break;
+    }
     return autoRoutine;
  }
-  public Pose2d getStartingPose(AutoConstants.StartingLocations location){
-    Pose2d returnPose = new Pose2d();
-    switch (location){
+  public Pose2d getStartingPose(AutoConstants.StartingLocations location,Alliance currentAlliance){
+    Pose2d returnPose=new Pose2d();
+    switch(location){
         case LEFTAMP:
-            break;
+        if(currentAlliance==Alliance.Red){   
+          returnPose=AutoConstants.redLeftAmpStartPos;     
+        }else{
+          returnPose=AutoConstants.blueLeftAmpStartPos;
+        }
+        break;
         case LEFTSPEAKER:
-            returnPose=createPose(2,7,0);
-            break;
+        if(currentAlliance==Alliance.Red){
+          returnPose=AutoConstants.redLeftSpeakerStartPos;        
+        }else{
+          returnPose=AutoConstants.blueLeftSpeakerStartPos; 
+        }
+        break;
         case CENTER1:
-            returnPose=createPose(1.13,5.54,0);
-            break;
+        if(currentAlliance==Alliance.Red){
+          returnPose=AutoConstants.redCenterStartPos;      
+        }else{
+          returnPose=AutoConstants.blueCenterStartPos;   
+        }
+        break;
         case RIGHTSPEAKER:
-            break;
+        if(currentAlliance==Alliance.Red){ 
+          returnPose=AutoConstants.redRightSpeakerStartPos;        
+        }else{
+          returnPose=AutoConstants.blueRightSpeakerStartPos;  
+        }
+        break;
     }
     return returnPose;
   }
@@ -89,18 +162,22 @@ public class AutoCommands {
 
       return newPath;
   }
-  private Command autoScore4Notes(){
+
+  private Command redAutoScore4Notes(){
       SequentialCommandGroup mockScore1=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
       SequentialCommandGroup mockScore2=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
       SequentialCommandGroup mockScore3=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
       SequentialCommandGroup mockScore4=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
                                             
 
-      Command startToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.centerStartPos,
+      Command startToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
                                                               Constants.AutoConstants.locationRedShortAmpNote));
 
       Command leftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
@@ -109,28 +186,59 @@ public class AutoCommands {
       Command centerNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortCenterNote,
                                                               Constants.AutoConstants.locationRedShortSourceNote));
 
-      Command rightNoteToStartPos=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortSourceNote,
-                                                              Constants.AutoConstants.centerStartPos));
+      SequentialCommandGroup score4Note=new SequentialCommandGroup(mockScore1,startToLeftNote,mockScore2,leftNoteToCenterNote,
+                                                                 mockScore3,centerNoteToRightNote,mockScore4);
+
+      return score4Note;
+  }
+
+  private Command blueAutoScore4Notes(){
+      SequentialCommandGroup mockScore1=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
+                                            new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
+      SequentialCommandGroup mockScore2=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
+                                            new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
+      SequentialCommandGroup mockScore3=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
+                                            new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
+      SequentialCommandGroup mockScore4=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
+                                            new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+                                            
+
+      Command startToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueCenterStartPos,
+                                                              Constants.AutoConstants.locationBlueShortAmpNote));
+
+      Command leftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
+                                                              Constants.AutoConstants.locationBlueShortCenterNote));
+
+      Command centerNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortCenterNote,
+                                                              Constants.AutoConstants.locationBlueShortSourceNote));
 
       SequentialCommandGroup score4Note=new SequentialCommandGroup(mockScore1,startToLeftNote,mockScore2,leftNoteToCenterNote,
                                                                  mockScore3,centerNoteToRightNote,mockScore4);
 
       return score4Note;
   }
-   private Command autoScore5NotesRight(){
+
+  private Command redAutoScore5NotesRight(){
       SequentialCommandGroup mockScore1=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
       SequentialCommandGroup mockScore2=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
       SequentialCommandGroup mockScore3=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
       SequentialCommandGroup mockScore4=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
+
       SequentialCommandGroup mockScore5=new SequentialCommandGroup(new MoveArmCommand(m_rotateArm,Constants.RotateArm.armSpeed),
                                             new MoveArmCommand(m_rotateArm,-Constants.RotateArm.armSpeed));
                                             
 
-      Command startToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.centerStartPos,
+      Command startToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
                                                               Constants.AutoConstants.locationRedShortAmpNote));
 
       Command leftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
