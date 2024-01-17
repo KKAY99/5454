@@ -63,6 +63,8 @@ public class RobotContainer {
     private SendableChooser<String> m_autoChosen = new SendableChooser<>(); 
     private DigitalInput m_brakeButton = new DigitalInput(Constants.LimitSwitches.brakeButtonPort);
     private RotateArmSubsystem m_rotateArm=new RotateArmSubsystem(Constants.RotateArm.armRotatePort);
+    private IntakeSubsystem m_intake=new IntakeSubsystem(0);
+    private ShooterSubsystem m_shooter=new ShooterSubsystem();
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
 
@@ -90,7 +92,7 @@ public class RobotContainer {
      * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
-    private void configureButtonBindings() {
+    private void configureButtonBindings(){
     }
        
     public void refreshSmartDashboard()
@@ -109,15 +111,15 @@ public class RobotContainer {
    */
 
   private void createAutonomousCommandList(){
-      AutoCommands autoMaker = new AutoCommands(m_swerve,m_rotateArm);
+      AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake);
       m_autoChooser.setDefaultOption(AutoConstants.autoMode0,AutoConstants.autoMode0);
       m_autoChooser.addOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
-      SmartDashboard.putData("Auto Chooser",m_autoChooser);          
+      SmartDashboard.putData("Auto Chooser",m_autoChooser);
   }
 
   public Command getAutonomousCommand(){
     Alliance currentAlliance=DriverStation.getAlliance().get();
-    AutoCommands autoMaker = new AutoCommands(m_swerve,m_rotateArm);
+    AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake);
     AutoConstants.StartingLocations startLocation=m_autoStart.getSelected();
     double delay=m_autoDelay.getSelected();
     String autoChosen=m_autoChosen.getSelected();

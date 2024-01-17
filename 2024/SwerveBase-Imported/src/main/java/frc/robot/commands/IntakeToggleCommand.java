@@ -5,16 +5,17 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Constants;
 
-public class IntakeToggleCommand extends Command {
+public class IntakeToggleCommand extends Command{
   private IntakeSubsystem m_intake;
 
   private boolean m_toggle;
 
   public IntakeToggleCommand(IntakeSubsystem intake,boolean toggle){
     m_intake=intake;
-
     m_toggle=toggle;
+
   }
 
   @Override
@@ -22,14 +23,10 @@ public class IntakeToggleCommand extends Command {
 
   @Override
   public void execute(){
-
-  }
-
-  @Override
-  public void end(boolean interrupted){}
-
-  @Override
-  public boolean isFinished(){
-    return m_toggle;
+    if(m_toggle){
+      m_intake.run(Constants.IntakeConstants.intakeSpeed);  
+    }else{
+      m_intake.stop();
+    }
   }
 }

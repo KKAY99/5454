@@ -50,12 +50,12 @@ public final class Constants {
         public static final String autoMode10="10=Score4,Source,Long Source";
         public static final String autoMode11="11=Score4,Amp,Long Amp";
 
-        public static final Pose2d locationRedShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
-        public static final Pose2d locationRedShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
-        public static final Pose2d locationRedShortSourceNote=new Pose2d(2.89,4.09,new Rotation2d(0));
-        public static final Pose2d locationBlueShortAmpNote=new Pose2d(13.67,4.09,new Rotation2d(0));
-        public static final Pose2d locationBlueShortCenterNote=new Pose2d(13.68,5.57,new Rotation2d(0));
-        public static final Pose2d locationBlueShortSourceNote=new Pose2d(13.68,7.01,new Rotation2d(0));
+        public static final Pose2d locationBlueShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
+        public static final Pose2d locationBlueShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
+        public static final Pose2d locationBlueShortSourceNote=new Pose2d(2.89,4.09,new Rotation2d(0));
+        public static final Pose2d locationRedShortAmpNote=new Pose2d(13.67,4.09,new Rotation2d(0));
+        public static final Pose2d locationRedShortCenterNote=new Pose2d(13.68,5.57,new Rotation2d(0));
+        public static final Pose2d locationRedShortSourceNote=new Pose2d(13.68,7.01,new Rotation2d(0));
         
         public static final Pose2d locationLongAmpNote=new Pose2d(8.24,  0.78,new Rotation2d(0));
         public static final Pose2d locationLongAmp2Note=new Pose2d(8.24,  2.45,new Rotation2d(0));
@@ -63,30 +63,41 @@ public final class Constants {
         public static final Pose2d locationLongSource2Note=new Pose2d(8.24,  5.76,new Rotation2d(0));
         public static final Pose2d locationLongSourceNote=new Pose2d(8.24,  7.44,new Rotation2d(0));
        
-        public static final Pose2d locationRedLongRightWing=new Pose2d(5.28,  1.91,new Rotation2d(0));
+        public static final Pose2d locationRedLongRightWing=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d locationBlueLongRightWing=new Pose2d(5.28,1.91,new Rotation2d(0));
        
-        public static final Pose2d redCenterStartPos=new Pose2d(1.13,5.54,new Rotation2d(0));
-        public static final Pose2d blueCenterStartPos=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d redCenterStartPos=new Pose2d(15.17,5.54,new Rotation2d(0));
+        public static final Pose2d blueCenterStartPos=new Pose2d(1.13,5.54,new Rotation2d(0));
 
-        public static final Pose2d redLeftAmpStartPos=new Pose2d(0,0,new Rotation2d(0));
-        public static final Pose2d blueLeftAmpStartPos=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d redLeftAmpStartPos=new Pose2d(15.33,6.98,new Rotation2d(0));
+        public static final Pose2d blueLeftAmpStartPos=new Pose2d(1.22,6.98,new Rotation2d(0));
 
-        public static final Pose2d redLeftSpeakerStartPos=new Pose2d(0,0,new Rotation2d(0));
-        public static final Pose2d blueLeftSpeakerStartPos=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d redLeftSpeakerStartPos=new Pose2d(15.73,4.23,new Rotation2d(0));
+        public static final Pose2d blueLeftSpeakerStartPos=new Pose2d(0.73,6.72,new Rotation2d(0));
 
-        public static final Pose2d redRightSpeakerStartPos=new Pose2d(0,0,new Rotation2d(0));
-        public static final Pose2d blueRightSpeakerStartPos=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d redRightSpeakerStartPos=new Pose2d(15.73,6.72,new Rotation2d(0));
+        public static final Pose2d blueRightSpeakerStartPos=new Pose2d(0.73,4.23,new Rotation2d(0));
+
+        public static final Pose2d redMoveOutOfBoundPos=new Pose2d(13.74,4.95,new Rotation2d(0));
+        public static final Pose2d blueMoveOutOfBoundPos=new Pose2d(2.18,4.90,new Rotation2d(0));
       }
         
     public static final class InputControllers {
-        public static final int kXboxDrive = 0;
-        public static final int kXboxOperator = 1;
-        public static final int kCustomController = 2;
+      public static final int kXboxDrive = 0;
+      public static final int kXboxOperator = 1;
+      public static final int kCustomController = 2;
+    }
+
+    public static final class IntakeConstants{
+      public static final double intakeSpeed=1;
+    }
+
+    public static final class ShooterConstants{
+      public static final double autoShooterSpeed=1;
     }
 
     public static final class RotateArm{
       public static final int armRotatePort=11;
-      
       public static final double armSpeed=0.3;
     }
 
@@ -96,6 +107,7 @@ public final class Constants {
 
     public static final class ButtonBindings{
       public static final int rotateArmButton=1;
+      public static final int intakeToggleButton=2;
     }
 
 

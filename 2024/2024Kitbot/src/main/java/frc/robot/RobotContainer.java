@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.awt.Color;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -65,7 +67,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        final ShooterCommand shooter1Command=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed1);
+        final ShootTopCommand shooter1Command=new ShootTopCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed4);
 
         JoystickButton shoot1=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton1);
         shoot1.whileTrue(shooter1Command);
@@ -130,7 +132,7 @@ public class RobotContainer {
         m_drive.setDeadband(0.1);
   }
   public void clearAllStickyFaults(){
-  Alliance alliance = DriverStation.getAlliance();
+  Alliance alliance = DriverStation.getAlliance().get();
     //m_robotPDH.clearStickyFaults();
   }
   

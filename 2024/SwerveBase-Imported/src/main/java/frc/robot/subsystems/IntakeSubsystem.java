@@ -31,13 +31,13 @@ public class IntakeSubsystem extends SubsystemBase {
     //System.out.println("ABS Encoder" + m_AbsoluteEncoder.get()  + " Rel Encoder " + m_rotateEncoder.getPosition());
     }
 
-    public void rotate(double power){
+    public void run(double power){
         m_intakeMotor.set(power);
     }
  
     
 
-    public void stopRotate(){
+    public void stop(){
       m_intakeMotor.set(0);
     }
     

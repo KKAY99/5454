@@ -26,8 +26,8 @@ public final class Constants {
     public static final int shootingMotor2Port=22;
 
     public static final double shooterSpeed1=.25;
-    public static final double shooterSpeed2=.50;
-    public static final double shooterSpeed3=.75;
+    public static final double shooterSpeed2=.40;
+    public static final double shooterSpeed3=.50;
     public static final double shooterSpeed4=1.0;
   }
 

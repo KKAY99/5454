@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 public class ShooterSubsystem extends SubsystemBase{
     private TalonSRX m_ShootingMotor1;
@@ -14,9 +15,12 @@ public class ShooterSubsystem extends SubsystemBase{
         
         m_ShootingMotor2=new TalonSRX(shootingMotor2);
     }
-
-    public void RunShootingMotors(double speed){
+ public void RunTopMotor(double speed){
         m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
+   
+       }
+ public void RunShootingMotors(double speed){
+        m_ShootingMotor1.set(ControlMode.PercentOutput,speed);     
         m_ShootingMotor2.set(ControlMode.PercentOutput,speed);
     }
 
