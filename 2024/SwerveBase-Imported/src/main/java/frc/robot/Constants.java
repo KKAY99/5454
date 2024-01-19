@@ -94,6 +94,11 @@ public final class Constants {
 
     public static final class ShooterConstants{
       public static final double autoShooterSpeed=1;
+      public static final double testShooterSpeed1=1;
+      public static final double testShooterSpeed2=0.9;
+
+      public static final int shooterMotorPort1=0;
+      public static final int shooterMotorPort2=0;
     }
 
     public static final class RotateArm{
@@ -107,7 +112,8 @@ public final class Constants {
 
     public static final class ButtonBindings{
       public static final int rotateArmButton=1;
-      public static final int intakeToggleButton=2;
+      public static final int testShooter1Button=1;
+      public static final int testShooter2Button=2;
     }
 
 

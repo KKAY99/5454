@@ -64,7 +64,7 @@ public class RobotContainer {
     private DigitalInput m_brakeButton = new DigitalInput(Constants.LimitSwitches.brakeButtonPort);
     private RotateArmSubsystem m_rotateArm=new RotateArmSubsystem(Constants.RotateArm.armRotatePort);
     private IntakeSubsystem m_intake=new IntakeSubsystem(0);
-    private ShooterSubsystem m_shooter=new ShooterSubsystem();
+    private ShooterSubsystem m_shooter=new ShooterSubsystem(Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
 
@@ -93,6 +93,13 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
+      ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
+      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
+      shootButton1.whileTrue(shoot1);
+
+      ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
+      JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
+      shootButton2.whileTrue(shoot2);
     }
        
     public void refreshSmartDashboard()

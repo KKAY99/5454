@@ -23,10 +23,13 @@ public class ShootCommand extends Command {
   public void execute(){}
 
   @Override
-  public void end(boolean interrupted){}
+  public void end(boolean interrupted){
+    m_shooter.stop();
+  }
 
   @Override
   public boolean isFinished(){
+    m_shooter.run(m_speed);
     return false;
   }
 }
