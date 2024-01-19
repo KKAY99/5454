@@ -34,12 +34,16 @@ public class AutoCommands {
   private IntakeSubsystem m_intake;
 
   Command m_blueStartToLeftNote;
+  Command m_blueLeftSpeakerToAmpNote;
+  Command m_blueCenterSpeakerToCenterNote;
   Command m_blueLeftNoteToCenterNote;
   Command m_blueCenterNoteToRightNote;
   Command m_blueRightNoteToNote5;
   Command m_sourceLongtoBlueShootLocation;
   Command m_blueStartToMoveOutPos;
   Command m_redStartToLeftNote;
+  Command m_redLeftSpeakerToAmpNote;
+  Command m_redCenterSpeakerToCenterNote;
   Command m_redLeftNoteToCenterNote;
   Command m_redCenterNoteToRightNote;
   Command m_redRightNoteToNote5;
@@ -72,6 +76,10 @@ public class AutoCommands {
   public void CreateCommands(){
     Command m_blueStartToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueCenterStartPos,
                                                           Constants.AutoConstants.locationBlueShortAmpNote));
+    Command m_blueLeftSpeakerToAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueLeftSpeakerStartPos,
+                                                          Constants.AutoConstants.locationBlueShortAmpNote));
+    Command m_blueCenterSpeakerToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueCenterStartPos,
+                                                          Constants.AutoConstants.locationBlueShortCenterNote));
     Command m_blueLeftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
                                                           Constants.AutoConstants.locationBlueShortCenterNote));
     Command m_blueCenterNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortCenterNote,
@@ -85,6 +93,10 @@ public class AutoCommands {
 
     Command m_redStartToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
                                                           Constants.AutoConstants.locationRedShortAmpNote));
+    Command m_redLeftSpeakerToAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redRightSpeakerStartPos,
+                                                          Constants.AutoConstants.locationRedShortAmpNote));
+    Command m_redCenterSpeakerToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
+                                                          Constants.AutoConstants.locationRedShortCenterNote));
     Command m_redLeftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                           Constants.AutoConstants.locationRedShortCenterNote));
     Command m_redCenterNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortCenterNote,
@@ -140,13 +152,17 @@ public class AutoCommands {
         }
       break;
       case AutoConstants.autoMode2:
-        if(currentAlliance==Alliance.Red){         
+        if(currentAlliance==Alliance.Red){ 
+          redScoreAmp2();
         }else{
+          blueScoreAmp2();
         }
       break;
       case AutoConstants.autoMode3:
-        if(currentAlliance==Alliance.Red){       
+        if(currentAlliance==Alliance.Red){    
+          redScoreCenter2();   
         }else{
+          blueScoreCenter2();
         }
       break;
       case AutoConstants.autoMode4:
@@ -248,27 +264,39 @@ public class AutoCommands {
   }
 
   private Command blueScore1MoveOut(){
-    SequentialCommandGroup score1Move=new SequentialCommandGroup(m_shoot1,m_blueStartToMoveOutPos);
+    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_blueStartToMoveOutPos);
 
-    return score1Move;
+    return score2;
   }
 
   private Command redScore1MoveOut(){
-    SequentialCommandGroup score1Move=new SequentialCommandGroup(m_shoot1,m_redStartToMoveOutPos);
+    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_redStartToMoveOutPos);
 
-    return score1Move;
+    return score2;
+  }
+
+  private Command blueScoreAmp2(){
+    SequentialCommandGroup scoreCenter2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueLeftSpeakerToAmpNote,m_stopIntake1);
+
+    return scoreCenter2;
+  }
+
+  private Command redScoreAmp2(){
+    SequentialCommandGroup scoreCenter2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redLeftSpeakerToAmpNote,m_stopIntake1);
+
+    return scoreCenter2;
   }
 
   private Command blueScoreCenter2(){
-    SequentialCommandGroup scoreCenter2=new SequentialCommandGroup(m_shoot1,m_blueStartToMoveOutPos);
+    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueCenterSpeakerToCenterNote,m_stopIntake1);
 
-    return scoreCenter2;
+    return score2;
   }
 
   private Command redScoreCenter2(){
-    SequentialCommandGroup scoreCenter2=new SequentialCommandGroup(m_shoot1,m_blueStartToMoveOutPos);
+    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redCenterSpeakerToCenterNote,m_stopIntake1);
 
-    return scoreCenter2;
+    return score2;
   }
 
   private Command redAutoScore4Notes(){                             
