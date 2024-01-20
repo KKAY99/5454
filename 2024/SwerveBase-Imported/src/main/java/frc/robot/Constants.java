@@ -94,9 +94,41 @@ public final class Constants {
 
     public static final class TurretConstants{
       public static final int turretMotorPort=61;
+      public static final int turretLimitSwitchPort=0;
 
-      public static final double turretSpeed=0.7;
+      public static final double turretSpeed=0.3;
+      public static final double hometurretSpeed=0.1;
+      public static final double softLimitLeftLow=4;
+      public static final double softLimitRightHigh=38;;
     }
+
+    public static final class LimeLightValues {
+      public static final double steeringP = 0.035;
+      public static final double steeringI = 0;
+      public static final double steeringD = 0.0055;
+      public static final double steeringFeedForward = 0.0;
+
+      public static final double targetHeight = 18; // 249 cm
+      public static final double targetXPosShoot = -1.5;
+      public static final double targetXPosSafeZone = 5;
+      public static final double targetXPosRange=50;
+      public static final double limelightHeight = 19; //37
+      public static final double limelightAngle = 0; //40
+      public static final double kVisionDistanceTolerance = 5;
+      public static final double kVisionXTolerance = .04;
+      public static final double kVisionXOffset=4;
+      public static final double kVisionXMaxDistanceOffset=4.31; // was 1.7
+      public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
+
+      public static final double m_closeXCheck=1;
+      public static final double m_medXCheck=5;
+      public static final double m_farXCheck=10;
+
+      public static final double limeLightTrackSpeed1=0.01;
+      public static final double limeLightTrackSpeed2=0.03;
+      public static final double limeLightTrackSpeed3=0.09;
+      public static final double limeLightTrackSpeed4=0.12;
+  }
 
     public static final class ShooterConstants{
       public static final double autoShooterSpeed=1;

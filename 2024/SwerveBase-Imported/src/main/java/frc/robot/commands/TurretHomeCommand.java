@@ -1,15 +1,13 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.TurretSubsystem;
 
-public class TurretCommand extends Command{
+public class TurretHomeCommand extends Command {
   private TurretSubsystem m_turret;
 
-  private double m_speed;
-
-  public TurretCommand(TurretSubsystem turret,double speed){
+  public TurretHomeCommand(TurretSubsystem turret){
     m_turret=turret;
-    m_speed=speed;
   }
 
   @Override
@@ -18,10 +16,17 @@ public class TurretCommand extends Command{
   }
   @Override
   public void execute(){
+  m_turret.RunTurretMotor(-Constants.TurretConstants.hometurretSpeed);
+
   }
 
   @Override
   public boolean isFinished(){
-    return m_turret.RunCheckLimits(m_speed);
+    if(m_turret.IsAtHardLimit()){
+      m_turret.stop();
+      m_turret.SetEncoderToZero();
+      return true;
+    }
+    return false;
   }
 }

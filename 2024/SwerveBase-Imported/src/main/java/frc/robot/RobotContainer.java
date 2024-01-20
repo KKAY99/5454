@@ -8,7 +8,6 @@ import java.sql.Driver;
 import java.util.List;
 
 import javax.swing.JToggleButton;
-
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -22,6 +21,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -38,6 +38,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoCommands;
+import frc.robot.utilities.Limelight;
+
 
 
 /**
@@ -62,12 +64,15 @@ public class RobotContainer {
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
     private SendableChooser<String> m_autoChosen = new SendableChooser<>(); 
-    private DigitalInput m_brakeButton = new DigitalInput(Constants.LimitSwitches.brakeButtonPort);
-    private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort);
+    private DigitalInput m_brakeButton = new DigitalInput(3);
+    private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
     private IntakeSubsystem m_intake=new IntakeSubsystem(0);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
+    private Limelight m_Limelight = new Limelight();
+
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
+    private boolean m_HasHomed=false;
 
     public RobotContainer(){
       //Named Commands
@@ -94,21 +99,25 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-      ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
+      /*ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
       shootButton1.whileTrue(shoot1);
 
       ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
-      shootButton2.whileTrue(shoot2);
+      shootButton2.whileTrue(shoot2);*/
 
       TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
-      JoystickButton turretLeftButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretLeftButton);
+      JoystickButton turretLeftButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretRightButton);
       turretLeftButton.whileTrue(turretLeft);
 
       TurretCommand turretRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
-      JoystickButton turretRightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretRightButton);
+      JoystickButton turretRightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretLeftButton);
       turretRightButton.whileTrue(turretRight);
+
+      RobotTrackCommand turretTrack=new RobotTrackCommand(m_Limelight,m_turret);
+      JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
+      turretTrackButton.whileTrue(turretTrack);
     }
        
     public void refreshSmartDashboard(){  
@@ -178,7 +187,12 @@ public class RobotContainer {
 
   private void disableBrakeMode(){
   }
-  private void homeRobot(){
 
+  private void homeRobot(){
+    if(m_HasHomed==false){
+      Command turretHome=new TurretHomeCommand(m_turret);
+      CommandScheduler.getInstance().schedule(turretHome);
+      m_HasHomed=true;
+    }
   }
 }    

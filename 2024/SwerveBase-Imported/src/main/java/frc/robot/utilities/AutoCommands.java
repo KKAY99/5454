@@ -77,10 +77,10 @@ public class AutoCommands {
 
   public AutoCommands(Swerve swerveDrive,ShooterSubsystem shooter,IntakeSubsystem intake){
       newCommand();
-      CreateCommands();
       m_swerve=swerveDrive;
       m_shooter=shooter;
       m_intake=intake;
+      CreateCommands();
   }
 
   public void CreateCommands(){

@@ -1,9 +1,8 @@
-package frc.robot.classes;
+package frc.robot.utilities;
+
 
 import frc.robot.Constants;
-
 import java.util.Map;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
