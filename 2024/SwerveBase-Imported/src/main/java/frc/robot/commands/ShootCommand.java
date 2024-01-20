@@ -24,12 +24,12 @@ public class ShootCommand extends Command {
 
   @Override
   public void end(boolean interrupted){
-    m_shooter.stop();
+    m_shooter.StopShootingMotors();
   }
 
   @Override
   public boolean isFinished(){
-    m_shooter.run(m_speed);
+    m_shooter.RunShootingMotors(m_speed);
     return false;
   }
 }

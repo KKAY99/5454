@@ -92,13 +92,19 @@ public final class Constants {
       public static final double intakeSpeed=1;
     }
 
+    public static final class TurretConstants{
+      public static final int turretMotorPort=61;
+
+      public static final double turretSpeed=0.7;
+    }
+
     public static final class ShooterConstants{
       public static final double autoShooterSpeed=1;
       public static final double testShooterSpeed1=1;
       public static final double testShooterSpeed2=0.9;
 
-      public static final int shooterMotorPort1=0;
-      public static final int shooterMotorPort2=0;
+      public static final int shooterMotorPort1=21;
+      public static final int shooterMotorPort2=22;
     }
 
     public static final class RotateArm{
@@ -111,9 +117,10 @@ public final class Constants {
     }
 
     public static final class ButtonBindings{
-      public static final int rotateArmButton=1;
-      public static final int testShooter1Button=1;
-      public static final int testShooter2Button=2;
+      public static final int testShooter1Button=4;
+      public static final int testShooter2Button=1;
+      public static final int turretLeftButton=2;
+      public static final int turretRightButton=3;
     }
 
 

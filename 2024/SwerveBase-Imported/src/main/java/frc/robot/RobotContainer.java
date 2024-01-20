@@ -7,6 +7,8 @@ package frc.robot;
 import java.sql.Driver;
 import java.util.List;
 
+import javax.swing.JToggleButton;
+
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -34,7 +36,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.*;
-
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoCommands;
 
@@ -62,13 +63,13 @@ public class RobotContainer {
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
     private SendableChooser<String> m_autoChosen = new SendableChooser<>(); 
     private DigitalInput m_brakeButton = new DigitalInput(Constants.LimitSwitches.brakeButtonPort);
-    private RotateArmSubsystem m_rotateArm=new RotateArmSubsystem(Constants.RotateArm.armRotatePort);
+    private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort);
     private IntakeSubsystem m_intake=new IntakeSubsystem(0);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
 
-    public RobotContainer() {
+    public RobotContainer(){
       //Named Commands
       NamedCommands.registerCommand("autoscore",new AutoDoNothingCommand()); 
       // Configure the button bindings
@@ -100,14 +101,19 @@ public class RobotContainer {
       ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
       shootButton2.whileTrue(shoot2);
+
+      TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
+      JoystickButton turretLeftButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretLeftButton);
+      turretLeftButton.whileTrue(turretLeft);
+
+      TurretCommand turretRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
+      JoystickButton turretRightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretRightButton);
+      turretRightButton.whileTrue(turretRight);
     }
        
-    public void refreshSmartDashboard()
-    {  
+    public void refreshSmartDashboard(){  
       m_swerve.getPose();
-        
-        
-}
+    }
     
   
 

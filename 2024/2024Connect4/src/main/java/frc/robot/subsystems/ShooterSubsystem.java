@@ -9,6 +9,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase{
+    //private TalonSRX m_ShootingMotor1;
+    //private TalonSRX m_ShootingMotor2;
     private CANSparkMax m_ShootingMotor1;
     private CANSparkMax m_ShootingMotor2;
 
@@ -18,6 +20,8 @@ public class ShooterSubsystem extends SubsystemBase{
     private double maxRPM;
 
     public ShooterSubsystem(int shootingMotor1,int shootingMotor2){
+        //m_ShootingMotor1=new TalonSRX(shootingMotor1);  
+        //m_ShootingMotor2=new TalonSRX(shootingMotor2);
         m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
         m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
 
@@ -47,17 +51,16 @@ public class ShooterSubsystem extends SubsystemBase{
         m_pidController2.setFF(kFF);
         m_pidController2.setOutputRange(kMinOutput, kMaxOutput);
     }
-    public void RunTopMotor(double speed){
-        m_ShootingMotor1.set(speed);
+ public void RunTopMotor(double speed){
+  //      m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
    
-    }
-
+       }
  public void RunShootingMotors(double speed){
-        m_ShootingMotor1.set(speed);    
-        m_ShootingMotor2.set(speed);
+        //m_ShootingMotor1.set(speed);    
+        //m_ShootingMotor2.set(speed);
         //speed=speed*maxRPM;
-        //m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
-        //m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
+        m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
+        m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
     }
 
     public void StopShootingMotors(){

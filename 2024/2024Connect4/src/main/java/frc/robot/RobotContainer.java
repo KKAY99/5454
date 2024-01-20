@@ -41,17 +41,9 @@ import frc.robot.Constants.*;
  */
 public class RobotContainer {
 
-    private ShooterSubsystem m_Shooter=new ShooterSubsystem(Constants.ShooterConstants.shootingMotor1Port,Constants.ShooterConstants.shootingMotor2Port,
-                                       Constants.ShooterConstants.shootingMotor3Port,Constants.ShooterConstants.shootingMotor4Port);
+    private ShooterSubsystem m_Shooter=new ShooterSubsystem(Constants.ShooterConstants.shootingMotor1Port,Constants.ShooterConstants.shootingMotor2Port);
 
     private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
-    private WPI_VictorSPX m_LeftMotor1=new WPI_VictorSPX(DriveConstants.leftMotor1Port);
-    private WPI_VictorSPX m_LeftMotor2=new WPI_VictorSPX(DriveConstants.leftMotor2Port);
-    private WPI_VictorSPX m_RightMotor1=new WPI_VictorSPX(DriveConstants.rightMotor1Port);
-    private WPI_VictorSPX m_RightMotor2=new WPI_VictorSPX(DriveConstants.rightMotor2Port);
-    private MotorControllerGroup m_left = new MotorControllerGroup(m_LeftMotor1,m_LeftMotor2);
-    private MotorControllerGroup m_right = new MotorControllerGroup(m_RightMotor1,m_RightMotor2);
-    private DifferentialDrive m_drive=new DifferentialDrive(m_left,m_right);
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
@@ -129,8 +121,6 @@ public class RobotContainer {
   }*/
   
   public void driveRobot(){
-        m_drive.arcadeDrive(m_xBoxDriver.getLeftX(),m_xBoxDriver.getLeftY());
-        m_drive.setDeadband(0.1);
   }
   public void clearAllStickyFaults(){
   Alliance alliance = DriverStation.getAlliance().get();

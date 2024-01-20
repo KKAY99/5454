@@ -6,8 +6,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
-
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 
@@ -32,7 +30,7 @@ public class SmartShooter extends Command {
 
     @Override
     public void initialize() {
-        m_turret.trackTarget(true);
+        m_turret.TrackTarget(true);
         m_timer.reset();
         m_timer.start();
     }
@@ -126,9 +124,9 @@ public class SmartShooter extends Command {
     @Override
     public void end(boolean interrupted) {
         SmartDashboard.putBoolean("Shooter Running", false);
-        m_turret.trackTarget(false);
+        m_turret.TrackTarget(false);
         m_turret.stop();
-        m_shooter.stop();
+        m_shooter.StopShootingMotors();
         m_timer.stop();
     }
 

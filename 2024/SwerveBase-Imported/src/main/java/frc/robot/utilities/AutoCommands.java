@@ -36,29 +36,39 @@ public class AutoCommands {
   Command m_blueStartToLeftNote;
   Command m_blueLeftSpeakerToAmpNote;
   Command m_blueCenterSpeakerToCenterNote;
+  Command m_blueSourceSpeakerToSourceNote;
   Command m_blueLeftNoteToCenterNote;
   Command m_blueCenterNoteToRightNote;
   Command m_blueRightNoteToNote5;
   Command m_sourceLongtoBlueShootLocation;
+  Command m_blueAmpToSourceNote;
+  Command m_blueAmpToLongAmpNote;
   Command m_blueStartToMoveOutPos;
+
   Command m_redStartToLeftNote;
   Command m_redLeftSpeakerToAmpNote;
   Command m_redCenterSpeakerToCenterNote;
+  Command m_redSourceSpeakerToSourceNote;
   Command m_redLeftNoteToCenterNote;
   Command m_redCenterNoteToRightNote;
   Command m_redRightNoteToNote5;
   Command m_sourceLongtoRedShootLocation;
+  Command m_redAmpToSourceNote;
+  Command m_redAmpToLongAmpNote;
   Command m_redStartToMoveOutPos;
+
   Command m_shoot1;
   Command m_shoot2;
   Command m_shoot3;
   Command m_shoot4;
   Command m_shoot5;
+
   Command m_startIntake1;
   Command m_startIntake2;
   Command m_startIntake3;
   Command m_startIntake4;
   Command m_startIntake5;
+
   Command m_stopIntake1;
   Command m_stopIntake2;
   Command m_stopIntake3;
@@ -80,14 +90,20 @@ public class AutoCommands {
                                                           Constants.AutoConstants.locationBlueShortAmpNote));
     Command m_blueCenterSpeakerToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueCenterStartPos,
                                                           Constants.AutoConstants.locationBlueShortCenterNote));
+    Command m_blueSourceSpeakerToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueRightSpeakerStartPos,
+                                                          Constants.AutoConstants.locationBlueShortSourceNote));
     Command m_blueLeftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
                                                           Constants.AutoConstants.locationBlueShortCenterNote));
     Command m_blueCenterNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortCenterNote,
                                                           Constants.AutoConstants.locationBlueShortSourceNote));
     Command m_blueRightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortSourceNote,
                                                           Constants.AutoConstants.locationLongSourceNote));
+    Command m_blueAmpToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
+                                                          Constants.AutoConstants.locationBlueShortSourceNote));
     Command m_longSourcetoBlueShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
                                                           Constants.AutoConstants.locationBlueLongRightWing));
+    Command m_blueAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
+                                                          Constants.AutoConstants.locationLongAmpNote));
     Command m_blueStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueCenterStartPos,
                                                           Constants.AutoConstants.blueMoveOutOfBoundPos));
 
@@ -97,6 +113,8 @@ public class AutoCommands {
                                                           Constants.AutoConstants.locationRedShortAmpNote));
     Command m_redCenterSpeakerToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
                                                           Constants.AutoConstants.locationRedShortCenterNote));
+    Command m_redSourceSpeakerToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redLeftSpeakerStartPos,
+                                                          Constants.AutoConstants.locationRedShortSourceNote));
     Command m_redLeftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                           Constants.AutoConstants.locationRedShortCenterNote));
     Command m_redCenterNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortCenterNote,
@@ -105,6 +123,10 @@ public class AutoCommands {
                                                           Constants.AutoConstants.locationLongSourceNote));
     Command m_longSourcetoRedShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
                                                           Constants.AutoConstants.locationRedLongRightWing));
+    Command m_redAmpToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
+                                                          Constants.AutoConstants.locationRedShortSourceNote));
+    Command m_redAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
+                                                          Constants.AutoConstants.locationLongAmpNote));
     Command m_redStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
                                                           Constants.AutoConstants.redMoveOutOfBoundPos));
   
@@ -166,23 +188,31 @@ public class AutoCommands {
         }
       break;
       case AutoConstants.autoMode4:
-        if(currentAlliance==Alliance.Red){       
+        if(currentAlliance==Alliance.Red){
+          redScoreSource2();     
         }else{
+          blueScoreSource2();
         }
       break;
       case AutoConstants.autoMode5:
-        if(currentAlliance==Alliance.Red){       
+        if(currentAlliance==Alliance.Red){
+          redScoreAmpSource3();     
         }else{
+          blueScoreAmpSource3();
         }
       break;
       case AutoConstants.autoMode6:
-        if(currentAlliance==Alliance.Red){       
+        if(currentAlliance==Alliance.Red){ 
+          redScoreAmpPauseSource3();      
         }else{
+          blueScoreAmpPauseSource3();   
         }
       break;
       case AutoConstants.autoMode7:
-        if(currentAlliance==Alliance.Red){       
+        if(currentAlliance==Alliance.Red){  
+          redScoreAmpLongAmp3();     
         }else{
+          blueScoreAmpLongAmp3();  
         }
       break;
       case AutoConstants.autoMode8:
@@ -276,27 +306,84 @@ public class AutoCommands {
   }
 
   private Command blueScoreAmp2(){
-    SequentialCommandGroup scoreCenter2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueLeftSpeakerToAmpNote,m_stopIntake1);
+    SequentialCommandGroup scoreCenter2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueLeftSpeakerToAmpNote,m_stopIntake1,
+                                                                  m_shoot2);
 
     return scoreCenter2;
   }
 
   private Command redScoreAmp2(){
-    SequentialCommandGroup scoreCenter2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redLeftSpeakerToAmpNote,m_stopIntake1);
+    SequentialCommandGroup scoreCenter2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redLeftSpeakerToAmpNote,m_stopIntake1,
+                                                                  m_shoot2);
 
     return scoreCenter2;
   }
 
   private Command blueScoreCenter2(){
-    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueCenterSpeakerToCenterNote,m_stopIntake1);
+    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueCenterSpeakerToCenterNote,m_stopIntake1,
+                                                            m_shoot2);
 
     return score2;
   }
 
   private Command redScoreCenter2(){
-    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redCenterSpeakerToCenterNote,m_stopIntake1);
+    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redCenterSpeakerToCenterNote,m_stopIntake1,
+                                                            m_shoot2);
 
     return score2;
+  }
+
+  private Command redScoreSource2(){
+    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redSourceSpeakerToSourceNote,m_stopIntake1,
+                                                            m_shoot2);
+
+    return score2;
+  }
+
+  private Command blueScoreSource2(){
+    SequentialCommandGroup score2=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueSourceSpeakerToSourceNote,m_stopIntake1,
+                                                            m_shoot2);
+
+    return score2;
+  }
+
+  private Command redScoreAmpSource3(){
+    SequentialCommandGroup score3=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redLeftSpeakerToAmpNote,m_stopIntake1,
+                                                            m_shoot2,m_startIntake2,m_redAmpToSourceNote,m_stopIntake2,m_shoot3);
+
+    return score3;
+  }
+
+  private Command blueScoreAmpSource3(){
+    SequentialCommandGroup score3=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueLeftSpeakerToAmpNote,m_stopIntake1,
+                                                            m_shoot2,m_startIntake2,m_blueAmpToSourceNote,m_stopIntake2,m_shoot3);
+    return score3;
+  }
+
+  private Command redScoreAmpPauseSource3(){
+    SequentialCommandGroup score3=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redLeftSpeakerToAmpNote,m_stopIntake1,
+                                                            m_shoot2,m_startIntake2,m_redAmpToSourceNote,m_stopIntake2,m_shoot3);
+
+    return score3;
+  }
+
+  private Command blueScoreAmpPauseSource3(){
+    SequentialCommandGroup score3=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueLeftSpeakerToAmpNote,m_stopIntake1,
+                                                            m_shoot2,m_startIntake2,m_blueAmpToSourceNote,m_stopIntake2,m_shoot3);
+    return score3;
+  }
+
+  private Command redScoreAmpLongAmp3(){
+    SequentialCommandGroup score3=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redLeftSpeakerToAmpNote,m_stopIntake1,
+                                                            m_shoot2,m_startIntake2,m_redAmpToLongAmpNote,m_stopIntake2,m_shoot3);
+
+    return score3;
+  }
+
+  private Command blueScoreAmpLongAmp3(){
+    SequentialCommandGroup score3=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueLeftSpeakerToAmpNote,m_stopIntake1,
+                                                            m_shoot2,m_startIntake2,m_blueAmpToLongAmpNote,m_stopIntake2,m_shoot3);
+    return score3;
   }
 
   private Command redAutoScore4Notes(){                             

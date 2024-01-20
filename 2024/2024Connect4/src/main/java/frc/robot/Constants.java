@@ -24,13 +24,16 @@ public final class Constants {
   public static final class ShooterConstants{
     public static final int shootingMotor1Port=21;
     public static final int shootingMotor2Port=22;
-    public static final int shootingMotor3Port=0;
-    public static final int shootingMotor4Port=1;
 
-    public static final double shooterSpeed1=0.7;
-    public static final double shooterSpeed2=0.8;
-    public static final double shooterSpeed3=0.9;
-    public static final double shooterSpeed4=1;
+    public static final double shooterSpeed1=.25;
+  //  public static final double shooterSpeed2=0.446;
+  //  public static final double shooterSpeed3=0.450;
+  //  public static final double shooterSpeed4=0.454;
+  
+    public static final double shooterSpeed2=6000;
+    public static final double shooterSpeed3=7500;
+    public static final double shooterSpeed4=8000;
+  
   }
 
   public static final class IntakeConstants{
