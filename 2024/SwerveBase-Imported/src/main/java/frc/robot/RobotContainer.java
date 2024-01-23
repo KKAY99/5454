@@ -68,7 +68,7 @@ public class RobotContainer {
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
     private IntakeSubsystem m_intake=new IntakeSubsystem(0);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
-    private Limelight m_Limelight = new Limelight();
+    private Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightHeight,Constants.LimeLightValues.limelightAngle);
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
@@ -121,6 +121,7 @@ public class RobotContainer {
     }
        
     public void refreshSmartDashboard(){  
+      m_Limelight.update(true);
       m_swerve.getPose();
     }
     

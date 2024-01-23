@@ -246,11 +246,4 @@ public class Limelight {
         updateDashboard();
 
     }
-
-
-    public void update() {
-        if (m_LimelightLEDOn) {
-            updateDashboard();
-        }
-    }
 }

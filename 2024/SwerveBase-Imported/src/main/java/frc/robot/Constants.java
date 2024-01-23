@@ -108,12 +108,12 @@ public final class Constants {
       public static final double steeringD = 0.0055;
       public static final double steeringFeedForward = 0.0;
 
-      public static final double targetHeight = 18; // 249 cm
+      public static final double targetHeight = 33.75; // 249 cm
       public static final double targetXPosShoot = -1.5;
       public static final double targetXPosSafeZone = 5;
       public static final double targetXPosRange=50;
-      public static final double limelightHeight = 19; //37
-      public static final double limelightAngle = 0; //40
+      public static final double limelightHeight = 26.5; //37
+      public static final double limelightAngle = 11; //40
       public static final double kVisionDistanceTolerance = 5;
       public static final double kVisionXTolerance = .04;
       public static final double kVisionXOffset=4;

@@ -56,10 +56,13 @@ public class RobotTrackCommand extends Command{
       }else{
         if(speed>0){
           m_runRight=true;
+          m_runLeft=false;
         }else if(speed<0){
           m_runLeft=true;
+          m_runRight=false;
         }else{
           m_runRight=true;
+          m_runLeft=false;
         }
         m_state=TrackingStates.SEARCHING;
       }
@@ -86,8 +89,8 @@ public class RobotTrackCommand extends Command{
         m_state=TrackingStates.TRACKING;
       }
     break;
-    return false;
   }
+  return false;
 }
 
 }

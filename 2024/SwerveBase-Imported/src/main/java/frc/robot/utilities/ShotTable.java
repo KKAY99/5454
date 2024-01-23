@@ -1,10 +1,9 @@
-package frc.robot.commands;
-
+package frc.robot.utilities;
 import frc.robot.Constants;
 
 public class ShotTable {
     
-    private double parseTable(double distance, int column,boolean calculateValue){
+    private double parseTable(double distance,int column,boolean calculateValue){
         boolean bExceededDistance=false;
         int tableLoop=0;
         int rows=Constants.Shooter.distanceLookup.length;

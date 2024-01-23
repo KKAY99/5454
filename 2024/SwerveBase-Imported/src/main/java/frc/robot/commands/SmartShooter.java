@@ -10,6 +10,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.utilities.ShotTable;
 
 public class SmartShooter extends Command {
     private final ShooterSubsystem m_shooter;

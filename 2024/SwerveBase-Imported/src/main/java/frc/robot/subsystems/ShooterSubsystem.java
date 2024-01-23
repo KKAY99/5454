@@ -47,17 +47,11 @@ public class ShooterSubsystem extends SubsystemBase{
         m_pidController2.setFF(kFF);
         m_pidController2.setOutputRange(kMinOutput, kMaxOutput);
     }
-    public void RunTopMotor(double speed){
-        m_ShootingMotor1.set(speed);
-   
-    }
-
- public void RunShootingMotors(double speed){
-        m_ShootingMotor1.set(speed);    
-        m_ShootingMotor2.set(speed);
-        //speed=speed*maxRPM;
-        //m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
-        //m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
+    
+    public void RunShootingMotors(double speed){
+        speed=speed*maxRPM;
+        m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
+        m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
     }
 
     public void StopShootingMotors(){
