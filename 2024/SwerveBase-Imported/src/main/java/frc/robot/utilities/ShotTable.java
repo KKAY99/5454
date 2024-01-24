@@ -4,6 +4,7 @@ import frc.robot.Constants;
 public class ShotTable {
     
     private double parseTable(double distance,int column,boolean calculateValue){
+    try{    
         boolean bExceededDistance=false;
         int tableLoop=0;
         int rows=Constants.Shooter.distanceLookup.length;
@@ -13,7 +14,7 @@ public class ShotTable {
         double lastDistance=0;
         double currentDistance=0;
         
-        lastValue=Constants.Shooter.distanceLookup[tableLoop][column];
+        currentValue=Constants.Shooter.distanceLookup[tableLoop][column];
         
         do{
             lastValue=currentValue;
@@ -21,17 +22,28 @@ public class ShotTable {
             lastDistance=currentDistance;
             currentDistance=Constants.Shooter.distanceLookup[tableLoop][Constants.Shooter.columnDistance];
             tableLoop++;
-            nextDistance=Constants.Shooter.distanceLookup[tableLoop][Constants.Shooter.columnDistance];
-        } while (nextDistance<distance && tableLoop<rows); 
+            if(tableLoop<rows){
+                nextDistance=Constants.Shooter.distanceLookup[tableLoop][Constants.Shooter.columnDistance];
+            } else{
+                nextDistance=999999;
+            }
+            } while (nextDistance<distance); 
         //table loop is pointing to the 
         if(calculateValue){
             //TODO: Calculate value using median 
+            System.out.println(lastValue);
+            System.out.println(currentValue);
+            System.out.println(lastDistance);
+            System.out.println(currentDistance);
             return currentValue;
         }else {
             return currentValue;
         }
-        
-
+    }
+    catch(Exception e){
+        System.out.println("Exception: "+ e.getMessage());
+        return 0;
+    }
         
     }
     public double getAngle(double distance){

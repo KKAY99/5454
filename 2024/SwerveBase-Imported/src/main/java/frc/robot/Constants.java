@@ -120,14 +120,16 @@ public final class Constants {
       public static final double kVisionXMaxDistanceOffset=4.31; // was 1.7
       public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
 
-      public static final double m_closeXCheck=1;
-      public static final double m_medXCheck=5;
-      public static final double m_farXCheck=10;
+      public static final double closeXCheck=3;
+      public static final double medXCheck=9;
+      public static final double farXCheck=15;
+
+      public static final double limeLightDeadBand=0.5;
 
       public static final double limeLightTrackSpeed1=0.01;
       public static final double limeLightTrackSpeed2=0.03;
-      public static final double limeLightTrackSpeed3=0.09;
-      public static final double limeLightTrackSpeed4=0.12;
+      public static final double limeLightTrackSpeed3=0.07;
+      public static final double limeLightTrackSpeed4=0.1;
   }
 
     public static final class ShooterConstants{

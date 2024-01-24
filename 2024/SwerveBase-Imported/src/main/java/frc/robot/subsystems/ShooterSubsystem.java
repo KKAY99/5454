@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import frc.robot.utilities.ShotTable;
 public class ShooterSubsystem extends SubsystemBase{
     private CANSparkMax m_ShootingMotor1;
     private CANSparkMax m_ShootingMotor2;
@@ -18,6 +18,33 @@ public class ShooterSubsystem extends SubsystemBase{
     private double maxRPM;
 
     public ShooterSubsystem(int shootingMotor1,int shootingMotor2){
+        //TEST PLACE
+        ShotTable shotTable = new ShotTable();
+        double power;
+        double distance=6;
+ 
+        power=shotTable.getVelocity(distance);
+        System.out.println("distance: " + distance + " -- " + "Power:" + power);
+           power=shotTable.getVelocity(distance);
+        distance=11;
+           System.out.println("distance: " + distance +  " -- " + "Power:" + power);
+       distance=21;
+           power=shotTable.getVelocity(distance);
+        System.out.println("distance: " + distance  + " -- " + "Power:" + power);
+        distance=34;
+        power=shotTable.getVelocity(distance);
+        System.out.println("distance: " + distance  + " -- " + "Power:" + power);
+        distance=43;
+        
+        power=shotTable.getVelocity(distance);
+        System.out.println("distance: " + distance + " -- "+ "Power:" + power);
+        distance=53;
+        power=shotTable.getVelocity(distance);
+        System.out.println("distance: " + distance + " -- "+ "Power:" + power);
+        distance=211;
+        power=shotTable.getVelocity(distance);
+        System.out.println("distance: " + distance + " -- "+ "Power:" + power);
+
         m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
         m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
 
