@@ -30,9 +30,9 @@ public final class Constants {
   //  public static final double shooterSpeed3=0.450;
   //  public static final double shooterSpeed4=0.454;
   
-    public static final double shooterSpeed2=-7100;
-    public static final double shooterSpeed3=-7000;
-    public static final double shooterSpeed4=-6950;
+    public static final double shooterSpeed2=-7600;
+    public static final double shooterSpeed3=-7300;
+    public static final double shooterSpeed4=-7100;
   
   }
 
