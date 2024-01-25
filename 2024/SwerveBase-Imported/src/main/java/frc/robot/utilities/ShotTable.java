@@ -35,7 +35,7 @@ public class ShotTable {
            // System.out.println(currentValue);
            // System.out.println(lastDistance);
            // System.out.println(currentDistance);
-            double x=(distance-lastDistance) / (currentDistance - lastDistance)
+            double x=(distance-lastDistance) / (currentDistance - lastDistance);
             double z=(currentValue - lastValue) * x;
             return z;
         }else {
