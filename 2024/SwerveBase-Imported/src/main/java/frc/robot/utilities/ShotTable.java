@@ -31,11 +31,13 @@ public class ShotTable {
         //table loop is pointing to the 
         if(calculateValue){
             //TODO: Calculate value using median 
-            System.out.println(lastValue);
-            System.out.println(currentValue);
-            System.out.println(lastDistance);
-            System.out.println(currentDistance);
-            return currentValue;
+           // System.out.println(lastValue);
+           // System.out.println(currentValue);
+           // System.out.println(lastDistance);
+           // System.out.println(currentDistance);
+            double x=(distance-lastDistance) / (currentDistance - lastDistance)
+            double z=(currentValue - lastValue) * x;
+            return z;
         }else {
             return currentValue;
         }
