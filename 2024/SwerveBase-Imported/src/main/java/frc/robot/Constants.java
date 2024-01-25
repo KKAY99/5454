@@ -126,8 +126,8 @@ public final class Constants {
 
       public static final double limeLightDeadBand=0.5;
 
-      public static final double limeLightTrackSpeed1=0.01;
-      public static final double limeLightTrackSpeed2=0.03;
+      public static final double limeLightTrackSpeed1=0.03;
+      public static final double limeLightTrackSpeed2=0.05;
       public static final double limeLightTrackSpeed3=0.07;
       public static final double limeLightTrackSpeed4=0.1;
   }

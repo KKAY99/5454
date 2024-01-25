@@ -230,6 +230,10 @@ public class Limelight {
 
     }
 
+    public double GetDistanceMultipler(){
+        return (getDistance()*0.1)+1;
+    }
+
     public void turnLEDOff() {
         llTable.getEntry("ledMode").setNumber(1);
         m_LimelightLEDOn = false;
