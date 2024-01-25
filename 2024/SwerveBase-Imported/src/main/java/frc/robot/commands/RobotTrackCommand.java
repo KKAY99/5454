@@ -32,18 +32,18 @@ public class RobotTrackCommand extends Command{
   public boolean isFinished(){
     double speed=0;
 
-    double deadBand;
+    double multiplier=m_limeLight.GetDistanceMultipler();
 
     switch(m_state){
     case TRACKING:
       if(m_limeLight.isTargetAvailible()){
-        if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.limeLightDeadBand){
+        if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.limeLightDeadBand*multiplier){
           speed=0;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closeXCheck){
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closeXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed1;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.medXCheck){
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.medXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed2;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.farXCheck){
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.farXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed3;
         }else{
           speed=Constants.LimeLightValues.limeLightTrackSpeed4;
