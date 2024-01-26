@@ -97,11 +97,21 @@ public final class Constants {
       public static final int turretLimitSwitchPort=0;
 
       public static final double maxTurretSpeed=0.3;
-
       public static final double turretSpeed=0.3;
       public static final double hometurretSpeed=0.1;
       public static final double softLimitLeftLow=4;
       public static final double softLimitRightHigh=38;
+
+      public static final double turretStraightPos=0;
+      public static final double turret90Pos=90;
+
+      public static final double turretP=0.1;
+      public static final double turretI=0;
+      public static final double turretD=0;
+
+      public static enum States{
+        TURRET,INTAKE
+      }
     }
 
     public static final class LimeLightValues {
@@ -157,6 +167,8 @@ public final class Constants {
       public static final int testShooter2Button=1;
       public static final int turretLeftButton=2;
       public static final int turretRightButton=3;
+      public static final int turret90Button=5;
+      public static final int turretStraightButton=6;
     }
 
 

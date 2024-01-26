@@ -13,9 +13,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 
 public class TurretSubsystem extends SubsystemBase{
   private CANSparkMax m_turretMotor;
+
+  private SparkMaxPIDController m_pidController;
 
   private DigitalInput m_limitSwitch;
 
@@ -23,10 +27,18 @@ public class TurretSubsystem extends SubsystemBase{
 
   private double m_speed;
 
+  private double kTurretP=Constants.TurretConstants.turretP;
+  private double kTurretI=Constants.TurretConstants.turretI;
+  private double kTurretD=Constants.TurretConstants.turretD;
+
   public TurretSubsystem(int turretMotorPort, int limitSwitchPort){
     m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
     m_limitSwitch=new DigitalInput(limitSwitchPort);
     m_encoder=m_turretMotor.getEncoder();
+    m_pidController=m_turretMotor.getPIDController();
+    m_pidController.setP(kTurretP);
+    m_pidController.setI(kTurretI);
+    m_pidController.setD(kTurretD);
   }
 
   public void TrackTarget(boolean bool){
@@ -97,6 +109,10 @@ public class TurretSubsystem extends SubsystemBase{
 
   public double GetEncoderValue(){
     return m_encoder.getPosition();
+  }
+
+  public void TurretSetReference(double pos){
+    m_pidController.setReference(pos,ControlType.kPosition);
   }
 
   public void SetEncoderToZero(){

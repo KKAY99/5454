@@ -107,17 +107,25 @@ public class RobotContainer {
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
       shootButton2.whileTrue(shoot2);*/
 
-      TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
+      TurretCommand turretLeft=new TurretCommand(m_turret,m_intake,Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.States.TURRET);
       JoystickButton turretLeftButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretRightButton);
       turretLeftButton.whileTrue(turretLeft);
 
-      TurretCommand turretRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
+      TurretCommand turretRight=new TurretCommand(m_turret,m_intake,-Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.States.TURRET);
       JoystickButton turretRightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretLeftButton);
       turretRightButton.whileTrue(turretRight);
 
+      TurretCommand turretStraight=new TurretCommand(m_turret,m_intake,-Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.States.INTAKE);
+      JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretStraightButton);
+      turretStraightButton.whileTrue(turretStraight);
+
+      TurretCommand turret90=new TurretCommand(m_turret,m_intake,-Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.States.INTAKE);
+      JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90Button);
+      turret90Button.onTrue(turret90);
+
       RobotTrackCommand turretTrack=new RobotTrackCommand(m_Limelight,m_turret);
       JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
-      turretTrackButton.whileTrue(turretTrack);
+      turretTrackButton.onTrue(turretTrack);
     }
        
     public void refreshSmartDashboard(){  
