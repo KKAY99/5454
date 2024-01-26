@@ -96,10 +96,12 @@ public final class Constants {
       public static final int turretMotorPort=61;
       public static final int turretLimitSwitchPort=0;
 
+      public static final double maxTurretSpeed=0.3;
+
       public static final double turretSpeed=0.3;
       public static final double hometurretSpeed=0.1;
       public static final double softLimitLeftLow=4;
-      public static final double softLimitRightHigh=38;;
+      public static final double softLimitRightHigh=38;
     }
 
     public static final class LimeLightValues {
@@ -122,13 +124,13 @@ public final class Constants {
 
       public static final double closeXCheck=3;
       public static final double medXCheck=9;
-      public static final double farXCheck=15;
+      public static final double farXCheck=14;
 
       public static final double limeLightDeadBand=0.5;
 
-      public static final double limeLightTrackSpeed1=0.03;
-      public static final double limeLightTrackSpeed2=0.05;
-      public static final double limeLightTrackSpeed3=0.07;
+      public static final double limeLightTrackSpeed1=0.02;
+      public static final double limeLightTrackSpeed2=0.06;
+      public static final double limeLightTrackSpeed3=0.09;
       public static final double limeLightTrackSpeed4=0.1;
   }
 

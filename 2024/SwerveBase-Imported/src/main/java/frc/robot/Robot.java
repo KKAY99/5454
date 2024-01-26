@@ -88,7 +88,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-  
+    m_robot.AutoPeriodic();
     
   }
 
@@ -103,7 +103,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic(){
+    m_robot.AutoPeriodic();
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override

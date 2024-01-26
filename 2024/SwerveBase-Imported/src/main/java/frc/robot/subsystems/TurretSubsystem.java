@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.TurretConstants;
 
 import java.io.Console;
+
+import javax.sound.midi.SysexMessage;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -31,6 +34,15 @@ public class TurretSubsystem extends SubsystemBase{
   }
   
   public void RunTurretMotor(double power){
+    //Check if motor speed is greater than limit
+    if(Math.abs(power)>Constants.TurretConstants.maxTurretSpeed){
+      System.out.println("Over Speed Limit: "+power);
+      if(power<0){
+        power=-TurretConstants.maxTurretSpeed;
+      }else{
+        power=TurretConstants.maxTurretSpeed;
+      }
+    }
     m_speed=power;
     m_turretMotor.set(m_speed);
   }
@@ -44,6 +56,7 @@ public class TurretSubsystem extends SubsystemBase{
     System.out.println("Left Limit:" + IsAtLeftLimit());
     System.out.println("IsRotatingtoRight: " + IsRotatingToRight());
     System.out.println("IsRotatingtoLeft: " + IsRotatingToLeft());*/
+
     
     if(IsAtRightLimit()&&IsRotatingToRight()){
       stop();

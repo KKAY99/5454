@@ -154,8 +154,16 @@ public class Swerve extends SubsystemBase {
      return null;
   }
   }
+
+  public void AddVisionPose(Pose2d visionPose,double timeStamp,boolean soft,double trustWorthiness){
+    swerve.addVisionMeasurement(visionPose,timeStamp,soft,trustWorthiness);
+    System.out.println("Robot Pose Swerve: "+getPose());
+    System.out.println("Robot Pose Limelight: "+visionPose);
+  }
+
   @Override
   public void periodic() {
+    
     swerve.updateOdometry();
    
   }

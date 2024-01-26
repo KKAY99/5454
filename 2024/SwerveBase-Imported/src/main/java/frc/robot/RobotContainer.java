@@ -177,6 +177,14 @@ public class RobotContainer {
     resetBrakeModetoNormal();
     homeRobot();  
   }  
+  public void AutoPeriodic(){
+    if(m_Limelight.isTargetAvailible()){
+    //Get Limelight
+    //add ision measurement in swervie
+    m_swerve.AddVisionPose(m_Limelight.GetPoseViaApriltag(),0,true,1);
+    }
+   
+  }
   public void TeleopMode(){
     //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
     resetBrakeModetoNormal();

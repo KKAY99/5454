@@ -3,6 +3,8 @@ package frc.robot.utilities;
 import frc.robot.Constants;
 import java.util.Map;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -21,6 +23,8 @@ public class Limelight {
     private static NetworkTableEntry ta;
     // does the limelight have a target
     private static NetworkTableEntry tv;
+    // robot pose based on limelight
+    private static NetworkTableEntry robotPose;
 
 
     private double m_limeLightHeight;
@@ -68,6 +72,8 @@ public class Limelight {
         ta = llTable.getEntry("ta");
         // does the limelight have a target
         tv = llTable.getEntry("tv");
+        // robot pose accoridng to limelight
+        robotPose = llTable.getEntry("botpose");
         
         m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
@@ -227,11 +233,26 @@ public class Limelight {
         SmartDashboard.putBoolean("Target Distance", isAtTargetDistance());
         SmartDashboard.putBoolean("On TargetX", isOnTargetX());
         SmartDashboard.putString("limelight mode", getVisionMode());
+        SmartDashboard.putNumberArray("RobotPoseLimelight", GetDoublePosArray());
 
     }
 
     public double GetDistanceMultipler(){
-        return (getDistance()*0.1)+1;
+        return (getDistance()*0.05)+1;
+    }
+
+    public Pose2d GetPoseViaApriltag(){
+        double[] empty=null;
+        double[] robotPoseValues=robotPose.getDoubleArray(empty);
+
+        Pose2d pose=new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
+        return pose;
+    }
+
+    public double[] GetDoublePosArray(){
+        double[] empty=null;
+
+        return robotPose.getDoubleArray(empty);
     }
 
     public void turnLEDOff() {
