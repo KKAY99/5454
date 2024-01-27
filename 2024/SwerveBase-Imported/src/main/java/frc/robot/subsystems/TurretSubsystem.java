@@ -56,7 +56,7 @@ public class TurretSubsystem extends SubsystemBase{
       }
     }
     m_speed=power;
-    m_turretMotor.set(m_speed);
+    m_turretMotor.set(power);
   }
 
   
@@ -113,6 +113,10 @@ public class TurretSubsystem extends SubsystemBase{
 
   public void TurretSetReference(double pos){
     m_pidController.setReference(pos,ControlType.kPosition);
+  }
+
+  public void ResetPIDReference(){
+    m_pidController.setReference(0,ControlType.kVelocity);
   }
 
   public void SetEncoderToZero(){

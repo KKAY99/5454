@@ -67,8 +67,8 @@ public class RobotContainer {
     private DigitalInput m_brakeButton = new DigitalInput(3);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
     private IntakeSubsystem m_intake=new IntakeSubsystem(0);
-    private ShooterSubsystem m_shooter=new ShooterSubsystem(Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
     private Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightHeight,Constants.LimeLightValues.limelightAngle);
+    private ShooterSubsystem m_shooter=new ShooterSubsystem(m_Limelight,Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
@@ -99,11 +99,11 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-      /*ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
-      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
+      ShootCommand shoot1=new ShootCommand(m_shooter,m_Limelight,Constants.ShooterConstants.testShooterSpeed1);
+      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,1);
       shootButton1.whileTrue(shoot1);
 
-      ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
+      /*ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
       shootButton2.whileTrue(shoot2);*/
 
@@ -119,13 +119,13 @@ public class RobotContainer {
       JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretStraightButton);
       turretStraightButton.whileTrue(turretStraight);
 
-      TurretCommand turret90=new TurretCommand(m_turret,m_intake,-Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.States.INTAKE);
+      TurretCommand turret90=new TurretCommand(m_turret,m_intake,-Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turret90Pos,Constants.TurretConstants.States.INTAKE);
       JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90Button);
-      turret90Button.onTrue(turret90);
+      turret90Button.whileTrue(turret90);
 
       RobotTrackCommand turretTrack=new RobotTrackCommand(m_Limelight,m_turret);
       JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
-      turretTrackButton.onTrue(turretTrack);
+      turretTrackButton.whileTrue(turretTrack);
     }
        
     public void refreshSmartDashboard(){  

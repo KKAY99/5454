@@ -11,6 +11,7 @@ public class ShotTable {
         double currentValue=0;
         double lastValue=0;
         double nextDistance=0;
+        double nextValue=0;
         double lastDistance=0;
         double currentDistance=0;
         
@@ -24,6 +25,8 @@ public class ShotTable {
             tableLoop++;
             if(tableLoop<rows){
                 nextDistance=Constants.Shooter.distanceLookup[tableLoop][Constants.Shooter.columnDistance];
+                nextValue=Constants.Shooter.distanceLookup[tableLoop][column];
+        
             } else{
                 nextDistance=999999;
             }
@@ -31,12 +34,17 @@ public class ShotTable {
         //table loop is pointing to the 
         if(calculateValue){
             //TODO: Calculate value using median 
-           // System.out.println(lastValue);
-           // System.out.println(currentValue);
-           // System.out.println(lastDistance);
-           // System.out.println(currentDistance);
-            double x=(distance-lastDistance) / (currentDistance - lastDistance);
-            double z=(currentValue - lastValue) * x;
+            //System.out.println(currentValue);
+            //System.out.println(nextValue);
+            //System.out.println(currentDistance);
+            //System.out.println(nextDistance);
+            double x=(distance-currentDistance) / (nextDistance - currentDistance); 
+            double y=(nextValue - currentValue) * x;
+            double z=y+currentValue;
+            System.out.println(distance + "^-^" + x + "^" + y +  "^^"+z);
+            //System.out.println();
+            //System.out.println();
+            
             return z;
         }else {
             return currentValue;

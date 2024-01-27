@@ -5,13 +5,14 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.utilities.Limelight;
 
 public class ShootCommand extends Command {
   private ShooterSubsystem m_shooter;
 
   private double m_speed;
 
-  public ShootCommand(ShooterSubsystem shooter, double speed){
+  public ShootCommand(ShooterSubsystem shooter,Limelight limelight,double speed){
     m_shooter=shooter;
     m_speed=speed;
   }
@@ -20,16 +21,18 @@ public class ShootCommand extends Command {
   public void initialize(){}
 
   @Override
-  public void execute(){}
+  public void execute(){
+    m_shooter.OutPutDistance();
+  }
 
   @Override
   public void end(boolean interrupted){
-    m_shooter.StopShootingMotors();
+    //m_shooter.StopShootingMotors();
   }
 
   @Override
   public boolean isFinished(){
-    m_shooter.RunShootingMotors(m_speed);
+    //m_shooter.RunShootingMotors(m_speed);
     return false;
   }
 }

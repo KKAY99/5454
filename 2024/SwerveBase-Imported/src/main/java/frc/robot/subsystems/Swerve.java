@@ -157,8 +157,8 @@ public class Swerve extends SubsystemBase {
 
   public void AddVisionPose(Pose2d visionPose,double timeStamp,boolean soft,double trustWorthiness){
     swerve.addVisionMeasurement(visionPose,timeStamp,soft,trustWorthiness);
-    System.out.println("Robot Pose Swerve: "+getPose());
-    System.out.println("Robot Pose Limelight: "+visionPose);
+    //System.out.println("Robot Pose Swerve: "+getPose());
+    //System.out.println("Robot Pose Limelight: "+visionPose);
   }
 
   @Override

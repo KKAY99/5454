@@ -24,7 +24,13 @@ public class TurretCommand extends Command{
   }
 
   @Override
+  public void execute(){
+    m_turret.ResetPIDReference();
+  }
+
+  @Override
   public void end(boolean interrupted){
+    m_turret.ResetPIDReference();
     m_turret.stop();
     m_intake.stop();
   }

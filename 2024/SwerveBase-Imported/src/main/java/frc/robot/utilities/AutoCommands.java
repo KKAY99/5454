@@ -130,11 +130,11 @@ public class AutoCommands {
     Command m_redStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
                                                           Constants.AutoConstants.redMoveOutOfBoundPos));
   
-    Command m_shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
-    Command m_shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
-    Command m_shoot3=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
-    Command m_shoot4=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
-    Command m_shoot5=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
+    Command m_shoot1=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
+    Command m_shoot2=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
+    Command m_shoot3=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
+    Command m_shoot4=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
+    Command m_shoot5=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
 
     Command m_startIntake1=new IntakeToggleCommand(m_intake,true);
     Command m_startIntake2=new IntakeToggleCommand(m_intake,true);

@@ -98,14 +98,14 @@ public final class Constants {
 
       public static final double maxTurretSpeed=0.3;
       public static final double turretSpeed=0.3;
-      public static final double hometurretSpeed=0.1;
+      public static final double hometurretSpeed=0.09;
       public static final double softLimitLeftLow=4;
       public static final double softLimitRightHigh=38;
 
-      public static final double turretStraightPos=0;
-      public static final double turret90Pos=90;
+      public static final double turretStraightPos=20.5;
+      public static final double turret90Pos=7.1;
 
-      public static final double turretP=0.1;
+      public static final double turretP=0.035;
       public static final double turretI=0;
       public static final double turretD=0;
 
@@ -141,7 +141,7 @@ public final class Constants {
       public static final double limeLightTrackSpeed1=0.02;
       public static final double limeLightTrackSpeed2=0.06;
       public static final double limeLightTrackSpeed3=0.09;
-      public static final double limeLightTrackSpeed4=0.1;
+      public static final double limeLightTrackSpeed4=0.15;
   }
 
     public static final class ShooterConstants{
@@ -218,7 +218,8 @@ public final class Constants {
           {10,100,10.5,4},
           {20,200,10.5,5},
           {30,300,10.5,6},
-          {40,400,10.5,7}
+          {40,400,10.5,7},
+          {60,700,10.5,4}
       };
 
     }

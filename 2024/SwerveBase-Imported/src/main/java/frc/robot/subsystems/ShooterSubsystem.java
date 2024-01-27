@@ -7,8 +7,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ShotTable;
 public class ShooterSubsystem extends SubsystemBase{
+    private Limelight m_limeLight;
+
     private CANSparkMax m_ShootingMotor1;
     private CANSparkMax m_ShootingMotor2;
 
@@ -16,17 +20,16 @@ public class ShooterSubsystem extends SubsystemBase{
     private SparkMaxPIDController m_pidController2;
 
     private double maxRPM;
+    private double m_distance;
 
-    public ShooterSubsystem(int shootingMotor1,int shootingMotor2){
+    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2){
         //TEST PLACE
-        ShotTable shotTable = new ShotTable();
-        double power;
-        double distance=6;
+        m_limeLight=limeLight;
  
-        power=shotTable.getVelocity(distance);
+/*         power=shotTable.getVelocity(distance);
         System.out.println("distance: " + distance + " -- " + "Power:" + power);
            power=shotTable.getVelocity(distance);
-        distance=11;
+        distance=5;
            System.out.println("distance: " + distance +  " -- " + "Power:" + power);
        distance=21;
            power=shotTable.getVelocity(distance);
@@ -43,8 +46,8 @@ public class ShooterSubsystem extends SubsystemBase{
         System.out.println("distance: " + distance + " -- "+ "Power:" + power);
         distance=211;
         power=shotTable.getVelocity(distance);
-        System.out.println("distance: " + distance + " -- "+ "Power:" + power);
-
+        System.out.println("distance: " + distance + " -- "+ "Power:" + power);*/
+        
         m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
         m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
 
@@ -85,5 +88,11 @@ public class ShooterSubsystem extends SubsystemBase{
         System.out.print("stop Motor Subsysem");
         m_ShootingMotor1.set(0);
         m_ShootingMotor2.set(0);
+    }
+
+    public void OutPutDistance(){
+        ShotTable shotTable = new ShotTable();
+        double calculation=shotTable.getVelocity(m_limeLight.getDistance());
+        System.out.println("Distance Calucations: "+calculation);
     }
 }
