@@ -13,6 +13,12 @@ import edu.wpi.first.math.util.Units;
 
 public final class Constants {
     public static final class AutoConstants{
+
+        public static final String Center="Center Start";
+        public static final String LeftAmp="Left Amp";
+        public static final String LeftSpeaker="Left Speaker";
+        public static final String RightSpeaker="RightSpeaker";
+
         public enum StartingLocations {
           LEFTAMP,
           LEFTSPEAKER,
@@ -31,12 +37,12 @@ public final class Constants {
         public static final String TimeDelay2="1 seconds";
         public static final String TimeDelay3="3 seconds";
         public static final String TimeDelay4="5 seconds";
-        public static final double TimeDelayVal1=0;
-        public static final double TimeDelayVal2=0.5;
-        public static final double TimeDelayVal3=1;
-        public static final double TimeDelayVal4=3;
-        public static final double TimeDelayVal5=6;
-
+        public static final double TimeDelayVal0=0;
+        public static final double TimeDelayVal1=.5;
+        public static final double TimeDelayVal2=1;
+        public static final double TimeDelayVal3=3;
+        public static final double TimeDelayVal4=5;
+    
         public static final String autoMode0="0-Do Nothing";
         public static final String autoMode1="1=Score1,Move";
         public static final String autoMode2="2=Score2,Amp";

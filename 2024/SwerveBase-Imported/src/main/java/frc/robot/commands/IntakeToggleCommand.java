@@ -24,9 +24,15 @@ public class IntakeToggleCommand extends Command{
   @Override
   public void execute(){
     if(m_toggle){
-      m_intake.run(Constants.IntakeConstants.intakeSpeed);  
+      //m_intake.run(Constants.IntakeConstants.intakeSpeed);  
     }else{
-      m_intake.stop();
+      //m_intake.stop();
     }
+  }
+
+  @Override 
+  public boolean isFinished() {
+      // TODO Auto-generated method stub
+      return true;
   }
 }
