@@ -12,7 +12,7 @@ public class ShootCommand extends Command {
 
   private double m_speed;
 
-  public ShootCommand(ShooterSubsystem shooter,Limelight limelight,double speed){
+  public ShootCommand(ShooterSubsystem shooter,double speed){
     m_shooter=shooter;
     m_speed=speed;
   }
@@ -22,7 +22,7 @@ public class ShootCommand extends Command {
 
   @Override
   public void execute(){
-    m_shooter.OutPutDistance();
+    //m_shooter.OutPutDistance();
   }
 
   @Override
@@ -33,6 +33,6 @@ public class ShootCommand extends Command {
   @Override
   public boolean isFinished(){
     //m_shooter.RunShootingMotors(m_speed);
-    return false;
+    return true;
   }
 }

@@ -63,7 +63,6 @@ public class RobotContainer {
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
-    private SendableChooser<String> m_autoChosen = new SendableChooser<>(); 
     private DigitalInput m_brakeButton = new DigitalInput(3);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
     private IntakeSubsystem m_intake=new IntakeSubsystem(0);
@@ -99,7 +98,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-      ShootCommand shoot1=new ShootCommand(m_shooter,m_Limelight,Constants.ShooterConstants.testShooterSpeed1);
+      ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,1);
       shootButton1.whileTrue(shoot1);
 
@@ -142,23 +141,48 @@ public class RobotContainer {
    */
 
   private void createAutonomousCommandList(){
-      AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake);
       m_autoChooser.setDefaultOption(AutoConstants.autoMode0,AutoConstants.autoMode0);
       m_autoChooser.addOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
+      m_autoChooser.addOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
+      m_autoChooser.addOption(AutoConstants.autoMode3,AutoConstants.autoMode3);
+      m_autoChooser.addOption(AutoConstants.autoMode4,AutoConstants.autoMode4);
+      m_autoChooser.addOption(AutoConstants.autoMode5,AutoConstants.autoMode5);
+      m_autoChooser.addOption(AutoConstants.autoMode6,AutoConstants.autoMode6);
+      m_autoChooser.addOption(AutoConstants.autoMode7,AutoConstants.autoMode7);
+      m_autoChooser.addOption(AutoConstants.autoMode10,AutoConstants.autoMode10);
+      m_autoChooser.addOption(AutoConstants.autoMode11,AutoConstants.autoMode11);
+
       SmartDashboard.putData("Auto Chooser",m_autoChooser);
+      m_autoDelay.setDefaultOption(AutoConstants.TimeDelay0,AutoConstants.TimeDelayVal0);
+      m_autoDelay.addOption(AutoConstants.TimeDelay1,AutoConstants.TimeDelayVal1);
+      m_autoDelay.addOption(AutoConstants.TimeDelay2,AutoConstants.TimeDelayVal2);
+      m_autoDelay.addOption(AutoConstants.TimeDelay3,AutoConstants.TimeDelayVal3);
+      m_autoDelay.addOption(AutoConstants.TimeDelay4,AutoConstants.TimeDelayVal4);
+      SmartDashboard.putData("Auto Delay",m_autoDelay);
+
+      m_autoStart.setDefaultOption(AutoConstants.Center,AutoConstants.StartingLocations.CENTER1);
+      m_autoStart.addOption(AutoConstants.LeftAmp,AutoConstants.StartingLocations.LEFTAMP);
+      m_autoStart.addOption(AutoConstants.LeftSpeaker,AutoConstants.StartingLocations.LEFTAMP);
+      m_autoStart.addOption(AutoConstants.RightSpeaker,AutoConstants.StartingLocations.RIGHTSPEAKER);
+      SmartDashboard.putData("Auto Start",m_autoStart);
+
   }
 
   public Command getAutonomousCommand(){
     Alliance currentAlliance=DriverStation.getAlliance().get();
-    AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake);
+    AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake,m_turret,m_Limelight);
     AutoConstants.StartingLocations startLocation=m_autoStart.getSelected();
     double delay=m_autoDelay.getSelected();
-    String autoChosen=m_autoChosen.getSelected();
+    String autoChosen=m_autoChooser.getSelected();
     Command newCommand=null;
-
-    m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
+    
+    if(m_Limelight.isTargetAvailible()){
+      m_swerve.resetOdometry(m_Limelight.GetPoseViaApriltag());
+    }else{
+      m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
+    }
     newCommand=autoMaker.createAutoCommand(startLocation,autoChosen,delay,currentAlliance);
-
+    System.out.println(newCommand.toString());
     return newCommand;
   }
 
@@ -179,17 +203,19 @@ public class RobotContainer {
     }
   }
   }
+
   public void AutonMode(){
   // m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.AUTOMODE);
   // enableLimelights();
     resetBrakeModetoNormal();
     homeRobot();  
   }  
+
   public void AutoPeriodic(){
     if(m_Limelight.isTargetAvailible()){
     //Get Limelight
     //add ision measurement in swervie
-    m_swerve.AddVisionPose(m_Limelight.GetPoseViaApriltag(),0,true,1);
+    //m_swerve.AddVisionPose(m_Limelight.GetPoseViaApriltag(),0,true,1);
     }
    
   }

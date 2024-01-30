@@ -14,6 +14,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.RotateArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.RotateArm;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDoNothingCommand;
 import frc.robot.commands.MoveArmCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.TurretCommand;
 import frc.robot.commands.IntakeToggleCommand;
 
 
@@ -32,121 +34,125 @@ public class AutoCommands {
 
   private ShooterSubsystem m_shooter;
   private IntakeSubsystem m_intake;
+  private Limelight m_limeLight;
+  private TurretSubsystem m_turret;
 
-  Command m_blueStartToLeftNote;
-  Command m_blueLeftSpeakerToAmpNote;
-  Command m_blueCenterSpeakerToCenterNote;
-  Command m_blueSourceSpeakerToSourceNote;
-  Command m_blueLeftNoteToCenterNote;
-  Command m_blueCenterNoteToRightNote;
-  Command m_blueRightNoteToNote5;
-  Command m_sourceLongtoBlueShootLocation;
-  Command m_blueAmpToSourceNote;
-  Command m_blueAmpToLongAmpNote;
-  Command m_blueStartToMoveOutPos;
+  private Command m_blueStartToLeftNote;
+  private Command m_blueLeftSpeakerToAmpNote;
+  private Command m_blueCenterSpeakerToCenterNote;
+  private Command m_blueSourceSpeakerToSourceNote;
+  private Command m_blueLeftNoteToCenterNote;
+  private Command m_blueCenterNoteToRightNote;
+  private Command m_blueRightNoteToNote5;
+  private Command m_sourceLongtoBlueShootLocation;
+  private Command m_blueAmpToSourceNote;
+  private Command m_blueAmpToLongAmpNote;
+  private Command m_blueStartToMoveOutPos;
 
-  Command m_redStartToLeftNote;
-  Command m_redLeftSpeakerToAmpNote;
-  Command m_redCenterSpeakerToCenterNote;
-  Command m_redSourceSpeakerToSourceNote;
-  Command m_redLeftNoteToCenterNote;
-  Command m_redCenterNoteToRightNote;
-  Command m_redRightNoteToNote5;
-  Command m_sourceLongtoRedShootLocation;
-  Command m_redAmpToSourceNote;
-  Command m_redAmpToLongAmpNote;
-  Command m_redStartToMoveOutPos;
+  private Command m_redStartToLeftNote;
+  private Command m_redLeftSpeakerToAmpNote;
+  private Command m_redCenterSpeakerToCenterNote;
+  private Command m_redSourceSpeakerToSourceNote;
+  private Command m_redLeftNoteToCenterNote;
+  private Command m_redCenterNoteToRightNote;
+  private Command m_redRightNoteToNote5;
+  private Command m_sourceLongtoRedShootLocation;
+  private Command m_redAmpToSourceNote;
+  private Command m_redAmpToLongAmpNote;
+  private Command m_redStartToMoveOutPos;
 
-  Command m_shoot1;
-  Command m_shoot2;
-  Command m_shoot3;
-  Command m_shoot4;
-  Command m_shoot5;
+  private Command m_shoot1;
+  private Command m_shoot2;
+  private Command m_shoot3;
+  private Command m_shoot4;
+  private Command m_shoot5;
 
-  Command m_startIntake1;
-  Command m_startIntake2;
-  Command m_startIntake3;
-  Command m_startIntake4;
-  Command m_startIntake5;
+  private Command m_startIntake1;
+  private Command m_startIntake2;
+  private Command m_startIntake3;
+  private Command m_startIntake4;
+  private Command m_startIntake5;
 
-  Command m_stopIntake1;
-  Command m_stopIntake2;
-  Command m_stopIntake3;
-  Command m_stopIntake4;
-  Command m_stopIntake5;
+  private Command m_stopIntake1;
+  private Command m_stopIntake2;
+  private Command m_stopIntake3;
+  private Command m_stopIntake4;
+  private Command m_stopIntake5;
 
-  public AutoCommands(Swerve swerveDrive,ShooterSubsystem shooter,IntakeSubsystem intake){
+  public AutoCommands(Swerve swerveDrive,ShooterSubsystem shooter,IntakeSubsystem intake,TurretSubsystem turret,Limelight limelight){
       newCommand();
       m_swerve=swerveDrive;
       m_shooter=shooter;
       m_intake=intake;
+      m_turret=turret;
+      m_limeLight=limelight;
       CreateCommands();
   }
 
   public void CreateCommands(){
-    Command m_blueStartToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueCenterStartPos,
+    m_blueStartToLeftNote=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.locationBlueShortAmpNote));
-    Command m_blueLeftSpeakerToAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueLeftSpeakerStartPos,
+    m_blueLeftSpeakerToAmpNote=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.locationBlueShortAmpNote));
-    Command m_blueCenterSpeakerToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueCenterStartPos,
+    m_blueCenterSpeakerToCenterNote=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.locationBlueShortCenterNote));
-    Command m_blueSourceSpeakerToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueRightSpeakerStartPos,
+    m_blueSourceSpeakerToSourceNote=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.locationBlueShortSourceNote));
-    Command m_blueLeftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
+    m_blueLeftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
                                                           Constants.AutoConstants.locationBlueShortCenterNote));
-    Command m_blueCenterNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortCenterNote,
+    m_blueCenterNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortCenterNote,
                                                           Constants.AutoConstants.locationBlueShortSourceNote));
-    Command m_blueRightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortSourceNote,
+    m_blueRightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortSourceNote,
                                                           Constants.AutoConstants.locationLongSourceNote));
-    Command m_blueAmpToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
+    m_blueAmpToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
                                                           Constants.AutoConstants.locationBlueShortSourceNote));
-    Command m_longSourcetoBlueShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
+    m_sourceLongtoBlueShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
                                                           Constants.AutoConstants.locationBlueLongRightWing));
-    Command m_blueAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
+    m_blueAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
                                                           Constants.AutoConstants.locationLongAmpNote));
-    Command m_blueStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.blueCenterStartPos,
+    m_blueStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.blueMoveOutOfBoundPos));
 
-    Command m_redStartToLeftNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
+    m_redStartToLeftNote=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.locationRedShortAmpNote));
-    Command m_redLeftSpeakerToAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redRightSpeakerStartPos,
+    m_redLeftSpeakerToAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redRightSpeakerStartPos,
                                                           Constants.AutoConstants.locationRedShortAmpNote));
-    Command m_redCenterSpeakerToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
+    m_redCenterSpeakerToCenterNote=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.locationRedShortCenterNote));
-    Command m_redSourceSpeakerToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redLeftSpeakerStartPos,
+    m_redSourceSpeakerToSourceNote=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.locationRedShortSourceNote));
-    Command m_redLeftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
+    m_redLeftNoteToCenterNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                           Constants.AutoConstants.locationRedShortCenterNote));
-    Command m_redCenterNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortCenterNote,
+    m_redCenterNoteToRightNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortCenterNote,
                                                           Constants.AutoConstants.locationRedShortSourceNote));
-    Command m_redRightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortSourceNote,
+    m_redRightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortSourceNote,
                                                           Constants.AutoConstants.locationLongSourceNote));
-    Command m_longSourcetoRedShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
+    m_sourceLongtoRedShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
                                                           Constants.AutoConstants.locationRedLongRightWing));
-    Command m_redAmpToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
+    m_redAmpToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                           Constants.AutoConstants.locationRedShortSourceNote));
-    Command m_redAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
+    m_redAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                           Constants.AutoConstants.locationLongAmpNote));
-    Command m_redStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.redCenterStartPos,
+    m_redStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.redMoveOutOfBoundPos));
   
-    Command m_shoot1=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
-    Command m_shoot2=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
-    Command m_shoot3=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
-    Command m_shoot4=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
-    Command m_shoot5=new ShootCommand(m_shooter,null,Constants.ShooterConstants.autoShooterSpeed);
+    m_shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
+    m_shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
+    m_shoot3=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
+    m_shoot4=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
+    m_shoot5=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
 
-    Command m_startIntake1=new IntakeToggleCommand(m_intake,true);
-    Command m_startIntake2=new IntakeToggleCommand(m_intake,true);
-    Command m_startIntake3=new IntakeToggleCommand(m_intake,true);
-    Command m_startIntake4=new IntakeToggleCommand(m_intake,true);
-    Command m_startIntake5=new IntakeToggleCommand(m_intake,true);
+    m_startIntake1=new IntakeToggleCommand(m_intake,true);
+    m_startIntake2=new IntakeToggleCommand(m_intake,true);
+    m_startIntake3=new IntakeToggleCommand(m_intake,true);
+    m_startIntake4=new IntakeToggleCommand(m_intake,true);
+    m_startIntake5=new IntakeToggleCommand(m_intake,true);
 
-    Command m_stopIntake1=new IntakeToggleCommand(m_intake,false);
-    Command m_stopIntake2=new IntakeToggleCommand(m_intake,false);
-    Command m_stopIntake3=new IntakeToggleCommand(m_intake,false);
-    Command m_stopIntake4=new IntakeToggleCommand(m_intake,false);
-    Command m_stopIntake5=new IntakeToggleCommand(m_intake,false);
+    m_stopIntake1=new IntakeToggleCommand(m_intake,false);
+    m_stopIntake2=new IntakeToggleCommand(m_intake,false);
+    m_stopIntake3=new IntakeToggleCommand(m_intake,false);
+    m_stopIntake4=new IntakeToggleCommand(m_intake,false);
+    m_stopIntake5=new IntakeToggleCommand(m_intake,false);
   }
 
   private void newCommand(){
@@ -158,8 +164,8 @@ public class AutoCommands {
   }
 
   public Command createAutoCommand(AutoConstants.StartingLocations startinglocation,String routine,double startDelay,Alliance currentAlliance){
-    Command autoRoutine = new AutoDoNothingCommand();
-    newCommand();
+    Command autoRoutine = null;
+    
     m_startingPose=getStartingPose(startinglocation,currentAlliance);
 
     switch(routine){
@@ -168,51 +174,51 @@ public class AutoCommands {
       break;
       case AutoConstants.autoMode1:
         if(currentAlliance==Alliance.Red){    
-          redScore1MoveOut();     
+          autoRoutine=redScore1MoveOut();     
         }else{
-          blueScore1MoveOut();
+          autoRoutine=blueScore1MoveOut();
         }
       break;
       case AutoConstants.autoMode2:
         if(currentAlliance==Alliance.Red){ 
-          redScoreAmp2();
+          autoRoutine=redScoreAmp2();
         }else{
-          blueScoreAmp2();
+          autoRoutine=blueScoreAmp2();
         }
       break;
       case AutoConstants.autoMode3:
         if(currentAlliance==Alliance.Red){    
-          redScoreCenter2();   
+          autoRoutine=redScoreCenter2();   
         }else{
-          blueScoreCenter2();
+          autoRoutine=blueScoreCenter2();
         }
       break;
       case AutoConstants.autoMode4:
         if(currentAlliance==Alliance.Red){
-          redScoreSource2();     
+          autoRoutine=redScoreSource2();     
         }else{
-          blueScoreSource2();
+          autoRoutine=blueScoreSource2();
         }
       break;
       case AutoConstants.autoMode5:
         if(currentAlliance==Alliance.Red){
-          redScoreAmpSource3();     
+          autoRoutine=redScoreAmpSource3();     
         }else{
-          blueScoreAmpSource3();
+          autoRoutine=blueScoreAmpSource3();
         }
       break;
       case AutoConstants.autoMode6:
         if(currentAlliance==Alliance.Red){ 
-          redScoreAmpPauseSource3();      
+          autoRoutine=redScoreAmpPauseSource3();      
         }else{
-          blueScoreAmpPauseSource3();   
+          autoRoutine=blueScoreAmpPauseSource3();   
         }
       break;
       case AutoConstants.autoMode7:
         if(currentAlliance==Alliance.Red){  
-          redScoreAmpLongAmp3();     
+          autoRoutine=redScoreAmpLongAmp3();     
         }else{
-          blueScoreAmpLongAmp3();  
+          autoRoutine=blueScoreAmpLongAmp3();  
         }
       break;
       case AutoConstants.autoMode8:
@@ -245,7 +251,7 @@ public class AutoCommands {
 
   public Pose2d getStartingPose(AutoConstants.StartingLocations location,Alliance currentAlliance){
     Pose2d returnPose=new Pose2d();
-    switch(location){
+      switch(location){
         case LEFTAMP:
         if(currentAlliance==Alliance.Red){   
           returnPose=AutoConstants.redLeftAmpStartPos;     
@@ -274,7 +280,7 @@ public class AutoCommands {
           returnPose=AutoConstants.blueRightSpeakerStartPos;  
         }
         break;
-    }
+      }
     return returnPose;
   }
 
@@ -388,16 +394,16 @@ public class AutoCommands {
 
   private Command redAutoScore4Notes(){                             
       SequentialCommandGroup score4Note=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_redStartToLeftNote,m_stopIntake1,m_shoot2,m_startIntake2,m_redLeftNoteToCenterNote,
-                                                                 m_stopIntake2,m_shoot3,m_startIntake3,m_redCenterNoteToRightNote,m_shoot4,m_stopIntake3);
-
+                                                                 m_stopIntake2,m_shoot3,m_startIntake3,m_redCenterNoteToRightNote,m_stopIntake3,m_shoot4);
+      
       return score4Note;
   }
 
   private Command blueAutoScore4Notes(){
-      SequentialCommandGroup score4Note=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueStartToLeftNote,m_stopIntake1,m_shoot2,m_startIntake2,m_blueLeftNoteToCenterNote,
-                                                                m_stopIntake2,m_shoot3,m_startIntake3,m_blueCenterNoteToRightNote,m_startIntake3,m_shoot4);
+     SequentialCommandGroup score4Note=new SequentialCommandGroup(m_shoot1,m_startIntake1,m_blueStartToLeftNote,m_stopIntake1,m_shoot2,m_startIntake2,m_blueLeftNoteToCenterNote,
+                                                               m_stopIntake2,m_shoot3,m_startIntake3,m_blueCenterNoteToRightNote,m_stopIntake3,m_shoot4);
 
-      return score4Note;
+     return score4Note;
   }
 
   private Command redAutoScore5NotesRight(){

@@ -24,7 +24,7 @@ public class Limelight {
     // does the limelight have a target
     private static NetworkTableEntry tv;
     // robot pose based on limelight
-    private static NetworkTableEntry robotPose;
+    private static NetworkTableEntry robotPoseRed;
 
 
     private double m_limeLightHeight;
@@ -73,7 +73,7 @@ public class Limelight {
         // does the limelight have a target
         tv = llTable.getEntry("tv");
         // robot pose accoridng to limelight
-        robotPose = llTable.getEntry("botpose");
+        robotPoseRed = llTable.getEntry("botpose_wpiblue");
         
         m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
@@ -144,14 +144,12 @@ public class Limelight {
     public double getYRaw(){
         return ty.getDouble(0.0);
     }
-    
 
     public double getArea() {
         return ta.getDouble(0.0);
     }
 
     public boolean isTargetAvailible() {
-
         return tv.getDouble(0) == 1.0;
     }
 
@@ -229,12 +227,15 @@ public class Limelight {
         SmartDashboard.putNumber("limelight y", getY());
         SmartDashboard.putNumber("limelight area", getArea());
         SmartDashboard.putNumber("Our limelight distance", getDistance());
-        SmartDashboard.putBoolean("limelight has target", isTargetAvailible());
-        SmartDashboard.putBoolean("Target Distance", isAtTargetDistance());
-        SmartDashboard.putBoolean("On TargetX", isOnTargetX());
+        SmartDashboard.putBoolean("limelight Have Atleast 1 target", isTargetAvailible());
+        SmartDashboard.putBoolean("Targets>=2", DoesLimelightHaveTwoTargets());
         SmartDashboard.putString("limelight mode", getVisionMode());
-        SmartDashboard.putNumberArray("RobotPoseLimelight", GetDoublePosArray());
+        SmartDashboard.putNumberArray("RobotPoseRedLimelight", GetDoublePosArray());
 
+    }
+
+    public boolean DoesLimelightHaveTwoTargets(){
+        return tv.getDouble(0)>= 2.0;
     }
 
     public double GetDistanceMultipler(){
@@ -243,16 +244,16 @@ public class Limelight {
 
     public Pose2d GetPoseViaApriltag(){
         double[] empty=null;
-        double[] robotPoseValues=robotPose.getDoubleArray(empty);
+        double[] robotPoseValues=robotPoseRed.getDoubleArray(empty);
 
-        Pose2d pose=new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
+        Pose2d pose=new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
         return pose;
     }
 
     public double[] GetDoublePosArray(){
         double[] empty=null;
 
-        return robotPose.getDoubleArray(empty);
+        return robotPoseRed.getDoubleArray(empty);
     }
 
     public void turnLEDOff() {
