@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;    
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
@@ -31,7 +32,8 @@ public class ShooterSubsystem extends SubsystemBase{
         //m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
         m_ShootingMotor1=new WPI_TalonFX(shootingMotor1);  
         m_ShootingMotor2=new WPI_TalonFX(shootingMotor2);
-        
+        configmotor(m_ShootingMotor1);
+        configmotor(m_ShootingMotor2);
         /*m_pidController1 = m_ShootingMotor1.getPIDController();
         m_pidController2 = m_ShootingMotor2.getPIDController();
 
@@ -59,6 +61,20 @@ public class ShooterSubsystem extends SubsystemBase{
         m_pidController2.setOutputRange(kMinOutput, kMaxOutput);
         */
     }
+
+ public void configmotor(WPI_TalonFX motor){
+   motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+                                        0,30);
+   motor.configNominalOutputForward(0,30);
+   motor.configNominalOutputReverse(0,30);
+   motor.configPeakOutputForward(1,30);
+   motor.configPeakOutputReverse(-1,30);
+   motor.config_kF(0, 1023/2066.0,30);
+   motor.config_kP(0, .1,30);
+   motor.config_kI(0, 0.001,30);
+   motor.config_kD(0, 5,30);
+   
+ }
  public void RunTopMotor(double speed){
   //      m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
    
@@ -69,12 +85,12 @@ public class ShooterSubsystem extends SubsystemBase{
         //speed=speed*maxRPM;
 //        m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
 //        m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
-        //m_ShootingMotor1.set(ControlMode.Velocity, speed);
-        //m_ShootingMotor2.set(ControlMode.Velocity, speed);
-        speed=0.85;
-        System.out.println("overriding shooter to set percentge - " + speed);
-        m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
-        m_ShootingMotor2.set(ControlMode.PercentOutput, speed);   
+        m_ShootingMotor1.set(ControlMode.Velocity, speed);
+        m_ShootingMotor2.set(ControlMode.Velocity, speed*.665);
+       // speed=0.88;
+       // System.out.println("overriding shooter to set percentge - " + speed);
+      //  m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
+      //  m_ShootingMotor2.set(ControlMode.PercentOutput, speed);   
 }  
 
     public void StopShootingMotors(){
