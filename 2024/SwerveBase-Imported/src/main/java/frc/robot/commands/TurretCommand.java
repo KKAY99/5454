@@ -32,7 +32,7 @@ public class TurretCommand extends Command{
   public void end(boolean interrupted){
     m_turret.ResetPIDReference();
     m_turret.stop();
-    m_intake.stop();
+    m_intake.stopIntake();
   }
 
   @Override

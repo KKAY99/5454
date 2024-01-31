@@ -12,7 +12,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-    public static final class AutoConstants{
+  public static final int brakeButton=3;
+  public static final class AutoConstants{
 
         public static final String Center="Center Start";
         public static final String LeftAmp="Left Amp";
@@ -96,6 +97,14 @@ public final class Constants {
 
     public static final class IntakeConstants{
       public static final double intakeSpeed=1;
+      public static final int intakeMotorPort1=18;
+      public static final int intakeMotorPort2=17;
+      public static final int intakeLowTowerDetect=1;
+      public static final int intakeHighTowerDetect=2;
+    }
+    public static final class climbConstants{
+      public static final int climbPort=19;
+      public static final double climbSpeed=.4;
     }
 
     public static final class TurretConstants{

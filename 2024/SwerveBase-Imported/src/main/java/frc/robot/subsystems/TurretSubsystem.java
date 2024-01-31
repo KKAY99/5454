@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 public class TurretSubsystem extends SubsystemBase{
   private CANSparkMax m_turretMotor;
@@ -122,6 +123,13 @@ public class TurretSubsystem extends SubsystemBase{
   public void SetEncoderToZero(){
     m_encoder.setPosition(0);
   }
+  public void setBrakeOn(){
+      m_turretMotor.setIdleMode(IdleMode.kBrake);  
+    } 
+  public void setCoastOn(){
+         m_turretMotor.setIdleMode(IdleMode.kCoast);
+    }
+
 
   @Override
   public void periodic(){

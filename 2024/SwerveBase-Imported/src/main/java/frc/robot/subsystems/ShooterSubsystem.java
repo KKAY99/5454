@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.utilities.Limelight;
@@ -95,4 +96,14 @@ public class ShooterSubsystem extends SubsystemBase{
         double calculation=shotTable.getVelocity(m_limeLight.getDistance());
         System.out.println("Distance Calucations: "+calculation);
     }
+    public void setBrakeOn(){
+      m_ShootingMotor1.setIdleMode(IdleMode.kBrake);  
+      m_ShootingMotor2.setIdleMode(IdleMode.kBrake);
+    } 
+  public void setCoastOn(){
+         m_ShootingMotor1.setIdleMode(IdleMode.kCoast);
+         m_ShootingMotor2.setIdleMode(IdleMode.kCoast);    
+    
+    }
+
 }

@@ -63,9 +63,10 @@ public class RobotContainer {
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
-    private DigitalInput m_brakeButton = new DigitalInput(3);
+    private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
-    private IntakeSubsystem m_intake=new IntakeSubsystem(0);
+    private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,Constants.IntakeConstants.intakeMotorPort2,Constants.IntakeConstants.intakeLowTowerDetect,Constants.IntakeConstants.intakeHighTowerDetect);
+    private ClimbSubsystem m_climb = new ClimbSubsystem(Constants.climbConstants.climbPort);
     private Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightHeight,Constants.LimeLightValues.limelightAngle);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(m_Limelight,Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
 
@@ -226,9 +227,17 @@ public class RobotContainer {
     
   }
   private void resetBrakeModetoNormal(){
+    m_intake.setBrakeOn();
+    m_shooter.setBrakeOn();
+    m_turret.setBrakeOn();
+    m_climb.setBrakeOn();
   }
 
   private void disableBrakeMode(){
+    m_intake.setCoastOn();
+    m_shooter.setCoastOn();
+    m_turret.setCoastOn();
+    m_climb.setCoastOn();
   }
 
   private void homeRobot(){
