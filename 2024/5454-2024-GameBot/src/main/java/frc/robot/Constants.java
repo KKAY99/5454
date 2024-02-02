@@ -110,7 +110,8 @@ public final class Constants {
     public static final class TurretConstants{
       public static final int turretMotorPort=61;
       public static final int turretLimitSwitchPort=0;
-
+      public static final int turretMoveTimeOut=5;
+      public static final double deadband=0.05;
       public static final double maxTurretSpeed=0.3;
       public static final double turretSpeed=0.3;
       public static final double hometurretSpeed=0.09;
@@ -238,7 +239,22 @@ public final class Constants {
       };
 
     }
-       
+    public class LEDPanel {
+      public static final int UPPERPORT = 0;
+      public static final int BOTTOMPORT = 9;
+      public static final int FLASH_DELAY=5;
+
+      public class Colors {
+          public static final int RED = 0;
+          public static final int PINK = 1;
+          public static final int PURPLE = 2;
+          public static final int BLUE = 3;
+          public static final int CYAN = 4;
+          public static final int GREEN = 5;
+          public static final int YELLOW = 6;
+          public static final int ORANGE = 7;
+      }
+  }
    
   }
   

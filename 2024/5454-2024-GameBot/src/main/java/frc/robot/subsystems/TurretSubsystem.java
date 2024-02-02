@@ -87,6 +87,11 @@ public class TurretSubsystem extends SubsystemBase{
     m_speed=0;
     m_turretMotor.stopMotor();
   }
+  public boolean isAtPosition(double targetPos,double deadband){
+    //if gap between target pos and current position is less than deadband we return true
+    return Math.abs((Math.abs(GetEncoderValue())-Math.abs(targetPos)))<deadband;
+  
+  }
 
   public boolean IsAtHardLimit(){
     return m_limitSwitch.get();

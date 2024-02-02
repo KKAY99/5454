@@ -107,19 +107,21 @@ public class RobotContainer {
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
       shootButton2.whileTrue(shoot2);*/
 
-      TurretCommand turretLeft=new TurretCommand(m_turret,m_intake,Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.States.TURRET);
+      TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
       JoystickButton turretLeftButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretRightButton);
       turretLeftButton.whileTrue(turretLeft);
 
-      TurretCommand turretRight=new TurretCommand(m_turret,m_intake,-Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.States.TURRET);
+      TurretCommand turretRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
       JoystickButton turretRightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretLeftButton);
       turretRightButton.whileTrue(turretRight);
 
-      TurretCommand turretStraight=new TurretCommand(m_turret,m_intake,-Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.States.INTAKE);
+      TurretPosCommand turretStraight=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,
+                                    Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
       JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretStraightButton);
       turretStraightButton.whileTrue(turretStraight);
 
-      TurretCommand turret90=new TurretCommand(m_turret,m_intake,-Constants.TurretConstants.turretSpeed,Constants.TurretConstants.turret90Pos,Constants.TurretConstants.States.INTAKE);
+      TurretPosCommand turret90=new TurretPosCommand(m_turret,-Constants.TurretConstants.turretSpeed,
+                                    Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
       JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90Button);
       turret90Button.whileTrue(turret90);
 
@@ -133,7 +135,7 @@ public class RobotContainer {
       m_swerve.getPose();
     }
     
-  
+    
 
    /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
