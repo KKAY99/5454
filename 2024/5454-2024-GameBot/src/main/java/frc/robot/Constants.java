@@ -57,6 +57,19 @@ public final class Constants {
         public static final String autoMode10="10=Score4,Source,Long Source";
         public static final String autoMode11="11=Score4,Amp,Long Amp";
 
+        public static final String noPath="No Path";
+        public static final String blueShortAmpNote="BlueShortAmpNote";
+        public static final String blueShortCenterNote="BlueShortCenterNote";
+        public static final String blueShortSourceNote="BlueShortSourceNote";
+        public static final String redShortAmpNote="RedShortAmpNote";
+        public static final String redShortCenterNote="RedShortCenterNote";
+        public static final String redShortSourceNote="RedShortSourceNote";
+        public static final String longAmpNote1="LongAmpNote1";
+        public static final String longAmpNote2="LongAmpNote2";
+        public static final String longCenterNote="LongCenterNote";
+        public static final String longSourceNote1="LongSourceNote2";
+        public static final String longSourceNote2="LongSourceNote1";
+
         public static final Pose2d locationBlueShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
         public static final Pose2d locationBlueShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
         public static final Pose2d locationBlueShortSourceNote=new Pose2d(2.89,4.09,new Rotation2d(0));

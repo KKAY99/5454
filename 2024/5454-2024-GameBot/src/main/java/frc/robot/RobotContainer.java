@@ -39,6 +39,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoCommands;
 import frc.robot.utilities.Limelight;
+import frc.robot.utilities.ModularAutoBuilder;
 
 
 
@@ -63,6 +64,13 @@ public class RobotContainer {
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
+    private SendableChooser<Boolean> m_shouldUseModularBuilder = new SendableChooser<>();
+    private SendableChooser<Pose2d> m_autoPath1 = new SendableChooser<>();
+    private SendableChooser<Pose2d> m_autoPath2 = new SendableChooser<>(); 
+    private SendableChooser<Pose2d> m_autoPath3 = new SendableChooser<>(); 
+    private SendableChooser<Pose2d> m_autoPath4 = new SendableChooser<>(); 
+    private SendableChooser<Pose2d> m_autoPath5 = new SendableChooser<>(); 
+
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
     private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,Constants.IntakeConstants.intakeMotorPort2,Constants.IntakeConstants.intakeLowTowerDetect,Constants.IntakeConstants.intakeHighTowerDetect);
@@ -169,11 +177,85 @@ public class RobotContainer {
       m_autoStart.addOption(AutoConstants.RightSpeaker,AutoConstants.StartingLocations.RIGHTSPEAKER);
       SmartDashboard.putData("Auto Start",m_autoStart);
 
+      m_autoPath1.setDefaultOption(AutoConstants.noPath, null);
+      m_autoPath1.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
+      m_autoPath1.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
+      m_autoPath1.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
+      m_autoPath1.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
+      m_autoPath1.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
+      m_autoPath1.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
+      m_autoPath1.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
+      m_autoPath1.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
+      m_autoPath1.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
+      m_autoPath1.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
+      m_autoPath1.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      SmartDashboard.putData("Auto Path 1",m_autoPath1);
+
+      m_autoPath2.setDefaultOption(AutoConstants.noPath, null);
+      m_autoPath2.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
+      m_autoPath2.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
+      m_autoPath2.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
+      m_autoPath2.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
+      m_autoPath2.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
+      m_autoPath2.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
+      m_autoPath2.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
+      m_autoPath2.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
+      m_autoPath2.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
+      m_autoPath2.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
+      m_autoPath2.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      SmartDashboard.putData("Auto Path 2",m_autoPath2);
+
+      m_autoPath3.setDefaultOption(AutoConstants.noPath, null);
+      m_autoPath3.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
+      m_autoPath3.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
+      m_autoPath3.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
+      m_autoPath3.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
+      m_autoPath3.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
+      m_autoPath3.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
+      m_autoPath3.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
+      m_autoPath3.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
+      m_autoPath3.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
+      m_autoPath3.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
+      m_autoPath3.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      SmartDashboard.putData("Auto Path 3",m_autoPath3);
+
+      m_autoPath4.setDefaultOption(AutoConstants.noPath, null);
+      m_autoPath4.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
+      m_autoPath4.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
+      m_autoPath4.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
+      m_autoPath4.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
+      m_autoPath4.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
+      m_autoPath4.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
+      m_autoPath4.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
+      m_autoPath4.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
+      m_autoPath4.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
+      m_autoPath4.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
+      m_autoPath4.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      SmartDashboard.putData("Auto Path 4",m_autoPath4);
+
+      m_autoPath5.setDefaultOption(AutoConstants.noPath, null);
+      m_autoPath5.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
+      m_autoPath5.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
+      m_autoPath5.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
+      m_autoPath5.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
+      m_autoPath5.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
+      m_autoPath5.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
+      m_autoPath5.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
+      m_autoPath5.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
+      m_autoPath5.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
+      m_autoPath5.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
+      m_autoPath5.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      SmartDashboard.putData("Auto Path 5",m_autoPath5);
+
+      m_shouldUseModularBuilder.setDefaultOption("Dont Use Modular Builder",false);
+      m_shouldUseModularBuilder.addOption("Use Modular Builder",true);
+      SmartDashboard.putData("Should Use Modular Builder",m_shouldUseModularBuilder);
   }
 
   public Command getAutonomousCommand(){
     Alliance currentAlliance=DriverStation.getAlliance().get();
     AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake,m_turret,m_Limelight);
+    ModularAutoBuilder autoModularMaker = new ModularAutoBuilder(m_swerve,m_shooter,m_intake,m_turret,m_Limelight);
     AutoConstants.StartingLocations startLocation=m_autoStart.getSelected();
     double delay=m_autoDelay.getSelected();
     String autoChosen=m_autoChooser.getSelected();
@@ -184,8 +266,13 @@ public class RobotContainer {
     }else{
       m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
     }
-    newCommand=autoMaker.createAutoCommand(startLocation,autoChosen,delay,currentAlliance);
-    System.out.println(newCommand.toString());
+
+    if(m_shouldUseModularBuilder.getSelected()){
+      newCommand=autoModularMaker.CreateAutoCommand(m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),m_autoPath5.getSelected());
+    }else{
+      newCommand=autoMaker.createAutoCommand(startLocation,autoChosen,delay,currentAlliance);
+    }
+
     return newCommand;
   }
 
