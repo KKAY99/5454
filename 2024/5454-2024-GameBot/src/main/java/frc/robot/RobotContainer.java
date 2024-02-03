@@ -65,6 +65,7 @@ public class RobotContainer {
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
     private SendableChooser<Boolean> m_shouldUseModularBuilder = new SendableChooser<>();
+    private SendableChooser<Boolean> m_shootFinalNote = new SendableChooser<>();
     private SendableChooser<Pose2d> m_autoPath1 = new SendableChooser<>();
     private SendableChooser<Pose2d> m_autoPath2 = new SendableChooser<>(); 
     private SendableChooser<Pose2d> m_autoPath3 = new SendableChooser<>(); 
@@ -248,6 +249,10 @@ public class RobotContainer {
       m_autoPath5.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
       SmartDashboard.putData("Auto Path 5",m_autoPath5);
 
+      m_shootFinalNote.setDefaultOption("Dont Shoot Final Note",false);
+      m_shootFinalNote.addOption("Shoot Final Note",true);
+      SmartDashboard.putData("Should Shoot Final Note",m_shootFinalNote);
+
       m_shouldUseModularBuilder.setDefaultOption("Dont Use Modular Builder",false);
       m_shouldUseModularBuilder.addOption("Use Modular Builder",true);
       SmartDashboard.putData("Should Use Modular Builder",m_shouldUseModularBuilder);
@@ -269,7 +274,8 @@ public class RobotContainer {
     }
 
     if(m_shouldUseModularBuilder.getSelected()){
-      newCommand=autoModularMaker.CreateAutoCommand(m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),m_autoPath5.getSelected());
+      newCommand=autoModularMaker.CreateAutoCommand(m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
+                                                    m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
     }else{
       newCommand=autoMaker.createAutoCommand(startLocation,autoChosen,delay,currentAlliance);
     }

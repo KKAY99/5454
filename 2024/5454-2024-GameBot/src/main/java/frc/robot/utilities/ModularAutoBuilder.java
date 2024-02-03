@@ -35,8 +35,6 @@ public class ModularAutoBuilder {
   private Limelight m_limeLight;
   private TurretSubsystem m_turret;
 
-  public Pose2d m_startingPose = new Pose2d();
-
   private Command m_shoot1;
   private Command m_shoot2;
   private Command m_shoot3;
@@ -56,13 +54,13 @@ public class ModularAutoBuilder {
   private Command m_stopIntake5;
 
   public ModularAutoBuilder(Swerve swerveDrive,ShooterSubsystem shooter,IntakeSubsystem intake,TurretSubsystem turret,Limelight limelight){
-      m_swerve=swerveDrive;
-      m_shooter=shooter;
-      m_intake=intake;
-      m_turret=turret;
-      m_limeLight=limelight;
+    m_swerve=swerveDrive;
+    m_shooter=shooter;
+    m_intake=intake;
+    m_turret=turret;
+    m_limeLight=limelight;
 
-      CreateCommands();
+    CreateCommands();
   }
 
   public void CreateCommands(){
@@ -100,54 +98,37 @@ public class ModularAutoBuilder {
     return newPath;
   }
 
-  public Command CreateAutoCommand(Pose2d pose1,Pose2d pose2,Pose2d pose3,Pose2d pose4,Pose2d pose5){
+  public Command CreateAutoCommand(Pose2d pose1,Pose2d pose2,Pose2d pose3,Pose2d pose4,Pose2d pose5,boolean shouldShootFinalNote){
+    SequentialCommandGroup newSequentialCommand=new SequentialCommandGroup(null);
+
     if(pose1==null){
-      return new AutoDoNothingCommand();
+     newSequentialCommand.addCommands(new AutoDoNothingCommand());
 
     }else if(pose2==null){
-      return CreateAuto1Path(pose1);
-    }
-    else if(pose3==null){
-      return CreateAuto2Path(pose1,pose2);
-    }
-    else if(pose4==null){
-      return CreateAuto3Path(pose1,pose2,pose3);
+      newSequentialCommand.addCommands(m_startIntake1,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)),m_stopIntake1);
+
+    }else if(pose3==null){
+      newSequentialCommand.addCommands(m_startIntake2,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2)),m_stopIntake2);
+
+    }else if(pose4==null){
+      newSequentialCommand.addCommands(m_startIntake3,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3)),m_stopIntake3);
 
     }else if(pose5==null){
-      return CreateAuto4Path(pose1,pose2,pose3,pose4);
+      newSequentialCommand.addCommands(m_startIntake4,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4)),m_stopIntake4);
 
     }else{
-      return CreateAuto5Path(pose1,pose2,pose3,pose4,pose5);
+      Command shootFinalNote=null;
+      
+      if(shouldShootFinalNote){
+        shootFinalNote=m_shoot5;
+      }else{
+        shootFinalNote=new AutoDoNothingCommand();
+      }
+      newSequentialCommand.addCommands(m_startIntake5,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose5)),m_stopIntake5,shootFinalNote);
 
     }
-  }
+    Command newCommand=newSequentialCommand;
 
-  private Command CreateAuto1Path(Pose2d pose1){
-    Command newCommand=new SequentialCommandGroup(m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)));
-    return newCommand;
-  }
-
-  private Command CreateAuto2Path(Pose2d pose1,Pose2d pose2){
-    Command newCommand=new SequentialCommandGroup(m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)),m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2)));
-    return newCommand;
-  }
-
-  private Command CreateAuto3Path(Pose2d pose1,Pose2d pose2,Pose2d pose3){
-    Command newCommand=new SequentialCommandGroup(m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)),m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2)),
-                                                  m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3)));
-    return newCommand;
-  }
-
-  private Command CreateAuto4Path(Pose2d pose1,Pose2d pose2,Pose2d pose3,Pose2d pose4){
-    Command newCommand=new SequentialCommandGroup(m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)),m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2)),
-                                                  m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3)),m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4)));
-    return newCommand;
-  }
-
-  private Command CreateAuto5Path(Pose2d pose1,Pose2d pose2,Pose2d pose3,Pose2d pose4,Pose2d pose5){
-    Command newCommand=new SequentialCommandGroup(m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)),m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2)),
-                                                  m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3)),m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4)),
-                                                  m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose5)));
     return newCommand;
   }
 }
