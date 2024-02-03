@@ -129,7 +129,8 @@ public class Swerve extends SubsystemBase {
     return swerve.getYaw().getDegrees();
   }
   public Rotation2d getGyro2D(){
-    return null;
+    return swerve.getYaw();  // 5454 added for Smartshooter
+
   }
 
   public double getPitch() {
@@ -173,8 +174,17 @@ public class Swerve extends SubsystemBase {
     //System.out.println("Robot Pose Limelight: "+visionPose);
   }
 
+  public FieldRelativeSpeed getRelativeSpeed(){
+    return m_fieldRelVel;
+  }
+  public FieldRelativeAccel getRelativeAccel(){
+    return m_fieldRelAccel;
+  }
   @Override
   public void periodic() {
+    m_fieldRelVel = new FieldRelativeSpeed(swerve.getFieldVelocity(), swerve.getYaw());
+    m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, Constants.kRobotLoopTime);
+    m_lastFieldRelVel = m_fieldRelVel;
     
     swerve.updateOdometry();
     //5454 Update 
