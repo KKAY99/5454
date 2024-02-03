@@ -83,7 +83,13 @@ public class Pigeon2Swerve extends SwerveIMU {
   public Rotation3d getRotation3d() {
     return getRawRotation3d().minus(offset);
   }
-
+ /**
+   * Fetch the {@link Rotation3d} from the IMU. Robot relative.
+   *
+   * @return {@link Rotation3d} from the IMU.
+   */
+  
+  
   /**
    * Fetch the acceleration [x, y, z] from the IMU in meters per second squared. If acceleration
    * isn't supported returns empty.

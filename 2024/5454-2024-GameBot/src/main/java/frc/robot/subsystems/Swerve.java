@@ -23,6 +23,8 @@ import frc.robot.swervelib.SwerveDrive;
 import frc.robot.swervelib.parser.SwerveParser;
 import frc.robot.swervelib.telemetry.SwerveDriveTelemetry;
 import frc.robot.swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import frc.robot.utilities.FieldRelativeAccel;
+import frc.robot.utilities.FieldRelativeSpeed;
 
 public class Swerve extends SubsystemBase {
 
@@ -31,6 +33,11 @@ public class Swerve extends SubsystemBase {
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(Units.feetToMeters(14.5));
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(Units.feetToMeters(14.5));
   private SlewRateLimiter rotationLimiter = new SlewRateLimiter(Units.feetToMeters(14.5));
+  
+  //5454 Extensions based on 1706 SmartShooter from 2022
+  private FieldRelativeSpeed m_fieldRelVel = new FieldRelativeSpeed();
+  private FieldRelativeSpeed m_lastFieldRelVel = new FieldRelativeSpeed();
+  private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();;
 
   /** Subsystem class for the swerve drive. */
   public Swerve() {
@@ -165,6 +172,11 @@ public class Swerve extends SubsystemBase {
   public void periodic() {
     
     swerve.updateOdometry();
+    //5454 Update 
+   // m_fieldRelVel = new FieldRelativeSpeed(getRobotVelolocity(),  );
+   // m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, GlobalConstants.kLoopTime);
+   // m_lastFieldRelVel = m_fieldRelVel;
+
    
   }
 }

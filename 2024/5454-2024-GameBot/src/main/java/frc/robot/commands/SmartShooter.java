@@ -3,14 +3,21 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.SmartShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
-
+import frc.robot.utilities.FieldRelativeAccel;
+import frc.robot.utilities.FieldRelativeSpeed;
+import frc.robot.utilities.Limelight;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.utilities.ShotTable;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class SmartShooter extends Command {
     private final ShooterSubsystem m_shooter;
@@ -38,15 +45,18 @@ public class SmartShooter extends Command {
 
     @Override
     public void execute() {
-/*
+
         double currentTime = m_timer.get();
-
+/* 
        // m_drive.getRobotVelocity().fromFieldRelativeSpeeds(null, null)
-        FieldRelativeSpeed robotVel = m_drive.getFieldRelativeSpeed();
+        FieldRelativeSpeed robotVel =m_drive.getRobotVelocity();
         FieldRelativeAccel robotAccel = m_drive.getFieldRelativeAccel();
-
-        Translation2d target = GoalConstants.kGoalLocation;
-
+        Alliance currentAlliance=DriverStation.getAlliance().get();
+        if(currentAlliance==Alliance.Red){
+            Translation2d target = SmartShooterConstants.kRedSpeakerLocation;
+        else{
+             Translation2d target = SmartShooterConstants.kRedSpeakerLocation;
+        }
         Translation2d robotToGoal = target.minus(m_drive.getPose().getTranslation());
         double dist = robotToGoal.getDistance(new Translation2d()) * 39.37;
 

@@ -268,6 +268,9 @@ public final class Constants {
           public static final int ORANGE = 7;
       }
   }
-   
+  public static final class SmartShooterConstants {
+    public static final Translation2d kRedSpeakerLocation = new Translation2d(8.23, 4.115);
+    public static final Translation2d kBlueSpeakerLocation = new Translation2d(8.23, 4.115);
+ 
   }
-  
+}

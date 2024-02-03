@@ -108,7 +108,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings(){
       ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
-      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,1);
+      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
       shootButton1.whileTrue(shoot1);
 
       /*ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
@@ -139,7 +139,8 @@ public class RobotContainer {
     }
        
     public void refreshSmartDashboard(){  
-      m_Limelight.update(true);
+      //TODO: ADD BACK WHEN LIMELIGHT ON
+      //m_Limelight.update(true);
       m_swerve.getPose();
     }
     
