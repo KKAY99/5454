@@ -11,11 +11,15 @@ public class IntakeSubsystem extends SubsystemBase{
     private CANSparkMax m_intakeOne;
     private CANSparkMax m_intakeTwo;
 
-    public IntakeSubsystem(int motorOne, int motorTwo,int lowTower, int highTower){
+    private Lasercan m_laserCan;
+
+    public IntakeSubsystem(int motorOne, int motorTwo,Lasercan laserCan){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setIdleMode(IdleMode.kBrake);
         m_intakeTwo= new CANSparkMax(motorTwo,MotorType.kBrushless);
         m_intakeTwo.setIdleMode(IdleMode.kBrake);
+
+        m_laserCan=laserCan;
     }
 
     public void runIntake(double speed){
@@ -28,11 +32,11 @@ public class IntakeSubsystem extends SubsystemBase{
     }
     
     public boolean isLowerTowerDetected(){
-        return m_lowTower.BreakBeam();
+        return m_laserCan.LowTurretBreakBeam();
     }
     
     public boolean isHigherTowerDetected(){
-          return m_highTower.BreakBeam();
+          return m_laserCan.HighTurretBreakBeam();
     }
             
     public void setBrakeOn(){

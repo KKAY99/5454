@@ -3,22 +3,38 @@ import au.grapplerobotics.LaserCan;
 import frc.robot.Constants.LaserCanConstants;
 
 public class Lasercan{
-    private Lasercan m_highTower;
-    private Lasercan m_lowTower;
+    private LaserCan m_highTurret;
+    private LaserCan m_lowTurret;
 
     public Lasercan(int lowTurretid,int highTurretid){
-        m_highTower=new LaserCan(id);
+        m_lowTurret=new LaserCan(lowTurretid);
+        m_highTurret=new LaserCan(highTurretid);
     }
 
-    public double GetDistanceInMM(){
-        System.out.println(m_laserCan.getMeasurement().status);
+    public double GetDistanceInMMLow(){
+        System.out.println(m_lowTurret.getMeasurement().status);
 
-        return m_laserCan.getMeasurement().distance_mm;
+        return m_lowTurret.getMeasurement().distance_mm;
     }
 
-    public boolean BreakBeam(){
+    public double GetDistanceInMMHigh(){
+        System.out.println(m_highTurret.getMeasurement().status);
+
+        return m_highTurret.getMeasurement().distance_mm;
+    }
+
+    public boolean LowTurretBreakBeam(){
         boolean returnValue=false;
-        if(GetDistanceInMM()<LaserCanConstants.distanceToReflector+LaserCanConstants.deadBand){
+        if(GetDistanceInMMLow()<LaserCanConstants.distanceToReflectorLow+LaserCanConstants.deadBand){
+            returnValue=true;
+        }
+
+        return returnValue;
+    }
+
+    public boolean HighTurretBreakBeam(){
+        boolean returnValue=false;
+        if(GetDistanceInMMHigh()<LaserCanConstants.distanceToReflectorHigh+LaserCanConstants.deadBand){
             returnValue=true;
         }
 
