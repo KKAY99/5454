@@ -55,10 +55,11 @@ import frc.robot.utilities.ModularAutoBuilder;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     
-    private Swerve m_swerve = new Swerve();
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
+    private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
+    private Swerve m_swerve = new Swerve();
  
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
@@ -74,7 +75,7 @@ public class RobotContainer {
 
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
-    private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,Constants.IntakeConstants.intakeMotorPort2,Constants.IntakeConstants.intakeLowTowerDetect,Constants.IntakeConstants.intakeHighTowerDetect);
+    private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,Constants.IntakeConstants.intakeMotorPort2,Constants.LaserCanConstants.intakeLowTowerLaserCan,Constants.LaserCanConstants.intakeHighTowerLaserCan);
     private ClimbSubsystem m_climb = new ClimbSubsystem(Constants.climbConstants.climbPort);
     private Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightHeight,Constants.LimeLightValues.limelightAngle);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(m_Limelight,Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
@@ -94,7 +95,8 @@ public class RobotContainer {
         m_swerve.drive(
             () -> m_xBoxDriver.getRawAxis(translationAxis),
             () -> m_xBoxDriver.getRawAxis(strafeAxis),
-            () -> m_xBoxDriver.getRawAxis(rotationAxis)));
+            () -> m_xBoxDriver.getRawAxis(rotationAxis),
+            () -> m_xBoxDriver.getRawAxis(rightTriggerAxis)));
 
     }
        

@@ -21,10 +21,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.awt.Color;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
+import au.grapplerobotics.LaserCan;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.Constants.*;

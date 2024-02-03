@@ -40,6 +40,11 @@ public final class Constants {
     
   }
 
+  public static final class LaserCanConstants{
+    public static final double distanceToReflector=0;
+    public static final double deadBand=0;
+  }
+
   public static final class ButtonConstants{
     public static final int xBoxDriverPort=0;
     

@@ -112,8 +112,6 @@ public final class Constants {
       public static final double intakeSpeed=1;
       public static final int intakeMotorPort1=18;
       public static final int intakeMotorPort2=17;
-      public static final int intakeLowTowerDetect=1;
-      public static final int intakeHighTowerDetect=2;
     }
     public static final class climbConstants{
       public static final int climbPort=19;
@@ -142,6 +140,14 @@ public final class Constants {
         TURRET,INTAKE
       }
     }
+
+    public static final class LaserCanConstants{
+    public static final double distanceToReflector=0;
+    public static final double deadBand=0;
+
+    public static final int intakeLowTowerLaserCan=1;
+    public static final int intakeHighTowerLaserCan=2;
+   }
 
     public static final class LimeLightValues {
       public static final double steeringP = 0.035;
@@ -268,6 +274,7 @@ public final class Constants {
           public static final int ORANGE = 7;
       }
   }
+
   public static final class SmartShooterConstants {
     public static final Translation2d kRedSpeakerLocation = new Translation2d(8.23, 4.115);
     public static final Translation2d kBlueSpeakerLocation = new Translation2d(8.23, 4.115);

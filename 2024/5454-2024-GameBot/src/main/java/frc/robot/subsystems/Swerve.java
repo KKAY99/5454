@@ -69,12 +69,13 @@ public class Swerve extends SubsystemBase {
   }
 
   public Command drive(
-      DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup) {
+      DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier speedMultiplier) {
     return run(() -> {
           double translationVal =
               translationLimiter.calculate(
                   MathUtil.applyDeadband(
-                      translationSup.getAsDouble(), Constants.GeneralConstants.swerveDeadband));
+                      translationSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),0.1)
+                      ,Constants.GeneralConstants.swerveDeadband));
           double strafeVal =
               strafeLimiter.calculate(
                   MathUtil.applyDeadband(

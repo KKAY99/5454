@@ -1,19 +1,19 @@
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Lasercan;
 
 public class IntakeSubsystem extends SubsystemBase{
-
     private Spark m_intakeOne;
     private Spark m_intakeTwo;
-    private DutyCycleEncoder m_highTower;
-    private DutyCycleEncoder m_lowTower;
+    private Lasercan m_highTower;
+    private Lasercan m_lowTower;
+
     public IntakeSubsystem(int motorOne, int motorTwo,int lowTower, int highTower){
         m_intakeOne= new Spark(motorOne);
         m_intakeTwo= new Spark(motorTwo);
-        m_lowTower = new DutyCycleEncoder(lowTower);
-        m_highTower = new DutyCycleEncoder(highTower);
+        m_lowTower = new Lasercan(lowTower);
+        m_highTower = new Lasercan(highTower);
         }
 
     public void runIntake(double speed){
@@ -26,10 +26,10 @@ public class IntakeSubsystem extends SubsystemBase{
     }
     
     public boolean isLowerTowerDetected(){
-        return m_lowTower.get()==1;
+        return m_lowTower.BreakBeam();
     }
     public boolean isHigherTowerDetected(){
-          return m_highTower.get()==1;
+          return m_highTower.BreakBeam();
     }
             
 
