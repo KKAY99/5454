@@ -142,7 +142,8 @@ public final class Constants {
     }
 
     public static final class LaserCanConstants{
-    public static final double distanceToReflector=0;
+    public static final double distanceToReflectorLow=0;
+    public static final double distanceToReflectorHigh=0;
     public static final double deadBand=0;
 
     public static final int intakeLowTowerLaserCan=1;
