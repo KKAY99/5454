@@ -10,9 +10,15 @@ public class Lasercan{
     }
 
     public double GetDistanceInMM(){
-        System.out.println(m_laserCan.getMeasurement().status);
+        double returnValue=0.0;
+        
+        if(m_laserCan.getMeasurement()==null){
+            returnValue=0.0;
+        }else{
+            returnValue=m_laserCan.getMeasurement().distance_mm;
+        }
 
-        return m_laserCan.getMeasurement().distance_mm;
+        return returnValue;
     }
 
     public boolean BreakBeam(){

@@ -22,7 +22,7 @@ public class ConveyorSubsystem extends SubsystemBase{
         m_conveyOne.set(speed);
         
     }
-    public void stopClimb(){
+    public void stopConveyer(){
         m_conveyOne.set(0);
         
     }

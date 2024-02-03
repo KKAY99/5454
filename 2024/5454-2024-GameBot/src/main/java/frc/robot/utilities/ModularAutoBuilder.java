@@ -103,19 +103,18 @@ public class ModularAutoBuilder {
 
     if(pose1==null){
      newSequentialCommand.addCommands(new AutoDoNothingCommand());
-
     }else if(pose2==null){
-      newSequentialCommand.addCommands(m_startIntake1,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)),m_stopIntake1);
-
+      newSequentialCommand.addCommands(m_startIntake1,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)),
+                                      m_stopIntake1);
     }else if(pose3==null){
-      newSequentialCommand.addCommands(m_startIntake2,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2)),m_stopIntake2);
-
+      newSequentialCommand.addCommands(m_startIntake2,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2)),
+                                      m_stopIntake2);
     }else if(pose4==null){
-      newSequentialCommand.addCommands(m_startIntake3,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3)),m_stopIntake3);
-
+      newSequentialCommand.addCommands(m_startIntake3,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3)),
+                                      m_stopIntake3);
     }else if(pose5==null){
-      newSequentialCommand.addCommands(m_startIntake4,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4)),m_stopIntake4);
-
+      newSequentialCommand.addCommands(m_startIntake4,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4)),
+                                      m_stopIntake4);
     }else{
       Command shootFinalNote=null;
       

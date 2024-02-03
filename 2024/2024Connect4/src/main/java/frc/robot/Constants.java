@@ -48,6 +48,10 @@ public final class Constants {
     public static final double deadBand=0;
   }
 
+  public static final class ADABreakBeamConstants{
+    public static final int breakBeamDIO=0;
+  }
+
   public static final class ButtonConstants{
     public static final int xBoxDriverPort=0;
     

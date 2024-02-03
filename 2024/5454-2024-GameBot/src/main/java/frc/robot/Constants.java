@@ -113,6 +113,11 @@ public final class Constants {
       public static final int intakeMotorPort1=18;
       public static final int intakeMotorPort2=17;
     }
+
+    public static final class ConveyerConstants{
+      public static final double conveySpeed=1;
+    }
+
     public static final class climbConstants{
       public static final int climbPort=19;
       public static final double climbSpeed=.4;
@@ -148,6 +153,11 @@ public final class Constants {
 
     public static final int intakeLowTowerLaserCan=1;
     public static final int intakeHighTowerLaserCan=2;
+    }
+
+   public static final class ADABreakBeamConstants{
+    public static final double dioPortLow=0;
+    public static final double dioPortHigh=1;
    }
 
     public static final class LimeLightValues {

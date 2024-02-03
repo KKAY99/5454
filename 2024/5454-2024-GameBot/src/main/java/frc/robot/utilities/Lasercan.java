@@ -12,19 +12,32 @@ public class Lasercan{
     }
 
     public double GetDistanceInMMLow(){
-        System.out.println(m_lowTurret.getMeasurement().status);
+        double returnValue=0.0;
 
-        return m_lowTurret.getMeasurement().distance_mm;
+        if(m_lowTurret.getMeasurement()==null){
+            returnValue=0.0;
+        }else{
+            returnValue=m_lowTurret.getMeasurement().distance_mm;
+        }
+
+        return returnValue;
     }
 
     public double GetDistanceInMMHigh(){
-        System.out.println(m_highTurret.getMeasurement().status);
+        double returnValue=0.0;
 
-        return m_highTurret.getMeasurement().distance_mm;
+        if(m_lowTurret.getMeasurement()==null){
+            returnValue=0.0;
+        }else{
+            returnValue=m_highTurret.getMeasurement().distance_mm;
+        }
+
+        return returnValue;
     }
 
     public boolean LowTurretBreakBeam(){
         boolean returnValue=false;
+
         if(GetDistanceInMMLow()<LaserCanConstants.distanceToReflectorLow+LaserCanConstants.deadBand){
             returnValue=true;
         }
@@ -34,6 +47,7 @@ public class Lasercan{
 
     public boolean HighTurretBreakBeam(){
         boolean returnValue=false;
+
         if(GetDistanceInMMHigh()<LaserCanConstants.distanceToReflectorHigh+LaserCanConstants.deadBand){
             returnValue=true;
         }

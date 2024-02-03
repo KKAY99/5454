@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.subsystems.*;
+import frc.robot.utils.ADABreakBeam;
+import frc.robot.utils.Lasercan;
 import frc.robot.commands.*;
 import frc.robot.Constants.*;
 
@@ -42,6 +44,11 @@ public class RobotContainer {
     private ShooterSubsystem m_Shooter=new ShooterSubsystem(Constants.ShooterConstants.shootingMotor1Port,Constants.ShooterConstants.shootingMotor2Port);
 
     private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
+
+    private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.breakBeamDIO);
+
+    //private Lasercan m_laserCan=new Lasercan(6);
+
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
@@ -80,7 +87,8 @@ public class RobotContainer {
     }
        
     public void refreshSmartDashboard(){  
-   
+        //System.out.println("ADA Break Beam: "+m_adaBreakBeam.BreakBeam());
+        //System.out.println("Laser Can Measurement: "+m_laserCan.GetDistanceInMM());
     }
     
     public void disabledPerioidicUpdates(){
