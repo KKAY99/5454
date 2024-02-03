@@ -47,10 +47,11 @@ public class SmartShooter extends Command {
     public void execute() {
 
         double currentTime = m_timer.get();
-/* 
+ 
        // m_drive.getRobotVelocity().fromFieldRelativeSpeeds(null, null)
-        FieldRelativeSpeed robotVel =m_drive.getRobotVelocity();
-        FieldRelativeAccel robotAccel = m_drive.getFieldRelativeAccel();
+       //NEED TO FINISH getGyro2D;
+       FieldRelativeSpeed robotVel = new FieldRelativeSpeed(m_drive.getRobotVelocity(),m_drive.getGyro2D());
+    /*     FieldRelativeAccel robotAccel = m_drive.getFieldRelativeAccel();
         Alliance currentAlliance=DriverStation.getAlliance().get();
         if(currentAlliance==Alliance.Red){
             Translation2d target = SmartShooterConstants.kRedSpeakerLocation;
