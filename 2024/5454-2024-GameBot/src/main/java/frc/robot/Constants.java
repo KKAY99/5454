@@ -116,6 +116,8 @@ public final class Constants {
 
     public static final class ConveyerConstants{
       public static final double conveySpeed=1;
+
+      public static final int motor1Port=0;
     }
 
     public static final class climbConstants{
@@ -156,8 +158,17 @@ public final class Constants {
     }
 
    public static final class ADABreakBeamConstants{
-    public static final double dioPortLow=0;
-    public static final double dioPortHigh=1;
+    public static final int dioPortLow=0;
+    public static final int dioPortHigh=1;
+   }
+
+   public static final class LEDConstants{
+    public static final int ledPWM=0;
+    public static final int ledCount=0;
+
+    public static enum LEDCOLORS{
+      RED,GREEN,PURPLE,ORANGE
+    }
    }
 
     public static final class LimeLightValues {

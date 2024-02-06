@@ -4,11 +4,13 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.ADABreakBeam;
+import frc.robot.utilities.LED;
 
 public class IntakeConveyCommand extends Command{
   private IntakeSubsystem m_intake;
   private ConveyorSubsystem m_convey;
   private ADABreakBeam m_adaBreakBeam;
+  private LED m_led;
 
   private enum STATE{
     INTAKING,CONVEYING,NOTEINSHOOTPOS
@@ -16,7 +18,7 @@ public class IntakeConveyCommand extends Command{
 
   private STATE m_state=STATE.INTAKING;
 
-  public IntakeConveyCommand(IntakeSubsystem intake,ConveyorSubsystem convey,ADABreakBeam adaBreakBeam){
+  public IntakeConveyCommand(IntakeSubsystem intake,ConveyorSubsystem convey,ADABreakBeam adaBreakBeam,LED led){
     m_convey=convey;
     m_intake=intake;
     m_adaBreakBeam=adaBreakBeam;
@@ -34,9 +36,10 @@ public class IntakeConveyCommand extends Command{
 
     switch(m_state){
       case INTAKING:
+      m_led.SetLEDColorIntake();
       m_intake.runIntake(Constants.IntakeConstants.intakeSpeed);
 
-      if(m_adaBreakBeam.getLowBreakBeam()||m_adaBreakBeam.getHighBreakBeam()){
+      if(m_adaBreakBeam.getLowBreakBeam()){
         m_intake.stopIntake();
         m_state=STATE.CONVEYING;
       }
@@ -52,6 +55,7 @@ public class IntakeConveyCommand extends Command{
 
       break;
       case NOTEINSHOOTPOS:
+      m_led.SetLEDColorNoteReady();
       returnValue=true;
       break;
     }

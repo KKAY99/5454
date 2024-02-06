@@ -39,7 +39,9 @@ import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.utilities.ADABreakBeam;
 import frc.robot.utilities.AutoCommands;
+import frc.robot.utilities.LED;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ModularAutoBuilder;
 
@@ -75,6 +77,9 @@ public class RobotContainer {
     private SendableChooser<Pose2d> m_autoPath4 = new SendableChooser<>(); 
     private SendableChooser<Pose2d> m_autoPath5 = new SendableChooser<>(); 
 
+    private LED m_led=new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
+    private ConveyorSubsystem m_convey=new ConveyorSubsystem(Constants.ConveyerConstants.motor1Port);
+    private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.dioPortLow,Constants.ADABreakBeamConstants.dioPortHigh);
     private Lasercan m_laserCan=new Lasercan(Constants.LaserCanConstants.intakeLowTowerLaserCan,Constants.LaserCanConstants.intakeHighTowerLaserCan);
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
@@ -139,9 +144,13 @@ public class RobotContainer {
       JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90Button);
       turret90Button.whileTrue(turret90);
 
-      RobotTrackCommand turretTrack=new RobotTrackCommand(m_Limelight,m_turret);
+      /*RobotTrackCommand turretTrack=new RobotTrackCommand(m_Limelight,m_turret);
       JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
-      turretTrackButton.whileTrue(turretTrack);
+      turretTrackButton.whileTrue(turretTrack);*/
+
+      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_convey,m_adaBreakBeam,m_led);
+      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
+      intakeConveyButton.whileTrue(intakeConvey);
     }
        
     public void refreshSmartDashboard(){  
@@ -311,7 +320,11 @@ public class RobotContainer {
   // enableLimelights();
     resetBrakeModetoNormal();
     homeRobot();  
-  }  
+  } 
+  
+  public void teleopPeriodic(){
+    //m_led.updateLEDs();
+  }
 
   public void AutoPeriodic(){
     if(m_Limelight.isTargetAvailible()){

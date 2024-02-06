@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ConveyorSubsystem extends SubsystemBase{
-
     private CANSparkMax m_conveyOne;
+    
     public ConveyorSubsystem(int motorOne){
         m_conveyOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_conveyOne.setIdleMode(IdleMode.kBrake);

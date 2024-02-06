@@ -106,7 +106,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic(){
-    m_robot.AutoPeriodic();
+    m_robot.teleopPeriodic();
   }
 
   /** This function is called once when the robot is disabled. */
