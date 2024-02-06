@@ -50,16 +50,17 @@ public class SmartShooter extends Command {
  
        // m_drive.getRobotVelocity().fromFieldRelativeSpeeds(null, null)
        //NEED TO FINISH getGyro2D;
-       FieldRelativeSpeed robotVel = new FieldRelativeSpeed(m_drive.getRobotVelocity(),m_drive.getGyro2D());
-    /*     FieldRelativeAccel robotAccel = m_drive.getFieldRelativeAccel();
+       FieldRelativeSpeed robotVel = m_drive.getRelativeSpeed();
+       FieldRelativeAccel robotAccel =m_drive.getRelativeAccel();
         Alliance currentAlliance=DriverStation.getAlliance().get();
+        Translation2d target=null;
         if(currentAlliance==Alliance.Red){
-            Translation2d target = SmartShooterConstants.kRedSpeakerLocation;
-        else{
-             Translation2d target = SmartShooterConstants.kRedSpeakerLocation;
+            target = SmartShooterConstants.kRedSpeakerLocation;
+        } else {
+             target = SmartShooterConstants.kRedSpeakerLocation;
         }
         Translation2d robotToGoal = target.minus(m_drive.getPose().getTranslation());
-        double dist = robotToGoal.getDistance(new Translation2d()) * 39.37;
+        double dist = robotToGoal.getDistance(new Translation2d()) * 39.37; //WHY 39.37
 
         SmartDashboard.putNumber("Calculated (in)", dist);
 
@@ -70,7 +71,8 @@ public class SmartShooter extends Command {
         SmartDashboard.putNumber("Fixed Time", shotTime);
 
         Translation2d movingGoalLocation = new Translation2d();
-
+/*      
+        //loop throuh to allow for converge
         for(int i=0;i<5;i++){
 
             double virtualGoalX = target.getX()
@@ -84,7 +86,7 @@ public class SmartShooter extends Command {
             Translation2d testGoalLocation = new Translation2d(virtualGoalX, virtualGoalY);
 
             Translation2d toTestGoal = testGoalLocation.minus(m_drive.getPose().getTranslation());
-
+ 
             double newShotTime = m_timeTable.getOutput(toTestGoal.getDistance(new Translation2d()) * 39.37);
 
             if(Math.abs(newShotTime-shotTime) <= 0.010){

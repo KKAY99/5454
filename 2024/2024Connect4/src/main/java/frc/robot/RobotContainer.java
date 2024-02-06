@@ -45,7 +45,7 @@ public class RobotContainer {
 
     private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
 
-    private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.breakBeamDIO);
+ //   private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.breakBeamDIO);
 
     //private Lasercan m_laserCan=new Lasercan(6);
 

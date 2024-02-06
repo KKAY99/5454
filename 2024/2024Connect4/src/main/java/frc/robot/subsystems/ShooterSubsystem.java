@@ -86,7 +86,7 @@ public class ShooterSubsystem extends SubsystemBase{
 //        m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
 //        m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
         m_ShootingMotor1.set(ControlMode.Velocity, speed);
-        m_ShootingMotor2.set(ControlMode.Velocity, speed*.665);
+        m_ShootingMotor2.set(ControlMode.Velocity, speed);
       //  speed=0.88;
        // System.out.println("overriding shooter to set percentge - " + speed);
       // m_ShootingMotor1.set(ControlMode.PercentOutput,speed);

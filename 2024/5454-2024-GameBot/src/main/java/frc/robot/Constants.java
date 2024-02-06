@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+  public static final double kRobotLoopTime = 0.020;
   public static final int brakeButton=3;
   public static final class AutoConstants{
 
@@ -202,7 +203,8 @@ public final class Constants {
   }
 
     public static final class ShooterConstants{
-      public static final double autoShooterSpeed=1;
+      public static final double kAccelCompFactor = 0.100; // in units of seconds
+        public static final double autoShooterSpeed=1;
       public static final double testShooterSpeed1=1;
       public static final double testShooterSpeed2=0.9;
 
