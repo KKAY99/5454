@@ -15,7 +15,9 @@ public final class Constants {
   public static final double kRobotLoopTime = 0.020;
   public static final int brakeButton=3;
   public static final class DriveConstants{
-    public static final double MinGasPedalSpeed=0.3;
+      // Joystick axis deadband for the swerve drive
+    public static final double swerveDeadband = 0.1;
+    public static final double MinGasPedalSpeed=0.15;
   }
   public static final class AutoConstants{
 
@@ -239,8 +241,7 @@ public final class Constants {
         // Enable or disable competition mode
         public static final boolean tuningMode = true;
 
-        // Joystick axis deadband for the swerve drive
-        public static final double swerveDeadband = 0.1;
+      
 
         public static final double voltageComp = 10.0;
 

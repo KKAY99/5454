@@ -76,16 +76,16 @@ public class Swerve extends SubsystemBase {
               translationLimiter.calculate(
                   MathUtil.applyDeadband(
                        translationSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed)
-                      ,Constants.GeneralConstants.swerveDeadband));
+                      ,Constants.DriveConstants.swerveDeadband));
           double strafeVal =
               strafeLimiter.calculate(
                   MathUtil.applyDeadband(
                       strafeSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed)
-                      ,Constants.GeneralConstants.swerveDeadband));
+                      ,Constants.DriveConstants.swerveDeadband));
           double rotationVal =
               rotationLimiter.calculate(
                   MathUtil.applyDeadband(
-                      rotationSup.getAsDouble(), Constants.GeneralConstants.swerveDeadband));
+                      rotationSup.getAsDouble(), Constants.DriveConstants.swerveDeadband));
           SmartDashboard.putNumber("translationvalue",translationVal);
           SmartDashboard.putNumber("strafevalue",strafeVal);
       
