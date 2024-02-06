@@ -1,8 +1,17 @@
 package frc.robot.utilities;
+import edu.wpi.first.math.InterpolatingMatrixTreeMap;
 import frc.robot.Constants;
 
 public class ShotTable {
-    
+    //private InterpolatingMatrixTreeMap shotDataMap = new InterpolatingMatrixTreeMap<>(10,)
+    public ShotTable(){
+        loadtables();
+    }
+
+    private void loadtables (){
+        
+    }
+
     private double parseTable(double distance,int column,boolean calculateValue){
     try{    
         boolean bExceededDistance=false;

@@ -34,7 +34,7 @@ public class TurretSubsystem extends SubsystemBase{
 
   public TurretSubsystem(int turretMotorPort, int limitSwitchPort){
     m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
-    m_limitSwitch=new DigitalInput(limitSwitchPort);
+    //m_limitSwitch=new DigitalInput(limitSwitchPort);
     m_encoder=m_turretMotor.getEncoder();
     m_pidController=m_turretMotor.getPIDController();
     m_pidController.setP(kTurretP);

@@ -14,6 +14,9 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static final double kRobotLoopTime = 0.020;
   public static final int brakeButton=3;
+  public static final class DriveConstants{
+    public static final double MinGasPedalSpeed=0.3;
+  }
   public static final class AutoConstants{
 
         public static final String Center="Center Start";
@@ -112,17 +115,17 @@ public final class Constants {
     public static final class IntakeConstants{
       public static final double intakeSpeed=1;
       public static final int intakeMotorPort1=18;
-      public static final int intakeMotorPort2=17;
+      public static final int intakeMotorPort2=19;
     }
 
     public static final class ConveyerConstants{
       public static final double conveySpeed=1;
 
-      public static final int motor1Port=0;
+      public static final int motor1Port=16;
     }
 
     public static final class climbConstants{
-      public static final int climbPort=19;
+      public static final int climbPort=14;
       public static final double climbSpeed=.4;
     }
 

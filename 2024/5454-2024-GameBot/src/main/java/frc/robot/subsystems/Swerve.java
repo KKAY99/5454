@@ -75,12 +75,13 @@ public class Swerve extends SubsystemBase {
           double translationVal =
               translationLimiter.calculate(
                   MathUtil.applyDeadband(
-                      translationSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),0.1)
+                       translationSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed)
                       ,Constants.GeneralConstants.swerveDeadband));
           double strafeVal =
               strafeLimiter.calculate(
                   MathUtil.applyDeadband(
-                      strafeSup.getAsDouble(), Constants.GeneralConstants.swerveDeadband));
+                      strafeSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed)
+                      ,Constants.GeneralConstants.swerveDeadband));
           double rotationVal =
               rotationLimiter.calculate(
                   MathUtil.applyDeadband(
