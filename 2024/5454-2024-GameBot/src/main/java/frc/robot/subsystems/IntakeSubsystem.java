@@ -3,43 +3,41 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
 import frc.robot.utilities.Lasercan;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase{
+    private IntakeSubsystemIO m_intakeIO;
+    private IntakeSubsystemIOInputsAutoLogged m_intakeAutoLogged=new IntakeSubsystemIOInputsAutoLogged();
+
     private CANSparkMax m_intakeOne;
     private CANSparkMax m_intakeTwo;
 
-    private Lasercan m_laserCan;
+    private double m_currentSpeed;
 
-    public IntakeSubsystem(int motorOne, int motorTwo,Lasercan laserCan){
+    public IntakeSubsystem(int motorOne,int motorTwo,IntakeSubsystemIO intakeIO){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
         m_intakeOne.setIdleMode(IdleMode.kBrake);
         m_intakeTwo= new CANSparkMax(motorTwo,MotorType.kBrushless);
         m_intakeTwo.setIdleMode(IdleMode.kBrake);
-         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
-        m_laserCan=laserCan;
+        m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
+
+        m_intakeIO=intakeIO;
     }
 
     public void runIntake(double speed){
+        m_currentSpeed=speed;
         m_intakeOne.set(speed);
         m_intakeTwo.set(speed);
     }
     public void stopIntake(){
+        m_currentSpeed=0;
         m_intakeOne.set(0);
         m_intakeTwo.set(0);
-    }
-    
-    public boolean isLowerTowerDetected(){
-        return m_laserCan.LowTurretBreakBeam();
-    }
-    
-    public boolean isHigherTowerDetected(){
-          return m_laserCan.HighTurretBreakBeam();
     }
             
     public void setBrakeOn(){
@@ -51,5 +49,12 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeOne.setIdleMode(IdleMode.kCoast);
         m_intakeTwo.setIdleMode(IdleMode.kCoast);
     }
-    
+
+    @Override
+    public void periodic(){
+        m_intakeIO.updateInputs(m_intakeAutoLogged);
+
+        Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
+        Logger.recordOutput("IntakeSpeed",m_currentSpeed);
+    } 
 }
