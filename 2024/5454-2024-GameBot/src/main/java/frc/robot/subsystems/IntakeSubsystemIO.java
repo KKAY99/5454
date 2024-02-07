@@ -1,17 +1,13 @@
 package frc.robot.subsystems;
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public interface IntakeSubsystemIO {
     @AutoLog
-
-    public static class IntakeSubsystemIOInputs{
-        public double speed=0.0;
-        public boolean lowBreakBeam=false;
-        public boolean highBreakBeam=false;
+    public class IntakeSubsystemIOInputs{
+        public double intakeSpeed=0.0;
     }
 
-    public default void updateInputs(IntakeSubsystemIOInputs inputs){
-
-    }
-
+    public default void updateInputs(IntakeSubsystemIOInputs inputs){}
 }
