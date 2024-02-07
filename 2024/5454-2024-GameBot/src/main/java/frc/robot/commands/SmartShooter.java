@@ -24,13 +24,16 @@ public class SmartShooter extends Command {
     private final TurretSubsystem m_turret;
     private final Swerve m_drive;
     private final boolean m_updatePose;
+    private final Limelight m_limelight;
     private final Timer m_timer = new Timer();
     private ShotTable m_shotTable = new ShotTable();
+    private final double kConvertInchestoMeters=39.37;
    
-    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, boolean updatePose) {
+    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,boolean updatePose) {
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
+        m_limelight = limelight;
         m_updatePose = updatePose;
         addRequirements(shooter, turret);
     }
@@ -60,8 +63,7 @@ public class SmartShooter extends Command {
              target = SmartShooterConstants.kRedSpeakerLocation;
         }
         Translation2d robotToGoal = target.minus(m_drive.getPose().getTranslation());
-        double dist = robotToGoal.getDistance(new Translation2d()) * 39.37; //WHY 39.37
-
+        double dist = robotToGoal.getDistance(new Translation2d()) * kConvertInchestoMeters;
         SmartDashboard.putNumber("Calculated (in)", dist);
 
         //double fixedShotTime = m_timeTable.getOutput(dist);
@@ -71,8 +73,8 @@ public class SmartShooter extends Command {
         SmartDashboard.putNumber("Fixed Time", shotTime);
 
         Translation2d movingGoalLocation = new Translation2d();
-/*      
-        //loop throuh to allow for converge
+      
+       // loop throuh to allow for converge
         for(int i=0;i<5;i++){
 
             double virtualGoalX = target.getX()
@@ -87,7 +89,7 @@ public class SmartShooter extends Command {
 
             Translation2d toTestGoal = testGoalLocation.minus(m_drive.getPose().getTranslation());
  
-            double newShotTime = m_timeTable.getOutput(toTestGoal.getDistance(new Translation2d()) * 39.37);
+            double newShotTime = m_shotTable.getShotTime(toTestGoal.getDistance(new Translation2d()) * kConvertInchestoMeters);
 
             if(Math.abs(newShotTime-shotTime) <= 0.010){
                 i=4;
@@ -108,31 +110,19 @@ public class SmartShooter extends Command {
         SmartDashboard.putNumber("NewDist", newDist);
 
         m_turret.aimAtGoal(m_drive.getPose(), movingGoalLocation, false);
-
-        if (SmartDashboard.getBoolean("Adjust Shot?", false)) {
-            m_shooter.run(m_rpmTable.getOutput(newDist) + SmartDashboard.getNumber("SetShotAdjust", 0));
-            m_hood.run(m_hoodTable.getOutput(newDist) + SmartDashboard.getNumber("SetHoodAdjust", 0));
-        } else {
-            m_shooter.run(m_rpmTable.getOutput(newDist));
-            m_hood.run(m_hoodTable.getOutput(newDist));
-
-        }
-
-        if (currentTime > 0.250 && Limelight.valid() && Limelight.getDistance() >= 85.0) {
-            double dL = Limelight.getDistance() * 0.0254;
-            double tR = m_drive.getGyro().getRadians();
-            double tT = m_turret.getMeasurement() - Math.PI;
-            double tL = -1.0 * Limelight.tx();
-
-            Pose2d pose = calcPoseFromVision(dL, tR, tT, tL, GoalConstants.kGoalLocation);
-
+       
+        m_shooter.setAngle(m_shotTable.getAngle(newDist));
+        m_shooter.RunShootingMotors(m_shotTable.getVelocity(newDist));
+     
+    
+        if (currentTime > 0.250 && m_limelight.isTargetAvailible() && m_limelight.getDistance() >= 85.0) {
             if (m_updatePose) {
-                m_drive.setPose(pose);
+                //update pose based on vision
+               // m_drive.AddVisionPose(null,0,true,1);            }
             }
-
         }
 
- */
+ 
     }
 
     @Override

@@ -26,7 +26,7 @@ public class Limelight {
     // robot pose based on limelight
     private static NetworkTableEntry robotPoseRed;
 
-
+    private static double kConvertInchestoMeters = 0.0254; //Multiple 
     private double m_limeLightHeight;
     private double m_mountingAngle;
     private double m_targetDistance = 0;
@@ -99,6 +99,9 @@ public class Limelight {
         }   
         //System.out.println(distance + " - " + m_targetHeight + " -- " + m_limeLightHeight + " --- " + measuredAngle + "----" + m_mountingAngle);
         return distance;
+    }
+    public double getDistanceInMeters(){
+        return getDistance()*kConvertInchestoMeters;
     }
     public void setPipeline(int pipeline){
         llTable.getEntry("pipeline").setNumber(pipeline);
