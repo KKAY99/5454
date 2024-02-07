@@ -13,6 +13,9 @@ import edu.wpi.first.math.util.Units;
 
 public final class Constants {
   public static final double kRobotLoopTime = 0.020;
+  public static final int k30Amp=30;
+  public static final int k20Amp=20;
+  public static final int k40Amp=40;
   public static final int brakeButton=3;
   public static final class DriveConstants{
       // Joystick axis deadband for the swerve drive

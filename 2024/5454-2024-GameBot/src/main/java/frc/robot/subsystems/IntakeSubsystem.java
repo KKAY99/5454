@@ -3,6 +3,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import frc.robot.Constants;
 import frc.robot.utilities.Lasercan;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,10 +17,11 @@ public class IntakeSubsystem extends SubsystemBase{
 
     public IntakeSubsystem(int motorOne, int motorTwo,Lasercan laserCan){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
+        m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
         m_intakeOne.setIdleMode(IdleMode.kBrake);
         m_intakeTwo= new CANSparkMax(motorTwo,MotorType.kBrushless);
         m_intakeTwo.setIdleMode(IdleMode.kBrake);
-
+         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
         m_laserCan=laserCan;
     }
 

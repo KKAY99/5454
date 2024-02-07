@@ -26,6 +26,7 @@ import frc.robot.swervelib.telemetry.SwerveDriveTelemetry;
 import frc.robot.swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import frc.robot.utilities.FieldRelativeAccel;
 import frc.robot.utilities.FieldRelativeSpeed;
+import org.littletonrobotics.junction.Logger;
 
 public class Swerve extends SubsystemBase {
 
@@ -88,7 +89,9 @@ public class Swerve extends SubsystemBase {
                       rotationSup.getAsDouble(), Constants.DriveConstants.swerveDeadband));
           SmartDashboard.putNumber("translationvalue",translationVal);
           SmartDashboard.putNumber("strafevalue",strafeVal);
-      
+          Logger.recordOutput("Swerve Translation", translationVal);
+          Logger.recordOutput("Swerve Strafe Value",strafeVal);
+          Logger.recordOutput("Rotation Value",rotationVal);
           drive(
               new Translation2d(translationVal, strafeVal)
                   .times(swerve.swerveController.config.maxSpeed),
