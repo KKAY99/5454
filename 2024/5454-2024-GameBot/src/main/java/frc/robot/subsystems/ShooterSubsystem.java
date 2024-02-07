@@ -16,42 +16,22 @@ public class ShooterSubsystem extends SubsystemBase{
 
     private CANSparkMax m_ShootingMotor1;
     private CANSparkMax m_ShootingMotor2;
+    private CANSparkMax m_angleMotor;
 
     private SparkMaxPIDController m_pidController1;
     private SparkMaxPIDController m_pidController2;
-
+    private SparkMaxPIDController m_anglePID;
+     
     private double maxRPM;
     private double m_distance;
 
-    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2){
+    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor){
         //TEST PLACE
         m_limeLight=limeLight;
- 
-/*         power=shotTable.getVelocity(distance);
-        System.out.println("distance: " + distance + " -- " + "Power:" + power);
-           power=shotTable.getVelocity(distance);
-        distance=5;
-           System.out.println("distance: " + distance +  " -- " + "Power:" + power);
-       distance=21;
-           power=shotTable.getVelocity(distance);
-        System.out.println("distance: " + distance  + " -- " + "Power:" + power);
-        distance=34;
-        power=shotTable.getVelocity(distance);
-        System.out.println("distance: " + distance  + " -- " + "Power:" + power);
-        distance=43;
-        
-        power=shotTable.getVelocity(distance);
-        System.out.println("distance: " + distance + " -- "+ "Power:" + power);
-        distance=53;
-        power=shotTable.getVelocity(distance);
-        System.out.println("distance: " + distance + " -- "+ "Power:" + power);
-        distance=211;
-        power=shotTable.getVelocity(distance);
-        System.out.println("distance: " + distance + " -- "+ "Power:" + power);*/
-        
         m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
         m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
-
+        m_angleMotor = new CANSparkMax(angleMotor,MotorType.kBrushless);
+        m_anglePID = m_angleMotor.getPIDController();
         m_pidController1 = m_ShootingMotor1.getPIDController();
         m_pidController2 = m_ShootingMotor2.getPIDController();
 
@@ -62,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase{
         double kFF = 0.000015; 
         double kMaxOutput = 1; 
         double  kMinOutput = -1;
-        maxRPM = 5676;
+    
 
         m_pidController1.setP(kP);
         m_pidController1.setI(kI);
@@ -77,6 +57,22 @@ public class ShooterSubsystem extends SubsystemBase{
         m_pidController2.setIZone(kIz);
         m_pidController2.setFF(kFF);
         m_pidController2.setOutputRange(kMinOutput, kMaxOutput);
+    
+        double anglekP = 6e-5; 
+        double anglekI = 0;
+        double anglekD = 0; 
+        double anglekIz = 0; 
+        double anglekFF = 0.000015; 
+        double anglekMaxOutput = 1; 
+        double anglekMinOutput = -1;
+    
+        m_anglePID.setP(anglekP);
+        m_anglePID.setI(anglekI);
+        m_anglePID.setD(anglekD);
+        m_anglePID.setIZone(anglekIz);
+        m_anglePID.setFF(anglekFF);
+        m_anglePID.setOutputRange(anglekMinOutput, anglekMaxOutput);
+
     }
     
     public void RunShootingMotors(double speed){

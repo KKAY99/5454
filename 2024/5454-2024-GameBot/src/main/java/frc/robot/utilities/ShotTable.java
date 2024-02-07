@@ -1,15 +1,25 @@
 package frc.robot.utilities;
 import edu.wpi.first.math.InterpolatingMatrixTreeMap;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.Constants;
+import edu.wpi.first.math.Num;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class ShotTable {
-    //private InterpolatingMatrixTreeMap shotDataMap = new InterpolatingMatrixTreeMap<>(10,)
+    private Num rows;
+    private Num columns;
+    private InterpolatingDoubleTreeMap shotVelocity= new InterpolatingDoubleTreeMap();
+    private InterpolatingDoubleTreeMap angle= new InterpolatingDoubleTreeMap();
+    private InterpolatingDoubleTreeMap shotTime= new InterpolatingDoubleTreeMap();
+   
     public ShotTable(){
         loadtables();
     }
 
     private void loadtables (){
-        
+        //READ CONSTANTS
+        shotVelocity.put(100.00,100.00);
+
     }
 
     private double parseTable(double distance,int column,boolean calculateValue){

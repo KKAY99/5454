@@ -228,6 +228,7 @@ public final class Constants {
 
       public static final int shooterMotorPort1=21;
       public static final int shooterMotorPort2=22;
+      public static final int shooterAnglePort=23;
     }
 
     public static final class RotateArm{

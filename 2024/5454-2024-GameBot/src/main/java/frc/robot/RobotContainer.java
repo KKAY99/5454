@@ -79,14 +79,20 @@ public class RobotContainer {
     private SendableChooser<Pose2d> m_autoPath5 = new SendableChooser<>(); 
 
     private LED m_led=new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
-    private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.dioPortLow,Constants.ADABreakBeamConstants.dioPortHigh);
-    private Lasercan m_laserCan=new Lasercan(Constants.LaserCanConstants.intakeLowTowerLaserCan,Constants.LaserCanConstants.intakeHighTowerLaserCan);
+    private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.dioPortLow,
+                                            Constants.ADABreakBeamConstants.dioPortHigh);
+    private Lasercan m_laserCan=new Lasercan(Constants.LaserCanConstants.intakeLowTowerLaserCan,
+                                    Constants.LaserCanConstants.intakeHighTowerLaserCan);
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
-    private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,Constants.TurretConstants.turretLimitSwitchPort);
-    private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,Constants.IntakeConstants.intakeMotorPort2,m_laserCan);
+    private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,
+                                         Constants.TurretConstants.turretLimitSwitchPort);
+    private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,
+                                         Constants.IntakeConstants.intakeMotorPort2,m_laserCan);
     private ClimbSubsystem m_climb = new ClimbSubsystem(Constants.climbConstants.climbPort);
-    private Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightHeight,Constants.LimeLightValues.limelightAngle);
-    private ShooterSubsystem m_shooter=new ShooterSubsystem(m_Limelight,Constants.ShooterConstants.shooterMotorPort1,Constants.ShooterConstants.shooterMotorPort2);
+    private Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightHeight,
+                                        Constants.LimeLightValues.limelightAngle);
+    private ShooterSubsystem m_shooter=new ShooterSubsystem(m_Limelight,Constants.ShooterConstants.shooterMotorPort1,
+                                           Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort);
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
