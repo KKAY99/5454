@@ -96,6 +96,15 @@ public class ShooterSubsystem extends SubsystemBase{
         double calculation=shotTable.getVelocity(m_limeLight.getDistance());
         System.out.println("Distance Calucations: "+calculation);
     }
+
+    public void setAngle(double targetAngle){
+        //FIX: TO DO SetAngle
+    }
+    public double getAngle(){
+        //FIX: TO DO GetAngle
+        return 999;
+    }
+
     public void setBrakeOn(){
       m_ShootingMotor1.setIdleMode(IdleMode.kBrake);  
       m_ShootingMotor2.setIdleMode(IdleMode.kBrake);
@@ -105,5 +114,6 @@ public class ShooterSubsystem extends SubsystemBase{
          m_ShootingMotor2.setIdleMode(IdleMode.kCoast);    
     
     }
+
 
 }

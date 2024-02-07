@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.utilities.Limelight;
 
 import java.io.Console;
 
@@ -9,6 +10,9 @@ import javax.sound.midi.SysexMessage;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -134,7 +138,40 @@ public class TurretSubsystem extends SubsystemBase{
   public void setCoastOn(){
          m_turretMotor.setIdleMode(IdleMode.kCoast);
     }
+  
+ public void aimAtGoal(Pose2d robotPose, Translation2d goal, boolean aimAtVision) {
+  //FIX: TO DO Implement AimAtGoal 
+  /* Translation2d robotToGoal = goal.minus(robotPose.getTranslation());
+    double angle = Math.atan2(robotToGoal.getY(), robotToGoal.getX());
+    angle = Math.PI + angle - robotPose.getRotation().getRadians();
 
+    angle = MathUtils.toUnitCircAngle(angle);
+
+    if (m_trackTarget) {
+      Limelight.enable();
+    } else {
+      Limelight.disable();
+    }
+
+    SmartDashboard.putNumber("Turret Set Angle", angle);
+
+    if (aimAtVision && Limelight.valid()) {
+      angle = getMeasurement() - Limelight.tx();
+    }
+
+    m_desiredAngle = angle;
+
+    if (angle < TurretConstants.kLow) {
+      angle = TurretConstants.kLow;
+    } else if (angle > TurretConstants.kHigh) {
+      angle = TurretConstants.kHigh;
+    }
+
+    double neoRevs = angle / TurretConstants.kRatio / (2 * Math.PI);
+
+    m_controller.setReference(neoRevs, ControlType.kSmartMotion);
+ */
+  }
 
   @Override
   public void periodic(){
