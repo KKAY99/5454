@@ -1,6 +1,7 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.ADABreakBeam;
@@ -8,18 +9,18 @@ import frc.robot.utilities.LED;
 
 public class IntakeConveyCommand extends Command{
   private IntakeSubsystem m_intake;
-  private ConveyorSubsystem m_convey;
   private ADABreakBeam m_adaBreakBeam;
   private LED m_led;
 
+  private boolean m_hasNotHitLowBeam=false;
+
   private enum STATE{
-    INTAKING,CONVEYING,NOTEINSHOOTPOS
+    INTAKING,NOTEINSHOOTPOS
   }
 
   private STATE m_state=STATE.INTAKING;
 
-  public IntakeConveyCommand(IntakeSubsystem intake,ConveyorSubsystem convey,ADABreakBeam adaBreakBeam,LED led){
-    m_convey=convey;
+  public IntakeConveyCommand(IntakeSubsystem intake,ADABreakBeam adaBreakBeam,LED led){
     m_intake=intake;
     m_adaBreakBeam=adaBreakBeam;
   }
@@ -27,7 +28,6 @@ public class IntakeConveyCommand extends Command{
   @Override
   public void end(boolean interrupted){
     m_intake.stopIntake();
-    m_convey.stopConveyer();
   }
 
   @Override
@@ -36,26 +36,20 @@ public class IntakeConveyCommand extends Command{
 
     switch(m_state){
       case INTAKING:
-      m_led.SetLEDColorIntake();
       m_intake.runIntake(Constants.IntakeConstants.intakeSpeed);
 
-      if(m_adaBreakBeam.getLowBreakBeam()){
-        m_intake.stopIntake();
-        m_state=STATE.CONVEYING;
+      if(m_adaBreakBeam.getLowBreakBeam()&&!m_hasNotHitLowBeam){
+        m_hasNotHitLowBeam=true;
+        m_led.SetLEDState(LEDConstants.LEDStates.INTAKELOW);
       }
 
-      break;
-      case CONVEYING:
-      m_convey.runConveyor(Constants.ConveyerConstants.conveySpeed);
-
-      if(m_adaBreakBeam.getLowBreakBeam()){
-        m_convey.stopConveyer();
+      if(m_hasNotHitLowBeam&&m_adaBreakBeam.getHighBreakBeam()){
+        m_intake.stopIntake();
+        m_led.SetLEDState(LEDConstants.LEDStates.INTAKEHASNOTE);
         m_state=STATE.NOTEINSHOOTPOS;
       }
-
       break;
       case NOTEINSHOOTPOS:
-      m_led.SetLEDColorNoteReady();
       returnValue=true;
       break;
     }

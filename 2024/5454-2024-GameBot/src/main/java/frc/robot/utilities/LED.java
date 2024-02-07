@@ -1,13 +1,20 @@
 package frc.robot.utilities;
+import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
+
+import java.util.GregorianCalendar;
+import java.util.Set;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.Timer;
 
 public class LED{
     private AddressableLED m_led;
     private AddressableLEDBuffer m_ledBuffer;
 
-    private LEDConstants.LEDCOLORS m_currentLEDColor;
+    private LEDConstants.LEDStates m_currentLEDState;
+    private LEDConstants.LEDDisplayStates m_currentLEDDisplay;
 
     public LED(int port,int ledCount){
         m_led=new AddressableLED(port);
@@ -19,32 +26,74 @@ public class LED{
         m_led.start();
     }
 
-    public void SetLEDColor(LEDConstants.LEDCOLORS ledColor){
-        switch(ledColor){
-            case RED:
-            m_ledBuffer.setRGB(0,255,0,0);
+    private void UpdateLEDS(LEDConstants.LEDStates ledState){
+        if(ledState!=LEDConstants.LEDStates.OFF){
+            m_led.start();
+        }
+        
+        switch(ledState){
+            case INTAKELOW:
+            SetLEDColor(LEDConstants.LEDColors.RED);
+            m_currentLEDDisplay=LEDConstants.LEDDisplayStates.FLASHING;
             break;
-            case GREEN:
-            m_ledBuffer.setRGB(0,0,255,0);
+            case TARGETLOCK:
+            SetLEDColor(LEDConstants.LEDColors.GREEN);
+            m_currentLEDDisplay=LEDConstants.LEDDisplayStates.SOLID;
             break;
-            case PURPLE:
-            m_ledBuffer.setRGB(0,160,32,240);
+            case TELEOP:
+            SetLEDColor(LEDConstants.LEDColors.GREEN);
+            m_currentLEDDisplay=LEDConstants.LEDDisplayStates.SOLID;
             break;
-            case ORANGE:
-            m_ledBuffer.setRGB(0,255,165,0);
+            case AUTO:
+            SetLEDColor(LEDConstants.LEDColors.RED);
+            m_currentLEDDisplay=LEDConstants.LEDDisplayStates.SOLID;
+            break;
+            case INTAKEHASNOTE:
+            SetLEDColor(LEDConstants.LEDColors.ORANGE);
+            m_currentLEDDisplay=LEDConstants.LEDDisplayStates.FLASHING;
+            break;
+            case OFF:
+            m_led.stop();
+            break;
+        }
+
+        switch(m_currentLEDDisplay){
+            case SOLID:
+            m_led.setData(m_ledBuffer);
+            break;
+            case FLASHING:
+            m_led.setData(m_ledBuffer);
+            break;
+            case CHASING:
+            m_led.setData(m_ledBuffer);
             break;
         }
     }
 
-    public void SetLEDColorIntake(){
-        m_currentLEDColor=LEDConstants.LEDCOLORS.RED;
+    private void SetLEDColor(LEDConstants.LEDColors ledColor){
+        switch(ledColor){
+            case RED:
+            m_ledBuffer.setRGB(m_ledBuffer.getLength(),255,0,0);
+            break;
+            case ORANGE:
+            m_ledBuffer.setRGB(m_ledBuffer.getLength(),255,165,0);
+            break;
+            case BLUE:
+            m_ledBuffer.setRGB(m_ledBuffer.getLength(),0,0,255);
+            break;
+            case PURPLE:
+            m_ledBuffer.setRGB(m_ledBuffer.getLength(),160,32,240);
+            break;
+            case GREEN:
+            m_ledBuffer.setRGB(m_ledBuffer.getLength(),0,255,0);
+            break;
+        }
     }
 
-    public void SetLEDColorNoteReady(){
-        m_currentLEDColor=LEDConstants.LEDCOLORS.ORANGE;
-    }
-
-    public void updateLEDs(){
-        SetLEDColor(m_currentLEDColor);
+    public void SetLEDState(LEDConstants.LEDStates ledState){
+        if(ledState!=m_currentLEDState){
+            m_currentLEDState=ledState;
+            UpdateLEDS(m_currentLEDState);
+        }
     }
 }

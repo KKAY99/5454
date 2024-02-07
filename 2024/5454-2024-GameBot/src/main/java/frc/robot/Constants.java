@@ -172,8 +172,18 @@ public final class Constants {
     public static final int ledPWM=0;
     public static final int ledCount=0;
 
-    public static enum LEDCOLORS{
-      RED,GREEN,PURPLE,ORANGE
+    public static final double timeToWait=3;
+
+    public static enum LEDStates{
+      AUTO,TELEOP,INTAKELOW,INTAKEHASNOTE,TARGETLOCK,OFF
+    }
+
+    public static enum LEDColors{
+      GREEN,RED,ORANGE,BLUE,PURPLE
+    }
+
+    public static enum LEDDisplayStates{
+      FLASHING,SOLID,CHASING
     }
    }
 
@@ -227,10 +237,10 @@ public final class Constants {
     }
 
     public static final class ButtonBindings{
-      public static final int testShooter1Button=4;
-      public static final int testShooter2Button=1;
-      public static final int turretLeftButton=2;
-      public static final int turretRightButton=3;
+      public static final int intakeConveyButton=1;
+      public static final int intakeToggleFalseButton=2;
+      public static final int intakeToggleTrueButton=3;
+      public static final int turretLeftButton=4;
       public static final int turret90Button=5;
       public static final int turretStraightButton=6;
     }

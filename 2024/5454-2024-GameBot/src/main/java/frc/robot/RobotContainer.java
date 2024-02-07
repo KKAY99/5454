@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ButtonBindings;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.ADABreakBeam;
@@ -78,7 +79,6 @@ public class RobotContainer {
     private SendableChooser<Pose2d> m_autoPath5 = new SendableChooser<>(); 
 
     private LED m_led=new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
-    private ConveyorSubsystem m_convey=new ConveyorSubsystem(Constants.ConveyerConstants.motor1Port);
     private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.dioPortLow,Constants.ADABreakBeamConstants.dioPortHigh);
     private Lasercan m_laserCan=new Lasercan(Constants.LaserCanConstants.intakeLowTowerLaserCan,Constants.LaserCanConstants.intakeHighTowerLaserCan);
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
@@ -119,12 +119,16 @@ public class RobotContainer {
      */
     private void configureButtonBindings(){
       IntakeToggleCommand intakeToggleTrue=new IntakeToggleCommand(m_intake,true);
-      JoystickButton intakeToggleTrueButton=new JoystickButton(m_xBoxDriver,3);
+      JoystickButton intakeToggleTrueButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleTrueButton);
       intakeToggleTrueButton.whileTrue(intakeToggleTrue);
 
       IntakeToggleCommand intakeToggleFalse=new IntakeToggleCommand(m_intake,false);
-      JoystickButton intakeToggleFalseButton=new JoystickButton(m_xBoxDriver,2);
+      JoystickButton intakeToggleFalseButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleFalseButton);
       intakeToggleFalseButton.whileTrue(intakeToggleFalse);
+
+      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_adaBreakBeam,m_led);
+      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeConveyButton);
+      intakeConveyButton.whileTrue(intakeConvey);
 
       /*ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
@@ -155,10 +159,6 @@ public class RobotContainer {
       /*RobotTrackCommand turretTrack=new RobotTrackCommand(m_Limelight,m_turret);
       JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
       turretTrackButton.whileTrue(turretTrack);*/
-
-      /*IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_convey,m_adaBreakBeam,m_led);
-      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
-      intakeConveyButton.whileTrue(intakeConvey);*/
     }
        
     public void refreshSmartDashboard(){  
@@ -331,7 +331,6 @@ public class RobotContainer {
   } 
   
   public void teleopPeriodic(){
-    //m_led.updateLEDs();
   }
 
   public void AutoPeriodic(){
