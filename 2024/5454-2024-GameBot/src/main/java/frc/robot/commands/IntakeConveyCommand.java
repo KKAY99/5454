@@ -5,10 +5,11 @@ import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.ADABreakBeam;
 import frc.robot.utilities.LED;
+import frc.robot.utilities.Lasercan;
 
 public class IntakeConveyCommand extends Command{
   private IntakeSubsystem m_intake;
-  private ADABreakBeam m_adaBreakBeam;
+  private Lasercan m_laserCan;
   private LED m_led;
 
   private boolean m_hasNotHitLowBeam=false;
@@ -19,9 +20,9 @@ public class IntakeConveyCommand extends Command{
 
   private STATE m_state=STATE.INTAKING;
 
-  public IntakeConveyCommand(IntakeSubsystem intake,ADABreakBeam adaBreakBeam,LED led){
+  public IntakeConveyCommand(IntakeSubsystem intake,Lasercan lasercan,LED led){
     m_intake=intake;
-    m_adaBreakBeam=adaBreakBeam;
+    m_laserCan=lasercan;
   }
 
   @Override
@@ -37,12 +38,12 @@ public class IntakeConveyCommand extends Command{
       case INTAKING:
       m_intake.runIntake(Constants.IntakeConstants.intakeSpeed);
 
-      if(m_adaBreakBeam.getLowBreakBeam()&&!m_hasNotHitLowBeam){
+      if(m_laserCan.LowTurretBreakBeam()&&!m_hasNotHitLowBeam){
         m_hasNotHitLowBeam=true;
         m_led.SetLEDState(LEDConstants.LEDStates.INTAKELOW);
       }
 
-      if(m_hasNotHitLowBeam&&m_adaBreakBeam.getHighBreakBeam()){
+      if(m_hasNotHitLowBeam&&m_laserCan.HighTurretBreakBeam()){
         m_intake.stopIntake();
         m_led.SetLEDState(LEDConstants.LEDStates.INTAKEHASNOTE);
         m_state=STATE.NOTEINSHOOTPOS;

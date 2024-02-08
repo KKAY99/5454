@@ -12,10 +12,8 @@ public class IntakeToggleCommand extends Command{
 
   private boolean m_toggle;
 
-  public IntakeToggleCommand(IntakeSubsystem intake,boolean toggle){
+  public IntakeToggleCommand(IntakeSubsystem intake){
     m_intake=intake;
-    m_toggle=toggle;
-
   }
 
   @Override
@@ -23,11 +21,7 @@ public class IntakeToggleCommand extends Command{
 
   @Override
   public void execute(){
-    if(m_toggle){
-      m_intake.runIntake(Constants.IntakeConstants.intakeSpeed);  
-    }else{
-      m_intake.stopIntake();
-    }
+    m_intake.ToggleIntake(Constants.IntakeConstants.intakeSpeed);
   }
 
   @Override 

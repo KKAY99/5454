@@ -1,5 +1,4 @@
 package frc.robot.utilities;
-import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants.LaserCanConstants;
 

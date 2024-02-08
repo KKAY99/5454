@@ -1,8 +1,14 @@
 package frc.robot.utilities;
+import org.littletonrobotics.junction.Logger;
 import au.grapplerobotics.LaserCan;
 import frc.robot.Constants.LaserCanConstants;
+import frc.robot.subsystems.IntakeSubsystemIO;
+import frc.robot.subsystems.IntakeSubsystemIOInputsAutoLogged;
 
 public class Lasercan{
+    private LasercanIO m_laserCanIO;
+    private LasercanIOInputsAutoLogged m_laserCanAutoLogged=new LasercanIOInputsAutoLogged();
+
     private LaserCan m_highTurret;
     private LaserCan m_lowTurret;
 
@@ -54,4 +60,12 @@ public class Lasercan{
 
         return returnValue;
     }
+
+    public void laserCanPeriodic(){
+        m_laserCanIO.updateInputs(m_laserCanAutoLogged);
+
+        Logger.processInputs("LaserCan",m_laserCanAutoLogged);
+        Logger.recordOutput("LowTurretBreakBeam",LowTurretBreakBeam());
+        Logger.recordOutput("HighTurretBreakBeam",HighTurretBreakBeam());
+    } 
 }

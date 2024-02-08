@@ -13,7 +13,6 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import frc.robot.utilities.Lasercan;
-import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -64,7 +63,6 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
     private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
-    private Swerve m_swerve = new Swerve();
  
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
@@ -78,6 +76,7 @@ public class RobotContainer {
     private SendableChooser<Pose2d> m_autoPath4 = new SendableChooser<>(); 
     private SendableChooser<Pose2d> m_autoPath5 = new SendableChooser<>(); 
 
+    private Swerve m_swerve = new Swerve(new SwerveIO(){});
     private LED m_led=new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
     private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.dioPortLow,
                                             Constants.ADABreakBeamConstants.dioPortHigh);
@@ -85,9 +84,9 @@ public class RobotContainer {
                                     Constants.LaserCanConstants.intakeHighTowerLaserCan);
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,
-                                         Constants.TurretConstants.turretLimitSwitchPort);
+                                         Constants.TurretConstants.turretLimitSwitchPort,new TurretSubsystemIO(){});
     private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,
-                                         Constants.IntakeConstants.intakeMotorPort2,m_laserCan);
+                                         Constants.IntakeConstants.intakeMotorPort2,new IntakeSubsystemIO(){});
     private ClimbSubsystem m_climb = new ClimbSubsystem(Constants.climbConstants.climbPort);
     private Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightHeight,
                                         Constants.LimeLightValues.limelightAngle);
@@ -124,17 +123,31 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-      IntakeToggleCommand intakeToggleTrue=new IntakeToggleCommand(m_intake,true);
-      JoystickButton intakeToggleTrueButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleTrueButton);
+      IntakeToggleCommand intakeToggleTrue=new IntakeToggleCommand(m_intake);
+      JoystickButton intakeToggleTrueButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButton);
       intakeToggleTrueButton.whileTrue(intakeToggleTrue);
 
-      IntakeToggleCommand intakeToggleFalse=new IntakeToggleCommand(m_intake,false);
-      JoystickButton intakeToggleFalseButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleFalseButton);
-      intakeToggleFalseButton.whileTrue(intakeToggleFalse);
-
-      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_adaBreakBeam,m_led);
+      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_laserCan,m_led);
       JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeConveyButton);
       intakeConveyButton.whileTrue(intakeConvey);
+
+      TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
+      JoystickButton turretLeftButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretLeftButton);
+      turretLeftButton.whileTrue(turretLeft);
+
+      TurretCommand turretRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
+      JoystickButton turretRightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretRightButton);
+      turretRightButton.whileTrue(turretRight);
+
+      TurretPosCommand turretStraight=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,
+                                                          Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+      JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretStraightButton);
+      turretStraightButton.whileTrue(turretStraight);
+
+      TurretPosCommand turret90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,
+                                                    Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+      JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90Button);
+      turret90Button.whileTrue(turret90);
 
       /*ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
@@ -142,25 +155,7 @@ public class RobotContainer {
 
       /*ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
-      shootButton2.whileTrue(shoot2);*/
-
-      /*TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
-      JoystickButton turretLeftButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretRightButton);
-      turretLeftButton.whileTrue(turretLeft);
-
-      TurretCommand turretRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
-      JoystickButton turretRightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretLeftButton);
-      turretRightButton.whileTrue(turretRight);
-
-      TurretPosCommand turretStraight=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,
-                                    Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretStraightButton);
-      turretStraightButton.whileTrue(turretStraight);
-
-      TurretPosCommand turret90=new TurretPosCommand(m_turret,-Constants.TurretConstants.turretSpeed,
-                                    Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90Button);
-      turret90Button.whileTrue(turret90);*/
+      shootButton2.whileTrue(shoot2);
 
       /*RobotTrackCommand turretTrack=new RobotTrackCommand(m_Limelight,m_turret);
       JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);

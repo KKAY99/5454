@@ -135,7 +135,7 @@ public final class Constants {
     }
 
     public static final class TurretConstants{
-      public static final int turretMotorPort=61;
+      public static final int turretMotorPort=20;
       public static final int turretLimitSwitchPort=0;
       public static final int turretMoveTimeOut=5;
       public static final double deadband=0.05;
@@ -222,7 +222,7 @@ public final class Constants {
 
     public static final class ShooterConstants{
       public static final double kAccelCompFactor = 0.100; // in units of seconds
-        public static final double autoShooterSpeed=1;
+      public static final double autoShooterSpeed=1;
       public static final double testShooterSpeed1=1;
       public static final double testShooterSpeed2=0.9;
 
@@ -241,10 +241,10 @@ public final class Constants {
     }
 
     public static final class ButtonBindings{
-      public static final int intakeConveyButton=1;
-      public static final int intakeToggleFalseButton=2;
-      public static final int intakeToggleTrueButton=3;
-      public static final int turretLeftButton=4;
+      public static final int intakeToggleButton=1;
+      public static final int turretRightButton=2;
+      public static final int turretLeftButton=3;
+      public static final int intakeConveyButton=4;
       public static final int turret90Button=5;
       public static final int turretStraightButton=6;
     }

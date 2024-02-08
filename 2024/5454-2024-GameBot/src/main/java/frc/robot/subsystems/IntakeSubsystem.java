@@ -18,6 +18,8 @@ public class IntakeSubsystem extends SubsystemBase{
 
     private double m_currentSpeed;
 
+    private boolean m_intakeToggle=false;
+
     public IntakeSubsystem(int motorOne,int motorTwo,IntakeSubsystemIO intakeIO){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
@@ -34,6 +36,7 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeOne.set(speed);
         m_intakeTwo.set(speed);
     }
+
     public void stopIntake(){
         m_currentSpeed=0;
         m_intakeOne.set(0);
@@ -45,9 +48,20 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeTwo.setIdleMode(IdleMode.kBrake);
     
     } 
+
     public void setCoastOn(){
         m_intakeOne.setIdleMode(IdleMode.kCoast);
         m_intakeTwo.setIdleMode(IdleMode.kCoast);
+    }
+
+    public void ToggleIntake(double speed){
+        if(m_intakeToggle){
+            m_intakeToggle=false;
+            stopIntake();
+        }else{
+            m_intakeToggle=true;
+            runIntake(speed);
+        }
     }
 
     @Override
@@ -56,5 +70,5 @@ public class IntakeSubsystem extends SubsystemBase{
 
         Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
         Logger.recordOutput("IntakeSpeed",m_currentSpeed);
-    } 
+    }
 }

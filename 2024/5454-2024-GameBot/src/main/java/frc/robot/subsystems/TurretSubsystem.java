@@ -8,6 +8,8 @@ import java.io.Console;
 
 import javax.sound.midi.SysexMessage;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -22,6 +24,9 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 public class TurretSubsystem extends SubsystemBase{
+  private TurretSubsystemIO m_turretIO;
+  private TurretSubsystemIOInputsAutoLogged m_turretAutoLogged=new TurretSubsystemIOInputsAutoLogged();
+
   private CANSparkMax m_turretMotor;
 
   private SparkMaxPIDController m_pidController;
@@ -36,7 +41,8 @@ public class TurretSubsystem extends SubsystemBase{
   private double kTurretI=Constants.TurretConstants.turretI;
   private double kTurretD=Constants.TurretConstants.turretD;
 
-  public TurretSubsystem(int turretMotorPort, int limitSwitchPort){
+  public TurretSubsystem(int turretMotorPort, int limitSwitchPort, TurretSubsystemIO turretIO){
+    m_turretIO=turretIO;
     m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
     //m_limitSwitch=new DigitalInput(limitSwitchPort);
     m_encoder=m_turretMotor.getEncoder();
@@ -175,6 +181,13 @@ public class TurretSubsystem extends SubsystemBase{
 
   @Override
   public void periodic(){
+    m_turretIO.updateInputs(m_turretAutoLogged);
+
+    Logger.processInputs("TurretSubsystem",m_turretAutoLogged);
+    Logger.recordOutput("TurretSpeed",m_speed);
+    Logger.recordOutput("TurretEncoder",GetEncoderValue());
+    Logger.recordOutput("TurretLimit",IsAtHardLimit());
+
     SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
   }
 }

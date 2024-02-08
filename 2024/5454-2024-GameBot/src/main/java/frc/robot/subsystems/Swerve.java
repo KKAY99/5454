@@ -29,8 +29,9 @@ import frc.robot.utilities.FieldRelativeSpeed;
 import org.littletonrobotics.junction.Logger;
 
 public class Swerve extends SubsystemBase {
-
   private final SwerveDrive swerve;
+  private SwerveIO m_swerveIO;
+  private SwerveIOInputsAutoLogged m_swerveAutoLogged=new SwerveIOInputsAutoLogged();
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(Units.feetToMeters(14.5));
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(Units.feetToMeters(14.5));
@@ -42,7 +43,8 @@ public class Swerve extends SubsystemBase {
   private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();;
 
   /** Subsystem class for the swerve drive. */
-  public Swerve() {
+  public Swerve(SwerveIO swerveIO) {
+    m_swerveIO=swerveIO;
   // TODO: ReplaceTuning Mode for Logging verbosity
     //  if (SpartanEntryManager.isTuningMode()) {
   //    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -186,6 +188,10 @@ public class Swerve extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    m_swerveIO.updateInputs(m_swerveAutoLogged);
+
+    Logger.processInputs("Swerve",m_swerveAutoLogged);
+
     m_fieldRelVel = new FieldRelativeSpeed(swerve.getFieldVelocity(), swerve.getYaw());
     m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, Constants.kRobotLoopTime);
     m_lastFieldRelVel = m_fieldRelVel;
@@ -195,7 +201,5 @@ public class Swerve extends SubsystemBase {
    // m_fieldRelVel = new FieldRelativeSpeed(getRobotVelolocity(),  );
    // m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, GlobalConstants.kLoopTime);
    // m_lastFieldRelVel = m_fieldRelVel;
-
-   
   }
 }

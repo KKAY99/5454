@@ -142,17 +142,17 @@ public class AutoCommands {
     m_shoot4=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
     m_shoot5=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
 
-    m_startIntake1=new IntakeToggleCommand(m_intake,true);
-    m_startIntake2=new IntakeToggleCommand(m_intake,true);
-    m_startIntake3=new IntakeToggleCommand(m_intake,true);
-    m_startIntake4=new IntakeToggleCommand(m_intake,true);
-    m_startIntake5=new IntakeToggleCommand(m_intake,true);
+    m_startIntake1=new IntakeToggleCommand(m_intake);
+    m_startIntake2=new IntakeToggleCommand(m_intake);
+    m_startIntake3=new IntakeToggleCommand(m_intake);
+    m_startIntake4=new IntakeToggleCommand(m_intake);
+    m_startIntake5=new IntakeToggleCommand(m_intake);
 
-    m_stopIntake1=new IntakeToggleCommand(m_intake,false);
-    m_stopIntake2=new IntakeToggleCommand(m_intake,false);
-    m_stopIntake3=new IntakeToggleCommand(m_intake,false);
-    m_stopIntake4=new IntakeToggleCommand(m_intake,false);
-    m_stopIntake5=new IntakeToggleCommand(m_intake,false);
+    m_stopIntake1=new IntakeToggleCommand(m_intake);
+    m_stopIntake2=new IntakeToggleCommand(m_intake);
+    m_stopIntake3=new IntakeToggleCommand(m_intake);
+    m_stopIntake4=new IntakeToggleCommand(m_intake);
+    m_stopIntake5=new IntakeToggleCommand(m_intake);
   }
 
   private void newCommand(){
