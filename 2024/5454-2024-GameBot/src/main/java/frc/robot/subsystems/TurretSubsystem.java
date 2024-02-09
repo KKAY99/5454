@@ -104,7 +104,12 @@ public class TurretSubsystem extends SubsystemBase{
   }
 
   public boolean IsAtHardLimit(){
+    if(m_limitSwitch!=null){
     return m_limitSwitch.get();
+    }
+    else{
+      return false;
+    }
   }
 
   public boolean IsAtLeftLimit(){
@@ -188,6 +193,6 @@ public class TurretSubsystem extends SubsystemBase{
     Logger.recordOutput("TurretEncoder",GetEncoderValue());
     Logger.recordOutput("TurretLimit",IsAtHardLimit());
 
-    SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
+    //SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
   }
 }

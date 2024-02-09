@@ -139,11 +139,11 @@ public final class Constants {
       public static final int turretLimitSwitchPort=0;
       public static final int turretMoveTimeOut=5;
       public static final double deadband=0.05;
-      public static final double maxTurretSpeed=0.3;
-      public static final double turretSpeed=0.3;
-      public static final double hometurretSpeed=0.09;
-      public static final double softLimitLeftLow=4;
-      public static final double softLimitRightHigh=38;
+      public static final double maxTurretSpeed=1;
+      public static final double turretSpeed=1;
+      public static final double hometurretSpeed=0.3;
+      public static final double softLimitLeftLow=-35;
+      public static final double softLimitRightHigh=7;
 
       public static final double turretStraightPos=20.5;
       public static final double turret90Pos=7.1;
@@ -158,11 +158,11 @@ public final class Constants {
     }
 
     public static final class LaserCanConstants{
-    public static final double distanceToReflectorLow=0;
+    public static final double distanceToReflectorLow=0.161;
     public static final double distanceToReflectorHigh=0;
-    public static final double deadBand=0;
+    public static final double deadBand=0.04;
 
-    public static final int intakeLowTowerLaserCan=1;
+    public static final int intakeLowTowerLaserCan=6;
     public static final int intakeHighTowerLaserCan=2;
     }
 

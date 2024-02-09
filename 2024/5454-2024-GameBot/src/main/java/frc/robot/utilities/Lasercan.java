@@ -13,8 +13,12 @@ public class Lasercan{
     private LaserCan m_lowTurret;
 
     public Lasercan(int lowTurretid,int highTurretid){
-        m_lowTurret=new LaserCan(lowTurretid);
-        m_highTurret=new LaserCan(highTurretid);
+        try{
+            m_lowTurret=new LaserCan(lowTurretid);
+            m_highTurret=new LaserCan(highTurretid);
+        } catch (Exception e){
+            System.out.print("LaserCan Init Failed: Error - " + e.getMessage());
+        }
     }
 
     public double GetDistanceInMMLow(){
@@ -44,7 +48,9 @@ public class Lasercan{
     public boolean LowTurretBreakBeam(){
         boolean returnValue=false;
 
-        if(GetDistanceInMMLow()<LaserCanConstants.distanceToReflectorLow+LaserCanConstants.deadBand){
+        if(m_lowTurret.getMeasurement()==null){
+            returnValue=false;
+        }else if(GetDistanceInMMLow()<LaserCanConstants.distanceToReflectorLow+LaserCanConstants.deadBand){
             returnValue=true;
         }
 

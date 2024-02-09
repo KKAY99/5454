@@ -345,6 +345,7 @@ public class RobotContainer {
   public void TeleopMode(){
     //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
     resetBrakeModetoNormal();
+    m_swerve.resetOdometry(Constants.AutoConstants.redCenterStartPos);
     homeRobot();
     
   }
