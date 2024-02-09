@@ -140,8 +140,8 @@ public class TurretSubsystem extends SubsystemBase{
     m_pidController.setReference(0,ControlType.kVelocity);
   }
 
-  public void SetEncoderToZero(){
-    m_encoder.setPosition(0);
+  public void SetEncoder(double pos ){
+    m_encoder.setPosition(pos);
   }
   public void setBrakeOn(){
       m_turretMotor.setIdleMode(IdleMode.kBrake);  

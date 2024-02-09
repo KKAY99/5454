@@ -1,7 +1,10 @@
 package frc.robot.utilities;
 import edu.wpi.first.math.InterpolatingMatrixTreeMap;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.units.Velocity;
 import frc.robot.Constants;
+import frc.robot.Constants.Shooter;
+import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.math.Num;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
@@ -18,11 +21,24 @@ public class ShotTable {
 
     private void loadtables (){
         //READ CONSTANTS
-        shotVelocity.put(100.00,100.00);
-
+        double distance;
+        double velocity;
+        double shotTimerow;
+        double anglerow;
+        int dataRows=Constants.Shooter.distanceLookup.length;
+        for(int rowLoop=0;rowLoop<dataRows;rowLoop++){
+            distance=Constants.Shooter.distanceLookup[rowLoop][Shooter.columnDistance];
+            velocity=Constants.Shooter.distanceLookup[rowLoop][Shooter.columnVelocity];
+            anglerow=Constants.Shooter.distanceLookup[rowLoop][Shooter.columnAngle];
+            shotTimerow=Constants.Shooter.distanceLookup[rowLoop][Shooter.columnShotTime];
+            shotVelocity.put(distance,velocity);
+            angle.put(distance,anglerow);
+            shotTime.put(distance,shotTimerow);
+        }
+      
     }
 
-    private double parseTable(double distance,int column,boolean calculateValue){
+    private double DONOTUSEparseTable(double distance,int column,boolean calculateValue){
     try{    
         boolean bExceededDistance=false;
         int tableLoop=0;
@@ -76,12 +92,12 @@ public class ShotTable {
         
     }
     public double getAngle(double distance){
-        return parseTable(distance,Constants.Shooter.columnAngle,false);
+        return angle.get(distance);
     }
     public double getVelocity(double distance){
-        return parseTable(distance,Constants.Shooter.columnVelocity,true);
+        return shotVelocity.get(distance);
     }
     public double getShotTime(double distance){
-        return parseTable(distance,Constants.Shooter.columnShotTime,false);
+        return shotVelocity.get(distance);
     }
 }

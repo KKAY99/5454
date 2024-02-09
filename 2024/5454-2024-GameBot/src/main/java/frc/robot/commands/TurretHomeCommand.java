@@ -22,9 +22,10 @@ public class TurretHomeCommand extends Command {
 
   @Override
   public boolean isFinished(){
+
     if(m_turret.IsAtHardLimit()){
       m_turret.stop();
-      m_turret.SetEncoderToZero();
+      m_turret.SetEncoder(Constants.TurretConstants.homingPosition);
       return true;
     }
     return false;
