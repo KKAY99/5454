@@ -138,6 +138,7 @@ public final class Constants {
       public static final int turretMotorPort=20;
       public static final int turretLimitSwitchPort=0;
       public static final int turretMoveTimeOut=5;
+      public static final double homingPosition=20;  //encoder offset from hard limit
       public static final double deadband=0.05;
       public static final double maxTurretSpeed=0.3;
       public static final double turretSpeed=0.3;
