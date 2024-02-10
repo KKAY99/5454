@@ -9,8 +9,6 @@ import edu.wpi.first.math.Num;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class ShotTable {
-    private Num rows;
-    private Num columns;
     private InterpolatingDoubleTreeMap shotVelocity= new InterpolatingDoubleTreeMap();
     private InterpolatingDoubleTreeMap angle= new InterpolatingDoubleTreeMap();
     private InterpolatingDoubleTreeMap shotTime= new InterpolatingDoubleTreeMap();
