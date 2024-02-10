@@ -26,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeOne.setIdleMode(IdleMode.kBrake);
         m_intakeTwo= new CANSparkMax(motorTwo,MotorType.kBrushless);
         m_intakeTwo.setIdleMode(IdleMode.kBrake);
-        m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
+        m_intakeTwo.setSmartCurrentLimit(Constants.k30Amp);
 
         m_intakeIO=intakeIO;
     }
