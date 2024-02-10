@@ -91,9 +91,9 @@ public class Swerve extends SubsystemBase {
                       -rotationSup.getAsDouble(), Constants.DriveConstants.swerveDeadband));
           SmartDashboard.putNumber("translationvalue",translationVal);
           SmartDashboard.putNumber("strafevalue",strafeVal);
-          Logger.recordOutput("Swerve Translation", translationVal);
-          Logger.recordOutput("Swerve Strafe Value",strafeVal);
-          Logger.recordOutput("Rotation Value",rotationVal);
+          Logger.recordOutput("Swerve/Translation", translationVal);
+          Logger.recordOutput("Swerve/Strafe Value",strafeVal);
+          Logger.recordOutput("Swerve/Rotation Value",rotationVal);
           drive(
               new Translation2d(translationVal, strafeVal)
                   .times(swerve.swerveController.config.maxSpeed),
@@ -190,7 +190,7 @@ public class Swerve extends SubsystemBase {
   public void periodic() {
     m_swerveIO.updateInputs(m_swerveAutoLogged);
 
-    Logger.processInputs("Swerve",m_swerveAutoLogged);
+    //Logger.processInputs("Swerve",m_swerveAutoLogged);
 
     m_fieldRelVel = new FieldRelativeSpeed(swerve.getFieldVelocity(), swerve.getYaw());
     m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, Constants.kRobotLoopTime);

@@ -15,6 +15,8 @@ public class ShootCommand extends Command {
   public ShootCommand(ShooterSubsystem shooter,double speed){
     m_shooter=shooter;
     m_speed=speed;
+
+    addRequirements(m_shooter);
   }
 
   @Override

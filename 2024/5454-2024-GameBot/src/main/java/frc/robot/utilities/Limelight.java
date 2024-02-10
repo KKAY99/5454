@@ -2,6 +2,8 @@ package frc.robot.utilities;
 
 import frc.robot.Constants;
 import java.util.Map;
+
+import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -270,9 +272,15 @@ public class Limelight {
         m_LimelightLEDOn = true;
     }
 
-    public void update(boolean isEnabled) {
-
+    public void LimeLightPeriodic(boolean isEnabled) {
         updateDashboard();
 
+        Logger.recordOutput("LimeLight/TargetX",getX());
+        Logger.recordOutput("LimeLight/TargetY",getY());
+        Logger.recordOutput("LimeLight/TargetDistance",getDistance());
+        Logger.recordOutput("LimeLight/TargetDistanceInMeters",getDistanceInMeters());
+        Logger.recordOutput("LimeLight/LimelightPipeline",getPipeline());
+        Logger.recordOutput("LimeLight/LimelightApriltagPos",GetPoseViaApriltag());
+        Logger.recordOutput("LimeLight/DoesLimelightHaveTarget",isTargetAvailible());
     }
 }

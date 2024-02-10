@@ -5,6 +5,8 @@ import frc.robot.Constants.LEDConstants;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
@@ -95,5 +97,10 @@ public class LED{
             m_currentLEDState=ledState;
             UpdateLEDS(m_currentLEDState);
         }
+    }
+
+    public void LEDPeriodic(){
+        Logger.recordOutput("LED/CurrentLEDState",m_currentLEDState);
+        Logger.recordOutput("LED/CurrentLEDDisplayState",m_currentLEDDisplay);
     }
 }

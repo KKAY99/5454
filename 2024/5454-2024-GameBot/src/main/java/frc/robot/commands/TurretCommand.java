@@ -17,6 +17,7 @@ public class TurretCommand extends Command{
     m_turret=turret;
     m_speed=speed;
   
+    addRequirements(m_turret);
   }
 
   @Override

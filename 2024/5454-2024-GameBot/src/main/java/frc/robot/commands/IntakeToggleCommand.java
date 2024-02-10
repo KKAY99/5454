@@ -12,8 +12,13 @@ public class IntakeToggleCommand extends Command{
 
   private boolean m_toggle;
 
-  public IntakeToggleCommand(IntakeSubsystem intake){
+  private double m_speed;
+
+  public IntakeToggleCommand(IntakeSubsystem intake,double speed){
     m_intake=intake;
+    m_speed=speed;
+
+    addRequirements(m_intake);
   }
 
   @Override
@@ -21,7 +26,7 @@ public class IntakeToggleCommand extends Command{
 
   @Override
   public void execute(){
-    m_intake.ToggleIntake(Constants.IntakeConstants.intakeSpeed);
+    m_intake.ToggleIntake(m_speed);
   }
 
   @Override 

@@ -5,9 +5,11 @@ import frc.robot.Constants.TurretConstants;
 import frc.robot.utilities.Limelight;
 
 import java.io.Console;
+import java.util.logging.LogManager;
 
 import javax.sound.midi.SysexMessage;
 
+import org.littletonrobotics.junction.LogDataReceiver;
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.CANSparkMax;
@@ -35,6 +37,8 @@ public class TurretSubsystem extends SubsystemBase{
 
   private RelativeEncoder m_encoder;
 
+  private boolean m_hasSetReference;
+
   private double m_speed;
 
   private double kTurretP=Constants.TurretConstants.turretP;
@@ -44,7 +48,7 @@ public class TurretSubsystem extends SubsystemBase{
   public TurretSubsystem(int turretMotorPort, int limitSwitchPort, TurretSubsystemIO turretIO){
     m_turretIO=turretIO;
     m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
-    //m_limitSwitch=new DigitalInput(limitSwitchPort);
+    m_limitSwitch=new DigitalInput(limitSwitchPort);
     m_encoder=m_turretMotor.getEncoder();
     m_pidController=m_turretMotor.getPIDController();
     m_pidController.setP(kTurretP);
@@ -113,19 +117,19 @@ public class TurretSubsystem extends SubsystemBase{
   }
 
   public boolean IsAtLeftLimit(){
-    return GetEncoderValue()<=Constants.TurretConstants.softLimitLeftLow;
+    return GetEncoderValue()>=Constants.TurretConstants.softLimitLeftHigh;
   }
 
   public boolean IsAtRightLimit(){
-    return GetEncoderValue()>=Constants.TurretConstants.softLimitRightHigh;
+    return GetEncoderValue()<=Constants.TurretConstants.softLimitRightLow;
   }
 
   public boolean IsRotatingToLeft(){
-    return m_speed<0;
+    return m_speed>0;
   }
 
   public boolean IsRotatingToRight(){
-    return m_speed>0;
+    return m_speed<0;
   }
 
   public double GetEncoderValue(){
@@ -133,22 +137,26 @@ public class TurretSubsystem extends SubsystemBase{
   }
 
   public void TurretSetReference(double pos){
+    m_hasSetReference=true;
     m_pidController.setReference(pos,ControlType.kPosition);
   }
 
   public void ResetPIDReference(){
+    m_hasSetReference=false;
     m_pidController.setReference(0,ControlType.kVelocity);
   }
 
   public void SetEncoder(double pos ){
     m_encoder.setPosition(pos);
   }
+  
   public void setBrakeOn(){
-      m_turretMotor.setIdleMode(IdleMode.kBrake);  
-    } 
-  public void setCoastOn(){
-         m_turretMotor.setIdleMode(IdleMode.kCoast);
-    }
+    m_turretMotor.setIdleMode(IdleMode.kBrake);  
+  } 
+  
+    public void setCoastOn(){
+    m_turretMotor.setIdleMode(IdleMode.kCoast);
+  }
   
  public void aimAtGoal(Pose2d robotPose, Translation2d goal, boolean aimAtVision) {
   //FIX: TO DO Implement AimAtGoal 
@@ -188,11 +196,14 @@ public class TurretSubsystem extends SubsystemBase{
   public void periodic(){
     m_turretIO.updateInputs(m_turretAutoLogged);
 
-    Logger.processInputs("TurretSubsystem",m_turretAutoLogged);
-    Logger.recordOutput("TurretSpeed",m_speed);
-    Logger.recordOutput("TurretEncoder",GetEncoderValue());
-    Logger.recordOutput("TurretLimit",IsAtHardLimit());
+    //Logger.processInputs("TurretSubsystem",m_turretAutoLogged);
+    Logger.recordOutput("Turret/TurretSpeed",m_speed);
+    Logger.recordOutput("Turret/TurretEncoder",GetEncoderValue());
+    Logger.recordOutput("Turret/TurretHardLimit",IsAtHardLimit());
+    Logger.recordOutput("Turret/TurretLeftLimit",IsAtLeftLimit());
+    Logger.recordOutput("Turret/TurretRightLimit",IsAtRightLimit());
+    Logger.recordOutput("Turret/TurretHasSetReference",m_hasSetReference);
 
-    //SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
+    SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
   }
 }

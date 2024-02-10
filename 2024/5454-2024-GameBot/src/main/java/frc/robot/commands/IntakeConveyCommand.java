@@ -23,6 +23,8 @@ public class IntakeConveyCommand extends Command{
   public IntakeConveyCommand(IntakeSubsystem intake,Lasercan lasercan,LED led){
     m_intake=intake;
     m_laserCan=lasercan;
+
+    addRequirements(m_intake);
   }
 
   @Override

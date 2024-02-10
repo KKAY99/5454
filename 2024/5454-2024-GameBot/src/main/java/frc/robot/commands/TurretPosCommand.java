@@ -19,6 +19,8 @@ public class TurretPosCommand extends Command{
     m_turretPos=pos;
     m_timeOut=timeout;
     m_deadband=posCheckBand;
+
+    addRequirements(m_turret);
     }
 
   @Override
@@ -36,9 +38,9 @@ public class TurretPosCommand extends Command{
 
   @Override
   public boolean isFinished(){
-    boolean hasTimedOut = (Timer.getFPGATimestamp()>(m_startTime+m_timeOut));
+    boolean hasTimedOut=(Timer.getFPGATimestamp()>(m_startTime+m_timeOut));
     boolean hasreachedPosition=m_turret.isAtPosition(m_turretPos,m_deadband);
-    if(hasTimedOut || hasreachedPosition) {
+    if(hasTimedOut||hasreachedPosition) {
       return true;
     }else{
       return false;

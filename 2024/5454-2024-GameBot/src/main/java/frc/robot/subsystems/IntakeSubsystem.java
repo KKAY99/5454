@@ -68,7 +68,7 @@ public class IntakeSubsystem extends SubsystemBase{
     public void periodic(){
         m_intakeIO.updateInputs(m_intakeAutoLogged);
 
-        Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
-        Logger.recordOutput("IntakeSpeed",m_currentSpeed);
+        //Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
+        Logger.recordOutput("Intake/IntakeSpeed",m_currentSpeed);
     }
 }

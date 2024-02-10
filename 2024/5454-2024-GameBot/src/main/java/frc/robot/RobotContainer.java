@@ -123,31 +123,35 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-      IntakeToggleCommand intakeToggleTrue=new IntakeToggleCommand(m_intake);
-      JoystickButton intakeToggleTrueButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButton);
-      intakeToggleTrueButton.whileTrue(intakeToggleTrue);
+      IntakeToggleCommand intakeToggleTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+      JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
+      intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
 
-      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_laserCan,m_led);
-      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeConveyButton);
-      intakeConveyButton.whileTrue(intakeConvey);
+      IntakeToggleCommand intakeToggleTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed);
+      JoystickButton intakeToggleTrueButtonOut=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonOut);
+      intakeToggleTrueButtonOut.onTrue(intakeToggleTrueOut);
+
+      /*IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_laserCan,m_led);
+      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonOut);
+      intakeConveyButton.whileTrue(intakeConvey);*/
 
       TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
-      JoystickButton turretLeftButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretLeftButton);
+      POVButton turretLeftButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.turretPOVLeft);
       turretLeftButton.whileTrue(turretLeft);
 
       TurretCommand turretRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
-      JoystickButton turretRightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretRightButton);
+      POVButton turretRightButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.turretPOVRight);
       turretRightButton.whileTrue(turretRight);
 
       TurretPosCommand turretStraight=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,
                                                           Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turretStraightButton);
-      turretStraightButton.whileTrue(turretStraight);
+      JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret0);
+      turretStraightButton.onTrue(turretStraight);
 
       TurretPosCommand turret90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,
                                                     Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90Button);
-      turret90Button.whileTrue(turret90);
+      JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90);
+      turret90Button.onTrue(turret90);
 
       /*ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
@@ -331,13 +335,13 @@ public class RobotContainer {
     homeRobot();  
   } 
   
-  public void teleopPeriodic(){
+  public void TeleopPeriodic(){
   }
 
   public void AutoPeriodic(){
     if(m_Limelight.isTargetAvailible()){
     //Get Limelight
-    //add ision measurement in swervie
+    //add Vision measurement to swerve
     //m_swerve.AddVisionPose(m_Limelight.GetPoseViaApriltag(),0,true,1);
     }
    
@@ -347,7 +351,6 @@ public class RobotContainer {
     resetBrakeModetoNormal();
     m_swerve.resetOdometry(Constants.AutoConstants.redCenterStartPos);
     homeRobot();
-    
   }
   private void resetBrakeModetoNormal(){
     m_intake.setBrakeOn();
@@ -364,10 +367,10 @@ public class RobotContainer {
   }
 
   private void homeRobot(){
-    /*if(m_HasHomed==false){
+    if(m_HasHomed==false){
       Command turretHome=new TurretHomeCommand(m_turret);
       CommandScheduler.getInstance().schedule(turretHome);
       m_HasHomed=true;
-    }*/
+    }
   }
 }    

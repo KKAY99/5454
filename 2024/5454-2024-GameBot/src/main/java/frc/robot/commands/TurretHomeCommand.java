@@ -16,7 +16,7 @@ public class TurretHomeCommand extends Command {
   }
   @Override
   public void execute(){
-  m_turret.RunTurretMotor(-Constants.TurretConstants.hometurretSpeed);
+  m_turret.RunTurretMotor(Constants.TurretConstants.hometurretSpeed);
 
   }
 

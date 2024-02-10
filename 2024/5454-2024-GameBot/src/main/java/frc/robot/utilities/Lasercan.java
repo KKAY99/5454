@@ -67,11 +67,11 @@ public class Lasercan{
         return returnValue;
     }
 
-    public void laserCanPeriodic(){
+    public void LaserCanPeriodic(){
         m_laserCanIO.updateInputs(m_laserCanAutoLogged);
 
-        Logger.processInputs("LaserCan",m_laserCanAutoLogged);
-        Logger.recordOutput("LowTurretBreakBeam",LowTurretBreakBeam());
-        Logger.recordOutput("HighTurretBreakBeam",HighTurretBreakBeam());
+        //Logger.processInputs("LaserCan",m_laserCanAutoLogged);
+        Logger.recordOutput("LaserCan/LowTurretBreakBeam",LowTurretBreakBeam());
+        Logger.recordOutput("LaserCan/HighTurretBreakBeam",HighTurretBreakBeam());
     } 
 }

@@ -137,17 +137,17 @@ public final class Constants {
     public static final class TurretConstants{
       public static final int turretMotorPort=20;
       public static final int turretLimitSwitchPort=0;
-      public static final int turretMoveTimeOut=5;
-      public static final double homingPosition=20;  //encoder offset from hard limit
-      public static final double deadband=0.05;
+      public static final int turretMoveTimeOut=3;
+      public static final double homingPosition=0;  //encoder offset from hard limit
+      public static final double deadband=1;
       public static final double maxTurretSpeed=1;
       public static final double turretSpeed=1;
       public static final double hometurretSpeed=0.3;
-      public static final double softLimitLeftLow=-35;
-      public static final double softLimitRightHigh=7;
+      public static final double softLimitRightLow=-47;
+      public static final double softLimitLeftHigh=0;
 
-      public static final double turretStraightPos=20.5;
-      public static final double turret90Pos=7.1;
+      public static final double turretStraightPos=-40;
+      public static final double turret90Pos=0;
 
       public static final double turretP=0.035;
       public static final double turretI=0;
@@ -168,8 +168,8 @@ public final class Constants {
     }
 
    public static final class ADABreakBeamConstants{
-    public static final int dioPortLow=0;
-    public static final int dioPortHigh=1;
+    public static final int dioPortLow=1;
+    public static final int dioPortHigh=2;
    }
 
    public static final class LEDConstants{
@@ -242,12 +242,13 @@ public final class Constants {
     }
 
     public static final class ButtonBindings{
-      public static final int intakeToggleButton=1;
-      public static final int turretRightButton=2;
-      public static final int turretLeftButton=3;
-      public static final int intakeConveyButton=4;
-      public static final int turret90Button=5;
-      public static final int turretStraightButton=6;
+      public static final int intakeToggleButtonIn=1;
+      public static final int turret90=2;
+      public static final int turret0=3;
+      public static final int intakeToggleButtonOut=4;
+
+      public static final int turretPOVLeft=270;
+      public static final int turretPOVRight=90;
     }
 
 

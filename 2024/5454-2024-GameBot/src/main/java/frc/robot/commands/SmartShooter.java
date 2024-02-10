@@ -35,7 +35,7 @@ public class SmartShooter extends Command {
         m_drive = drive;
         m_limelight = limelight;
         m_updatePose = updatePose;
-        addRequirements(shooter, turret);
+        addRequirements(shooter,turret);
     }
 
 
