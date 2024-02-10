@@ -1,4 +1,6 @@
 package frc.robot.commands;
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
@@ -19,18 +21,26 @@ public class IntakeConveyCommand extends Command{
   }
 
   private STATE m_state=STATE.INTAKING;
-
+  private boolean m_isRunning;
   public IntakeConveyCommand(IntakeSubsystem intake,Lasercan lasercan,LED led){
     m_intake=intake;
     m_laserCan=lasercan;
-
+    m_isRunning=false;
     addRequirements(m_intake);
+  }
+
+  @Override
+  public void execute(){
+    m_isRunning=true;
   }
 
   @Override
   public void end(boolean interrupted){
     m_hasHitLowBeam=false;
     m_intake.stopIntake();
+    m_isRunning=false;
+    Logger.recordOutput("Intake/IntakeConveyCommand",m_isRunning);
+
   }
 
   @Override
@@ -58,6 +68,9 @@ public class IntakeConveyCommand extends Command{
       returnValue=true;
       break;
     }
+    Logger.recordOutput("Intake/IntakeConveyCommand",m_state.toString());
+
     return returnValue;
   }
+  
 }
