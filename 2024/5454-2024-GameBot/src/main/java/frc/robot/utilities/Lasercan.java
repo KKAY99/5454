@@ -1,6 +1,8 @@
 package frc.robot.utilities;
 import org.littletonrobotics.junction.Logger;
 import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.LaserCan.RegionOfInterest;
+import au.grapplerobotics.LaserCan.TimingBudget;
 import frc.robot.Constants.LaserCanConstants;
 import frc.robot.subsystems.IntakeSubsystemIO;
 import frc.robot.subsystems.IntakeSubsystemIOInputsAutoLogged;
@@ -16,6 +18,15 @@ public class Lasercan{
         try{
             m_lowTurret=new LaserCan(lowTurretid);
             m_highTurret=new LaserCan(highTurretid);
+
+            RegionOfInterest lowROI=new RegionOfInterest(6,4,6,4);
+            m_lowTurret.setRegionOfInterest(lowROI);
+
+            RegionOfInterest highROI=new RegionOfInterest(6,4,6,4);
+            m_highTurret.setRegionOfInterest(highROI);
+
+            m_lowTurret.setTimingBudget(TimingBudget.TIMING_BUDGET_33MS);
+            m_highTurret.setTimingBudget(TimingBudget.TIMING_BUDGET_33MS);
         } catch (Exception e){
             System.out.print("LaserCan Init Failed: Error - " + e.getMessage());
         }
@@ -60,7 +71,9 @@ public class Lasercan{
     public boolean HighTurretBreakBeam(){
         boolean returnValue=false;
 
-        if(GetDistanceInMMHigh()<LaserCanConstants.distanceToReflectorHigh+LaserCanConstants.deadBand){
+        if(m_lowTurret.getMeasurement()==null){
+            returnValue=false;
+        }else if(GetDistanceInMMHigh()<LaserCanConstants.distanceToReflectorHigh+LaserCanConstants.deadBand){
             returnValue=true;
         }
 

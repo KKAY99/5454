@@ -8,7 +8,7 @@ public class ADABreakBeam{
 
     public ADABreakBeam(int lowDioPort,int highDioPort){
         m_lowBreakBeam=new DigitalInput(lowDioPort);
-        m_highBreakBeam=new DigitalInput(highDioPort);
+        //m_highBreakBeam=new DigitalInput(highDioPort);
     }
 
     public boolean getLowBreakBeam(){

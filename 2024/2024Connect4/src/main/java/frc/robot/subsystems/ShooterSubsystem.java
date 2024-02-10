@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;    
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ShooterConstants;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
@@ -19,13 +21,13 @@ public class ShooterSubsystem extends SubsystemBase{
     //private CANSparkMax m_ShootingMotor2;
     private WPI_TalonFX m_ShootingMotor1;
     private WPI_TalonFX m_ShootingMotor2;
-    
+    private CANSparkMax m_feederMotor;
     private SparkMaxPIDController m_pidController1;
     private SparkMaxPIDController m_pidController2;
 
     private double maxRPM;
 
-    public ShooterSubsystem(int shootingMotor1,int shootingMotor2){
+    public ShooterSubsystem(int shootingMotor1,int shootingMotor2,int feedMotor){
         //m_ShootingMotor1=new TalonSRX(shootingMotor1);  
         //m_ShootingMotor2=new TalonSRX(shootingMotor2);
         //m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
@@ -34,6 +36,7 @@ public class ShooterSubsystem extends SubsystemBase{
         m_ShootingMotor2=new WPI_TalonFX(shootingMotor2);
         configmotor(m_ShootingMotor1);
         configmotor(m_ShootingMotor2);
+        m_feederMotor=new CANSparkMax(feedMotor, MotorType.kBrushless);
         /*m_pidController1 = m_ShootingMotor1.getPIDController();
         m_pidController2 = m_ShootingMotor2.getPIDController();
 
@@ -87,6 +90,7 @@ public class ShooterSubsystem extends SubsystemBase{
 //        m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
         m_ShootingMotor1.set(ControlMode.Velocity, speed);
         m_ShootingMotor2.set(ControlMode.Velocity, speed);
+        m_feederMotor.set(ShooterConstants.feederSpeed);
       //  speed=0.88;
        // System.out.println("overriding shooter to set percentge - " + speed);
       // m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
@@ -97,5 +101,6 @@ public class ShooterSubsystem extends SubsystemBase{
         System.out.print("stop Motor Subsysem");
         m_ShootingMotor1.set(0);
         m_ShootingMotor2.set(0);
+        m_feederMotor.set(0);
     }
 }

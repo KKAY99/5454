@@ -6,6 +6,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
 import frc.robot.utilities.Lasercan;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,7 +22,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private double m_currentSpeed;
 
     private boolean m_intakeToggle=false;
-
+    private AnalogInput m_irReflector;
     public IntakeSubsystem(int motorOne,int motorTwo,IntakeSubsystemIO intakeIO){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
@@ -29,6 +32,9 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeTwo.setSmartCurrentLimit(Constants.k30Amp);
 
         m_intakeIO=intakeIO;
+        //TODO: REMOVE CONSTANT - EVIL CONSTANT
+        m_irReflector=new AnalogInput(4);
+
     }
 
     public void runIntake(double speed){
@@ -67,7 +73,7 @@ public class IntakeSubsystem extends SubsystemBase{
     @Override
     public void periodic(){
         m_intakeIO.updateInputs(m_intakeAutoLogged);
-
+        System.out.println("Reflector::" + m_irReflector.getValue());
         //Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
         Logger.recordOutput("Intake/IntakeSpeed",m_currentSpeed);
     }

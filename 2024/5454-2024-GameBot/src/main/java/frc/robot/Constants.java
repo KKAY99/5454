@@ -120,6 +120,9 @@ public final class Constants {
 
     public static final class IntakeConstants{
       public static final double intakeSpeed=1;
+      public static final double intakeConveyGetNoteSpeed=1;
+      public static final double intakeConveyHasNoteSpeed=0.2;
+      public static final int intakeBreakBeamport=4;
       public static final int intakeMotorPort1=18;
       public static final int intakeMotorPort2=19;
     }
@@ -160,21 +163,22 @@ public final class Constants {
     }
 
     public static final class LaserCanConstants{
-    public static final double distanceToReflectorLow=0.161;
-    public static final double distanceToReflectorHigh=0;
-    public static final double deadBand=0.04;
+    public static final double distanceToReflectorLow=100;
+    public static final double distanceToReflectorHigh=100;
+    public static final double deadBand=7;
 
-    public static final int intakeLowTowerLaserCan=6;
-    public static final int intakeHighTowerLaserCan=2;
+    public static final int intakeLowTowerLaserCan=2;
+    public static final int intakeHighTowerLaserCan=6;
     }
 
    public static final class ADABreakBeamConstants{
-    public static final int dioPortLow=1;
-    public static final int dioPortHigh=2;
+    public static final int dioPortLow=2;
+    public static final int dioPortHigh=3;
    }
 
    public static final class LEDConstants{
-    public static final int ledPWM=0;
+    public static final int blinkInPWM=0;
+    public static final int ledPWM=1;
     public static final int ledCount=0;
 
     public static final double timeToWait=3;

@@ -79,7 +79,7 @@ public class RobotContainer {
 
     private Swerve m_swerve = new Swerve(new SwerveIO(){});
     private PDHLogging m_pdhLogger= new PDHLogging(Constants.pdhCAN);
-    private LED m_led=new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
+    private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
     private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.dioPortLow,
                                             Constants.ADABreakBeamConstants.dioPortHigh);
     private Lasercan m_laserCan=new Lasercan(Constants.LaserCanConstants.intakeLowTowerLaserCan,
@@ -125,17 +125,17 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-      IntakeToggleCommand intakeToggleTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-      JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
-      intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
+    // IntakeToggleCommand intakeToggleTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+      //JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
+      //intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
 
       IntakeToggleCommand intakeToggleTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed);
       JoystickButton intakeToggleTrueButtonOut=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonOut);
       intakeToggleTrueButtonOut.onTrue(intakeToggleTrueOut);
 
-      /*IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_laserCan,m_led);
-      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonOut);
-      intakeConveyButton.whileTrue(intakeConvey);*/
+      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,Constants.IntakeConstants.intakeBreakBeamport,m_led);
+      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
+      intakeConveyButton.toggleOnTrue(intakeConvey);
 
       TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
       POVButton turretLeftButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.turretPOVLeft);
@@ -363,16 +363,16 @@ public class RobotContainer {
   }
   private void resetBrakeModetoNormal(){
     m_intake.setBrakeOn();
-    m_shooter.setBrakeOn();
+ //   m_shooter.setBrakeOn();
     m_turret.setBrakeOn();
-    m_climb.setBrakeOn();
+ //   m_climb.setBrakeOn();
   }
 
   private void disableBrakeMode(){
     m_intake.setCoastOn();
-    m_shooter.setCoastOn();
+//    m_shooter.setCoastOn();
     m_turret.setCoastOn();
-    m_climb.setCoastOn();
+//    m_climb.setCoastOn();
   }
 
   private void homeRobot(){

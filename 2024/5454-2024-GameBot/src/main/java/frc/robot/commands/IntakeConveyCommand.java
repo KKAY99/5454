@@ -8,35 +8,34 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.ADABreakBeam;
 import frc.robot.utilities.LED;
 import frc.robot.utilities.Lasercan;
-
+import frc.robot.utilities.AnalogAutoDirectFB6DN0E;
 public class IntakeConveyCommand extends Command{
   private IntakeSubsystem m_intake;
-  private Lasercan m_laserCan;
+  private AnalogAutoDirectFB6DN0E m_breakBeam;
   private LED m_led;
 
-  private boolean m_hasHitLowBeam=false;
-
   private enum STATE{
-    INTAKING,NOTEINSHOOTPOS
+    INTAKINGNOTE,HASNOTE,NOTEINSHOOTPOS
   }
 
-  private STATE m_state=STATE.INTAKING;
+  private STATE m_state=STATE.INTAKINGNOTE;
   private boolean m_isRunning;
-  public IntakeConveyCommand(IntakeSubsystem intake,Lasercan lasercan,LED led){
+  public IntakeConveyCommand(IntakeSubsystem intake, int breakbeamport,LED led){
     m_intake=intake;
-    m_laserCan=lasercan;
+    m_breakBeam = new AnalogAutoDirectFB6DN0E(breakbeamport);
+    //m_laserCan=lasercan;
     m_isRunning=false;
     addRequirements(m_intake);
   }
 
   @Override
-  public void execute(){
+  public void initialize(){
+    m_state=STATE.INTAKINGNOTE;
     m_isRunning=true;
   }
 
   @Override
   public void end(boolean interrupted){
-    m_hasHitLowBeam=false;
     m_intake.stopIntake();
     m_isRunning=false;
     Logger.recordOutput("Intake/IntakeConveyCommand",m_isRunning);
@@ -46,29 +45,34 @@ public class IntakeConveyCommand extends Command{
   @Override
   public boolean isFinished(){
     boolean returnValue=false;
-    System.out.println("Lasercan BreakBeam: "+m_laserCan.LowTurretBreakBeam());
-    System.out.println("Lasercan Distance: "+m_laserCan.GetDistanceInMMLow());
+    //System.out.println("Lasercan BreakBeam: "+m_laserCan.HighTurretBreakBeam());
+    //System.out.println("Lasercan Distance: "+m_laserCan.GetDistanceInMMHigh());
 
     switch(m_state){
-      case INTAKING:
-      m_intake.runIntake(Constants.IntakeConstants.intakeSpeed);
+      case INTAKINGNOTE:
+      m_intake.runIntake(Constants.IntakeConstants.intakeConveyGetNoteSpeed);
 
-      if(m_laserCan.LowTurretBreakBeam()&&!m_hasHitLowBeam){
-        m_hasHitLowBeam=true;
+      if(m_breakBeam.isBeamBroken()){
         //m_led.SetLEDState(LEDConstants.LEDStates.INTAKELOW);
-      }
-
-      if(m_hasHitLowBeam&&m_laserCan.LowTurretBreakBeam()){
-        m_intake.stopIntake();
-        //m_led.SetLEDState(LEDConstants.LEDStates.INTAKEHASNOTE);
+        //m_intake.stopIntake();
         m_state=STATE.NOTEINSHOOTPOS;
       }
+      break;
+      case HASNOTE:
+      m_intake.runIntake(Constants.IntakeConstants.intakeConveyHasNoteSpeed);
+
+      /*if(m_laserCan.HighTurretBreakBeam()){
+        m_intake.stopIntake();
+        m_state=STATE.NOTEINSHOOTPOS;
+      }*/
       break;
       case NOTEINSHOOTPOS:
       returnValue=true;
       break;
     }
     Logger.recordOutput("Intake/IntakeConveyCommand",m_state.toString());
+    Logger.recordOutput("Intake/BreakBeamStatus",m_breakBeam.isBeamBroken());
+    Logger.recordOutput("Intake/BreakBeamValue",m_breakBeam.getRawValue());
 
     return returnValue;
   }

@@ -26,7 +26,7 @@ public class ShooterSubsystem extends SubsystemBase{
     private double m_distance;
 
     public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor){
-        //TEST PLACE
+        /* 
         m_limeLight=limeLight;
         m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
         m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
@@ -72,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase{
         m_anglePID.setIZone(anglekIz);
         m_anglePID.setFF(anglekFF);
         m_anglePID.setOutputRange(anglekMinOutput, anglekMaxOutput);
-
+      */
     }
     
     public void RunShootingMotors(double speed){

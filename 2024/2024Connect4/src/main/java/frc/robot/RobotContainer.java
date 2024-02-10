@@ -41,7 +41,9 @@ import frc.robot.Constants.*;
  */
 public class RobotContainer {
 
-    private ShooterSubsystem m_Shooter=new ShooterSubsystem(Constants.ShooterConstants.shootingMotor1Port,Constants.ShooterConstants.shootingMotor2Port);
+    private ShooterSubsystem m_Shooter=new ShooterSubsystem(ShooterConstants.shootingMotor1Port,
+                                            ShooterConstants.shootingMotor2Port,
+                                            ShooterConstants.feederMotorPort);
 
     private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
 

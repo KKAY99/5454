@@ -54,6 +54,7 @@ public class TurretSubsystem extends SubsystemBase{
     m_pidController.setP(kTurretP);
     m_pidController.setI(kTurretI);
     m_pidController.setD(kTurretD);
+
   }
 
   public void TrackTarget(boolean bool){
@@ -195,7 +196,7 @@ public class TurretSubsystem extends SubsystemBase{
   @Override
   public void periodic(){
     m_turretIO.updateInputs(m_turretAutoLogged);
-
+   
     //Logger.processInputs("TurretSubsystem",m_turretAutoLogged);
     Logger.recordOutput("Turret/TurretSpeed",m_speed);
     Logger.recordOutput("Turret/TurretEncoder",GetEncoderValue());

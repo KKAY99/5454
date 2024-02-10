@@ -1,6 +1,7 @@
 package frc.robot.commands;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
@@ -14,7 +15,7 @@ public class TurretCommand extends Command{
 
   private double m_turretPos;
   private boolean m_isRunning;
-
+  private DigitalInput m_irReflector;
   
   public TurretCommand(TurretSubsystem turret,double speed){
     m_turret=turret;

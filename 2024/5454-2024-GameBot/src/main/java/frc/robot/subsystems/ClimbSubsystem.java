@@ -18,8 +18,8 @@ public class ClimbSubsystem extends SubsystemBase{
     private double m_isExtended;
 
     public ClimbSubsystem(int motorOne){
-        m_climbOne= new CANSparkMax(motorOne,MotorType.kBrushless);
-        m_climbOne.setIdleMode(IdleMode.kBrake);
+//        m_climbOne= new CANSparkMax(motorOne,MotorType.kBrushless);
+//        m_climbOne.setIdleMode(IdleMode.kBrake);
        
     }
 

@@ -1,6 +1,7 @@
 package frc.robot.utilities;
 import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
+import frc.robot.subsystems.BlinkInSubsystem;
 
 import java.util.GregorianCalendar;
 import java.util.Set;
@@ -17,8 +18,11 @@ public class LED{
 
     private LEDConstants.LEDStates m_currentLEDState;
     private LEDConstants.LEDDisplayStates m_currentLEDDisplay;
+  
+    private BlinkInSubsystem m_blinkIn;
 
-    public LED(int port,int ledCount){
+    public LED(int blinkInPWMport, int port,int ledCount){
+        m_blinkIn=new BlinkInSubsystem(blinkInPWMport);
         m_led=new AddressableLED(port);
         m_ledBuffer=new AddressableLEDBuffer(ledCount);
 
