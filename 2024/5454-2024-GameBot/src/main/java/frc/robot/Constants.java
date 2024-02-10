@@ -17,6 +17,7 @@ public final class Constants {
   public static final int k20Amp=20;
   public static final int k40Amp=40;
   public static final int brakeButton=3;
+  public static final int pdhCAN=1;
   public static final class DriveConstants{
       // Joystick axis deadband for the swerve drive
     public static final double swerveDeadband = 0.1;
