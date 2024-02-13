@@ -44,7 +44,6 @@ import frc.robot.utilities.AutoCommands;
 import frc.robot.utilities.LED;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ModularAutoBuilder;
-import frc.robot.utilities.PDHLogging;
 
 
 
@@ -78,12 +77,7 @@ public class RobotContainer {
     private SendableChooser<Pose2d> m_autoPath5 = new SendableChooser<>(); 
 
     private Swerve m_swerve = new Swerve(new SwerveIO(){});
-    private PDHLogging m_pdhLogger= new PDHLogging(Constants.pdhCAN);
     private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
-    private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.dioPortLow,
-                                            Constants.ADABreakBeamConstants.dioPortHigh);
-    private Lasercan m_laserCan=new Lasercan(Constants.LaserCanConstants.intakeLowTowerLaserCan,
-                                    Constants.LaserCanConstants.intakeHighTowerLaserCan);
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,
                                          Constants.TurretConstants.turretLimitSwitchPort,new TurretSubsystemIO(){});
@@ -168,7 +162,7 @@ public class RobotContainer {
       turretTrackButton.whileTrue(turretTrack);*/
     }
        
-    public void refreshSmartDashboard(){  
+    private void refreshSmartDashboard(){  
       //TODO: ADD BACK WHEN LIMELIGHT ON
       //m_Limelight.update(true);
       m_swerve.getPose();
@@ -338,16 +332,15 @@ public class RobotContainer {
   } 
   
   public void AllPeriodic(){
-    m_pdhLogger.updatePDHLog();
-  
+       refreshSmartDashboard();
   }
 
   public void TeleopPeriodic(){
-    AllPeriodic();
+   
   }
 
   public void AutoPeriodic(){
-     AllPeriodic();
+  
     if(m_Limelight.isTargetAvailible()){
     //Get Limelight
     //add Vision measurement to swerve

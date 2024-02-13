@@ -62,7 +62,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     m_robot.checkBrakeButton();
-    m_robot.refreshSmartDashboard();
+    m_robot.AllPeriodic();
     CommandScheduler.getInstance().run();
   }
 

@@ -121,6 +121,7 @@ public final class Constants {
     public static final class IntakeConstants{
       public static final double intakeSpeed=1;
       public static final double intakeConveyGetNoteSpeed=1;
+      //public static final double intakeConveyHasNoteSpeed=1;
       public static final double intakeConveyHasNoteSpeed=0.2;
       public static final int intakeBreakBeamport=4;
       public static final int intakeMotorPort1=18;

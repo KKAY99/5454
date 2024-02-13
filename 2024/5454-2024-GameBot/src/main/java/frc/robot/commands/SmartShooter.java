@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -28,6 +30,7 @@ public class SmartShooter extends Command {
     private final Timer m_timer = new Timer();
     private ShotTable m_shotTable = new ShotTable();
     private final double kConvertInchestoMeters=39.37;
+    private boolean m_isRunning=false;
    
     public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,boolean updatePose) {
         m_shooter = shooter;
@@ -50,8 +53,10 @@ public class SmartShooter extends Command {
     public void execute() {
 
         double currentTime = m_timer.get();
- 
-       // m_drive.getRobotVelocity().fromFieldRelativeSpeeds(null, null)
+        m_isRunning=true;
+        Logger.recordOutput("Shooter/SmartShooterCommand",m_isRunning);
+
+        // m_drive.getRobotVelocity().fromFieldRelativeSpeeds(null, null)
        //NEED TO FINISH getGyro2D;
        FieldRelativeSpeed robotVel = m_drive.getRelativeSpeed();
        FieldRelativeAccel robotAccel =m_drive.getRelativeAccel();
@@ -108,6 +113,9 @@ public class SmartShooter extends Command {
         double newDist = movingGoalLocation.minus(m_drive.getPose().getTranslation()).getDistance(new Translation2d()) * 39.37;
 
         SmartDashboard.putNumber("NewDist", newDist);
+        Logger.recordOutput("Shooter/SmartShooterActualDistance",dist);
+        Logger.recordOutput("Shooter/SmartShooterNewDistance",newDist);
+         
 
         m_turret.aimAtGoal(m_drive.getPose(), movingGoalLocation, false);
        
@@ -127,11 +135,14 @@ public class SmartShooter extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        SmartDashboard.putBoolean("Shooter Running", false);
         m_turret.TrackTarget(false);
         m_turret.stop();
         m_shooter.StopShootingMotors();
         m_timer.stop();
+        m_isRunning=false;
+        Logger.recordOutput("Shooter/ShooterSpeed",0);
+        Logger.recordOutput("Shooter/SmartShooterCommand",m_isRunning);
+
     }
 
     private Pose2d calcPoseFromVision(double dL, double tR, double tT, double tL, Translation2d goal) {

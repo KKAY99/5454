@@ -38,7 +38,7 @@ public class IntakeConveyCommand extends Command{
   public void end(boolean interrupted){
     m_intake.stopIntake();
     m_isRunning=false;
-    Logger.recordOutput("Intake/IntakeConveyCommand",m_isRunning);
+    Logger.recordOutput("Intake/IntakeConveyCommand","Not Running");
 
   }
 

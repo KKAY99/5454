@@ -88,12 +88,13 @@ public class Swerve extends SubsystemBase {
           double rotationVal =
               rotationLimiter.calculate(
                   MathUtil.applyDeadband(
-                      -rotationSup.getAsDouble(), Constants.DriveConstants.swerveDeadband));
+                      -rotationSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed), Constants.DriveConstants.swerveDeadband));
           SmartDashboard.putNumber("translationvalue",translationVal);
           SmartDashboard.putNumber("strafevalue",strafeVal);
           Logger.recordOutput("Swerve/Translation", translationVal);
           Logger.recordOutput("Swerve/Strafe Value",strafeVal);
           Logger.recordOutput("Swerve/Rotation Value",rotationVal);
+          Logger.recordOutput("Swerve/Gas Pedal Value",speedMultiplier.getAsDouble());
           drive(
               new Translation2d(translationVal, strafeVal)
                   .times(swerve.swerveController.config.maxSpeed),
@@ -191,12 +192,17 @@ public class Swerve extends SubsystemBase {
     m_swerveIO.updateInputs(m_swerveAutoLogged);
 
     //Logger.processInputs("Swerve",m_swerveAutoLogged);
-
+  
     m_fieldRelVel = new FieldRelativeSpeed(swerve.getFieldVelocity(), swerve.getYaw());
     m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, Constants.kRobotLoopTime);
     m_lastFieldRelVel = m_fieldRelVel;
     
     swerve.updateOdometry();
+    Logger.recordOutput("Swerve/FieldRelativeSpeedX", m_fieldRelVel.vx);
+    Logger.recordOutput("Swerve/FieldRelativeSpeedY", m_fieldRelVel.vy);
+    Logger.recordOutput("Swerve/FieldRelativeAccelX",m_fieldRelAccel.ax);
+    Logger.recordOutput("Swerve/FieldRelativeAccelY",m_fieldRelAccel.ay);
+    Logger.recordOutput("Swerve/Gyro Yaw",swerve.getYaw());
     //5454 Update 
    // m_fieldRelVel = new FieldRelativeSpeed(getRobotVelolocity(),  );
    // m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, GlobalConstants.kLoopTime);
