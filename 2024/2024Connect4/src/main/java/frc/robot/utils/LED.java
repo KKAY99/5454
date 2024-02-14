@@ -1,12 +1,10 @@
-package frc.robot.utilities;
+package frc.robot.utils;
 import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.BlinkInSubsystem;
 
 import java.util.GregorianCalendar;
 import java.util.Set;
-
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -16,12 +14,12 @@ public class LED{
     private AddressableLED m_led;
     private AddressableLEDBuffer m_ledBuffer;
 
-    private LEDConstants.PrimaryLEDStates m_currentPrimaryLEDState;
-    private LEDConstants.SecondaryLEDStates m_currentSecondaryLEDState;
+    private LEDConstants.LEDStates m_currentPrimaryLEDState;
+    private LEDConstants.LEDStates m_currentSecondaryLEDState;
     private LEDConstants.LEDDisplayStates m_currentLEDDisplay;
   
     private BlinkInSubsystem m_blinkIn;
-
+    private double m_pattern =-1;
     public LED(int blinkInPWMport, int port,int ledCount){
         m_blinkIn=new BlinkInSubsystem(blinkInPWMport);
         m_led=new AddressableLED(port);
@@ -33,8 +31,8 @@ public class LED{
         m_led.start();
     }
 
-    private void UpdatePrimaryLEDS(LEDConstants.PrimaryLEDStates ledState){
-        if(ledState!=LEDConstants.PrimaryLEDStates.OFF){
+    private void UpdatePrimaryLEDS(LEDConstants.LEDStates ledState){
+        if(ledState!=LEDConstants.LEDStates.OFF){
             m_led.start();
         }
         
@@ -42,6 +40,10 @@ public class LED{
             case INTAKELOW:
             SetLEDColor(LEDConstants.LEDColors.RED);
             m_currentLEDDisplay=LEDConstants.LEDDisplayStates.FLASHING;
+            break;
+            case TARGETLOCK:
+            SetLEDColor(LEDConstants.LEDColors.GREEN);
+            m_currentLEDDisplay=LEDConstants.LEDDisplayStates.SOLID;
             break;
             case TELEOP:
             SetLEDColor(LEDConstants.LEDColors.GREEN);
@@ -73,27 +75,6 @@ public class LED{
         }
     }
 
-    private void UpdateSecondaryLEDS(LEDConstants.SecondaryLEDStates ledState){
-        if(ledState!=LEDConstants.SecondaryLEDStates.OFF){
-            m_led.start();
-        }
-        
-        switch(ledState){
-            case TARGETVISIBLE:
-            m_blinkIn.runled(LEDConstants.blinkinYellow);
-            break;
-            case TARGETLOCK:
-            m_blinkIn.runled(LEDConstants.blinkinGreen);
-            break;
-            case NOTARGET:
-            m_blinkIn.runled(LEDConstants.blinkinRed);
-            break;
-            case OFF:
-            m_blinkIn.stopled();
-            break;
-        }
-    }
-
     private void SetLEDColor(LEDConstants.LEDColors ledColor){
         switch(ledColor){
             case RED:
@@ -114,23 +95,17 @@ public class LED{
         }
     }
 
-    public void SetLEDPrimaryState(LEDConstants.PrimaryLEDStates ledState){
+    public void SetLEDState(LEDConstants.LEDStates ledState){
         if(ledState!=m_currentPrimaryLEDState){
             m_currentPrimaryLEDState=ledState;
             UpdatePrimaryLEDS(m_currentPrimaryLEDState);
         }
     }
-
-    public void SetLEDSecondaryState(LEDConstants.SecondaryLEDStates ledState){
-        if(ledState!=m_currentSecondaryLEDState){
-            m_currentSecondaryLEDState=ledState;
-            UpdateSecondaryLEDS(m_currentSecondaryLEDState);
-        }
+    public void testBlinkIn(){
+        m_pattern=-0.35;
+        m_blinkIn.runled(m_pattern);
+        System.out.println("testing BlinkIn" + m_pattern);
     }
-
     public void LEDPeriodic(){
-        Logger.recordOutput("LED/CurrentPrimaryLEDState",m_currentPrimaryLEDState);
-        Logger.recordOutput("LED/CurrentSecondaryLEDState",m_currentPrimaryLEDState);
-        Logger.recordOutput("LED/CurrentLEDDisplayState",m_currentLEDDisplay);
     }
 }

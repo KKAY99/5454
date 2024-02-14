@@ -61,4 +61,24 @@ public final class Constants {
     public static final int shooterButton3=3;
     public static final int shooterButton4=4;
   }
+
+  public static final class LEDConstants{
+    public static final int blinkInPWM=0;
+    public static final int ledPWM=1;
+    public static final int ledCount=0;
+
+    public static final double timeToWait=3;
+
+    public static enum LEDStates{
+      AUTO,TELEOP,INTAKELOW,INTAKEHASNOTE,TARGETLOCK,OFF
+    }
+
+    public static enum LEDColors{
+      GREEN,RED,ORANGE,BLUE,PURPLE
+    }
+
+    public static enum LEDDisplayStates{
+      FLASHING,SOLID,CHASING
+    }
+   }
 }

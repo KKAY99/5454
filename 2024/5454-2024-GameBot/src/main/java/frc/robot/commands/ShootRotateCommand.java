@@ -9,20 +9,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.utilities.Limelight;
 
-public class ShootCommand extends Command {
+public class ShootRotateCommand extends Command {
   private ShooterSubsystem m_shooter;
 
   private double m_speed;
-  private double m_baseMotorSpeed;
 
   private boolean m_isRunning=false;
 
-  public ShootCommand(ShooterSubsystem shooter,double speed,double baseMotorSpeed){
+  public ShootRotateCommand(ShooterSubsystem shooter,double speed){
     m_shooter=shooter;
     m_speed=speed;
-    m_baseMotorSpeed=baseMotorSpeed;
-
-    addRequirements(m_shooter);
   }
 
   @Override
@@ -30,29 +26,24 @@ public class ShootCommand extends Command {
 
   @Override
   public void execute(){
-    //m_shooter.OutPutDistance();
     m_isRunning=true;
-    Logger.recordOutput("Shooter/ShooterCommand",m_isRunning);
-    Logger.recordOutput("Shooter/ShooterSpeed",m_speed);
+    Logger.recordOutput("Shooter/ShooterRotateCommand",m_isRunning);
+    Logger.recordOutput("Shooter/ShooterRotateSpeed",m_speed);
 
   }
 
   @Override
   public void end(boolean interrupted){
-    m_shooter.RunShootingMotors(m_baseMotorSpeed);
+    m_shooter.stopRotate();
     m_isRunning=false;
-    Logger.recordOutput("Shooter/ShooterSpeed",0);
-    Logger.recordOutput("Shooter/ShooterCommand",m_isRunning);
+    Logger.recordOutput("Shooter/ShooterRotateSpeed",0);
+    Logger.recordOutput("Shooter/ShooterRotateCommand",m_isRunning);
 
   }
 
   @Override
   public boolean isFinished(){
-    boolean returnValue=false;
-
-    if(m_shooter.isMotorVelocityAtBase()){
-      m_shooter.RunShootingMotors(m_speed);
-    }
+    m_shooter.RotateShooter(m_speed);
     return false;
   }
 }

@@ -9,20 +9,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.utilities.Limelight;
 
-public class ShootCommand extends Command {
+public class ShootRotateSetReferenceCommand extends Command {
   private ShooterSubsystem m_shooter;
 
-  private double m_speed;
-  private double m_baseMotorSpeed;
+  private double m_angle;
 
   private boolean m_isRunning=false;
 
-  public ShootCommand(ShooterSubsystem shooter,double speed,double baseMotorSpeed){
+  public ShootRotateSetReferenceCommand(ShooterSubsystem shooter,double angle){
     m_shooter=shooter;
-    m_speed=speed;
-    m_baseMotorSpeed=baseMotorSpeed;
-
-    addRequirements(m_shooter);
+    m_angle=angle;
   }
 
   @Override
@@ -30,19 +26,18 @@ public class ShootCommand extends Command {
 
   @Override
   public void execute(){
-    //m_shooter.OutPutDistance();
     m_isRunning=true;
-    Logger.recordOutput("Shooter/ShooterCommand",m_isRunning);
-    Logger.recordOutput("Shooter/ShooterSpeed",m_speed);
+    Logger.recordOutput("Shooter/ShooterRotateSetReferenceCommand",m_isRunning);
+    Logger.recordOutput("Shooter/ShooterRotateSetReferenceAngle",m_angle);
 
   }
 
   @Override
   public void end(boolean interrupted){
-    m_shooter.RunShootingMotors(m_baseMotorSpeed);
+    m_shooter.stopRotate();
     m_isRunning=false;
-    Logger.recordOutput("Shooter/ShooterSpeed",0);
-    Logger.recordOutput("Shooter/ShooterCommand",m_isRunning);
+    Logger.recordOutput("Shooter/ShooterRotateSetReferenceAngle",0);
+    Logger.recordOutput("Shooter/ShooterRotateSetReferenceCommand",m_isRunning);
 
   }
 
@@ -50,9 +45,12 @@ public class ShootCommand extends Command {
   public boolean isFinished(){
     boolean returnValue=false;
 
-    if(m_shooter.isMotorVelocityAtBase()){
-      m_shooter.RunShootingMotors(m_speed);
+    m_shooter.setAngle(m_angle);
+
+    if(m_shooter.getAngle()==m_angle){
+      returnValue=true;
     }
-    return false;
+
+    return true;
   }
 }

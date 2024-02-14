@@ -1,14 +1,20 @@
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;    
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ShotTable;
 public class ShooterSubsystem extends SubsystemBase{
@@ -21,8 +27,13 @@ public class ShooterSubsystem extends SubsystemBase{
     private SparkMaxPIDController m_pidController1;
     private SparkMaxPIDController m_pidController2;
     private SparkMaxPIDController m_anglePID;
+
+    private RelativeEncoder m_angleEncoder;
+    private RelativeEncoder m_shoot1Encoder;
+    private RelativeEncoder m_shoot2Encoder;
      
     private double maxRPM;
+    private double m_velocity;
     private double m_distance;
 
     public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor){
@@ -32,6 +43,7 @@ public class ShooterSubsystem extends SubsystemBase{
         m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
         m_angleMotor = new CANSparkMax(angleMotor,MotorType.kBrushless);
         m_anglePID = m_angleMotor.getPIDController();
+        m_angleEncoder=m_angle.getEncoder();
         m_pidController1 = m_ShootingMotor1.getPIDController();
         m_pidController2 = m_ShootingMotor2.getPIDController();
 
@@ -76,15 +88,36 @@ public class ShooterSubsystem extends SubsystemBase{
     }
     
     public void RunShootingMotors(double speed){
+        m_velocity=speed*maxRPM;
         speed=speed*maxRPM;
         m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
         m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
     }
 
     public void StopShootingMotors(){
+        m_velocity=0;
         System.out.print("stop Motor Subsysem");
         m_ShootingMotor1.set(0);
         m_ShootingMotor2.set(0);
+    }
+
+    public boolean isMotorVelocityAtBase(){
+        boolean returnValue=false;
+
+        if(GetVelocityMotor1()+ShooterConstants.baseSpeedDeadband>=ShooterConstants.baseMotorSpeed*maxRPM&&GetVelocityMotor1()-ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed*maxRPM
+            &&GetVelocityMotor2()+ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed*maxRPM&&GetVelocityMotor2()-ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed*maxRPM){
+            returnValue=true;
+        }
+
+        return returnValue;
+    }
+
+    public double GetVelocityMotor1(){
+        return m_shoot1Encoder.getVelocity();
+    }
+
+    public double GetVelocityMotor2(){
+        return m_shoot2Encoder.getVelocity();
     }
 
     public void OutPutDistance(){
@@ -93,23 +126,42 @@ public class ShooterSubsystem extends SubsystemBase{
         System.out.println("Distance Calucations: "+calculation);
     }
 
-    public void setAngle(double targetAngle){
-        //FIX: TO DO SetAngle
+    public void RotateShooter(double speed){
+        m_angleMotor.set(speed);
     }
+
+    public void stopRotate(){
+        m_angleMotor.set(0);
+    }
+
+    public void setAngle(double targetAngle){
+        m_anglePID.setReference(targetAngle,ControlType.kPosition);
+    }
+
     public double getAngle(){
-        //FIX: TO DO GetAngle
-        return 999;
+        return m_angleEncoder.getPosition();
+    }
+
+    public void ResetControlType(){
+        m_anglePID.setReference(0,ControlType.kVelocity);
     }
 
     public void setBrakeOn(){
       m_ShootingMotor1.setIdleMode(IdleMode.kBrake);  
       m_ShootingMotor2.setIdleMode(IdleMode.kBrake);
     } 
-  public void setCoastOn(){
+  
+    public void setCoastOn(){
          m_ShootingMotor1.setIdleMode(IdleMode.kCoast);
          m_ShootingMotor2.setIdleMode(IdleMode.kCoast);    
     
     }
 
+    @Override
+    public void periodic(){
+        Logger.recordOutput("Shooter/ShooterVelocity",m_velocity);
+        Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
+        Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
+    }
 
 }

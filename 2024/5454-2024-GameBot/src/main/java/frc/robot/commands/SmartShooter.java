@@ -31,8 +31,9 @@ public class SmartShooter extends Command {
     private ShotTable m_shotTable = new ShotTable();
     private final double kConvertInchestoMeters=39.37;
     private boolean m_isRunning=false;
+    private double m_baseMotorSpeed;
    
-    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,boolean updatePose) {
+    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,boolean updatePose,double baseMotorpeed) {
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
@@ -137,7 +138,7 @@ public class SmartShooter extends Command {
     public void end(boolean interrupted) {
         m_turret.TrackTarget(false);
         m_turret.stop();
-        m_shooter.StopShootingMotors();
+        m_shooter.RunShootingMotors(m_baseMotorSpeed);
         m_timer.stop();
         m_isRunning=false;
         Logger.recordOutput("Shooter/ShooterSpeed",0);

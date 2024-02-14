@@ -136,11 +136,11 @@ public class AutoCommands {
     m_redStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.redMoveOutOfBoundPos));
   
-    m_shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
-    m_shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
-    m_shoot3=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
-    m_shoot4=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
-    m_shoot5=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed);
+    m_shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
+    m_shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
+    m_shoot3=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
+    m_shoot4=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
+    m_shoot5=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
 
     m_startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
     m_startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);

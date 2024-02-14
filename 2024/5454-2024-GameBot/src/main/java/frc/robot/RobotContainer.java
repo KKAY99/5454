@@ -149,9 +149,9 @@ public class RobotContainer {
       JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90);
       turret90Button.onTrue(turret90);
 
-      /*ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1);
-      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
-      shootButton1.whileTrue(shoot1);*/
+      /*ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
+      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.manualShootButton);
+      shootButton1.whileTrue(shoot1);
 
       /*ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
@@ -324,10 +324,15 @@ public class RobotContainer {
   }
   }
 
+  public void SetBaseShooterSpeed(){
+    //m_shooter.RunShootingMotors(Constants.ShooterConstants.baseMotorSpeed);
+  }
+
   public void AutonMode(){
   // m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.AUTOMODE);
   // enableLimelights();
     resetBrakeModetoNormal();
+    SetBaseShooterSpeed();
     homeRobot();  
   } 
   
@@ -352,6 +357,7 @@ public class RobotContainer {
     //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
     resetBrakeModetoNormal();
     m_swerve.resetOdometry(Constants.AutoConstants.redCenterStartPos);
+    SetBaseShooterSpeed();
     homeRobot();
   }
   private void resetBrakeModetoNormal(){

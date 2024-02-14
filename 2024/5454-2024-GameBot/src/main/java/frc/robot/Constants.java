@@ -184,8 +184,16 @@ public final class Constants {
 
     public static final double timeToWait=3;
 
-    public static enum LEDStates{
+    public static final double blinkinGreen=0.71;
+    public static final double blinkinYellow=0.69;
+    public static final double blinkinRed=0.61;
+
+    public static enum PrimaryLEDStates{
       AUTO,TELEOP,INTAKELOW,INTAKEHASNOTE,TARGETLOCK,OFF
+    }
+
+    public static enum SecondaryLEDStates{
+      TARGETVISIBLE,NOTARGET,TARGETLOCK,OFF
     }
 
     public static enum LEDColors{
@@ -232,6 +240,8 @@ public final class Constants {
       public static final double autoShooterSpeed=1;
       public static final double testShooterSpeed1=1;
       public static final double testShooterSpeed2=0.9;
+      public static final double baseSpeedDeadband=100;
+      public static final double baseMotorSpeed=0.6;
 
       public static final int shooterMotorPort1=21;
       public static final int shooterMotorPort2=22;
@@ -252,6 +262,7 @@ public final class Constants {
       public static final int turret90=2;
       public static final int turret0=3;
       public static final int intakeToggleButtonOut=4;
+      public static final int manualShootButton=5;
 
       public static final int turretPOVLeft=270;
       public static final int turretPOVRight=90;
