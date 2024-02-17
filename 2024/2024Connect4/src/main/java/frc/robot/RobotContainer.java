@@ -67,7 +67,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        final ShootTopCommand shooter1Command=new ShootTopCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed4);
+        final ShooterCommand shooter1Command=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed4);
 
         JoystickButton shoot1=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton1);
         shoot1.whileTrue(shooter1Command);
@@ -95,7 +95,7 @@ public class RobotContainer {
     }
     
     public void disabledPerioidicUpdates(){
-        m_led.testBlinkIn();
+//        m_led.testBlinkIn();
     }
 
     public void disableLimelights(){

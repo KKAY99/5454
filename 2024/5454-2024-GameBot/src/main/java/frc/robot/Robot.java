@@ -61,7 +61,6 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
-    m_robot.checkBrakeButton();
     m_robot.AllPeriodic();
     CommandScheduler.getInstance().run();
   }
@@ -115,7 +114,11 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    //only check during disabled to make sure we don't flip switch by accident in match
+     m_robot.checkBrakeButton();
+   
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
