@@ -41,18 +41,18 @@ public class ShootCommand extends Command {
   public void end(boolean interrupted){
     m_shooter.RunShootingMotors(m_baseMotorSpeed);
     m_isRunning=false;
+    m_shooter.ShotTaken();
     Logger.recordOutput("Shooter/ShooterSpeed",0);
     Logger.recordOutput("Shooter/ShooterCommand",m_isRunning);
-
   }
 
   @Override
   public boolean isFinished(){
     boolean returnValue=false;
 
-    if(m_shooter.isMotorVelocityAtBase()){
+    //if(m_shooter.isMotorVelocityAtBase()){
       m_shooter.RunShootingMotors(m_speed);
-    }
+    //}
     return false;
   }
 }

@@ -15,6 +15,7 @@ public final class Constants {
   public static final double kRobotLoopTime = 0.020;
   public static final int k30Amp=30;
   public static final int k20Amp=20;
+  public static final int k15Amp=15;
   public static final int k40Amp=40;
   public static final int brakeButton=3;
   public static final int pdhCAN=1;
@@ -123,9 +124,12 @@ public final class Constants {
       public static final double intakeConveyGetNoteSpeed=1;
       //public static final double intakeConveyHasNoteSpeed=1;
       public static final double intakeConveyHasNoteSpeed=0.2;
-      public static final int intakeBreakBeamport=4;
+      public static final int intakeBreakBeamport=3;
       public static final int intakeMotorPort1=18;
       public static final int intakeMotorPort2=19;
+
+      public static final double timeToRunIntake=0.5;
+      public static final double autoIntakeSpeed=1;
     }
 
     public static final class ConveyerConstants{
@@ -215,8 +219,10 @@ public final class Constants {
       public static final double targetXPosShoot = -1.5;
       public static final double targetXPosSafeZone = 5;
       public static final double targetXPosRange=50;
-      public static final double limelightHeight = 26.5; //37
-      public static final double limelightAngle = 11; //40
+      public static final double limelightTurretHeight = 26.5; //37
+      public static final double limelightTurretAngle = 11; //40
+      public static final double limelightStaticHeight = 0;
+      public static final double limelightStaticAngle = 0;
       public static final double kVisionDistanceTolerance = 5;
       public static final double kVisionXTolerance = .04;
       public static final double kVisionXOffset=4;
@@ -233,6 +239,9 @@ public final class Constants {
       public static final double limeLightTrackSpeed2=0.06;
       public static final double limeLightTrackSpeed3=0.09;
       public static final double limeLightTrackSpeed4=0.15;
+
+      public static final String turretLimelightName="";
+      public static final String staticLimelightName="";
   }
 
     public static final class ShooterConstants{
@@ -240,11 +249,14 @@ public final class Constants {
       public static final double autoShooterSpeed=1;
       public static final double testShooterSpeed1=1;
       public static final double testShooterSpeed2=0.9;
+      public static final double feederSpeed=0.5;
       public static final double baseSpeedDeadband=100;
       public static final double baseMotorSpeed=0.6;
+      public static final double timeToRunShooter=1;
 
-      public static final int shooterMotorPort1=21;
+      public static final int shooterMotorPort1=31;
       public static final int shooterMotorPort2=22;
+      public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
     }
 

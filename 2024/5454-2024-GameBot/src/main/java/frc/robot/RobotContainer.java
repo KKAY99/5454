@@ -45,8 +45,6 @@ import frc.robot.utilities.LED;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ModularAutoBuilder;
 
-
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -82,12 +80,13 @@ public class RobotContainer {
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,
                                          Constants.TurretConstants.turretLimitSwitchPort,new TurretSubsystemIO(){});
     private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,
-                                         Constants.IntakeConstants.intakeMotorPort2,new IntakeSubsystemIO(){});
+                                         Constants.IntakeConstants.intakeMotorPort2,
+                                         Constants.IntakeConstants.intakeBreakBeamport, new IntakeSubsystemIO(){});
     private ClimbSubsystem m_climb = new ClimbSubsystem(Constants.climbConstants.climbPort);
-    private Limelight m_Limelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightHeight,
-                                        Constants.LimeLightValues.limelightAngle);
-    private ShooterSubsystem m_shooter=new ShooterSubsystem(m_Limelight,Constants.ShooterConstants.shooterMotorPort1,
-                                           Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort);
+    private Limelight m_TurretLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
+                                        Constants.LimeLightValues.limelightTurretAngle);
+    private ShooterSubsystem m_shooter=new ShooterSubsystem(m_TurretLimelight,Constants.ShooterConstants.shooterMotorPort1,
+                                           Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort,Constants.ShooterConstants.feederMotorPort);
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
@@ -99,7 +98,7 @@ public class RobotContainer {
       // Configure the button bindings
         configureButtonBindings();
         //Create Auto Commands
-        createAutonomousCommandList();
+        createAutonomousCommandList(); 
         m_swerve.setDefaultCommand(
         m_swerve.drive(
             () -> m_xBoxDriver.getRawAxis(translationAxis),
@@ -119,17 +118,17 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-    // IntakeToggleCommand intakeToggleTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-      //JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
-      //intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
+      IntakeToggleCommand intakeToggleTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+      JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
+      intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
 
       IntakeToggleCommand intakeToggleTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed);
       JoystickButton intakeToggleTrueButtonOut=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonOut);
       intakeToggleTrueButtonOut.onTrue(intakeToggleTrueOut);
 
-      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,Constants.IntakeConstants.intakeBreakBeamport,m_led);
-      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
-      intakeConveyButton.toggleOnTrue(intakeConvey);
+      //IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_led);
+      //JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
+      //intakeConveyButton.toggleOnTrue(intakeConvey);
 
       TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
       POVButton turretLeftButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.turretPOVLeft);
@@ -149,7 +148,7 @@ public class RobotContainer {
       JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90);
       turret90Button.onTrue(turret90);
 
-      /*ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
+      ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.manualShootButton);
       shootButton1.whileTrue(shoot1);
 
@@ -282,15 +281,15 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    Alliance currentAlliance=DriverStation.getAlliance().get();
+    /*Alliance currentAlliance=DriverStation.getAlliance().get();
     AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake,m_turret,m_Limelight);
     ModularAutoBuilder autoModularMaker = new ModularAutoBuilder(m_swerve,m_shooter,m_intake,m_turret,m_Limelight);
     AutoConstants.StartingLocations startLocation=m_autoStart.getSelected();
     double delay=m_autoDelay.getSelected();
-    String autoChosen=m_autoChooser.getSelected();
+    String autoChosen=m_autoChooser.getSelected();*/
     Command newCommand=null;
     
-    if(m_Limelight.isTargetAvailible()){
+    /*if(m_Limelight.isTargetAvailible()){
       m_swerve.resetOdometry(m_Limelight.GetPoseViaApriltag());
     }else{
       m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
@@ -301,7 +300,7 @@ public class RobotContainer {
                                                     m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
     }else{
       newCommand=autoMaker.createAutoCommand(startLocation,autoChosen,delay,currentAlliance);
-    }
+    }*/
 
     return newCommand;
   }
@@ -346,7 +345,7 @@ public class RobotContainer {
 
   public void AutoPeriodic(){
   
-    if(m_Limelight.isTargetAvailible()){
+    if(m_TurretLimelight.isTargetAvailible()){
     //Get Limelight
     //add Vision measurement to swerve
     //m_swerve.AddVisionPose(m_Limelight.GetPoseViaApriltag(),0,true,1);
@@ -357,6 +356,7 @@ public class RobotContainer {
     //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
     resetBrakeModetoNormal();
     m_swerve.resetOdometry(Constants.AutoConstants.redCenterStartPos);
+    m_shooter.ResetShotsTaken();
     SetBaseShooterSpeed();
     homeRobot();
   }

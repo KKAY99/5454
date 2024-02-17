@@ -11,7 +11,6 @@ import frc.robot.utilities.Lasercan;
 import frc.robot.utilities.AnalogAutoDirectFB6DN0E;
 public class IntakeConveyCommand extends Command{
   private IntakeSubsystem m_intake;
-  private AnalogAutoDirectFB6DN0E m_breakBeam;
   private LED m_led;
 
   private enum STATE{
@@ -20,9 +19,8 @@ public class IntakeConveyCommand extends Command{
 
   private STATE m_state=STATE.INTAKINGNOTE;
   private boolean m_isRunning;
-  public IntakeConveyCommand(IntakeSubsystem intake, int breakbeamport,LED led){
+  public IntakeConveyCommand(IntakeSubsystem intake,LED led){
     m_intake=intake;
-    m_breakBeam = new AnalogAutoDirectFB6DN0E(breakbeamport);
     //m_laserCan=lasercan;
     m_isRunning=false;
     addRequirements(m_intake);
@@ -52,9 +50,9 @@ public class IntakeConveyCommand extends Command{
       case INTAKINGNOTE:
       m_intake.runIntake(Constants.IntakeConstants.intakeConveyGetNoteSpeed);
 
-      if(m_breakBeam.isBeamBroken()){
-        //m_led.SetLEDState(LEDConstants.LEDStates.INTAKELOW);
-        //m_intake.stopIntake();
+      if(m_intake.isBeamBroken()){
+      //  m_led.SetLEDState(LEDConstants .INTAKELOW);
+        m_intake.stopIntake();
         m_state=STATE.NOTEINSHOOTPOS;
       }
       break;
@@ -71,8 +69,6 @@ public class IntakeConveyCommand extends Command{
       break;
     }
     Logger.recordOutput("Intake/IntakeConveyCommand",m_state.toString());
-    Logger.recordOutput("Intake/BreakBeamStatus",m_breakBeam.isBeamBroken());
-    Logger.recordOutput("Intake/BreakBeamValue",m_breakBeam.getRawValue());
 
     return returnValue;
   }

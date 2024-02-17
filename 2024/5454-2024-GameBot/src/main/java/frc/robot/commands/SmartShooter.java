@@ -141,9 +141,9 @@ public class SmartShooter extends Command {
         m_shooter.RunShootingMotors(m_baseMotorSpeed);
         m_timer.stop();
         m_isRunning=false;
+        m_shooter.ShotTaken();
         Logger.recordOutput("Shooter/ShooterSpeed",0);
         Logger.recordOutput("Shooter/SmartShooterCommand",m_isRunning);
-
     }
 
     private Pose2d calcPoseFromVision(double dL, double tR, double tT, double tL, Translation2d goal) {

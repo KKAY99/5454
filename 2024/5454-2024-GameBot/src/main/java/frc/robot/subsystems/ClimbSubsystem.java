@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ClimbSubsystem extends SubsystemBase{
     private CANSparkMax m_climbOne;
@@ -19,6 +20,7 @@ public class ClimbSubsystem extends SubsystemBase{
 
     public ClimbSubsystem(int motorOne){
 //        m_climbOne= new CANSparkMax(motorOne,MotorType.kBrushless);
+        //m_climbOne.setSmartCurrentLimit(Constants.k30Amp);
 //        m_climbOne.setIdleMode(IdleMode.kBrake);
        
     }

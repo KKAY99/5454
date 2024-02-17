@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
+import frc.robot.utilities.AnalogAutoDirectFB6DN0E;
 import frc.robot.utilities.Lasercan;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -22,8 +23,8 @@ public class IntakeSubsystem extends SubsystemBase{
     private double m_currentSpeed;
 
     private boolean m_intakeToggle=false;
-    private AnalogInput m_irReflector;
-    public IntakeSubsystem(int motorOne,int motorTwo,IntakeSubsystemIO intakeIO){
+    private AnalogAutoDirectFB6DN0E m_irReflector;
+    public IntakeSubsystem(int motorOne,int motorTwo,int analogPort, IntakeSubsystemIO intakeIO){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
         m_intakeOne.setIdleMode(IdleMode.kBrake);
@@ -33,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase{
 
         m_intakeIO=intakeIO;
         //TODO: REMOVE CONSTANT - EVIL CONSTANT
-        m_irReflector=new AnalogInput(4);
+        m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
 
     }
 
@@ -70,10 +71,14 @@ public class IntakeSubsystem extends SubsystemBase{
         }
     }
 
+    public boolean isBeamBroken(){
+        return m_irReflector.isBeamBroken();
+    }
     @Override
     public void periodic(){
         m_intakeIO.updateInputs(m_intakeAutoLogged);
-        System.out.println("Reflector::" + m_irReflector.getValue());
+        Logger.recordOutput("Intake/BeamBroken", m_irReflector.isBeamBroken());
+        Logger.recordOutput("Intake/BreakBeamSensorDistance", m_irReflector.getRawValue());
         //Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
         Logger.recordOutput("Intake/IntakeSpeed",m_currentSpeed);
     }
