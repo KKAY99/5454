@@ -5,14 +5,14 @@ import java.util.function.DoubleSupplier;
 import javax.lang.model.util.ElementScanner14;
 
 import java.util.function.BooleanSupplier;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.common.Utilities;
 import frc.robot.Constants;
-public class DefaultDriveCommand extends Command {
+public class DefaultDriveCommand extends CommandBase {
    
   private final DrivetrainSubsystem m_drive;
   //private final SwerveSubsystem m_drive;
