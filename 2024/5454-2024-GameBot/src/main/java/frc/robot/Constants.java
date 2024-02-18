@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+  
   public static final double kRobotLoopTime = 0.020;
   public static final int k30Amp=30;
   public static final int k20Amp=20;
@@ -19,6 +20,7 @@ public final class Constants {
   public static final int k40Amp=40;
   public static final int brakeButton=3;
   public static final int pdhCAN=1;
+  
   public static final class DriveConstants{
       // Joystick axis deadband for the swerve drive
     public static final double swerveDeadband = 0.1;
@@ -145,20 +147,20 @@ public final class Constants {
 
     public static final class TurretConstants{
       public static final int turretMotorPort=20;
-      public static final int turretLimitSwitchPort=0;
+      public static final int turretLimitSwitchPort=4;
       public static final int turretMoveTimeOut=3;
       public static final double homingPosition=0;  //encoder offset from hard limit
       public static final double deadband=1;
       public static final double maxTurretSpeed=1;
       public static final double turretSpeed=1;
       public static final double hometurretSpeed=0.3;
-      public static final double softLimitRightLow=-47;
-      public static final double softLimitLeftHigh=0;
+      public static final double softLimitRightLow=-100;
+      public static final double softLimitLeftHigh=100;
 
-      public static final double turretStraightPos=-40;
+      public static final double turretStraightPos=-37;
       public static final double turret90Pos=0;
 
-      public static final double turretP=0.035;
+      public static final double turretP=0.050;
       public static final double turretI=0;
       public static final double turretD=0;
 
@@ -249,10 +251,11 @@ public final class Constants {
       public static final double autoShooterSpeed=1;
       public static final double testShooterSpeed1=1;
       public static final double testShooterSpeed2=0.9;
-      public static final double feederSpeed=0.5;
+      public static final double feederSpeed=-0.5;
       public static final double baseSpeedDeadband=100;
       public static final double baseMotorSpeed=0.6;
       public static final double timeToRunShooter=1;
+      public static final double rotateSpeed=0.45;
 
       public static final int shooterMotorPort1=31;
       public static final int shooterMotorPort2=22;
@@ -260,24 +263,32 @@ public final class Constants {
       public static final int shooterAnglePort=23;
     }
 
-    public static final class RotateArm{
-      public static final int armRotatePort=11;
-      public static final double armSpeed=0.3;
-    }
 
     public static final class LimitSwitches {
       public static final int brakeButtonPort=0;
     }
 
     public static final class ButtonBindings{
-      public static final int intakeToggleButtonIn=1;
-      public static final int turret90=2;
-      public static final int turret0=3;
-      public static final int intakeToggleButtonOut=4;
-      public static final int manualShootButton=5;
+      public static final int driverintakeToggleButtonIn=1;
+      public static final int driverturret90=2;
+      public static final int driverturret0=3;
+      public static final int driverintakeToggleButtonOut=4;
+      public static final int drivermanualShootButton=5;
 
-      public static final int turretPOVLeft=270;
-      public static final int turretPOVRight=90;
+      public static final int driverturretPOVLeft=270;
+      public static final int driverturretPOVRight=90;
+      public static final int driverturretPOVrotateUp=0;
+      public static final int driverturretPOVrotateDown=180;
+
+      public static final int operatorintakeToggleButtonIn=1;
+      public static final int operatorturret90=2;
+      public static final int operatorturret0=3;
+      public static final int operatorintakeToggleButtonOut=4;
+      public static final int operatormanualShootButton=5;
+
+      public static final int operatorturretPOVLeft=270;
+      public static final int operatorturretPOVRight=90;
+
     }
 
 
@@ -315,7 +326,7 @@ public final class Constants {
     );
    
    }
-   public static final class Shooter{
+   public static final class ShooterTable{
        public static final int columnDistance=0;
        public static final int columnVelocity=1;
        public static final int columnAngle=2;

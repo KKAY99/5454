@@ -7,7 +7,6 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.utilities.Limelight;
 
 public class ShootRotateSetReferenceCommand extends Command {
   private ShooterSubsystem m_shooter;
@@ -51,6 +50,6 @@ public class ShootRotateSetReferenceCommand extends Command {
       returnValue=true;
     }
 
-    return true;
+    return returnValue;
   }
 }

@@ -7,13 +7,11 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.Constants;
 
 public class IntakeToggleCommand extends Command{
   private IntakeSubsystem m_intake;
 
-  private boolean m_toggle;
-
+  
   private double m_speed;
   private boolean m_isRunning;
   public IntakeToggleCommand(IntakeSubsystem intake,double speed){

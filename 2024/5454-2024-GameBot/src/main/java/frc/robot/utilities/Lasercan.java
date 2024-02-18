@@ -4,8 +4,7 @@ import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.LaserCan.RegionOfInterest;
 import au.grapplerobotics.LaserCan.TimingBudget;
 import frc.robot.Constants.LaserCanConstants;
-import frc.robot.subsystems.IntakeSubsystemIO;
-import frc.robot.subsystems.IntakeSubsystemIOInputsAutoLogged;
+
 
 public class Lasercan{
     private LasercanIO m_laserCanIO;

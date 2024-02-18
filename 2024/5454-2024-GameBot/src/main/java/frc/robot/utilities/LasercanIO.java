@@ -1,7 +1,6 @@
 package frc.robot.utilities;
 import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
+
 
 public interface LasercanIO {
     @AutoLog

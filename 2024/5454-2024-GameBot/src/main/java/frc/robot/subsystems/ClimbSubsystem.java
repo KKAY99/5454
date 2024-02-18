@@ -22,6 +22,7 @@ public class ClimbSubsystem extends SubsystemBase{
 //        m_climbOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         //m_climbOne.setSmartCurrentLimit(Constants.k30Amp);
 //        m_climbOne.setIdleMode(IdleMode.kBrake);
+       // m_climbOne.burnFlash();
        
     }
 

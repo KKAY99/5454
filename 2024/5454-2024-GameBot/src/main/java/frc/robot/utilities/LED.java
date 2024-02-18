@@ -55,6 +55,10 @@ public class LED{
             SetLEDColor(LEDConstants.LEDColors.ORANGE);
             m_currentLEDDisplay=LEDConstants.LEDDisplayStates.FLASHING;
             break;
+            case TARGETLOCK:
+                SetLEDColor(LEDConstants.LEDColors.PURPLE);
+                m_currentLEDDisplay=LEDConstants.LEDDisplayStates.FLASHING;
+            
             case OFF:
             m_led.stop();
             break;

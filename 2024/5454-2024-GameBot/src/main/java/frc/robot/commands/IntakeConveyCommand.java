@@ -3,12 +3,9 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.utilities.ADABreakBeam;
 import frc.robot.utilities.LED;
-import frc.robot.utilities.Lasercan;
-import frc.robot.utilities.AnalogAutoDirectFB6DN0E;
+
 public class IntakeConveyCommand extends Command{
   private IntakeSubsystem m_intake;
   private LED m_led;
@@ -18,24 +15,20 @@ public class IntakeConveyCommand extends Command{
   }
 
   private STATE m_state=STATE.INTAKINGNOTE;
-  private boolean m_isRunning;
   public IntakeConveyCommand(IntakeSubsystem intake,LED led){
     m_intake=intake;
-    //m_laserCan=lasercan;
-    m_isRunning=false;
+    m_led=led;
     addRequirements(m_intake);
   }
 
   @Override
   public void initialize(){
     m_state=STATE.INTAKINGNOTE;
-    m_isRunning=true;
   }
 
   @Override
   public void end(boolean interrupted){
     m_intake.stopIntake();
-    m_isRunning=false;
     Logger.recordOutput("Intake/IntakeConveyCommand","Not Running");
 
   }
@@ -43,8 +36,6 @@ public class IntakeConveyCommand extends Command{
   @Override
   public boolean isFinished(){
     boolean returnValue=false;
-    //System.out.println("Lasercan BreakBeam: "+m_laserCan.HighTurretBreakBeam());
-    //System.out.println("Lasercan Distance: "+m_laserCan.GetDistanceInMMHigh());
 
     switch(m_state){
       case INTAKINGNOTE:

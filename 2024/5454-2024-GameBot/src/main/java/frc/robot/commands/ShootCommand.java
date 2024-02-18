@@ -7,7 +7,6 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.utilities.Limelight;
 
 public class ShootCommand extends Command {
   private ShooterSubsystem m_shooter;
@@ -40,6 +39,7 @@ public class ShootCommand extends Command {
   @Override
   public void end(boolean interrupted){
     m_shooter.RunShootingMotors(m_baseMotorSpeed);
+    m_shooter.StopShootingMotors();  // for testing
     m_isRunning=false;
     m_shooter.ShotTaken();
     Logger.recordOutput("Shooter/ShooterSpeed",0);
@@ -53,6 +53,6 @@ public class ShootCommand extends Command {
     //if(m_shooter.isMotorVelocityAtBase()){
       m_shooter.RunShootingMotors(m_speed);
     //}
-    return false;
+    return returnValue;
   }
 }

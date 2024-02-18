@@ -55,6 +55,7 @@ public class TurretSubsystem extends SubsystemBase{
     m_pidController.setP(kTurretP);
     m_pidController.setI(kTurretI);
     m_pidController.setD(kTurretD);
+    m_turretMotor.burnFlash(); //ensure all settings are saved if a a browout happens
 
   }
 

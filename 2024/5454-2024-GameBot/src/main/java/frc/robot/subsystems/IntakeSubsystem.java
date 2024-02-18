@@ -31,7 +31,8 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeTwo= new CANSparkMax(motorTwo,MotorType.kBrushless);
         m_intakeTwo.setIdleMode(IdleMode.kBrake);
         m_intakeTwo.setSmartCurrentLimit(Constants.k30Amp);
-
+        m_intakeOne.burnFlash(); //ensure all settings are saved if a a browout happens
+        m_intakeTwo.burnFlash(); //ensure all settings are saved if a a browout happens
         m_intakeIO=intakeIO;
         //TODO: REMOVE CONSTANT - EVIL CONSTANT
         m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);

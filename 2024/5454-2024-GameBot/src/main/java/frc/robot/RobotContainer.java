@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import java.sql.Driver;
 import java.util.List;
 
 import javax.swing.JToggleButton;
@@ -12,7 +11,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import frc.robot.utilities.Lasercan;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -63,6 +61,7 @@ public class RobotContainer {
     private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
  
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
+    private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
@@ -119,38 +118,71 @@ public class RobotContainer {
      */
     private void configureButtonBindings(){
       IntakeToggleCommand intakeToggleTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-      JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
+      JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
       intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
 
+      IntakeToggleCommand intakeToggleOperatorTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+      JoystickButton intakeToggleTrueOperatorButtonIn=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonIn);
+      intakeToggleTrueOperatorButtonIn.onTrue(intakeToggleOperatorTrueIn);
+
       IntakeToggleCommand intakeToggleTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed);
-      JoystickButton intakeToggleTrueButtonOut=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonOut);
+      JoystickButton intakeToggleTrueButtonOut=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonOut);
       intakeToggleTrueButtonOut.onTrue(intakeToggleTrueOut);
+
+      IntakeToggleCommand intakeToggleOperatorTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed);
+      JoystickButton intakeToggleOperatorTrueButtonOut=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonOut);
+      intakeToggleOperatorTrueButtonOut.onTrue(intakeToggleOperatorTrueOut);
 
       //IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_led);
       //JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
       //intakeConveyButton.toggleOnTrue(intakeConvey);
 
       TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
-      POVButton turretLeftButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.turretPOVLeft);
+      POVButton turretLeftButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.driverturretPOVLeft);
       turretLeftButton.whileTrue(turretLeft);
 
+      TurretCommand turretOperatorLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
+      POVButton turretOperatorLeftButton=new POVButton(m_xBoxOperator,Constants.ButtonBindings.operatorturretPOVLeft);
+      turretOperatorLeftButton.whileTrue(turretOperatorLeft);
+
       TurretCommand turretRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
-      POVButton turretRightButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.turretPOVRight);
+      POVButton turretRightButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.driverturretPOVRight);
       turretRightButton.whileTrue(turretRight);
+
+      
+      TurretCommand turretOperatorRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
+      POVButton turretOperatorRightButton=new POVButton(m_xBoxOperator,Constants.ButtonBindings.operatorturretPOVRight);
+      turretOperatorRightButton.whileTrue(turretOperatorRight);
+
 
       TurretPosCommand turretStraight=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,
                                                           Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret0);
+      JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverturret0);
       turretStraightButton.onTrue(turretStraight);
+
+     TurretPosCommand turretOperatorStraight=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,
+                                                          Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+      JoystickButton turretOperatorStraightButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorturret0);
+      turretOperatorStraightButton.onTrue(turretOperatorStraight);
+
 
       TurretPosCommand turret90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,
                                                     Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.turret90);
+      JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverturret90);
       turret90Button.onTrue(turret90);
 
+      TurretPosCommand turretOp90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,
+                                                    Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+      JoystickButton turretOp90Button=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorturret90);
+      turretOp90Button.onTrue(turretOp90);
+
       ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
-      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.manualShootButton);
-      shootButton1.whileTrue(shoot1);
+      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.drivermanualShootButton);
+      shootButton1.toggleOnTrue(shoot1);
+
+      ShootCommand shootOp1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
+      JoystickButton shootOpButton1=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatormanualShootButton);
+      shootOpButton1.toggleOnTrue(shootOp1);
 
       /*ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
@@ -159,6 +191,17 @@ public class RobotContainer {
       /*RobotTrackCommand turretTrack=new RobotTrackCommand(m_Limelight,m_turret);
       JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter1Button);
       turretTrackButton.whileTrue(turretTrack);*/
+    
+    
+      ShootRotateCommand shooterRotateUp = new ShootRotateCommand(m_shooter, Constants.ShooterConstants.rotateSpeed);
+      POVButton rotateUp = new POVButton(m_xBoxDriver, ButtonBindings.driverturretPOVrotateUp);
+      rotateUp.whileTrue(shooterRotateUp);
+
+      ShootRotateCommand shooterRotateDown = new ShootRotateCommand(m_shooter, -Constants.ShooterConstants.rotateSpeed);
+      POVButton rotateDown = new POVButton(m_xBoxDriver, ButtonBindings.driverturretPOVrotateDown);
+      rotateDown.whileTrue(shooterRotateDown);
+
+     
     }
        
     private void refreshSmartDashboard(){  

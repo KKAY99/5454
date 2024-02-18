@@ -3,7 +3,7 @@ import edu.wpi.first.math.InterpolatingMatrixTreeMap;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.units.Velocity;
 import frc.robot.Constants;
-import frc.robot.Constants.Shooter;
+import frc.robot.Constants.ShooterTable;
 import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.math.Num;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -23,12 +23,12 @@ public class ShotTable {
         double velocity;
         double shotTimerow;
         double anglerow;
-        int dataRows=Constants.Shooter.distanceLookup.length;
+        int dataRows=Constants.ShooterTable.distanceLookup.length;
         for(int rowLoop=0;rowLoop<dataRows;rowLoop++){
-            distance=Constants.Shooter.distanceLookup[rowLoop][Shooter.columnDistance];
-            velocity=Constants.Shooter.distanceLookup[rowLoop][Shooter.columnVelocity];
-            anglerow=Constants.Shooter.distanceLookup[rowLoop][Shooter.columnAngle];
-            shotTimerow=Constants.Shooter.distanceLookup[rowLoop][Shooter.columnShotTime];
+            distance=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnDistance];
+            velocity=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnVelocity];
+            anglerow=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnAngle];
+            shotTimerow=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnShotTime];
             shotVelocity.put(distance,velocity);
             angle.put(distance,anglerow);
             shotTime.put(distance,shotTimerow);
@@ -38,9 +38,9 @@ public class ShotTable {
 
     private double DONOTUSEparseTable(double distance,int column,boolean calculateValue){
     try{    
-        boolean bExceededDistance=false;
+       
         int tableLoop=0;
-        int rows=Constants.Shooter.distanceLookup.length;
+        int rows=Constants.ShooterTable.distanceLookup.length;
         double currentValue=0;
         double lastValue=0;
         double nextDistance=0;
@@ -48,17 +48,17 @@ public class ShotTable {
         double lastDistance=0;
         double currentDistance=0;
         
-        currentValue=Constants.Shooter.distanceLookup[tableLoop][column];
+        currentValue=Constants.ShooterTable.distanceLookup[tableLoop][column];
         
         do{
             lastValue=currentValue;
-            currentValue=Constants.Shooter.distanceLookup[tableLoop][column];
+            currentValue=Constants.ShooterTable.distanceLookup[tableLoop][column];
             lastDistance=currentDistance;
-            currentDistance=Constants.Shooter.distanceLookup[tableLoop][Constants.Shooter.columnDistance];
+            currentDistance=Constants.ShooterTable.distanceLookup[tableLoop][Constants.ShooterTable.columnDistance];
             tableLoop++;
             if(tableLoop<rows){
-                nextDistance=Constants.Shooter.distanceLookup[tableLoop][Constants.Shooter.columnDistance];
-                nextValue=Constants.Shooter.distanceLookup[tableLoop][column];
+                nextDistance=Constants.ShooterTable.distanceLookup[tableLoop][Constants.ShooterTable.columnDistance];
+                nextValue=Constants.ShooterTable.distanceLookup[tableLoop][column];
         
             } else{
                 nextDistance=999999;

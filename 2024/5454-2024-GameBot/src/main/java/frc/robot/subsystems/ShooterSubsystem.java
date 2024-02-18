@@ -6,9 +6,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
@@ -30,7 +27,7 @@ public class ShooterSubsystem extends SubsystemBase{
     private WPI_TalonFX m_ShootingMotor2;
     
     private CANSparkMax m_feederMotor;
-    //private CANSparkMax m_angleMotor;
+    private CANSparkMax m_angleMotor;
 
     //private SparkMaxPIDController m_anglePID;
 
@@ -49,8 +46,8 @@ public class ShooterSubsystem extends SubsystemBase{
         configmotor(m_ShootingMotor2);
         m_feederMotor=new CANSparkMax(feedMotor,MotorType.kBrushless);
         m_feederMotor.setSmartCurrentLimit(Constants.k30Amp);
-        //m_angleMotor = new CANSparkMax(angleMotor,MotorType.kBrushless);
-        //m_angleMotor.setSmartCurrentLimit(Constants.k30Amp);
+        m_angleMotor = new CANSparkMax(angleMotor,MotorType.kBrushless);
+        m_angleMotor.setSmartCurrentLimit(Constants.k30Amp);
         //m_anglePID = m_angleMotor.getPIDController();
         //m_angleEncoder=m_angleMotor.getEncoder();
     
@@ -88,8 +85,8 @@ public class ShooterSubsystem extends SubsystemBase{
         //speed=speed*maxRPM;
         // m_ShootingMotor1.set(ControlMode.Velocity, speed);
        // m_ShootingMotor2.set(ControlMode.Velocity, speed);
-       m_ShootingMotor1.set(ControlMode.PercentOutput, 1); 
-       m_ShootingMotor2.set(ControlMode.PercentOutput, 1); 
+       m_ShootingMotor1.set(ControlMode.PercentOutput, -0.5); 
+       m_ShootingMotor2.set(ControlMode.PercentOutput, -0.5); 
        m_feederMotor.set(ShooterConstants.feederSpeed);
     }  
 
@@ -125,11 +122,11 @@ public class ShooterSubsystem extends SubsystemBase{
     }
 
     public void RotateShooter(double speed){
-        //m_angleMotor.set(speed);
+        m_angleMotor.set(speed);
     }
 
     public void stopRotate(){
-        //m_angleMotor.set(0);
+        m_angleMotor.set(0);
     }
 
     public void setAngle(double targetAngle){
