@@ -46,7 +46,7 @@ public class RobotContainer {
                                             ShooterConstants.feederMotorPort);
 
     private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
-    private LED m_led= new LED(9,4,100);
+    private LED m_led= new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
  //   private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.breakBeamDIO);
 
     //private Lasercan m_laserCan=new Lasercan(6);
@@ -111,10 +111,12 @@ public class RobotContainer {
                 
         }  
         public void TeleopMode(){
+            m_led.SetLEDState(Constants.LEDConstants.LEDStates.TELEOP);
                 
         }
     
     public void DisableMode(){
+        m_led.SetLEDState(Constants.LEDConstants.LEDStates.OFF);
        
     }
     public void EnableMode(){

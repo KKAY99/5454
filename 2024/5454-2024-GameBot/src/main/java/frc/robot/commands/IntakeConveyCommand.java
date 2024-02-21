@@ -9,15 +9,17 @@ import frc.robot.utilities.LED;
 public class IntakeConveyCommand extends Command{
   private IntakeSubsystem m_intake;
   private LED m_led;
+  private double m_speed;
 
   private enum STATE{
     INTAKINGNOTE,HASNOTE,NOTEINSHOOTPOS
   }
 
   private STATE m_state=STATE.INTAKINGNOTE;
-  public IntakeConveyCommand(IntakeSubsystem intake,LED led){
+  public IntakeConveyCommand(IntakeSubsystem intake,double intakeSpeed, LED led){
     m_intake=intake;
     m_led=led;
+    m_speed=intakeSpeed;
     addRequirements(m_intake);
   }
 
@@ -39,7 +41,7 @@ public class IntakeConveyCommand extends Command{
 
     switch(m_state){
       case INTAKINGNOTE:
-      m_intake.runIntake(Constants.IntakeConstants.intakeConveyGetNoteSpeed);
+      m_intake.runIntake(m_speed);
 
       if(m_intake.isBeamBroken()){
       //  m_led.SetLEDState(LEDConstants .INTAKELOW);
@@ -60,7 +62,7 @@ public class IntakeConveyCommand extends Command{
       break;
     }
     Logger.recordOutput("Intake/IntakeConveyCommand",m_state.toString());
-
+    
     return returnValue;
   }
   

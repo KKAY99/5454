@@ -33,8 +33,8 @@ public class Robot extends LoggedRobot {
 
   Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
 
-  if (isReal()) {
-    Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+  if (isReal()) { // Log 
+    Logger.addDataReceiver(new WPILOGWriter());//to a USB stick ("/U/logs")
     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
     new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
   } else {
@@ -110,7 +110,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit(){
+    m_robot.stopRumble();
+  }
 
   /** This function is called periodically when disabled. */
   @Override

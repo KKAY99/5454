@@ -5,18 +5,29 @@
 package frc.robot.commands;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeToggleCommand extends Command{
   private IntakeSubsystem m_intake;
-
+  private XboxController m_xboxController;
   
   private double m_speed;
   private boolean m_isRunning;
+
   public IntakeToggleCommand(IntakeSubsystem intake,double speed){
     m_intake=intake;
     m_speed=speed;
+    m_isRunning=false;
+    addRequirements(m_intake);
+  }
+
+  public IntakeToggleCommand(IntakeSubsystem intake,double speed,XboxController xboxController){
+    m_intake=intake;
+    m_speed=speed;
+    m_xboxController=xboxController;
     m_isRunning=false;
     addRequirements(m_intake);
   }
@@ -27,7 +38,7 @@ public class IntakeToggleCommand extends Command{
   @Override
   public void execute(){
     m_isRunning=true;
-    m_intake.ToggleIntake(m_speed);
+    m_intake.ToggleIntake(m_speed,m_xboxController);
   }
   
   @Override public void end(boolean interrupted){

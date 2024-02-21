@@ -47,7 +47,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.DisableMode();
+  }
 
   @Override
   public void disabledPeriodic() {
@@ -76,6 +78,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
      m_robotContainer.disabledPerioidicUpdates();
+     m_robotContainer.TeleopMode();
 
   }
 

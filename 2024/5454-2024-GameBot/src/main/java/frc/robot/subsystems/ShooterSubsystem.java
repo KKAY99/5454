@@ -20,15 +20,19 @@ import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ShotTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 public class ShooterSubsystem extends SubsystemBase{
     private Limelight m_limeLight;
 
-    private WPI_TalonFX m_ShootingMotor1;
-    private WPI_TalonFX m_ShootingMotor2;
-    
+   // private WPI_TalonFX m_ShootingMotor1;
+   // private WPI_TalonFX m_ShootingMotor2;
+    private TalonFX m_ShootingMotor1;
+    private TalonFX m_ShootingMotor2; 
     private CANSparkMax m_feederMotor;
     private CANSparkMax m_angleMotor;
-
+    
     //private SparkMaxPIDController m_anglePID;
 
     //private RelativeEncoder m_angleEncoder;
@@ -40,8 +44,8 @@ public class ShooterSubsystem extends SubsystemBase{
 
     public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor){
         m_limeLight=limeLight;
-        m_ShootingMotor1=new WPI_TalonFX(shootingMotor1);  
-        m_ShootingMotor2=new WPI_TalonFX(shootingMotor2);
+        m_ShootingMotor1=new TalonFX(shootingMotor1);  
+        m_ShootingMotor2=new TalonFX(shootingMotor2);
         configmotor(m_ShootingMotor1);
         configmotor(m_ShootingMotor2);
         m_feederMotor=new CANSparkMax(feedMotor,MotorType.kBrushless);
@@ -68,18 +72,17 @@ public class ShooterSubsystem extends SubsystemBase{
         m_angleMotor.getEncoder();*/
     }
 
-    public void configmotor(WPI_TalonFX motor){
-        motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
-                                        0,30);
-        motor.configNominalOutputForward(0,30);
-        motor.configNominalOutputReverse(0,30);
-        motor.configPeakOutputForward(1,30);
-        motor.configPeakOutputReverse(-1,30);
-        motor.config_kF(0, 1023/2066.0,30);
-        motor.config_kP(0, .1,30);
-        motor.config_kI(0, 0.001,30);
-        motor.config_kD(0, 5,30);  
-    }
+    public void configmotor(TalonFX motor){
+        var fx_cfg = new TalonFXConfiguration();
+        // fetch *all* configs currently applied to the device
+        var slot0Configs = new Slot0Configs();
+        slot0Configs.kV = 1023/2066.0;
+        slot0Configs.kP=.1;
+        slot0Configs.kI=0.001;
+        slot0Configs.kD=5; 
+        // apply gains, 50 ms totl timeout
+        motor.getConfigurator().apply(slot0Configs, 0.050); 
+        }
     
     public void RunShootingMotors(double speed){
         //speed=speed*maxRPM;
@@ -89,6 +92,14 @@ public class ShooterSubsystem extends SubsystemBase{
        m_ShootingMotor2.set(ControlMode.PercentOutput, -0.5); 
        m_feederMotor.set(ShooterConstants.feederSpeed);
     }  
+
+    public void RunFeedRollers(double speed){
+        m_feederMotor.set(speed);
+    }
+
+    public void StopFeedRollers(){
+        m_feederMotor.set(0);
+    }
 
     public void StopShootingMotors(){
         m_ShootingMotor1.set(0);

@@ -31,6 +31,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.AutoConstants;
@@ -117,9 +118,13 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-      IntakeToggleCommand intakeToggleTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+     // IntakeToggleCommand intakeToggleTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+     // JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
+     // intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
+
+      IntakeConveyCommand intakeConveyIn=new IntakeConveyCommand(m_intake,Constants.IntakeConstants.intakeSpeed,m_led);
       JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
-      intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
+      intakeToggleTrueButtonIn.onTrue(intakeConveyIn);
 
       IntakeToggleCommand intakeToggleOperatorTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
       JoystickButton intakeToggleTrueOperatorButtonIn=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonIn);
@@ -183,6 +188,15 @@ public class RobotContainer {
       ShootCommand shootOp1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
       JoystickButton shootOpButton1=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatormanualShootButton);
       shootOpButton1.toggleOnTrue(shootOp1);
+
+      FeedRollerCommand feedRoller= new FeedRollerCommand(m_shooter,Constants.ShooterConstants.manualfeederSpeed,
+                                    m_xBoxDriver);
+      JoystickButton feedRollerButton = new JoystickButton(m_xBoxDriver,ButtonBindings.drivermanualFeedRollerButton);
+      feedRollerButton.whileTrue(feedRoller);
+
+      GyroResetCommand gyroReset= new GyroResetCommand(m_swerve);
+      JoystickButton gyroResetButton = new JoystickButton(m_xBoxDriver,ButtonBindings.driverGyroResetButton);
+      gyroResetButton.onTrue(gyroReset);
 
       /*ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
@@ -368,6 +382,11 @@ public class RobotContainer {
 
   public void SetBaseShooterSpeed(){
     //m_shooter.RunShootingMotors(Constants.ShooterConstants.baseMotorSpeed);
+  }
+
+  public void stopRumble(){
+    m_xBoxDriver.setRumble(RumbleType.kBothRumble,Constants.InputControllers.kRumbleoff);
+    m_xBoxOperator.setRumble(RumbleType.kBothRumble,Constants.InputControllers.kRumbleoff);
   }
 
   public void AutonMode(){

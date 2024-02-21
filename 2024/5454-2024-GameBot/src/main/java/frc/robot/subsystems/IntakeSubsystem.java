@@ -5,11 +5,15 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
+import frc.robot.Constants.InputControllers;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.utilities.AnalogAutoDirectFB6DN0E;
 import frc.robot.utilities.Lasercan;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -62,12 +66,18 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeTwo.setIdleMode(IdleMode.kCoast);
     }
 
-    public void ToggleIntake(double speed){
+    public void ToggleIntake(double speed,XboxController xboxController){
         if(m_intakeToggle){
             m_intakeToggle=false;
+            if(xboxController!=null){
+                xboxController.setRumble(RumbleType.kBothRumble,InputControllers.kRumbleoff);
+            }
             stopIntake();
         }else{
             m_intakeToggle=true;
+            if(xboxController!=null){
+                xboxController.setRumble(RumbleType.kBothRumble,Constants.InputControllers.kRumbleFull);
+            }
             runIntake(speed);
         }
     }

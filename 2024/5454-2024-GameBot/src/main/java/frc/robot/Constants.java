@@ -119,6 +119,10 @@ public final class Constants {
       public static final int kXboxDrive = 0;
       public static final int kXboxOperator = 1;
       public static final int kCustomController = 2;
+      public static final double kRumbleoff=0;
+      public static final double kRumbleLight =0.25;
+      public static final double kRumbleMedium=0.5;
+      public static final double kRumbleFull=1.0;
     }
 
     public static final class IntakeConstants{
@@ -154,8 +158,8 @@ public final class Constants {
       public static final double maxTurretSpeed=1;
       public static final double turretSpeed=1;
       public static final double hometurretSpeed=0.3;
-      public static final double softLimitRightLow=-100;
-      public static final double softLimitLeftHigh=100;
+      public static final double softLimitRightLow=-40;
+      public static final double softLimitLeftHigh=36.00;
 
       public static final double turretStraightPos=-37;
       public static final double turret90Pos=0;
@@ -252,10 +256,11 @@ public final class Constants {
       public static final double testShooterSpeed1=1;
       public static final double testShooterSpeed2=0.9;
       public static final double feederSpeed=-0.5;
+      public static final double manualfeederSpeed=-0.3;
       public static final double baseSpeedDeadband=100;
       public static final double baseMotorSpeed=0.6;
       public static final double timeToRunShooter=1;
-      public static final double rotateSpeed=0.45;
+      public static final double rotateSpeed=0.99;
 
       public static final int shooterMotorPort1=31;
       public static final int shooterMotorPort2=22;
@@ -274,6 +279,8 @@ public final class Constants {
       public static final int driverturret0=3;
       public static final int driverintakeToggleButtonOut=4;
       public static final int drivermanualShootButton=5;
+      public static final int drivermanualFeedRollerButton=6;
+      public static final int driverGyroResetButton=7;
 
       public static final int driverturretPOVLeft=270;
       public static final int driverturretPOVRight=90;
@@ -289,6 +296,7 @@ public final class Constants {
       public static final int operatorturretPOVLeft=270;
       public static final int operatorturretPOVRight=90;
 
+      public static final double rumbleValue=1;
     }
 
 

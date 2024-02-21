@@ -1,6 +1,7 @@
 package frc.robot.utils;
 import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
+import frc.robot.Constants.LEDConstants.LEDStates;
 import frc.robot.subsystems.BlinkInSubsystem;
 
 import java.util.GregorianCalendar;
@@ -29,6 +30,7 @@ public class LED{
         m_led.setData(m_ledBuffer);
 
         m_led.start();
+        m_currentPrimaryLEDState=LEDStates.OFF;
     }
 
     private void UpdatePrimaryLEDS(LEDConstants.LEDStates ledState){
@@ -46,7 +48,7 @@ public class LED{
             m_currentLEDDisplay=LEDConstants.LEDDisplayStates.SOLID;
             break;
             case TELEOP:
-            SetLEDColor(LEDConstants.LEDColors.GREEN);
+            SetLEDColor(LEDConstants.LEDColors.PURPLE);
             m_currentLEDDisplay=LEDConstants.LEDDisplayStates.SOLID;
             break;
             case AUTO:
@@ -76,26 +78,39 @@ public class LED{
     }
 
     private void SetLEDColor(LEDConstants.LEDColors ledColor){
+        int r=0;
+        int g=0;
+        int b=0;
+
         switch(ledColor){
             case RED:
-            m_ledBuffer.setRGB(m_ledBuffer.getLength(),255,0,0);
+            r=255;
             break;
             case ORANGE:
-            m_ledBuffer.setRGB(m_ledBuffer.getLength(),255,165,0);
+            r=255;
+            g=165;
             break;
             case BLUE:
-            m_ledBuffer.setRGB(m_ledBuffer.getLength(),0,0,255);
+            b=255;
             break;
             case PURPLE:
-            m_ledBuffer.setRGB(m_ledBuffer.getLength(),160,32,240);
+            r=160;
+            g=32;
+            b=240;
             break;
             case GREEN:
-            m_ledBuffer.setRGB(m_ledBuffer.getLength(),0,255,0);
+            g=255;
+            
             break;
+        }
+
+        for(int i=0;i<m_ledBuffer.getLength();i++){
+            m_ledBuffer.setRGB(i,r,g,b);
         }
     }
 
     public void SetLEDState(LEDConstants.LEDStates ledState){
+        System.out.println("Setting Led Color To: "+ledState);
         if(ledState!=m_currentPrimaryLEDState){
             m_currentPrimaryLEDState=ledState;
             UpdatePrimaryLEDS(m_currentPrimaryLEDState);
