@@ -268,6 +268,9 @@ public final class Constants {
       public static final double homeDeadband=2;
       public static final double homeRotateSpeed=0.1;
 
+      public static final double longShotDis=-66;
+      public static final double shortShotDis=-39;
+
       public static final int shooterMotorPort1=31;
       public static final int shooterMotorPort2=22;
       public static final int feederMotorPort=21;
@@ -286,23 +289,21 @@ public final class Constants {
       public static final int driverturret0=3;
       public static final int driverintakeToggleButtonOut=4;
       public static final int drivermanualShootButton=5;
-      public static final int drivermanualFeedRollerButton=6;
       public static final int driverGyroResetButton=7;
-      public static final int driverSmartShooter=8;
 
       public static final int driverturretPOVLeft=270;
       public static final int driverturretPOVRight=90;
-      public static final int driverturretPOVrotateUp=0;
-      public static final int driverturretPOVrotateDown=180;
 
       public static final int operatorintakeToggleButtonIn=1;
       public static final int operatorturret90=2;
       public static final int operatorturret0=3;
       public static final int operatorintakeToggleButtonOut=4;
-      public static final int operatormanualShootButton=5;
+      public static final int operatorTurretTrack=5;
 
       public static final int operatorturretPOVLeft=270;
       public static final int operatorturretPOVRight=90;
+      public static final int operatorTurretPOVrotateUp=0;
+      public static final int operatorTurretPOVrotateDown=180;
 
       public static final double rumbleValue=1;
     }
@@ -354,7 +355,7 @@ public final class Constants {
           {24,0.53,-51,5},
           {31,0.53,-57.8,6},
           {37,0.65,-63.7,7},
-          {39.8,0.65,-66.9,4}
+          {39.4,0.65,-66.9,4}
       };
 
     }

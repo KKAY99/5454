@@ -38,12 +38,13 @@ public class IntakeToggleCommand extends Command{
   @Override
   public void execute(){
     m_isRunning=true;
-    m_intake.ToggleIntake(m_speed,m_xboxController);
+    //m_intake.ToggleIntake(m_speed,m_xboxController);
   }
   
   @Override public void end(boolean interrupted){
    m_isRunning=false; 
      Logger.recordOutput("Intake/IntakeToggleCommand",m_isRunning);
+     m_intake.stopIntake();
 
   }
 
@@ -52,6 +53,8 @@ public class IntakeToggleCommand extends Command{
       // TODO Auto-generated method stub
       Logger.recordOutput("Intake/IntakeToggleCommand",m_isRunning);
 
-      return true;
+      m_intake.runIntake(m_speed);
+      
+      return false;
   }
 }

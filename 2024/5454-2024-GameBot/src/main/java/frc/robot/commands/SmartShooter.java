@@ -37,7 +37,6 @@ public class SmartShooter extends Command {
     private boolean m_shootWhileMove=false;
     private double m_currentTime;
     private double kTimeToRun=Constants.ShooterConstants.timeToRunShooter;
-    private boolean isShooterRunning=false;
     private double m_feederStartTime;
     private enum STATE{
         SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,END
@@ -173,27 +172,27 @@ public class SmartShooter extends Command {
                 double angleGap=Math.abs(m_shooter.getRelativePosition())
                     -Math.abs(m_shotTable.getAngle(limeLimelightDis));
                   Logger.recordOutput("Shooter/AngleGap",angleGap);
-                if(angleGap< Constants.ShooterConstants.kAngleDeadband  && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
+                if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
+                    m_shooter.stopRotate();
                     m_shooter.RunShootingMotors(m_shotTable.getVelocity(limeLimelightDis));
-                    isShooterRunning=true;
                     m_state=STATE.RAMPUPSHOOTER;
                     m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
                     Logger.recordOutput("Shooter/AngleGap",0);
                 }
                  break;
-            case RAMPUPSHOOTER:
-                    m_shooter.stopRotate();
+            case RAMPUPSHOOTER:                   
                     if(Timer.getFPGATimestamp()>m_feederStartTime){
+                        m_currentTime=Timer.getFPGATimestamp();
                         m_state=STATE.SHOOT;
                     }
                     break;
             case SHOOT:
-              if(isShooterRunning){
+
+            
                 m_shooter.RunFeedRollers(ShooterConstants.feederSpeed);
                 m_intake.runIntake(Constants.IntakeConstants.autoIntakeSpeed);
-             }
-          
-            if(m_currentTime+kTimeToRun<Timer.getFPGATimestamp()&&isShooterRunning){
+                     
+            if(m_currentTime+kTimeToRun<Timer.getFPGATimestamp()){
                 m_state=STATE.END;
             }
             break;
@@ -213,8 +212,8 @@ public class SmartShooter extends Command {
         m_timer.stop();
         m_intake.stopIntake();
         m_isRunning=false;
+        m_state=STATE.SETANGLE;
         m_shooter.ShotTaken();
-        isShooterRunning=false;
         Logger.recordOutput("Shooter/ShooterSpeed",0);
         Logger.recordOutput("Shooter/SmartShooterCommand",m_isRunning);
     }

@@ -40,6 +40,7 @@ public class TurretSubsystem extends SubsystemBase{
   private boolean m_hasSetReference;
 
   private double m_speed;
+  private double m_targetAngle;
 
   private double kTurretP=Constants.TurretConstants.turretP;
   private double kTurretI=Constants.TurretConstants.turretI;
@@ -141,6 +142,7 @@ public class TurretSubsystem extends SubsystemBase{
 
   public void TurretSetReference(double pos){
     m_hasSetReference=true;
+    m_targetAngle=pos;
     m_pidController.setReference(pos,ControlType.kPosition);
   }
 
@@ -206,6 +208,7 @@ public class TurretSubsystem extends SubsystemBase{
     Logger.recordOutput("Turret/TurretLeftLimit",IsAtLeftLimit());
     Logger.recordOutput("Turret/TurretRightLimit",IsAtRightLimit());
     Logger.recordOutput("Turret/TurretHasSetReference",m_hasSetReference);
+    Logger.recordOutput("Turret/TurretReferenceAngle",m_targetAngle);
 
     SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
   }

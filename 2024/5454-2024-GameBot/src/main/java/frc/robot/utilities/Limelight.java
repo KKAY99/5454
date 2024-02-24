@@ -234,7 +234,7 @@ public class Limelight {
         SmartDashboard.putBoolean("limelight Have Atleast 1 target", isTargetAvailible());
         SmartDashboard.putBoolean("Targets>=2", DoesLimelightHaveTwoTargets());
         SmartDashboard.putString("limelight mode", getVisionMode());
-        SmartDashboard.putNumberArray("RobotPoseRedLimelight", GetDoublePosArray());
+        //SmartDashboard.putNumberArray("RobotPoseRedLimelight", GetDoublePosArray());
 
     }
 
@@ -247,10 +247,10 @@ public class Limelight {
     }
 
     public Pose2d GetPoseViaApriltag(){
-        double[] empty=null;
-        double[] robotPoseValues=robotPoseRed.getDoubleArray(empty);
+        //double[] empty=null;
+        //double[] robotPoseValues=robotPoseRed.getDoubleArray(empty);
 
-        Pose2d pose=new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
+        Pose2d pose =new Pose2d(0,0,new Rotation2d(0));//=new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
         return pose;
     }
 

@@ -63,9 +63,9 @@ public class ShooterSubsystem extends SubsystemBase{
         m_canCoder=new WPI_CANCoder(canCoderId);
         m_angleEncoder=m_angleMotor.getEncoder();
     
-        double anglekP = 0.05; 
-        double anglekI = 0;
-        double anglekD = 0; 
+        double anglekP = 0.03; 
+        double anglekI = 0.01;
+        double anglekD = 0.01; 
         double anglekIz = 0; 
         double anglekFF = 0.000015; 
         double anglekMaxOutput = 1; 
@@ -103,7 +103,7 @@ public class ShooterSubsystem extends SubsystemBase{
          
        m_ShootingMotor1.set(-speed); 
        m_ShootingMotor2.set(-speed); 
-       //m_feederMotor.set(ShooterConstants.feederSpeed);
+       m_feederMotor.set(ShooterConstants.feederSpeed);
     }  
 
     public void RunFeedRollers(double speed){
@@ -202,6 +202,28 @@ public class ShooterSubsystem extends SubsystemBase{
     public void PutTableMultiplier(){
     }
 
+    public boolean isAtLongShot(){
+        boolean returnValue=false;
+
+        if(getRelativePosition()>Constants.ShooterConstants.longShotDis-0.25&&
+            getRelativePosition()<Constants.ShooterConstants.longShotDis+0.25){
+                returnValue=true;
+        }
+
+        return returnValue;
+    }
+
+    public boolean isAtShortShot(){
+        boolean returnValue=false;
+
+        if(getRelativePosition()>Constants.ShooterConstants.shortShotDis-0.25&&
+            getRelativePosition()<Constants.ShooterConstants.shortShotDis+0.25){
+                returnValue=true;
+        }
+
+        return returnValue;
+    }
+
     @Override
     public void periodic(){
         Logger.recordOutput("Shooter/ShooterVelocity",m_velocity);
@@ -213,5 +235,8 @@ public class ShooterSubsystem extends SubsystemBase{
         Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
         Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken",m_shotsTaken);
+
+        SmartDashboard.putBoolean("IsAtLongShotAngle",isAtLongShot());
+        SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());
     }
 }
