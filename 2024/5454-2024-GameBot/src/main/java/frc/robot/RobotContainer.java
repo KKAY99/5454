@@ -86,7 +86,8 @@ public class RobotContainer {
     private Limelight m_TurretLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
                                         Constants.LimeLightValues.limelightTurretAngle);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(m_TurretLimelight,Constants.ShooterConstants.shooterMotorPort1,
-                                           Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort,Constants.ShooterConstants.feederMotorPort);
+                                           Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort,
+                                           Constants.ShooterConstants.feederMotorPort,Constants.ShooterConstants.encoderCanID);
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
@@ -122,7 +123,7 @@ public class RobotContainer {
      // JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
      // intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
 
-      IntakeConveyCommand intakeConveyIn=new IntakeConveyCommand(m_intake,Constants.IntakeConstants.intakeSpeed,m_led);
+      IntakeToggleCommand intakeConveyIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
       JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
       intakeToggleTrueButtonIn.onTrue(intakeConveyIn);
 
@@ -198,6 +199,10 @@ public class RobotContainer {
       JoystickButton gyroResetButton = new JoystickButton(m_xBoxDriver,ButtonBindings.driverGyroResetButton);
       gyroResetButton.onTrue(gyroReset);
 
+      SmartShooter smartShooter=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false);
+      JoystickButton smartShooterButton=new JoystickButton(m_xBoxDriver,ButtonBindings.driverSmartShooter);
+      smartShooterButton.onTrue(smartShooter);
+
       /*ShootCommand shoot2=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed2);
       JoystickButton shootButton2=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.testShooter2Button);
       shootButton2.whileTrue(shoot2);
@@ -220,7 +225,7 @@ public class RobotContainer {
        
     private void refreshSmartDashboard(){  
       //TODO: ADD BACK WHEN LIMELIGHT ON
-      //m_Limelight.update(true);
+      m_TurretLimelight.LimeLightPeriodic(true);
       m_swerve.getPose();
     }
     
@@ -440,6 +445,9 @@ public class RobotContainer {
     if(m_HasHomed==false){
       Command turretHome=new TurretHomeCommand(m_turret);
       CommandScheduler.getInstance().schedule(turretHome);
+
+      Command shooterHome=new HomeShooterCommand(m_shooter);
+      CommandScheduler.getInstance().schedule(shooterHome);
       m_HasHomed=true;
     }
   }

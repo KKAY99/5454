@@ -225,8 +225,8 @@ public final class Constants {
       public static final double targetXPosShoot = -1.5;
       public static final double targetXPosSafeZone = 5;
       public static final double targetXPosRange=50;
-      public static final double limelightTurretHeight = 26.5; //37
-      public static final double limelightTurretAngle = 11; //40
+      public static final double limelightTurretHeight = 17.5; //37
+      public static final double limelightTurretAngle = 45; //40
       public static final double limelightStaticHeight = 0;
       public static final double limelightStaticAngle = 0;
       public static final double kVisionDistanceTolerance = 5;
@@ -251,21 +251,28 @@ public final class Constants {
   }
 
     public static final class ShooterConstants{
+      public static final double kAngleDeadband=0.15;
+      public static final double kRampUpTime=1;
       public static final double kAccelCompFactor = 0.100; // in units of seconds
       public static final double autoShooterSpeed=1;
-      public static final double testShooterSpeed1=1;
+      public static final double testShooterSpeed1=0.65;
       public static final double testShooterSpeed2=0.9;
-      public static final double feederSpeed=-0.5;
+      public static final double feederSpeed=-1;
       public static final double manualfeederSpeed=-0.3;
       public static final double baseSpeedDeadband=100;
       public static final double baseMotorSpeed=0.6;
       public static final double timeToRunShooter=1;
       public static final double rotateSpeed=0.99;
 
+      public static final double homePos=202;
+      public static final double homeDeadband=2;
+      public static final double homeRotateSpeed=0.1;
+
       public static final int shooterMotorPort1=31;
       public static final int shooterMotorPort2=22;
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
+      public static final int encoderCanID=11;
     }
 
 
@@ -281,6 +288,7 @@ public final class Constants {
       public static final int drivermanualShootButton=5;
       public static final int drivermanualFeedRollerButton=6;
       public static final int driverGyroResetButton=7;
+      public static final int driverSmartShooter=8;
 
       public static final int driverturretPOVLeft=270;
       public static final int driverturretPOVRight=90;
@@ -342,11 +350,11 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed, angle, shottime
-          {10,100,10.5,4},
-          {20,200,10.5,5},
-          {30,300,10.5,6},
-          {40,400,10.5,7},
-          {60,700,10.5,4}
+          {17,0.4,-39,4},
+          {24,0.53,-51,5},
+          {31,0.53,-57.8,6},
+          {37,0.65,-63.7,7},
+          {39.8,0.65,-66.9,4}
       };
 
     }

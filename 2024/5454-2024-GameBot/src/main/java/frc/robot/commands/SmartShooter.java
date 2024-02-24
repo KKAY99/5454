@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SmartShooterConstants;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.utilities.FieldRelativeAccel;
@@ -25,20 +27,30 @@ public class SmartShooter extends Command {
     private final ShooterSubsystem m_shooter;
     private final TurretSubsystem m_turret;
     private final Swerve m_drive;
+    private final IntakeSubsystem m_intake;
     private final boolean m_updatePose;
     private final Limelight m_limelight;
     private final Timer m_timer = new Timer();
     private ShotTable m_shotTable = new ShotTable();
     private final double kConvertInchestoMeters=39.37;
     private boolean m_isRunning=false;
-    private double m_baseMotorSpeed;
-   
-    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,boolean updatePose,double baseMotorpeed) {
+    private boolean m_shootWhileMove=false;
+    private double m_currentTime;
+    private double kTimeToRun=Constants.ShooterConstants.timeToRunShooter;
+    private boolean isShooterRunning=false;
+    private double m_feederStartTime;
+    private enum STATE{
+        SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,END
+      }
+    private STATE m_state=STATE.SETANGLE;
+    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,IntakeSubsystem intake,boolean updatePose,boolean shootwhileMove) {
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
         m_limelight = limelight;
+        m_intake=intake;
         m_updatePose = updatePose;
+        m_shootWhileMove=shootwhileMove;
         addRequirements(shooter,turret);
     }
 
@@ -48,10 +60,10 @@ public class SmartShooter extends Command {
         m_turret.TrackTarget(true);
         m_timer.reset();
         m_timer.start();
+        m_currentTime=Timer.getFPGATimestamp();
+        m_state=STATE.SETANGLE;
     }
-
-    @Override
-    public void execute() {
+    private void shootwhileMove(){
 
         double currentTime = m_timer.get();
         m_isRunning=true;
@@ -134,14 +146,75 @@ public class SmartShooter extends Command {
  
     }
 
+    private void shootStatic(){
+    }
+
+    @Override
+    public void execute() {
+        if(m_shootWhileMove){
+            shootwhileMove();
+        }else{
+            shootStatic();
+        }
+        
+    }
+
+    @Override
+    public boolean isFinished(){
+        boolean returnValue=false;
+        double limeLimelightDis=m_limelight.getDistance();
+        Logger.recordOutput("Shooter/SmartShooterState",m_state.toString());
+        switch(m_state){
+            case SETANGLE:          
+                m_shooter.setAngle(m_shotTable.getAngle(limeLimelightDis));
+                m_state=STATE.WAITFORANGLE;
+                 break;
+            case WAITFORANGLE:
+                double angleGap=Math.abs(m_shooter.getRelativePosition())
+                    -Math.abs(m_shotTable.getAngle(limeLimelightDis));
+                  Logger.recordOutput("Shooter/AngleGap",angleGap);
+                if(angleGap< Constants.ShooterConstants.kAngleDeadband  && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
+                    m_shooter.RunShootingMotors(m_shotTable.getVelocity(limeLimelightDis));
+                    isShooterRunning=true;
+                    m_state=STATE.RAMPUPSHOOTER;
+                    m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
+                    Logger.recordOutput("Shooter/AngleGap",0);
+                }
+                 break;
+            case RAMPUPSHOOTER:
+                    m_shooter.stopRotate();
+                    if(Timer.getFPGATimestamp()>m_feederStartTime){
+                        m_state=STATE.SHOOT;
+                    }
+                    break;
+            case SHOOT:
+              if(isShooterRunning){
+                m_shooter.RunFeedRollers(ShooterConstants.feederSpeed);
+                m_intake.runIntake(Constants.IntakeConstants.autoIntakeSpeed);
+             }
+          
+            if(m_currentTime+kTimeToRun<Timer.getFPGATimestamp()&&isShooterRunning){
+                m_state=STATE.END;
+            }
+            break;
+            case END:
+                returnValue=true;
+        }
+        return returnValue;
+    }
+
     @Override
     public void end(boolean interrupted) {
         m_turret.TrackTarget(false);
         m_turret.stop();
-        m_shooter.RunShootingMotors(m_baseMotorSpeed);
+        m_shooter.StopFeedRollers();
+        m_shooter.StopShootingMotors();
+        m_shooter.ResetControlType();
         m_timer.stop();
+        m_intake.stopIntake();
         m_isRunning=false;
         m_shooter.ShotTaken();
+        isShooterRunning=false;
         Logger.recordOutput("Shooter/ShooterSpeed",0);
         Logger.recordOutput("Shooter/SmartShooterCommand",m_isRunning);
     }

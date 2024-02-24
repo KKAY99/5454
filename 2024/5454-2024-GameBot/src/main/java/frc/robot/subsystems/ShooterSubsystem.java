@@ -7,6 +7,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -22,7 +24,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 public class ShooterSubsystem extends SubsystemBase{
     private Limelight m_limeLight;
 
@@ -33,16 +38,18 @@ public class ShooterSubsystem extends SubsystemBase{
     private CANSparkMax m_feederMotor;
     private CANSparkMax m_angleMotor;
     
-    //private SparkMaxPIDController m_anglePID;
+    private SparkMaxPIDController m_anglePID;
 
-    //private RelativeEncoder m_angleEncoder;
+    private RelativeEncoder m_angleEncoder;
+    private WPI_CANCoder m_canCoder;
      
     private double maxRPM;
     private double m_velocity;
     private double m_distance;
+    private double m_targetAngle=0;
     private double m_shotsTaken;
 
-    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor){
+    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId){
         m_limeLight=limeLight;
         m_ShootingMotor1=new TalonFX(shootingMotor1);  
         m_ShootingMotor2=new TalonFX(shootingMotor2);
@@ -52,10 +59,11 @@ public class ShooterSubsystem extends SubsystemBase{
         m_feederMotor.setSmartCurrentLimit(Constants.k30Amp);
         m_angleMotor = new CANSparkMax(angleMotor,MotorType.kBrushless);
         m_angleMotor.setSmartCurrentLimit(Constants.k30Amp);
-        //m_anglePID = m_angleMotor.getPIDController();
-        //m_angleEncoder=m_angleMotor.getEncoder();
+        m_anglePID = m_angleMotor.getPIDController();
+        m_canCoder=new WPI_CANCoder(canCoderId);
+        m_angleEncoder=m_angleMotor.getEncoder();
     
-        double anglekP = 6e-5; 
+        double anglekP = 0.05; 
         double anglekI = 0;
         double anglekD = 0; 
         double anglekIz = 0; 
@@ -63,34 +71,39 @@ public class ShooterSubsystem extends SubsystemBase{
         double anglekMaxOutput = 1; 
         double anglekMinOutput = -1;
     
-        /*m_anglePID.setP(anglekP);
+        m_anglePID.setP(anglekP);
         m_anglePID.setI(anglekI);
         m_anglePID.setD(anglekD);
         m_anglePID.setIZone(anglekIz);
         m_anglePID.setFF(anglekFF);
         m_anglePID.setOutputRange(anglekMinOutput, anglekMaxOutput);
-        m_angleMotor.getEncoder();*/
+        m_angleMotor.getEncoder();
+
+        maxRPM=5676;
     }
 
     public void configmotor(TalonFX motor){
         var fx_cfg = new TalonFXConfiguration();
         // fetch *all* configs currently applied to the device
         var slot0Configs = new Slot0Configs();
-        slot0Configs.kV = 1023/2066.0;
-        slot0Configs.kP=.1;
-        slot0Configs.kI=0.001;
-        slot0Configs.kD=5; 
+        slot0Configs.kV = 0.12;
+        slot0Configs.kP=0.11;
+        slot0Configs.kI=0.48;
+        slot0Configs.kD=0.01; 
         // apply gains, 50 ms totl timeout
         motor.getConfigurator().apply(slot0Configs, 0.050); 
         }
     
     public void RunShootingMotors(double speed){
-        //speed=speed*maxRPM;
         // m_ShootingMotor1.set(ControlMode.Velocity, speed);
        // m_ShootingMotor2.set(ControlMode.Velocity, speed);
-       m_ShootingMotor1.set(ControlMode.PercentOutput, -0.5); 
-       m_ShootingMotor2.set(ControlMode.PercentOutput, -0.5); 
-       m_feederMotor.set(ShooterConstants.feederSpeed);
+       //VelocityDutyCycle m_velocity= new VelocityDutyCycle(-speed);
+       //m_ShootingMotor1.setControl(m_velocity);
+       //m_ShootingMotor2.setControl(m_velocity);
+         
+       m_ShootingMotor1.set(-speed); 
+       m_ShootingMotor2.set(-speed); 
+       //m_feederMotor.set(ShooterConstants.feederSpeed);
     }  
 
     public void RunFeedRollers(double speed){
@@ -119,11 +132,11 @@ public class ShooterSubsystem extends SubsystemBase{
     }
 
     public double GetVelocityMotor1(){
-        return m_ShootingMotor1.getSelectedSensorVelocity();
+        return m_ShootingMotor1.getVelocity().getValueAsDouble();
     }
 
     public double GetVelocityMotor2(){
-        return m_ShootingMotor2.getSelectedSensorVelocity();
+        return m_ShootingMotor2.getVelocity().getValueAsDouble();
     }
 
     public void OutPutDistance(){
@@ -141,26 +154,40 @@ public class ShooterSubsystem extends SubsystemBase{
     }
 
     public void setAngle(double targetAngle){
-        //m_anglePID.setReference(targetAngle,ControlType.kPosition);
+        m_targetAngle=targetAngle;
+        m_anglePID.setReference(targetAngle,ControlType.kPosition);
+
     }
 
-    public double getAngle(){
-        return 0;//m_angleEncoder.getPosition();
+    public double getCanCoderPosition(){
+        return m_canCoder.getAbsolutePosition();
+    }
+
+    public void zeroRelativePosition(){
+        m_angleEncoder.setPosition(0);
+    }
+
+    public void zeroCanCoderPosition(){
+        m_canCoder.setPosition(0);
+    }
+
+    public double getRelativePosition(){
+        return m_angleEncoder.getPosition();
     }
 
     public void ResetControlType(){
-        //m_anglePID.setReference(0,ControlType.kVelocity);
+        m_anglePID.setReference(0,ControlType.kVelocity);
     }
 
     public void setBrakeOn(){
-        m_ShootingMotor1.setNeutralMode(NeutralMode.Brake);
-        m_ShootingMotor1.setNeutralMode(NeutralMode.Brake);
+        m_ShootingMotor1.setNeutralMode(NeutralModeValue.Brake);
+        m_ShootingMotor1.setNeutralMode(NeutralModeValue.Brake);
         //m_angleMotor.setIdleMode(IdleMode.kBrake);
     } 
   
     public void setCoastOn(){
-        m_ShootingMotor1.setNeutralMode(NeutralMode.Coast);
-        m_ShootingMotor1.setNeutralMode(NeutralMode.Coast);
+        m_ShootingMotor1.setNeutralMode(NeutralModeValue.Coast);
+        m_ShootingMotor1.setNeutralMode(NeutralModeValue.Coast);
         //m_angleMotor.setIdleMode(IdleMode.kCoast);
     }
 
@@ -178,8 +205,13 @@ public class ShooterSubsystem extends SubsystemBase{
     @Override
     public void periodic(){
         Logger.recordOutput("Shooter/ShooterVelocity",m_velocity);
+        Logger.recordOutput("Shooter/ShooterSetAngle",m_targetAngle);
         Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
         Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
+        Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
+        Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken",m_shotsTaken);
     }
 }

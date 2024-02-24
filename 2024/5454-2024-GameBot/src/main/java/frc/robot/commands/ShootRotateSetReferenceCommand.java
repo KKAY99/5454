@@ -46,7 +46,7 @@ public class ShootRotateSetReferenceCommand extends Command {
 
     m_shooter.setAngle(m_angle);
 
-    if(m_shooter.getAngle()==m_angle){
+    if(m_shooter.getRelativePosition()==m_angle){
       returnValue=true;
     }
 
