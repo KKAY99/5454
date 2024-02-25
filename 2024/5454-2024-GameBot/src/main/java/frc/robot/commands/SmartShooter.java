@@ -206,8 +206,7 @@ public class SmartShooter extends Command {
     public void end(boolean interrupted) {
         m_turret.TrackTarget(false);
         m_turret.stop();
-        m_shooter.StopFeedRollers();
-        m_shooter.StopShootingMotors();
+        m_shooter.SlowShootingMotors();  // also stops feeder 
         m_shooter.ResetControlType();
         m_timer.stop();
         m_intake.stopIntake();

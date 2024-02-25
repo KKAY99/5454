@@ -28,6 +28,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase{
     private Limelight m_limeLight;
 
@@ -45,12 +46,15 @@ public class ShooterSubsystem extends SubsystemBase{
      
     private double maxRPM;
     private double m_velocity;
+    private double m_baseSpeed;
     private double m_distance;
+
     private double m_targetAngle=0;
     private double m_shotsTaken;
 
-    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId){
+    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId,double baseSpeed){
         m_limeLight=limeLight;
+        m_baseSpeed=baseSpeed;
         m_ShootingMotor1=new TalonFX(shootingMotor1);  
         m_ShootingMotor2=new TalonFX(shootingMotor2);
         configmotor(m_ShootingMotor1);
@@ -92,17 +96,22 @@ public class ShooterSubsystem extends SubsystemBase{
         slot0Configs.kD=0.01; 
         // apply gains, 50 ms totl timeout
         motor.getConfigurator().apply(slot0Configs, 0.050); 
+       
         }
     
     public void RunShootingMotors(double speed){
+        VelocityVoltage m_velocity = new VelocityVoltage(0);
+        m_velocity.Slot = 0;
+        m_ShootingMotor1.setControl(m_velocity.withVelocity(speed));
+        m_ShootingMotor2.setControl(m_velocity.withVelocity(speed));
         // m_ShootingMotor1.set(ControlMode.Velocity, speed);
        // m_ShootingMotor2.set(ControlMode.Velocity, speed);
        //VelocityDutyCycle m_velocity= new VelocityDutyCycle(-speed);
        //m_ShootingMotor1.setControl(m_velocity);
        //m_ShootingMotor2.setControl(m_velocity);
          
-       m_ShootingMotor1.set(-speed); 
-       m_ShootingMotor2.set(-speed); 
+       //m_ShootingMotor1.set(-speed); 
+       //m_ShootingMotor2.set(-speed); 
        m_feederMotor.set(ShooterConstants.feederSpeed);
     }  
 
@@ -114,10 +123,20 @@ public class ShooterSubsystem extends SubsystemBase{
         m_feederMotor.set(0);
     }
 
-    public void StopShootingMotors(){
+    public void SlowShootingMotors(){
+        //keep motors running
+         VelocityVoltage m_velocity = new VelocityVoltage(0);
+        m_velocity.Slot = 0;
+        m_ShootingMotor1.setControl(m_velocity.withVelocity(m_baseSpeed));
+        m_ShootingMotor2.setControl(m_velocity.withVelocity(m_baseSpeed));
+      
+        m_feederMotor.set(0);
+    }
+    public void stopShooter(){
         m_ShootingMotor1.set(0);
         m_ShootingMotor2.set(0);
         m_feederMotor.set(0);
+        
     }
 
     public boolean isMotorVelocityAtBase(){

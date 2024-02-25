@@ -260,7 +260,7 @@ public final class Constants {
       public static final double feederSpeed=-1;
       public static final double manualfeederSpeed=-0.3;
       public static final double baseSpeedDeadband=100;
-      public static final double baseMotorSpeed=0.6;
+      public static final double baseMotorSpeed=60; //rps
       public static final double timeToRunShooter=1;
       public static final double rotateSpeed=0.99;
 
@@ -351,12 +351,21 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed, angle, shottime
+          {17,0.4*180,-39,4},
+          {24,0.53*180,-51,5},
+          {31,0.53*180,-57.8,6},
+          {37,0.65*180,-63.7,7},
+          {39.4,0.65*180,-66.9,4}
+      };
+       public static final double [][]olddistanceLookup={
+           //distance , speed, angle, shottime
           {17,0.4,-39,4},
           {24,0.53,-51,5},
           {31,0.53,-57.8,6},
           {37,0.65,-63.7,7},
           {39.4,0.65,-66.9,4}
       };
+      
 
     }
     public class LEDPanel {

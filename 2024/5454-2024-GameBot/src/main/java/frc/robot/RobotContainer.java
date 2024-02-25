@@ -90,7 +90,8 @@ public class RobotContainer {
                                         Constants.LimeLightValues.limelightTurretAngle);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(m_TurretLimelight,Constants.ShooterConstants.shooterMotorPort1,
                                            Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort,
-                                           Constants.ShooterConstants.feederMotorPort,Constants.ShooterConstants.encoderCanID);
+                                           Constants.ShooterConstants.feederMotorPort,Constants.ShooterConstants.encoderCanID,
+                                           Constants.ShooterConstants.baseMotorSpeed);
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
@@ -388,7 +389,7 @@ public class RobotContainer {
   }
 
   public void SetBaseShooterSpeed(){
-    //m_shooter.RunShootingMotors(Constants.ShooterConstants.baseMotorSpeed);
+    m_shooter.SlowShootingMotors();
   }
 
   public void stopRumble(){

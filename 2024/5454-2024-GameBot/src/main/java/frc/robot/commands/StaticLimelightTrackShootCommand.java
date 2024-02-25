@@ -44,7 +44,7 @@ public class StaticLimelightTrackShootCommand extends Command{
   public void end(boolean interrupted){
     m_intake.stopIntake();
     m_turret.stop();
-    m_shooter.StopShootingMotors();
+    m_shooter.SlowShootingMotors();
     m_turret.ResetPIDReference();
   }
 
@@ -91,7 +91,7 @@ public class StaticLimelightTrackShootCommand extends Command{
       }
 
       if(m_currentTime+kTimeToRunShooter<Timer.getFPGATimestamp()){
-        m_shooter.StopShootingMotors();
+        m_shooter.SlowShootingMotors();
         returnValue=true;
         m_shooter.ShotTaken();
       }else{

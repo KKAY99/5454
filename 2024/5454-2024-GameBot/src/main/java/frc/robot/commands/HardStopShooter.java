@@ -12,7 +12,7 @@ public class HardStopShooter extends Command{
 
   @Override
   public void execute(){
-    m_shooter.StopShootingMotors();
+    m_shooter.stopShooter();
   }
 
   @Override

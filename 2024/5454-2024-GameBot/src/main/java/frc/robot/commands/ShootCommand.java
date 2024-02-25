@@ -38,8 +38,7 @@ public class ShootCommand extends Command {
 
   @Override
   public void end(boolean interrupted){
-    m_shooter.RunShootingMotors(m_baseMotorSpeed);
-    m_shooter.StopShootingMotors();  // for testing
+    m_shooter.SlowShootingMotors();  // for testing
     m_isRunning=false;
     m_shooter.ShotTaken();
     Logger.recordOutput("Shooter/ShooterSpeed",0);
