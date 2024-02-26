@@ -262,7 +262,7 @@ public final class Constants {
       public static final double baseSpeedDeadband=100;
       public static final double baseMotorSpeed=60; //rps
       public static final double timeToRunShooter=1;
-      public static final double rotateSpeed=0.99;
+      public static final double rotateSpeed=0.3;
 
       public static final double homePos=202;
       public static final double homeDeadband=2;
@@ -299,6 +299,7 @@ public final class Constants {
       public static final int operatorturret0=3;
       public static final int operatorintakeToggleButtonOut=4;
       public static final int operatorTurretTrack=5;
+      public static final int operatorTurretToggle=6;
 
       public static final int operatorturretPOVLeft=270;
       public static final int operatorturretPOVRight=90;

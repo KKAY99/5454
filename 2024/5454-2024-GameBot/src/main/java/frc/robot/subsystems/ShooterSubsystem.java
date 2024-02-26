@@ -224,8 +224,8 @@ public class ShooterSubsystem extends SubsystemBase{
     public boolean isAtLongShot(){
         boolean returnValue=false;
 
-        if(getRelativePosition()>Constants.ShooterConstants.longShotDis-0.25&&
-            getRelativePosition()<Constants.ShooterConstants.longShotDis+0.25){
+        if(getRelativePosition()>Constants.ShooterConstants.longShotDis-0.4&&
+            getRelativePosition()<Constants.ShooterConstants.longShotDis+0.4){
                 returnValue=true;
         }
 
@@ -235,8 +235,8 @@ public class ShooterSubsystem extends SubsystemBase{
     public boolean isAtShortShot(){
         boolean returnValue=false;
 
-        if(getRelativePosition()>Constants.ShooterConstants.shortShotDis-0.25&&
-            getRelativePosition()<Constants.ShooterConstants.shortShotDis+0.25){
+        if(getRelativePosition()>Constants.ShooterConstants.shortShotDis-0.4&&
+            getRelativePosition()<Constants.ShooterConstants.shortShotDis+0.4){
                 returnValue=true;
         }
 

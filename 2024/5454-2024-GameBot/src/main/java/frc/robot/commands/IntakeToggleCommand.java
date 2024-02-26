@@ -16,16 +16,19 @@ public class IntakeToggleCommand extends Command{
   
   private double m_speed;
   private boolean m_isRunning;
+  private boolean m_shouldToggle;
 
-  public IntakeToggleCommand(IntakeSubsystem intake,double speed){
+  public IntakeToggleCommand(IntakeSubsystem intake,double speed,boolean shouldToggle){
     m_intake=intake;
+    m_shouldToggle=shouldToggle;
     m_speed=speed;
     m_isRunning=false;
     addRequirements(m_intake);
   }
 
-  public IntakeToggleCommand(IntakeSubsystem intake,double speed,XboxController xboxController){
+  public IntakeToggleCommand(IntakeSubsystem intake,double speed,XboxController xboxController,boolean shouldToggle){
     m_intake=intake;
+    m_shouldToggle=shouldToggle;
     m_speed=speed;
     m_xboxController=xboxController;
     m_isRunning=false;
@@ -38,7 +41,9 @@ public class IntakeToggleCommand extends Command{
   @Override
   public void execute(){
     m_isRunning=true;
-    //m_intake.ToggleIntake(m_speed,m_xboxController);
+    if(m_shouldToggle){
+      m_intake.ToggleIntake(m_speed,m_xboxController);
+    }
   }
   
   @Override public void end(boolean interrupted){
@@ -50,11 +55,12 @@ public class IntakeToggleCommand extends Command{
 
   @Override 
   public boolean isFinished() {
-      // TODO Auto-generated method stub
+    boolean returnValue=m_shouldToggle;
       Logger.recordOutput("Intake/IntakeToggleCommand",m_isRunning);
-
-      m_intake.runIntake(m_speed);
+      if(!m_shouldToggle){
+        m_intake.runIntake(m_speed);
+      }
       
-      return false;
+      return returnValue;
   }
 }
