@@ -16,6 +16,7 @@ public class TurretToggleCommand extends Command{
   private double m_startTime;
   private double m_deadband;
   private double kTurretToggleDeadband=5;
+  private double kTurretPosMidPoint=18.5;
   private boolean m_isRunning;
   private boolean m_shouldGo90;
 
@@ -31,7 +32,7 @@ public class TurretToggleCommand extends Command{
     m_startTime=Timer.getFPGATimestamp();
     m_isRunning=true;
 
-    if(m_turret.GetEncoderValue()<TurretConstants.turret90Pos-kTurretToggleDeadband&&m_turret.GetEncoderValue()>-18.5||m_turret.GetEncoderValue()>TurretConstants.turret90Pos+kTurretToggleDeadband){
+    if(m_turret.GetEncoderValue()<TurretConstants.turret90Pos-kTurretToggleDeadband&&m_turret.GetEncoderValue()>-kTurretPosMidPoint||m_turret.GetEncoderValue()>TurretConstants.turret90Pos+kTurretToggleDeadband){
       m_shouldGo90=true;
       System.out.println("Going To 90 1");
 
@@ -40,7 +41,7 @@ public class TurretToggleCommand extends Command{
       System.out.println("Going To 0 1");
 
     }else if(m_turret.GetEncoderValue()<TurretConstants.turretStraightPos-kTurretToggleDeadband||m_turret.GetEncoderValue()>TurretConstants.turretStraightPos+kTurretToggleDeadband&&
-    m_turret.GetEncoderValue()<-18.5){
+    m_turret.GetEncoderValue()<-kTurretPosMidPoint){
       m_shouldGo90=false;
       System.out.println("Going To 90 2");
 

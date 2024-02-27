@@ -133,17 +133,17 @@ public class AutoCommands {
     m_shoot4=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
     m_shoot5=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
 
-    m_startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_startIntake3=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_startIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_startIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+    m_startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_startIntake3=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_startIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_startIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
 
-    m_stopIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_stopIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_stopIntake3=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_stopIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_stopIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+    m_stopIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_stopIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_stopIntake3=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_stopIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_stopIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
   }
 
   private void newCommand(){

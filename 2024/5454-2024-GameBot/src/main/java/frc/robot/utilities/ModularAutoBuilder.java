@@ -67,17 +67,17 @@ public class ModularAutoBuilder {
     m_shoot4=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
     m_shoot5=new ShootCommand(m_shooter,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
 
-    m_startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_startIntake3=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_startIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_startIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+    m_startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_startIntake3=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_startIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_startIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
 
-    m_stopIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_stopIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_stopIntake3=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_stopIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
-    m_stopIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+    m_stopIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_stopIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_stopIntake3=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_stopIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    m_stopIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
   }
 
   public PathPlannerPath CreateAutoPath(Pose2d startPose,Pose2d desiredPose){
@@ -102,16 +102,16 @@ public class ModularAutoBuilder {
      newSequentialCommand.addCommands(new AutoDoNothingCommand());
     }else if(pose2==null){
       newSequentialCommand.addCommands(m_startIntake1,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1)),
-                                      m_stopIntake1);
+                                      m_stopIntake1,m_shoot1);
     }else if(pose3==null){
       newSequentialCommand.addCommands(m_startIntake2,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2)),
-                                      m_stopIntake2);
+                                      m_stopIntake2,m_shoot2);
     }else if(pose4==null){
       newSequentialCommand.addCommands(m_startIntake3,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3)),
-                                      m_stopIntake3);
+                                      m_stopIntake3,m_shoot3);
     }else if(pose5==null){
       newSequentialCommand.addCommands(m_startIntake4,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4)),
-                                      m_stopIntake4);
+                                      m_stopIntake4,m_shoot4);
     }else{
       Command shootFinalNote=null;
       
