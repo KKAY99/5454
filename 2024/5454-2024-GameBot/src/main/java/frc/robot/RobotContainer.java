@@ -191,7 +191,7 @@ public class RobotContainer {
       shootButton1.toggleOnTrue(shoot1);
 
       ShootCommand shootOp1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
-      Trigger shootOpTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>0.1);
+      Trigger shootOpTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       shootOpTrigger.whileTrue(shootOp1);
 
       //FeedRollerCommand feedRoller= new FeedRollerCommand(m_shooter,Constants.ShooterConstants.manualfeederSpeed,
@@ -204,26 +204,36 @@ public class RobotContainer {
       gyroResetButton.onTrue(gyroReset);
 
       SmartShooter smartShooter=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false);
-      Trigger smartShooterTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(leftTriggerAxis)>0.1);
+      Trigger smartShooterTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(leftTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       smartShooterTrigger.whileTrue(smartShooter);
 
       TurretToggleCommand toggleTurret=new TurretToggleCommand(m_turret, TurretConstants.turretMoveTimeOut);
-      JoystickButton turretToggleButton=new JoystickButton(m_xBoxOperator,6);
+      JoystickButton turretToggleButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorTurretToggle);
       turretToggleButton.onTrue(toggleTurret);
 
       RobotTrackCommand turretTrack=new RobotTrackCommand(m_TurretLimelight,m_turret);
       JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.operatorTurretTrack);
       turretTrackButton.whileTrue(turretTrack);
     
-      ShootRotateCommand shooterRotateUp = new ShootRotateCommand(m_shooter, Constants.ShooterConstants.rotateSpeed);
+      ShootRotateCommand shooterRotateUp = new ShootRotateCommand(m_shooter, Constants.ShooterConstants.rotateSlowSpeed);
       POVButton rotateUp = new POVButton(m_xBoxOperator, ButtonBindings.operatorTurretPOVrotateUp);
       rotateUp.whileTrue(shooterRotateUp);
 
-      ShootRotateCommand shooterRotateDown = new ShootRotateCommand(m_shooter, -Constants.ShooterConstants.rotateSpeed);
+      ShootRotateCommand shooterRotateDown = new ShootRotateCommand(m_shooter, -Constants.ShooterConstants.rotateSlowSpeed);
       POVButton rotateDown = new POVButton(m_xBoxOperator, ButtonBindings.operatorTurretPOVrotateDown);
       rotateDown.whileTrue(shooterRotateDown);
 
+      //use left Y
+      ShootRotateCommand shooterRotateStick = new ShootRotateCommand(m_shooter, ()->m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorRotateAxis));
+      //is true when stick is outside of the deadband
      
+      Trigger rotateStickTrigger= new Trigger(() -> Math.abs(m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorRotateAxis))>
+          Constants.ButtonBindings.operatorRotateDeadband);
+      rotateStickTrigger.whileTrue(shooterRotateStick);
+
+      ShootRotateSetReferenceCommand stowCommand = new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shooterStowAngle);
+      JoystickButton operatorStow=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorStow);
+      operatorStow.onTrue(stowCommand);
     }
        
     private void refreshSmartDashboard(){  

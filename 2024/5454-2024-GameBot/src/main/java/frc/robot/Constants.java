@@ -263,10 +263,14 @@ public final class Constants {
       public static final double baseMotorSpeed=60; //rps
       public static final double timeToRunShooter=1;
       public static final double rotateSpeed=0.99;
+      public static final double rotateSlowSpeed=0.99;
 
       public static final double homePos=202;
       public static final double homeDeadband=2;
       public static final double homeRotateSpeed=0.1;
+      public static final double rotateLowSoftLimit=-20;
+      public static final double rotateHighSoftLimit=20;
+      
 
       public static final double longShotDis=-66;
       public static final double shortShotDis=-39;
@@ -276,6 +280,7 @@ public final class Constants {
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
       public static final int encoderCanID=11;
+      public static final double shooterStowAngle=23;
     }
 
 
@@ -299,6 +304,10 @@ public final class Constants {
       public static final int operatorturret0=3;
       public static final int operatorintakeToggleButtonOut=4;
       public static final int operatorTurretTrack=5;
+      public static final int operatorTurretToggle=6;
+      public static final int operatorStow=7;
+      public static final int operatorRotateAxis=1; 
+      public static final double operatorRotateDeadband=0.05; 
 
       public static final int operatorturretPOVLeft=270;
       public static final int operatorturretPOVRight=90;
@@ -306,6 +315,7 @@ public final class Constants {
       public static final int operatorTurretPOVrotateDown=180;
 
       public static final double rumbleValue=1;
+      public static final double triggerDeadband=0.1;
     }
 
 

@@ -243,6 +243,19 @@ public class ShooterSubsystem extends SubsystemBase{
         return returnValue;
     }
 
+    public boolean hasHitRotateLimit(double speed){
+        boolean returnValue=false;
+        if(speed>0){
+            //if going up in speed and hitting HighSoftLimit then return true
+            returnValue=(getRelativePosition()>=Constants.ShooterConstants.rotateHighSoftLimit);
+
+
+        }else{
+            //negative speed so check low soft limit 
+            returnValue =(getRelativePosition()<=Constants.ShooterConstants.rotateLowSoftLimit);
+        }
+        return returnValue;
+    }
     @Override
     public void periodic(){
         Logger.recordOutput("Shooter/ShooterVelocity",m_velocity);
