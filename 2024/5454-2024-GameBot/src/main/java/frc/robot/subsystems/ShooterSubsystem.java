@@ -51,6 +51,7 @@ public class ShooterSubsystem extends SubsystemBase{
 
     private double m_targetAngle=0;
     private double m_shotsTaken;
+    
 
     public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId,double baseSpeed){
         m_limeLight=limeLight;
@@ -67,9 +68,9 @@ public class ShooterSubsystem extends SubsystemBase{
         m_canCoder=new WPI_CANCoder(canCoderId);
         m_angleEncoder=m_angleMotor.getEncoder();
     
-        double anglekP = 0.03; 
-        double anglekI = 0.01;
-        double anglekD = 0.01; 
+        double anglekP = 0.8;//0.1 
+        double anglekI = 0.00;
+        double anglekD = 0.00; 
         double anglekIz = 0; 
         double anglekFF = 0.000015; 
         double anglekMaxOutput = 1; 
@@ -96,8 +97,20 @@ public class ShooterSubsystem extends SubsystemBase{
         slot0Configs.kD=0.01; 
         // apply gains, 50 ms totl timeout
         motor.getConfigurator().apply(slot0Configs, 0.050); 
-       
-        }
+        /**
+        * Configure the current limits that will be used
+        * Stator Current is the current that passes through the motor stators.
+        *  Use stator current limits to limit rotor acceleration/heat production
+        * Supply Current is the current that passes into the controller from the supply
+        *  Use supply current limits to prevent breakers from tripping
+        *
+        * 
+        //will need to use                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
+        //fx_cfg.CurrentLimits.
+        //motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      20,                25,                1.0));
+        //motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      10,                15,                0.5));
+            
+    }
     
     public void RunShootingMotors(double speed){
         VelocityVoltage m_velocity = new VelocityVoltage(0);
@@ -111,8 +124,12 @@ public class ShooterSubsystem extends SubsystemBase{
        //m_ShootingMotor2.setControl(m_velocity);
          
        //m_ShootingMotor1.set(-speed); 
-       //m_ShootingMotor2.set(-speed); 
-       m_feederMotor.set(ShooterConstants.feederSpeed);
+       //m_ShootingMotor2.set(-speed);
+       if(speed>0){
+        m_feederMotor.set(-ShooterConstants.feederSpeed);
+       }else{
+        m_feederMotor.set(ShooterConstants.feederSpeed);
+       }
     }  
 
     public void RunFeedRollers(double speed){
@@ -221,11 +238,22 @@ public class ShooterSubsystem extends SubsystemBase{
     public void PutTableMultiplier(){
     }
 
-    public boolean isAtLongShot(){
+    public boolean isAtPodiumShot(){
         boolean returnValue=false;
 
-        if(getRelativePosition()>Constants.ShooterConstants.longShotDis-0.4&&
-            getRelativePosition()<Constants.ShooterConstants.longShotDis+0.4){
+        if(getRelativePosition()>Math.abs(Constants.ShooterConstants.podiumShotEncoderVal)-Constants.ShooterConstants.shooterPosDeadband&&
+            getRelativePosition()<Math.abs(Constants.ShooterConstants.podiumShotEncoderVal)+Constants.ShooterConstants.shooterPosDeadband){
+                returnValue=true;
+        }
+
+        return returnValue;
+    }
+
+    public boolean isAtMidShot(){
+        boolean returnValue=false;
+
+        if(getRelativePosition()>Math.abs(Constants.ShooterConstants.midShotEncoderVal)-Constants.ShooterConstants.shooterPosDeadband&&
+            getRelativePosition()<Math.abs(Constants.ShooterConstants.midShotEncoderVal)+Constants.ShooterConstants.shooterPosDeadband){
                 returnValue=true;
         }
 
@@ -235,8 +263,8 @@ public class ShooterSubsystem extends SubsystemBase{
     public boolean isAtShortShot(){
         boolean returnValue=false;
 
-        if(getRelativePosition()>Constants.ShooterConstants.shortShotDis-0.4&&
-            getRelativePosition()<Constants.ShooterConstants.shortShotDis+0.4){
+        if(getRelativePosition()>Math.abs(Constants.ShooterConstants.shortShotEncoderVal)-Constants.ShooterConstants.shooterPosDeadband&&
+            getRelativePosition()<Math.abs(Constants.ShooterConstants.shortShotEncoderVal)+Constants.ShooterConstants.shooterPosDeadband){
                 returnValue=true;
         }
 
@@ -248,11 +276,9 @@ public class ShooterSubsystem extends SubsystemBase{
         if(speed>0){
             //if going up in speed and hitting HighSoftLimit then return true
             returnValue=(getRelativePosition()>=Constants.ShooterConstants.rotateHighSoftLimit);
-
-
         }else{
-            //negative speed so check low soft limit 
-            returnValue =(getRelativePosition()<=Constants.ShooterConstants.rotateLowSoftLimit);
+            //negatives speed so check low soft limit 
+            returnValue=(getRelativePosition()<=Constants.ShooterConstants.rotateLowSoftLimit);
         }
         return returnValue;
     }
@@ -267,8 +293,9 @@ public class ShooterSubsystem extends SubsystemBase{
         Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
         Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken",m_shotsTaken);
-
-        SmartDashboard.putBoolean("IsAtLongShotAngle",isAtLongShot());
+        Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
+        SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
+        SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
         SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());
     }
 }

@@ -130,7 +130,7 @@ public final class Constants {
       public static final double intakeConveyGetNoteSpeed=1;
       //public static final double intakeConveyHasNoteSpeed=1;
       public static final double intakeConveyHasNoteSpeed=0.2;
-      public static final int intakeBreakBeamport=3;
+      public static final int intakeBreakBeamport=9;
       public static final int intakeMotorPort1=18;
       public static final int intakeMotorPort2=19;
 
@@ -226,7 +226,7 @@ public final class Constants {
       public static final double targetXPosSafeZone = 5;
       public static final double targetXPosRange=50;
       public static final double limelightTurretHeight = 17.5; //37
-      public static final double limelightTurretAngle = 45; //40
+      public static final double limelightTurretAngle = 22.5; //40
       public static final double limelightStaticHeight = 0;
       public static final double limelightStaticAngle = 0;
       public static final double kVisionDistanceTolerance = 5;
@@ -235,19 +235,26 @@ public final class Constants {
       public static final double kVisionXMaxDistanceOffset=4.31; // was 1.7
       public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
 
+      public static final double closerXCheck=1.5;
       public static final double closeXCheck=3;
       public static final double medXCheck=9;
       public static final double farXCheck=14;
 
       public static final double limeLightDeadBand=0.5;
 
-      public static final double limeLightTrackSpeed1=0.02;
-      public static final double limeLightTrackSpeed2=0.06;
-      public static final double limeLightTrackSpeed3=0.09;
-      public static final double limeLightTrackSpeed4=0.15;
+      public static final double limeLightTrackSpeed0=0.03;
+      public static final double limeLightTrackSpeed1=0.23;
+      public static final double limeLightTrackSpeed2=0.26;
+      public static final double limeLightTrackSpeed3=0.30;
+      public static final double limeLightTrackSpeed4=0.33;
 
       public static final String turretLimelightName="";
       public static final String staticLimelightName="";
+
+      public static final double podiumShotDis=0;
+      public static final double midShotDis=0;
+      public static final double shortShotDis=0;
+      public static final double limelightDisDeadband=0.45;
   }
 
     public static final class ShooterConstants{
@@ -255,32 +262,33 @@ public final class Constants {
       public static final double kRampUpTime=1;
       public static final double kAccelCompFactor = 0.100; // in units of seconds
       public static final double autoShooterSpeed=1;
-      public static final double testShooterSpeed1=0.65;
-      public static final double testShooterSpeed2=0.9;
+      public static final double testShooterSpeed1=-10;
+      public static final double shooterIntakeSpeed=10;
       public static final double feederSpeed=-1;
       public static final double manualfeederSpeed=-0.3;
       public static final double baseSpeedDeadband=100;
-      public static final double baseMotorSpeed=60; //rps
+      public static final double baseMotorSpeed=-10; //rps
       public static final double timeToRunShooter=1;
       public static final double rotateSpeed=0.99;
-      public static final double rotateSlowSpeed=0.99;
+      public static final double rotateSlowSpeed=0.3;
 
-      public static final double homePos=202;
+      public static final double homePos=177.8;
       public static final double homeDeadband=2;
       public static final double homeRotateSpeed=0.1;
-      public static final double rotateLowSoftLimit=-20;
-      public static final double rotateHighSoftLimit=20;
-      
+      public static final double rotateLowSoftLimit=-60;
+      public static final double rotateHighSoftLimit=60; 
 
-      public static final double longShotDis=-66;
-      public static final double shortShotDis=-39;
+      public static final double podiumShotEncoderVal=-66;
+      public static final double midShotEncoderVal=0;
+      public static final double shortShotEncoderVal=-39;
+      public static final double shooterPosDeadband=0.15;
 
       public static final int shooterMotorPort1=31;
       public static final int shooterMotorPort2=22;
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
       public static final int encoderCanID=11;
-      public static final double shooterStowAngle=23;
+      public static final double shooterStowAngle=-90;
     }
 
 
@@ -304,8 +312,9 @@ public final class Constants {
       public static final int operatorturret0=3;
       public static final int operatorintakeToggleButtonOut=4;
       public static final int operatorTurretTrack=5;
-      public static final int operatorTurretToggle=6;
+      public static final int operatorShooterIntake=6;
       public static final int operatorStow=7;
+      public static final int operatorTurretToggle=8;
       public static final int operatorRotateAxis=1; 
       public static final double operatorRotateDeadband=0.05; 
 
@@ -361,11 +370,11 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed, angle, shottime
-          {17,0.4*180,-39,4},
-          {24,0.53*180,-51,5},
-          {31,0.53*180,-57.8,6},
-          {37,0.65*180,-63.7,7},
-          {39.4,0.65*180,-66.9,4}
+          {17,-50,-39,4},
+          {24,-106,-51,5},
+          {31,-106,-57.8,6},
+          {37,-0.65*200,-63.7,7},
+          {39.4,-0.65*200,-66.9,4}
       };
        public static final double [][]olddistanceLookup={
            //distance , speed, angle, shottime

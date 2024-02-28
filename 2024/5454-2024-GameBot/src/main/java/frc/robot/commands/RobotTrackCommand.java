@@ -38,6 +38,8 @@ public class RobotTrackCommand extends Command{
       if(m_limeLight.isTargetAvailible()){
         if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.limeLightDeadBand*multiplier){
           speed=0;
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closerXCheck*multiplier){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed0;
         }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closeXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed1;
         }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.medXCheck*multiplier){

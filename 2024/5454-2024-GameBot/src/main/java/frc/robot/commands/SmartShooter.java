@@ -164,14 +164,19 @@ public class SmartShooter extends Command {
         double limeLimelightDis=m_limelight.getDistance();
         Logger.recordOutput("Shooter/SmartShooterState",m_state.toString());
         switch(m_state){
-            case SETANGLE:          
-                m_shooter.setAngle(m_shotTable.getAngle(limeLimelightDis));
-                m_state=STATE.WAITFORANGLE;
+            case SETANGLE: 
+                if (m_limelight.isTargetAvailible()){        
+                    m_shooter.setAngle(m_shotTable.getAngle(limeLimelightDis));
+                    m_state=STATE.WAITFORANGLE;
+                }else{
+                    m_shooter.stopRotate();
+                    m_state=STATE.SETANGLE;
+                }
                  break;
             case WAITFORANGLE:
                 double angleGap=Math.abs(m_shooter.getRelativePosition())
                     -Math.abs(m_shotTable.getAngle(limeLimelightDis));
-                  Logger.recordOutput("Shooter/AngleGap",angleGap);
+                Logger.recordOutput("Shooter/AngleGap",angleGap);
                 if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
                     m_shooter.stopRotate();
                     m_shooter.RunShootingMotors(m_shotTable.getVelocity(limeLimelightDis));
@@ -186,9 +191,7 @@ public class SmartShooter extends Command {
                         m_state=STATE.SHOOT;
                     }
                     break;
-            case SHOOT:
-
-            
+            case SHOOT:           
                 m_shooter.RunFeedRollers(ShooterConstants.feederSpeed);
                 m_intake.runIntake(Constants.IntakeConstants.autoIntakeSpeed);
                      
@@ -208,7 +211,7 @@ public class SmartShooter extends Command {
         m_turret.stop();
         m_shooter.SlowShootingMotors();  // also stops feeder 
         m_shooter.ResetControlType();
-        m_timer.stop();
+        m_shooter.stopRotate();
         m_intake.stopIntake();
         m_isRunning=false;
         m_state=STATE.SETANGLE;

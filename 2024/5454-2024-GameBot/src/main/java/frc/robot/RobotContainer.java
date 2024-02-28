@@ -5,7 +5,6 @@
 package frc.robot;
 
 import java.util.List;
-
 import javax.swing.JToggleButton;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.GoalEndState;
@@ -127,19 +126,19 @@ public class RobotContainer {
      // JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
      // intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
 
-      IntakeToggleCommand intakeConveyIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+      IntakeToggleCommand intakeConveyIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,false);
       JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
       intakeToggleTrueButtonIn.whileTrue(intakeConveyIn);
 
-      IntakeToggleCommand intakeToggleOperatorTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed);
+      IntakeToggleCommand intakeToggleOperatorTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,false);
       JoystickButton intakeToggleTrueOperatorButtonIn=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonIn);
       intakeToggleTrueOperatorButtonIn.whileTrue(intakeToggleOperatorTrueIn);
 
-      IntakeToggleCommand intakeToggleTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed);
+      IntakeToggleCommand intakeToggleTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed,false);
       JoystickButton intakeToggleTrueButtonOut=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonOut);
       intakeToggleTrueButtonOut.whileTrue(intakeToggleTrueOut);
 
-      IntakeToggleCommand intakeToggleOperatorTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed);
+      IntakeToggleCommand intakeToggleOperatorTrueOut=new IntakeToggleCommand(m_intake,-Constants.IntakeConstants.intakeSpeed,false);
       JoystickButton intakeToggleOperatorTrueButtonOut=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonOut);
       intakeToggleOperatorTrueButtonOut.whileTrue(intakeToggleOperatorTrueOut);
 
@@ -194,6 +193,14 @@ public class RobotContainer {
       Trigger shootOpTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       shootOpTrigger.whileTrue(shootOp1);
 
+      //ShootRotateSetReferenceCommand setref=new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shortShotEncoderVal);
+      //Trigger setrefTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
+      //setrefTrigger.whileTrue(setref);
+
+      ShootCommand shooterIntakeOp=new ShootCommand(m_shooter,Constants.ShooterConstants.shooterIntakeSpeed,Constants.ShooterConstants.baseMotorSpeed);
+      JoystickButton shootIntakeOpButton= new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorShooterIntake);
+      shootIntakeOpButton.whileTrue(shooterIntakeOp);
+
       //FeedRollerCommand feedRoller= new FeedRollerCommand(m_shooter,Constants.ShooterConstants.manualfeederSpeed,
       //                              m_xBoxDriver);
       //JoystickButton feedRollerButton = new JoystickButton(m_xBoxDriver,ButtonBindings.drivermanualFeedRollerButton);
@@ -212,7 +219,7 @@ public class RobotContainer {
       turretToggleButton.onTrue(toggleTurret);
 
       RobotTrackCommand turretTrack=new RobotTrackCommand(m_TurretLimelight,m_turret);
-      JoystickButton turretTrackButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.operatorTurretTrack);
+      JoystickButton turretTrackButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorTurretTrack);
       turretTrackButton.whileTrue(turretTrack);
     
       ShootRotateCommand shooterRotateUp = new ShootRotateCommand(m_shooter, Constants.ShooterConstants.rotateSlowSpeed);
@@ -435,6 +442,9 @@ public class RobotContainer {
   public void TeleopMode(){
     //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
     resetBrakeModetoNormal();
+    m_shooter.ResetControlType();   
+    m_shooter.stopRotate(); //reset rogue pid
+   
     m_swerve.resetOdometry(Constants.AutoConstants.redCenterStartPos);
     m_shooter.ResetShotsTaken();
     SetBaseShooterSpeed();

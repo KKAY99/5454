@@ -33,6 +33,7 @@ public class Limelight {
     private double m_targetDistance = 0;
     private double m_xStaticOffset = 0;
     private boolean m_LimelightLEDOn = false;
+    private String m_limeLightName;
 
     private double kP = Constants.LimeLightValues.steeringP;
     private double kI = Constants.LimeLightValues.steeringI;
@@ -81,6 +82,7 @@ public class Limelight {
         m_mountingAngle = mountingAngle;
         m_xStaticOffset = xoffSet;
         m_targetDistance = targetDistance;
+        m_limeLightName=limeLightName;
     };
 
 
@@ -243,7 +245,7 @@ public class Limelight {
     }
 
     public double GetDistanceMultipler(){
-        return (getDistance()*0.05)+1;
+        return (getDistance()*0.2)+1;
     }
 
     public Pose2d GetPoseViaApriltag(){
@@ -271,6 +273,18 @@ public class Limelight {
         m_LimelightLEDOn = true;
     }
 
+    private boolean isAtPodiumDis(){
+        return false;
+    }
+
+    private boolean isAtMidDis(){
+        return false;
+    }
+
+    private boolean isAtShortDis(){
+        return false;  
+    }
+
     public void LimeLightPeriodic(boolean isEnabled) {
         updateDashboard();
 
@@ -281,5 +295,11 @@ public class Limelight {
         Logger.recordOutput("LimeLight/LimelightPipeline",getPipeline());
         Logger.recordOutput("LimeLight/LimelightApriltagPos",GetPoseViaApriltag());
         Logger.recordOutput("LimeLight/DoesLimelightHaveTarget",isTargetAvailible());
+
+        if(m_limeLightName==Constants.LimeLightValues.turretLimelightName){
+        SmartDashboard.putBoolean("IsRobotAtPodiumShotDis",isAtPodiumDis());
+        SmartDashboard.putBoolean("IsRobotAtMidShotDis",isAtMidDis());
+        SmartDashboard.putBoolean("IsRobotAtShortShotDis",isAtShortDis());
+        }
     }
 }
