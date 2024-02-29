@@ -44,16 +44,20 @@ public class ShooterSubsystem extends SubsystemBase{
     private RelativeEncoder m_angleEncoder;
     private WPI_CANCoder m_canCoder;
      
-    private double maxRPM;
     private double m_velocity;
     private double m_baseSpeed;
     private double m_distance;
 
     private double m_targetAngle=0;
     private double m_shotsTaken;
-    
 
-    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId,double baseSpeed){
+    private double m_shooterVeloc1;
+    private double m_shooterVeloc2;
+    private double m_shooterAngle;
+
+    private boolean m_shouldUseDashBoardVals;
+
+    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId,double baseSpeed,boolean shouldUseDashBoardVals){
         m_limeLight=limeLight;
         m_baseSpeed=baseSpeed;
         m_ShootingMotor1=new TalonFX(shootingMotor1);  
@@ -67,6 +71,8 @@ public class ShooterSubsystem extends SubsystemBase{
         m_anglePID = m_angleMotor.getPIDController();
         m_canCoder=new WPI_CANCoder(canCoderId);
         m_angleEncoder=m_angleMotor.getEncoder();
+
+        m_shouldUseDashBoardVals=shouldUseDashBoardVals;
     
         double anglekP = 0.8;//0.1 
         double anglekI = 0.00;
@@ -83,8 +89,6 @@ public class ShooterSubsystem extends SubsystemBase{
         m_anglePID.setFF(anglekFF);
         m_anglePID.setOutputRange(anglekMinOutput, anglekMaxOutput);
         m_angleMotor.getEncoder();
-
-        maxRPM=5676;
     }
 
     public void configmotor(TalonFX motor){
@@ -115,8 +119,14 @@ public class ShooterSubsystem extends SubsystemBase{
     public void RunShootingMotors(double speed){
         VelocityVoltage m_velocity = new VelocityVoltage(0);
         m_velocity.Slot = 0;
-        m_ShootingMotor1.setControl(m_velocity.withVelocity(speed));
-        m_ShootingMotor2.setControl(m_velocity.withVelocity(speed));
+        
+        if(m_shouldUseDashBoardVals){
+            m_ShootingMotor1.setControl(m_velocity.withVelocity(m_shooterVeloc1));
+            m_ShootingMotor2.setControl(m_velocity.withVelocity(m_shooterVeloc2));
+        }else{
+            m_ShootingMotor1.setControl(m_velocity.withVelocity(speed));
+            m_ShootingMotor2.setControl(m_velocity.withVelocity(speed));
+        }
         // m_ShootingMotor1.set(ControlMode.Velocity, speed);
        // m_ShootingMotor2.set(ControlMode.Velocity, speed);
        //VelocityDutyCycle m_velocity= new VelocityDutyCycle(-speed);
@@ -159,8 +169,9 @@ public class ShooterSubsystem extends SubsystemBase{
     public boolean isMotorVelocityAtBase(){
         boolean returnValue=false;
 
-        if(GetVelocityMotor1()+ShooterConstants.baseSpeedDeadband>=ShooterConstants.baseMotorSpeed*maxRPM&&GetVelocityMotor1()-ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed*maxRPM
-            &&GetVelocityMotor2()+ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed*maxRPM&&GetVelocityMotor2()-ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed*maxRPM){
+        //TODO: fix
+        if(GetVelocityMotor1()+ShooterConstants.baseSpeedDeadband>=ShooterConstants.baseMotorSpeed&&GetVelocityMotor1()-ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed
+            &&GetVelocityMotor2()+ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed&&GetVelocityMotor2()-ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed){
             returnValue=true;
         }
 
@@ -191,7 +202,11 @@ public class ShooterSubsystem extends SubsystemBase{
 
     public void setAngle(double targetAngle){
         m_targetAngle=targetAngle;
-        m_anglePID.setReference(targetAngle,ControlType.kPosition);
+        if(m_shouldUseDashBoardVals){
+            m_anglePID.setReference(m_shooterAngle,ControlType.kPosition);
+        }else{
+            m_anglePID.setReference(targetAngle,ControlType.kPosition);
+        }
 
     }
 
@@ -282,6 +297,14 @@ public class ShooterSubsystem extends SubsystemBase{
         }
         return returnValue;
     }
+
+    
+  public void GetDashboardShooterVals(){
+    m_shooterVeloc1=SmartDashboard.getNumber("ShooterVeloc1",0)*-1;
+    m_shooterVeloc2=SmartDashboard.getNumber("ShooterVeloc2",0)*-1;
+    m_shooterAngle=SmartDashboard.getNumber("ShooterAngle",0);
+  }
+
     @Override
     public void periodic(){
         Logger.recordOutput("Shooter/ShooterVelocity",m_velocity);
@@ -297,5 +320,7 @@ public class ShooterSubsystem extends SubsystemBase{
         SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
         SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
         SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());
+
+        GetDashboardShooterVals();
     }
 }

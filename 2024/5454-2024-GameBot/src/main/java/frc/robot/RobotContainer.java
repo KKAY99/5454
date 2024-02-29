@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -70,6 +72,7 @@ public class RobotContainer {
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
     private SendableChooser<Boolean> m_shouldUseModularBuilder = new SendableChooser<>();
     private SendableChooser<Boolean> m_shootFinalNote = new SendableChooser<>();
+    private SendableChooser<Boolean> m_shouldUseDashBoardValues = new SendableChooser<>();
     private SendableChooser<Pose2d> m_autoPath1 = new SendableChooser<>();
     private SendableChooser<Pose2d> m_autoPath2 = new SendableChooser<>(); 
     private SendableChooser<Pose2d> m_autoPath3 = new SendableChooser<>(); 
@@ -90,7 +93,7 @@ public class RobotContainer {
     private ShooterSubsystem m_shooter=new ShooterSubsystem(m_TurretLimelight,Constants.ShooterConstants.shooterMotorPort1,
                                            Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort,
                                            Constants.ShooterConstants.feederMotorPort,Constants.ShooterConstants.encoderCanID,
-                                           Constants.ShooterConstants.baseMotorSpeed);
+                                           Constants.ShooterConstants.baseMotorSpeed,m_shouldUseDashBoardValues.getSelected());
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
@@ -193,13 +196,15 @@ public class RobotContainer {
       Trigger shootOpTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       shootOpTrigger.whileTrue(shootOp1);
 
-      //ShootRotateSetReferenceCommand setref=new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shortShotEncoderVal);
+      ShootRotateSetReferenceCommand setref=new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shortShotEncoderVal);
+      JoystickButton setrefButton= new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorShooterIntake);
+      setrefButton.whileTrue(setref);
       //Trigger setrefTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       //setrefTrigger.whileTrue(setref);
 
       ShootCommand shooterIntakeOp=new ShootCommand(m_shooter,Constants.ShooterConstants.shooterIntakeSpeed,Constants.ShooterConstants.baseMotorSpeed);
-      JoystickButton shootIntakeOpButton= new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorShooterIntake);
-      shootIntakeOpButton.whileTrue(shooterIntakeOp);
+      //JoystickButton shootIntakeOpButton= new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorShooterIntake);
+      //shootIntakeOpButton.whileTrue(shooterIntakeOp);
 
       //FeedRollerCommand feedRoller= new FeedRollerCommand(m_shooter,Constants.ShooterConstants.manualfeederSpeed,
       //                              m_xBoxDriver);
@@ -360,6 +365,14 @@ public class RobotContainer {
       m_shouldUseModularBuilder.setDefaultOption("Dont Use Modular Builder",false);
       m_shouldUseModularBuilder.addOption("Use Modular Builder",true);
       SmartDashboard.putData("Should Use Modular Builder",m_shouldUseModularBuilder);
+
+      m_shouldUseDashBoardValues.setDefaultOption("Dont Use Shooter Vals",false);
+      m_shouldUseDashBoardValues.addOption("Use Shooter Vals",true);
+      SmartDashboard.putData("Should Use Inputted Shooter Vals",m_shouldUseModularBuilder);
+
+      SmartDashboard.putNumber("Shooter1Veloc",0);
+      SmartDashboard.putNumber("Shooter2Veloc",0);
+      SmartDashboard.putNumber("ShooterAngle",0);
   }
 
   public Command getAutonomousCommand(){
@@ -427,7 +440,6 @@ public class RobotContainer {
   }
 
   public void TeleopPeriodic(){
-   
   }
 
   public void AutoPeriodic(){
