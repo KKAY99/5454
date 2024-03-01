@@ -82,18 +82,20 @@ public class RobotContainer {
     private Swerve m_swerve = new Swerve(new SwerveIO(){});
     private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
+    private Limelight m_TurretLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
+                                        Constants.LimeLightValues.limelightTurretAngle);
+   
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,
-                                         Constants.TurretConstants.turretLimitSwitchPort,new TurretSubsystemIO(){});
+                                         Constants.TurretConstants.turretLimitSwitchPort,
+                                         m_TurretLimelight,new TurretSubsystemIO(){});
     private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,
                                          Constants.IntakeConstants.intakeMotorPort2,
                                          Constants.IntakeConstants.intakeBreakBeamport, new IntakeSubsystemIO(){});
     private ClimbSubsystem m_climb = new ClimbSubsystem(Constants.climbConstants.climbPort);
-    private Limelight m_TurretLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
-                                        Constants.LimeLightValues.limelightTurretAngle);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(m_TurretLimelight,Constants.ShooterConstants.shooterMotorPort1,
                                            Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort,
                                            Constants.ShooterConstants.feederMotorPort,Constants.ShooterConstants.encoderCanID,
-                                           Constants.ShooterConstants.baseMotorSpeed,m_shouldUseDashBoardValues.getSelected());
+                                           Constants.ShooterConstants.baseMotorSpeed,false);
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
@@ -145,9 +147,9 @@ public class RobotContainer {
       JoystickButton intakeToggleOperatorTrueButtonOut=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonOut);
       intakeToggleOperatorTrueButtonOut.whileTrue(intakeToggleOperatorTrueOut);
 
-      //IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_led);
-      //JoystickButton intakeConveyButton=new JoystickButton(m_xBoxDriver,ButtonBindings.intakeToggleButtonIn);
-      //intakeConveyButton.toggleOnTrue(intakeConvey);
+      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,Constants.IntakeConstants.intakeSpeed,m_led);
+      JoystickButton intakeConveyButton=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeConveyButtonIn);
+      intakeConveyButton.onTrue(intakeConvey);
 
       TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
       POVButton turretLeftButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.driverturretPOVLeft);
@@ -172,12 +174,6 @@ public class RobotContainer {
       JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverturret0);
       turretStraightButton.onTrue(turretStraight);
 
-     TurretPosCommand turretOperatorStraight=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,
-                                                          Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turretOperatorStraightButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorturret0);
-      turretOperatorStraightButton.onTrue(turretOperatorStraight);
-
-
       TurretPosCommand turret90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,
                                                     Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
       JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverturret90);
@@ -188,11 +184,11 @@ public class RobotContainer {
       JoystickButton turretOp90Button=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorturret90);
       turretOp90Button.onTrue(turretOp90);
 
-      ShootCommand shoot1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
+      ShootCommand shoot1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.drivermanualShootButton);
       shootButton1.toggleOnTrue(shoot1);
 
-      ShootCommand shootOp1=new ShootCommand(m_shooter,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
+      ShootCommand shootOp1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
       Trigger shootOpTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       shootOpTrigger.whileTrue(shootOp1);
 
@@ -202,7 +198,7 @@ public class RobotContainer {
       //Trigger setrefTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       //setrefTrigger.whileTrue(setref);
 
-      ShootCommand shooterIntakeOp=new ShootCommand(m_shooter,Constants.ShooterConstants.shooterIntakeSpeed,Constants.ShooterConstants.baseMotorSpeed);
+      ShootCommand shooterIntakeOp=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.shooterIntakeSpeed,Constants.ShooterConstants.baseMotorSpeed);
       //JoystickButton shootIntakeOpButton= new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorShooterIntake);
       //shootIntakeOpButton.whileTrue(shooterIntakeOp);
 
@@ -245,7 +241,8 @@ public class RobotContainer {
 
       ShootRotateSetReferenceCommand stowCommand = new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shooterStowAngle);
       JoystickButton operatorStow=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorStow);
-      operatorStow.onTrue(stowCommand);
+      SequentialCommandGroup stowAndStop=new SequentialCommandGroup(new HardStopShooter(m_shooter),stowCommand);
+      operatorStow.onTrue(stowAndStop);
     }
        
     private void refreshSmartDashboard(){  
@@ -436,7 +433,7 @@ public class RobotContainer {
   } 
   
   public void AllPeriodic(){
-       refreshSmartDashboard();
+    //   refreshSmartDashboard();
   }
 
   public void TeleopPeriodic(){
@@ -454,13 +451,15 @@ public class RobotContainer {
   public void TeleopMode(){
     //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
     resetBrakeModetoNormal();
-    m_shooter.ResetControlType();   
+    m_shooter.ResetControlType();  
+    m_TurretLimelight.LimeLightPeriodic(true); 
     m_shooter.stopRotate(); //reset rogue pid
    
     m_swerve.resetOdometry(Constants.AutoConstants.redCenterStartPos);
     m_shooter.ResetShotsTaken();
-    SetBaseShooterSpeed();
     homeRobot();
+    SetBaseShooterSpeed();
+
   }
   private void resetBrakeModetoNormal(){
     m_intake.setBrakeOn();

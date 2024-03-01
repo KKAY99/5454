@@ -106,6 +106,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic(){
     m_robot.TeleopPeriodic();
+     
   }
 
   /** This function is called once when the robot is disabled. */

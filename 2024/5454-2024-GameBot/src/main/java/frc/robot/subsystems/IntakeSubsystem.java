@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 public class IntakeSubsystem extends SubsystemBase{
     private IntakeSubsystemIO m_intakeIO;
@@ -28,6 +30,7 @@ public class IntakeSubsystem extends SubsystemBase{
 
     private boolean m_intakeToggle=false;
     private AnalogAutoDirectFB6DN0E m_irReflector;
+    private TimeOfFlight m_TOFlow;
     public IntakeSubsystem(int motorOne,int motorTwo,int analogPort, IntakeSubsystemIO intakeIO){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
@@ -39,8 +42,10 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeTwo.burnFlash(); //ensure all settings are saved if a a browout happens
         m_intakeIO=intakeIO;
         //TODO: REMOVE CONSTANT - EVIL CONSTANT
-        m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
-
+        //m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
+        m_TOFlow = new TimeOfFlight(55);
+        m_TOFlow.setRangingMode(RangingMode.Short, 24);
+       
     }
 
     public void runIntake(double speed){
@@ -83,13 +88,27 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public boolean isBeamBroken(){
-        return m_irReflector.isBeamBroken();
+      return m_TOFlow.getRange()<70;
     }
+
+    public boolean checkBreakBeamValue(){
+        boolean returnValue=false;
+
+        if(m_TOFlow.getRange()==0||m_TOFlow==null){
+            returnValue=false;
+        }else{
+            returnValue=true;
+        }
+
+        return returnValue;
+    }
+
     @Override
     public void periodic(){
         m_intakeIO.updateInputs(m_intakeAutoLogged);
-        Logger.recordOutput("Intake/BeamBroken", m_irReflector.isBeamBroken());
-        Logger.recordOutput("Intake/BreakBeamSensorDistance", m_irReflector.getRawValue());
+        Logger.recordOutput("Intake/BeamBroken",isBeamBroken());
+   
+     Logger.recordOutput("Intake/BreakBeamSensorDistance", m_TOFlow.getRange());
         //Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
         Logger.recordOutput("Intake/IntakeSpeed",m_currentSpeed);
     }

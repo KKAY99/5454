@@ -21,6 +21,8 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ShotTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -57,6 +59,8 @@ public class ShooterSubsystem extends SubsystemBase{
 
     private boolean m_shouldUseDashBoardVals;
 
+    private NetworkTable m_networkTable;
+
     public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId,double baseSpeed,boolean shouldUseDashBoardVals){
         m_limeLight=limeLight;
         m_baseSpeed=baseSpeed;
@@ -73,6 +77,8 @@ public class ShooterSubsystem extends SubsystemBase{
         m_angleEncoder=m_angleMotor.getEncoder();
 
         m_shouldUseDashBoardVals=shouldUseDashBoardVals;
+
+        m_networkTable = NetworkTableInstance.getDefault().getTable("SmartDashboard");
     
         double anglekP = 0.8;//0.1 
         double anglekI = 0.00;
@@ -89,6 +95,8 @@ public class ShooterSubsystem extends SubsystemBase{
         m_anglePID.setFF(anglekFF);
         m_anglePID.setOutputRange(anglekMinOutput, anglekMaxOutput);
         m_angleMotor.getEncoder();
+
+
     }
 
     public void configmotor(TalonFX motor){
@@ -300,9 +308,9 @@ public class ShooterSubsystem extends SubsystemBase{
 
     
   public void GetDashboardShooterVals(){
-    m_shooterVeloc1=SmartDashboard.getNumber("ShooterVeloc1",0)*-1;
-    m_shooterVeloc2=SmartDashboard.getNumber("ShooterVeloc2",0)*-1;
-    m_shooterAngle=SmartDashboard.getNumber("ShooterAngle",0);
+    m_shooterVeloc1=m_networkTable.getEntry("ShooterVeloc1").getNumber(0).doubleValue();
+    m_shooterVeloc2=m_networkTable.getEntry("ShooterVeloc2").getNumber(0).doubleValue();
+    m_shooterAngle=m_networkTable.getEntry("ShooterAngle").getNumber(0).doubleValue();
   }
 
     @Override
@@ -313,14 +321,17 @@ public class ShooterSubsystem extends SubsystemBase{
         Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
         Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
         Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
+     //   Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
         Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken",m_shotsTaken);
         Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
-        SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
-        SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
-        SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());
+        Logger.recordOutput("Shooter/DashboardShooterVeloc1",m_shooterVeloc1);
+        Logger.recordOutput("Shooter/DashboardShooterVeloc2",m_shooterVeloc2);
+        Logger.recordOutput("Shooter/DashboardShooterAngle",m_shooterAngle);
+      //  SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
+      //  SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
+      //  SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());
 
-        GetDashboardShooterVals();
+       // GetDashboardShooterVals();
     }
 }

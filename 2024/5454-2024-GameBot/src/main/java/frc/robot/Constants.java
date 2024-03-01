@@ -240,7 +240,7 @@ public final class Constants {
       public static final double medXCheck=9;
       public static final double farXCheck=14;
 
-      public static final double limeLightDeadBand=0.5;
+      public static final double limeLightDeadBand=1.0;
 
       public static final double limeLightTrackSpeed0=0.03;
       public static final double limeLightTrackSpeed1=0.23;
@@ -262,7 +262,7 @@ public final class Constants {
       public static final double kRampUpTime=1;
       public static final double kAccelCompFactor = 0.100; // in units of seconds
       public static final double autoShooterSpeed=1;
-      public static final double testShooterSpeed1=-10;
+      public static final double testShooterSpeed1=-155;
       public static final double shooterIntakeSpeed=10;
       public static final double feederSpeed=-1;
       public static final double manualfeederSpeed=-0.3;
@@ -275,7 +275,7 @@ public final class Constants {
       public static final double homePos=177.8;
       public static final double homeDeadband=2;
       public static final double homeRotateSpeed=0.1;
-      public static final double rotateLowSoftLimit=-60;
+      public static final double rotateLowSoftLimit=-99;
       public static final double rotateHighSoftLimit=60; 
 
       public static final double podiumShotEncoderVal=-66;
@@ -288,7 +288,8 @@ public final class Constants {
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
       public static final int encoderCanID=11;
-      public static final double shooterStowAngle=-90;
+      public static final double shooterStowAngle=-99;
+      public static final double shooterVisionClearanceAngle=-65;
     }
 
 
@@ -309,7 +310,7 @@ public final class Constants {
 
       public static final int operatorintakeToggleButtonIn=1;
       public static final int operatorturret90=2;
-      public static final int operatorturret0=3;
+      public static final int operatorintakeConveyButtonIn=3;
       public static final int operatorintakeToggleButtonOut=4;
       public static final int operatorTurretTrack=5;
       public static final int operatorShooterIntake=6;
@@ -370,16 +371,16 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed, angle, shottime
-          {17,-50,-39,4},
-          {24,-106,-51,5},
-          {31,-106,-57.8,6},
-          {37,-0.65*200,-63.7,7},
+          {16.5,-140,-36,4},//Updated
+          {22.7,-140,-45.9,5},//Updated
+          {28.3,-150,-54.5,6},//Updated
+          {36.2,-160,-58.2,7},//Needs Tuning
           {39.4,-0.65*200,-66.9,4}
       };
        public static final double [][]olddistanceLookup={
            //distance , speed, angle, shottime
           {17,0.4,-39,4},
-          {24,0.53,-51,5},
+          {22.7,0.53,-51,5},
           {31,0.53,-57.8,6},
           {37,0.65,-63.7,7},
           {39.4,0.65,-66.9,4}

@@ -43,19 +43,11 @@ public class IntakeConveyCommand extends Command{
       case INTAKINGNOTE:
       m_intake.runIntake(m_speed);
 
-      if(m_intake.isBeamBroken()){
+      if(m_intake.isBeamBroken()&&m_intake.checkBreakBeamValue()){
       //  m_led.SetLEDState(LEDConstants .INTAKELOW);
         m_intake.stopIntake();
         m_state=STATE.NOTEINSHOOTPOS;
       }
-      break;
-      case HASNOTE:
-      m_intake.runIntake(Constants.IntakeConstants.intakeConveyHasNoteSpeed);
-
-      /*if(m_laserCan.HighTurretBreakBeam()){
-        m_intake.stopIntake();
-        m_state=STATE.NOTEINSHOOTPOS;
-      }*/
       break;
       case NOTEINSHOOTPOS:
       returnValue=true;

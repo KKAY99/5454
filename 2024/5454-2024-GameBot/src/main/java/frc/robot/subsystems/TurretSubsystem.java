@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.RelativeEncoder;
@@ -38,7 +39,8 @@ public class TurretSubsystem extends SubsystemBase{
   private RelativeEncoder m_encoder;
 
   private boolean m_hasSetReference;
-
+  
+  private Limelight m_limeLight;
   private double m_speed;
   private double m_targetAngle;
 
@@ -46,8 +48,9 @@ public class TurretSubsystem extends SubsystemBase{
   private double kTurretI=Constants.TurretConstants.turretI;
   private double kTurretD=Constants.TurretConstants.turretD;
 
-  public TurretSubsystem(int turretMotorPort, int limitSwitchPort, TurretSubsystemIO turretIO){
+  public TurretSubsystem(int turretMotorPort, int limitSwitchPort, Limelight limelight,TurretSubsystemIO turretIO){
     m_turretIO=turretIO;
+    m_limeLight=limelight;
     m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
     m_turretMotor.setSmartCurrentLimit(Constants.k15Amp);
     m_limitSwitch=new DigitalInput(limitSwitchPort);
@@ -60,8 +63,40 @@ public class TurretSubsystem extends SubsystemBase{
 
   }
 
+  public boolean IsOnTarget(){
+    boolean returnValue=false;
+     if(m_limeLight.isTargetAvailible()){
+      if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.limeLightDeadBand){
+          returnValue=true;
+      }
+     }
+     return returnValue;
+  }  
   public void TrackTarget(boolean bool){
-
+    double speed=0;
+     if(m_limeLight.isTargetAvailible()){
+        if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.limeLightDeadBand){
+          speed=0;
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closeXCheck){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed1;
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.medXCheck){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed2;
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.farXCheck){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed3;
+        }else{
+          speed=Constants.LimeLightValues.limeLightTrackSpeed4;
+        }
+        System.out.println(m_limeLight.getXRaw());
+        if(m_limeLight.getXRaw()<0){
+          RunCheckLimits(speed);
+          m_speed=speed;
+        }else if(m_limeLight.getXRaw()>0){
+          RunCheckLimits(-speed);
+          m_speed=-speed;
+        }else{
+          stop();          
+        }
+     }
   }
   
   public void RunTurretMotor(double power){
@@ -164,7 +199,7 @@ public class TurretSubsystem extends SubsystemBase{
   }
   
  public void aimAtGoal(Pose2d robotPose, Translation2d goal, boolean aimAtVision) {
-  //FIX: TO DO Implement AimAtGoal 
+  //FIX: TO DO Implemetnt AimAtGoal 
   /* Translation2d robotToGoal = goal.minus(robotPose.getTranslation());
     double angle = Math.atan2(robotToGoal.getY(), robotToGoal.getX());
     angle = Math.PI + angle - robotPose.getRotation().getRadians();

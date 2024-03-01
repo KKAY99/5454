@@ -13,6 +13,7 @@ public class HardStopShooter extends Command{
   @Override
   public void execute(){
     m_shooter.stopShooter();
+    m_shooter.StopFeedRollers();
   }
 
   @Override

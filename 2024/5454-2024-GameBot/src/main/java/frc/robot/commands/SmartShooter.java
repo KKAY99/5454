@@ -39,7 +39,7 @@ public class SmartShooter extends Command {
     private double kTimeToRun=Constants.ShooterConstants.timeToRunShooter;
     private double m_feederStartTime;
     private enum STATE{
-        SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,END
+        VISIONCLEARANCE,WAITFORVISIONCLEARANCE,TURRETFIND,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,END
       }
     private STATE m_state=STATE.SETANGLE;
     public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,IntakeSubsystem intake,boolean updatePose,boolean shootwhileMove) {
@@ -56,11 +56,11 @@ public class SmartShooter extends Command {
 
     @Override
     public void initialize() {
-        m_turret.TrackTarget(true);
+        m_shooter.SlowShootingMotors();
         m_timer.reset();
         m_timer.start();
         m_currentTime=Timer.getFPGATimestamp();
-        m_state=STATE.SETANGLE;
+        m_state=STATE.VISIONCLEARANCE;
     }
     private void shootwhileMove(){
 
@@ -162,10 +162,39 @@ public class SmartShooter extends Command {
     public boolean isFinished(){
         boolean returnValue=false;
         double limeLimelightDis=m_limelight.getDistance();
+        double angleGap=0;
         Logger.recordOutput("Shooter/SmartShooterState",m_state.toString());
         switch(m_state){
+            case VISIONCLEARANCE: 
+            m_shooter.setAngle(ShooterConstants.shooterVisionClearanceAngle);
+
+            m_state=STATE.WAITFORVISIONCLEARANCE;
+            break;
+            case WAITFORVISIONCLEARANCE: 
+            angleGap=Math.abs(m_shooter.getRelativePosition())
+                    -Math.abs(ShooterConstants.shooterVisionClearanceAngle);
+                Logger.recordOutput("Shooter/AngleGap",angleGap);
+                if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
+                    m_shooter.stopRotate();
+                    m_state=STATE.TURRETFIND;
+                    Logger.recordOutput("Shooter/AngleGap",0);
+                }
+            break;
+            case TURRETFIND:
+               m_turret.TrackTarget(true);
+               m_state=STATE.TURRETLOCKWAIT;
+            case TURRETLOCKWAIT:                
+                if(m_turret.IsOnTarget()){
+                    m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
+                    m_state=STATE.SETANGLE;
+                } else{
+                   m_turret.TrackTarget(true);
+                }
+             //stay in turret lock mode
+            break;
+                
             case SETANGLE: 
-                if (m_limelight.isTargetAvailible()){        
+                if(m_limelight.isTargetAvailible()){        
                     m_shooter.setAngle(m_shotTable.getAngle(limeLimelightDis));
                     m_state=STATE.WAITFORANGLE;
                 }else{
@@ -174,7 +203,7 @@ public class SmartShooter extends Command {
                 }
                  break;
             case WAITFORANGLE:
-                double angleGap=Math.abs(m_shooter.getRelativePosition())
+                angleGap=Math.abs(m_shooter.getRelativePosition())
                     -Math.abs(m_shotTable.getAngle(limeLimelightDis));
                 Logger.recordOutput("Shooter/AngleGap",angleGap);
                 if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){

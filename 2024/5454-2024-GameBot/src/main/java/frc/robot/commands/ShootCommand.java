@@ -6,18 +6,22 @@ package frc.robot.commands;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootCommand extends Command {
   private ShooterSubsystem m_shooter;
+  private IntakeSubsystem m_intake;
 
   private double m_speed;
   private double m_baseMotorSpeed;
 
   private boolean m_isRunning=false;
 
-  public ShootCommand(ShooterSubsystem shooter,double speed,double baseMotorSpeed){
+  public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed,double baseMotorSpeed){
     m_shooter=shooter;
+    m_intake=intake;
     m_speed=speed;
     m_baseMotorSpeed=baseMotorSpeed;
 
@@ -41,6 +45,7 @@ public class ShootCommand extends Command {
     m_shooter.SlowShootingMotors();  // for testing
     m_isRunning=false;
     m_shooter.ShotTaken();
+    m_intake.stopIntake();
     Logger.recordOutput("Shooter/ShooterSpeed",0);
     Logger.recordOutput("Shooter/ShooterCommand",m_isRunning);
   }
@@ -51,6 +56,7 @@ public class ShootCommand extends Command {
 
     //if(m_shooter.isMotorVelocityAtBase()){
       m_shooter.RunShootingMotors(m_speed);
+      m_intake.runIntake(Constants.IntakeConstants.intakeSpeed);
     //}
     return returnValue;
   }
