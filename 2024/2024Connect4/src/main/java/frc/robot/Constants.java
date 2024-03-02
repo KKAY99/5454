@@ -63,9 +63,9 @@ public final class Constants {
   }
 
   public static final class LEDConstants{
-    public static final int blinkInPWM=0;
+    public static final int blinkInPWM=9;
     public static final int ledPWM=3;
-    public static final int ledCount=100;
+    public static final int ledCount=200;
 
     public static final double timeToWait=3;
 

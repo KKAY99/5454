@@ -77,6 +77,7 @@ public class ShooterSubsystem extends SubsystemBase{
    motor.config_kI(0, 0.001,30);
    motor.config_kD(0, 5,30);
    
+   
  }
  public void RunTopMotor(double speed){
   //      m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
