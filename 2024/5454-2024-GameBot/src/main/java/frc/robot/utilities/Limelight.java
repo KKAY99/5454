@@ -229,13 +229,13 @@ public class Limelight {
     }
 
     private void updateDashboard() {
-        SmartDashboard.putNumber("limelight x", getX());
-        SmartDashboard.putNumber("limelight y", getY());
-        SmartDashboard.putNumber("limelight area", getArea());
+   //     SmartDashboard.putNumber("limelight x", getX());
+   //     SmartDashboard.putNumber("limelight y", getY());
+   //     SmartDashboard.putNumber("limelight area", getArea());
         SmartDashboard.putNumber("Our limelight distance", getDistance());
         SmartDashboard.putBoolean("limelight Have Atleast 1 target", isTargetAvailible());
         SmartDashboard.putBoolean("Targets>=2", DoesLimelightHaveTwoTargets());
-        SmartDashboard.putString("limelight mode", getVisionMode());
+  //      SmartDashboard.putString("limelight mode", getVisionMode());
         //SmartDashboard.putNumberArray("RobotPoseRedLimelight", GetDoublePosArray());
 
     }
@@ -295,11 +295,8 @@ public class Limelight {
         Logger.recordOutput("LimeLight/LimelightPipeline",getPipeline());
         Logger.recordOutput("LimeLight/LimelightApriltagPos",GetPoseViaApriltag());
         Logger.recordOutput("LimeLight/DoesLimelightHaveTarget",isTargetAvailible());
-
-        if(m_limeLightName==Constants.LimeLightValues.turretLimelightName){
         SmartDashboard.putBoolean("IsRobotAtPodiumShotDis",isAtPodiumDis());
         SmartDashboard.putBoolean("IsRobotAtMidShotDis",isAtMidDis());
         SmartDashboard.putBoolean("IsRobotAtShortShotDis",isAtShortDis());
-        }
     }
 }

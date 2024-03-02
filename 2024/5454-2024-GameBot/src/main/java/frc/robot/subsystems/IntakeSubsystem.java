@@ -31,6 +31,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private boolean m_intakeToggle=false;
     private AnalogAutoDirectFB6DN0E m_irReflector;
     private TimeOfFlight m_TOFlow;
+    private DigitalInput m_breakbeam = new DigitalInput(9);
     public IntakeSubsystem(int motorOne,int motorTwo,int analogPort, IntakeSubsystemIO intakeIO){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
@@ -43,8 +44,8 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeIO=intakeIO;
         //TODO: REMOVE CONSTANT - EVIL CONSTANT
         //m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
-        m_TOFlow = new TimeOfFlight(55);
-        m_TOFlow.setRangingMode(RangingMode.Short, 24);
+      //  m_TOFlow = new TimeOfFlight(55);
+       // m_TOFlow.setRangingMode(RangingMode.Short, 24);
        
     }
 
@@ -88,27 +89,22 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public boolean isBeamBroken(){
-      return m_TOFlow.getRange()<70;
-    }
-
-    public boolean checkBreakBeamValue(){
         boolean returnValue=false;
-
-        if(m_TOFlow.getRange()==0||m_TOFlow==null){
+        if(m_breakbeam.get()){
             returnValue=false;
         }else{
             returnValue=true;
         }
 
-        return returnValue;
+     return returnValue; 
     }
 
     @Override
     public void periodic(){
         m_intakeIO.updateInputs(m_intakeAutoLogged);
         Logger.recordOutput("Intake/BeamBroken",isBeamBroken());
-   
-     Logger.recordOutput("Intake/BreakBeamSensorDistance", m_TOFlow.getRange());
+        //System.out.println(isBeamBroken());
+    // Logger.recordOutput("Intake/BreakBeamSensorDistance", m_TOFlow.getRange());
         //Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
         Logger.recordOutput("Intake/IntakeSpeed",m_currentSpeed);
     }

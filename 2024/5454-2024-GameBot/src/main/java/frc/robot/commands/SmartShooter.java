@@ -38,10 +38,19 @@ public class SmartShooter extends Command {
     private double m_currentTime;
     private double kTimeToRun=Constants.ShooterConstants.timeToRunShooter;
     private double m_feederStartTime;
+    private double m_motor1TargetSpeed=0;
+    private double m_motor2TargetSpeed=0;
+    private boolean m_motor1IsAtBase=false;
+    private boolean m_motor2IsAtBase=false;
+    private boolean m_runLeft=true;
+    private boolean m_runRight=false;
+
     private enum STATE{
-        VISIONCLEARANCE,WAITFORVISIONCLEARANCE,TURRETFIND,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,END
-      }
+        VISIONCLEARANCE,WAITFORVISIONCLEARANCE,TURRETFIND,TURRETSEARCH,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
+    }
+
     private STATE m_state=STATE.SETANGLE;
+
     public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,IntakeSubsystem intake,boolean updatePose,boolean shootwhileMove) {
         m_shooter = shooter;
         m_turret = turret;
@@ -59,6 +68,8 @@ public class SmartShooter extends Command {
         m_shooter.SlowShootingMotors();
         m_timer.reset();
         m_timer.start();
+        m_motor1IsAtBase=false;
+        m_motor2IsAtBase=false;
         m_currentTime=Timer.getFPGATimestamp();
         m_state=STATE.VISIONCLEARANCE;
     }
@@ -132,7 +143,7 @@ public class SmartShooter extends Command {
         m_turret.aimAtGoal(m_drive.getPose(), movingGoalLocation, false);
        
         m_shooter.setAngle(m_shotTable.getAngle(newDist));
-        m_shooter.RunShootingMotors(m_shotTable.getVelocity(newDist));
+        m_shooter.RunShootingMotors(m_shotTable.getVelocity1(newDist),m_shotTable.getVelocity2(newDist));
      
     
         if (currentTime > 0.250 && m_limelight.isTargetAvailible() && m_limelight.getDistance() >= 85.0) {
@@ -166,9 +177,13 @@ public class SmartShooter extends Command {
         Logger.recordOutput("Shooter/SmartShooterState",m_state.toString());
         switch(m_state){
             case VISIONCLEARANCE: 
-            m_shooter.setAngle(ShooterConstants.shooterVisionClearanceAngle);
 
-            m_state=STATE.WAITFORVISIONCLEARANCE;
+            if(m_shooter.getRelativePosition()<ShooterConstants.shooterVisionClearanceAngle){
+                m_shooter.setAngle(ShooterConstants.shooterVisionClearanceAngle);
+                m_state=STATE.WAITFORVISIONCLEARANCE;
+            }else{
+                m_state=STATE.TURRETFIND;
+            }
             break;
             case WAITFORVISIONCLEARANCE: 
             angleGap=Math.abs(m_shooter.getRelativePosition())
@@ -184,38 +199,77 @@ public class SmartShooter extends Command {
                m_turret.TrackTarget(true);
                m_state=STATE.TURRETLOCKWAIT;
             case TURRETLOCKWAIT:                
-                if(m_turret.IsOnTarget()){
-                    m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
-                    m_state=STATE.SETANGLE;
-                } else{
-                   m_turret.TrackTarget(true);
+                if(m_limelight.isTargetAvailible()){
+                    if(m_turret.IsOnTarget()){
+                        m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
+                        m_state=STATE.SETANGLE;
+                    }else{
+                        m_turret.TrackTarget(true);
+                    }
+                }else{
+                    double speed=m_turret.getCurrentSpeed();
+
+                    if(speed>0){
+                        m_runRight=true;
+                        m_runLeft=false;
+                      }else if(speed<0){
+                        m_runLeft=true;
+                        m_runRight=false;
+                      }else{
+                        m_runRight=true;
+                        m_runLeft=false;
+                      }
+
+                      m_state=STATE.TURRETSEARCH;
                 }
              //stay in turret lock mode
             break;
-                
+            case TURRETSEARCH:
+            if(!m_limelight.isTargetAvailible()){
+                if(m_runLeft){
+                  m_turret.RunCheckLimits(-Constants.LimeLightValues.limeLightTrackSpeed4);
+                  if(m_turret.IsAtLeftLimit()){
+                    m_runRight=true;
+                    m_runLeft=false;
+                  }
+                }
+              
+                if(m_runRight){
+                  m_turret.RunCheckLimits(Constants.LimeLightValues.limeLightTrackSpeed4);
+                  if(m_turret.IsAtRightLimit()){
+                    m_runRight=false;
+                    m_runLeft=true;
+                  }
+                }
+              }else{
+                m_state=STATE.TURRETFIND;
+              }
+            break; 
             case SETANGLE: 
-                if(m_limelight.isTargetAvailible()){        
+                if(m_limelight.isTargetAvailible()){  
+                    m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   
+                    m_motor2TargetSpeed=m_shotTable.getVelocity2(limeLimelightDis);    
                     m_shooter.setAngle(m_shotTable.getAngle(limeLimelightDis));
                     m_state=STATE.WAITFORANGLE;
                 }else{
                     m_shooter.stopRotate();
                     m_state=STATE.SETANGLE;
                 }
-                 break;
+            break;
             case WAITFORANGLE:
                 angleGap=Math.abs(m_shooter.getRelativePosition())
                     -Math.abs(m_shotTable.getAngle(limeLimelightDis));
                 Logger.recordOutput("Shooter/AngleGap",angleGap);
-                if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
+                if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
                     m_shooter.stopRotate();
-                    m_shooter.RunShootingMotors(m_shotTable.getVelocity(limeLimelightDis));
+                    m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed);
                     m_state=STATE.RAMPUPSHOOTER;
                     m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
                     Logger.recordOutput("Shooter/AngleGap",0);
                 }
-                 break;
+            break;
             case RAMPUPSHOOTER:                   
-                    if(Timer.getFPGATimestamp()>m_feederStartTime){
+                    if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_motor1TargetSpeed,m_motor2TargetSpeed)){
                         m_currentTime=Timer.getFPGATimestamp();
                         m_state=STATE.SHOOT;
                     }
@@ -225,9 +279,30 @@ public class SmartShooter extends Command {
                 m_intake.runIntake(Constants.IntakeConstants.autoIntakeSpeed);
                      
             if(m_currentTime+kTimeToRun<Timer.getFPGATimestamp()){
-                m_state=STATE.END;
+                m_state=STATE.SLOW;
             }
             break;
+            case SLOW:
+                m_shooter.StopFeedRollers();
+                m_intake.stopIntake();
+
+                if(m_motor1TargetSpeed<ShooterConstants.baseMotorSpeed&&!m_motor1IsAtBase){
+                    m_motor1TargetSpeed=m_motor1TargetSpeed+3;
+                }else{
+                    m_motor1IsAtBase=true;
+                }
+
+                if(m_motor2TargetSpeed<ShooterConstants.baseMotorSpeed&&!m_motor2IsAtBase){
+                    m_motor2TargetSpeed=m_motor2TargetSpeed+3;
+                }else{
+                    m_motor2IsAtBase=true;
+                }
+                
+                if(m_motor1IsAtBase&&m_motor2IsAtBase){
+                    m_state=STATE.END;
+                }else{
+                    m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed);
+                }
             case END:
                 returnValue=true;
         }

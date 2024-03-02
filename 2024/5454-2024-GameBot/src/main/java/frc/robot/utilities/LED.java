@@ -32,6 +32,22 @@ public class LED{
 
         m_led.start();
     }
+    
+    public LED( int port,int ledCount){
+        m_led=new AddressableLED(port);
+        m_ledBuffer=new AddressableLEDBuffer(ledCount);
+
+        m_led.setLength(m_ledBuffer.getLength());
+        for(int i=0;i<100;i++){
+            m_ledBuffer.setRGB(1,160,32,240);
+        }
+        m_led.setData(m_ledBuffer);
+        // SetLEDColor(LEDConstants.LEDColors.PURPLE);
+      
+        m_led.start();
+               
+    }
+
 
     private void UpdatePrimaryLEDS(LEDConstants.PrimaryLEDStates ledState){
         if(ledState!=LEDConstants.PrimaryLEDStates.OFF){

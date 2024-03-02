@@ -34,8 +34,6 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 public class ShooterSubsystem extends SubsystemBase{
     private Limelight m_limeLight;
 
-   // private WPI_TalonFX m_ShootingMotor1;
-   // private WPI_TalonFX m_ShootingMotor2;
     private TalonFX m_ShootingMotor1;
     private TalonFX m_ShootingMotor2; 
     private CANSparkMax m_feederMotor;
@@ -46,20 +44,13 @@ public class ShooterSubsystem extends SubsystemBase{
     private RelativeEncoder m_angleEncoder;
     private WPI_CANCoder m_canCoder;
      
-    private double m_velocity;
     private double m_baseSpeed;
     private double m_distance;
 
     private double m_targetAngle=0;
     private double m_shotsTaken;
-
-    private double m_shooterVeloc1;
-    private double m_shooterVeloc2;
-    private double m_shooterAngle;
-
-    private boolean m_shouldUseDashBoardVals;
-
-    private NetworkTable m_networkTable;
+    private double m_desiredVeloc1;
+    private double m_desiredVeloc2;
 
     public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId,double baseSpeed,boolean shouldUseDashBoardVals){
         m_limeLight=limeLight;
@@ -75,10 +66,6 @@ public class ShooterSubsystem extends SubsystemBase{
         m_anglePID = m_angleMotor.getPIDController();
         m_canCoder=new WPI_CANCoder(canCoderId);
         m_angleEncoder=m_angleMotor.getEncoder();
-
-        m_shouldUseDashBoardVals=shouldUseDashBoardVals;
-
-        m_networkTable = NetworkTableInstance.getDefault().getTable("SmartDashboard");
     
         double anglekP = 0.8;//0.1 
         double anglekI = 0.00;
@@ -124,31 +111,23 @@ public class ShooterSubsystem extends SubsystemBase{
             
     }
     
-    public void RunShootingMotors(double speed){
+    public void RunShootingMotors(double veloc1,double veloc2){
+        //values are for the indivudal shooter motors
+        m_desiredVeloc1=veloc1;
+        m_desiredVeloc2=veloc2;
+
         VelocityVoltage m_velocity = new VelocityVoltage(0);
         m_velocity.Slot = 0;
         
-        if(m_shouldUseDashBoardVals){
-            m_ShootingMotor1.setControl(m_velocity.withVelocity(m_shooterVeloc1));
-            m_ShootingMotor2.setControl(m_velocity.withVelocity(m_shooterVeloc2));
+        m_ShootingMotor1.setControl(m_velocity.withVelocity(veloc1));
+        m_ShootingMotor2.setControl(m_velocity.withVelocity(veloc2));
+
+        if(veloc1>0){
+            m_feederMotor.set(-ShooterConstants.feederSpeed);
         }else{
-            m_ShootingMotor1.setControl(m_velocity.withVelocity(speed));
-            m_ShootingMotor2.setControl(m_velocity.withVelocity(speed));
-        }
-        // m_ShootingMotor1.set(ControlMode.Velocity, speed);
-       // m_ShootingMotor2.set(ControlMode.Velocity, speed);
-       //VelocityDutyCycle m_velocity= new VelocityDutyCycle(-speed);
-       //m_ShootingMotor1.setControl(m_velocity);
-       //m_ShootingMotor2.setControl(m_velocity);
-         
-       //m_ShootingMotor1.set(-speed); 
-       //m_ShootingMotor2.set(-speed);
-       if(speed>0){
-        m_feederMotor.set(-ShooterConstants.feederSpeed);
-       }else{
-        m_feederMotor.set(ShooterConstants.feederSpeed);
+            m_feederMotor.set(ShooterConstants.feederSpeed);
        }
-    }  
+    } 
 
     public void RunFeedRollers(double speed){
         m_feederMotor.set(speed);
@@ -174,12 +153,14 @@ public class ShooterSubsystem extends SubsystemBase{
         
     }
 
-    public boolean isMotorVelocityAtBase(){
+    public boolean isMotorVelocitysAtDesiredSpeed(double veloc1,double veloc2){
         boolean returnValue=false;
 
-        //TODO: fix
-        if(GetVelocityMotor1()+ShooterConstants.baseSpeedDeadband>=ShooterConstants.baseMotorSpeed&&GetVelocityMotor1()-ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed
-            &&GetVelocityMotor2()+ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed&&GetVelocityMotor2()-ShooterConstants.baseSpeedDeadband<=ShooterConstants.baseMotorSpeed){
+        System.out.println("Veloc1 "+veloc1);
+        System.out.println("CurrentVeloc "+ GetVelocityMotor1());
+
+        if(Math.abs(GetVelocityMotor1())+Math.abs(ShooterConstants.baseSpeedDeadband)>=Math.abs(veloc1)&&Math.abs(GetVelocityMotor1())-Math.abs(ShooterConstants.baseSpeedDeadband)<=Math.abs(veloc1)
+            &&Math.abs(GetVelocityMotor2())+Math.abs(ShooterConstants.baseSpeedDeadband)>=Math.abs(veloc2)&&Math.abs(GetVelocityMotor2())-Math.abs(ShooterConstants.baseSpeedDeadband)<=Math.abs(veloc2)){
             returnValue=true;
         }
 
@@ -187,16 +168,18 @@ public class ShooterSubsystem extends SubsystemBase{
     }
 
     public double GetVelocityMotor1(){
-        return m_ShootingMotor1.getVelocity().getValueAsDouble();
+        System.out.println(m_ShootingMotor1.getVelocity() + " = " + m_ShootingMotor1.getRotorVelocity());
+        return m_ShootingMotor1.getRotorVelocity().getValueAsDouble();
+        
     }
 
     public double GetVelocityMotor2(){
-        return m_ShootingMotor2.getVelocity().getValueAsDouble();
+        return m_ShootingMotor2.getRotorVelocity().getValueAsDouble();
     }
 
     public void OutPutDistance(){
         ShotTable shotTable = new ShotTable();
-        double calculation=shotTable.getVelocity(m_limeLight.getDistance());
+        double calculation=shotTable.getVelocity1(m_limeLight.getDistance());
         System.out.println("Distance Calucations: "+calculation);
     }
 
@@ -210,11 +193,7 @@ public class ShooterSubsystem extends SubsystemBase{
 
     public void setAngle(double targetAngle){
         m_targetAngle=targetAngle;
-        if(m_shouldUseDashBoardVals){
-            m_anglePID.setReference(m_shooterAngle,ControlType.kPosition);
-        }else{
-            m_anglePID.setReference(targetAngle,ControlType.kPosition);
-        }
+        m_anglePID.setReference(targetAngle,ControlType.kPosition);
 
     }
 
@@ -306,32 +285,21 @@ public class ShooterSubsystem extends SubsystemBase{
         return returnValue;
     }
 
-    
-  public void GetDashboardShooterVals(){
-    m_shooterVeloc1=m_networkTable.getEntry("ShooterVeloc1").getNumber(0).doubleValue();
-    m_shooterVeloc2=m_networkTable.getEntry("ShooterVeloc2").getNumber(0).doubleValue();
-    m_shooterAngle=m_networkTable.getEntry("ShooterAngle").getNumber(0).doubleValue();
-  }
-
     @Override
     public void periodic(){
-        Logger.recordOutput("Shooter/ShooterVelocity",m_velocity);
+        Logger.recordOutput("Shooter/Shooter1Velocity",m_desiredVeloc1);
+        Logger.recordOutput("Shooter/Shooter2Velocity",m_desiredVeloc2);
         Logger.recordOutput("Shooter/ShooterSetAngle",m_targetAngle);
-        Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
-        Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
-        Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
+//        Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
+//        Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
+//        Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
+//        Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
      //   Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
         Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken",m_shotsTaken);
         Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
-        Logger.recordOutput("Shooter/DashboardShooterVeloc1",m_shooterVeloc1);
-        Logger.recordOutput("Shooter/DashboardShooterVeloc2",m_shooterVeloc2);
-        Logger.recordOutput("Shooter/DashboardShooterAngle",m_shooterAngle);
       //  SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
       //  SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
       //  SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());
-
-       // GetDashboardShooterVals();
     }
 }

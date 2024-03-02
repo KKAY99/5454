@@ -1,4 +1,6 @@
 package frc.robot.commands;
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -20,6 +22,13 @@ public class TurretCommand extends Command{
   public TurretCommand(TurretSubsystem turret,double speed){
     m_turret=turret;
     m_speed=speed;
+    m_isRunning=false;
+    addRequirements(m_turret);
+  }
+
+  public TurretCommand(TurretSubsystem turret,DoubleSupplier speed){
+    m_turret=turret;
+    m_speed=speed.getAsDouble();
     m_isRunning=false;
     addRequirements(m_turret);
   }

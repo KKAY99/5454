@@ -9,9 +9,12 @@ import edu.wpi.first.math.Num;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class ShotTable {
-    private InterpolatingDoubleTreeMap shotVelocity= new InterpolatingDoubleTreeMap();
+    private InterpolatingDoubleTreeMap shotVelocity1= new InterpolatingDoubleTreeMap();
+    private InterpolatingDoubleTreeMap shotVelocity2= new InterpolatingDoubleTreeMap();
     private InterpolatingDoubleTreeMap angle= new InterpolatingDoubleTreeMap();
     private InterpolatingDoubleTreeMap shotTime= new InterpolatingDoubleTreeMap();
+    private InterpolatingDoubleTreeMap multiplier= new InterpolatingDoubleTreeMap();
+    private InterpolatingDoubleTreeMap offset= new InterpolatingDoubleTreeMap();
    
     public ShotTable(){
         loadtables();
@@ -20,16 +23,25 @@ public class ShotTable {
     private void loadtables (){
         //READ CONSTANTS
         double distance;
-        double velocity;
+        double velocity1;
+        double velocity2;
         double shotTimerow;
         double anglerow;
+        double multiplierrow;
+        double offsetrow;
         int dataRows=Constants.ShooterTable.distanceLookup.length;
         for(int rowLoop=0;rowLoop<dataRows;rowLoop++){
             distance=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnDistance];
-            velocity=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnVelocity];
+            velocity1=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnVelocity1];
+            velocity2=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnVelocity2];
             anglerow=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnAngle];
             shotTimerow=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnShotTime];
-            shotVelocity.put(distance,velocity);
+            multiplierrow=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnMultiplier];
+            offsetrow=Constants.ShooterTable.distanceLookup[rowLoop][ShooterTable.columnOffset];
+            offset.put(distance,offsetrow);
+            multiplier.put(distance,multiplierrow);
+            shotVelocity1.put(distance,velocity1);
+            shotVelocity2.put(distance,velocity2);
             angle.put(distance,anglerow);
             shotTime.put(distance,shotTimerow);
         }
@@ -92,10 +104,20 @@ public class ShotTable {
     public double getAngle(double distance){
         return angle.get(distance);
     }
-    public double getVelocity(double distance){
-        return shotVelocity.get(distance);
+    public double getVelocity1(double distance){
+        return shotVelocity1.get(distance);
+    }
+
+    public double getVelocity2(double distance){
+        return shotVelocity2.get(distance);
     }
     public double getShotTime(double distance){
-        return shotVelocity.get(distance);
+        return shotVelocity1.get(distance);
+    }
+    public double getDistanceMultiplier(double distance){
+        return multiplier.get(distance);
+    }
+    public double getCrosshairOffset(double distance){
+        return offset.get(distance);
     }
 }

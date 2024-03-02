@@ -3,6 +3,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.utilities.Limelight;
+import frc.robot.utilities.ShotTable;
 
 import java.io.Console;
 import java.util.logging.LogManager;
@@ -29,6 +30,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 public class TurretSubsystem extends SubsystemBase{
   private TurretSubsystemIO m_turretIO;
   private TurretSubsystemIOInputsAutoLogged m_turretAutoLogged=new TurretSubsystemIOInputsAutoLogged();
+  private ShotTable m_shotTable = new ShotTable();
 
   private CANSparkMax m_turretMotor;
 
@@ -49,7 +51,7 @@ public class TurretSubsystem extends SubsystemBase{
   private double kTurretD=Constants.TurretConstants.turretD;
 
   public TurretSubsystem(int turretMotorPort, int limitSwitchPort, Limelight limelight,TurretSubsystemIO turretIO){
-    m_turretIO=turretIO;
+     m_turretIO=turretIO;
     m_limeLight=limelight;
     m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
     m_turretMotor.setSmartCurrentLimit(Constants.k15Amp);
@@ -65,32 +67,43 @@ public class TurretSubsystem extends SubsystemBase{
 
   public boolean IsOnTarget(){
     boolean returnValue=false;
-     if(m_limeLight.isTargetAvailible()){
-      if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.limeLightDeadBand){
+    double limelightDis=m_limeLight.getDistance();
+    double multiplier=m_shotTable.getDistanceMultiplier(limelightDis);
+    double x=m_limeLight.getXRaw()+m_shotTable.getCrosshairOffset(limelightDis); 
+    
+    m_limeLight.setOffSet(m_shotTable.getCrosshairOffset(limelightDis));
+
+    if(m_limeLight.isTargetAvailible()){
+      if(Math.abs(x)<Constants.LimeLightValues.limeLightDeadBand*multiplier){
           returnValue=true;
       }
      }
      return returnValue;
-  }  
+    } 
   public void TrackTarget(boolean bool){
     double speed=0;
-     if(m_limeLight.isTargetAvailible()){
-        if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.limeLightDeadBand){
+    double limelightDis=m_limeLight.getDistance();
+    double x=m_limeLight.getXRaw()+m_shotTable.getCrosshairOffset(limelightDis);
+    double multiplier=m_shotTable.getDistanceMultiplier(limelightDis);
+    Logger.recordOutput("Turret/TrackXTarget",x);
+   
+   
+    if(m_limeLight.isTargetAvailible()){
+        if(Math.abs(x)<Constants.LimeLightValues.limeLightDeadBand*multiplier){
           speed=0;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closeXCheck){
+        }else if(Math.abs(x)<Constants.LimeLightValues.closeXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed1;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.medXCheck){
+        }else if(Math.abs(x)<Constants.LimeLightValues.medXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed2;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.farXCheck){
+        }else if(Math.abs(x)<Constants.LimeLightValues.farXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed3;
         }else{
           speed=Constants.LimeLightValues.limeLightTrackSpeed4;
         }
-        System.out.println(m_limeLight.getXRaw());
-        if(m_limeLight.getXRaw()<0){
+        if(x<0 && speed!=0){
           RunCheckLimits(speed);
           m_speed=speed;
-        }else if(m_limeLight.getXRaw()>0){
+        }else if(x>0 && speed!=0){
           RunCheckLimits(-speed);
           m_speed=-speed;
         }else{
@@ -149,8 +162,7 @@ public class TurretSubsystem extends SubsystemBase{
   public boolean IsAtHardLimit(){
     if(m_limitSwitch!=null){
     return m_limitSwitch.get();
-    }
-    else{
+    }else{
       return false;
     }
   }
@@ -197,6 +209,10 @@ public class TurretSubsystem extends SubsystemBase{
     public void setCoastOn(){
     m_turretMotor.setIdleMode(IdleMode.kCoast);
   }
+
+  public double getCurrentSpeed(){
+    return m_speed;
+  }
   
  public void aimAtGoal(Pose2d robotPose, Translation2d goal, boolean aimAtVision) {
   //FIX: TO DO Implemetnt AimAtGoal 
@@ -238,13 +254,13 @@ public class TurretSubsystem extends SubsystemBase{
    
     //Logger.processInputs("TurretSubsystem",m_turretAutoLogged);
     Logger.recordOutput("Turret/TurretSpeed",m_speed);
-    Logger.recordOutput("Turret/TurretEncoder",GetEncoderValue());
-    Logger.recordOutput("Turret/TurretHardLimit",IsAtHardLimit());
-    Logger.recordOutput("Turret/TurretLeftLimit",IsAtLeftLimit());
-    Logger.recordOutput("Turret/TurretRightLimit",IsAtRightLimit());
+   // Logger.recordOutput("Turret/TurretEncoder",GetEncoderValue());
+   // Logger.recordOutput("Turret/TurretHardLimit",IsAtHardLimit());
+   // Logger.recordOutput("Turret/TurretLeftLimit",IsAtLeftLimit());
+   // Logger.recordOutput("Turret/TurretRightLimit",IsAtRightLimit());
     Logger.recordOutput("Turret/TurretHasSetReference",m_hasSetReference);
     Logger.recordOutput("Turret/TurretReferenceAngle",m_targetAngle);
 
-    SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
+   // SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
   }
 }

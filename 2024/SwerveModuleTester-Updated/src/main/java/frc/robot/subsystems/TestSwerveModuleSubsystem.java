@@ -94,8 +94,13 @@ public class TestSwerveModuleSubsystem extends SubsystemBase{
       double relativeValue = m_turningMotor.getEncoder().getPosition();
       return relativeValue;
     }
+
+    public double getEncoderValue(){
+      return m_encoder.getAbsolutePosition();
+    }
     @Override
     public void periodic() {
+      System.out.println(getEncoderValue());
         // This method will be called once per scheduler run
 //     System.out.println(" * Pos  " + getRotatePos() + " " + getLimitSwitch());
     }

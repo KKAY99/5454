@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimbSubsystem;
 
@@ -14,6 +16,11 @@ public class ClimbCommand extends Command {
   public ClimbCommand(ClimbSubsystem climb,double speed){
     m_climb=climb;
     m_speed=speed;
+  }
+
+  public ClimbCommand(ClimbSubsystem climb,DoubleSupplier speed){
+    m_climb=climb;
+    m_speed=speed.getAsDouble();
   }
 
   @Override

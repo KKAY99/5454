@@ -45,7 +45,7 @@ import frc.robot.utilities.ADABreakBeam;
 import frc.robot.utilities.AutoCommands;
 import frc.robot.utilities.LED;
 import frc.robot.utilities.Limelight;
-import frc.robot.utilities.ModularAutoBuilder;
+import frc.robot.utilities.ChooseYourOwnAdventureAuto;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -73,18 +73,20 @@ public class RobotContainer {
     private SendableChooser<Boolean> m_shouldUseModularBuilder = new SendableChooser<>();
     private SendableChooser<Boolean> m_shootFinalNote = new SendableChooser<>();
     private SendableChooser<Boolean> m_shouldUseDashBoardValues = new SendableChooser<>();
-    private SendableChooser<Pose2d> m_autoPath1 = new SendableChooser<>();
-    private SendableChooser<Pose2d> m_autoPath2 = new SendableChooser<>(); 
-    private SendableChooser<Pose2d> m_autoPath3 = new SendableChooser<>(); 
-    private SendableChooser<Pose2d> m_autoPath4 = new SendableChooser<>(); 
-    private SendableChooser<Pose2d> m_autoPath5 = new SendableChooser<>(); 
+    private SendableChooser<Pose2d[]> m_autoPath1 = new SendableChooser<>();
+    private SendableChooser<Pose2d[]> m_autoPath2 = new SendableChooser<>(); 
+    private SendableChooser<Pose2d[]> m_autoPath3 = new SendableChooser<>(); 
+    private SendableChooser<Pose2d[]> m_autoPath4 = new SendableChooser<>(); 
+    private SendableChooser<Pose2d[]> m_autoPath5 = new SendableChooser<>(); 
 
     private Swerve m_swerve = new Swerve(new SwerveIO(){});
-    private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
+//    private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
+    private LED m_led= new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
     private Limelight m_TurretLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
                                         Constants.LimeLightValues.limelightTurretAngle);
-   
+    /*private Limelight m_StaticLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
+                                        Constants.LimeLightValues.limelightTurretAngle,0,0,Constants.LimeLightValues.staticLimelightName);*/
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,
                                          Constants.TurretConstants.turretLimitSwitchPort,
                                          m_TurretLimelight,new TurretSubsystemIO(){});
@@ -147,7 +149,7 @@ public class RobotContainer {
       JoystickButton intakeToggleOperatorTrueButtonOut=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonOut);
       intakeToggleOperatorTrueButtonOut.whileTrue(intakeToggleOperatorTrueOut);
 
-      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,Constants.IntakeConstants.intakeSpeed,m_led);
+      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed,m_led);
       JoystickButton intakeConveyButton=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeConveyButtonIn);
       intakeConveyButton.onTrue(intakeConvey);
 
@@ -188,7 +190,7 @@ public class RobotContainer {
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.drivermanualShootButton);
       shootButton1.toggleOnTrue(shoot1);
 
-      ShootCommand shootOp1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
+      ShootCommand shootOp1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed,m_shouldUseDashBoardValues);
       Trigger shootOpTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       shootOpTrigger.whileTrue(shootOp1);
 
@@ -232,12 +234,24 @@ public class RobotContainer {
       rotateDown.whileTrue(shooterRotateDown);
 
       //use left Y
-      ShootRotateCommand shooterRotateStick = new ShootRotateCommand(m_shooter, ()->m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorRotateAxis));
+      ShootRotateCommand shooterRotateStick = new ShootRotateCommand(m_shooter, ()->-m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorRotateAxis));
       //is true when stick is outside of the deadband
+
+      TurretCommand turretRotateStick = new TurretCommand(m_turret,()->m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorTurretAxis));
+
+      ClimbCommand climbRotateStick = new ClimbCommand(m_climb,()->m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorClimbAxis));
      
       Trigger rotateStickTrigger= new Trigger(() -> Math.abs(m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorRotateAxis))>
-          Constants.ButtonBindings.operatorRotateDeadband);
+      Constants.ButtonBindings.operatorRotateDeadband);
       rotateStickTrigger.whileTrue(shooterRotateStick);
+
+      Trigger turretStickTrigger= new Trigger(() -> Math.abs(m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorTurretAxis))>
+      Constants.ButtonBindings.operatorRotateDeadband);
+      turretStickTrigger.whileTrue(turretRotateStick);
+
+      Trigger climbStickTrigger= new Trigger(() -> Math.abs(m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorClimbAxis))>
+      Constants.ButtonBindings.operatorRotateDeadband);
+      climbStickTrigger.whileTrue(climbRotateStick);
 
       ShootRotateSetReferenceCommand stowCommand = new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shooterStowAngle);
       JoystickButton operatorStow=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorStow);
@@ -286,73 +300,73 @@ public class RobotContainer {
       SmartDashboard.putData("Auto Start",m_autoStart);
 
       m_autoPath1.setDefaultOption(AutoConstants.noPath, null);
-      m_autoPath1.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
-      m_autoPath1.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
-      m_autoPath1.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
-      m_autoPath1.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
-      m_autoPath1.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
-      m_autoPath1.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
-      m_autoPath1.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
-      m_autoPath1.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
-      m_autoPath1.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
-      m_autoPath1.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
-      m_autoPath1.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      m_autoPath1.addOption(AutoConstants.blueShortAmpNote,AutoConstants.blueShortAmpNoteArray);
+      m_autoPath1.addOption(AutoConstants.blueShortCenterNote,AutoConstants.blueShortCenterNoteArray);
+      m_autoPath1.addOption(AutoConstants.blueShortSourceNote,AutoConstants.blueShortSourceNoteArray);
+      m_autoPath1.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpNoteArray);
+      m_autoPath1.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterNoteArray);
+      m_autoPath1.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceNoteArray);
+      m_autoPath1.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmp1NoteArray);
+      m_autoPath1.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2NoteArray);
+      m_autoPath1.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterNoteArray);
+      m_autoPath1.addOption(AutoConstants.longSourceNote1,AutoConstants.longSource1NoteArray);
+      m_autoPath1.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2NoteArray);
       SmartDashboard.putData("Auto Path 1",m_autoPath1);
 
       m_autoPath2.setDefaultOption(AutoConstants.noPath, null);
-      m_autoPath2.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
-      m_autoPath2.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
-      m_autoPath2.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
-      m_autoPath2.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
-      m_autoPath2.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
-      m_autoPath2.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
-      m_autoPath2.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
-      m_autoPath2.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
-      m_autoPath2.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
-      m_autoPath2.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
-      m_autoPath2.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      m_autoPath2.addOption(AutoConstants.blueShortAmpNote,AutoConstants.blueShortAmpNoteArray);
+      m_autoPath2.addOption(AutoConstants.blueShortCenterNote,AutoConstants.blueShortCenterNoteArray);
+      m_autoPath2.addOption(AutoConstants.blueShortSourceNote,AutoConstants.blueShortSourceNoteArray);
+      m_autoPath2.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpNoteArray);
+      m_autoPath2.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterNoteArray);
+      m_autoPath2.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceNoteArray);
+      m_autoPath2.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmp1NoteArray);
+      m_autoPath2.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2NoteArray);
+      m_autoPath2.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterNoteArray);
+      m_autoPath2.addOption(AutoConstants.longSourceNote1,AutoConstants.longSource1NoteArray);
+      m_autoPath2.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2NoteArray);
       SmartDashboard.putData("Auto Path 2",m_autoPath2);
 
       m_autoPath3.setDefaultOption(AutoConstants.noPath, null);
-      m_autoPath3.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
-      m_autoPath3.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
-      m_autoPath3.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
-      m_autoPath3.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
-      m_autoPath3.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
-      m_autoPath3.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
-      m_autoPath3.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
-      m_autoPath3.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
-      m_autoPath3.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
-      m_autoPath3.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
-      m_autoPath3.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      m_autoPath3.addOption(AutoConstants.blueShortAmpNote,AutoConstants.blueShortAmpNoteArray);
+      m_autoPath3.addOption(AutoConstants.blueShortCenterNote,AutoConstants.blueShortCenterNoteArray);
+      m_autoPath3.addOption(AutoConstants.blueShortSourceNote,AutoConstants.blueShortSourceNoteArray);
+      m_autoPath3.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpNoteArray);
+      m_autoPath3.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterNoteArray);
+      m_autoPath3.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceNoteArray);
+      m_autoPath3.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmp1NoteArray);
+      m_autoPath3.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2NoteArray);
+      m_autoPath3.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterNoteArray);
+      m_autoPath3.addOption(AutoConstants.longSourceNote1,AutoConstants.longSource1NoteArray);
+      m_autoPath3.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2NoteArray);
       SmartDashboard.putData("Auto Path 3",m_autoPath3);
 
       m_autoPath4.setDefaultOption(AutoConstants.noPath, null);
-      m_autoPath4.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
-      m_autoPath4.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
-      m_autoPath4.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
-      m_autoPath4.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
-      m_autoPath4.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
-      m_autoPath4.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
-      m_autoPath4.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
-      m_autoPath4.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
-      m_autoPath4.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
-      m_autoPath4.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
-      m_autoPath4.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      m_autoPath4.addOption(AutoConstants.blueShortAmpNote,AutoConstants.blueShortAmpNoteArray);
+      m_autoPath4.addOption(AutoConstants.blueShortCenterNote,AutoConstants.blueShortCenterNoteArray);
+      m_autoPath4.addOption(AutoConstants.blueShortSourceNote,AutoConstants.blueShortSourceNoteArray);
+      m_autoPath4.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpNoteArray);
+      m_autoPath4.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterNoteArray);
+      m_autoPath4.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceNoteArray);
+      m_autoPath4.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmp1NoteArray);
+      m_autoPath4.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2NoteArray);
+      m_autoPath4.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterNoteArray);
+      m_autoPath4.addOption(AutoConstants.longSourceNote1,AutoConstants.longSource1NoteArray);
+      m_autoPath4.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2NoteArray);
       SmartDashboard.putData("Auto Path 4",m_autoPath4);
 
       m_autoPath5.setDefaultOption(AutoConstants.noPath, null);
-      m_autoPath5.addOption(AutoConstants.blueShortAmpNote,AutoConstants.locationBlueShortAmpNote);
-      m_autoPath5.addOption(AutoConstants.blueShortCenterNote,AutoConstants.locationBlueShortCenterNote);
-      m_autoPath5.addOption(AutoConstants.blueShortSourceNote,AutoConstants.locationBlueShortSourceNote);
-      m_autoPath5.addOption(AutoConstants.redShortAmpNote,AutoConstants.locationRedShortAmpNote);
-      m_autoPath5.addOption(AutoConstants.redShortCenterNote,AutoConstants.locationRedShortCenterNote);
-      m_autoPath5.addOption(AutoConstants.redShortSourceNote,AutoConstants.locationRedShortSourceNote);
-      m_autoPath5.addOption(AutoConstants.longAmpNote1,AutoConstants.locationLongAmpNote);
-      m_autoPath5.addOption(AutoConstants.longAmpNote2,AutoConstants.locationLongAmp2Note);
-      m_autoPath5.addOption(AutoConstants.longCenterNote,AutoConstants.locationLongCenterNote);
-      m_autoPath5.addOption(AutoConstants.longSourceNote1,AutoConstants.locationLongSourceNote);
-      m_autoPath5.addOption(AutoConstants.longSourceNote2,AutoConstants.locationLongSource2Note);
+      m_autoPath5.addOption(AutoConstants.blueShortAmpNote,AutoConstants.blueShortAmpNoteArray);
+      m_autoPath5.addOption(AutoConstants.blueShortCenterNote,AutoConstants.blueShortCenterNoteArray);
+      m_autoPath5.addOption(AutoConstants.blueShortSourceNote,AutoConstants.blueShortSourceNoteArray);
+      m_autoPath5.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpNoteArray);
+      m_autoPath5.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterNoteArray);
+      m_autoPath5.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceNoteArray);
+      m_autoPath5.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmp1NoteArray);
+      m_autoPath5.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2NoteArray);
+      m_autoPath5.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterNoteArray);
+      m_autoPath5.addOption(AutoConstants.longSourceNote1,AutoConstants.longSource1NoteArray);
+      m_autoPath5.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2NoteArray);
       SmartDashboard.putData("Auto Path 5",m_autoPath5);
 
       m_shootFinalNote.setDefaultOption("Dont Shoot Final Note",false);
@@ -365,7 +379,7 @@ public class RobotContainer {
 
       m_shouldUseDashBoardValues.setDefaultOption("Dont Use Shooter Vals",false);
       m_shouldUseDashBoardValues.addOption("Use Shooter Vals",true);
-      SmartDashboard.putData("Should Use Inputted Shooter Vals",m_shouldUseModularBuilder);
+      SmartDashboard.putData("Should Use Inputted Shooter Vals",m_shouldUseDashBoardValues);
 
       SmartDashboard.putNumber("Shooter1Veloc",0);
       SmartDashboard.putNumber("Shooter2Veloc",0);
@@ -373,16 +387,16 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    /*Alliance currentAlliance=DriverStation.getAlliance().get();
-    AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake,m_turret,m_Limelight);
-    ModularAutoBuilder autoModularMaker = new ModularAutoBuilder(m_swerve,m_shooter,m_intake,m_turret,m_Limelight);
+    Alliance currentAlliance=DriverStation.getAlliance().get();
+    AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake,m_turret,m_TurretLimelight);
+    ChooseYourOwnAdventureAuto autoModularMaker = new ChooseYourOwnAdventureAuto(m_swerve,m_shooter,m_intake,m_turret,m_TurretLimelight);
     AutoConstants.StartingLocations startLocation=m_autoStart.getSelected();
     double delay=m_autoDelay.getSelected();
-    String autoChosen=m_autoChooser.getSelected();*/
+    String autoChosen=m_autoChooser.getSelected();
     Command newCommand=null;
     
-    /*if(m_Limelight.isTargetAvailible()){
-      m_swerve.resetOdometry(m_Limelight.GetPoseViaApriltag());
+    if(m_TurretLimelight.isTargetAvailible()){
+      m_swerve.resetOdometry(m_TurretLimelight.GetPoseViaApriltag());
     }else{
       m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
     }
@@ -392,7 +406,7 @@ public class RobotContainer {
                                                     m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
     }else{
       newCommand=autoMaker.createAutoCommand(startLocation,autoChosen,delay,currentAlliance);
-    }*/
+    }
 
     return newCommand;
   }
@@ -401,10 +415,10 @@ public class RobotContainer {
     if(m_brakeButton.get() && m_brakeButtonPressed==false){ 
       m_brakeButtonPressed=true;
       if(m_isBrakeButtonToggled==false){
-                    disableBrakeMode();
+   //                 disableBrakeMode();
                     m_isBrakeButtonToggled=true;
             }else{
-                    resetBrakeModetoNormal();
+    //                resetBrakeModetoNormal();
                     m_isBrakeButtonToggled=false;
             }
   }else{
@@ -429,11 +443,13 @@ public class RobotContainer {
   // enableLimelights();
     resetBrakeModetoNormal();
     SetBaseShooterSpeed();
-    homeRobot();  
+    homeRobot(); 
+    ChangeVisionPipeline(); 
   } 
   
   public void AllPeriodic(){
-    //   refreshSmartDashboard();
+    //   refreshSmartDashboard();\ 
+        m_TurretLimelight.LimeLightPeriodic(true); 
   }
 
   public void TeleopPeriodic(){
@@ -452,7 +468,6 @@ public class RobotContainer {
     //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
     resetBrakeModetoNormal();
     m_shooter.ResetControlType();  
-    m_TurretLimelight.LimeLightPeriodic(true); 
     m_shooter.stopRotate(); //reset rogue pid
    
     m_swerve.resetOdometry(Constants.AutoConstants.redCenterStartPos);
@@ -460,7 +475,19 @@ public class RobotContainer {
     homeRobot();
     SetBaseShooterSpeed();
 
+    ChangeVisionPipeline();
   }
+
+  private void ChangeVisionPipeline(){
+    Alliance currentAlliance=DriverStation.getAlliance().get();
+
+    if(currentAlliance==Alliance.Red){
+      m_TurretLimelight.setPipeline(Constants.LimeLightValues.redSpeakerPipeline);
+    }else{
+      m_TurretLimelight.setPipeline(Constants.LimeLightValues.blueSpeakerPipeline);
+    }
+  }
+
   private void resetBrakeModetoNormal(){
     m_intake.setBrakeOn();
  //   m_shooter.setBrakeOn();

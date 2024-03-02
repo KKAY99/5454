@@ -55,9 +55,9 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     
-    private int drivePort=34;
-    private int turnPort=44;
-    private int encoderPort=54;
+    private int drivePort=32;
+    private int turnPort=42;
+    private int encoderPort=52;
     // Front Right Encoder = 51 , front Left Encoder = 52
     private final TestSwerveModuleSubsystem m_RobotDrive = new TestSwerveModuleSubsystem(drivePort,turnPort,encoderPort);
 

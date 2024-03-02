@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
+
 /** SwerveIMU interface for the Pigeon2 */
 public class Pigeon2Swerve extends SwerveIMU {
 
@@ -23,11 +25,15 @@ public class Pigeon2Swerve extends SwerveIMU {
    * @param canbus CAN Bus name the pigeon resides on.
    */
   public Pigeon2Swerve(int canid, String canbus) {
-    imu = new WPI_Pigeon2(canid, canbus);
-    Pigeon2Configuration config = new Pigeon2Configuration();
-    imu.configAllSettings(config);
-    imu.setYaw(0); //5454 Add 1/8/24
-    SmartDashboard.putData(imu);
+    try{
+      imu = new WPI_Pigeon2(canid, canbus);
+      Pigeon2Configuration config = new Pigeon2Configuration();
+      imu.configAllSettings(config);
+      imu.setYaw(0); //5454 Add 1/8/24
+      SmartDashboard.putData(imu);
+    }catch(Exception e){
+      Logger.recordOutput("Pigeon State Down","Pigeon Bad");
+    }
   }
 
   /**

@@ -119,7 +119,8 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
     //only check during disabled to make sure we don't flip switch by accident in match
-     m_robot.checkBrakeButton();
+    //disabled can error testing
+    // m_robot.checkBrakeButton();
    
   }
 

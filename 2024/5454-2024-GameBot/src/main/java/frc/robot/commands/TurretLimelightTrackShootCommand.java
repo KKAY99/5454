@@ -126,7 +126,7 @@ public class TurretLimelightTrackShootCommand extends Command{
         returnValue=true;
         m_shooter.ShotTaken();
       }else{
-        m_shooter.RunShootingMotors(Constants.ShooterConstants.autoShooterSpeed);
+        m_shooter.RunShootingMotors(Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.autoShooterSpeed);
       }
     break;
   }
