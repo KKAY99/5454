@@ -380,8 +380,38 @@ public final class Constants {
 
       public static final double rumbleValue=1;
       public static final double triggerDeadband=0.1;
-    }
 
+      public static final int customShot1=0;
+      public static final int customShot2=1;
+      public static final int customShot3=2;
+      public static final int customShot4=3;
+      public static final int customShot5=4;
+      public static final int customShot6=5;
+    }
+    public static final double customShot1Velocity1=-30;
+    public static final double customShot1Velocity2=-30;
+    public static final double customShot1Angle=-36;
+ 
+    public static final double customShot2Velocity1=-30;
+    public static final double customShot2Velocity2=-30;
+    public static final double customShot2Angle=-30;
+ 
+    public static final double customShot3Velocity1=-30;
+    public static final double customShot3Velocity2=-30;
+    public static final double customShot3Angle=-30;
+
+    public static final double customShot4Velocity1=-30;
+    public static final double customShot4Velocity2=-30;
+    public static final double customShot4Angle=-30;
+    
+    public static final double customShot5Velocity1=-30;
+    public static final double customShot5Velocity2=-30;
+    public static final double customShot5Angle=-30;
+    
+    public static final double customShot6Velocity1=-30;
+    public static final double customShot6Velocity2=-30;
+    public static final double customShot6Angle=-30;
+    
 
     /** General robot constants  from 3512*/
     public static final class GeneralConstants {

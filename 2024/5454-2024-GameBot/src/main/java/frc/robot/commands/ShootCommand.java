@@ -24,10 +24,9 @@ public class ShootCommand extends Command {
 
   private NetworkTable m_networkTable;
 
-  private double m_speed=0;
+  private double m_speed1=0;
+  private double m_speed2=0;
   private double m_baseMotorSpeed;
-  private double m_shooterVeloc1;
-  private double m_shooterVeloc2;
   private double m_shooterAngle;
   private double m_currentTime;
   private double kTimeToRun=Constants.ShooterConstants.timeToRunShooter;
@@ -35,11 +34,12 @@ public class ShootCommand extends Command {
   private double m_targetSpeed=0;
   private double m_motor1TargetSpeed=0;
   private double m_motor2TargetSpeed=0;
-
+  
   private boolean m_motor1IsAtBase=false;
   private boolean m_motor2IsAtBase=false;
   private boolean m_isRunning=false;
   private boolean m_shouldUseDashBoardVals;
+  private boolean m_setAngle=false;
   private static int kSlowDownDeadBand=2;
   private enum STATE{
    SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
@@ -50,7 +50,9 @@ public class ShootCommand extends Command {
   public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed,double baseMotorSpeed){
     m_shooter=shooter;
     m_intake=intake;
-    m_speed=speed;
+    m_speed1=speed;
+    m_speed2=speed;
+    m_setAngle=false;
     m_baseMotorSpeed=baseMotorSpeed;
     m_shouldUseDashBoardVals=false;
 
@@ -63,12 +65,24 @@ public class ShootCommand extends Command {
   public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed,double baseMotorSpeed,SendableChooser<Boolean> shoulduseDashBoardVals){
     m_shooter=shooter;
     m_intake=intake;
-    m_speed=speed;
+    m_speed1=speed;
+    m_speed2=speed;
+    m_setAngle=false;
     m_baseMotorSpeed=baseMotorSpeed;
     m_shouldUseDashBoardValuesSendable=shoulduseDashBoardVals;
 
     m_networkTable = NetworkTableInstance.getDefault().getTable("SmartDashboard");
 
+    GetDashboardShooterVals();
+    addRequirements(m_shooter);
+  }
+  public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed1,double speed2,double angle){
+    m_shooter=shooter;
+    m_intake=intake;
+    m_speed1=speed1;
+    m_speed2=speed2;
+    m_shooterAngle=angle;
+    m_setAngle=false;
     GetDashboardShooterVals();
     addRequirements(m_shooter);
   }
@@ -90,7 +104,7 @@ public class ShootCommand extends Command {
     GetDashboardShooterVals(); 
     m_isRunning=true;
     Logger.recordOutput("Shooter/ShooterCommand",m_isRunning);
-    Logger.recordOutput("Shooter/ShooterSpeed",m_speed);
+    Logger.recordOutput("Shooter/ShooterSpeed",m_speed1 + " / " + m_speed2);
 
   }
 
@@ -105,8 +119,8 @@ public class ShootCommand extends Command {
   }
 
   public void GetDashboardShooterVals(){
-    m_shooterVeloc1=SmartDashboard.getNumber("Shooter1Veloc",0);
-    m_shooterVeloc2=SmartDashboard.getNumber("Shooter2Veloc",0);
+    m_speed1=SmartDashboard.getNumber("Shooter1Veloc",0);
+    m_speed2=SmartDashboard.getNumber("Shooter2Veloc",0);
     m_shooterAngle=SmartDashboard.getNumber("ShooterAngle",0);
 
     /*m_shooterVeloc1=m_networkTable.getEntry("ShooterVeloc1").getNumber(0).doubleValue();
@@ -118,17 +132,18 @@ public class ShootCommand extends Command {
   @Override
   public boolean isFinished(){
     if(m_shouldUseDashBoardValuesSendable==null){
-      System.out.println("null");
+      System.out.println("Looking up");
     }else{
       System.out.println(m_shouldUseDashBoardValuesSendable.getSelected().booleanValue());
     }
     boolean returnValue=false;
     double angleGap=0;
 
-    if(!m_shouldUseDashBoardVals){
-    m_shooter.RunShootingMotors(m_speed,m_speed);
+    if(!m_shouldUseDashBoardVals && !m_setAngle){
+        m_shooter.RunShootingMotors(m_speed1,m_speed2);
 
-    if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_speed,m_speed)){
+    if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_speed1,m_speed2)){
+      m_shooter.RunFeedRollers(Constants.ShooterConstants.feederSpeed);
       m_intake.runIntake(Constants.IntakeConstants.intakeSpeed);
     } 
     }else{
@@ -143,7 +158,7 @@ public class ShootCommand extends Command {
           Logger.recordOutput("Shooter/AngleGap",angleGap);
           if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
             m_shooter.stopRotate();
-            m_shooter.RunShootingMotors(m_shooterVeloc1,m_shooterVeloc2);
+            m_shooter.RunShootingMotors(m_speed1,m_speed2);
             m_state=STATE.RAMPUPSHOOTER;
             m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
             Logger.recordOutput("Shooter/AngleGap",0);
@@ -160,8 +175,8 @@ public class ShootCommand extends Command {
           m_intake.runIntake(Constants.IntakeConstants.autoIntakeSpeed);
                      
           if(m_currentTime+kTimeToRun+5<Timer.getFPGATimestamp()){
-              m_motor1TargetSpeed=m_shooterVeloc1;
-              m_motor2TargetSpeed=m_shooterVeloc2;
+              m_motor1TargetSpeed=m_speed1;
+              m_motor2TargetSpeed=m_speed2;
               m_state=STATE.SLOW;
           }
         break;

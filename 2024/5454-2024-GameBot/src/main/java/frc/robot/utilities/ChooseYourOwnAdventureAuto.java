@@ -87,11 +87,11 @@ public class ChooseYourOwnAdventureAuto {
   }
 
   public void CreateCommands(){
-    m_shoot1=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false);
-    m_shoot2=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false);
-    m_shoot3=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false);
-    m_shoot4=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false);
-    m_shoot5=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false);
+    m_shoot1=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
+    m_shoot2=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
+    m_shoot3=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
+    m_shoot4=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
+    m_shoot5=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
 
     m_startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
     m_startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);

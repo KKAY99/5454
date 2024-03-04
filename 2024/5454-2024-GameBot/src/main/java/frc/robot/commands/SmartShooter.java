@@ -44,6 +44,7 @@ public class SmartShooter extends Command {
     private boolean m_motor2IsAtBase=false;
     private boolean m_runLeft=true;
     private boolean m_runRight=false;
+    private boolean m_shouldRotate=true;
     private static int kSlowDownDeadBand=2; 
     private enum STATE{
         VISIONCLEARANCE,WAITFORVISIONCLEARANCE,TURRETFIND,TURRETSEARCH,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
@@ -51,12 +52,13 @@ public class SmartShooter extends Command {
 
     private STATE m_state=STATE.SETANGLE;
 
-    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,IntakeSubsystem intake,boolean updatePose,boolean shootwhileMove) {
+    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,IntakeSubsystem intake,boolean updatePose,boolean shootwhileMove,boolean shouldRotate) {
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
         m_limelight = limelight;
         m_intake=intake;
+        m_shouldRotate=shouldRotate;
         m_updatePose = updatePose;
         m_shootWhileMove=shootwhileMove;
         addRequirements(shooter,turret,intake);
@@ -159,7 +161,7 @@ public class SmartShooter extends Command {
 
     private void shootStatic(){
     }
-
+    
     @Override
     public void execute() {
         if(m_shootWhileMove){
@@ -203,8 +205,12 @@ public class SmartShooter extends Command {
                 }
             break;
             case TURRETFIND:
-               m_turret.TrackTarget(true);
-               m_state=STATE.TURRETLOCKWAIT;
+               if(m_shouldRotate){ 
+                m_turret.TrackTarget(true);
+                m_state=STATE.TURRETLOCKWAIT;
+               } else {
+                m_state=STATE.SETANGLE;
+               }
             case TURRETLOCKWAIT:                
                 if(m_limelight.isTargetAvailible()){
                     if(m_turret.IsOnTarget()){

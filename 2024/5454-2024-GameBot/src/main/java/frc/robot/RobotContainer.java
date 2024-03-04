@@ -68,6 +68,7 @@ public class RobotContainer {
  
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
+    private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
@@ -214,7 +215,8 @@ public class RobotContainer {
       JoystickButton gyroResetButton = new JoystickButton(m_xBoxDriver,ButtonBindings.driverGyroResetButton);
       gyroResetButton.onTrue(gyroReset);
 
-      SmartShooter smartShooter=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false);
+      //disable rotate for testing
+      SmartShooter smartShooter=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,false);
       Trigger smartShooterTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(leftTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       smartShooterTrigger.onTrue(smartShooter);
 
@@ -258,6 +260,23 @@ public class RobotContainer {
       JoystickButton operatorStow=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorStow);
       SequentialCommandGroup stowAndStop=new SequentialCommandGroup(new HardStopShooter(m_shooter),stowCommand);
       operatorStow.onTrue(stowAndStop);
+   
+      ShootCommand shootCustom1=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle);
+      JoystickButton custom1 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot1);
+      custom1.onTrue(shootCustom1);
+
+      ShootCommand shootCustom2=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle);
+      JoystickButton custom2 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot2);
+      custom2.onTrue(shootCustom2);
+
+      ShootCommand shootCustom3=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle);
+      JoystickButton custom3 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot3);
+      custom3.onTrue(shootCustom3);
+
+      ShootCommand shootCustom4=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle);
+      JoystickButton custom4 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot4);
+      custom4.onTrue(shootCustom4);
+
     }
        
     private void refreshSmartDashboard(){  
