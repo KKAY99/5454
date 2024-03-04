@@ -28,13 +28,8 @@ public final class Constants {
     public static final double swerveDeadband = 0.1;
     public static final double MinGasPedalSpeed=0.15;
   }
-  public static final class Waypoints {
 
-    public static final class Waypoint1{
-         
-    }
-  }
-   public static final class AutoConstants{
+  public static final class AutoConstants{
 
         public static final String Center="Center Start";
         public static final String LeftAmp="Left Amp";
@@ -93,40 +88,63 @@ public final class Constants {
 
         public static final Pose2d locationBlueShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
         public static final Pose2d blueShortAmpNoteIntakeWaypoint=new Pose2d(2.89,6.99,new Rotation2d(0));
-        public static final AutoPose2D blueShortAmpAutoPoses=new AutoPose2D(locationBlueShortAmpNote,blueShortAmpNoteIntakeWaypoint,locationBlueShortAmpNote);
+        public static final AutoPose2D blueShortAmpAutoPoses=new AutoPose2D(locationBlueShortAmpNote,blueShortAmpNoteIntakeWaypoint,
+                                                                            locationBlueShortAmpNote,false);
 
         public static final Pose2d locationBlueShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
         public static final Pose2d blueShortCenterNoteIntakeWaypoint=new Pose2d(2.89,5.54,new Rotation2d(0));
+        public static final AutoPose2D blueShortCenterAutoPoses=new AutoPose2D(locationBlueShortCenterNote,blueShortCenterNoteIntakeWaypoint,
+                                                                              locationBlueShortCenterNote,false);
         
         public static final Pose2d locationBlueShortSourceNote=new Pose2d(2.89,4.09,new Rotation2d(0));
         public static final Pose2d blueShortSourceNoteIntakeWaypoint=new Pose2d(2.89,4.09,new Rotation2d(0));
+        public static final AutoPose2D blueShortSourceAutoPoses=new AutoPose2D(locationBlueShortSourceNote,blueShortSourceNoteIntakeWaypoint,
+                                                                              locationBlueShortSourceNote,false);
         
         public static final Pose2d locationRedShortAmpNote=new Pose2d(13.67,4.09,new Rotation2d(0));
         public static final Pose2d redShortAmpNoteIntakeWaypoint=new Pose2d(13.67,4.09,new Rotation2d(0));
+        public static final AutoPose2D redShortAmpAutoPoses=new AutoPose2D(locationRedShortAmpNote,redShortAmpNoteIntakeWaypoint,
+                                                                          locationRedShortAmpNote,false);
 
         public static final Pose2d locationRedShortCenterNote=new Pose2d(13.68,5.57,new Rotation2d(0));
         public static final Pose2d redShortCenterNoteIntakeWaypoint=new Pose2d(13.68,5.57,new Rotation2d(0));
+        public static final AutoPose2D redShortCenterAutoPoses=new AutoPose2D(locationRedShortCenterNote,redShortCenterNoteIntakeWaypoint,
+                                                                              locationRedShortCenterNote,false);
         
         public static final Pose2d locationRedShortSourceNote=new Pose2d(13.68,7.01,new Rotation2d(0));
         public static final Pose2d redShortSourceNoteIntakeWaypoint=new Pose2d(13.68,7.01,new Rotation2d(0));
+        public static final AutoPose2D redShortSourceAutoPoses=new AutoPose2D(locationRedShortSourceNote,redShortSourceNoteIntakeWaypoint,
+                                                                              locationRedShortSourceNote,false);
 
         public static final Pose2d locationLongAmpNote=new Pose2d(8.24,  0.78,new Rotation2d(0));
-        public static final Pose2d longAmpNoteIntakeWaypoint=new Pose2d(8.24,  0.78,new Rotation2d(0));
+        public static final Pose2d longAmpNoteRedIntakeWaypoint=new Pose2d(8.24,  0.78,new Rotation2d(0));
+        public static final Pose2d longAmpNoteBlueIntakeWaypoint=new Pose2d(8.24,  0.78,new Rotation2d(0));
+        public static final AutoPose2D longAmpAutoPoses=new AutoPose2D(locationLongAmpNote,false);
 
         public static final Pose2d locationLongAmp2Note=new Pose2d(8.24,  2.45,new Rotation2d(0));
-        public static final Pose2d longAmp2NoteIntakeWaypoint=new Pose2d(8.24,  2.45,new Rotation2d(0));
+        public static final Pose2d longAmp2NoteRedIntakeWaypoint=new Pose2d(8.24,  2.45,new Rotation2d(0));
+        public static final Pose2d longAmp2NoteBlueIntakeWaypoint=new Pose2d(8.24,  2.45,new Rotation2d(0));
+        public static final AutoPose2D longAmp2AutoPoses=new AutoPose2D(locationLongAmp2Note,false);
 
         public static final Pose2d locationLongCenterNote=new Pose2d(8.24,  4.09,new Rotation2d(0));
-        public static final Pose2d longCenterNoteIntakeWaypoint=new Pose2d(8.24,  4.09,new Rotation2d(0));
+        public static final Pose2d longCenterNoteRedIntakeWaypoint=new Pose2d(8.24,  4.09,new Rotation2d(0));
+        public static final Pose2d longCenterNoteBlueIntakeWaypoint=new Pose2d(8.24,  4.09,new Rotation2d(0));
+        public static final AutoPose2D longCenterAutoPoses=new AutoPose2D(locationLongCenterNote,false);
 
         public static final Pose2d locationLongSource2Note=new Pose2d(8.24,  5.76,new Rotation2d(0));
-        public static final Pose2d longSource2NoteIntakeWaypoint=new Pose2d(8.24,  5.76,new Rotation2d(0));
+        public static final Pose2d longSource2NoteRedIntakeWaypoint=new Pose2d(8.24,  5.76,new Rotation2d(0));
+        public static final Pose2d longSource2NoteBlueIntakeWaypoint=new Pose2d(8.24,  5.76,new Rotation2d(0));
+        public static final AutoPose2D longSource2AutoPoses=new AutoPose2D(locationLongSource2Note,false);
 
         public static final Pose2d locationLongSourceNote=new Pose2d(8.24,  7.44,new Rotation2d(0));
-        public static final Pose2d longSourceNoteIntakeWaypoint=new Pose2d(8.24,  7.44,new Rotation2d(0));
+        public static final Pose2d longSourceNoteRedIntakeWaypoint=new Pose2d(8.24,  7.44,new Rotation2d(0));
+        public static final Pose2d longSourceNoteBlueIntakeWaypoint=new Pose2d(8.24,  7.44,new Rotation2d(0));
+        public static final AutoPose2D longSourceAutoPoses=new AutoPose2D(locationLongSourceNote,false);
        
-        public static final Pose2d locationRedLongRightWing=new Pose2d(0,0,new Rotation2d(0));
-        public static final Pose2d locationBlueLongRightWing=new Pose2d(5.28,1.91,new Rotation2d(0));
+        public static final Pose2d locationRedLongAmpWing=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d locationBlueLongAmpWing=new Pose2d(5.28,1.91,new Rotation2d(0));
+        public static final Pose2d locationRedLongSourceWing=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d locationBlueLongSourceWing=new Pose2d(5.28,1.91,new Rotation2d(0));
        
         public static final Pose2d redCenterStartPos=new Pose2d(15.17,5.54,new Rotation2d(0));
         public static final Pose2d blueCenterStartPos=new Pose2d(1.13,5.54,new Rotation2d(0));
@@ -142,40 +160,6 @@ public final class Constants {
 
         public static final Pose2d redMoveOutOfBoundPos=new Pose2d(13.74,4.95,new Rotation2d(0));
         public static final Pose2d blueMoveOutOfBoundPos=new Pose2d(2.18,4.90,new Rotation2d(0));
-
-        public static final Pose2d[] blueShortAmpNoteArray={
-          locationBlueShortAmpNote,blueShortAmpNoteIntakeWaypoint
-        };
-        public static final Pose2d[] blueShortCenterNoteArray={
-          locationBlueShortCenterNote,blueShortCenterNoteIntakeWaypoint
-        };
-        public static final Pose2d[] blueShortSourceNoteArray={
-          locationBlueShortSourceNote,blueShortSourceNoteIntakeWaypoint
-        };
-        public static final Pose2d[] redShortAmpNoteArray={
-          locationRedShortAmpNote,redShortAmpNoteIntakeWaypoint
-        };
-        public static final Pose2d[] redShortCenterNoteArray={
-          locationRedShortCenterNote,redShortCenterNoteIntakeWaypoint
-        };
-        public static final Pose2d[] redShortSourceNoteArray={
-          locationRedShortSourceNote,redShortSourceNoteIntakeWaypoint
-        };
-        public static final Pose2d[] longSource1NoteArray={
-          locationLongSourceNote,longSourceNoteIntakeWaypoint
-        };
-        public static final Pose2d[] longSource2NoteArray={
-          locationLongSource2Note,longSource2NoteIntakeWaypoint
-        };
-        public static final Pose2d[] longCenterNoteArray={
-          locationLongCenterNote,longCenterNoteIntakeWaypoint
-        };
-        public static final Pose2d[] longAmp1NoteArray={
-          locationLongAmpNote,longAmpNoteIntakeWaypoint
-        };
-        public static final Pose2d[] longAmp2NoteArray={
-          locationLongAmp2Note,longAmp2NoteIntakeWaypoint
-        };
       }
         
     public static final class InputControllers {

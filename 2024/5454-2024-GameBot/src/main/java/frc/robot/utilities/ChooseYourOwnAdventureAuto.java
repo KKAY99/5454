@@ -23,9 +23,9 @@ import frc.robot.commands.AutoDoNothingCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SmartShooter;
 import frc.robot.commands.TurretCommand;
+import frc.robot.commands.TurretPosCommand;
 import frc.robot.commands.SmartShooter;
 import frc.robot.commands.IntakeToggleCommand;
-
 
 public class ChooseYourOwnAdventureAuto {
   private Swerve m_swerve;
@@ -58,11 +58,23 @@ public class ChooseYourOwnAdventureAuto {
   private Command m_turretSet4;
   private Command m_turretSet5;
 
-  private Command m_wayPoint1;
-  private Command m_wayPoint2;
-  private Command m_wayPoint3;
-  private Command m_wayPoint4;
-  private Command m_wayPoint5;
+  private Command m_path1;
+  private Command m_path2;
+  private Command m_path3;
+  private Command m_path4;
+  private Command m_path5;
+
+  private Command m_intakeWayPoint1;
+  private Command m_intakeWayPoint2;
+  private Command m_intakeWayPoint3;
+  private Command m_intakeWayPoint4;
+  private Command m_intakeWayPoint5;
+
+  private Command m_shotWayPoint1;
+  private Command m_shotWayPoint2;
+  private Command m_shotWayPoint3;
+  private Command m_shotWayPoint4;
+  private Command m_shotWayPoint5;
 
   public ChooseYourOwnAdventureAuto(Swerve swerveDrive,ShooterSubsystem shooter,IntakeSubsystem intake,TurretSubsystem turret,Limelight limelight){
     m_swerve=swerveDrive;
@@ -94,31 +106,61 @@ public class ChooseYourOwnAdventureAuto {
     m_stopIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
   }
 
-  public void SetPosWaypointCommands(Pose2d[] pose1,Pose2d[] pose2,Pose2d[] pose3,Pose2d[] pose4,Pose2d[] pose5){
+  public void SetPathCommands(AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5){
     if(pose1!=null){
-      m_wayPoint1=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1[1]));
+      m_path1=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1.getPathPos()));
+      m_intakeWayPoint1=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1.getIntakePos()));
+      m_shotWayPoint1=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1.getShotPos()));
+      m_turretSet1=new TurretPosCommand(m_turret,pose1.getIntakeRotatePose(),Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     }else{
-      m_wayPoint1=new AutoDoNothingCommand();
+      m_path1=new AutoDoNothingCommand();
+      m_intakeWayPoint1=new AutoDoNothingCommand();
+      m_shotWayPoint1=new AutoDoNothingCommand();
+      m_turretSet1=new AutoDoNothingCommand();
     }
     if(pose2!=null){
-      m_wayPoint2=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2[1]));
+      m_path2=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2.getPathPos()));
+      m_intakeWayPoint2=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2.getIntakePos()));
+      m_shotWayPoint2=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2.getShotPos()));
+      m_turretSet2=new TurretPosCommand(m_turret,pose2.getIntakeRotatePose(),Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     }else{
-      m_wayPoint2=new AutoDoNothingCommand();
+      m_path2=new AutoDoNothingCommand();
+      m_intakeWayPoint2=new AutoDoNothingCommand();
+      m_shotWayPoint2=new AutoDoNothingCommand();
+      m_turretSet2=new AutoDoNothingCommand();
     }
     if(pose3!=null){
-      m_wayPoint3=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3[1]));
+      m_path3=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3.getPathPos()));
+      m_intakeWayPoint3=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3.getIntakePos()));
+      m_shotWayPoint3=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3.getShotPos()));
+      m_turretSet3=new TurretPosCommand(m_turret,pose3.getIntakeRotatePose(),Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     }else{
-      m_wayPoint3=new AutoDoNothingCommand();
+      m_path3=new AutoDoNothingCommand();
+      m_intakeWayPoint3=new AutoDoNothingCommand();
+      m_shotWayPoint3=new AutoDoNothingCommand();
+      m_turretSet3=new AutoDoNothingCommand();
     }
     if(pose4!=null){
-      m_wayPoint4=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4[1]));
+      m_path4=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4.getPathPos()));
+      m_intakeWayPoint4=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4.getIntakePos()));
+      m_shotWayPoint4=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4.getShotPos()));
+      m_turretSet4=new TurretPosCommand(m_turret,pose4.getIntakeRotatePose(),Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     }else{
-      m_wayPoint4=new AutoDoNothingCommand();
+      m_path4=new AutoDoNothingCommand();
+      m_intakeWayPoint4=new AutoDoNothingCommand();
+      m_shotWayPoint4=new AutoDoNothingCommand();
+      m_turretSet4=new AutoDoNothingCommand();
     }
     if(pose5!=null){
-      m_wayPoint5=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose5[1]));
+      m_path5=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose5.getPathPos()));
+      m_intakeWayPoint5=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose5.getIntakePos()));
+      m_shotWayPoint5=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose5.getShotPos()));
+      m_turretSet5=new TurretPosCommand(m_turret,pose5.getIntakeRotatePose(),Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     }else{
-      m_wayPoint5=new AutoDoNothingCommand();
+      m_path5=new AutoDoNothingCommand();
+      m_intakeWayPoint5=new AutoDoNothingCommand();
+      m_shotWayPoint5=new AutoDoNothingCommand();
+      m_turretSet5=new AutoDoNothingCommand();
     } 
   }
 
@@ -137,25 +179,21 @@ public class ChooseYourOwnAdventureAuto {
     return newPath;
   }
 
-  public Command CreateAutoCommand(Pose2d[] pose1,Pose2d[] pose2,Pose2d[] pose3,Pose2d[] pose4,Pose2d[] pose5,boolean shouldShootFinalNote){
+  public Command CreateAutoCommand(AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
     SequentialCommandGroup newSequentialCommand=new SequentialCommandGroup(null);
-    SetPosWaypointCommands(pose1,pose2,pose3,pose4,pose5);
+    SetPathCommands(pose1,pose2,pose3,pose4,pose5);
 
     if(pose1!=null){
-      newSequentialCommand.addCommands(m_wayPoint1,m_turretSet1,m_startIntake1,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose1[0])),
-                                      m_stopIntake1,m_shoot1);
+      newSequentialCommand.addCommands(m_intakeWayPoint1,m_turretSet1,m_startIntake1,m_path1,m_stopIntake1,m_shotWayPoint1,m_shoot1);
     }
     if(pose2!=null){
-      newSequentialCommand.addCommands(m_wayPoint2,m_turretSet2,m_startIntake2,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose2[0])),
-                                      m_stopIntake2,m_shoot2);
+      newSequentialCommand.addCommands(m_intakeWayPoint2,m_turretSet2,m_startIntake2,m_path2,m_stopIntake2,m_shotWayPoint2,m_shoot2);
     }
     if(pose3!=null){
-      newSequentialCommand.addCommands(m_wayPoint3,m_turretSet3,m_startIntake3,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose3[0])),
-                                      m_stopIntake3,m_shoot3);
+      newSequentialCommand.addCommands(m_intakeWayPoint3,m_turretSet3,m_startIntake3,m_path3,m_stopIntake3,m_shotWayPoint3,m_shoot3);
     }
     if(pose4!=null){
-      newSequentialCommand.addCommands(m_wayPoint4,m_turretSet4,m_startIntake4,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose4[0])),
-                                      m_stopIntake4,m_shoot4);
+      newSequentialCommand.addCommands(m_intakeWayPoint4,m_turretSet4,m_startIntake4,m_path4,m_stopIntake4,m_shotWayPoint4,m_shoot4);
     }
     if(pose5!=null){
       Command shootFinalNote=null;
@@ -165,8 +203,8 @@ public class ChooseYourOwnAdventureAuto {
       }else{
         shootFinalNote=new AutoDoNothingCommand();
       }
-      newSequentialCommand.addCommands(m_wayPoint5,m_turretSet5,m_startIntake5,m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),pose5[0])),m_stopIntake5,shootFinalNote);
 
+      newSequentialCommand.addCommands(m_intakeWayPoint5,m_turretSet5,m_startIntake5,m_path5,m_stopIntake5,m_shotWayPoint5,shootFinalNote);
     }
 
     Command newCommand=newSequentialCommand;

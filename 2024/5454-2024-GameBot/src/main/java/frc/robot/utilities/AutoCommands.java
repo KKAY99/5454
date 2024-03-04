@@ -98,7 +98,7 @@ public class AutoCommands {
     m_blueAmpToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
                                                           Constants.AutoConstants.locationBlueShortSourceNote));
     m_sourceLongtoBlueShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
-                                                          Constants.AutoConstants.locationBlueLongRightWing));
+                                                          Constants.AutoConstants.locationBlueLongAmpWing));
     m_blueAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
                                                           Constants.AutoConstants.locationLongAmpNote));
     m_blueStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
@@ -119,7 +119,7 @@ public class AutoCommands {
     m_redRightNoteToNote5=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortSourceNote,
                                                           Constants.AutoConstants.locationLongSourceNote));
     m_sourceLongtoRedShootLocation=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationLongSourceNote,
-                                                          Constants.AutoConstants.locationRedLongRightWing));
+                                                          Constants.AutoConstants.locationRedLongAmpWing));
     m_redAmpToSourceNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                           Constants.AutoConstants.locationRedShortSourceNote));
     m_redAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
