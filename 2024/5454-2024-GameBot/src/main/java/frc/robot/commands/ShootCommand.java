@@ -40,7 +40,7 @@ public class ShootCommand extends Command {
   private boolean m_motor2IsAtBase=false;
   private boolean m_isRunning=false;
   private boolean m_shouldUseDashBoardVals;
-
+  private static int kSlowDownDeadBand=2;
   private enum STATE{
    SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
   }
@@ -168,18 +168,17 @@ public class ShootCommand extends Command {
         case SLOW:
         m_shooter.StopFeedRollers();
         m_intake.stopIntake();
+        if(m_motor1TargetSpeed<ShooterConstants.baseMotorSpeed-kSlowDownDeadBand&&!m_motor1IsAtBase){
+          m_motor1TargetSpeed=m_motor1TargetSpeed+1;
+      }else{
+          m_motor1IsAtBase=true;
+      }
 
-        if(m_motor1TargetSpeed<ShooterConstants.baseMotorSpeed&&!m_motor1IsAtBase){
-            m_motor1TargetSpeed=m_motor1TargetSpeed+3;
-        }else{
-            m_motor1IsAtBase=true;
-        }
-
-        if(m_motor2TargetSpeed<ShooterConstants.baseMotorSpeed&&!m_motor2IsAtBase){
-            m_motor2TargetSpeed=m_motor2TargetSpeed+3;
-        }else{
-            m_motor2IsAtBase=true;
-        }
+      if(m_motor2TargetSpeed<ShooterConstants.baseMotorSpeed-kSlowDownDeadBand&&!m_motor2IsAtBase){
+          m_motor2TargetSpeed=m_motor2TargetSpeed+1;
+      }else{
+          m_motor2IsAtBase=true;
+      }
         
         if(m_motor1IsAtBase&&m_motor2IsAtBase){
             m_state=STATE.END;

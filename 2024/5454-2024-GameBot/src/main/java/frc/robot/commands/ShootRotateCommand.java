@@ -24,6 +24,7 @@ public class ShootRotateCommand extends Command {
     m_shooter=shooter;
     m_speed=speed;
     m_isSupplierMode=false;
+    addRequirements(shooter);
   }
   public ShootRotateCommand(ShooterSubsystem shooter,DoubleSupplier speedSupplier){
     m_shooter=shooter;

@@ -309,7 +309,7 @@ public final class Constants {
       public static final double limeLightTrackSpeed1=0.05;
       public static final double limeLightTrackSpeed2=0.09;
       public static final double limeLightTrackSpeed3=0.15;
-      public static final double limeLightTrackSpeed4=0.20;
+      public static final double limeLightTrackSpeed4=0.30;
 
       public static final String turretLimelightName="";
       public static final String staticLimelightName="static";
@@ -325,6 +325,7 @@ public final class Constants {
 
     public static final class ShooterConstants{
       public static final double kAngleDeadband=0.15;
+      public static final double kIntakeFeedAngleDeadband=10;
       public static final double kRampUpTime=1;
       public static final double kAccelCompFactor = 0.100; // in units of seconds
       public static final double autoShooterSpeed=1;
@@ -333,7 +334,8 @@ public final class Constants {
       public static final double feederSpeed=-1;
       public static final double manualfeederSpeed=-0.3;
       public static final double baseSpeedDeadband=5;
-      public static final double baseMotorSpeed=-10; //rps
+      //public static final double baseMotorSpeed=-20; //rps
+      public static final double baseMotorSpeed=0; //rps
       public static final double timeToRunShooter=1;
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
@@ -385,7 +387,7 @@ public final class Constants {
       public static final int operatorRotateAxis=1;
       public static final int operatorTurretAxis=0; 
       public static final int operatorClimbAxis=5;
-      public static final double operatorRotateDeadband=0.05; 
+      public static final double operatorRotateDeadband=0.2; 
 
       public static final int operatorturretPOVLeft=270;
       public static final int operatorturretPOVRight=90;
@@ -442,11 +444,11 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
-          {17.5,-55,-55,-36,4,1,7.9},
-          {22.45,-50,-50,-43,5,1,0},
-          {30.5,-60,-40,-53,6,1,0},
-          {39.4,-70,-45,-61,6,1,0},
-          {63.08,-90,-60,-71,7,1,0}
+          {17.5,-30,-30,-36,4,1,7.9},
+          {22.45,-50,-50,-43,5,1,7.9},
+          {30.5,-60,-40,-53,6,1,7.9},
+          {39.4,-70,-45,-61,6,1,7.9},
+          {63.08,-90,-60,-71,7,1,7.9}
       };
        public static final double [][]olddistanceLookup={
            //distance , speed, angle, shottime

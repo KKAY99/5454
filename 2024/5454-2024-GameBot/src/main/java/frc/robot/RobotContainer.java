@@ -215,7 +215,7 @@ public class RobotContainer {
 
       SmartShooter smartShooter=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false);
       Trigger smartShooterTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(leftTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
-      smartShooterTrigger.whileTrue(smartShooter);
+      smartShooterTrigger.onTrue(smartShooter);
 
       TurretToggleCommand toggleTurret=new TurretToggleCommand(m_turret, TurretConstants.turretMoveTimeOut);
       JoystickButton turretToggleButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorTurretToggle);

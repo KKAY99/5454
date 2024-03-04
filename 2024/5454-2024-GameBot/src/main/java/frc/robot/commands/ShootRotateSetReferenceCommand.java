@@ -18,6 +18,7 @@ public class ShootRotateSetReferenceCommand extends Command {
   public ShootRotateSetReferenceCommand(ShooterSubsystem shooter,double angle){
     m_shooter=shooter;
     m_angle=angle;
+    addRequirements(shooter);
   }
 
   @Override
@@ -35,7 +36,8 @@ public class ShootRotateSetReferenceCommand extends Command {
   public void end(boolean interrupted){
     m_shooter.stopRotate();
     m_isRunning=false;
-    Logger.recordOutput("Shooter/ShooterRotateSetReferenceAngle",0);
+    m_angle=0;
+    Logger.recordOutput("Shooter/ShooterRotateSetReferenceAngle",0.00);
     Logger.recordOutput("Shooter/ShooterRotateSetReferenceCommand",m_isRunning);
 
   }

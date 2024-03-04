@@ -78,17 +78,17 @@ public class Swerve extends SubsystemBase {
           double translationVal =
               translationLimiter.calculate(
                   MathUtil.applyDeadband(
-                       -translationSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed)
+                       -translationSup.getAsDouble() * Math.max(1-speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed)
                       ,Constants.DriveConstants.swerveDeadband));
           double strafeVal =
               strafeLimiter.calculate(
                   MathUtil.applyDeadband(
-                      -strafeSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed)
+                      -strafeSup.getAsDouble() * Math.max(1-speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed)
                       ,Constants.DriveConstants.swerveDeadband));
           double rotationVal =
               rotationLimiter.calculate(
                   MathUtil.applyDeadband(
-                      -rotationSup.getAsDouble() * Math.max(speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed), Constants.DriveConstants.swerveDeadband));
+                      -rotationSup.getAsDouble() * Math.max(1-speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed), Constants.DriveConstants.swerveDeadband));
           SmartDashboard.putNumber("translationvalue",translationVal);
           SmartDashboard.putNumber("strafevalue",strafeVal);
           Logger.recordOutput("Swerve/Translation", translationVal);
@@ -198,10 +198,10 @@ public class Swerve extends SubsystemBase {
     m_lastFieldRelVel = m_fieldRelVel;
     
     swerve.updateOdometry();
-    Logger.recordOutput("Swerve/FieldRelativeSpeedX", m_fieldRelVel.vx);
-    Logger.recordOutput("Swerve/FieldRelativeSpeedY", m_fieldRelVel.vy);
-    Logger.recordOutput("Swerve/FieldRelativeAccelX",m_fieldRelAccel.ax);
-    Logger.recordOutput("Swerve/FieldRelativeAccelY",m_fieldRelAccel.ay);
+    //Logger.recordOutput("Swerve/FieldRelativeSpeedX", m_fieldRelVel.vx);
+    //Logger.recordOutput("Swerve/FieldRelativeSpeedY", m_fieldRelVel.vy);
+    //Logger.recordOutput("Swerve/FieldRelativeAccelX",m_fieldRelAccel.ax);
+    //Logger.recordOutput("Swerve/FieldRelativeAccelY",m_fieldRelAccel.ay);
     Logger.recordOutput("Swerve/Gyro Yaw",swerve.getYaw());
     //5454 Update 
    // m_fieldRelVel = new FieldRelativeSpeed(getRobotVelolocity(),  );

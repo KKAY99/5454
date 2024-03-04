@@ -1,10 +1,8 @@
 package frc.robot.commands;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.utilities.LED;
@@ -26,6 +24,7 @@ public class IntakeConveyCommand extends Command{
     m_led=led;
     m_speed=intakeSpeed;
     addRequirements(m_intake);
+    addRequirements(m_shooter);
   }
 
   @Override
@@ -53,7 +52,7 @@ public class IntakeConveyCommand extends Command{
       case WAITFORANGLE:
         angleGap=Math.abs(m_shooter.getRelativePosition())
                 -Math.abs(0);
-        if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
+        if(angleGap<Constants.ShooterConstants.kIntakeFeedAngleDeadband && angleGap>-Constants.ShooterConstants.kIntakeFeedAngleDeadband ){
           m_shooter.stopRotate();
           m_state=STATE.INTAKINGNOTE;
         }

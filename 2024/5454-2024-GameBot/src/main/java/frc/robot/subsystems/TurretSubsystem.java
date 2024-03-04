@@ -138,9 +138,11 @@ public class TurretSubsystem extends SubsystemBase{
 
     
     if(IsAtRightLimit()&&IsRotatingToRight()){
+      System.out.println("stopping right limit");
       stop();
       returnValue=true;
     }else if(IsAtLeftLimit()&&IsRotatingToLeft()){
+      System.out.println("stopping left limit");
       stop();
       returnValue=true;
     }else{

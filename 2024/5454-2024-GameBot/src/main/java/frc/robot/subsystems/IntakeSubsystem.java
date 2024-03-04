@@ -31,8 +31,8 @@ public class IntakeSubsystem extends SubsystemBase{
     private boolean m_intakeToggle=false;
     private AnalogAutoDirectFB6DN0E m_irReflector;
     private TimeOfFlight m_TOFlow;
-    private DigitalInput m_breakbeam = new DigitalInput(9);
-    public IntakeSubsystem(int motorOne,int motorTwo,int analogPort, IntakeSubsystemIO intakeIO){
+    private DigitalInput m_breakbeam ;
+    public IntakeSubsystem(int motorOne,int motorTwo,int sensorPort, IntakeSubsystemIO intakeIO){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
         m_intakeOne.setIdleMode(IdleMode.kBrake);
@@ -42,6 +42,7 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeOne.burnFlash(); //ensure all settings are saved if a a browout happens
         m_intakeTwo.burnFlash(); //ensure all settings are saved if a a browout happens
         m_intakeIO=intakeIO;
+        m_breakbeam=new DigitalInput(sensorPort);
         //TODO: REMOVE CONSTANT - EVIL CONSTANT
         //m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
       //  m_TOFlow = new TimeOfFlight(55);

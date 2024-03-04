@@ -588,7 +588,7 @@ public class SwerveDrive {
     for (SwerveModule module : swerveModules) {
       SwerveModuleState2 moduleState = module.getState();
       sumOmega += Math.abs(moduleState.omegaRadPerSecond);
-      if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH) {
+     /*  if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH) {
         SmartDashboard.putNumber(
             "Module" + module.moduleNumber + "Relative Encoder", module.getRelativePosition());
         SmartDashboard.putNumber(
@@ -600,7 +600,7 @@ public class SwerveDrive {
             moduleState.angle.getDegrees();
         SwerveDriveTelemetry.measuredStates[(module.moduleNumber * 2) + 1] =
             moduleState.speedMetersPerSecond;
-      }
+      }*/
     }
 
     // If the robot isn't moving synchronize the encoders every 100ms (Inspired by democrat's SDS

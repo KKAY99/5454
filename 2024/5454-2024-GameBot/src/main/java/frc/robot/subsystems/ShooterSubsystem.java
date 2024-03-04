@@ -188,6 +188,7 @@ public class ShooterSubsystem extends SubsystemBase{
     }
 
     public void stopRotate(){
+        m_anglePID.setReference(0,ControlType.kVelocity);
         m_angleMotor.set(0);
     }
 
@@ -287,17 +288,17 @@ public class ShooterSubsystem extends SubsystemBase{
 
     @Override
     public void periodic(){
-        Logger.recordOutput("Shooter/Shooter1Velocity",m_desiredVeloc1);
-        Logger.recordOutput("Shooter/Shooter2Velocity",m_desiredVeloc2);
+        Logger.recordOutput("Shooter/Shooter1VelocitySet",m_desiredVeloc1);
+        Logger.recordOutput("Shooter/Shooter2VelocitySet",m_desiredVeloc2);
         Logger.recordOutput("Shooter/ShooterSetAngle",m_targetAngle);
-//        Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
-//        Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
-//        Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
-//        Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
+      //  Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
+      //  Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
+      //  Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
+      //  Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
      //   Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
-        Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
+     //   Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken",m_shotsTaken);
-        Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
+     //   Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
       //  SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
       //  SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
       //  SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());

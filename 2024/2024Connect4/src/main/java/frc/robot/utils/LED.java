@@ -22,7 +22,7 @@ public class LED{
     private BlinkInSubsystem m_blinkIn;
     private double m_pattern =-1;
     public LED(int blinkInPWMport, int port,int ledCount){
-        m_blinkIn=new BlinkInSubsystem(blinkInPWMport);
+       // m_blinkIn=new BlinkInSubsystem(blinkInPWMport);
         m_led=new AddressableLED(port);
         m_ledBuffer=new AddressableLEDBuffer(ledCount);
 
@@ -77,7 +77,7 @@ public class LED{
         }
     }
 
-    private void SetLEDColor(LEDConstants.LEDColors ledColor){
+    public void SetLEDColor(LEDConstants.LEDColors ledColor){
         int r=0;
         int g=0;
         int b=0;
@@ -107,6 +107,7 @@ public class LED{
         for(int i=0;i<m_ledBuffer.getLength();i++){
             m_ledBuffer.setRGB(i,r,g,b);
         }
+        m_led.start();
     }
 
     public void SetLEDState(LEDConstants.LEDStates ledState){
