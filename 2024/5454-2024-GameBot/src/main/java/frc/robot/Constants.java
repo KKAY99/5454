@@ -335,7 +335,7 @@ public final class Constants {
       public static final double shortShotEncoderVal=-39;
       public static final double shooterPosDeadband=0.15;
 
-      public static final int shooterMotorPort1=31;
+      public static final int shooterMotorPort1=23;
       public static final int shooterMotorPort2=22;
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
@@ -459,13 +459,17 @@ public final class Constants {
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
           {17.5,-30,-30,-36,4,1,7.9},
-          {22.45,-50,-50,-43,5,1,7.9},
-          {30.5,-60,-40,-53,6,1,7.9},
+          {20.5,-30,-30,-34,5,1,7.9},
+          {22.7,-30,-30,-36,5,1,7.9},
+          {24.6,-30,-30,-39,5,1,7.9},
+          {26.5,-35,-35,-42,5,1,7.9},
+          {29.0,-35,-35,-44,5,1,7.9},
+          {30.7,-35,-35,-47,5,1,7.9},
           {39.4,-70,-45,-61,6,1,7.9},
           {63.08,-90,-60,-71,7,1,7.9}
       };
        public static final double [][]olddistanceLookup={
-           //distance , speed, angle, shottime
+           //distance , spe65555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555588ed, angle, shottime
           {17,0.4,-39,4},
           {22.7,0.53,-51,5},
           {31,0.53,-57.8,6},

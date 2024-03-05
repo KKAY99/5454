@@ -95,7 +95,7 @@ public class RobotContainer {
     private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,
                                          Constants.IntakeConstants.intakeMotorPort2,
                                          Constants.IntakeConstants.intakeBreakBeamport, new IntakeSubsystemIO(){});
-    private ClimbSubsystem m_climb = new ClimbSubsystem(Constants.climbConstants.climbPort);
+    //private ClimbSubsystem m_climb = new ClimbSubsystem(Constants.climbConstants.climbPort);
     private ShooterSubsystem m_shooter=new ShooterSubsystem(m_TurretLimelight,Constants.ShooterConstants.shooterMotorPort1,
                                            Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort,
                                            Constants.ShooterConstants.feederMotorPort,Constants.ShooterConstants.encoderCanID,
@@ -242,7 +242,7 @@ public class RobotContainer {
 
       TurretCommand turretRotateStick = new TurretCommand(m_turret,()->m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorTurretAxis));
 
-      ClimbCommand climbRotateStick = new ClimbCommand(m_climb,()->m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorClimbAxis));
+      //ClimbCommand climbRotateStick = new ClimbCommand(m_climb,()->m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorClimbAxis));
      
       Trigger rotateStickTrigger= new Trigger(() -> Math.abs(m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorRotateAxis))>
       Constants.ButtonBindings.operatorRotateDeadband);
@@ -252,9 +252,9 @@ public class RobotContainer {
       Constants.ButtonBindings.operatorRotateDeadband);
       turretStickTrigger.whileTrue(turretRotateStick);
 
-      Trigger climbStickTrigger= new Trigger(() -> Math.abs(m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorClimbAxis))>
-      Constants.ButtonBindings.operatorRotateDeadband);
-      climbStickTrigger.whileTrue(climbRotateStick);
+      //Trigger climbStickTrigger= new Trigger(() -> Math.abs(m_xBoxOperator.getRawAxis(Constants.ButtonBindings.operatorClimbAxis))>
+      //Constants.ButtonBindings.operatorRotateDeadband);
+      //climbStickTrigger.whileTrue(climbRotateStick);
 
       ShootRotateSetReferenceCommand stowCommand = new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shooterStowAngle);
       JoystickButton operatorStow=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorStow);

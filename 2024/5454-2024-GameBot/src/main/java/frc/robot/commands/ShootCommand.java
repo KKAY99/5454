@@ -140,7 +140,7 @@ public class ShootCommand extends Command {
     double angleGap=0;
 
     if(!m_shouldUseDashBoardVals && !m_setAngle){
-        m_shooter.RunShootingMotors(m_speed1,m_speed2);
+        m_shooter.RunShootingMotors(m_speed1,m_speed2,false);
 
     if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_speed1,m_speed2)){
       m_shooter.RunFeedRollers(Constants.ShooterConstants.feederSpeed);
@@ -158,18 +158,18 @@ public class ShootCommand extends Command {
           Logger.recordOutput("Shooter/AngleGap",angleGap);
           if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
             m_shooter.stopRotate();
-            m_shooter.RunShootingMotors(m_speed1,m_speed2);
+            m_shooter.RunShootingMotors(m_speed1,m_speed2,false);
             m_state=STATE.RAMPUPSHOOTER;
             m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
-            Logger.recordOutput("Shooter/AngleGap",0);
+            Logger.recordOutput("Shooter/AngleGap",0.00);
           }
         break;
         case RAMPUPSHOOTER:                   
-          if(Timer.getFPGATimestamp()>m_feederStartTime){
-            m_currentTime=Timer.getFPGATimestamp();
-            m_state=STATE.SHOOT;
-          }
-        break;
+        if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_speed1,m_speed2)){
+          m_currentTime=Timer.getFPGATimestamp();
+          m_state=STATE.SHOOT;
+      }
+      break;
         case SHOOT:           
           m_shooter.RunFeedRollers(ShooterConstants.feederSpeed);
           m_intake.runIntake(Constants.IntakeConstants.autoIntakeSpeed);
@@ -198,7 +198,7 @@ public class ShootCommand extends Command {
         if(m_motor1IsAtBase&&m_motor2IsAtBase){
             m_state=STATE.END;
         }else{
-            m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed);
+            m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed,false);
         }
         break;         
         case END:

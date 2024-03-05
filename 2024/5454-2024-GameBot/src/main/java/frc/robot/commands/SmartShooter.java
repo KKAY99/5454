@@ -146,7 +146,7 @@ public class SmartShooter extends Command {
         m_turret.aimAtGoal(m_drive.getPose(), movingGoalLocation, false);
        
         m_shooter.setAngle(m_shotTable.getAngle(newDist));
-        m_shooter.RunShootingMotors(m_shotTable.getVelocity1(newDist),m_shotTable.getVelocity2(newDist));
+        m_shooter.RunShootingMotors(m_shotTable.getVelocity1(newDist),m_shotTable.getVelocity2(newDist),true);
      
     
         if (currentTime > 0.250 && m_limelight.isTargetAvailible() && m_limelight.getDistance() >= 85.0) {
@@ -209,7 +209,7 @@ public class SmartShooter extends Command {
                 m_turret.TrackTarget(true);
                 m_state=STATE.TURRETLOCKWAIT;
                } else {
-                m_state=STATE.SETANGLE;
+                 m_state=STATE.SETANGLE;
                }
             case TURRETLOCKWAIT:                
                 if(m_limelight.isTargetAvailible()){
@@ -278,7 +278,7 @@ public class SmartShooter extends Command {
                 Logger.recordOutput("Shooter/AngleGap",angleGap);
                 if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
                     m_shooter.stopRotate();
-                    m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed);
+                    m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed,false);
                     m_state=STATE.RAMPUPSHOOTER;
                     m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
                     Logger.recordOutput("Shooter/AngleGap",0);
@@ -317,7 +317,7 @@ public class SmartShooter extends Command {
                 if(m_motor1IsAtBase&&m_motor2IsAtBase){
                     m_state=STATE.END;
                 }else{
-                    m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed);
+                    m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed,false);
                 }
                 break;
             case END:

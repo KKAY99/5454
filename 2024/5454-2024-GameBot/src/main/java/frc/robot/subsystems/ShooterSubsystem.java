@@ -87,7 +87,7 @@ public class ShooterSubsystem extends SubsystemBase{
     }
 
     public void configmotor(TalonFX motor){
-        var fx_cfg = new TalonFXConfiguration();
+       
         // fetch *all* configs currently applied to the device
         var slot0Configs = new Slot0Configs();
         slot0Configs.kV = 0.12;
@@ -105,13 +105,17 @@ public class ShooterSubsystem extends SubsystemBase{
         *
         * 
         //will need to use                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
-        //fx_cfg.CurrentLimits.
+        //var fx_cfg = new TalonFXConfiguration();
+        //fx_cfg.CurrentLimits.SupplyCurrentLimit=60;
+        //fx_cfg.CurrentLimits.SupplyCurrentLimitEnable=true;
+        //fx_cfg.CurrentLimits.SupplyCurrentThreshold=0.5;
+        //motor.getConfigurator().apply(fx_cfg);
         //motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      20,                25,                1.0));
         //motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      10,                15,                0.5));
             
     }
     
-    public void RunShootingMotors(double veloc1,double veloc2){
+    public void RunShootingMotors(double veloc1,double veloc2,boolean runFeedMotors){
         //values are for the indivudal shooter motors
         m_desiredVeloc1=veloc1;
         m_desiredVeloc2=veloc2;
@@ -121,12 +125,14 @@ public class ShooterSubsystem extends SubsystemBase{
         
         m_ShootingMotor1.setControl(m_velocity.withVelocity(veloc1));
         m_ShootingMotor2.setControl(m_velocity.withVelocity(veloc2));
-
-        if(veloc1>0){
-            m_feederMotor.set(-ShooterConstants.feederSpeed);
-        }else{
-            m_feederMotor.set(ShooterConstants.feederSpeed);
-       }
+        
+        if(runFeedMotors){
+            if(veloc1>0){
+                m_feederMotor.set(-ShooterConstants.feederSpeed);
+            }else{
+                m_feederMotor.set(ShooterConstants.feederSpeed);
+        }
+        }
     } 
 
     public void RunFeedRollers(double speed){
@@ -155,13 +161,19 @@ public class ShooterSubsystem extends SubsystemBase{
 
     public boolean isMotorVelocitysAtDesiredSpeed(double veloc1,double veloc2){
         boolean returnValue=false;
+        boolean bMotor1UptoSpeed=false;
+        boolean bMotor2UptoSpeed=false;
 
         System.out.println("Veloc1 "+veloc1);
         System.out.println("CurrentVeloc "+ GetVelocityMotor1());
+        
+        bMotor1UptoSpeed=Math.abs(GetVelocityMotor1())+Math.abs(ShooterConstants.baseSpeedDeadband)>=Math.abs(veloc1);
+        bMotor2UptoSpeed=Math.abs(GetVelocityMotor2())+Math.abs(ShooterConstants.baseSpeedDeadband)>=Math.abs(veloc2);
+        
+        
+        if(bMotor1UptoSpeed && bMotor2UptoSpeed){
 
-        if(Math.abs(GetVelocityMotor1())+Math.abs(ShooterConstants.baseSpeedDeadband)>=Math.abs(veloc1)&&Math.abs(GetVelocityMotor1())-Math.abs(ShooterConstants.baseSpeedDeadband)<=Math.abs(veloc1)
-            &&Math.abs(GetVelocityMotor2())+Math.abs(ShooterConstants.baseSpeedDeadband)>=Math.abs(veloc2)&&Math.abs(GetVelocityMotor2())-Math.abs(ShooterConstants.baseSpeedDeadband)<=Math.abs(veloc2)){
-            returnValue=true;
+                returnValue=true;
         }
 
         return returnValue;
