@@ -34,6 +34,7 @@ public class ChooseYourOwnAdventureAuto {
   private Limelight m_limeLight;
   private TurretSubsystem m_turret;
 
+  private Command m_shoot0;
   private Command m_shoot1;
   private Command m_shoot2;
   private Command m_shoot3;
@@ -52,6 +53,7 @@ public class ChooseYourOwnAdventureAuto {
   private Command m_stopIntake4;
   private Command m_stopIntake5;
 
+  private Command m_turretSet0;
   private Command m_turretSet1;
   private Command m_turretSet2;
   private Command m_turretSet3;
@@ -87,11 +89,14 @@ public class ChooseYourOwnAdventureAuto {
   }
 
   public void CreateCommands(){
-    m_shoot1=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot2=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot3=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot4=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot5=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
+    m_shoot0=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,false);
+    m_shoot1=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,false);
+    m_shoot2=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,false);
+    m_shoot3=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,false);
+    m_shoot4=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,false);
+    m_shoot5=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,false);
+
+    m_turretSet0=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
 
     m_startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
     m_startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
@@ -180,11 +185,12 @@ public class ChooseYourOwnAdventureAuto {
   }
 
   public Command CreateAutoCommand(AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
-    SequentialCommandGroup newSequentialCommand=new SequentialCommandGroup(null);
+    SequentialCommandGroup newSequentialCommand=new SequentialCommandGroup();
     SetPathCommands(pose1,pose2,pose3,pose4,pose5);
 
     if(pose1!=null){
-      newSequentialCommand.addCommands(m_intakeWayPoint1,m_turretSet1,m_startIntake1,m_path1,m_stopIntake1,m_shotWayPoint1,m_shoot1);
+      newSequentialCommand.addCommands(m_turretSet0,m_shoot0);
+      newSequentialCommand.addCommands(m_turretSet1,m_startIntake1,m_path1,m_stopIntake1,m_shotWayPoint1,m_shoot1);
     }
     if(pose2!=null){
       newSequentialCommand.addCommands(m_intakeWayPoint2,m_turretSet2,m_startIntake2,m_path2,m_stopIntake2,m_shotWayPoint2,m_shoot2);

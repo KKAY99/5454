@@ -39,8 +39,6 @@ public class TurretPosCommand extends Command{
     m_turret.stop();
     m_isRunning=false;
     Logger.recordOutput("Turret/TurretPosCommand",m_isRunning);
-
-  
   }
  
 

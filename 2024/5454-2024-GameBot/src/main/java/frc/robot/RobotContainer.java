@@ -393,10 +393,6 @@ public class RobotContainer {
       m_shootFinalNote.addOption("Shoot Final Note",true);
       SmartDashboard.putData("Should Shoot Final Note",m_shootFinalNote);
 
-      m_shouldUseModularBuilder.setDefaultOption("Dont Use Modular Builder",false);
-      m_shouldUseModularBuilder.addOption("Use Modular Builder",true);
-      SmartDashboard.putData("Should Use Modular Builder",m_shouldUseModularBuilder);
-
       m_shouldUseDashBoardValues.setDefaultOption("Dont Use Shooter Vals",false);
       m_shouldUseDashBoardValues.addOption("Use Shooter Vals",true);
       SmartDashboard.putData("Should Use Inputted Shooter Vals",m_shouldUseDashBoardValues);
@@ -421,12 +417,8 @@ public class RobotContainer {
       m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
     }
 
-    if(m_shouldUseModularBuilder.getSelected()){
-      newCommand=autoModularMaker.CreateAutoCommand(m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
-                                                    m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
-    }else{
-      newCommand=autoMaker.createAutoCommand(startLocation,autoChosen,delay,currentAlliance);
-    }
+    newCommand=autoModularMaker.CreateAutoCommand(m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
+                                                  m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
 
     return newCommand;
   }

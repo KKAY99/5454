@@ -183,7 +183,7 @@ public class SmartShooter extends Command {
             case VISIONCLEARANCE: 
             if(m_limelight.isTargetAvailible()){
                 m_state=STATE.TURRETFIND;
-            } else{ //if you can't see the target see if we need to move it
+            }else{ //if you can't see the target see if we need to move it
 
                 if(m_shooter.getRelativePosition()<ShooterConstants.shooterVisionClearanceAngle){
                     m_shooter.setAngle(ShooterConstants.shooterVisionClearanceAngle);
@@ -205,10 +205,10 @@ public class SmartShooter extends Command {
                 }
             break;
             case TURRETFIND:
-               if(m_shouldRotate){ 
+               if(!m_shouldRotate){ 
                 m_turret.TrackTarget(true);
                 m_state=STATE.TURRETLOCKWAIT;
-               } else {
+               }else{
                  m_state=STATE.SETANGLE;
                }
             case TURRETLOCKWAIT:                
@@ -233,12 +233,17 @@ public class SmartShooter extends Command {
                         m_runLeft=false;
                       }
 
-                      m_state=STATE.TURRETSEARCH;
+                      if(!m_shouldRotate){
+                        m_state=STATE.SETANGLE;
+                      }else{
+                        m_state=STATE.TURRETSEARCH;
+                      }
                 }
              //stay in turret lock mode
             break;
             case TURRETSEARCH:
-            if(!m_limelight.isTargetAvailible()){
+            System.out.println("Is In turret track");
+            if(!m_limelight.isTargetAvailible()&&!m_shouldRotate){
                 if(m_runLeft){
                   Logger.recordOutput("Shooter/SmartShooterState",m_state.toString()+ " - Left " + m_turret.GetEncoderValue());      
                   m_turret.RunCheckLimits(Constants.LimeLightValues.limeLightTrackSpeed4);

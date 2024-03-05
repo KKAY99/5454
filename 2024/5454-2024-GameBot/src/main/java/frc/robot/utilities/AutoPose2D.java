@@ -7,13 +7,13 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
 
 public class AutoPose2D{
-
     private Pose2d m_pos;
     private Pose2d m_intakePos;
     private Pose2d m_shotPos;
     private boolean m_shouldTurn90;
 
     public AutoPose2D(Pose2d pos,Pose2d intakePos,Pose2d shotPos,boolean shouldTurn90){
+        //This constructor is for short note locations
         m_pos=pos;
         m_intakePos=intakePos;
         m_shotPos=shotPos;
@@ -21,7 +21,7 @@ public class AutoPose2D{
     }
 
     public AutoPose2D(Pose2d pos,boolean shouldTurn90){
-        //This Constructor is for long note locations
+        //This constructor is for long note locations
         m_pos=pos;
         m_intakePos=FindLongIntakePos();
         m_shotPos=FindLongShotPos();
