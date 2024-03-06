@@ -109,6 +109,18 @@ public class TurretSubsystem extends SubsystemBase{
         }else{
           stop();          
         }
+     }else {
+     // search mode
+        //set default speed
+        if(m_speed==0){
+          m_speed=speed=Constants.LimeLightValues.limeLightTrackSpeed5;
+        }
+        double oldspeed=m_speed; // speed gets set to zero in checklimits
+        if(RunCheckLimits(m_speed)) {
+          System.out.println("reverse speed" + oldspeed);
+          m_speed=0-oldspeed;  // reverse speed when we hit a limit
+        }
+      
      }
   }
   

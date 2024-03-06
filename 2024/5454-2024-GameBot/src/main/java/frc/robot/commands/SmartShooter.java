@@ -47,7 +47,7 @@ public class SmartShooter extends Command {
     private boolean m_shouldRotate=true;
     private static int kSlowDownDeadBand=2; 
     private enum STATE{
-        VISIONCLEARANCE,WAITFORVISIONCLEARANCE,TURRETFIND,TURRETSEARCH,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
+        VISIONCLEARANCE,WAITFORVISIONCLEARANCE,CHECKROTATEMODE,TURRETFIND,TURRETSEARCH,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
     }
 
     private STATE m_state=STATE.SETANGLE;
@@ -182,7 +182,7 @@ public class SmartShooter extends Command {
         switch(m_state){
             case VISIONCLEARANCE: 
             if(m_limelight.isTargetAvailible()){
-                m_state=STATE.TURRETFIND;
+                m_state=STATE.CHECKROTATEMODE;
             }else{ //if you can't see the target see if we need to move it
 
                 if(m_shooter.getRelativePosition()<ShooterConstants.shooterVisionClearanceAngle){
@@ -190,7 +190,7 @@ public class SmartShooter extends Command {
                     m_state=STATE.WAITFORVISIONCLEARANCE;
                 }else{
                     m_shooter.stopRotate(); // make sure rotation has stopped
-                    m_state=STATE.TURRETFIND;
+                    m_state=STATE.CHECKROTATEMODE;
                 }
             }
             break;
@@ -204,68 +204,25 @@ public class SmartShooter extends Command {
                     Logger.recordOutput("Shooter/AngleGap",0);
                 }
             break;
+            case CHECKROTATEMODE:
+                if(m_shouldRotate){
+                    m_state=STATE.TURRETFIND;
+                } else {
+                    m_state=STATE.SETANGLE;
+                }
+            break;
             case TURRETFIND:
-               if(!m_shouldRotate){ 
-                m_turret.TrackTarget(true);
                 m_state=STATE.TURRETLOCKWAIT;
-               }else{
-                 m_state=STATE.SETANGLE;
-               }
-            case TURRETLOCKWAIT:                
+            case TURRETLOCKWAIT:                   
+                m_turret.TrackTarget(true);        
                 if(m_limelight.isTargetAvailible()){
                     if(m_turret.IsOnTarget()){
                         m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
                         m_state=STATE.SETANGLE;
-                    }else{
-                        m_turret.TrackTarget(true);
                     }
-                }else{
-                    double speed=m_turret.getCurrentSpeed();
-
-                    if(speed>0){
-                        m_runRight=true;
-                        m_runLeft=false;
-                      }else if(speed<0){
-                        m_runLeft=true;
-                        m_runRight=false;
-                      }else{
-                        m_runRight=true;
-                        m_runLeft=false;
-                      }
-
-                      if(!m_shouldRotate){
-                        m_state=STATE.SETANGLE;
-                      }else{
-                        m_state=STATE.TURRETSEARCH;
-                      }
-                }
+                } // if not on target keep in track target mode
              //stay in turret lock mode
-            break;
-            case TURRETSEARCH:
-            System.out.println("Is In turret track");
-            if(!m_limelight.isTargetAvailible()&&!m_shouldRotate){
-                if(m_runLeft){
-                  Logger.recordOutput("Shooter/SmartShooterState",m_state.toString()+ " - Left " + m_turret.GetEncoderValue());      
-                  m_turret.RunCheckLimits(Constants.LimeLightValues.limeLightTrackSpeed4);
-                  if(m_turret.IsAtLeftLimit())
-                  {
-                    m_runRight=true;
-                    m_runLeft=false;
-                  }
-                }
-              
-                if(m_runRight){
-                  Logger.recordOutput("Shooter/SmartShooterState",m_state.toString()+ " - Right " + m_turret.GetEncoderValue());
-                  m_turret.RunCheckLimits(-Constants.LimeLightValues.limeLightTrackSpeed4);
-                  if(m_turret.IsAtRightLimit()){
-                    m_runRight=false;
-                    m_runLeft=true;
-                  }
-                }
-              }else{
-                m_state=STATE.TURRETFIND;
-              }
-            break; 
+            break;           
             case SETANGLE: 
                 if(m_limelight.isTargetAvailible()){  
                     m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   

@@ -114,7 +114,7 @@ public final class Constants {
         public static final Pose2d locationRedShortSourceNote=new Pose2d(13.68,7.01,new Rotation2d(0));
         public static final Pose2d redShortSourceNoteIntakeWaypoint=new Pose2d(14.39,7.01,new Rotation2d(0));
         public static final AutoPose2D redShortSourceAutoPoses=new AutoPose2D(locationRedShortSourceNote,redShortSourceNoteIntakeWaypoint,
-                                                                              locationRedShortSourceNote,false);
+                                                                              locationRedShortCenterNote,false);
 
         public static final Pose2d locationLongAmpNote=new Pose2d(8.24,  7.47,new Rotation2d(0));
         public static final Pose2d longAmpNoteRedIntakeWaypoint=new Pose2d(9.05,  7.47,new Rotation2d(0));
@@ -297,6 +297,7 @@ public final class Constants {
       public static final double limeLightTrackSpeed2=0.09;
       public static final double limeLightTrackSpeed3=0.15;
       public static final double limeLightTrackSpeed4=0.30;
+      public static final double limeLightTrackSpeed5=0.5454;
 
       public static final String turretLimelightName="";
       public static final String staticLimelightName="static";
@@ -320,14 +321,14 @@ public final class Constants {
       public static final double shooterIntakeSpeed=10;
       public static final double feederSpeed=-1;
       public static final double manualfeederSpeed=-0.3;
-      public static final double baseSpeedDeadband=5;
+      public static final double baseSpeedDeadband=2;
       //public static final double baseMotorSpeed=-20; //rps
       public static final double baseMotorSpeed=0; //rps
       public static final double timeToRunShooter=1;
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
 
-      public static final double homePos=177.8;
+      public static final double homePos=180;//177.8;
       public static final double homeDeadband=2;
       public static final double homeRotateSpeed=0.1;
       public static final double rotateLowSoftLimit=-99;
@@ -384,12 +385,12 @@ public final class Constants {
       public static final double rumbleValue=1;
       public static final double triggerDeadband=0.1;
 
-      public static final int customShot1=0;
-      public static final int customShot2=1;
-      public static final int customShot3=2;
-      public static final int customShot4=3;
-      public static final int customShot5=4;
-      public static final int customShot6=5;
+      public static final int customShot1=1;
+      public static final int customShot2=2;
+      public static final int customShot3=3;
+      public static final int customShot4=4;
+      public static final int customShot5=5;
+      public static final int customShot6=6;
     }
     public static final double customShot1Velocity1=-30;
     public static final double customShot1Velocity2=-30;
@@ -461,24 +462,24 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
-          {17.5,-30,-30,-36,4,1,7.9},
-          {20.5,-30,-30,-34,5,1,7.9},
-          {22.7,-30,-30,-36,5,1,7.9},
-          {24.6,-30,-30,-39,5,1,7.9},
-          {26.5,-35,-35,-42,5,1,7.9},
-          {29.0,-35,-35,-44,5,1,7.9},
-          {30.7,-35,-35,-47,5,1,7.9},
-          {31.2,-40,-40,-50,5,1,7.9},
-          {33.7,-50,-35,-50,5,1,7.9},
-          {35.4,-50,-35,-52,5,1,7.9},
-          {37.6,-50,-35,-53,5,1,7.9},
-          {39.8,-60,-30,-58,5,1,7.9},
-          {41.5,-60,-40,-60,5,1,7.9},
-          {43.9,-60,-40,-61,5,1,7.9},
-          {45.7,-75,-50,-63,5,1,7.9},
-          {48.0,-75,-50,-58,5,1,7.9},
-          {68.5,-60,-40,-60.5,5,1,7.9},
-          {72.1,-60,-40,-61,5,1,7.9}
+          {17.5,-30,-30,-36,4,1,6.0},
+          {20.5,-30,-30,-34,5,1,5.6},
+          {22.7,-30,-30,-36,5,1,5.4},
+          {24.6,-30,-30,-39,5,1,5.3},
+          {26.5,-35,-35,-42,5,1,5.2},
+          {29.0,-35,-35,-44,5,1,5.0},
+          {30.7,-35,-35,-47,5,1,4.42},
+          {31.2,-40,-40,-50,5,1,4.2},
+          {33.7,-50,-35,-50,5,1,4.1},
+          {35.4,-50,-35,-52,5,1,4.0},
+          {37.6,-50,-35,-53,5,1,3.9},
+          {39.8,-60,-30,-58,5,1,3.7},
+          {41.5,-60,-40,-60,5,1,3.5},
+          {43.9,-60,-40,-61,5,1,3.2},
+          {45.7,-75,-50,-63,5,1,3.0},
+          {48.0,-75,-50,-58,5,1,2.3},
+          {68.5,-60,-40,-60.5,5,1,2.3},
+          {72.1,-60,-40,-61,5,1,2.3}
          
       };
        public static final double [][]olddistanceLookup={
