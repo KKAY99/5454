@@ -107,7 +107,7 @@ public class Swerve extends SubsystemBase {
 
   private BooleanSupplier FlipPath(){
     BooleanSupplier supplier;
-    supplier=()->false;
+    supplier=()->true;
     return supplier;
   }
 

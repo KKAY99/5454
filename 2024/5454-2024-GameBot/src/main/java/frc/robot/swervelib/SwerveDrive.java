@@ -1,5 +1,5 @@
 package frc.robot.swervelib;
-
+import com.pathplanner.lib.path.PathPlannerTrajectory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -30,6 +30,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -352,6 +353,8 @@ public class SwerveDrive {
    *
    * @param trajectory the trajectory to post.
    */
+
+
   public void postTrajectory(Trajectory trajectory) {
     if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.LOW.ordinal()) {
       field.getObject("Trajectory").setTrajectory(trajectory);
@@ -419,6 +422,12 @@ public class SwerveDrive {
     } else {
       return simIMU.getYaw();
     }
+  }
+
+  public Rotation2d GetGyroRotation2d(){
+    double angle = getYaw().getDegrees();
+
+    return Rotation2d.fromDegrees(angle);   
   }
 
   /**
