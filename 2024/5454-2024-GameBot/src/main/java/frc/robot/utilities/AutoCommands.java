@@ -101,8 +101,8 @@ public class AutoCommands {
                                                           Constants.AutoConstants.locationBlueLongAmpWing));
     m_blueAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationBlueShortAmpNote,
                                                           Constants.AutoConstants.locationLongAmpNote));
-    m_blueStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
-                                                          Constants.AutoConstants.blueMoveOutOfBoundPos));
+    //m_blueStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
+     //                                                     Constants.AutoConstants.blueMoveOutOfBoundPos));
 
     m_redStartToLeftNote=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
                                                           Constants.AutoConstants.locationRedShortAmpNote));
@@ -124,8 +124,8 @@ public class AutoCommands {
                                                           Constants.AutoConstants.locationRedShortSourceNote));
     m_redAmpToLongAmpNote=m_swerve.createPathCommand(CreateAutoPath(Constants.AutoConstants.locationRedShortAmpNote,
                                                           Constants.AutoConstants.locationLongAmpNote));
-    m_redStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
-                                                          Constants.AutoConstants.redMoveOutOfBoundPos));
+   // m_redStartToMoveOutPos=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),
+     //                                                     Constants.AutoConstants.redMoveOutOfBoundPos));
   
     m_shoot1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
     m_shoot2=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.autoShooterSpeed,Constants.ShooterConstants.baseMotorSpeed);
@@ -245,9 +245,9 @@ public class AutoCommands {
       switch(location){
         case LEFTAMP:
         if(currentAlliance==Alliance.Red){   
-          returnPose=AutoConstants.redLeftAmpStartPos;     
+          //returnPose=AutoConstants.redLeftAmpStartPos;     
         }else{
-          returnPose=AutoConstants.blueLeftAmpStartPos;
+          //returnPose=AutoConstants.blueLeftAmpStartPos;
         }
         break;
         case LEFTSPEAKER:

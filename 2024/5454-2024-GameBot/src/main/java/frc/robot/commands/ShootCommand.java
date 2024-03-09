@@ -39,6 +39,7 @@ public class ShootCommand extends Command {
   private boolean m_motor2IsAtBase=false;
   private boolean m_isRunning=false;
   private boolean m_shouldUseDashBoardVals;
+  private boolean m_shouldCheckBoardVals;
   private boolean m_setAngle=false;
   private static int kSlowDownDeadBand=2;
   private enum STATE{
@@ -62,7 +63,7 @@ public class ShootCommand extends Command {
     addRequirements(m_shooter);
   }
 
-  public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed,double baseMotorSpeed,SendableChooser<Boolean> shoulduseDashBoardVals){
+  public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed,double baseMotorSpeed,SendableChooser<Boolean> shoulduseDashBoardVals,boolean shouldCheckBoardValues){
     m_shooter=shooter;
     m_intake=intake;
     m_speed1=speed;
@@ -70,20 +71,31 @@ public class ShootCommand extends Command {
     m_setAngle=false;
     m_baseMotorSpeed=baseMotorSpeed;
     m_shouldUseDashBoardValuesSendable=shoulduseDashBoardVals;
+    m_shouldCheckBoardVals=shouldCheckBoardValues;
 
     m_networkTable = NetworkTableInstance.getDefault().getTable("SmartDashboard");
-
-    GetDashboardShooterVals();
     addRequirements(m_shooter);
   }
-  public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed1,double speed2,double angle){
+  public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed1,double speed2,double angle,boolean shouldCheckBoardValues){
     m_shooter=shooter;
     m_intake=intake;
     m_speed1=speed1;
     m_speed2=speed2;
     m_shooterAngle=angle;
     m_setAngle=false;
-    GetDashboardShooterVals();
+    m_shouldCheckBoardVals=shouldCheckBoardValues;
+    m_shouldUseDashBoardValuesSendable=null;
+    addRequirements(m_shooter);
+  }
+ public ShootCommand(ShooterSubsystem shooter,IntakeSubsystem intake,double speed1,double speed2,double angle,boolean setAngle,boolean shouldCheckBoardValues){
+    m_shooter=shooter;
+    m_intake=intake;
+    m_speed1=speed1;
+    m_speed2=speed2;
+    m_shooterAngle=angle;
+    m_setAngle=setAngle;
+    m_shouldCheckBoardVals=shouldCheckBoardValues;
+    m_shouldUseDashBoardValuesSendable=null;
     addRequirements(m_shooter);
   }
 
@@ -91,6 +103,8 @@ public class ShootCommand extends Command {
   public void initialize(){
     if(m_shouldUseDashBoardValuesSendable!=null){
       m_shouldUseDashBoardVals=m_shouldUseDashBoardValuesSendable.getSelected().booleanValue();
+    }else{
+      m_shouldUseDashBoardVals=false;
     }
 
     m_motor1IsAtBase=false;
@@ -119,9 +133,11 @@ public class ShootCommand extends Command {
   }
 
   public void GetDashboardShooterVals(){
-    m_speed1=SmartDashboard.getNumber("Shooter1Veloc",0);
-    m_speed2=SmartDashboard.getNumber("Shooter2Veloc",0);
-    m_shooterAngle=SmartDashboard.getNumber("ShooterAngle",0);
+    if(m_shouldUseDashBoardVals&&m_shouldCheckBoardVals){
+      m_speed1=SmartDashboard.getNumber("Shooter1Veloc",0);
+      m_speed2=SmartDashboard.getNumber("Shooter2Veloc",0);
+      m_shooterAngle=SmartDashboard.getNumber("ShooterAngle",0);
+    }
 
     /*m_shooterVeloc1=m_networkTable.getEntry("ShooterVeloc1").getNumber(0).doubleValue();
     m_shooterVeloc2=m_networkTable.getEntry("ShooterVeloc2").getNumber(0).doubleValue();
@@ -139,7 +155,7 @@ public class ShootCommand extends Command {
     boolean returnValue=false;
     double angleGap=0;
 
-    if(!m_shouldUseDashBoardVals && !m_setAngle){
+    if(!m_shouldUseDashBoardVals&&!m_setAngle){
         m_shooter.RunShootingMotors(m_speed1,m_speed2,false);
 
     if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_speed1,m_speed2)){

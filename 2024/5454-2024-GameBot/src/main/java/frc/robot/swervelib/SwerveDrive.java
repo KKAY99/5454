@@ -17,7 +17,9 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -48,7 +50,7 @@ import frc.robot.swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 /** Swerve Drive class representing and controlling the swerve drive. */
 public class SwerveDrive {
-
+   private boolean m_autoControl = false;
   /** Swerve Kinematics object utilizing second order kinematics. */
   public final SwerveKinematics2 kinematics;
   /** Swerve drive configuration. */
@@ -209,11 +211,21 @@ public class SwerveDrive {
       boolean headingCorrection) {
     // Creates a robot-relative ChassisSpeeds object, converting from field-relative speeds if
     // necessary.
-    ChassisSpeeds velocity =
+    ChassisSpeeds velocity;
+ //   if(DriverStation.getAlliance().get()==Alliance.Red){
+      velocity =
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 translation.getX(), translation.getY(), rotation, getYaw())
             : new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
+   // }else{
+      //Mean we are in blue so reverse drive
+    //  velocity =
+    //    fieldRelative
+    //        ? ChassisSpeeds.fromFieldRelativeSpeeds(
+    //            -translation.getX(), -translation.getY(), -rotation, getYaw())
+    //        : new ChassisSpeeds(-translation.getX(), -translation.getY(), -rotation);
+    //}
 
     // Heading Angular Velocity Deadband, might make a configuration option later.
     // Originally made by Team 1466 Webb Robotics.
@@ -503,6 +515,7 @@ public class SwerveDrive {
     }
   }
 
+
   /**
    * Point all modules toward the robot center, thus making the robot very difficult to move.
    * Forcing the robot to keep the current pose.
@@ -701,5 +714,76 @@ public class SwerveDrive {
     }
   }
 
+  //?BAD BAD LEGACY CODE MIGRATED OVER
+  public void moveGyro(double direction, double rotation,double speed, double distance, boolean stopAtEnd){
+    automove(direction,rotation,speed,distance,stopAtEnd,true);
+}
+private double getDistanceFromWheel(){
+  SwerveModule module=swerveModules[1];
+  return module.getDriveMotor().getPosition();
+}
+
+private void automove(double direction, double rotation,double speed, double distance, boolean stopAtEnd,boolean fieldCentric)
+{   double startDistance;
+    double forward=0;
+    double strafe=0;
+    Translation2d targetTranslation;
+    m_autoControl = true;
+    startDistance=getDistanceFromWheel();
+    switch ((int) direction){
+            case 0:
+                    forward=-1*speed;
+                    strafe=0;
+                    break;
+            case 45:
+                    forward=-1*speed;
+                    strafe=1*speed;
+                    break;
+           
+            case 90:
+                    forward=0;
+                    strafe=1*speed;
+                    break;
+            case 135:
+                    forward=1*speed;
+                    strafe=1*speed;
+                    break;
+            case 180:
+                    forward=1*speed;
+                    strafe=0;
+                    break;
+            case 225:
+                    forward=1*speed;
+                    strafe=-1*speed;
+                    break;
+            case 270:
+                    forward=0;
+                    strafe=-1*speed;
+                    break;
+            case 315:
+                    forward=-1*speed;
+                    strafe=-1*speed;
+                    break;
+            
+    }
+    //if not travelling distance then just turn movement on 
+    if(distance==0){
+
+            drive(new Translation2d(forward, strafe), rotation, fieldCentric,false);
+            //periodic();
+    }else {
+            double distanceTravelled=getDistanceFromWheel()-startDistance;
+            while(distanceTravelled<=distance && m_autoControl){
+               drive(new Translation2d(forward, strafe), rotation, fieldCentric,false);
+            //periodic();
+            distanceTravelled=Math.abs(getDistanceFromWheel()-startDistance);
+            //      System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
+            } 
+    }
+    if (stopAtEnd) {
+            drive(new Translation2d(0,0), 0, fieldCentric,false);
+           // periodic();                
+    }
+}
 
 }

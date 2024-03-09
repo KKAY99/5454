@@ -11,20 +11,21 @@ public class AutoPose2D{
     private Pose2d m_intakePos;
     private Pose2d m_shotPos;
     private boolean m_shouldTurn90;
+    private boolean m_shouldShoot;
 
-    public AutoPose2D(Pose2d pos,Pose2d intakePos,Pose2d shotPos,boolean shouldTurn90){
+    public AutoPose2D(Pose2d pos,Pose2d intakePos,Pose2d shotPos,boolean shouldTurn90,boolean shouldShoot){
         //This constructor is for short note locations
         m_pos=pos;
         m_intakePos=intakePos;
         m_shotPos=shotPos;
+        m_shouldShoot=shouldShoot;
         m_shouldTurn90=shouldTurn90;
     }
 
-    public AutoPose2D(Pose2d pos,boolean shouldTurn90){
+    public AutoPose2D(Pose2d pos,boolean shouldTurn90,boolean shouldShoot){
         //This constructor is for long note locations
         m_pos=pos;
-        m_intakePos=FindLongIntakePos();
-        m_shotPos=FindLongShotPos();
+        m_shouldShoot=shouldShoot;
         m_shouldTurn90=shouldTurn90;
     }
 
@@ -33,11 +34,29 @@ public class AutoPose2D{
     }
 
     public Pose2d getIntakePos(){
-        return m_intakePos;
+        Pose2d returnValue=null;
+
+        if(m_intakePos==null){
+            returnValue=FindLongIntakePos();
+        }else{
+            returnValue=m_intakePos;
+        }
+        return returnValue;
     }
 
     public Pose2d getShotPos(){
-        return m_shotPos;
+        Pose2d returnValue=null;
+
+        if(m_shotPos==null){
+            returnValue=FindLongShotPos();
+        }else{
+            returnValue=m_shotPos;
+        }
+        return returnValue;
+    }
+
+    public boolean shouldShootNote(){
+        return m_shouldShoot;
     }
 
     public double getIntakeRotatePose(){

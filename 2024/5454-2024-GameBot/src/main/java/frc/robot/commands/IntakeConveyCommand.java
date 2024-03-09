@@ -18,10 +18,10 @@ public class IntakeConveyCommand extends Command{
   }
 
   private STATE m_state=STATE.INTAKINGNOTE;
-  public IntakeConveyCommand(IntakeSubsystem intake,ShooterSubsystem shooter,double intakeSpeed, LED led){
+  public IntakeConveyCommand(IntakeSubsystem intake,ShooterSubsystem shooter,double intakeSpeed){
     m_intake=intake;
     m_shooter=shooter;
-    m_led=led;
+    //m_led=led;
     m_speed=intakeSpeed;
     addRequirements(m_intake);
     addRequirements(m_shooter);

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.sql.DriverPropertyInfo;
 import java.util.List;
 import javax.swing.JToggleButton;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -36,14 +37,18 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.InputControllers;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.Constants.BlinkinConstants.LEDStates;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.BlinkinConstants;
 import frc.robot.Constants.ButtonBindings;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.ADABreakBeam;
 import frc.robot.utilities.AutoCommands;
 import frc.robot.utilities.AutoPose2D;
+import frc.robot.utilities.Blinkin;
 import frc.robot.utilities.LED;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ChooseYourOwnAdventureAuto;
@@ -70,6 +75,7 @@ public class RobotContainer {
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
+    private SendableChooser<String> m_autoOldSchool = new SendableChooser<>();
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
     private SendableChooser<Boolean> m_shouldUseModularBuilder = new SendableChooser<>();
@@ -83,12 +89,14 @@ public class RobotContainer {
 
     private Swerve m_swerve = new Swerve(new SwerveIO(){});
 //    private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
-    private LED m_led= new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
+    //private LED m_led= new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
+    private Blinkin m_blinkin=new Blinkin(Constants.BlinkinConstants.pwmID);
     private DigitalInput m_brakeButton = new DigitalInput(Constants.brakeButton);
     private Limelight m_TurretLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
                                         Constants.LimeLightValues.limelightTurretAngle);
     /*private Limelight m_StaticLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
                                         Constants.LimeLightValues.limelightTurretAngle,0,0,Constants.LimeLightValues.staticLimelightName);*/
+    private NoteFlipperSubsystem m_flip=new NoteFlipperSubsystem(Constants.NoteFlipConstants.canID);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,
                                          Constants.TurretConstants.turretLimitSwitchPort,
                                          m_TurretLimelight,new TurretSubsystemIO(){});
@@ -151,7 +159,7 @@ public class RobotContainer {
       JoystickButton intakeToggleOperatorTrueButtonOut=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonOut);
       intakeToggleOperatorTrueButtonOut.whileTrue(intakeToggleOperatorTrueOut);
 
-      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed,m_led);
+      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed);
       JoystickButton intakeConveyButton=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeConveyButtonIn);
       intakeConveyButton.onTrue(intakeConvey);
 
@@ -183,11 +191,6 @@ public class RobotContainer {
       JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverturret90);
       turret90Button.onTrue(turret90);
 
-      TurretPosCommand turretOp90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,
-                                                    Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turretOp90Button=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorturret90);
-      turretOp90Button.onTrue(turretOp90);
-
       ShootCommand shoot1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.drivermanualShootButton);
       shootButton1.toggleOnTrue(shoot1);
@@ -206,6 +209,10 @@ public class RobotContainer {
       //Trigger setrefTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       //setrefTrigger.whileTrue(setref);
 
+      AmpScoreHopeCommand noteFlip=new AmpScoreHopeCommand(m_shooter,m_flip,Constants.ShooterConstants.shooterAmpScoreAngle);
+      JoystickButton noteFlipButton=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorNoteFlip);
+      noteFlipButton.whileTrue(noteFlip);
+
       ShootCommand shooterIntakeOp=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.shooterIntakeSpeed,Constants.ShooterConstants.baseMotorSpeed);
       //JoystickButton shootIntakeOpButton= new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorShooterIntake);
       //shootIntakeOpButton.whileTrue(shooterIntakeOp);
@@ -223,10 +230,6 @@ public class RobotContainer {
       TurretToggleCommand toggleTurret=new TurretToggleCommand(m_turret, TurretConstants.turretMoveTimeOut);
       JoystickButton turretToggleButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorTurretToggle);
       turretToggleButton.onTrue(toggleTurret);
-
-      RobotTrackCommand turretTrack=new RobotTrackCommand(m_TurretLimelight,m_turret);
-      JoystickButton turretTrackButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.operatorTurretTrack);
-      turretTrackButton.whileTrue(turretTrack);
     
       ShootRotateCommand shooterRotateUp = new ShootRotateCommand(m_shooter, Constants.ShooterConstants.rotateSlowSpeed);
       POVButton rotateUp = new POVButton(m_xBoxOperator, ButtonBindings.operatorTurretPOVrotateUp);
@@ -261,28 +264,49 @@ public class RobotContainer {
       SequentialCommandGroup stowAndStop=new SequentialCommandGroup(new HardStopShooter(m_shooter),stowCommand);
       operatorStow.onTrue(stowAndStop);
    
-      ShootCommand shootCustom1=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle);
+      ShootRotateSetReferenceCommand stowDCommand = new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shooterStowAngle);
+      JoystickButton driverStow=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.operatorStow);
+       SequentialCommandGroup stowAndStopD=new SequentialCommandGroup(new HardStopShooter(m_shooter),stowDCommand);
+       driverStow.onTrue(stowAndStopD);
+
+      ShootCommand shootCustom1=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle,true,false);
       JoystickButton custom1 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot1);
       custom1.onTrue(shootCustom1);
 
-      ShootCommand shootCustom2=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle);
+      ShootCommand shootCustom2=new ShootCommand(m_shooter,m_intake,Constants.customShot2Velocity1,Constants.customShot2Velocity2,Constants.customShot2Angle,true,false);
       JoystickButton custom2 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot2);
       custom2.onTrue(shootCustom2);
 
-      ShootCommand shootCustom3=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle);
+      ShootCommand shootCustom3=new ShootCommand(m_shooter,m_intake,Constants.customShot3Velocity1,Constants.customShot3Velocity2,Constants.customShot3Angle,true,false);
       JoystickButton custom3 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot3);
       custom3.onTrue(shootCustom3);
 
-      ShootCommand shootCustom4=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle);
-      JoystickButton custom4 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot4);
-      custom4.onTrue(shootCustom4);
+      
+      ShootCommand shootManual=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity1,Constants.customShot3Angle,false,false);
+      JoystickButton customManual = new JoystickButton(m_CustomController, Constants.ButtonBindings.customManual);
+      customManual.onTrue(shootManual);
+
+      //ShootCommand shootCustom4=new ShootCommand(m_shooter,m_intake,Constants.customShot4Velocity1,Constants.customShot4Velocity2,Constants.customShot4Angle,false);
+      SourceIntakeCommand intakeCustom4=new SourceIntakeCommand(m_shooter,ShooterConstants.shooterSourceIntakeAngle);
+      JoystickButton intakeCustom4Button = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot4);
+      intakeCustom4Button.whileTrue(intakeCustom4);
 
     }
        
     private void refreshSmartDashboard(){  
       //TODO: ADD BACK WHEN LIMELIGHT ON
-      m_TurretLimelight.LimeLightPeriodic(true);
-      m_swerve.getPose();
+      //m_TurretLimelight.LimeLightPeriodic(true);
+//      m_swerve.getPose();
+
+      if(m_turret.IsAtLeftLimit()||m_turret.IsAtRightLimit()){
+        m_blinkin.SetLEDPrimaryState(LEDStates.ISATLIMIT);
+      }else{
+        if(m_TurretLimelight.isTargetAvailible()){
+          m_blinkin.SetLEDPrimaryState(LEDStates.TARGETLOCK);
+        }else{
+          m_blinkin.SetLEDPrimaryState(LEDStates.NOTARGET);
+        }
+      }
     }
     
     
@@ -295,6 +319,16 @@ public class RobotContainer {
 
   private void createAutonomousCommandList(){
       try{
+        m_autoOldSchool.setDefaultOption(AutoConstants.autoModeX0,AutoConstants.autoModeX0);
+        m_autoOldSchool.addOption(AutoConstants.autoModeX1,AutoConstants.autoModeX1);
+        m_autoOldSchool.addOption(AutoConstants.autoModeX2,AutoConstants.autoModeX2);
+        m_autoOldSchool.addOption(AutoConstants.autoModeX3,AutoConstants.autoModeX3);
+        m_autoOldSchool.addOption(AutoConstants.autoModeX4,AutoConstants.autoModeX4);
+        m_autoOldSchool.addOption(AutoConstants.autoModeX5,AutoConstants.autoModeX5);
+        m_autoOldSchool.addOption(AutoConstants.autoModeX6,AutoConstants.autoModeX6);
+        m_autoOldSchool.addOption(AutoConstants.autoModeX7,AutoConstants.autoModeX7);
+        
+        SmartDashboard.putData("Auto Chooser",m_autoChooser);
         m_autoChooser.setDefaultOption(AutoConstants.autoMode0,AutoConstants.autoMode0);
         m_autoChooser.addOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
         m_autoChooser.addOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
@@ -327,11 +361,15 @@ public class RobotContainer {
         m_autoPath1.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath1.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath1.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        m_autoPath1.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        m_autoPath1.addOption(AutoConstants.redSourceMoveOut,AutoConstants.moveOutRedSourceAutoPose);
+        m_autoPath1.addOption(AutoConstants.redAmpMoveOut,AutoConstants.moveOutRedAmpAutoPose);
+        m_autoPath1.addOption(AutoConstants.blueSourceMoveOut,AutoConstants.moveOutBlueSourceAutoPose);
+        m_autoPath1.addOption(AutoConstants.blueAmpMoveOut,AutoConstants.moveOutBlueSourceAutoPose);
+        /*m_autoPath1.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath1.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath1.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath1.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath1.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
+        m_autoPath1.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
         SmartDashboard.putData("Auto Path 1",m_autoPath1);
 
         m_autoPath2.setDefaultOption(AutoConstants.noPath, null);
@@ -341,11 +379,11 @@ public class RobotContainer {
         m_autoPath2.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath2.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath2.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        m_autoPath2.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        /*m_autoPath2.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath2.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath2.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath2.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath2.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
+        m_autoPath2.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
         SmartDashboard.putData("Auto Path 2",m_autoPath2);
 
         m_autoPath3.setDefaultOption(AutoConstants.noPath, null);
@@ -355,11 +393,11 @@ public class RobotContainer {
         m_autoPath3.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath3.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath3.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        m_autoPath3.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        /*m_autoPath3.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath3.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath3.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath3.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath3.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
+        m_autoPath3.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
         SmartDashboard.putData("Auto Path 3",m_autoPath3);
 
         m_autoPath4.setDefaultOption(AutoConstants.noPath, null);
@@ -369,11 +407,11 @@ public class RobotContainer {
         m_autoPath4.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath4.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath4.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        m_autoPath4.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        /*m_autoPath4.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath4.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath4.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath4.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath4.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
+        m_autoPath4.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
         SmartDashboard.putData("Auto Path 4",m_autoPath4);
 
         m_autoPath5.setDefaultOption(AutoConstants.noPath, null);
@@ -383,11 +421,11 @@ public class RobotContainer {
         m_autoPath5.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath5.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath5.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        m_autoPath5.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        /*m_autoPath5.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath5.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath5.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath5.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath5.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
+        m_autoPath5.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
         SmartDashboard.putData("Auto Path 5",m_autoPath5);
 
         m_shootFinalNote.setDefaultOption("Dont Shoot Final Note",false);
@@ -415,7 +453,7 @@ public class RobotContainer {
     String autoChosen=m_autoChooser.getSelected();
     Command newCommand=null;
     
-   // if(m_TurretLimelight.isTargetAvailible()){
+   // if(m_TurretLimelight.TargetAvailible()){
    //   m_swerve.resetOdometry(m_TurretLimelight.GetPoseViaApriltag());
    // }else{
       m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
@@ -464,7 +502,7 @@ public class RobotContainer {
   } 
   
   public void AllPeriodic(){
-    //   refreshSmartDashboard();\ 
+       refreshSmartDashboard();
         m_TurretLimelight.LimeLightPeriodic(true); 
   }
 
@@ -481,7 +519,7 @@ public class RobotContainer {
    
   }
   public void TeleopMode(){
-    //m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.TELEOP);
+    //m_blinkin.SetLEDPrimaryState(BlinkinConstants.LEDStates.TELEOP);
     resetBrakeModetoNormal();
     m_shooter.ResetControlType();  
     m_shooter.stopRotate(); //reset rogue pid

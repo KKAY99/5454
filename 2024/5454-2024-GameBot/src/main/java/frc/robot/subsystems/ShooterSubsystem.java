@@ -135,6 +135,26 @@ public class ShooterSubsystem extends SubsystemBase{
         }
     } 
 
+    public void RunShootingMotors(double veloc1,double veloc2,boolean runFeedMotors,double feederSpeed){
+        //values are for the indivudal shooter motors
+        m_desiredVeloc1=veloc1;
+        m_desiredVeloc2=veloc2;
+
+        VelocityVoltage m_velocity = new VelocityVoltage(0);
+        m_velocity.Slot = 0;
+        
+        m_ShootingMotor1.setControl(m_velocity.withVelocity(veloc1));
+        m_ShootingMotor2.setControl(m_velocity.withVelocity(veloc2));
+        
+        if(runFeedMotors){
+            if(veloc1>0){
+                m_feederMotor.set(-feederSpeed);
+            }else{
+                m_feederMotor.set(feederSpeed);
+        }
+        }
+    } 
+
     public void RunFeedRollers(double speed){
         m_feederMotor.set(speed);
     }
@@ -307,8 +327,8 @@ public class ShooterSubsystem extends SubsystemBase{
       //  Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
       //  Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
       //  Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
-     //   Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
-     //   Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
+        //Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
+        Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken",m_shotsTaken);
      //   Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
       //  SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());

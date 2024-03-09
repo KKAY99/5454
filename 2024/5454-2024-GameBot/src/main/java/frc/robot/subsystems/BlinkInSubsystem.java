@@ -24,7 +24,7 @@ public class BlinkInSubsystem extends SubsystemBase{
         m_pattern=pattern;
         m_blinkIn.set(pattern);  
     }
-
+    
     public void stopled(){
         m_pattern=0;
         m_blinkIn.set(0);  
