@@ -25,29 +25,34 @@ public class RobotTrackCommand extends Command{
   @Override
   public void end(boolean interrupted){
     m_turret.stop();
+    m_turret.TESTINGTrackTarget(false);
   }
 
   @Override
   public boolean isFinished(){
-    double speed=0;
+    m_turret.TESTINGTrackTarget(true);
+    
+    return m_turret.IsOnTarget();
 
-    double multiplier=m_limeLight.GetDistanceMultipler();
+    //double speed=0;
 
-    switch(m_state){
+   // double multiplier=m_limeLight.GetDistanceMultipler();
+
+    /*switch(m_state){
     case TRACKING:
       if(m_limeLight.isTargetAvailible()){
         if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.limeLightDeadBand*multiplier){
           speed=0;
         }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closerXCheck*multiplier){
-          speed=Constants.LimeLightValues.limeLightTrackSpeed0;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closeXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed1;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.medXCheck*multiplier){
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.closeXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed2;
-        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.farXCheck*multiplier){
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.medXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed3;
-        }else{
+        }else if(Math.abs(m_limeLight.getXRaw())<Constants.LimeLightValues.farXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed4;
+        }else{
+          speed=Constants.LimeLightValues.limeLightTrackSpeed5;
         }
 
         if(m_limeLight.getXRaw()<0){
@@ -96,6 +101,7 @@ public class RobotTrackCommand extends Command{
     break;
   }
   return false;
-}
+}*/
+  }
 
 }

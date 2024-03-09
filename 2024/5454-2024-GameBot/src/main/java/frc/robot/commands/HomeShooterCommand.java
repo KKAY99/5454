@@ -8,6 +8,7 @@ public class HomeShooterCommand extends CommandBase{
     
     public HomeShooterCommand(ShooterSubsystem shooter){
         m_shooter=shooter;
+        addRequirements(shooter);
     }
 
     @Override

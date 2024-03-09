@@ -19,7 +19,9 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.AutoConstants.AutonomousRoutines;
 import frc.robot.Constants.AutoConstants.StartingLocations;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.commands.AutoDelayedTimedMove;
 import frc.robot.commands.AutoDoNothingCommand;
+import frc.robot.commands.HomeShooterCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SmartShooter;
 import frc.robot.commands.TurretCommand;
@@ -40,6 +42,8 @@ public class ChooseYourOwnAdventureAuto {
   private Command m_shoot3;
   private Command m_shoot4;
   private Command m_shoot5;
+
+  private Command m_homeShooter;
 
   private Command m_startIntake1;
   private Command m_startIntake2;
@@ -95,6 +99,8 @@ public class ChooseYourOwnAdventureAuto {
     m_shoot3=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
     m_shoot4=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
     m_shoot5=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
+
+    m_homeShooter=new HomeShooterCommand(m_shooter);
 
     m_turretSet0=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
 
@@ -203,12 +209,15 @@ public class ChooseYourOwnAdventureAuto {
     return newPath;
   }
 
-  public Command CreateAutoCommand(AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
+  public Command CreateAutoCommand(Swerve swerve, AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
     try{
     SequentialCommandGroup newSequentialCommand=new SequentialCommandGroup();
     SetPathCommands(pose1,pose2,pose3,pose4,pose5);
-    newSequentialCommand.addCommands(m_turretSet0,m_shoot0); //always shoot
-
+    AutoDelayedTimedMove moveIt = new AutoDelayedTimedMove(swerve);
+    newSequentialCommand.addCommands(m_homeShooter,m_turretSet0,m_shoot0); //always shoot
+   
+    //newSequentialCommand.addCommands(m_turretSet0,m_shoot0); //always shoot
+  /* 
     if(pose1!=null){
       if(pose1.shouldShootNote()){
         m_shoot1=new AutoDoNothingCommand();
@@ -234,8 +243,9 @@ public class ChooseYourOwnAdventureAuto {
       }
 
       newSequentialCommand.addCommands(m_turretSet5,m_path5,m_startIntake5,m_intakeWayPoint5,m_stopIntake5,m_shotWayPoint5,shootFinalNote);
-    }
 
+    }
+    */
     Command newCommand=newSequentialCommand;
 
     return newCommand;

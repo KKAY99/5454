@@ -3,6 +3,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+
 import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
 import frc.robot.Constants.InputControllers;
@@ -47,7 +49,15 @@ public class IntakeSubsystem extends SubsystemBase{
         //m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
       //  m_TOFlow = new TimeOfFlight(55);
        // m_TOFlow.setRangingMode(RangingMode.Short, 24);
-       
+        m_intakeOne.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
+        m_intakeOne.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
+        m_intakeOne.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
+        m_intakeOne.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
+        m_intakeTwo.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
+        m_intakeTwo.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
+        m_intakeTwo.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
+        m_intakeTwo.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
+        
     }
 
     public void runIntake(double speed){

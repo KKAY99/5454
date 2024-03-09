@@ -291,6 +291,9 @@ public class RobotContainer {
       JoystickButton intakeCustom4Button = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot4);
       intakeCustom4Button.whileTrue(intakeCustom4);
 
+      RobotTrackCommand testTrack=new RobotTrackCommand(m_TurretLimelight, m_turret);
+      JoystickButton testTrackButton=new JoystickButton(m_CustomController,ButtonBindings.customShot5);
+
     }
        
     private void refreshSmartDashboard(){  
@@ -459,7 +462,7 @@ public class RobotContainer {
       m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
     //}
 
-    newCommand=autoModularMaker.CreateAutoCommand(m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
+    newCommand=autoModularMaker.CreateAutoCommand(m_swerve,m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
                                                   m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
 
     return newCommand;

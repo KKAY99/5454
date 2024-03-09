@@ -72,7 +72,7 @@ public class SwerveModule {
     driveMotor.setCurrentLimit(configuration.physicalCharacteristics.driveMotorCurrentLimit);
     angleMotor.setLoopRampRate(configuration.physicalCharacteristics.angleMotorRampRate);
     driveMotor.setLoopRampRate(configuration.physicalCharacteristics.driveMotorRampRate);
-
+    
     // Config angle encoders
     absoluteEncoder = moduleConfiguration.absoluteEncoder;
     if (absoluteEncoder != null) {

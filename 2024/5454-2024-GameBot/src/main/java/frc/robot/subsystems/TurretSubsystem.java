@@ -80,6 +80,7 @@ public class TurretSubsystem extends SubsystemBase{
      }
      return returnValue;
     } 
+
   public void TrackTarget(boolean bool){
     double speed=0;
     double limelightDis=m_limeLight.getDistance();
@@ -92,13 +93,13 @@ public class TurretSubsystem extends SubsystemBase{
         if(Math.abs(x)<Constants.LimeLightValues.limeLightDeadBand*multiplier){
           speed=0;
         }else if(Math.abs(x)<Constants.LimeLightValues.closeXCheck*multiplier){
-          speed=Constants.LimeLightValues.limeLightTrackSpeed1;
-        }else if(Math.abs(x)<Constants.LimeLightValues.medXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed2;
-        }else if(Math.abs(x)<Constants.LimeLightValues.farXCheck*multiplier){
+        }else if(Math.abs(x)<Constants.LimeLightValues.medXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed3;
-        }else{
+        }else if(Math.abs(x)<Constants.LimeLightValues.farXCheck*multiplier){
           speed=Constants.LimeLightValues.limeLightTrackSpeed4;
+        }else{
+          speed=Constants.LimeLightValues.limeLightTrackSpeed5;
         }
         if(x<0 && speed!=0){
           RunCheckLimits(speed);
@@ -123,7 +124,55 @@ public class TurretSubsystem extends SubsystemBase{
       
      }
   }
-  
+
+    public void TESTINGTrackTarget(boolean bool){
+    double speed=0;
+    double limelightDis=m_limeLight.getDistance();
+    double x=m_limeLight.getXRaw()+m_shotTable.getCrosshairOffset(limelightDis);
+    double multiplier=m_shotTable.getDistanceMultiplier(limelightDis);
+    Logger.recordOutput("Turret/TrackXTarget",x);
+   
+   
+    if(m_limeLight.isTargetAvailible()){
+        if(Math.abs(x)<Constants.LimeLightValues.limeLightDeadBand*multiplier){
+          speed=0;
+        }else if(Math.abs(x)<Constants.LimeLightValues.closerXCheck*multiplier){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed0;
+        }else if(Math.abs(x)<Constants.LimeLightValues.closeXCheck*multiplier){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed1TEST;
+        }else if(Math.abs(x)<Constants.LimeLightValues.closeToMediumXCheck*multiplier){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed2TEST;
+        }else if(Math.abs(x)<Constants.LimeLightValues.medXCheck*multiplier){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed3TEST;
+        }else if(Math.abs(x)<Constants.LimeLightValues.farXCheck*multiplier){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed4TEST;
+        }else{
+          speed=Constants.LimeLightValues.limeLightTrackSpeed5TEST;
+        }
+        if(x<0 && speed!=0){
+          RunCheckLimits(speed);
+          m_speed=speed;
+        }else if(x>0 && speed!=0){
+          RunCheckLimits(-speed);
+          m_speed=-speed;
+        }else{
+          stop();          
+        }
+     }else {
+     // search mode
+        //set default speed
+        if(m_speed==0){
+          m_speed=speed=Constants.LimeLightValues.limeLightTrackSpeed5;
+        }
+        double oldspeed=m_speed; // speed gets set to zero in checklimits
+        if(RunCheckLimits(m_speed)) {
+          System.out.println("reverse speed" + oldspeed);
+          m_speed=0-oldspeed;  // reverse speed when we hit a limit
+        }
+      
+     }
+    }
+
   public void RunTurretMotor(double power){
     //Check if motor speed is greater than limit
     if(Math.abs(power)>Constants.TurretConstants.maxTurretSpeed){

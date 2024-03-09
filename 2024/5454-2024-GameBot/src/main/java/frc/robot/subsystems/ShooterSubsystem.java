@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.Console;
 import org.littletonrobotics.junction.Logger;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -31,50 +33,53 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-public class ShooterSubsystem extends SubsystemBase{
+import com.ctre.phoenix6.BaseStatusSignal;
+
+public class ShooterSubsystem extends SubsystemBase {
     private Limelight m_limeLight;
 
     private TalonFX m_ShootingMotor1;
-    private TalonFX m_ShootingMotor2; 
+    private TalonFX m_ShootingMotor2;
     private CANSparkMax m_feederMotor;
     private CANSparkMax m_angleMotor;
-    
+
     private SparkMaxPIDController m_anglePID;
 
     private RelativeEncoder m_angleEncoder;
     private WPI_CANCoder m_canCoder;
-     
+
     private double m_baseSpeed;
     private double m_distance;
 
-    private double m_targetAngle=0;
+    private double m_targetAngle = 0;
     private double m_shotsTaken;
     private double m_desiredVeloc1;
     private double m_desiredVeloc2;
 
-    public ShooterSubsystem(Limelight limeLight,int shootingMotor1,int shootingMotor2,int angleMotor,int feedMotor,int canCoderId,double baseSpeed,boolean shouldUseDashBoardVals){
-        m_limeLight=limeLight;
-        m_baseSpeed=baseSpeed;
-        m_ShootingMotor1=new TalonFX(shootingMotor1);  
-        m_ShootingMotor2=new TalonFX(shootingMotor2);
+    public ShooterSubsystem(Limelight limeLight, int shootingMotor1, int shootingMotor2, int angleMotor, int feedMotor,
+            int canCoderId, double baseSpeed, boolean shouldUseDashBoardVals) {
+        m_limeLight = limeLight;
+        m_baseSpeed = baseSpeed;
+        m_ShootingMotor1 = new TalonFX(shootingMotor1);
+        m_ShootingMotor2 = new TalonFX(shootingMotor2);
         configmotor(m_ShootingMotor1);
         configmotor(m_ShootingMotor2);
-        m_feederMotor=new CANSparkMax(feedMotor,MotorType.kBrushless);
+        m_feederMotor = new CANSparkMax(feedMotor, MotorType.kBrushless);
         m_feederMotor.setSmartCurrentLimit(Constants.k30Amp);
-        m_angleMotor = new CANSparkMax(angleMotor,MotorType.kBrushless);
+        m_angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
         m_angleMotor.setSmartCurrentLimit(Constants.k30Amp);
         m_anglePID = m_angleMotor.getPIDController();
-        m_canCoder=new WPI_CANCoder(canCoderId);
-        m_angleEncoder=m_angleMotor.getEncoder();
-    
-        double anglekP = 0.8;//0.1 
+        m_canCoder = new WPI_CANCoder(canCoderId);
+        m_angleEncoder = m_angleMotor.getEncoder();
+
+        double anglekP = 0.8;// 0.1
         double anglekI = 0.00;
-        double anglekD = 0.00; 
-        double anglekIz = 0; 
-        double anglekFF = 0.000015; 
-        double anglekMaxOutput = 1; 
+        double anglekD = 0.00;
+        double anglekIz = 0;
+        double anglekFF = 0.000015;
+        double anglekMaxOutput = 1;
         double anglekMinOutput = -1;
-    
+
         m_anglePID.setP(anglekP);
         m_anglePID.setI(anglekI);
         m_anglePID.setD(anglekD);
@@ -83,256 +88,277 @@ public class ShooterSubsystem extends SubsystemBase{
         m_anglePID.setOutputRange(anglekMinOutput, anglekMaxOutput);
         m_angleMotor.getEncoder();
 
-
     }
 
-    public void configmotor(TalonFX motor){
-       
+    public void configmotor(TalonFX motor) {
+
         // fetch *all* configs currently applied to the device
         var slot0Configs = new Slot0Configs();
         slot0Configs.kV = 0.12;
-        slot0Configs.kP=0.11;
-        slot0Configs.kI=0.48;
-        slot0Configs.kD=0.01; 
+        slot0Configs.kP = 0.11;
+        slot0Configs.kI = 0.48;
+        slot0Configs.kD = 0.01;
+        BaseStatusSignal.setUpdateFrequencyForAll(
+                50,
+                motor.getPosition(),
+                motor.getVelocity(),
+                motor.getMotorVoltage(),
+                motor.getRotorVelocity());
+        motor.optimizeBusUtilization();
         // apply gains, 50 ms totl timeout
-        motor.getConfigurator().apply(slot0Configs, 0.050); 
+        motor.getConfigurator().apply(slot0Configs, 0.050);
+        // var fx_cfg = new TalonFXConfiguration();
+
         /**
-        * Configure the current limits that will be used
-        * Stator Current is the current that passes through the motor stators.
-        *  Use stator current limits to limit rotor acceleration/heat production
-        * Supply Current is the current that passes into the controller from the supply
-        *  Use supply current limits to prevent breakers from tripping
-        *
-        * 
-        //will need to use                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
-        //var fx_cfg = new TalonFXConfiguration();
-        //fx_cfg.CurrentLimits.SupplyCurrentLimit=60;
-        //fx_cfg.CurrentLimits.SupplyCurrentLimitEnable=true;
-        //fx_cfg.CurrentLimits.SupplyCurrentThreshold=0.5;
-        //motor.getConfigurator().apply(fx_cfg);
-        //motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      20,                25,                1.0));
-        //motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      10,                15,                0.5));
-            
+         * Configure the current limits that will be used
+         * Stator Current is the current that passes through the motor stators.
+         * Use stator current limits to limit rotor acceleration/heat production
+         * Supply Current is the current that passes into the controller from the
+         * supply.
+         * Use supply current limits to prevent breakers from tripping
+         *
+         * 
+         * //will need to use enabled | Limit(amp) | Trigger Threshold(amp) | Trigger
+         * Threshold Time(s)
+         */
+        // var fx_cfg = new TalonFXConfiguration();
+        // fx_cfg.CurrentLimits.SupplyCurrentLimit=60;
+        // fx_cfg.CurrentLimits.SupplyCurrentLimitEnable=true;
+        // fx_cfg.CurrentLimits.SupplyCurrentThreshold=0.5;
+        // motor.getConfigurator().apply(fx_cfg);
+        // motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20,
+        // 25, 1.0));
+        // motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10,
+        // 15, 0.5));
+
     }
-    
-    public void RunShootingMotors(double veloc1,double veloc2,boolean runFeedMotors){
-        //values are for the indivudal shooter motors
-        m_desiredVeloc1=veloc1;
-        m_desiredVeloc2=veloc2;
+
+    public void RunShootingMotors(double veloc1, double veloc2, boolean runFeedMotors) {
+        // values are for the indivudal shooter motors
+        m_desiredVeloc1 = veloc1;
+        m_desiredVeloc2 = veloc2;
 
         VelocityVoltage m_velocity = new VelocityVoltage(0);
         m_velocity.Slot = 0;
-        
+
         m_ShootingMotor1.setControl(m_velocity.withVelocity(veloc1));
         m_ShootingMotor2.setControl(m_velocity.withVelocity(veloc2));
-        
-        if(runFeedMotors){
-            if(veloc1>0){
+
+        if (runFeedMotors) {
+            if (veloc1 > 0) {
                 m_feederMotor.set(-ShooterConstants.feederSpeed);
-            }else{
+            } else {
                 m_feederMotor.set(ShooterConstants.feederSpeed);
+            }
         }
-        }
-    } 
+    }
 
-    public void RunShootingMotors(double veloc1,double veloc2,boolean runFeedMotors,double feederSpeed){
-        //values are for the indivudal shooter motors
-        m_desiredVeloc1=veloc1;
-        m_desiredVeloc2=veloc2;
+    public void RunShootingMotors(double veloc1, double veloc2, boolean runFeedMotors, double feederSpeed) {
+        // values are for the indivudal shooter motors
+        m_desiredVeloc1 = veloc1;
+        m_desiredVeloc2 = veloc2;
 
         VelocityVoltage m_velocity = new VelocityVoltage(0);
         m_velocity.Slot = 0;
-        
+
         m_ShootingMotor1.setControl(m_velocity.withVelocity(veloc1));
         m_ShootingMotor2.setControl(m_velocity.withVelocity(veloc2));
-        
-        if(runFeedMotors){
-            if(veloc1>0){
-                m_feederMotor.set(-feederSpeed);
-            }else{
-                m_feederMotor.set(feederSpeed);
-        }
-        }
-    } 
 
-    public void RunFeedRollers(double speed){
+        if (runFeedMotors) {
+            if (veloc1 > 0) {
+                m_feederMotor.set(-feederSpeed);
+            } else {
+                m_feederMotor.set(feederSpeed);
+            }
+        }
+    }
+
+    public void RunFeedRollers(double speed) {
         m_feederMotor.set(speed);
     }
 
-    public void StopFeedRollers(){
+    public void StopFeedRollers() {
         m_feederMotor.set(0);
     }
 
-    public void SlowShootingMotors(){
-        //keep motors running
-         VelocityVoltage m_velocity = new VelocityVoltage(0);
+    public void SlowShootingMotors() {
+        // keep motors running
+        VelocityVoltage m_velocity = new VelocityVoltage(0);
         m_velocity.Slot = 0;
         m_ShootingMotor1.setControl(m_velocity.withVelocity(m_baseSpeed));
         m_ShootingMotor2.setControl(m_velocity.withVelocity(m_baseSpeed));
-      
+
         m_feederMotor.set(0);
     }
-    public void stopShooter(){
+
+    public void stopShooter() {
         m_ShootingMotor1.set(0);
         m_ShootingMotor2.set(0);
         m_feederMotor.set(0);
-        
+
     }
 
-    public boolean isMotorVelocitysAtDesiredSpeed(double veloc1,double veloc2){
-        boolean returnValue=false;
-        boolean bMotor1UptoSpeed=false;
-        boolean bMotor2UptoSpeed=false;
+    public boolean isMotorVelocitysAtDesiredSpeed(double veloc1, double veloc2) {
+        boolean returnValue = false;
+        boolean bMotor1UptoSpeed = false;
+        boolean bMotor2UptoSpeed = false;
 
-        System.out.println("Veloc1 "+veloc1);
-        System.out.println("CurrentVeloc "+ GetVelocityMotor1());
-        
-        bMotor1UptoSpeed=Math.abs(GetVelocityMotor1())+Math.abs(ShooterConstants.baseSpeedDeadband)>=Math.abs(veloc1);
-        bMotor2UptoSpeed=Math.abs(GetVelocityMotor2())+Math.abs(ShooterConstants.baseSpeedDeadband)>=Math.abs(veloc2);
-        
-        
-        if(bMotor1UptoSpeed && bMotor2UptoSpeed){
+        // System.out.println("Veloc1 "+veloc1);
+        // System.out.println("CurrentVeloc "+ GetVelocityMotor1());
 
-                returnValue=true;
+        bMotor1UptoSpeed = Math.abs(GetVelocityMotor1()) + Math.abs(ShooterConstants.baseSpeedDeadband) >= Math
+                .abs(veloc1);
+        bMotor2UptoSpeed = Math.abs(GetVelocityMotor2()) + Math.abs(ShooterConstants.baseSpeedDeadband) >= Math
+                .abs(veloc2);
+
+        if (bMotor1UptoSpeed && bMotor2UptoSpeed) {
+
+            returnValue = true;
         }
 
         return returnValue;
     }
 
-    public double GetVelocityMotor1(){
-        System.out.println(m_ShootingMotor1.getVelocity() + " = " + m_ShootingMotor1.getRotorVelocity());
+    public double GetVelocityMotor1() {
+       // System.out.println(m_ShootingMotor1.getVelocity() + " = " + m_ShootingMotor1.getRotorVelocity());
         return m_ShootingMotor1.getRotorVelocity().getValueAsDouble();
-        
+
     }
 
-    public double GetVelocityMotor2(){
+    public double GetVelocityMotor2() {
         return m_ShootingMotor2.getRotorVelocity().getValueAsDouble();
     }
 
-    public void OutPutDistance(){
+    public void OutPutDistance() {
         ShotTable shotTable = new ShotTable();
-        double calculation=shotTable.getVelocity1(m_limeLight.getDistance());
-        System.out.println("Distance Calucations: "+calculation);
+        double calculation = shotTable.getVelocity1(m_limeLight.getDistance());
+        System.out.println("Distance Calucations: " + calculation);
     }
 
-    public void RotateShooter(double speed){
+    public void RotateShooter(double speed) {
         m_angleMotor.set(speed);
     }
 
-    public void stopRotate(){
-        m_anglePID.setReference(0,ControlType.kVelocity);
+    public void stopRotate() {
+        m_anglePID.setReference(0, ControlType.kVelocity);
         m_angleMotor.set(0);
     }
 
-    public void setAngle(double targetAngle){
-        m_targetAngle=targetAngle;
-        m_anglePID.setReference(targetAngle,ControlType.kPosition);
+    public void setAngle(double targetAngle) {
+        m_targetAngle = targetAngle;
+        m_anglePID.setReference(targetAngle, ControlType.kPosition);
 
     }
 
-    public double getCanCoderPosition(){
+    public double getCanCoderPosition() {
         return m_canCoder.getAbsolutePosition();
     }
 
-    public void zeroRelativePosition(){
+    public void zeroRelativePosition() {
         m_angleEncoder.setPosition(0);
     }
 
-    public void zeroCanCoderPosition(){
+    public void zeroCanCoderPosition() {
         m_canCoder.setPosition(0);
     }
 
-    public double getRelativePosition(){
+    public double getRelativePosition() {
         return m_angleEncoder.getPosition();
     }
 
-    public void ResetControlType(){
-        m_anglePID.setReference(0,ControlType.kVelocity);
+    public void ResetControlType() {
+        m_anglePID.setReference(0, ControlType.kVelocity);
     }
 
-    public void setBrakeOn(){
+    public void setBrakeOn() {
         m_ShootingMotor1.setNeutralMode(NeutralModeValue.Brake);
         m_ShootingMotor1.setNeutralMode(NeutralModeValue.Brake);
-        //m_angleMotor.setIdleMode(IdleMode.kBrake);
-    } 
-  
-    public void setCoastOn(){
+        // m_angleMotor.setIdleMode(IdleMode.kBrake);
+    }
+
+    public void setCoastOn() {
         m_ShootingMotor1.setNeutralMode(NeutralModeValue.Coast);
         m_ShootingMotor1.setNeutralMode(NeutralModeValue.Coast);
-        //m_angleMotor.setIdleMode(IdleMode.kCoast);
+        // m_angleMotor.setIdleMode(IdleMode.kCoast);
     }
 
-    public void ResetShotsTaken(){
-        m_shotsTaken=0;
+    public void ResetShotsTaken() {
+        m_shotsTaken = 0;
     }
 
-    public void ShotTaken(){
-        m_shotsTaken+=1;
+    public void ShotTaken() {
+        m_shotsTaken += 1;
     }
 
-    public void PutTableMultiplier(){
+    public void PutTableMultiplier() {
     }
 
-    public boolean isAtPodiumShot(){
-        boolean returnValue=false;
+    public boolean isAtPodiumShot() {
+        boolean returnValue = false;
 
-        if(getRelativePosition()>Math.abs(Constants.ShooterConstants.podiumShotEncoderVal)-Constants.ShooterConstants.shooterPosDeadband&&
-            getRelativePosition()<Math.abs(Constants.ShooterConstants.podiumShotEncoderVal)+Constants.ShooterConstants.shooterPosDeadband){
-                returnValue=true;
+        if (getRelativePosition() > Math.abs(Constants.ShooterConstants.podiumShotEncoderVal)
+                - Constants.ShooterConstants.shooterPosDeadband &&
+                getRelativePosition() < Math.abs(Constants.ShooterConstants.podiumShotEncoderVal)
+                        + Constants.ShooterConstants.shooterPosDeadband) {
+            returnValue = true;
         }
 
         return returnValue;
     }
 
-    public boolean isAtMidShot(){
-        boolean returnValue=false;
+    public boolean isAtMidShot() {
+        boolean returnValue = false;
 
-        if(getRelativePosition()>Math.abs(Constants.ShooterConstants.midShotEncoderVal)-Constants.ShooterConstants.shooterPosDeadband&&
-            getRelativePosition()<Math.abs(Constants.ShooterConstants.midShotEncoderVal)+Constants.ShooterConstants.shooterPosDeadband){
-                returnValue=true;
+        if (getRelativePosition() > Math.abs(Constants.ShooterConstants.midShotEncoderVal)
+                - Constants.ShooterConstants.shooterPosDeadband &&
+                getRelativePosition() < Math.abs(Constants.ShooterConstants.midShotEncoderVal)
+                        + Constants.ShooterConstants.shooterPosDeadband) {
+            returnValue = true;
         }
 
         return returnValue;
     }
 
-    public boolean isAtShortShot(){
-        boolean returnValue=false;
+    public boolean isAtShortShot() {
+        boolean returnValue = false;
 
-        if(getRelativePosition()>Math.abs(Constants.ShooterConstants.shortShotEncoderVal)-Constants.ShooterConstants.shooterPosDeadband&&
-            getRelativePosition()<Math.abs(Constants.ShooterConstants.shortShotEncoderVal)+Constants.ShooterConstants.shooterPosDeadband){
-                returnValue=true;
+        if (getRelativePosition() > Math.abs(Constants.ShooterConstants.shortShotEncoderVal)
+                - Constants.ShooterConstants.shooterPosDeadband &&
+                getRelativePosition() < Math.abs(Constants.ShooterConstants.shortShotEncoderVal)
+                        + Constants.ShooterConstants.shooterPosDeadband) {
+            returnValue = true;
         }
 
         return returnValue;
     }
 
-    public boolean hasHitRotateLimit(double speed){
-        boolean returnValue=false;
-        if(speed>0){
-            //if going up in speed and hitting HighSoftLimit then return true
-            returnValue=(getRelativePosition()>=Constants.ShooterConstants.rotateHighSoftLimit);
-        }else{
-            //negatives speed so check low soft limit 
-            returnValue=(getRelativePosition()<=Constants.ShooterConstants.rotateLowSoftLimit);
+    public boolean hasHitRotateLimit(double speed) {
+        boolean returnValue = false;
+        if (speed > 0) {
+            // if going up in speed and hitting HighSoftLimit then return true
+            returnValue = (getRelativePosition() >= Constants.ShooterConstants.rotateHighSoftLimit);
+        } else {
+            // negatives speed so check low soft limit
+            returnValue = (getRelativePosition() <= Constants.ShooterConstants.rotateLowSoftLimit);
         }
         return returnValue;
     }
 
     @Override
-    public void periodic(){
-        Logger.recordOutput("Shooter/Shooter1VelocitySet",m_desiredVeloc1);
-        Logger.recordOutput("Shooter/Shooter2VelocitySet",m_desiredVeloc2);
-        Logger.recordOutput("Shooter/ShooterSetAngle",m_targetAngle);
-      //  Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
-      //  Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
-      //  Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
-      //  Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
-        //Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
-        Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
-        Logger.recordOutput("Shooter/ShotsTaken",m_shotsTaken);
-     //   Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
-      //  SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
-      //  SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
-      //  SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());
+    public void periodic() {
+        Logger.recordOutput("Shooter/Shooter1VelocitySet", m_desiredVeloc1);
+        Logger.recordOutput("Shooter/Shooter2VelocitySet", m_desiredVeloc2);
+        Logger.recordOutput("Shooter/ShooterSetAngle", m_targetAngle);
+        // Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
+        // Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
+        // Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
+        // Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
+        // Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
+        // Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
+        Logger.recordOutput("Shooter/ShotsTaken", m_shotsTaken);
+        // Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
+        // SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
+        // SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
+        // SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());
     }
 }

@@ -329,17 +329,23 @@ public final class Constants {
 
       public static final double closerXCheck=1.5;
       public static final double closeXCheck=3;
+      public static final double closeToMediumXCheck=6;
       public static final double medXCheck=9;
       public static final double farXCheck=14;
 
       public static final double limeLightDeadBand=0.7;
 
       public static final double limeLightTrackSpeed0=0.03;
-      public static final double limeLightTrackSpeed1=0.05;
-      public static final double limeLightTrackSpeed2=0.09;
-      public static final double limeLightTrackSpeed3=0.15;
-      public static final double limeLightTrackSpeed4=0.30;
-      public static final double limeLightTrackSpeed5=0.5454;
+      public static final double limeLightTrackSpeed1=0.03;
+      public static final double limeLightTrackSpeed1TEST=0.08;
+      public static final double limeLightTrackSpeed2=0.05;
+      public static final double limeLightTrackSpeed2TEST=0.1;
+      public static final double limeLightTrackSpeed3=0.09;
+      public static final double limeLightTrackSpeed3TEST=0.15;
+      public static final double limeLightTrackSpeed4=0.15;
+      public static final double limeLightTrackSpeed4TEST=0.25;
+      public static final double limeLightTrackSpeed5=0.30;
+      public static final double limeLightTrackSpeed5TEST=0.35;
 
       public static final String turretLimelightName="";
       public static final String staticLimelightName="static";
@@ -442,13 +448,13 @@ public final class Constants {
       public static final int customShot8=11;
       public static final int customShot9=12;
     }
-    public static final double customShot1Velocity1=-30;
-    public static final double customShot1Velocity2=-30;
-    public static final double customShot1Angle=-40;
+    public static final double customShot1Velocity1=-40;
+    public static final double customShot1Velocity2=-40;
+    public static final double customShot1Angle=-44;
  
-    public static final double customShot2Velocity1=-40;
-    public static final double customShot2Velocity2=-40;
-    public static final double customShot2Angle=-40;
+    public static final double customShot2Velocity1=-45;
+    public static final double customShot2Velocity2=-45;
+    public static final double customShot2Angle=-44;
  
     public static final double customShot3Velocity1=-75;
     public static final double customShot3Velocity2=-50;
