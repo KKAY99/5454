@@ -21,6 +21,7 @@ import frc.robot.Constants.AutoConstants.StartingLocations;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.AutoDelayedTimedMove;
 import frc.robot.commands.AutoDoNothingCommand;
+import frc.robot.commands.CreateYourOwnAutoStateMachine;
 import frc.robot.commands.HomeShooterCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SmartShooter;
@@ -209,11 +210,11 @@ public class ChooseYourOwnAdventureAuto {
     return newPath;
   }
 
-  public Command CreateAutoCommand(Swerve swerve, AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
+  public Command CreateAutoCommandOLDCODE(Swerve swerve, AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
     try{
     SequentialCommandGroup newSequentialCommand=new SequentialCommandGroup();
     SetPathCommands(pose1,pose2,pose3,pose4,pose5);
-    
+
     newSequentialCommand.addCommands(m_homeShooter,m_turretSet0,m_shoot0); //always shoot
    
     //newSequentialCommand.addCommands(m_turretSet0,m_shoot0); //always shoot
@@ -255,6 +256,11 @@ public class ChooseYourOwnAdventureAuto {
 
       return newSequentialCommand;
     }
+  }
+
+  public Command CreateAutoCommand(Swerve swerve, AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
+    
+    return new CreateYourOwnAutoStateMachine(swerve, m_shooter, m_turret, m_intake, m_limeLight,pose1,pose2,pose3,pose4,pose5);
   }
 }
 
