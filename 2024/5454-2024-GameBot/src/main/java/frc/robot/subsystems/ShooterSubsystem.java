@@ -360,7 +360,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
         // Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
         // Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
-        // Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
+         Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken", m_shotsTaken);
         // Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
         // SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());

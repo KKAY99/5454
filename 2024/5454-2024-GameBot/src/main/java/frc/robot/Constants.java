@@ -258,7 +258,7 @@ public final class Constants {
 
    public static final class NoteFlipConstants{
     public static final int canID=12;
-    public static final double noteFlipSpeed=0.35;// was .25
+    public static final double noteFlipSpeed=-0.35;// was .35
     public static final double timeToRunAmpScore=2;
    }
 
