@@ -48,6 +48,9 @@ public class IntakeToggleCommand extends Command{
   
   @Override public void end(boolean interrupted){
      m_isRunning=false; 
+     if(!m_shouldToggle){
+      m_intake.ResetToggleBoolean();
+     }
      Logger.recordOutput("Intake/IntakeToggleCommand",m_isRunning);
      if(!m_shouldToggle){
       m_intake.stopIntake();

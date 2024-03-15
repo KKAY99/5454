@@ -307,13 +307,27 @@ public class SwerveDrive {
    *
    * @param chassisSpeeds Chassis speeds to set.
    */
-  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+  public void setChassisSpeedsClosed(ChassisSpeeds chassisSpeeds) {
     SwerveDriveTelemetry.desiredChassisSpeeds[1] = chassisSpeeds.vyMetersPerSecond;
     SwerveDriveTelemetry.desiredChassisSpeeds[0] = chassisSpeeds.vxMetersPerSecond;
     SwerveDriveTelemetry.desiredChassisSpeeds[2] =
         Math.toDegrees(chassisSpeeds.omegaRadiansPerSecond);
 
     setRawModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds), false);
+  }
+
+  /**
+   * Set chassis speeds with open-loop velocity control.
+   *
+   * @param chassisSpeeds Chassis speeds to set.
+   */
+  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+    SwerveDriveTelemetry.desiredChassisSpeeds[1] = chassisSpeeds.vyMetersPerSecond;
+    SwerveDriveTelemetry.desiredChassisSpeeds[0] = chassisSpeeds.vxMetersPerSecond;
+    SwerveDriveTelemetry.desiredChassisSpeeds[2] =
+        Math.toDegrees(chassisSpeeds.omegaRadiansPerSecond);
+
+    setRawModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds),true);
   }
 
   /**
@@ -563,6 +577,15 @@ public class SwerveDrive {
   public void replaceSwerveModuleFeedforward(SimpleMotorFeedforward feedforward) {
     for (SwerveModule swerveModule : swerveModules) {
       swerveModule.feedforward = feedforward;
+    }
+  }
+
+  /**
+   * Resets Modules PercentInput and SetReference
+   */
+  public void resetAllModules(){
+    for(SwerveModule swerveModule:swerveModules){
+      swerveModule.ResetReference();
     }
   }
 

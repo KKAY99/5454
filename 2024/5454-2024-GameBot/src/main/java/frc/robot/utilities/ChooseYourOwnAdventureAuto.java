@@ -213,15 +213,13 @@ public class ChooseYourOwnAdventureAuto {
     try{
     SequentialCommandGroup newSequentialCommand=new SequentialCommandGroup();
     SetPathCommands(pose1,pose2,pose3,pose4,pose5);
-    AutoDelayedTimedMove moveIt = new AutoDelayedTimedMove(swerve);
+    
     newSequentialCommand.addCommands(m_homeShooter,m_turretSet0,m_shoot0); //always shoot
    
     //newSequentialCommand.addCommands(m_turretSet0,m_shoot0); //always shoot
-  /* 
+   
     if(pose1!=null){
-      if(pose1.shouldShootNote()){
-        m_shoot1=new AutoDoNothingCommand();
-      }
+   
       newSequentialCommand.addCommands(m_turretSet1,m_path1,m_startIntake1,m_intakeWayPoint1,m_stopIntake1,m_shotWayPoint1,m_shoot1);
     }
     if(pose2!=null){
@@ -245,7 +243,7 @@ public class ChooseYourOwnAdventureAuto {
       newSequentialCommand.addCommands(m_turretSet5,m_path5,m_startIntake5,m_intakeWayPoint5,m_stopIntake5,m_shotWayPoint5,shootFinalNote);
 
     }
-    */
+    
     Command newCommand=newSequentialCommand;
 
     return newCommand;

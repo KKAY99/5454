@@ -333,7 +333,7 @@ public final class Constants {
       public static final double medXCheck=9;
       public static final double farXCheck=14;
 
-      public static final double limeLightDeadBand=0.7;
+      public static final double limeLightDeadBand=100;//HACK CHANGE BACK TO 0.7
 
       public static final double limeLightTrackSpeed0=0.03;
       public static final double limeLightTrackSpeed1=0.03;
@@ -374,6 +374,7 @@ public final class Constants {
       public static final double baseSpeedDeadband=2;
       //public static final double baseMotorSpeed=-20; //rps
       public static final double baseMotorSpeed=0; //rps
+      public static final double primeMotorSpeed=-20; //rps
       public static final double timeToRunShooter=1;
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;

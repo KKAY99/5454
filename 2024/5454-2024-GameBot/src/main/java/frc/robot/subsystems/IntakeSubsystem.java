@@ -99,6 +99,10 @@ public class IntakeSubsystem extends SubsystemBase{
         }
     }
 
+    public void ResetToggleBoolean(){
+        m_intakeToggle=false;
+    }
+
     public boolean isBeamBroken(){
         boolean returnValue=false;
         if(m_breakbeam.get()){

@@ -132,6 +132,12 @@ public class ShooterSubsystem extends SubsystemBase {
         // 15, 0.5));
 
     }
+    public void PrimeShootingMotors(){
+        double targetSpeed=Constants.ShooterConstants.primeMotorSpeed;
+        VelocityVoltage m_velocity = new VelocityVoltage(0);
+        m_ShootingMotor1.setControl(m_velocity.withVelocity(targetSpeed));
+        m_ShootingMotor2.setControl(m_velocity.withVelocity(targetSpeed));
+    }
 
     public void RunShootingMotors(double veloc1, double veloc2, boolean runFeedMotors) {
         // values are for the indivudal shooter motors

@@ -45,9 +45,10 @@ public class SmartShooter extends Command {
     private boolean m_runLeft=true;
     private boolean m_runRight=false;
     private boolean m_shouldRotate=true;
+    private double m_targetAngle=0;
     private static int kSlowDownDeadBand=2; 
     private enum STATE{
-        VISIONCLEARANCE,WAITFORVISIONCLEARANCE,CHECKROTATEMODE,TURRETFIND,TURRETSEARCH,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
+        START,VISIONCLEARANCE,WAITFORVISIONCLEARANCE,CHECKROTATEMODE,TURRETFIND,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
     }
 
     private STATE m_state=STATE.SETANGLE;
@@ -73,7 +74,7 @@ public class SmartShooter extends Command {
         m_motor1IsAtBase=false;
         m_motor2IsAtBase=false;
         m_currentTime=Timer.getFPGATimestamp();
-        m_state=STATE.VISIONCLEARANCE;
+        m_state=STATE.START;
         m_isRunning=true;
     }
     private void shootwhileMove(){
@@ -160,6 +161,7 @@ public class SmartShooter extends Command {
     }
 
     private void shootStatic(){
+        //the magic happens right here
     }
     
     @Override
@@ -180,7 +182,13 @@ public class SmartShooter extends Command {
         double angleGap=0;
         Logger.recordOutput("Shooter/SmartShooterState",m_state.toString());
         switch(m_state){
+            case START:
+                //prime shooting motors
+                m_shooter.PrimeShootingMotors();
+                m_state=STATE.VISIONCLEARANCE;
+                break;
             case VISIONCLEARANCE: 
+            
             if(m_limelight.isTargetAvailible()){
                 m_state=STATE.CHECKROTATEMODE;
             }else{ //if you can't see the target see if we need to move it
@@ -227,7 +235,8 @@ public class SmartShooter extends Command {
                 if(m_limelight.isTargetAvailible()){  
                     m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   
                     m_motor2TargetSpeed=m_shotTable.getVelocity2(limeLimelightDis);    
-                    m_shooter.setAngle(m_shotTable.getAngle(limeLimelightDis));
+                    m_targetAngle=m_shotTable.getAngle(limeLimelightDis);
+                    m_shooter.setAngle(m_targetAngle);
                     m_state=STATE.WAITFORANGLE;
                 }else{
                     m_shooter.stopRotate();
@@ -236,7 +245,7 @@ public class SmartShooter extends Command {
             break;
             case WAITFORANGLE:
                 angleGap=Math.abs(m_shooter.getRelativePosition())
-                    -Math.abs(m_shotTable.getAngle(limeLimelightDis));
+                    -Math.abs(m_targetAngle);
                 Logger.recordOutput("Shooter/AngleGap",angleGap);
                 if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
                     m_shooter.stopRotate();
@@ -297,7 +306,7 @@ public class SmartShooter extends Command {
         m_shooter.stopRotate();
         m_intake.stopIntake();
         m_isRunning=false;
-        m_state=STATE.SETANGLE;
+        m_state=STATE.START;
         m_shooter.ShotTaken();
         Logger.recordOutput("Shooter/SmartShooterCommand",m_isRunning);
     }

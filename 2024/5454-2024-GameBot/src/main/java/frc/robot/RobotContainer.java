@@ -523,6 +523,7 @@ public class RobotContainer {
   }
   public void TeleopMode(){
     //m_blinkin.SetLEDPrimaryState(BlinkinConstants.LEDStates.TELEOP);
+    m_swerve.resetModules();
     resetBrakeModetoNormal();
     m_shooter.ResetControlType();  
     m_shooter.stopRotate(); //reset rogue pid

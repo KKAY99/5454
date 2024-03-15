@@ -300,6 +300,13 @@ public class SwerveModule {
     return driveMotor;
   }
 
+  public void ResetReference(){
+    driveMotor.setReference(0,0);
+    driveMotor.set(0);
+    angleMotor.setReference(0,0);
+    angleMotor.set(0);
+  }
+
   /**
    * Fetch the {@link SwerveModuleConfiguration} for the {@link SwerveModule} with the parsed
    * configurations.

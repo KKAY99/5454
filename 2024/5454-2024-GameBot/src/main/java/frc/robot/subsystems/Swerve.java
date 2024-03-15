@@ -128,6 +128,11 @@ public class Swerve extends SubsystemBase {
     swerve.zeroGyro();
   }
 
+  //Resets Swerve Modules PercentOutput and SetReference
+  public void resetModules(){
+    swerve.resetAllModules();
+  }
+
   public void lock() {
     swerve.lockPose();
   }
