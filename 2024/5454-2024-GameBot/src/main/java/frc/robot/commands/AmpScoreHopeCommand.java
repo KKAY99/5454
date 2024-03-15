@@ -53,7 +53,7 @@ public class AmpScoreHopeCommand extends Command {
   public boolean isFinished() {
     boolean returnValue=false;
 
-    switch (m_state){
+    switch(m_state){
     case SETANGLE:    
         m_shooter.setAngle(m_angle);
         m_state=STATE.WAITFORANGLE;
