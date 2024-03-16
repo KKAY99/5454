@@ -120,13 +120,7 @@ public class RobotContainer {
         configureButtonBindings();
         //Create Auto Commands
         createAutonomousCommandList(); 
-        m_swerve.setDefaultCommand(
-        m_swerve.drive(
-            () -> m_xBoxDriver.getRawAxis(translationAxis),
-            () -> m_xBoxDriver.getRawAxis(strafeAxis),
-            () -> m_xBoxDriver.getRawAxis(rotationAxis),
-            () -> m_xBoxDriver.getRawAxis(rightTriggerAxis)));
-
+        
     }
        
     
@@ -355,6 +349,7 @@ public class RobotContainer {
         m_autoStart.addOption(AutoConstants.LeftAmp,AutoConstants.StartingLocations.LEFTAMP);
         m_autoStart.addOption(AutoConstants.LeftSpeaker,AutoConstants.StartingLocations.LEFTAMP);
         m_autoStart.addOption(AutoConstants.RightSpeaker,AutoConstants.StartingLocations.RIGHTSPEAKER);
+        m_autoStart.addOption(AutoConstants.testStart,AutoConstants.StartingLocations.TESTSTART);
         SmartDashboard.putData("Auto Start",m_autoStart);
 
         m_autoPath1.setDefaultOption(AutoConstants.noPath, null);
@@ -462,8 +457,10 @@ public class RobotContainer {
       m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
     //}
 
-    newCommand=autoModularMaker.CreateAutoCommand(m_swerve,m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
-                                                  m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
+    //newCommand=autoModularMaker.CreateAutoCommand(m_swerve,m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
+    //                                              m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
+
+    newCommand=autoModularMaker.TESTAUTO(currentAlliance);
 
     return newCommand;
   }
@@ -521,9 +518,19 @@ public class RobotContainer {
     }
    
   }
+  private void resetDefaultCommand(){
+      m_swerve.setDefaultCommand(
+        m_swerve.drive(
+            () -> m_xBoxDriver.getRawAxis(translationAxis),
+            () -> m_xBoxDriver.getRawAxis(strafeAxis),
+            () -> m_xBoxDriver.getRawAxis(rotationAxis),
+            () -> m_xBoxDriver.getRawAxis(rightTriggerAxis)));
+
+  }
   public void TeleopMode(){
     //m_blinkin.SetLEDPrimaryState(BlinkinConstants.LEDStates.TELEOP);
     m_swerve.resetModules();
+    resetDefaultCommand();
     resetBrakeModetoNormal();
     m_shooter.ResetControlType();  
     m_shooter.stopRotate(); //reset rogue pid

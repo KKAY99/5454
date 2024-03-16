@@ -42,11 +42,13 @@ import frc.robot.utils.LED;
  */
 public class RobotContainer {
 
-    private ShooterSubsystem m_Shooter=new ShooterSubsystem(ShooterConstants.shootingMotor1Port,
-                                            ShooterConstants.shootingMotor2Port,
-                                            ShooterConstants.feederMotorPort);
-
-    private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
+   // private ShooterSubsystem m_Shooter=new ShooterSubsystem(ShooterConstants.shootingMotor1Port,
+   //                                         ShooterConstants.shootingMotor2Port,
+   //                                         ShooterConstants.feederMotorPort);
+   
+   private TestSubsystem1 m_spark = new TestSubsystem1(16);
+   private TestSubsystem1 m_THEBETTERSPARK= new TestSubsystem1(11); 
+   private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
     private LED m_led= new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
  //   private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.breakBeamDIO);
 
@@ -68,7 +70,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        final ShooterCommand shooter1Command=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed4);
+      /*   final ShooterCommand shooter1Command=new ShooterCommand(m_Shooter,Constants.ShooterConstants.shooterSpeed4);
 
         JoystickButton shoot1=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton1);
         shoot1.whileTrue(shooter1Command);
@@ -87,6 +89,19 @@ public class RobotContainer {
 
         JoystickButton shoot4=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton4);
         shoot4.whileTrue(shooter4Command);
+        */
+        final TestCommand1 sparkMotor = new TestCommand1(m_spark);
+        JoystickButton test1 = new JoystickButton(m_xBoxDriver, 1);
+        test1.whileTrue(sparkMotor);
+
+        final TestCommand1 talonMotor = new TestCommand1(m_THEBETTERSPARK);
+        JoystickButton test2 = new JoystickButton(m_xBoxDriver, 2);
+        test2.whileTrue(talonMotor);
+
+        final Commander commander=new Commander(m_spark, m_THEBETTERSPARK);
+        JoystickButton commanderButton=new JoystickButton(m_xBoxDriver, 3);
+        commanderButton.whileTrue(commander);
+
     }
        
     public void refreshSmartDashboard(){  

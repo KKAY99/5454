@@ -28,7 +28,7 @@ public class CreateYourOwnAutoStateMachine extends Command{
     private CommandScheduler m_commandScheduler=CommandScheduler.getInstance();
 
     private enum PoseStates{SETNEWPOSES,WAIT}; 
-    private enum WaypointStates{START,INTAKEPOS,STARTINTAKE,NOTEPOS,STOPINTAKE,SHOOTPOS,SHOOT,END};
+    private enum WaypointStates{START,INTAKEPOS,INTAKEPOSWAIT,STARTINTAKE,NOTEPOS,NOTEPOSWAIT,STOPINTAKE,SHOOTPOS,SHOOTPOSWAIT,SHOOT,SHOOTWAIT,END};
 
     private PoseStates m_poseState;
     private WaypointStates m_waypointState;
@@ -37,8 +37,6 @@ public class CreateYourOwnAutoStateMachine extends Command{
     private Pose2d m_intakePos;
     private Pose2d m_notePos;
     private Pose2d m_shotPos;
-    private Pose2d m_lastShotPos;
-    private Pose2d m_startingPos;
 
     private int m_currentPose=0;
     private int m_endIndex;
@@ -48,7 +46,6 @@ public class CreateYourOwnAutoStateMachine extends Command{
     private Command m_shootPathCommand;
     private Command m_shoot=new SmartShooter(m_shooter,m_turret,m_swerve, m_limelight, m_intake,false,false,true);
     private Command m_toggleIntake=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
-    private Command m_getResetOdom=new GetResetSwervePose(m_swerve, m_limelight);
 
     public CreateYourOwnAutoStateMachine(Swerve swerve,ShooterSubsystem shooter,TurretSubsystem turret,IntakeSubsystem intake,Limelight limelight,AutoPose2D... poses){
         m_intake=intake;
@@ -56,6 +53,7 @@ public class CreateYourOwnAutoStateMachine extends Command{
         m_shooter=shooter;
         m_turret=turret;
         m_limelight=limelight;
+        m_endIndex=0;
 
         int arrayPos=0;
 
@@ -66,13 +64,15 @@ public class CreateYourOwnAutoStateMachine extends Command{
             }
         }
 
-        m_endIndex=m_poses.length+1;
+        if(m_poses.length!=0){
+            m_endIndex=m_poses.length+1;
+        }
     }
 
     private void IndexPoseState(){
         m_currentPose++;
         m_poseState=PoseStates.SETNEWPOSES;
-        m_waypointState=WaypointStates.INTAKEPOS;
+        m_waypointState=WaypointStates.START;
     }
 
     private PathPlannerPath CreateAutoPath(Pose2d startPose,Pose2d desiredPose){
@@ -93,7 +93,7 @@ public class CreateYourOwnAutoStateMachine extends Command{
     @Override
     public void initialize(){
         m_poseState=PoseStates.SETNEWPOSES;
-        m_waypointState=WaypointStates.INTAKEPOS;
+        m_waypointState=WaypointStates.START;
 
         m_currentPose=0;
     }
@@ -108,14 +108,6 @@ public class CreateYourOwnAutoStateMachine extends Command{
                     m_intakePos=m_poses[m_currentPose].getIntakePos();
                     m_notePos=m_poses[m_currentPose].getPathPos();
                     m_shotPos=m_poses[m_currentPose].getShotPos();
-
-                    if(m_currentPose!=0){
-                        m_lastShotPos=m_poses[m_currentPose-1].getShotPos();
-
-                        m_startingPos=m_lastShotPos;
-                    }else{
-                        m_startingPos=m_swerve.getPose();
-                    }
 
                     m_poseState=PoseStates.WAIT;
                 }else{
@@ -133,42 +125,62 @@ public class CreateYourOwnAutoStateMachine extends Command{
                 }
             break;
             case INTAKEPOS:
-                m_intakePathCommand=m_swerve.createPathCommand(CreateAutoPath(m_startingPos,m_intakePos));
-                SequentialCommandGroup newIntakePathSeq=new SequentialCommandGroup(m_getResetOdom,m_intakePathCommand);
+                m_intakePathCommand=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),m_intakePos));
 
-                m_commandScheduler.schedule(newIntakePathSeq);
-                m_waypointState=WaypointStates.STARTINTAKE;
+                m_commandScheduler.schedule(m_intakePathCommand);
+                m_waypointState=WaypointStates.INTAKEPOSWAIT;
+            break;
+            case INTAKEPOSWAIT:
+                if(!m_commandScheduler.isScheduled(m_intakePathCommand)){
+                    m_waypointState=WaypointStates.STARTINTAKE;
+                }
             break;
             case STARTINTAKE:
                 m_commandScheduler.schedule(m_toggleIntake);
                 m_waypointState=WaypointStates.NOTEPOS;
             break;
             case NOTEPOS:
-                m_notePathCommand=m_swerve.createPathCommand(CreateAutoPath(m_intakePos,m_notePos));
-                SequentialCommandGroup newNotePathSeq=new SequentialCommandGroup(m_getResetOdom,m_notePathCommand);
+                m_notePathCommand=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),m_notePos));
 
-                m_commandScheduler.schedule(newNotePathSeq);
-                m_waypointState=WaypointStates.STOPINTAKE;
+                m_commandScheduler.schedule(m_notePathCommand);
+                m_waypointState=WaypointStates.NOTEPOSWAIT;
+            break;
+            case NOTEPOSWAIT:
+                if(!m_commandScheduler.isScheduled(m_notePathCommand)){
+                    m_waypointState=WaypointStates.STOPINTAKE;
+                }
             break;
             case STOPINTAKE:
                 m_commandScheduler.schedule(m_toggleIntake);
                 m_waypointState=WaypointStates.SHOOTPOS;
             break;
             case SHOOTPOS:
-                m_shootPathCommand=m_swerve.createPathCommand(CreateAutoPath(m_notePos,m_shotPos));
-                SequentialCommandGroup newShootPathSeq=new SequentialCommandGroup(m_getResetOdom,m_shootPathCommand);
+                m_shootPathCommand=m_swerve.createPathCommand(CreateAutoPath(m_swerve.getPose(),m_shotPos));
 
-                m_commandScheduler.schedule(newShootPathSeq);
-                m_waypointState=WaypointStates.SHOOT;
+                m_commandScheduler.schedule(m_shootPathCommand);
+                m_waypointState=WaypointStates.SHOOTPOSWAIT;
+            break;
+            case SHOOTPOSWAIT:
+                if(!m_commandScheduler.isScheduled(m_shootPathCommand)){
+                    m_waypointState=WaypointStates.SHOOT;
+                }
             break;
             case SHOOT:
                 m_commandScheduler.schedule(m_shoot);
-                m_waypointState=WaypointStates.END;
+                m_waypointState=WaypointStates.SHOOTWAIT;
+            break;
+            case SHOOTWAIT:
+                if(!m_commandScheduler.isScheduled(m_shoot)){
+                    m_waypointState=WaypointStates.END;
+                }
             break;
             case END:
+            //check to see if at last Pos
             IndexPoseState();
         }
 
+        System.out.println("Current Pose State: "+m_poseState);
+        System.out.println("Current Waypoint State: "+m_waypointState);
         return shouldEndAuto;
     }
 

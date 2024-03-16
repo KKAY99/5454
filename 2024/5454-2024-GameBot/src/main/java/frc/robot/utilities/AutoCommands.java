@@ -271,6 +271,13 @@ public class AutoCommands {
           returnPose=AutoConstants.blueRightSpeakerStartPos;  
         }
         break;
+        case TESTSTART:
+        if(currentAlliance==Alliance.Red){ 
+          returnPose=AutoConstants.REDTESTSTART;        
+        }else{
+          returnPose=AutoConstants.BLUETESTSTART;  
+        }
+        break;
       }
     return returnPose;
   }

@@ -156,7 +156,7 @@ public class ShootCommand extends Command {
     double angleGap=0;
 
     if(!m_shouldUseDashBoardVals&&!m_setAngle){
-        m_shooter.RunShootingMotors(m_speed1,m_speed2,false);
+        m_shooter.RunShootingMotors(m_speed1,m_speed2,true);
 
     if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_speed1,m_speed2)){
       m_shooter.RunFeedRollers(Constants.ShooterConstants.feederSpeed);

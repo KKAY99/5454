@@ -40,7 +40,8 @@ public final class Constants {
           LEFTAMP,
           LEFTSPEAKER,
           CENTER1,
-          RIGHTSPEAKER
+          RIGHTSPEAKER,
+          TESTSTART
         }
 
         public enum AutonomousRoutines {
@@ -100,6 +101,14 @@ public final class Constants {
         public static final String longSourceNote1="LongSourceNote2";
         public static final String longSourceNote2="LongSourceNote1";
 
+        public static final String testStart="TEST START";
+
+        public static final Pose2d REDTESTSTART=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d BLUETESTSTART=new Pose2d(16,0,new Rotation2d(0));
+        
+        public static final Pose2d REDTEST=new Pose2d(1,1,new Rotation2d(0));
+        public static final Pose2d BLUETEST=new Pose2d(15,1,new Rotation2d(0));
+ 
         public static final Pose2d locationBlueShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
         public static final Pose2d blueShortAmpNoteIntakeWaypoint=new Pose2d(2.35,6.99,new Rotation2d(0));
         public static final AutoPose2D blueShortAmpAutoPoses=new AutoPose2D(locationBlueShortAmpNote,blueShortAmpNoteIntakeWaypoint,
@@ -334,6 +343,7 @@ public final class Constants {
       public static final double farXCheck=14;
 
       public static final double limeLightDeadBand=100;//HACK CHANGE BACK TO 0.7
+      public static final double limelightLastDisDeadband=0.1;
 
       public static final double limeLightTrackSpeed0=0.03;
       public static final double limeLightTrackSpeed1=0.03;
@@ -358,7 +368,9 @@ public final class Constants {
       public static final int redSpeakerPipeline=0;
       public static final int blueSpeakerPipeline=1;
   }
-
+   public static final class CAN {
+    public static final String CanivoreBus="5454Canivore";
+   }
     public static final class ShooterConstants{
       public static final double kAngleDeadband=0.3;
       public static final double kIntakeFeedAngleDeadband=10;

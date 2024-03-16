@@ -33,6 +33,7 @@ public class CANCoderSwerve extends SwerveAbsoluteEncoder {
    */
   public CANCoderSwerve(int id, String canbus) {
     encoder = new WPI_CANCoder(id, canbus);
+    System.out.println("CanBus is set to :" + canbus);
   }
 
   /** Reset the encoder to factory defaults. */
