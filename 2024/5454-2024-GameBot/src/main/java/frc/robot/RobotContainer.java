@@ -75,10 +75,8 @@ public class RobotContainer {
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
-    private SendableChooser<String> m_autoOldSchool = new SendableChooser<>();
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
-    private SendableChooser<Boolean> m_shouldUseModularBuilder = new SendableChooser<>();
     private SendableChooser<Boolean> m_shootFinalNote = new SendableChooser<>();
     private SendableChooser<Boolean> m_shouldUseDashBoardValues = new SendableChooser<>();
     private SendableChooser<AutoPose2D> m_autoPath1 = new SendableChooser<>();
@@ -107,7 +105,7 @@ public class RobotContainer {
     private ShooterSubsystem m_shooter=new ShooterSubsystem(m_TurretLimelight,Constants.ShooterConstants.shooterMotorPort1,
                                            Constants.ShooterConstants.shooterMotorPort2,Constants.ShooterConstants.shooterAnglePort,
                                            Constants.ShooterConstants.feederMotorPort,Constants.ShooterConstants.encoderCanID,
-                                           Constants.ShooterConstants.baseMotorSpeed,false);
+                                           Constants.ShooterConstants.baseMotorSpeed);
 
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
@@ -173,17 +171,6 @@ public class RobotContainer {
       TurretCommand turretOperatorRight=new TurretCommand(m_turret,-Constants.TurretConstants.turretSpeed);
       POVButton turretOperatorRightButton=new POVButton(m_xBoxOperator,Constants.ButtonBindings.operatorturretPOVRight);
       turretOperatorRightButton.whileTrue(turretOperatorRight);
-
-
-      TurretPosCommand turretStraight=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,
-                                                          Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turretStraightButton=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverturret0);
-      turretStraightButton.onTrue(turretStraight);
-
-      TurretPosCommand turret90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,
-                                                    Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-      JoystickButton turret90Button=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverturret90);
-      turret90Button.onTrue(turret90);
 
       ShootCommand shoot1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
       JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.drivermanualShootButton);
@@ -286,7 +273,8 @@ public class RobotContainer {
       intakeCustom4Button.whileTrue(intakeCustom4);
 
       RobotTrackCommand testTrack=new RobotTrackCommand(m_TurretLimelight, m_turret);
-      JoystickButton testTrackButton=new JoystickButton(m_CustomController,ButtonBindings.customShot5);
+      JoystickButton testTrackButton=new JoystickButton(m_xBoxDriver,ButtonBindings.driverturret90);
+      testTrackButton.whileTrue(testTrack);
 
     }
        
@@ -316,15 +304,6 @@ public class RobotContainer {
 
   private void createAutonomousCommandList(){
       try{
-        m_autoOldSchool.setDefaultOption(AutoConstants.autoModeX0,AutoConstants.autoModeX0);
-        m_autoOldSchool.addOption(AutoConstants.autoModeX1,AutoConstants.autoModeX1);
-        m_autoOldSchool.addOption(AutoConstants.autoModeX2,AutoConstants.autoModeX2);
-        m_autoOldSchool.addOption(AutoConstants.autoModeX3,AutoConstants.autoModeX3);
-        m_autoOldSchool.addOption(AutoConstants.autoModeX4,AutoConstants.autoModeX4);
-        m_autoOldSchool.addOption(AutoConstants.autoModeX5,AutoConstants.autoModeX5);
-        m_autoOldSchool.addOption(AutoConstants.autoModeX6,AutoConstants.autoModeX6);
-        m_autoOldSchool.addOption(AutoConstants.autoModeX7,AutoConstants.autoModeX7);
-        
         SmartDashboard.putData("Auto Chooser",m_autoChooser);
         m_autoChooser.setDefaultOption(AutoConstants.autoMode0,AutoConstants.autoMode0);
         m_autoChooser.addOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
@@ -496,7 +475,6 @@ public class RobotContainer {
   // m_ledStrip.setRobotMode(LEDSChargedup.LEDMode.AUTOMODE);
   // enableLimelights();
     resetBrakeModetoNormal();
-    SetBaseShooterSpeed();
     homeRobot(); 
     ChangeVisionPipeline(); 
   } 
@@ -535,10 +513,8 @@ public class RobotContainer {
     m_shooter.ResetControlType();  
     m_shooter.stopRotate(); //reset rogue pid
    
-    //m_swerve.resetOdometry(Constants.AutoConstants.redCenterStartPos);
     m_shooter.ResetShotsTaken();
     homeRobot();
-    SetBaseShooterSpeed();
 
     ChangeVisionPipeline();
   }

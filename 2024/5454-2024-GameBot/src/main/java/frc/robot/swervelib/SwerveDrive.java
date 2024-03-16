@@ -239,9 +239,9 @@ public class SwerveDrive {
     }
 
     // Display commanded speed for testing
-    if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH) {
-      SmartDashboard.putString("RobotVelocity", velocity.toString());
-    }
+   if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH) {
+       SmartDashboard.putString("RobotVelocity", velocity.toString());
+   }
     if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.HIGH.ordinal()) {
       SwerveDriveTelemetry.desiredChassisSpeeds[1] = velocity.vyMetersPerSecond;
       SwerveDriveTelemetry.desiredChassisSpeeds[0] = velocity.vxMetersPerSecond;
@@ -595,7 +595,7 @@ public class SwerveDrive {
    * SmartDashboard with module encoder readings and states.
    */
   public void updateOdometry() {
-    //update Smart Dashboard
+    //update Smart Dashboard - diable to red
     for (SwerveModule module : swerveModules) {
         SmartDashboard.putNumber(
             "Module" + module.moduleNumber + "Relative Encoder", module.getRelativePosition());

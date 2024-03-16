@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -55,6 +56,11 @@ public class TurretSubsystem extends SubsystemBase{
     m_limeLight=limelight;
     //HACKm_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
     //HACKm_turretMotor.setSmartCurrentLimit(Constants.k15Amp);
+    //HACKm_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
+    //HACKm_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
+    //HACKm_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
+    //HACKm_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
+   
     m_limitSwitch=new DigitalInput(limitSwitchPort);
     //HACKm_encoder=m_turretMotor.getEncoder();
     //HACKm_pidController=m_turretMotor.getPIDController();

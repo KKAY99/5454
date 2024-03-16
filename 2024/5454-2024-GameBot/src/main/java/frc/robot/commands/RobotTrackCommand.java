@@ -11,12 +11,6 @@ public class RobotTrackCommand extends Command{
   private boolean m_runLeft=true;
   private boolean m_runRight=false;
 
-  private enum TrackingStates{
-    TRACKING,SEARCHING
-  }
-
-  private TrackingStates m_state=TrackingStates.SEARCHING;
-
   public RobotTrackCommand(Limelight limeLight,TurretSubsystem turret){
     m_limeLight=limeLight;
     m_turret=turret;

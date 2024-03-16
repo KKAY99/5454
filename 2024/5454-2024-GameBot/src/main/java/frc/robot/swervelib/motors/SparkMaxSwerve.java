@@ -36,6 +36,9 @@ public class SparkMaxSwerve extends SwerveMotor {
     this.isDriveMotor = isDriveMotor;
     factoryDefaults();
     clearStickyFaults();
+ 
+    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1,50);
+    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2,50);
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
@@ -156,7 +159,10 @@ public class SparkMaxSwerve extends SwerveMotor {
 
       // Taken from
       // https://github.com/frc3512/SwerveBot-2022/blob/9d31afd05df6c630d5acb4ec2cf5d734c9093bf8/src/main/java/frc/lib/util/CANSparkMaxUtil.java#L67
-      configureCANStatusFrames(10, 20, 20, 500, 500);
+     // configureCANStatusFrames(10, 20, 20, 500, 500);
+   //5454 Added to slowdown canStatus3 and CanStatus4
+   configureCANStatusFrames(10, 20, 20, 1000, 1000);
+
     } else {
       absoluteEncoder.setPositionConversionFactor(positionConversionFactor);
       absoluteEncoder.setVelocityConversionFactor(positionConversionFactor / 60);

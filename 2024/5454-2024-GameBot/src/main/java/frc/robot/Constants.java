@@ -106,7 +106,7 @@ public final class Constants {
         public static final Pose2d REDTESTSTART=new Pose2d(0,0,new Rotation2d(0));
         public static final Pose2d BLUETESTSTART=new Pose2d(16,0,new Rotation2d(0));
         
-        public static final Pose2d REDTEST=new Pose2d(1,1,new Rotation2d(0));
+        public static final Pose2d REDTEST=new Pose2d(2,0,new Rotation2d(0));
         public static final Pose2d BLUETEST=new Pose2d(15,1,new Rotation2d(0));
  
         public static final Pose2d locationBlueShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
@@ -358,7 +358,7 @@ public final class Constants {
       public static final double limeLightTrackSpeed5TEST=0.35;
 
       public static final String turretLimelightName="";
-      public static final String staticLimelightName="static";
+      public static final String staticLimelightName="static-limelight";
 
       public static final double podiumShotDis=0;
       public static final double midShotDis=0;
@@ -391,10 +391,10 @@ public final class Constants {
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
 
-      public static final double homePos=232.646;//177.8;
+      public static final double homePos=254;//177.8;
       public static final double homeDeadband=0.05;
       public static final double homeRotateSpeed=0.1;
-      public static final double rotateLowSoftLimit=-99;
+      public static final double rotateLowSoftLimit=-83;
       public static final double rotateHighSoftLimit=72; 
 
       public static final double podiumShotEncoderVal=-66;
@@ -402,7 +402,7 @@ public final class Constants {
       public static final double shortShotEncoderVal=-39;
       public static final double shooterPosDeadband=0.15;
 
-      public static final int shooterMotorPort1=23;
+      public static final int shooterMotorPort1=24;
       public static final int shooterMotorPort2=22;
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;

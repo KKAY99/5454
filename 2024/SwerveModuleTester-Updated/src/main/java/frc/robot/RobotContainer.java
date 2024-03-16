@@ -5,6 +5,9 @@
 package frc.robot;
 
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -55,13 +58,27 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     
-    private int drivePort=32;
-    private int turnPort=42;
-    private int encoderPort=52;
+    private int drivePort=31;
+    private int turnPort=41;
+    private int encoderPort=51;
     // Front Right Encoder = 51 , front Left Encoder = 52
     private final TestSwerveModuleSubsystem m_RobotDrive = new TestSwerveModuleSubsystem(drivePort,turnPort,encoderPort);
 
- 
+    // CAN BUS tESTING - NOT PART OF REGULAR CODE
+    private CANSparkMax x1 =new CANSparkMax(32, MotorType.kBrushless);
+    private CANSparkMax x2 =new CANSparkMax(33, MotorType.kBrushless);
+    private CANSparkMax x3 =new CANSparkMax(34, MotorType.kBrushless);
+    private CANSparkMax x4 =new CANSparkMax(42, MotorType.kBrushless);
+    private CANSparkMax x5 =new CANSparkMax(43, MotorType.kBrushless);
+    private CANSparkMax x6 =new CANSparkMax(44, MotorType.kBrushless);
+    
+    private CANSparkMax x7 =new CANSparkMax(18, MotorType.kBrushless);
+    private CANSparkMax x8 =new CANSparkMax(19, MotorType.kBrushless);
+    private CANSparkMax x9 =new CANSparkMax(20, MotorType.kBrushless);
+    private CANSparkMax x10 =new CANSparkMax(12, MotorType.kBrushless);
+    private CANSparkMax x11 =new CANSparkMax(23, MotorType.kBrushless);
+    private CANSparkMax x12 =new CANSparkMax(21, MotorType.kBrushless);
+    
  
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
  

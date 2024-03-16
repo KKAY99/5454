@@ -10,7 +10,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.utilities.AnalogAutoDirectFB6DN0E;
-import frc.robot.utilities.Lasercan;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -18,8 +17,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.playingwithfusion.TimeOfFlight;
-import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 public class IntakeSubsystem extends SubsystemBase{
     private IntakeSubsystemIO m_intakeIO;
@@ -32,7 +29,6 @@ public class IntakeSubsystem extends SubsystemBase{
 
     private boolean m_intakeToggle=false;
     private AnalogAutoDirectFB6DN0E m_irReflector;
-    private TimeOfFlight m_TOFlow;
     private DigitalInput m_breakbeam ;
     public IntakeSubsystem(int motorOne,int motorTwo,int sensorPort, IntakeSubsystemIO intakeIO){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);

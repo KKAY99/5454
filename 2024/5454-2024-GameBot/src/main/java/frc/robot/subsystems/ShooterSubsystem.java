@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
@@ -16,6 +17,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -57,19 +60,31 @@ public class ShooterSubsystem extends SubsystemBase {
     private double m_desiredVeloc2;
 
     public ShooterSubsystem(Limelight limeLight, int shootingMotor1, int shootingMotor2, int angleMotor, int feedMotor,
-            int canCoderId, double baseSpeed, boolean shouldUseDashBoardVals) {
+            int canCoderId, double baseSpeed) {
         m_limeLight = limeLight;
         m_baseSpeed = baseSpeed;
         m_ShootingMotor1 = new TalonFX(shootingMotor1);
-        m_ShootingMotor2 = new TalonFX(shootingMotor2);
         configmotor(m_ShootingMotor1);
+        m_ShootingMotor2 = new TalonFX(shootingMotor2);
         configmotor(m_ShootingMotor2);
         m_feederMotor = new CANSparkMax(feedMotor, MotorType.kBrushless);
         m_feederMotor.setSmartCurrentLimit(Constants.k30Amp);
+        m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
+        m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
+        m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
+        m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
+    
         m_angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
         m_angleMotor.setSmartCurrentLimit(Constants.k30Amp);
+        m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
+        m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
+        m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
+        m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
+       
         m_anglePID = m_angleMotor.getPIDController();
         m_canCoder = new WPI_CANCoder(canCoderId);
+        m_canCoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 1000);
+                
         m_angleEncoder = m_angleMotor.getEncoder();
 
         double anglekP = 0.8;// 0.1

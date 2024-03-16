@@ -36,7 +36,7 @@ public class Robot extends LoggedRobot {
   if (isReal()) { // Log 
     Logger.addDataReceiver(new WPILOGWriter());//to a USB stick ("/U/logs")
     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-    new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+    //new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
   } else {
     setUseTiming(false); // Run as fast as possible
     String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)

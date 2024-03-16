@@ -295,8 +295,8 @@ public class Limelight {
         Logger.recordOutput("LimeLight/LimelightPipeline",getPipeline());
         Logger.recordOutput("LimeLight/LimelightApriltagPos",GetPoseViaApriltag());
         Logger.recordOutput("LimeLight/DoesLimelightHaveTarget",isTargetAvailible());
-        SmartDashboard.putBoolean("IsRobotAtPodiumShotDis",isAtPodiumDis());
-        SmartDashboard.putBoolean("IsRobotAtMidShotDis",isAtMidDis());
-        SmartDashboard.putBoolean("IsRobotAtShortShotDis",isAtShortDis());
+        //SmartDashboard.putBoolean("IsRobotAtPodiumShotDis",isAtPodiumDis());
+        //SmartDashboard.putBoolean("IsRobotAtMidShotDis",isAtMidDis());
+        //SmartDashboard.putBoolean("IsRobotAtShortShotDis",isAtShortDis());
     }
 }

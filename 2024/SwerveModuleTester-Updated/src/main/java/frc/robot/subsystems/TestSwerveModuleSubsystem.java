@@ -37,7 +37,7 @@ public class TestSwerveModuleSubsystem extends SubsystemBase{
        m_driveMotor = new CANSparkMax(driveMotorPort, MotorType.kBrushless);
         m_driveMotor.setSmartCurrentLimit(30);  
         m_driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        m_encoder=new WPI_CANCoder(encoderPort);
+        m_encoder=new WPI_CANCoder(encoderPort,"5454Canivore");
 
 
         m_pid.setP(0.01, 1);
@@ -100,7 +100,7 @@ public class TestSwerveModuleSubsystem extends SubsystemBase{
     }
     @Override
     public void periodic() {
-      System.out.println(getEncoderValue());
+//      System.out.println(getEncoderValue());
         // This method will be called once per scheduler run
 //     System.out.println(" * Pos  " + getRotatePos() + " " + getLimitSwitch());
     }
