@@ -96,9 +96,11 @@ public class SwerveModule {
     driveMotor.setMotorBrake(true);
 
     
-    Timer.delay(1.0);
+    Timer.delay(0.5);
     driveMotor.burnFlash();
+    Timer.delay(0.1);
     angleMotor.burnFlash();
+    Timer.delay(0.5);
     System.out.println("Burned Flash for Driver and Angle");
 
     if (SwerveDriveTelemetry.isSimulation) {
