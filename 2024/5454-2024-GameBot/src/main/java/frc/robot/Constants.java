@@ -108,6 +108,9 @@ public final class Constants {
         
         public static final Pose2d REDTEST=new Pose2d(2,0,new Rotation2d(0));
         public static final Pose2d BLUETEST=new Pose2d(15,1,new Rotation2d(0));
+
+        public static final Pose2d redSpeakerPos=new Pose2d(16.32,5.54,new Rotation2d(0));
+        public static final Pose2d blueSpeakerPos=new Pose2d(0.30,5.54,new Rotation2d(0));
  
         public static final Pose2d locationBlueShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
         public static final Pose2d blueShortAmpNoteIntakeWaypoint=new Pose2d(2.35,6.99,new Rotation2d(0));
@@ -236,11 +239,11 @@ public final class Constants {
       public static final double maxTurretSpeed=1;
       public static final double turretSpeed=1;
       public static final double hometurretSpeed=0.10;
-      public static final double softLimitRightLow=-42;
-      public static final double softLimitLeftHigh=38.00;
+      public static final double softLimitRightLow=-16.5;
+      public static final double softLimitLeftHigh=80;
 
-      public static final double turretStraightPos=-37;
-      public static final double turret90Pos=0;
+      public static final double turretStraightPos=0;
+      public static final double turret90Pos=36.8;
 
       public static final double turretP=0.050;
       public static final double turretI=0;
@@ -339,23 +342,23 @@ public final class Constants {
       public static final double closerXCheck=1.5;
       public static final double closeXCheck=3;
       public static final double closeToMediumXCheck=6;
-      public static final double medXCheck=9;
-      public static final double farXCheck=14;
+      public static final double medXCheck=16;
+      public static final double farXCheck=25;
 
-      public static final double limeLightDeadBand=100;//HACK CHANGE BACK TO 0.7
+      public static final double limeLightDeadBand=0.7;
       public static final double limelightLastDisDeadband=0.1;
 
       public static final double limeLightTrackSpeed0=0.03;
       public static final double limeLightTrackSpeed1=0.03;
-      public static final double limeLightTrackSpeed1TEST=0.08;
+      public static final double limeLightTrackSpeed1TEST=0.05;
       public static final double limeLightTrackSpeed2=0.05;
-      public static final double limeLightTrackSpeed2TEST=0.1;
+      public static final double limeLightTrackSpeed2TEST=0.08;
       public static final double limeLightTrackSpeed3=0.09;
-      public static final double limeLightTrackSpeed3TEST=0.15;
+      public static final double limeLightTrackSpeed3TEST=0.10;
       public static final double limeLightTrackSpeed4=0.15;
-      public static final double limeLightTrackSpeed4TEST=0.25;
+      public static final double limeLightTrackSpeed4TEST=0.35;
       public static final double limeLightTrackSpeed5=0.30;
-      public static final double limeLightTrackSpeed5TEST=0.35;
+      public static final double limeLightTrackSpeed5TEST=0.8;
 
       public static final String turretLimelightName="";
       public static final String staticLimelightName="static-limelight";
@@ -391,11 +394,11 @@ public final class Constants {
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
 
-      public static final double homePos=254;//177.8;
+      public static final double homePos=99.14;
       public static final double homeDeadband=0.05;
       public static final double homeRotateSpeed=0.1;
-      public static final double rotateLowSoftLimit=-83;
-      public static final double rotateHighSoftLimit=72; 
+      public static final double rotateLowSoftLimit=-63;
+      public static final double rotateHighSoftLimit=91; 
 
       public static final double podiumShotEncoderVal=-66;
       public static final double midShotEncoderVal=0;
@@ -407,7 +410,7 @@ public final class Constants {
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
       public static final int encoderCanID=11;
-      public static final double shooterStowAngle=-100.5;
+      public static final double shooterStowAngle=91;
       public static final double shooterVisionClearanceAngle=-65;
       public static final double shooterAmpScoreAngle=-49;
       public static final double shooterSourceIntakeAngle=55.28;
@@ -423,7 +426,7 @@ public final class Constants {
       public static final int driverturret90=2;
       public static final int driverturret0=3;
       public static final int driverintakeToggleButtonOut=4;
-      public static final int drivermanualShootButton=5;
+      public static final int driverTurretToggle=5;
       public static final int driverGyroResetButton=7;
 
       public static final int driverturretPOVLeft=270;
@@ -531,25 +534,25 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
-          {17.5,-40,-40,-44,4,1,6.0},
-          {20.5,-40,-40,-48.5,5,1,5.6},
-          {22.7,-40,-40,-50,5,1,5.4},
-          {24.6,-40,-40,-53,5,1,5.3},
-          {26.5,-45,-45,-56,5,1,5.2},
-          {29.0,-45,-45,-57,5,1,5.0},
-          {30.7,-45,-45,-60,5,1,4.42},
-          {31.2,-45,-35,-61,5,1,4.2},
-          {33.7,-50,-35,-62.2,5,1,4.1},
-          {34.33,-50,-35,-62.3,5,1,4.1},
-          {35.4,-50,-35,-63,5,1,4.0},//
-          {37.6,-50,-35,-66,5,1,3.9},
-          {39.8,-60,-30,-68,5,1,3.7},
-          {41.5,-63,-43,-71,5,1,3.5},
-          {43.9,-63,-43,-72,5,1,3.2},
-          {45.7,-75,-50,-72,5,1,3.0},
-          {48.0,-75,-50,-66,5,1,2.3},
-          {68.5,-60,-40,-68.5,5,1,2.3},
-          {72.1,-60,-40,-69,5,1,2.3}
+          {17.5,-40,-40,44,4,1,6.0},
+          {20.5,-40,-40,48.5,5,1,5.6},
+          {22.7,-40,-40,50,5,1,5.4},
+          {24.6,-40,-40,53,5,1,5.3},
+          {26.5,-45,-45,56,5,1,5.2},
+          {29.0,-45,-45,57,5,1,5.0},
+          {30.7,-45,-45,60,5,1,4.42},
+          {31.2,-45,-35,61,5,1,4.2},
+          {33.7,-50,-35,62.2,5,1,4.1},
+          {34.33,-50,-35,62.3,5,1,4.1},
+          {35.4,-50,-35,63,5,1,4.0},//
+          {37.6,-50,-35,66,5,1,3.9},
+          {39.8,-60,-30,68,5,1,3.7},
+          {41.5,-63,-43,71,5,1,3.5},
+          {43.9,-63,-43,72,5,1,3.2},
+          {45.7,-75,-50,72,5,1,3.0},
+          {48.0,-75,-50,66,5,1,2.3},
+          {68.5,-60,-40,68.5,5,1,2.3},
+          {72.1,-60,-40,69,5,1,2.3}
          
       };
        public static final double [][]olddistanceLookup={

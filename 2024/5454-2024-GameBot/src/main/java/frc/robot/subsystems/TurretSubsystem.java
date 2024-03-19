@@ -52,23 +52,23 @@ public class TurretSubsystem extends SubsystemBase{
   private double kTurretD=Constants.TurretConstants.turretD;
 
   public TurretSubsystem(int turretMotorPort, int limitSwitchPort, Limelight limelight,TurretSubsystemIO turretIO){
-     m_turretIO=turretIO;
+    m_turretIO=turretIO;
     m_limeLight=limelight;
-    //HACKm_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
-    //HACKm_turretMotor.setSmartCurrentLimit(Constants.k15Amp);
-    //HACKm_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
-    //HACKm_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
-    //HACKm_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
-    //HACKm_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
+    m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
+    m_turretMotor.setSmartCurrentLimit(Constants.k15Amp);
+    m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
+    m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
+    m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
+    m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
    
     m_limitSwitch=new DigitalInput(limitSwitchPort);
-    //HACKm_encoder=m_turretMotor.getEncoder();
-    //HACKm_pidController=m_turretMotor.getPIDController();
-    //HACKm_pidController.setP(kTurretP);
-    //HACKm_pidController.setI(kTurretI);
-    //HACK//HACKm_pidController.setD(kTurretD);
-    //HACKm_turretMotor.burnFlash(); //ensure all settings are saved if a a browout happens
-
+    m_encoder=m_turretMotor.getEncoder();
+    m_pidController=m_turretMotor.getPIDController();
+    m_pidController.setP(kTurretP);
+    m_pidController.setI(kTurretI);
+    m_pidController.setD(kTurretD);
+    m_turretMotor.burnFlash(); //ensure all settings are saved if a a browout happens
+     m_turretMotor.burnFlash();
   }
 
   public boolean IsOnTarget(){
@@ -155,6 +155,7 @@ public class TurretSubsystem extends SubsystemBase{
         }else{
           speed=Constants.LimeLightValues.limeLightTrackSpeed5TEST;
         }
+        System.out.println("Distance X " + x + " - Speed: " + speed);
         if(x<0 && speed!=0){
           RunCheckLimits(speed);
           m_speed=speed;
@@ -168,7 +169,7 @@ public class TurretSubsystem extends SubsystemBase{
      // search mode
         //set default speed
         if(m_speed==0){
-          m_speed=speed=Constants.LimeLightValues.limeLightTrackSpeed5;
+          m_speed=speed=Constants.LimeLightValues.limeLightTrackSpeed5TEST;
         }
         double oldspeed=m_speed; // speed gets set to zero in checklimits
         if(RunCheckLimits(m_speed)) {
@@ -190,7 +191,7 @@ public class TurretSubsystem extends SubsystemBase{
       }
     }
     m_speed=power;
-   //HACK m_turretMotor.set(power);
+    m_turretMotor.set(power);
   }
 
   
@@ -220,13 +221,12 @@ public class TurretSubsystem extends SubsystemBase{
 
   public void stop(){
     m_speed=0;
-  //HACK  m_turretMotor.stopMotor();
+    m_turretMotor.stopMotor();
   }
   public boolean isAtPosition(double targetPos,double deadband){
     
     //if gap between target pos and current position is less than deadband we return true
-    //HACK return Math.abs((Math.abs(GetEncoderValue())-Math.abs(targetPos)))<deadband;
-    return true;
+     return Math.abs((Math.abs(GetEncoderValue())-Math.abs(targetPos)))<deadband;
   }
 
   public boolean IsAtHardLimit(){
@@ -254,31 +254,30 @@ public class TurretSubsystem extends SubsystemBase{
   }
 
   public double GetEncoderValue(){
-    //HACKreturn m_encoder.getPosition();
-    return 0;
+    return m_encoder.getPosition();
   }
 
   public void TurretSetReference(double pos){
     m_hasSetReference=true;
     m_targetAngle=pos;
-    //HACKm_pidController.setReference(pos,ControlType.kPosition);
+    m_pidController.setReference(pos,ControlType.kPosition);
   }
 
   public void ResetPIDReference(){
     m_hasSetReference=false;
-    //HACKm_pidController.setReference(0,ControlType.kVelocity);
+    m_pidController.setReference(0,ControlType.kVelocity);
   }
 
   public void SetEncoder(double pos ){
-    //HACKm_encoder.setPosition(pos);
+    m_encoder.setPosition(pos);
   }
   
   public void setBrakeOn(){
-    //HACKm_turretMotor.setIdleMode(IdleMode.kBrake);  
+    m_turretMotor.setIdleMode(IdleMode.kBrake);  
   } 
   
     public void setCoastOn(){
-    //HACKm_turretMotor.setIdleMode(IdleMode.kCoast);
+    m_turretMotor.setIdleMode(IdleMode.kCoast);
   }
 
   public double getCurrentSpeed(){
@@ -321,17 +320,13 @@ public class TurretSubsystem extends SubsystemBase{
 
   @Override
   public void periodic(){
-    m_turretIO.updateInputs(m_turretAutoLogged);
-   
-    //Logger.processInputs("TurretSubsystem",m_turretAutoLogged);
     Logger.recordOutput("Turret/TurretSpeed",m_speed);
-   // Logger.recordOutput("Turret/TurretEncoder",GetEncoderValue());
-   // Logger.recordOutput("Turret/TurretHardLimit",IsAtHardLimit());
-   // Logger.recordOutput("Turret/TurretLeftLimit",IsAtLeftLimit());
-   // Logger.recordOutput("Turret/TurretRightLimit",IsAtRightLimit());
+    Logger.recordOutput("Turret/TurretEncoder",GetEncoderValue());
+    Logger.recordOutput("Turret/TurretHardLimit",IsAtHardLimit());
+    Logger.recordOutput("Turret/TurretLeftLimit",IsAtLeftLimit());
+    Logger.recordOutput("Turret/TurretRightLimit",IsAtRightLimit());
     Logger.recordOutput("Turret/TurretHasSetReference",m_hasSetReference);
     Logger.recordOutput("Turret/TurretReferenceAngle",m_targetAngle);
 
-   // SmartDashboard.putNumber("TurretEncoder",GetEncoderValue());
   }
 }

@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.swervelib.encoders.SwerveAbsoluteEncoder;
 import frc.robot.swervelib.math.SwerveModuleState2;
@@ -94,8 +95,11 @@ public class SwerveModule {
     driveMotor.setInverted(moduleConfiguration.driveMotorInverted);
     driveMotor.setMotorBrake(true);
 
+    
+    Timer.delay(1.0);
     driveMotor.burnFlash();
     angleMotor.burnFlash();
+    System.out.println("Burned Flash for Driver and Angle");
 
     if (SwerveDriveTelemetry.isSimulation) {
       simModule = new SwerveModuleSimulation();

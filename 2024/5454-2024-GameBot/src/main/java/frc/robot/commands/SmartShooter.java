@@ -45,6 +45,7 @@ public class SmartShooter extends Command {
     private boolean m_runLeft=true;
     private boolean m_runRight=false;
     private boolean m_shouldRotate=true;
+    private boolean m_shouldToggle;
     private double m_targetAngle=0;
     private static int kSlowDownDeadBand=2; 
     private enum STATE{
@@ -53,13 +54,14 @@ public class SmartShooter extends Command {
 
     private STATE m_state=STATE.SETANGLE;
 
-    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,IntakeSubsystem intake,boolean updatePose,boolean shootwhileMove,boolean shouldRotate) {
+    public SmartShooter(ShooterSubsystem shooter, TurretSubsystem turret, Swerve drive, Limelight limelight,IntakeSubsystem intake,boolean updatePose,boolean shootwhileMove,boolean shouldRotate,boolean shouldToggle) {
         m_shooter = shooter;
         m_turret = turret;
         m_drive = drive;
         m_limelight = limelight;
         m_intake=intake;
         m_shouldRotate=shouldRotate;
+        m_shouldToggle=shouldToggle;
         m_updatePose = updatePose;
         m_shootWhileMove=shootwhileMove;
         addRequirements(shooter,turret,intake);
@@ -224,7 +226,7 @@ public class SmartShooter extends Command {
             case TURRETLOCKWAIT:                   
                 m_turret.TrackTarget(true);        
                 if(m_limelight.isTargetAvailible()){
-                    if(m_turret.IsOnTarget()){
+                    if(m_turret.IsOnTarget()&&!m_shouldToggle){
                         m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
                         m_state=STATE.SETANGLE;
                     }
@@ -250,7 +252,6 @@ public class SmartShooter extends Command {
                 if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
                     m_shooter.stopRotate();
                     m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed,false);
-                    m_state=STATE.RAMPUPSHOOTER;
                     m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
                     Logger.recordOutput("Shooter/AngleGap",0);
                 }
@@ -301,7 +302,7 @@ public class SmartShooter extends Command {
     public void end(boolean interrupted) {
         m_turret.TrackTarget(false);
         m_turret.stop();
-        m_shooter.SlowShootingMotors();  // also stops feeder 
+        //m_shooter.SlowShootingMotors();  // also stops feeder 
         m_shooter.ResetControlType();
         m_shooter.stopRotate();
         m_intake.stopIntake();

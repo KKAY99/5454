@@ -44,7 +44,7 @@ public class CreateYourOwnAutoStateMachine extends Command{
     private Command m_intakePathCommand;
     private Command m_notePathCommand;
     private Command m_shootPathCommand;
-    private Command m_shoot=new SmartShooter(m_shooter,m_turret,m_swerve, m_limelight, m_intake,false,false,true);
+    private Command m_shoot=new SmartShooter(m_shooter,m_turret,m_swerve, m_limelight, m_intake,false,false,true,false);
     private Command m_toggleIntake=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
 
     public CreateYourOwnAutoStateMachine(Swerve swerve,ShooterSubsystem shooter,TurretSubsystem turret,IntakeSubsystem intake,Limelight limelight,AutoPose2D... poses){

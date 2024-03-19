@@ -94,12 +94,12 @@ public class ChooseYourOwnAdventureAuto {
   }
 
   public void CreateCommands(){
-    m_shoot0=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot1=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot2=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot3=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot4=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
-    m_shoot5=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true);
+    m_shoot0=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
+    m_shoot1=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
+    m_shoot2=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
+    m_shoot3=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
+    m_shoot4=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
+    m_shoot5=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
 
     m_homeShooter=new HomeShooterCommand(m_shooter);
 

@@ -1,6 +1,9 @@
 package frc.robot.utilities;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Constants.AutoConstants;
 
 import java.lang.Math;
 
@@ -18,10 +21,6 @@ public class PoseDistanceCalculator{
 
         return distance;
     }
-    
-    public double ConvertDistance(){
-        return 0.0;
-    }
 
     private double ChangeInX(double currentPosX,double targetPosX){
         double rightTriBase;
@@ -38,6 +37,14 @@ public class PoseDistanceCalculator{
     }
 
     private Pose2d GetAlliancePose2d(){
-        return new Pose2d(0,0,new Rotation2d(0));
+        Pose2d speakerPos;
+
+        if(DriverStation.getAlliance().get()==Alliance.Red){
+            speakerPos=AutoConstants.redSpeakerPos;
+        }else{
+            speakerPos=AutoConstants.blueSpeakerPos;
+        }
+
+        return speakerPos;
     }
 }

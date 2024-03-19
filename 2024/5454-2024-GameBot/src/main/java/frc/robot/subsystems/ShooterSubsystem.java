@@ -73,14 +73,16 @@ public class ShooterSubsystem extends SubsystemBase {
         m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
         m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
         m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
-    
+        m_feederMotor.burnFlash();
+
         m_angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
         m_angleMotor.setSmartCurrentLimit(Constants.k30Amp);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
-       
+      
+
         m_anglePID = m_angleMotor.getPIDController();
         m_canCoder = new WPI_CANCoder(canCoderId);
         m_canCoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 1000);
@@ -102,7 +104,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_anglePID.setFF(anglekFF);
         m_anglePID.setOutputRange(anglekMinOutput, anglekMaxOutput);
         m_angleMotor.getEncoder();
-
+        m_angleMotor.burnFlash();
     }
 
     public void configmotor(TalonFX motor) {
@@ -370,14 +372,14 @@ public class ShooterSubsystem extends SubsystemBase {
         Logger.recordOutput("Shooter/Shooter1VelocitySet", m_desiredVeloc1);
         Logger.recordOutput("Shooter/Shooter2VelocitySet", m_desiredVeloc2);
         Logger.recordOutput("Shooter/ShooterSetAngle", m_targetAngle);
-        // Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
-        // Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
+        Logger.recordOutput("Shooter/ShootMotor1Velocity",GetVelocityMotor1());
+        Logger.recordOutput("Shooter/ShootMotor2Velocity",GetVelocityMotor2());
         // Logger.recordOutput("Shooter/TalonMotor1Temp",m_ShootingMotor1.getDeviceTemp().getValueAsDouble());
         // Logger.recordOutput("Shooter/TalonMotor2Temp",m_ShootingMotor2.getDeviceTemp().getValueAsDouble());
-        // Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
-         Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
+        Logger.recordOutput("Shooter/CanCoderPositio ",getCanCoderPosition());
+        Logger.recordOutput("Shooter/RelativePosition",getRelativePosition());
         Logger.recordOutput("Shooter/ShotsTaken", m_shotsTaken);
-        // Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
+        Logger.recordOutput("Shooter/ShooterRotateSpeed",m_angleEncoder.getVelocity());
         // SmartDashboard.putBoolean("IsAtPodiumShotAngle",isAtPodiumShot());
         // SmartDashboard.putBoolean("IsAtMidShotAngle",isAtMidShot());
         // SmartDashboard.putBoolean("IsAtShortShotAngle",isAtShortShot());

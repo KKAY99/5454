@@ -14,12 +14,14 @@ public class RobotTrackCommand extends Command{
   public RobotTrackCommand(Limelight limeLight,TurretSubsystem turret){
     m_limeLight=limeLight;
     m_turret=turret;
+
+    addRequirements(m_turret);
   }
 
   @Override
   public void end(boolean interrupted){
-    m_turret.stop();
     m_turret.TESTINGTrackTarget(false);
+    m_turret.stop();
   }
 
   @Override

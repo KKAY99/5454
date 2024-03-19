@@ -36,7 +36,6 @@ public class SparkMaxSwerve extends SwerveMotor {
     this.isDriveMotor = isDriveMotor;
     factoryDefaults();
     clearStickyFaults();
- 
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1,50);
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2,50);
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);

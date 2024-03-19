@@ -252,7 +252,8 @@ public class Limelight {
         double[] empty=null;
         double[] robotPoseValues=robotPoseRed.getDoubleArray(empty);
 
-        Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
+        //Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
+        Pose2d pose=new Pose2d();
         return pose;
     }
 

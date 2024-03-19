@@ -114,6 +114,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit(){
     m_robot.stopRumble();
+    m_robot.disableBrakeMode(); // disable brake mode when disabled 
   }
 
   /** This function is called periodically when disabled. */

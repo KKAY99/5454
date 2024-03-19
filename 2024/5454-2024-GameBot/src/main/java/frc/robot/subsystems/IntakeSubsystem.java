@@ -19,9 +19,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase{
-    private IntakeSubsystemIO m_intakeIO;
-    private IntakeSubsystemIOInputsAutoLogged m_intakeAutoLogged=new IntakeSubsystemIOInputsAutoLogged();
-
+   
     private CANSparkMax m_intakeOne;
     private CANSparkMax m_intakeTwo;
 
@@ -30,7 +28,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private boolean m_intakeToggle=false;
     private AnalogAutoDirectFB6DN0E m_irReflector;
     private DigitalInput m_breakbeam ;
-    public IntakeSubsystem(int motorOne,int motorTwo,int sensorPort, IntakeSubsystemIO intakeIO){
+    public IntakeSubsystem(int motorOne,int motorTwo,int sensorPort){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
         m_intakeOne.setIdleMode(IdleMode.kBrake);
@@ -39,7 +37,6 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeTwo.setSmartCurrentLimit(Constants.k30Amp);
         m_intakeOne.burnFlash(); //ensure all settings are saved if a a browout happens
         m_intakeTwo.burnFlash(); //ensure all settings are saved if a a browout happens
-        m_intakeIO=intakeIO;
         m_breakbeam=new DigitalInput(sensorPort);
         //TODO: REMOVE CONSTANT - EVIL CONSTANT
         //m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
@@ -112,11 +109,8 @@ public class IntakeSubsystem extends SubsystemBase{
 
     @Override
     public void periodic(){
-        m_intakeIO.updateInputs(m_intakeAutoLogged);
         Logger.recordOutput("Intake/BeamBroken",isBeamBroken());
         //System.out.println(isBeamBroken());
-    // Logger.recordOutput("Intake/BreakBeamSensorDistance", m_TOFlow.getRange());
-        //Logger.processInputs("IntakeSubsystem",m_intakeAutoLogged);
         Logger.recordOutput("Intake/IntakeSpeed",m_currentSpeed);
     }
 }
