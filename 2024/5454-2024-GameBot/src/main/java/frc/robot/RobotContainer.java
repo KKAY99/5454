@@ -74,6 +74,7 @@ public class RobotContainer {
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
+    
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
     private SendableChooser<AutoConstants.StartingLocations> m_autoStart = new SendableChooser<>(); 
     private SendableChooser<Double> m_autoDelay = new SendableChooser<>(); 
@@ -426,6 +427,19 @@ public class RobotContainer {
       }
 
   public Command getAutonomousCommand(){
+    Command returnCommand;
+    String autoChosen=m_autoChooser.getSelected();
+  
+    //check to see if using Choose Your Own Adventure or Defined Path
+    if (autoChosen==Constants.AutoConstants.autoMode0){
+      returnCommand=getChoseAdventureAutonomousCommand();
+    } else {
+      returnCommand=getDefinedAutoCommand(autoChosen);
+    }
+    return returnCommand;
+
+  }
+  public Command getChoseAdventureAutonomousCommand(){
     Alliance currentAlliance=DriverStation.getAlliance().get();
     AutoCommands autoMaker = new AutoCommands(m_swerve,m_shooter,m_intake,m_turret,m_TurretLimelight);
     ChooseYourOwnAdventureAuto autoModularMaker = new ChooseYourOwnAdventureAuto(m_swerve,m_shooter,m_intake,m_turret,m_TurretLimelight);
@@ -446,6 +460,36 @@ public class RobotContainer {
     //newCommand=autoModularMaker.TESTAUTO(currentAlliance);
 
     return newCommand;
+  }
+  public Command getDefinedAutoCommand(String autoChosen){
+    Command returnCommand;
+    Alliance currentAlliance=DriverStation.getAlliance().get();
+    switch (autoChosen) {
+      case Constants.AutoConstants.autoMode1: // Do Nothing
+        returnCommand=new AutoDoNothingCommand();
+        break;
+      case Constants.AutoConstants.autoMode2: // 2=PP-Start Center,Score, Center Short, Amp Short
+        returnCommand=new AutoDoNothingCommand();
+        break;
+      case Constants.AutoConstants.autoMode3: // 3=PP-Start Left, Amp Short, Amp Long
+        returnCommand=new AutoDoNothingCommand();
+        break;
+      case Constants.AutoConstants.autoMode4: // 4=PP-Start Right, Source Long
+        returnCommand=new AutoDoNothingCommand();
+        break;
+      case Constants.AutoConstants.autoMode7: // Legacy-Score, Straight Back Score
+        returnCommand=legacyAutoShootMoveBackShoot();
+        break;
+      case Constants.AutoConstants.autoMode8: // Legacy-Score,Wait, Cross the Line Right
+        returnCommand=new AutoDoNothingCommand();
+        break;
+      case Constants.AutoConstants.autoMode9: // Legacy-Score, Center Amp Short, Amp Short
+        returnCommand=new AutoDoNothingCommand();
+        break;     
+      default:
+        returnCommand=new AutoDoNothingCommand();
+    }
+    return returnCommand;
   }
 
   public void checkBrakeButton(){
@@ -557,10 +601,12 @@ public class RobotContainer {
       m_HasHomed=true;
     }
   }
-  public Command createDistanceAuto(){
-    SmartShooter m_shoot0=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false); 
-    AutoMoveCommand m_Moveback = new AutoMoveCommand(m_swerve,0.0, 2.0);
-    return new SequentialCommandGroup(m_shoot0,m_Moveback);
-
+  private Command legacyAutoShootMoveBackShoot(){
+    SmartShooter shoot0=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false); 
+    SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false); 
+    TurretPosCommand turretSet0=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    IntakeToggleCommand startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    AutoMoveCommand moveback = new AutoMoveCommand(m_swerve,0.0, 2.0);
+    return new SequentialCommandGroup(shoot0,turretSet0,startIntake1,moveback,shoot1);
   }
 }    

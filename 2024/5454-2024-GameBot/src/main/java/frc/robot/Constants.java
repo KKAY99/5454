@@ -71,18 +71,18 @@ public final class Constants {
         public static final String autoModeX7="7=maybe this times";
 
 
-        public static final String autoMode0="0-Do Nothing";
-        public static final String autoMode1="1=Score1,Move";
-        public static final String autoMode2="2=Score2,Amp";
-        public static final String autoMode3="3=Score2,Center";
-        public static final String autoMode4="4=Score2,Source";
-        public static final String autoMode5="5=Score3,Amp,Source";
-        public static final String autoMode6="6=Score3,Amp,Pause,Source";
-        public static final String autoMode7="7=Score3,Amp,Long Amp";
-        public static final String autoMode8="8=Score3,Source,Long Source";
-        public static final String autoMode9="9=Score3,Amp,Long Amp";
-        public static final String autoMode10="10=Score4,Source,Long Source";
-        public static final String autoMode11="11=Score4,Amp,Long Amp";
+        public static final String autoMode0="0-Dynamic Auto Program";
+        public static final String autoMode1="1=Do Nothing";
+        public static final String autoMode2="2=PP-Start Center,Score, Center Short, Amp Short";
+        public static final String autoMode3="3=PP-Start Left, Amp Short, Amp Long";
+        public static final String autoMode4="4=PP-Start Right, Source Long";
+        public static final String autoMode5="5=TBD";
+        public static final String autoMode6="6=TBD";
+        public static final String autoMode7="7=Legacy-Score, Straight Back Score";
+        public static final String autoMode8="8=Legacy-Score,Wait, Cross the Line Right";
+        public static final String autoMode9="9=Legacy-Score, Center Amp Short, Amp Short";
+        public static final String autoMode10="10=TBD";
+        public static final String autoMode11="11=TBD";
 
         public static final String noPath="No Path";
         public static final String blueShortAmpNote="BlueShortAmpNote";
