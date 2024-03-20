@@ -741,7 +741,11 @@ public class SwerveDrive {
   public void moveGyro(double direction, double rotation,double speed, double distance, boolean stopAtEnd){
     automove(direction,rotation,speed,distance,stopAtEnd,true);
 }
-private double getDistanceFromWheel(){
+ public void moveGyroNoDistance(double direction, double rotation,double speed){
+    //distance of zero just moves
+    automove(direction,rotation,speed,0,false,true);
+}
+public double getDistanceFromWheel(){
   SwerveModule module=swerveModules[1];
   return module.getDriveMotor().getPosition();
 }
@@ -792,21 +796,24 @@ private void automove(double direction, double rotation,double speed, double dis
     //if not travelling distance then just turn movement on 
     if(distance==0){
 
-            drive(new Translation2d(forward, strafe), rotation, fieldCentric,false);
+            drive(new Translation2d(forward, strafe), rotation, fieldCentric,true);
             //periodic();
     }else {
             double distanceTravelled=getDistanceFromWheel()-startDistance;
             while(distanceTravelled<=distance && m_autoControl){
-               drive(new Translation2d(forward, strafe), rotation, fieldCentric,false);
+               drive(new Translation2d(forward, strafe), rotation, fieldCentric,true);
             //periodic();
             distanceTravelled=Math.abs(getDistanceFromWheel()-startDistance);
-            //      System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
+                  System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
             } 
     }
     if (stopAtEnd) {
             drive(new Translation2d(0,0), 0, fieldCentric,false);
            // periodic();                
     }
+}
+public void stopAutoDrive(){
+    drive(new Translation2d(0, 0), 0, true,true); 
 }
 
 }

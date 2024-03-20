@@ -5,13 +5,16 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.NoteFlipConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NoteFlipperSubsystem;
 
 public class AmpScoreHopeCommand extends Command {
     private ShooterSubsystem m_shooter;
+    private IntakeSubsystem m_intake;
     private NoteFlipperSubsystem m_flip;
 
    private enum STATE{SETANGLE,WAITFORANGLE,SHOOT,FEED,SHOOTANDFEED,END}
@@ -22,8 +25,9 @@ public class AmpScoreHopeCommand extends Command {
    private double m_currentTime;
    private double kTimeToRun=NoteFlipConstants.timeToRunAmpScore;
 
-   public AmpScoreHopeCommand(ShooterSubsystem shooter,NoteFlipperSubsystem flip,double angle){
+   public AmpScoreHopeCommand(ShooterSubsystem shooter,IntakeSubsystem intake,NoteFlipperSubsystem flip,double angle){
     m_shooter=shooter;
+    m_intake=intake;
     m_flip=flip;
     m_angle=angle;
 
@@ -44,6 +48,7 @@ public class AmpScoreHopeCommand extends Command {
   @Override
   public void end(boolean interrupted){
     m_shooter.stopRotate();
+    m_intake.stopIntake();
     m_shooter.stopShooter();
     m_flip.stop();
   }
@@ -70,6 +75,7 @@ public class AmpScoreHopeCommand extends Command {
     case SHOOTANDFEED:
         m_shooter.RunShootingMotors(ShooterConstants.ampScoreSpeed,ShooterConstants.ampScoreSpeed,true);
         m_flip.run(NoteFlipConstants.noteFlipSpeed);
+        m_intake.runIntake(IntakeConstants.intakeSpeed);
 
         if(m_currentTime>kTimeToRun+Timer.getFPGATimestamp()){
             m_shooter.stopShooter();

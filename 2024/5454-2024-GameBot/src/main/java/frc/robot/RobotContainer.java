@@ -180,7 +180,7 @@ public class RobotContainer {
       Trigger smartToggleTurretButton= new Trigger(() -> m_xBoxOperator.getRawAxis(leftTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       smartToggleTurretButton.toggleOnTrue(smartToggleTurret);
 
-      SmartShooter smartShooter=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,false,false);
+      SmartShooter smartShooter=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false);
       Trigger shootOpTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       shootOpTrigger.onTrue(smartShooter);
 
@@ -190,7 +190,7 @@ public class RobotContainer {
       //Trigger setrefTrigger= new Trigger(() -> m_xBoxOperator.getRawAxis(rightTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
       //setrefTrigger.whileTrue(setref);
 
-      AmpScoreHopeCommand noteFlip=new AmpScoreHopeCommand(m_shooter,m_flip,Constants.ShooterConstants.shooterAmpScoreAngle);
+      AmpScoreHopeCommand noteFlip=new AmpScoreHopeCommand(m_shooter,m_intake,m_flip,Constants.ShooterConstants.shooterAmpScoreAngle);
       JoystickButton noteFlipButton=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorNoteFlip);
       noteFlipButton.whileTrue(noteFlip);
 
@@ -213,7 +213,7 @@ public class RobotContainer {
       turretToggleButtonOp.onTrue(toggleTurretOp);
 
       TurretToggleCommand toggleTurretDriv=new TurretToggleCommand(m_turret, TurretConstants.turretMoveTimeOut);
-      JoystickButton turretToggleButtonDriv=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.driverTurretToggle);
+      JoystickButton turretToggleButtonDriv=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverTurretToggle);
       turretToggleButtonDriv.onTrue(toggleTurretDriv);
     
       ShootRotateCommand shooterRotateUp = new ShootRotateCommand(m_shooter, Constants.ShooterConstants.rotateSlowSpeed);
@@ -250,7 +250,7 @@ public class RobotContainer {
       operatorStow.onTrue(stowAndStop);
    
       ShootRotateSetReferenceCommand stowDCommand = new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.shooterStowAngle);
-      JoystickButton driverStow=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.operatorStow);
+      JoystickButton driverStow=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.driverStow);
        SequentialCommandGroup stowAndStopD=new SequentialCommandGroup(new HardStopShooter(m_shooter),stowDCommand);
        driverStow.onTrue(stowAndStopD);
 
@@ -276,9 +276,9 @@ public class RobotContainer {
       JoystickButton intakeCustom4Button = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot4);
       intakeCustom4Button.whileTrue(intakeCustom4);
 
-      RobotTrackCommand testTrack=new RobotTrackCommand(m_TurretLimelight, m_turret);
-      JoystickButton testTrackButton=new JoystickButton(m_xBoxDriver,ButtonBindings.driverturret90);
-      testTrackButton.whileTrue(testTrack);
+      ShootRotateSetReferenceCommand test=new ShootRotateSetReferenceCommand(m_shooter,Constants.ShooterConstants.PIDTESTAngle);
+      JoystickButton testButton=new JoystickButton(m_xBoxDriver,ButtonBindings.driverturret90);
+      testButton.whileTrue(test);
 
     }
        
@@ -440,10 +440,10 @@ public class RobotContainer {
       m_swerve.resetOdometry(autoMaker.getStartingPose(startLocation,currentAlliance));
     //}
 
-    //newCommand=autoModularMaker.CreateAutoCommand(m_swerve,m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
-    //                                              m_autoPath5.getSelected(),m_shootFinalNote.getSelected());                                     
-
-    newCommand=autoModularMaker.TESTAUTO(currentAlliance);
+    newCommand=autoModularMaker.CreateAutoCommand(m_autoPath1.getSelected(),m_autoPath2.getSelected(),m_autoPath3.getSelected(),m_autoPath4.getSelected(),
+                                                  m_autoPath5.getSelected());                                     
+   // newCommand=createDistanceAuto();
+    //newCommand=autoModularMaker.TESTAUTO(currentAlliance);
 
     return newCommand;
   }
@@ -556,5 +556,11 @@ public class RobotContainer {
       CommandScheduler.getInstance().schedule(shooterHome);
       m_HasHomed=true;
     }
+  }
+  public Command createDistanceAuto(){
+    SmartShooter m_shoot0=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false); 
+    AutoMoveCommand m_Moveback = new AutoMoveCommand(m_swerve,0.0, 2.0);
+    return new SequentialCommandGroup(m_shoot0,m_Moveback);
+
   }
 }    

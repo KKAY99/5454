@@ -189,20 +189,17 @@ public class SmartShooter extends Command {
                 m_shooter.PrimeShootingMotors();
                 m_state=STATE.VISIONCLEARANCE;
                 break;
-            case VISIONCLEARANCE: 
-            
-            if(m_limelight.isTargetAvailible()){
+            case VISIONCLEARANCE:
+        
+            if(m_shooter.getRelativePosition()>ShooterConstants.shooterVisionClearanceAngle ||
+                m_shooter.getRelativePosition()<ShooterConstants.shooterVisionClearanceHighPoint){
+                m_shooter.setAngle(ShooterConstants.shooterVisionClearanceAngle);
+                m_state=STATE.WAITFORVISIONCLEARANCE;
+            }else{
+                m_shooter.stopRotate(); // make sure rotation has stopped
                 m_state=STATE.CHECKROTATEMODE;
-            }else{ //if you can't see the target see if we need to move it
-
-                if(m_shooter.getRelativePosition()<ShooterConstants.shooterVisionClearanceAngle){
-                    m_shooter.setAngle(ShooterConstants.shooterVisionClearanceAngle);
-                    m_state=STATE.WAITFORVISIONCLEARANCE;
-                }else{
-                    m_shooter.stopRotate(); // make sure rotation has stopped
-                    m_state=STATE.CHECKROTATEMODE;
-                }
             }
+            
             break;
             case WAITFORVISIONCLEARANCE: 
             angleGap=Math.abs(m_shooter.getRelativePosition())
@@ -253,7 +250,7 @@ public class SmartShooter extends Command {
                     m_shooter.stopRotate();
                     m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed,false);
                     m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
-                    Logger.recordOutput("Shooter/AngleGap",0);
+                    m_state=STATE.RAMPUPSHOOTER;
                 }
             break;
             case RAMPUPSHOOTER:                   
@@ -302,7 +299,7 @@ public class SmartShooter extends Command {
     public void end(boolean interrupted) {
         m_turret.TrackTarget(false);
         m_turret.stop();
-        //m_shooter.SlowShootingMotors();  // also stops feeder 
+        m_shooter.SlowShootingMotors();  // also stops feeder 
         m_shooter.ResetControlType();
         m_shooter.stopRotate();
         m_intake.stopIntake();

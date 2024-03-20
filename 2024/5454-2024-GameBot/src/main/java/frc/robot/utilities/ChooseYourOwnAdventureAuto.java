@@ -258,9 +258,9 @@ public class ChooseYourOwnAdventureAuto {
     }
   }
 
-  public Command CreateAutoCommand(Swerve swerve, AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
+  public Command CreateAutoCommand(AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5){
     
-    return new CreateYourOwnAutoStateMachine(swerve,m_shooter,m_turret,m_intake,m_limeLight,pose1,pose2,pose3,pose4,pose5);
+    return new CreateYourOwnAutoStateMachine(m_swerve,m_shooter,m_turret,m_intake,m_limeLight,pose1,pose2,pose3,pose4,pose5);
   }
 
   public Command TESTAUTO(Alliance alliance){

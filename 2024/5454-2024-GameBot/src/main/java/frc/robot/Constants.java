@@ -103,29 +103,29 @@ public final class Constants {
 
         public static final String testStart="TEST START";
 
-        public static final Pose2d REDTESTSTART=new Pose2d(0,0,new Rotation2d(0));
-        public static final Pose2d BLUETESTSTART=new Pose2d(16,0,new Rotation2d(0));
+        public static final Pose2d BLUETESTSTART=new Pose2d(0,0,new Rotation2d(0));
+        public static final Pose2d REDTESTSTART=new Pose2d(16,0,new Rotation2d(0));
         
-        public static final Pose2d REDTEST=new Pose2d(2,0,new Rotation2d(0));
-        public static final Pose2d BLUETEST=new Pose2d(15,1,new Rotation2d(0));
+        public static final Pose2d BLUETEST=new Pose2d(0,1,new Rotation2d(0));
+        public static final Pose2d REDTEST=new Pose2d(15,0,new Rotation2d(0));
 
         public static final Pose2d redSpeakerPos=new Pose2d(16.32,5.54,new Rotation2d(0));
         public static final Pose2d blueSpeakerPos=new Pose2d(0.30,5.54,new Rotation2d(0));
- 
-        public static final Pose2d locationBlueShortAmpNote=new Pose2d(2.89,6.99,new Rotation2d(0));
-        public static final Pose2d blueShortAmpNoteIntakeWaypoint=new Pose2d(2.35,6.99,new Rotation2d(0));
-        public static final AutoPose2D blueShortAmpAutoPoses=new AutoPose2D(locationBlueShortAmpNote,blueShortAmpNoteIntakeWaypoint,
-                                                                            locationBlueShortAmpNote,false,true);
 
         public static final Pose2d locationBlueShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
-        public static final Pose2d blueShortCenterNoteIntakeWaypoint=new Pose2d(2.35,5.54,new Rotation2d(0));
+        public static final Pose2d blueShortCenterNoteIntakeWaypoint=new Pose2d(1.7,5.54,new Rotation2d(0));
         public static final AutoPose2D blueShortCenterAutoPoses=new AutoPose2D(locationBlueShortCenterNote,blueShortCenterNoteIntakeWaypoint,
                                                                               locationBlueShortCenterNote,false,true);
+ 
+        public static final Pose2d locationBlueShortAmpNote=new Pose2d(3,6.99,new Rotation2d(0));
+        public static final Pose2d blueShortAmpNoteIntakeWaypoint=new Pose2d(1.7,6.99,new Rotation2d(0));
+        public static final AutoPose2D blueShortAmpAutoPoses=new AutoPose2D(locationBlueShortAmpNote,blueShortAmpNoteIntakeWaypoint,
+                                                                            locationBlueShortCenterNote,false,true);
         
-        public static final Pose2d locationBlueShortSourceNote=new Pose2d(2.89,4.09,new Rotation2d(0));
-        public static final Pose2d blueShortSourceNoteIntakeWaypoint=new Pose2d(2.35,4.09,new Rotation2d(0));
+        public static final Pose2d locationBlueShortSourceNote=new Pose2d(3,4.09,new Rotation2d(0));
+        public static final Pose2d blueShortSourceNoteIntakeWaypoint=new Pose2d(1.7,4.09,new Rotation2d(0));
         public static final AutoPose2D blueShortSourceAutoPoses=new AutoPose2D(locationBlueShortSourceNote,blueShortSourceNoteIntakeWaypoint,
-                                                                              locationBlueShortSourceNote,false,true);
+                                                                              locationBlueShortCenterNote,false,true);
 
         public static final Pose2d locationRedShortCenterNote=new Pose2d(13.68,5.57,new Rotation2d(0));
         public static final Pose2d redShortCenterNoteIntakeWaypoint=new Pose2d(14.39,5.57,new Rotation2d(0));
@@ -172,16 +172,16 @@ public final class Constants {
         public static final Pose2d locationBlueLongSourceWing=new Pose2d(4.45,1.72,new Rotation2d(0));
        
         public static final Pose2d redCenterStartPos=new Pose2d(15.17,5.54,new Rotation2d(0));
-        public static final Pose2d blueCenterStartPos=new Pose2d(1.13,5.54,new Rotation2d(0));
+        public static final Pose2d blueCenterStartPos=new Pose2d(-1.13,-5.54,new Rotation2d(0));
 
         public static final Pose2d redRightAmpStartPos=new Pose2d(15.33,6.98,new Rotation2d(0));
-        public static final Pose2d blueRightAmpStartPos=new Pose2d(1.22,6.98,new Rotation2d(0));
+        public static final Pose2d blueRightAmpStartPos=new Pose2d(-1.22,-6.98,new Rotation2d(0));
 
         public static final Pose2d redLeftSpeakerStartPos=new Pose2d(15.73,4.23,new Rotation2d(0));
-        public static final Pose2d blueLeftSpeakerStartPos=new Pose2d(0.73,6.72,new Rotation2d(0));
+        public static final Pose2d blueLeftSpeakerStartPos=new Pose2d(-0.73,-6.72,new Rotation2d(0));
 
         public static final Pose2d redRightSpeakerStartPos=new Pose2d(15.73,6.72,new Rotation2d(0));
-        public static final Pose2d blueRightSpeakerStartPos=new Pose2d(0.73,4.23,new Rotation2d(0));
+        public static final Pose2d blueRightSpeakerStartPos=new Pose2d(-0.73,-4.23,new Rotation2d(0));
 
         public static final Pose2d redAmpMoveOutOfBoundPos=new Pose2d(12.17,6.82,new Rotation2d(0));
         public static final Pose2d blueAmpMoveOutOfBoundPos=new Pose2d(4.25,6.98,new Rotation2d(0));
@@ -194,7 +194,7 @@ public final class Constants {
       }
     
     public static final class AutoManual{
-      public static final double autoDriveSpeed=0.3;
+      public static final double autoDriveSpeed=0.4;
     }
     public static final class InputControllers {
       public static final int kXboxDrive = 0;
@@ -270,7 +270,7 @@ public final class Constants {
 
    public static final class NoteFlipConstants{
     public static final int canID=12;
-    public static final double noteFlipSpeed=-0.35;// was .35
+    public static final double noteFlipSpeed=0.35;
     public static final double timeToRunAmpScore=2;
    }
 
@@ -349,16 +349,11 @@ public final class Constants {
       public static final double limelightLastDisDeadband=0.1;
 
       public static final double limeLightTrackSpeed0=0.03;
-      public static final double limeLightTrackSpeed1=0.03;
-      public static final double limeLightTrackSpeed1TEST=0.05;
-      public static final double limeLightTrackSpeed2=0.05;
-      public static final double limeLightTrackSpeed2TEST=0.08;
-      public static final double limeLightTrackSpeed3=0.09;
-      public static final double limeLightTrackSpeed3TEST=0.10;
-      public static final double limeLightTrackSpeed4=0.15;
-      public static final double limeLightTrackSpeed4TEST=0.35;
-      public static final double limeLightTrackSpeed5=0.30;
-      public static final double limeLightTrackSpeed5TEST=0.8;
+      public static final double limeLightTrackSpeed1=0.05;
+      public static final double limeLightTrackSpeed2=0.08;
+      public static final double limeLightTrackSpeed3=0.10;
+      public static final double limeLightTrackSpeed4=0.35;
+      public static final double limeLightTrackSpeed5=0.8;
 
       public static final String turretLimelightName="";
       public static final String staticLimelightName="static-limelight";
@@ -398,7 +393,7 @@ public final class Constants {
       public static final double homeDeadband=0.05;
       public static final double homeRotateSpeed=0.1;
       public static final double rotateLowSoftLimit=-63;
-      public static final double rotateHighSoftLimit=91; 
+      public static final double rotateHighSoftLimit=89; 
 
       public static final double podiumShotEncoderVal=-66;
       public static final double midShotEncoderVal=0;
@@ -410,10 +405,13 @@ public final class Constants {
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
       public static final int encoderCanID=11;
-      public static final double shooterStowAngle=91;
-      public static final double shooterVisionClearanceAngle=-65;
-      public static final double shooterAmpScoreAngle=-49;
+      public static final double shooterStowAngle=90;
+      public static final double shooterVisionClearanceAngle=20;
+      public static final double shooterVisionClearanceHighPoint=20;
+      public static final double shooterAmpScoreAngle=49;
       public static final double shooterSourceIntakeAngle=55.28;
+
+      public static final double PIDTESTAngle=49;
     }
 
 
@@ -427,6 +425,7 @@ public final class Constants {
       public static final int driverturret0=3;
       public static final int driverintakeToggleButtonOut=4;
       public static final int driverTurretToggle=5;
+      public static final int driverStow=6;
       public static final int driverGyroResetButton=7;
 
       public static final int driverturretPOVLeft=270;

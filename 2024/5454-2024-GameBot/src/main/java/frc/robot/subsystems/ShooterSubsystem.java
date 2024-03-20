@@ -76,7 +76,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_feederMotor.burnFlash();
 
         m_angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
-        m_angleMotor.setSmartCurrentLimit(Constants.k30Amp);
+        m_angleMotor.setSmartCurrentLimit(Constants.k40Amp);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
@@ -259,6 +259,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void RotateShooter(double speed) {
+        ResetControlType();
         m_angleMotor.set(speed);
     }
 

@@ -32,6 +32,7 @@ public class ShootRotateCommand extends Command {
     
     m_doubleSupplier=speedSupplier;
     m_isSupplierMode=true;
+    addRequirements(shooter);
   }
   @Override
   public void initialize(){

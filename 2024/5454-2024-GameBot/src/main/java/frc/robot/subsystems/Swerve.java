@@ -8,7 +8,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -104,7 +106,19 @@ public class Swerve extends SubsystemBase {
         })
         .withName("TeleopSwerve");
   }
-
+  //pass through for moveGyro
+  public void moveGyro(double direction, double rotation,double speed, double distance, boolean stopAtEnd){
+    swerve.moveGyro(direction,rotation,speed,distance,stopAtEnd);
+  }
+   public void moveNoDistance(double direction, double rotation,double speed){
+    swerve.moveGyroNoDistance(direction,rotation,speed);
+  }
+  public double legacyGetDistancefromWheel(){
+    return swerve.getDistanceFromWheel();
+  }
+  public void stopAutoDrive(){
+    swerve.stopAutoDrive();
+  }
   private BooleanSupplier FlipPath(){
     BooleanSupplier supplier;
     supplier=()->false;
@@ -118,6 +132,14 @@ public class Swerve extends SubsystemBase {
 
   public void setChassisSpeeds(ChassisSpeeds speeds) {
     swerve.setChassisSpeeds(speeds);
+  }
+
+  public void autoSetChassisSpeeds(ChassisSpeeds speeds){
+    if(DriverStation.getAlliance().get()==Alliance.Red){
+      setChassisSpeeds(speeds);
+    }else{
+      setChassisSpeeds(speeds.unaryMinus());
+    }
   }
 
   public void setMotorBrake(boolean brake) {
