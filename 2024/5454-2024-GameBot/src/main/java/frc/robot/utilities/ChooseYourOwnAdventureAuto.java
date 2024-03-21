@@ -90,10 +90,10 @@ public class ChooseYourOwnAdventureAuto {
     m_turret=turret;
     m_limeLight=limelight;
 
-    CreateCommands();
+    //CreateCommands();
   }
 
-  public void CreateCommands(){
+  /*public void CreateCommands(){
     m_shoot0=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
     m_shoot1=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
     m_shoot2=new SmartShooter(m_shooter,m_turret,m_swerve,m_limeLight,m_intake,false,false,true,false);
@@ -117,6 +117,7 @@ public class ChooseYourOwnAdventureAuto {
     m_stopIntake4=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
     m_stopIntake5=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
   }
+
   private void LogTargets(AutoPose2D pose,String posename){
     System.out.println(posename + " Path:" + pose.getPathPos().getX() + " / " + pose.getPathPos().getY());
     System.out.println(posename + " Intake:" + pose.getIntakePos().getX() + " / " + pose.getIntakePos().getY());
@@ -195,20 +196,6 @@ public class ChooseYourOwnAdventureAuto {
     } 
   }
 
-  public PathPlannerPath CreateAutoPath(Pose2d startPose,Pose2d desiredPose){
-    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-      startPose,
-      desiredPose
-    );
-
-    PathPlannerPath newPath = new PathPlannerPath(
-          bezierPoints,
-          new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-          new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    );
-
-    return newPath;
-  }
 
   public Command CreateAutoCommandOLDCODE(Swerve swerve, AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5,boolean shouldShootFinalNote){
     try{
@@ -256,8 +243,27 @@ public class ChooseYourOwnAdventureAuto {
 
       return newSequentialCommand;
     }
+  }*/
+
+  public PathPlannerPath CreateAutoPath(Pose2d startPose,Pose2d desiredPose){
+    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+      startPose,
+      desiredPose
+    );
+
+    PathPlannerPath newPath = new PathPlannerPath(
+          bezierPoints,
+          new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+          new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    );
+
+    return newPath;
   }
 
+  /**
+     * Uses AutoPose2Ds for intake position, note position, and shot position
+     * @return returns new CreateYourOwnAutoStateMachine command
+  */
   public Command CreateAutoCommand(AutoPose2D pose1,AutoPose2D pose2,AutoPose2D pose3,AutoPose2D pose4,AutoPose2D pose5){
     
     return new CreateYourOwnAutoStateMachine(m_swerve,m_shooter,m_turret,m_intake,m_limeLight,pose1,pose2,pose3,pose4,pose5);

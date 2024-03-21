@@ -7,32 +7,43 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
 
 public class AutoPose2D{
-    private Pose2d m_pos;
+    private Pose2d m_notePos;
     private Pose2d m_intakePos;
     private Pose2d m_shotPos;
     private boolean m_shouldTurn90;
     private boolean m_shouldShoot;
 
-    public AutoPose2D(Pose2d pos,Pose2d intakePos,Pose2d shotPos,boolean shouldTurn90,boolean shouldShoot){
-        //This constructor is for short note locations
-        m_pos=pos;
+    /**
+     * Constructor for alliance side notes
+    */
+    public AutoPose2D(Pose2d notePos,Pose2d intakePos,Pose2d shotPos,boolean shouldTurn90,boolean shouldShoot){
+        m_notePos=notePos;
         m_intakePos=intakePos;
         m_shotPos=shotPos;
         m_shouldShoot=shouldShoot;
         m_shouldTurn90=shouldTurn90;
     }
 
+    /**
+    * Constructor for mid map notes
+    */
     public AutoPose2D(Pose2d pos,boolean shouldTurn90,boolean shouldShoot){
         //This constructor is for long note locations
-        m_pos=pos;
+        m_notePos=pos;
         m_shouldShoot=shouldShoot;
         m_shouldTurn90=shouldTurn90;
     }
 
-    public Pose2d getPathPos(){
-        return m_pos;
+    /**
+     * Grabs Pose2d of the note position
+    */
+    public Pose2d getNotePos(){
+        return m_notePos;
     }
 
+    /**
+     * Grabs Pose2d of the intake position
+    */
     public Pose2d getIntakePos(){
         Pose2d returnValue=null;
 
@@ -44,6 +55,9 @@ public class AutoPose2D{
         return returnValue;
     }
 
+     /**
+     * Grabs Pose2d of the shot position
+    */
     public Pose2d getShotPos(){
         Pose2d returnValue=null;
 
@@ -71,10 +85,23 @@ public class AutoPose2D{
         return returnValue;
     }
 
+     /**
+     * Checks if note position is not in either alliance
+    */
+    public boolean IsLongNote(){
+        boolean returnValue=false;
+
+        if(Math.abs(m_notePos.getX())>AutoConstants.blueSideWingLineX&&Math.abs(m_notePos.getX())<AutoConstants.redSideWingLineX){
+            returnValue=true;
+        }
+
+        return returnValue;
+    }
+
     private Pose2d FindLongShotPos(){
         Pose2d returnValue=null;
 
-        if(m_pos==AutoConstants.locationLongAmpNote||m_pos==AutoConstants.locationLongAmp2Note){
+        if(m_notePos.getY()>AutoConstants.yCoordMidpoint){
             if(DriverStation.getAlliance().get()==Alliance.Red){
                 returnValue=AutoConstants.locationRedLongAmpWing;
             }else{
@@ -82,7 +109,7 @@ public class AutoPose2D{
             }
         }
 
-        if(m_pos==AutoConstants.locationLongSourceNote||m_pos==AutoConstants.locationLongSource2Note||m_pos==AutoConstants.locationLongCenterNote){
+        if(m_notePos.getY()<AutoConstants.yCoordMidpoint){
             if(DriverStation.getAlliance().get()==Alliance.Red){
                 returnValue=AutoConstants.locationRedLongSourceWing;
             }else{
@@ -96,7 +123,7 @@ public class AutoPose2D{
     private Pose2d FindLongIntakePos(){
         Pose2d returnValue=null;
 
-        if(m_pos==AutoConstants.locationLongAmpNote){
+        if(m_notePos==AutoConstants.locationLongAmpNote){
             if(DriverStation.getAlliance().get()==Alliance.Red){
                 returnValue=AutoConstants.longAmpNoteRedIntakeWaypoint;
             }else{
@@ -104,7 +131,7 @@ public class AutoPose2D{
             }
         }
 
-        if(m_pos==AutoConstants.locationLongAmp2Note){
+        if(m_notePos==AutoConstants.locationLongAmp2Note){
             if(DriverStation.getAlliance().get()==Alliance.Red){
                 returnValue=AutoConstants.longAmp2NoteRedIntakeWaypoint;
             }else{
@@ -112,7 +139,7 @@ public class AutoPose2D{
             }
         }
 
-        if(m_pos==AutoConstants.locationLongCenterNote){
+        if(m_notePos==AutoConstants.locationLongCenterNote){
             if(DriverStation.getAlliance().get()==Alliance.Red){
                 returnValue=AutoConstants.longCenterNoteRedIntakeWaypoint;
             }else{
@@ -120,7 +147,7 @@ public class AutoPose2D{
             }
         }
 
-        if(m_pos==AutoConstants.locationLongSourceNote){
+        if(m_notePos==AutoConstants.locationLongSourceNote){
             if(DriverStation.getAlliance().get()==Alliance.Red){
                 returnValue=AutoConstants.longSourceNoteRedIntakeWaypoint;
             }else{
@@ -128,7 +155,7 @@ public class AutoPose2D{
             }
         }
 
-        if(m_pos==AutoConstants.locationLongSource2Note){
+        if(m_notePos==AutoConstants.locationLongSource2Note){
             if(DriverStation.getAlliance().get()==Alliance.Red){
                 returnValue=AutoConstants.longSource2NoteRedIntakeWaypoint;
             }else{

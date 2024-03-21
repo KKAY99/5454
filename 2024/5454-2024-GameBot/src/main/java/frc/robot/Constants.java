@@ -103,6 +103,11 @@ public final class Constants {
 
         public static final String testStart="TEST START";
 
+        public static final double blueSideWingLineX=0;
+        public static final double redSideWingLineX=0;
+
+        public static final double yCoordMidpoint=5.54;
+
         public static final Pose2d BLUETESTSTART=new Pose2d(0,0,new Rotation2d(0));
         public static final Pose2d REDTESTSTART=new Pose2d(16,0,new Rotation2d(0));
         
@@ -167,9 +172,9 @@ public final class Constants {
         public static final AutoPose2D longSourceAutoPoses=new AutoPose2D(locationLongSourceNote,false,true);
        
         public static final Pose2d locationRedLongAmpWing=new Pose2d(12.22,6.43,new Rotation2d(0));
-        public static final Pose2d locationBlueLongAmpWing=new Pose2d(12.22,1.72,new Rotation2d(0));
+        public static final Pose2d locationBlueLongAmpWing=new Pose2d(-12.22,-1.72,new Rotation2d(0));
         public static final Pose2d locationRedLongSourceWing=new Pose2d(4.45,6.43,new Rotation2d(0));
-        public static final Pose2d locationBlueLongSourceWing=new Pose2d(4.45,1.72,new Rotation2d(0));
+        public static final Pose2d locationBlueLongSourceWing=new Pose2d(-4.45,-1.72,new Rotation2d(0));
        
         public static final Pose2d redCenterStartPos=new Pose2d(15.17,5.54,new Rotation2d(0));
         public static final Pose2d blueCenterStartPos=new Pose2d(-1.13,-5.54,new Rotation2d(0));
@@ -184,9 +189,9 @@ public final class Constants {
         public static final Pose2d blueRightSpeakerStartPos=new Pose2d(-0.73,-4.23,new Rotation2d(0));
 
         public static final Pose2d redAmpMoveOutOfBoundPos=new Pose2d(12.17,6.82,new Rotation2d(0));
-        public static final Pose2d blueAmpMoveOutOfBoundPos=new Pose2d(4.25,6.98,new Rotation2d(0));
+        public static final Pose2d blueAmpMoveOutOfBoundPos=new Pose2d(-4.25,-6.98,new Rotation2d(0));
         public static final Pose2d redSourceMoveOutOfBoundPos=new Pose2d(12.79,1.84,new Rotation2d(0));
-        public static final Pose2d blueSourceMoveOutOfBoundPos=new Pose2d(3.86,1.50,new Rotation2d(0));
+        public static final Pose2d blueSourceMoveOutOfBoundPos=new Pose2d(-3.86,-1.50,new Rotation2d(0));
         public static final AutoPose2D moveOutRedSourceAutoPose=new AutoPose2D(redSourceMoveOutOfBoundPos,redSourceMoveOutOfBoundPos,redSourceMoveOutOfBoundPos,false,false);
         public static final AutoPose2D moveOutRedAmpAutoPose=new AutoPose2D(redAmpMoveOutOfBoundPos,redAmpMoveOutOfBoundPos,redAmpMoveOutOfBoundPos,false,false);
         public static final AutoPose2D moveOutBlueSourceAutoPose=new AutoPose2D(blueSourceMoveOutOfBoundPos,blueSourceMoveOutOfBoundPos,blueSourceMoveOutOfBoundPos,false,false);

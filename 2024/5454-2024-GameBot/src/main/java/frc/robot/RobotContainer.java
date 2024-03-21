@@ -343,15 +343,15 @@ public class RobotContainer {
         m_autoPath1.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath1.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath1.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        m_autoPath1.addOption(AutoConstants.redSourceMoveOut,AutoConstants.moveOutRedSourceAutoPose);
-        m_autoPath1.addOption(AutoConstants.redAmpMoveOut,AutoConstants.moveOutRedAmpAutoPose);
-        m_autoPath1.addOption(AutoConstants.blueSourceMoveOut,AutoConstants.moveOutBlueSourceAutoPose);
-        m_autoPath1.addOption(AutoConstants.blueAmpMoveOut,AutoConstants.moveOutBlueSourceAutoPose);
-        /*m_autoPath1.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        //m_autoPath1.addOption(AutoConstants.redSourceMoveOut,AutoConstants.moveOutRedSourceAutoPose);
+        //m_autoPath1.addOption(AutoConstants.redAmpMoveOut,AutoConstants.moveOutRedAmpAutoPose);
+        //m_autoPath1.addOption(AutoConstants.blueSourceMoveOut,AutoConstants.moveOutBlueSourceAutoPose);
+        //m_autoPath1.addOption(AutoConstants.blueAmpMoveOut,AutoConstants.moveOutBlueSourceAutoPose);
+        m_autoPath1.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath1.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath1.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath1.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath1.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
+        m_autoPath1.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
         SmartDashboard.putData("Auto Path 1",m_autoPath1);
 
         m_autoPath2.setDefaultOption(AutoConstants.noPath, null);
@@ -361,11 +361,11 @@ public class RobotContainer {
         m_autoPath2.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath2.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath2.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        /*m_autoPath2.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        m_autoPath2.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath2.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath2.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath2.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath2.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
+        m_autoPath2.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
         SmartDashboard.putData("Auto Path 2",m_autoPath2);
 
         m_autoPath3.setDefaultOption(AutoConstants.noPath, null);
@@ -375,11 +375,11 @@ public class RobotContainer {
         m_autoPath3.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath3.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath3.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        /*m_autoPath3.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        m_autoPath3.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath3.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath3.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath3.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath3.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
+        m_autoPath3.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
         SmartDashboard.putData("Auto Path 3",m_autoPath3);
 
         m_autoPath4.setDefaultOption(AutoConstants.noPath, null);
@@ -389,11 +389,11 @@ public class RobotContainer {
         m_autoPath4.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath4.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath4.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        /*m_autoPath4.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        m_autoPath4.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath4.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath4.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath4.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath4.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
+        m_autoPath4.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
         SmartDashboard.putData("Auto Path 4",m_autoPath4);
 
         m_autoPath5.setDefaultOption(AutoConstants.noPath, null);
@@ -403,11 +403,11 @@ public class RobotContainer {
         m_autoPath5.addOption(AutoConstants.redShortAmpNote,AutoConstants.redShortAmpAutoPoses);
         m_autoPath5.addOption(AutoConstants.redShortCenterNote,AutoConstants.redShortCenterAutoPoses);
         m_autoPath5.addOption(AutoConstants.redShortSourceNote,AutoConstants.redShortSourceAutoPoses);
-        /*m_autoPath5.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
+        m_autoPath5.addOption(AutoConstants.longAmpNote1,AutoConstants.longAmpAutoPoses);
         m_autoPath5.addOption(AutoConstants.longAmpNote2,AutoConstants.longAmp2AutoPoses);
         m_autoPath5.addOption(AutoConstants.longCenterNote,AutoConstants.longCenterAutoPoses);
         m_autoPath5.addOption(AutoConstants.longSourceNote1,AutoConstants.longSourceAutoPoses);
-        m_autoPath5.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);*/
+        m_autoPath5.addOption(AutoConstants.longSourceNote2,AutoConstants.longSource2AutoPoses);
         SmartDashboard.putData("Auto Path 5",m_autoPath5);
 
         m_shootFinalNote.setDefaultOption("Dont Shoot Final Note",false);
