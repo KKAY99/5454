@@ -196,6 +196,9 @@ public final class Constants {
         public static final AutoPose2D moveOutRedAmpAutoPose=new AutoPose2D(redAmpMoveOutOfBoundPos,redAmpMoveOutOfBoundPos,redAmpMoveOutOfBoundPos,false,false);
         public static final AutoPose2D moveOutBlueSourceAutoPose=new AutoPose2D(blueSourceMoveOutOfBoundPos,blueSourceMoveOutOfBoundPos,blueSourceMoveOutOfBoundPos,false,false);
         public static final AutoPose2D moveOutBlueAmpAutoPose=new AutoPose2D(blueAmpMoveOutOfBoundPos,blueAmpMoveOutOfBoundPos,blueAmpMoveOutOfBoundPos,false,false);
+      
+        public static final double distancetoShortNote=3.0;
+        public static final double distanceBetweeNotes=4.0;
       }
     
     public static final class AutoManual{

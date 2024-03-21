@@ -484,7 +484,7 @@ public class RobotContainer {
         returnCommand=new AutoDoNothingCommand();
         break;
       case Constants.AutoConstants.autoMode9: // Legacy-Score, Center Amp Short, Amp Short
-        returnCommand=new AutoDoNothingCommand();
+        returnCommand=legacyAutoShootMoveBackShoot(currentAlliance);
         break;     
       default:
         returnCommand=new AutoDoNothingCommand();
@@ -606,7 +606,29 @@ public class RobotContainer {
     SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false); 
     TurretPosCommand turretSet0=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     IntakeToggleCommand startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
-    AutoMoveCommand moveback = new AutoMoveCommand(m_swerve,0.0, 2.0);
+    AutoMoveCommand moveback = new AutoMoveCommand(m_swerve,0.0, Constants.AutoConstants.distancetoShortNote);
     return new SequentialCommandGroup(shoot0,turretSet0,startIntake1,moveback,shoot1);
+  }
+    private Command legacyAutoShootMoveBackShoot(Alliance currentAlliance){
+    SmartShooter shoot0=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false); 
+    SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false); 
+    SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,false); 
+    TurretPosCommand turretSet0=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    TurretPosCommand turretSet90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    IntakeToggleCommand startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    IntakeToggleCommand startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
+    AutoMoveCommand moveback = new AutoMoveCommand(m_swerve,0.0, Constants.AutoConstants.distancetoShortNote);
+    AutoMoveCommand moveover;
+    AutoMoveCommand moveover2;
+    if(currentAlliance==Alliance.Red){ 
+      moveover = new AutoMoveCommand(m_swerve,0.0, Constants.AutoConstants.distanceBetweeNotes);
+      moveover2 = new AutoMoveCommand(m_swerve,0.0, -Constants.AutoConstants.distanceBetweeNotes);
+    }else { // switch direction for Blue
+      moveover = new AutoMoveCommand(m_swerve,0.0, -Constants.AutoConstants.distanceBetweeNotes);
+      moveover2 = new AutoMoveCommand(m_swerve,0.0, Constants.AutoConstants.distanceBetweeNotes);
+
+    }
+      return new SequentialCommandGroup(shoot0,turretSet0,startIntake1,moveback,shoot1,turretSet90,startIntake2,moveover,moveover2,shoot2);
+  }
   }
 }    
