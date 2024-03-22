@@ -19,10 +19,11 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import java.util.function.DoubleSupplier;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -50,9 +51,9 @@ public class TurretSubsystem extends SubsystemBase{
   private double kTurretP=Constants.TurretConstants.turretP;
   private double kTurretI=Constants.TurretConstants.turretI;
   private double kTurretD=Constants.TurretConstants.turretD;
+  private DoubleSupplier m_ySpeed;
 
-  public TurretSubsystem(int turretMotorPort, int limitSwitchPort, Limelight limelight,TurretSubsystemIO turretIO){
-    m_turretIO=turretIO;
+  public TurretSubsystem(int turretMotorPort, int limitSwitchPort, Limelight limelight,DoubleSupplier getYSpeed){
     m_limeLight=limelight;
     m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
     m_turretMotor.setSmartCurrentLimit(Constants.k15Amp);
@@ -60,7 +61,7 @@ public class TurretSubsystem extends SubsystemBase{
     m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
     m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
     m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
-   
+    m_ySpeed=getYSpeed;
     m_limitSwitch=new DigitalInput(limitSwitchPort);
     m_encoder=m_turretMotor.getEncoder();
     m_pidController=m_turretMotor.getPIDController();
@@ -68,7 +69,7 @@ public class TurretSubsystem extends SubsystemBase{
     m_pidController.setI(kTurretI);
     m_pidController.setD(kTurretD);
     m_turretMotor.burnFlash(); //ensure all settings are saved if a a browout happens
-     m_turretMotor.burnFlash();
+    
   }
 
   public boolean IsOnTarget(){
@@ -92,6 +93,12 @@ public class TurretSubsystem extends SubsystemBase{
     double limelightDis=m_limeLight.getDistance();
     double x=m_limeLight.getXRaw()-m_shotTable.getCrosshairOffset(limelightDis);
     double multiplier=m_shotTable.getDistanceMultiplier(limelightDis);
+    // if robot is moving on Y Axis speed up turret
+    if(m_ySpeed.getAsDouble()>.3){
+      multiplier=multiplier*1.2;
+    }else if(m_ySpeed.getAsDouble()>.4){
+      multiplier=multiplier*1.5;
+    }
     Logger.recordOutput("Turret/TrackXTarget",x);
    
    
