@@ -245,6 +245,95 @@ public class ChooseYourOwnAdventureAuto {
     }
   }*/
 
+  public Pose2d getNotePose(AutoConstants.NotePoses notePos,Alliance currentAlliance){
+    Pose2d returnPose=new Pose2d(0,0,new Rotation2d(0));
+
+    switch(notePos){
+      case CENTERNOTEPOS:
+        if(currentAlliance==Alliance.Blue){
+          returnPose=AutoConstants.locationBlueShortCenterNote;
+        }else{
+          returnPose=AutoConstants.locationRedShortCenterNote;
+        }
+      break;
+      case EXACTCENTERNOTEPOS:
+        if(currentAlliance==Alliance.Blue){
+          returnPose=AutoConstants.blueShortCenterNoteIntakeWaypoint;
+        }else{
+          returnPose=AutoConstants.redShortCenterNoteIntakeWaypoint;
+        }
+      break;
+      case AMPNOTEPOS:
+        if(currentAlliance==Alliance.Blue){
+          returnPose=AutoConstants.locationBlueShortAmpNote;
+        }else{
+          returnPose=AutoConstants.locationRedShortAmpNote;
+        }
+      break;
+      case SOURCENOTEPOS:
+        if(currentAlliance==Alliance.Blue){
+          returnPose=AutoConstants.locationBlueShortSourceNote;
+        }else{
+          returnPose=AutoConstants.locationRedShortSourceNote;
+        }
+      break;
+      case LONGAMP1POS:
+      break;
+      case LONGAMP2POS:
+      break;
+      case LONGCENTERPOS:
+      break;
+      case LONGSOURCE1POS:
+      break;
+      case LONGSOURCE2POS:
+      break;
+    }
+
+    return returnPose;
+  }
+
+  public Pose2d getStartingPose(AutoConstants.StartingLocations location,Alliance currentAlliance){
+    Pose2d returnPose=new Pose2d();
+      switch(location){
+        case LEFTAMP:
+        if(currentAlliance==Alliance.Red){   
+          //returnPose=AutoConstants.redLeftAmpStartPos;     
+        }else{
+          //returnPose=AutoConstants.blueLeftAmpStartPos;
+        }
+        break;
+        case LEFTSPEAKER:
+        if(currentAlliance==Alliance.Red){
+          returnPose=AutoConstants.redLeftSpeakerStartPos;        
+        }else{
+          returnPose=AutoConstants.blueLeftSpeakerStartPos; 
+        }
+        break;
+        case CENTER1:
+        if(currentAlliance==Alliance.Red){
+          returnPose=AutoConstants.redCenterStartPos;      
+        }else{
+          returnPose=AutoConstants.blueCenterStartPos;   
+        }
+        break;
+        case RIGHTSPEAKER:
+        if(currentAlliance==Alliance.Red){ 
+          returnPose=AutoConstants.redRightSpeakerStartPos;        
+        }else{
+          returnPose=AutoConstants.blueRightSpeakerStartPos;  
+        }
+        break;
+        case TESTSTART:
+        if(currentAlliance==Alliance.Red){ 
+          returnPose=AutoConstants.REDTESTSTART;        
+        }else{
+          returnPose=AutoConstants.BLUETESTSTART;  
+        }
+        break;
+      }
+    return returnPose;
+  }
+
   public PathPlannerPath CreateAutoPath(Pose2d startPose,Pose2d desiredPose){
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
       startPose,

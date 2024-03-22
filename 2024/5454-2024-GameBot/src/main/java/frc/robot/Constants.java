@@ -44,6 +44,18 @@ public final class Constants {
           TESTSTART
         }
 
+        public enum NotePoses {
+          CENTERNOTEPOS,
+          EXACTCENTERNOTEPOS,
+          AMPNOTEPOS,
+          SOURCENOTEPOS,
+          LONGAMP1POS,
+          LONGAMP2POS,
+          LONGCENTERPOS,
+          LONGSOURCE1POS,
+          LONGSOURCE2POS
+        }
+
         public enum AutonomousRoutines {
           REDSCORENOTE4,
           REDSCORENOTE5R,
@@ -197,12 +209,12 @@ public final class Constants {
         public static final AutoPose2D moveOutBlueSourceAutoPose=new AutoPose2D(blueSourceMoveOutOfBoundPos,blueSourceMoveOutOfBoundPos,blueSourceMoveOutOfBoundPos,false,false);
         public static final AutoPose2D moveOutBlueAmpAutoPose=new AutoPose2D(blueAmpMoveOutOfBoundPos,blueAmpMoveOutOfBoundPos,blueAmpMoveOutOfBoundPos,false,false);
       
-        public static final double distancetoShortNote=3.0;
-        public static final double distanceBetweeNotes=4.0;
+        public static final double distancetoShortNote=2.0;
+        public static final double distanceBetweeNotes=1.6;
       }
     
     public static final class AutoManual{
-      public static final double autoDriveSpeed=0.4;
+      public static final double autoDriveSpeed=0.6;
     }
     public static final class InputControllers {
       public static final int kXboxDrive = 0;

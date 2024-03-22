@@ -11,6 +11,7 @@ public class AutoMoveCommand extends Command {
   private final double m_rcw;
   private boolean m_useGyro=false;
   private boolean m_isFinished=false;
+  private boolean m_driveStarted=false;
   private double m_startingDistance=0;
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})    
   public AutoMoveCommand(Swerve subsystem,double direction,double distance) {
@@ -41,9 +42,10 @@ public class AutoMoveCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_startingDistance=Math.abs(m_drive.legacyGetDistancefromWheel());
+    m_startingDistance=m_drive.legacyGetDistancefromWheel();
+    System.out.println("Starting Distance:" + m_startingDistance);
     m_isFinished=false;
- 
+    m_driveStarted=false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -63,10 +65,13 @@ public class AutoMoveCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      double distancetoGo=m_distance-(Math.abs(m_drive.legacyGetDistancefromWheel())-m_startingDistance);
+      double distancetoGo=m_distance-Math.abs(m_drive.legacyGetDistancefromWheel()-m_startingDistance);
       if(distancetoGo>0){
-        System.out.println("Distance to Go:" + distancetoGo + " Direction:" + m_direction + " Rotation:" + m_rcw);
-        m_drive.moveNoDistance(m_direction,m_rcw,Constants.AutoManual.autoDriveSpeed);   
+        System.out.println("Distance to Go:" + distancetoGo + "Current Distance:"+ Math.abs(m_drive.legacyGetDistancefromWheel()) + "Direction:" + m_direction + " Rotation:" + m_rcw );
+        if(m_driveStarted==false){
+          m_drive.moveNoDistance(m_direction,m_rcw,Constants.AutoManual.autoDriveSpeed);   
+          m_driveStarted=true;
+        }
       }else{     
         System.out.println("stopping");
         m_drive.stopAutoDrive(); 

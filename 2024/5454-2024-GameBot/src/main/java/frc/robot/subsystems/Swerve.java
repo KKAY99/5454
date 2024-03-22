@@ -225,8 +225,8 @@ public class Swerve extends SubsystemBase {
     m_lastFieldRelVel = m_fieldRelVel;
     
     swerve.updateOdometry();
-    //Logger.recordOutput("Swerve/FieldRelativeSpeedX", m_fieldRelVel.vx);
-    //Logger.recordOutput("Swerve/FieldRelativeSpeedY", m_fieldRelVel.vy);
+    Logger.recordOutput("Swerve/FieldRelativeSpeedX", m_fieldRelVel.vx);
+    Logger.recordOutput("Swerve/FieldRelativeSpeedY", m_fieldRelVel.vy);
     //Logger.recordOutput("Swerve/FieldRelativeAccelX",m_fieldRelAccel.ax);
     //Logger.recordOutput("Swerve/FieldRelativeAccelY",m_fieldRelAccel.ay);
     Logger.recordOutput("Swerve/Gyro Yaw",swerve.getYaw());

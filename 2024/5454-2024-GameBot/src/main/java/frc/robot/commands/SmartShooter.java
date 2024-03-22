@@ -303,6 +303,7 @@ public class SmartShooter extends Command {
         m_shooter.ResetControlType();
         m_shooter.stopRotate();
         m_intake.stopIntake();
+        m_intake.ResetToggleBoolean();
         m_isRunning=false;
         m_state=STATE.START;
         m_shooter.ShotTaken();
