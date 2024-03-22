@@ -94,13 +94,16 @@ public class TurretSubsystem extends SubsystemBase{
     double limelightDis=m_limeLight.getDistance();
     double x=m_limeLight.getXRaw()-m_shotTable.getCrosshairOffset(limelightDis);
     double multiplier=m_shotTable.getDistanceMultiplier(limelightDis);
+    double yRobotSpeed=Math.abs(m_ySpeed.getAsDouble());
     // if robot is moving on Y Axis speed up turret
-    /*if(m_ySpeed.getAsDouble()>.3){
-      multiplier=multiplier*1.2;
-    }else if(m_ySpeed.getAsDouble()>.4){
-      multiplier=multiplier*1.5;
-    }*/
-    Logger.recordOutput("Turret/TrackXTarget",x);
+    if(yRobotSpeed>.2){
+      multiplier=multiplier*.8;
+    }else if(yRobotSpeed>.5){
+      multiplier=multiplier*0.6;
+    }else if(yRobotSpeed>1.1){
+      multiplier=multiplier*0.4;
+    }
+    //Logger.recordOutput("Turret/TrackXTarget",x);
    
    
     if(m_limeLight.isTargetAvailible()){
@@ -119,7 +122,9 @@ public class TurretSubsystem extends SubsystemBase{
         }else{
           speed=Constants.LimeLightValues.limeLightTrackSpeed5;
         }
-        System.out.println("Distance X " + x + " - Speed: " + speed);
+         System.out.println("Robot Speed: " + yRobotSpeed + " Turret Speed:"+ speed);
+   
+        //System.out.println("Distance X " + x + " - Speed: " + speed);
         if(x<0 && speed!=0){
           RunCheckLimits(speed);
           m_speed=speed;
@@ -137,7 +142,7 @@ public class TurretSubsystem extends SubsystemBase{
         }
         double oldspeed=m_speed; // speed gets set to zero in checklimits
         if(RunCheckLimits(m_speed)) {
-          System.out.println("reverse speed" + oldspeed);
+          //System.out.println("reverse speed" + oldspeed);
           m_speed=0-oldspeed;  // reverse speed when we hit a limit
         }
       

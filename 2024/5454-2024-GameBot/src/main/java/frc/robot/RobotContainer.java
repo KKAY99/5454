@@ -472,7 +472,7 @@ public class RobotContainer {
         returnCommand=new AutoDoNothingCommand();
         break;
       case Constants.AutoConstants.autoMode2: // 2=PP-Start Center,Score, Center Short, Amp Short
-        returnCommand=PathPlanPreset1();
+        returnCommand=PathPlanCenterScoreCenterAmp();
         break;
       case Constants.AutoConstants.autoMode3: // 3=PP-Start Left, Amp Short, Amp Long
         returnCommand=new AutoDoNothingCommand();
@@ -626,6 +626,7 @@ public class RobotContainer {
     IntakeToggleCommand startIntake1=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
     IntakeToggleCommand startIntake2=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,true);
     AutoMoveCommand moveback = new AutoMoveCommand(m_swerve,0.0, Constants.AutoConstants.distancetoShortNote);
+    AutoMoveCommand moveforward = new AutoMoveCommand(m_swerve,180, Constants.AutoConstants.distancBacktoNoteLine);
     AutoMoveCommand moveover;
     AutoMoveCommand moveover2;
     if(currentAlliance==Alliance.Red){ 
@@ -636,11 +637,11 @@ public class RobotContainer {
       moveover2 = new AutoMoveCommand(m_swerve,270.0, Constants.AutoConstants.distanceBetweeNotes);
 
     }
-      return new SequentialCommandGroup(shoot0,turretSet00,startIntake1,shooterUp0,moveback,shoot1,turretSet90,
+      return new SequentialCommandGroup(shoot0,turretSet00,startIntake1,shooterUp0,moveback,shoot1,moveforward,turretSet90,
                                         shooterUp1,startIntake2,moveover,turretSet01,moveover2,shoot2);
   }
 
-  public Command PathPlanPreset1(){
+  public Command PathPlanCenterScoreCenterAmp(){
     ChooseYourOwnAdventureAuto autoBuilder=new ChooseYourOwnAdventureAuto(m_swerve, m_shooter, m_intake, m_turret, m_TurretLimelight);
     Alliance currentAlliance=DriverStation.getAlliance().get();
     Pose2d centerStartPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.CENTER1,currentAlliance);

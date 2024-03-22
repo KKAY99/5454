@@ -132,9 +132,9 @@ public final class Constants {
         public static final Pose2d presetAutoBlueShortAmpNote=new Pose2d(2.35,6.99,new Rotation2d(0));
         public static final Pose2d presetAutoBlueShortSourceNote=new Pose2d(2.35,4.09,new Rotation2d(0));
 
-        public static final Pose2d presetAutoRedShortCenterNote=new Pose2d(13.68,5.57,new Rotation2d(0));
-        public static final Pose2d presetAutoRedShortSourceNote=new Pose2d(13.68,4.09,new Rotation2d(0));
-        public static final Pose2d presetAutoRedShortAmpNote=new Pose2d(13.68,7.01,new Rotation2d(0));
+        public static final Pose2d presetAutoRedShortCenterNote=new Pose2d(13.5,5.57,new Rotation2d(0));
+        public static final Pose2d presetAutoRedShortSourceNote=new Pose2d(13.5,4.09,new Rotation2d(0));
+        public static final Pose2d presetAutoRedShortAmpNote=new Pose2d(13.5,7.01,new Rotation2d(0));
 
         public static final Pose2d locationBlueShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
         public static final Pose2d blueShortCenterNoteIntakeWaypoint=new Pose2d(1.7,5.54,new Rotation2d(0));
@@ -217,6 +217,7 @@ public final class Constants {
         public static final AutoPose2D moveOutBlueAmpAutoPose=new AutoPose2D(blueAmpMoveOutOfBoundPos,blueAmpMoveOutOfBoundPos,blueAmpMoveOutOfBoundPos,false,false);
       
         public static final double distancetoShortNote=2.0;
+        public static final double distancBacktoNoteLine=0.15;
         public static final double distanceBetweeNotes=1.6;
       }
     
@@ -379,7 +380,7 @@ public final class Constants {
       public static final double limeLightTrackSpeed1=0.05;
       public static final double limeLightTrackSpeed2=0.08;
       public static final double limeLightTrackSpeed3=0.10;
-      public static final double limeLightTrackSpeed4=0.35;
+      public static final double limeLightTrackSpeed4=0.5; //0.35
       public static final double limeLightTrackSpeed5=0.8;
 
       public static final String turretLimelightName="";

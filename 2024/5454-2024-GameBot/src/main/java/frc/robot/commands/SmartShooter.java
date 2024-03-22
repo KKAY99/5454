@@ -176,6 +176,13 @@ public class SmartShooter extends Command {
         
     }
 
+    private void setAnglefromLimelight(double limeLimelightDis){
+            m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   
+            m_motor2TargetSpeed=m_shotTable.getVelocity2(limeLimelightDis);    
+            m_targetAngle=m_shotTable.getAngle(limeLimelightDis);
+            m_shooter.setAngle(m_targetAngle);
+           
+    }
     @Override
     public boolean isFinished(){
         boolean returnValue=false;
@@ -207,7 +214,7 @@ public class SmartShooter extends Command {
                 Logger.recordOutput("Shooter/AngleGap",angleGap);
                 if(angleGap<Constants.ShooterConstants.kAngleDeadband && angleGap>-Constants.ShooterConstants.kAngleDeadband ){
                     m_shooter.stopRotate();
-                    m_state=STATE.TURRETFIND;
+                    m_state=STATE.CHECKROTATEMODE;
                     Logger.recordOutput("Shooter/AngleGap",0);
                 }
             break;
@@ -223,6 +230,7 @@ public class SmartShooter extends Command {
             case TURRETLOCKWAIT:                   
                 m_turret.TrackTarget(true);        
                 if(m_limelight.isTargetAvailible()){
+                    
                     if(m_turret.IsOnTarget()&&!m_shouldToggle){
                         m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
                         m_state=STATE.SETANGLE;
@@ -232,10 +240,8 @@ public class SmartShooter extends Command {
             break;           
             case SETANGLE: 
                 if(m_limelight.isTargetAvailible()){  
-                    m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   
-                    m_motor2TargetSpeed=m_shotTable.getVelocity2(limeLimelightDis);    
-                    m_targetAngle=m_shotTable.getAngle(limeLimelightDis);
-                    m_shooter.setAngle(m_targetAngle);
+                    setAnglefromLimelight(limeLimelightDis);
+                   
                     m_state=STATE.WAITFORANGLE;
                 }else{
                     m_shooter.stopRotate();
