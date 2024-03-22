@@ -28,6 +28,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class TurretSubsystem extends SubsystemBase{
   private TurretSubsystemIO m_turretIO;
@@ -94,11 +95,11 @@ public class TurretSubsystem extends SubsystemBase{
     double x=m_limeLight.getXRaw()-m_shotTable.getCrosshairOffset(limelightDis);
     double multiplier=m_shotTable.getDistanceMultiplier(limelightDis);
     // if robot is moving on Y Axis speed up turret
-    if(m_ySpeed.getAsDouble()>.3){
+    /*if(m_ySpeed.getAsDouble()>.3){
       multiplier=multiplier*1.2;
     }else if(m_ySpeed.getAsDouble()>.4){
       multiplier=multiplier*1.5;
-    }
+    }*/
     Logger.recordOutput("Turret/TrackXTarget",x);
    
    

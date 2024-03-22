@@ -99,7 +99,7 @@ public class RobotContainer {
     private NoteFlipperSubsystem m_flip=new NoteFlipperSubsystem(Constants.NoteFlipConstants.canID);
     private TurretSubsystem m_turret=new TurretSubsystem(Constants.TurretConstants.turretMotorPort,
                                          Constants.TurretConstants.turretLimitSwitchPort,
-                                         m_TurretLimelight,new TurretSubsystemIO(){});
+                                         m_TurretLimelight,m_swerve.getYSpeedSupplier());
     private IntakeSubsystem m_intake=new IntakeSubsystem(Constants.IntakeConstants.intakeMotorPort1,
                                          Constants.IntakeConstants.intakeMotorPort2,
                                          Constants.IntakeConstants.intakeBreakBeamport);

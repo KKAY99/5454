@@ -181,6 +181,9 @@ public class Swerve extends SubsystemBase {
   public ChassisSpeeds getRobotVelocity(){
     return swerve.getRobotVelocity();
   }
+  public DoubleSupplier getYSpeedSupplier(){
+    return ()->swerve.getRobotVelocity().vyMetersPerSecond;
+  }
   public Command createPathCommand(PathPlannerPath path){
     return AutoBuilder.followPath(path);
   }
