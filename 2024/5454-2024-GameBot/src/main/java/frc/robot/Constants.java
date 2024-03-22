@@ -46,7 +46,6 @@ public final class Constants {
 
         public enum NotePoses {
           CENTERNOTEPOS,
-          EXACTCENTERNOTEPOS,
           AMPNOTEPOS,
           SOURCENOTEPOS,
           LONGAMP1POS,
@@ -128,6 +127,14 @@ public final class Constants {
 
         public static final Pose2d redSpeakerPos=new Pose2d(16.32,5.54,new Rotation2d(0));
         public static final Pose2d blueSpeakerPos=new Pose2d(0.30,5.54,new Rotation2d(0));
+
+        public static final Pose2d presetAutoBlueShortCenterNote=new Pose2d(2.35,5.54,new Rotation2d(0));
+        public static final Pose2d presetAutoBlueShortAmpNote=new Pose2d(2.35,6.99,new Rotation2d(0));
+        public static final Pose2d presetAutoBlueShortSourceNote=new Pose2d(2.35,4.09,new Rotation2d(0));
+
+        public static final Pose2d presetAutoRedShortCenterNote=new Pose2d(13.68,5.57,new Rotation2d(0));
+        public static final Pose2d presetAutoRedShortSourceNote=new Pose2d(13.68,4.09,new Rotation2d(0));
+        public static final Pose2d presetAutoRedShortAmpNote=new Pose2d(13.68,7.01,new Rotation2d(0));
 
         public static final Pose2d locationBlueShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
         public static final Pose2d blueShortCenterNoteIntakeWaypoint=new Pose2d(1.7,5.54,new Rotation2d(0));

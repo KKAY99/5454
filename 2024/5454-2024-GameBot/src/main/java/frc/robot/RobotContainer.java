@@ -646,10 +646,9 @@ public class RobotContainer {
     Pose2d centerStartPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.CENTER1,currentAlliance);
     Pose2d centerNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.CENTERNOTEPOS,currentAlliance);
     Pose2d ampNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.AMPNOTEPOS,currentAlliance);
-    Pose2d exactCenterNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.EXACTCENTERNOTEPOS,currentAlliance);
 
-    SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
-    SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
+    SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
+    SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
     SmartShooter shoot3=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
 
     TurretPosCommand turretSet00=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
@@ -663,14 +662,15 @@ public class RobotContainer {
     ShootRotateSetReferenceCommand shooterSetRef2=new ShootRotateSetReferenceCommand(m_shooter,0);
 
     Command startToCenterNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(centerStartPos,centerNotePos));
-    Command moveBackToCenterNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(centerNotePos,exactCenterNotePos));
     Command centerNoteToAmpNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(centerNotePos,ampNotePos));
+    Command ampNoteToCenterNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(ampNotePos,centerNotePos));
 
     ParallelCommandGroup newMoveSetRef1=new ParallelCommandGroup(turretSet00,startToCenterNote,shooterSetRef1);
     ParallelCommandGroup newMoveSetRef2=new ParallelCommandGroup(turretSet90,centerNoteToAmpNote,shooterSetRef2);
+    ParallelCommandGroup newMoveSetRef3=new ParallelCommandGroup(turretSet01,ampNoteToCenterNote);
 
     m_swerve.resetOdometry(centerStartPos);
-    SequentialCommandGroup newSeq=new SequentialCommandGroup(shoot1,intake1,newMoveSetRef1,shoot2,moveBackToCenterNote,intake2,newMoveSetRef2,shoot3);
+    SequentialCommandGroup newSeq=new SequentialCommandGroup(shoot1,intake1,newMoveSetRef1,shoot2,intake2,newMoveSetRef2,newMoveSetRef3,shoot3);
 
     return newSeq;
   }

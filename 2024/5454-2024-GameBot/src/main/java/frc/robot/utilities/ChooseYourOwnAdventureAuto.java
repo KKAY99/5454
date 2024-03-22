@@ -251,30 +251,23 @@ public class ChooseYourOwnAdventureAuto {
     switch(notePos){
       case CENTERNOTEPOS:
         if(currentAlliance==Alliance.Blue){
-          returnPose=AutoConstants.locationBlueShortCenterNote;
+          returnPose=AutoConstants.presetAutoBlueShortCenterNote;
         }else{
-          returnPose=AutoConstants.locationRedShortCenterNote;
-        }
-      break;
-      case EXACTCENTERNOTEPOS:
-        if(currentAlliance==Alliance.Blue){
-          returnPose=AutoConstants.blueShortCenterNoteIntakeWaypoint;
-        }else{
-          returnPose=AutoConstants.redShortCenterNoteIntakeWaypoint;
+          returnPose=AutoConstants.presetAutoRedShortCenterNote;
         }
       break;
       case AMPNOTEPOS:
         if(currentAlliance==Alliance.Blue){
-          returnPose=AutoConstants.locationBlueShortAmpNote;
+          returnPose=AutoConstants.presetAutoBlueShortAmpNote;
         }else{
-          returnPose=AutoConstants.locationRedShortAmpNote;
+          returnPose=AutoConstants.presetAutoRedShortAmpNote;
         }
       break;
       case SOURCENOTEPOS:
         if(currentAlliance==Alliance.Blue){
-          returnPose=AutoConstants.locationBlueShortSourceNote;
+          returnPose=AutoConstants.presetAutoBlueShortSourceNote;
         }else{
-          returnPose=AutoConstants.locationRedShortSourceNote;
+          returnPose=AutoConstants.presetAutoRedShortSourceNote;
         }
       break;
       case LONGAMP1POS:
