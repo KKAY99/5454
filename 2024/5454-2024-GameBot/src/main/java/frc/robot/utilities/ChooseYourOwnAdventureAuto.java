@@ -245,38 +245,56 @@ public class ChooseYourOwnAdventureAuto {
     }
   }*/
 
+  private Pose2d InvertPose(Pose2d pose){
+    Pose2d newPose2d=new Pose2d(pose.getX()*-1,
+                                pose.getY()*-1,
+                                pose.getRotation().unaryMinus());
+
+    return newPose2d;
+  }
+
   public Pose2d getNotePose(AutoConstants.NotePoses notePos,Alliance currentAlliance){
     Pose2d returnPose=new Pose2d(0,0,new Rotation2d(0));
 
     switch(notePos){
       case CENTERNOTEPOS:
         if(currentAlliance==Alliance.Blue){
-          returnPose=AutoConstants.presetAutoBlueShortCenterNote;
+          returnPose=InvertPose(AutoConstants.presetAutoBlueShortCenterNote);
         }else{
           returnPose=AutoConstants.presetAutoRedShortCenterNote;
         }
       break;
       case AMPNOTEPOS:
         if(currentAlliance==Alliance.Blue){
-          returnPose=AutoConstants.presetAutoBlueShortAmpNote;
+          returnPose=InvertPose(AutoConstants.presetAutoBlueShortAmpNote);
         }else{
           returnPose=AutoConstants.presetAutoRedShortAmpNote;
         }
       break;
       case SOURCENOTEPOS:
         if(currentAlliance==Alliance.Blue){
-          returnPose=AutoConstants.presetAutoBlueShortSourceNote;
+          returnPose=InvertPose(AutoConstants.presetAutoBlueShortSourceNote);
         }else{
           returnPose=AutoConstants.presetAutoRedShortSourceNote;
         }
       break;
       case LONGAMP1POS:
+      if(currentAlliance==Alliance.Blue){
+          returnPose=InvertPose(AutoConstants.presetAutoLongAmpNote1);
+        }else{
+          returnPose=AutoConstants.presetAutoLongAmpNote1;
+        }
       break;
       case LONGAMP2POS:
       break;
       case LONGCENTERPOS:
       break;
       case LONGSOURCE1POS:
+      if(currentAlliance==Alliance.Blue){
+          returnPose=InvertPose(AutoConstants.presetAutoLongSourceNote1);
+        }else{
+          returnPose=AutoConstants.presetAutoLongSourceNote1;
+        }
       break;
       case LONGSOURCE2POS:
       break;
@@ -297,7 +315,7 @@ public class ChooseYourOwnAdventureAuto {
         break;
         case LEFTSPEAKER:
         if(currentAlliance==Alliance.Red){
-          returnPose=AutoConstants.redLeftSpeakerStartPos;        
+          returnPose=AutoConstants.redRightSpeakerStartPos;        
         }else{
           returnPose=AutoConstants.blueLeftSpeakerStartPos; 
         }
@@ -311,7 +329,7 @@ public class ChooseYourOwnAdventureAuto {
         break;
         case RIGHTSPEAKER:
         if(currentAlliance==Alliance.Red){ 
-          returnPose=AutoConstants.redRightSpeakerStartPos;        
+          returnPose=AutoConstants.redLeftSpeakerStartPos;        
         }else{
           returnPose=AutoConstants.blueRightSpeakerStartPos;  
         }

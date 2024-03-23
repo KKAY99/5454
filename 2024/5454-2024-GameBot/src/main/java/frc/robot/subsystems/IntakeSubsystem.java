@@ -19,16 +19,17 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase{
-   
     private CANSparkMax m_intakeOne;
     private CANSparkMax m_intakeTwo;
+    private CANSparkMax m_intakeExtension;
 
     private double m_currentSpeed;
 
     private boolean m_intakeToggle=false;
     private AnalogAutoDirectFB6DN0E m_irReflector;
-    private DigitalInput m_breakbeam ;
-    public IntakeSubsystem(int motorOne,int motorTwo,int sensorPort){
+    private DigitalInput m_breakbeam;
+
+    public IntakeSubsystem(int motorOne,int motorTwo,int intakeExtension,int sensorPort){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
         m_intakeOne.setIdleMode(IdleMode.kBrake);
@@ -38,6 +39,7 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeOne.burnFlash(); //ensure all settings are saved if a a browout happens
         m_intakeTwo.burnFlash(); //ensure all settings are saved if a a browout happens
         m_breakbeam=new DigitalInput(sensorPort);
+        m_intakeExtension=new CANSparkMax(intakeExtension,MotorType.kBrushless);
         //TODO: REMOVE CONSTANT - EVIL CONSTANT
         //m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
       //  m_TOFlow = new TimeOfFlight(55);
@@ -53,16 +55,28 @@ public class IntakeSubsystem extends SubsystemBase{
         
     }
 
+    public void runIntakeExtension(double speed){
+        m_intakeExtension.set(speed);
+    }
+
+    public void stopIntakeExtension(){
+        m_intakeExtension.set(0);
+    }
+
     public void runIntake(double speed){
         m_currentSpeed=speed;
         m_intakeOne.set(speed);
         m_intakeTwo.set(speed);
+
+        runIntakeExtension(IntakeConstants.intakeExtensionSpeed);
     }
 
     public void stopIntake(){
         m_currentSpeed=0;
         m_intakeOne.set(0);
         m_intakeTwo.set(0);
+
+        stopIntakeExtension();
     }
             
     public void setBrakeOn(){

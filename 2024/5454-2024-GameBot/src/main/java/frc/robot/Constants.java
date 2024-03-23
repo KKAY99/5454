@@ -87,7 +87,7 @@ public final class Constants {
         public static final String autoMode2="2=PP-Start Center,Score, Center Short, Amp Short";
         public static final String autoMode3="3=PP-Start Left, Amp Short, Amp Long";
         public static final String autoMode4="4=PP-Start Right, Source Long";
-        public static final String autoMode5="5=TBD";
+        public static final String autoMode5="5=PP-Start Center, Center Note, Amp Long";
         public static final String autoMode6="6=TBD";
         public static final String autoMode7="7=Legacy-Score, Straight Back Score";
         public static final String autoMode8="8=Legacy-Score,Wait, Cross the Line Right";
@@ -135,6 +135,9 @@ public final class Constants {
         public static final Pose2d presetAutoRedShortCenterNote=new Pose2d(13.5,5.57,new Rotation2d(0));
         public static final Pose2d presetAutoRedShortSourceNote=new Pose2d(13.5,4.09,new Rotation2d(0));
         public static final Pose2d presetAutoRedShortAmpNote=new Pose2d(13.5,7.01,new Rotation2d(0));
+
+        public static final Pose2d presetAutoLongAmpNote1=new Pose2d(8.24,  7.47,new Rotation2d(0));
+        public static final Pose2d presetAutoLongSourceNote1=new Pose2d(8.24,  0.78,new Rotation2d(0));
 
         public static final Pose2d locationBlueShortCenterNote=new Pose2d(2.89,5.54,new Rotation2d(0));
         public static final Pose2d blueShortCenterNoteIntakeWaypoint=new Pose2d(1.7,5.54,new Rotation2d(0));
@@ -239,9 +242,11 @@ public final class Constants {
       public static final double intakeConveyGetNoteSpeed=1;
       //public static final double intakeConveyHasNoteSpeed=1;
       public static final double intakeConveyHasNoteSpeed=0.2;
+      public static final double intakeExtensionSpeed=1;
       public static final int intakeBreakBeamport=9;
       public static final int intakeMotorPort1=18;
       public static final int intakeMotorPort2=19;
+      public static final int intakeExtensionPort=15;
 
       public static final double timeToRunIntake=0.5;
       public static final double autoIntakeSpeed=1;
@@ -272,6 +277,9 @@ public final class Constants {
 
       public static final double turretStraightPos=0;
       public static final double turret90Pos=36.8;
+      public static final double turretLeftShootPos=0;
+      public static final double turretRightShootPos=0;
+      public static final double turretAmpNoteShootPos=0;
 
       public static final double turretP=0.050;
       public static final double turretI=0;
@@ -298,8 +306,8 @@ public final class Constants {
 
    public static final class NoteFlipConstants{
     public static final int canID=12;
-    public static final double noteFlipSpeed=0.35;
-    public static final double timeToRunAmpScore=2;
+    public static final double noteFlipSpeed=-0.25;
+    public static final double timeToRunAmpScore=1;
    }
 
    public static final class LEDConstants{
@@ -407,7 +415,7 @@ public final class Constants {
       public static final double shooterIntakeSpeed=10;
       public static final double feederSpeed=-1;
       public static final double intakeFeederSpeed=-0.4;
-      public static final double ampScoreSpeed=-5;
+      public static final double ampScoreSpeed=-7.5;
       public static final double manualfeederSpeed=-0.3;
       public static final double baseSpeedDeadband=2;
       //public static final double baseMotorSpeed=-20; //rps
@@ -417,11 +425,11 @@ public final class Constants {
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
 
-      public static final double homePos=99.14;
+      public static final double homePos=85.518;
       public static final double homeDeadband=0.05;
       public static final double homeRotateSpeed=0.1;
-      public static final double rotateLowSoftLimit=-63;
-      public static final double rotateHighSoftLimit=89; 
+      public static final double rotateLowSoftLimit=-55;
+      public static final double rotateHighSoftLimit=77; 
 
       public static final double podiumShotEncoderVal=-66;
       public static final double midShotEncoderVal=0;
@@ -433,10 +441,10 @@ public final class Constants {
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
       public static final int encoderCanID=11;
-      public static final double shooterStowAngle=90;
+      public static final double shooterStowAngle=77;
       public static final double shooterVisionClearanceAngle=20;
       public static final double shooterVisionClearanceHighPoint=20;
-      public static final double shooterAmpScoreAngle=49;
+      public static final double shooterAmpScoreAngle=-44.45;
       public static final double shooterSourceIntakeAngle=55.28;
 
       public static final double PIDTESTAngle=49;
@@ -561,9 +569,9 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
-          {17.5,-40,-40,44,4,1,6.0},
-          {20.5,-40,-40,48.5,5,1,5.6},
-          {22.7,-40,-40,50,5,1,5.4},
+          {17.5,-70,-70,34,4,1,6.0},
+          {20.5,-70,-70,36.5,5,1,5.6},
+          {22.7,-70,-70,40,5,1,5.4},
           {24.6,-40,-40,53,5,1,5.3},
           {26.5,-45,-45,56,5,1,5.2},
           {29.0,-45,-45,57,5,1,5.0},

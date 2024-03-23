@@ -47,6 +47,7 @@ public class SmartShooter extends Command {
     private boolean m_shouldRotate=true;
     private boolean m_shouldToggle;
     private double m_targetAngle=0;
+    private double m_lastAngle=1000; // out of range value
     private static int kSlowDownDeadBand=2; 
     private enum STATE{
         START,VISIONCLEARANCE,WAITFORVISIONCLEARANCE,CHECKROTATEMODE,TURRETFIND,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
@@ -78,6 +79,7 @@ public class SmartShooter extends Command {
         m_currentTime=Timer.getFPGATimestamp();
         m_state=STATE.START;
         m_isRunning=true;
+        m_lastAngle=1000; // invalid value - zero is a valid target angle
     }
     private void shootwhileMove(){
 
@@ -176,12 +178,24 @@ public class SmartShooter extends Command {
         
     }
 
-    private void setAnglefromLimelight(double limeLimelightDis){
-            m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   
-            m_motor2TargetSpeed=m_shotTable.getVelocity2(limeLimelightDis);    
-            m_targetAngle=m_shotTable.getAngle(limeLimelightDis);
-            m_shooter.setAngle(m_targetAngle);
-           
+    private boolean setAngleandSpeedfromLimelight(double limeLimelightDis){
+            boolean returnValue=false;
+            double angleGap=Math.abs(m_shooter.getRelativePosition())
+                    -Math.abs(m_targetAngle);
+            Logger.recordOutput("Shooter/AngleGap",angleGap);
+            if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
+                    m_shooter.stopRotate();
+                    returnValue=true;
+            }else if(m_lastAngle!=m_targetAngle){
+                m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   
+                m_motor2TargetSpeed=m_shotTable.getVelocity2(limeLimelightDis);    
+                m_targetAngle=m_shotTable.getAngle(limeLimelightDis);
+                m_shooter.setAngle(m_targetAngle);
+                m_lastAngle=m_targetAngle;
+
+            }
+            return returnValue;
+            
     }
     @Override
     public boolean isFinished(){
@@ -240,8 +254,7 @@ public class SmartShooter extends Command {
             break;           
             case SETANGLE: 
                 if(m_limelight.isTargetAvailible()){  
-                    setAnglefromLimelight(limeLimelightDis);
-                   
+                    setAngleandSpeedfromLimelight(limeLimelightDis);
                     m_state=STATE.WAITFORANGLE;
                 }else{
                     m_shooter.stopRotate();
@@ -249,10 +262,7 @@ public class SmartShooter extends Command {
                 }
             break;
             case WAITFORANGLE:
-                angleGap=Math.abs(m_shooter.getRelativePosition())
-                    -Math.abs(m_targetAngle);
-                Logger.recordOutput("Shooter/AngleGap",angleGap);
-                if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
+                if(setAngleandSpeedfromLimelight(limeLimelightDis)){
                     m_shooter.stopRotate();
                     m_shooter.RunShootingMotors(m_motor1TargetSpeed,m_motor2TargetSpeed,false);
                     m_feederStartTime=Timer.getFPGATimestamp()+Constants.ShooterConstants.kRampUpTime;
@@ -270,7 +280,8 @@ public class SmartShooter extends Command {
                 m_shooter.RunFeedRollers(ShooterConstants.feederSpeed);
                      
             if(m_currentTime+kTimeToRun<Timer.getFPGATimestamp()){
-                m_state=STATE.SLOW;
+                //Doesnt use slow down as it is a time waste
+                m_state=STATE.END;
             }
             break;
             case SLOW:
@@ -306,6 +317,7 @@ public class SmartShooter extends Command {
         m_turret.TrackTarget(false);
         m_turret.stop();
         m_shooter.SlowShootingMotors();  // also stops feeder 
+        m_shooter.stopShooter();
         m_shooter.ResetControlType();
         m_shooter.stopRotate();
         m_intake.stopIntake();

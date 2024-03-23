@@ -17,12 +17,12 @@ public class AmpScoreHopeCommand extends Command {
     private IntakeSubsystem m_intake;
     private NoteFlipperSubsystem m_flip;
 
-   private enum STATE{SETANGLE,WAITFORANGLE,SHOOT,FEED,SHOOTANDFEED,END}
+   private enum STATE{SETANGLE,WAITFORANGLE,SHOOTANDFEED,MOVEUPANGLE,WAITFORMOVEUPANGLE,END}
    private STATE m_state;
 
    private double m_angle;
    private double angleGap;
-   private double m_currentTime;
+   private double m_startTime;
    private double kTimeToRun=NoteFlipConstants.timeToRunAmpScore;
 
    public AmpScoreHopeCommand(ShooterSubsystem shooter,IntakeSubsystem intake,NoteFlipperSubsystem flip,double angle){
@@ -68,7 +68,7 @@ public class AmpScoreHopeCommand extends Command {
         -Math.abs(m_angle);
         if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
             m_shooter.stopRotate();
-            m_currentTime=Timer.getFPGATimestamp();
+            m_startTime=Timer.getFPGATimestamp();
             m_state=STATE.SHOOTANDFEED;
         }
         break;
@@ -77,18 +77,24 @@ public class AmpScoreHopeCommand extends Command {
         m_flip.run(NoteFlipConstants.noteFlipSpeed);
         m_intake.runIntake(IntakeConstants.intakeSpeed);
 
-        if(m_currentTime>kTimeToRun+Timer.getFPGATimestamp()){
+        if(m_startTime+kTimeToRun<Timer.getFPGATimestamp()){
             m_shooter.stopShooter();
-            m_currentTime=Timer.getFPGATimestamp();
-            m_state=STATE.FEED;
+            m_intake.stopIntake();
+            m_state=STATE.MOVEUPANGLE;
         }
     break;
-    case FEED:
-        if(m_currentTime>kTimeToRun+Timer.getFPGATimestamp()){
-            m_flip.stop();
+    case MOVEUPANGLE:    
+        m_shooter.setAngle(0);
+        m_state=STATE.WAITFORMOVEUPANGLE;
+    break;
+    case WAITFORMOVEUPANGLE:
+        angleGap=Math.abs(m_shooter.getRelativePosition())
+        -Math.abs(0);
+        if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
+            m_shooter.stopRotate();
             m_state=STATE.END;
         }
-    break;
+        break;
     case END:
      returnValue=true;
     break;
