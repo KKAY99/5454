@@ -18,6 +18,8 @@ public class NoteFlipperSubsystem extends SubsystemBase{
         m_motor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
         m_motor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);   
         m_motor.setSmartCurrentLimit(Constants.k30Amp);
+        m_motor.setOpenLoopRampRate(0);
+        m_motor.setClosedLoopRampRate(0);
         m_motor.burnFlash();
     }
 

@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.utilities.AnalogAutoDirectFB6DN0E;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase{
+    private TurretSubsystem m_turret;
+
     private CANSparkMax m_intakeOne;
     private CANSparkMax m_intakeTwo;
     private CANSparkMax m_intakeExtension;
@@ -29,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private AnalogAutoDirectFB6DN0E m_irReflector;
     private DigitalInput m_breakbeam;
 
-    public IntakeSubsystem(int motorOne,int motorTwo,int intakeExtension,int sensorPort){
+    public IntakeSubsystem(TurretSubsystem turret,int motorOne,int motorTwo,int intakeExtension,int sensorPort){
         m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
         m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
         m_intakeOne.setIdleMode(IdleMode.kBrake);
@@ -40,6 +43,9 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeTwo.burnFlash(); //ensure all settings are saved if a a browout happens
         m_breakbeam=new DigitalInput(sensorPort);
         m_intakeExtension=new CANSparkMax(intakeExtension,MotorType.kBrushless);
+
+        m_turret=turret;
+
         //TODO: REMOVE CONSTANT - EVIL CONSTANT
         //m_irReflector=new AnalogAutoDirectFB6DN0E(analogPort);
       //  m_TOFlow = new TimeOfFlight(55);
@@ -56,7 +62,14 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public void runIntakeExtension(double speed){
-        m_intakeExtension.set(speed);
+        double turretEncoderValue=m_turret.GetEncoderValue();
+
+        if(turretEncoderValue<turretEncoderValue+TurretConstants.turretDeadBand&&
+            turretEncoderValue>turretEncoderValue-TurretConstants.turretDeadBand){
+            m_intakeExtension.set(speed);
+        }else{
+            m_intakeExtension.set(-speed);
+        }
     }
 
     public void stopIntakeExtension(){

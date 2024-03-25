@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.Console;
 import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -29,6 +31,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -58,7 +61,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double m_shotsTaken;
     private double m_desiredVeloc1;
     private double m_desiredVeloc2;
-
+    private Orchestra m_orchestra = new Orchestra();
     public ShooterSubsystem(Limelight limeLight, int shootingMotor1, int shootingMotor2, int angleMotor, int feedMotor,
             int canCoderId, double baseSpeed) {
         m_limeLight = limeLight;
@@ -368,6 +371,38 @@ public class ShooterSubsystem extends SubsystemBase {
         return returnValue;
     }
 
+    public boolean isSetAnglePastRotateLimit(double angle) {
+        boolean returnValue = false;
+        
+        if(angle>ShooterConstants.rotateHighSoftLimit||angle<ShooterConstants.rotateLowSoftLimit){
+            returnValue=true;
+        }
+        return returnValue;
+    }
+
+    public void setupMusic(){
+        Orchestra orchestra = new Orchestra();
+        // Add  devices to the orchestra
+        m_orchestra.addInstrument(m_ShootingMotor1);
+        m_orchestra.addInstrument(m_ShootingMotor2);
+   
+    }
+    public void playMusic(){
+        // Add  devices to the orchestra
+        m_orchestra.addInstrument(m_ShootingMotor1);
+        m_orchestra.addInstrument(m_ShootingMotor2);
+        // Attempt to load the chrp
+        var status = m_orchestra.loadMusic("ImperialTuner.chrp");
+        if (status.isOK()) {
+            System.out.println("Playing Music");
+            m_orchestra.play();
+            
+        }
+        else{
+            System.out.println("Music File Load error " + status.getDescription());
+        }
+    }
+       
     @Override
     public void periodic() {
         Logger.recordOutput("Shooter/Shooter1VelocitySet", m_desiredVeloc1);

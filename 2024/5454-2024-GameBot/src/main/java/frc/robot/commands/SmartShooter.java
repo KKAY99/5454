@@ -183,20 +183,24 @@ public class SmartShooter extends Command {
             double angleGap=Math.abs(m_shooter.getRelativePosition())
                     -Math.abs(m_targetAngle);
             Logger.recordOutput("Shooter/AngleGap",angleGap);
+            m_targetAngle=m_shotTable.getAngle(limeLimelightDis);
+
             if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
                     m_shooter.stopRotate();
                     returnValue=true;
             }else if(m_lastAngle!=m_targetAngle){
                 m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   
                 m_motor2TargetSpeed=m_shotTable.getVelocity2(limeLimelightDis);    
+                Logger.recordOutput("Shooter/TargetMotorSpeed1",m_motor1TargetSpeed);
+                Logger.recordOutput("Shooter/TargetMotorSpeed2",m_motor2TargetSpeed);
                 m_targetAngle=m_shotTable.getAngle(limeLimelightDis);
                 m_shooter.setAngle(m_targetAngle);
                 m_lastAngle=m_targetAngle;
 
             }
-            return returnValue;
-            
+            return returnValue;      
     }
+    
     @Override
     public boolean isFinished(){
         boolean returnValue=false;
@@ -242,7 +246,8 @@ public class SmartShooter extends Command {
             case TURRETFIND:
                 m_state=STATE.TURRETLOCKWAIT;
             case TURRETLOCKWAIT:                   
-                m_turret.TrackTarget(true);        
+                m_turret.TrackTarget(true);   
+                setAngleandSpeedfromLimelight(limeLimelightDis);     
                 if(m_limelight.isTargetAvailible()){
                     
                     if(m_turret.IsOnTarget()&&!m_shouldToggle){

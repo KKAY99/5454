@@ -16,6 +16,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.AutoConstants.AutonomousRoutines;
 import frc.robot.Constants.AutoConstants.StartingLocations;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -253,6 +254,28 @@ public class ChooseYourOwnAdventureAuto {
     return newPose2d;
   }
 
+  public double getTurretAngle(Alliance currentAlliance,AutoConstants.StartingLocations location){
+    double returnAngle=10.9;
+
+    switch(location){
+        case LEFTSPEAKER:
+        if(currentAlliance==Alliance.Red){
+          returnAngle=TurretConstants.turretNonCenterShootPos;    
+        }else{
+          returnAngle=-TurretConstants.turretNonCenterShootPos;  
+        }
+        break;
+        case RIGHTSPEAKER:
+        if(currentAlliance==Alliance.Red){ 
+          returnAngle=-TurretConstants.turretNonCenterShootPos;         
+        }else{
+          returnAngle=TurretConstants.turretNonCenterShootPos;  
+        }
+        break;
+      }
+    return returnAngle; 
+  }
+
   public Pose2d getNotePose(AutoConstants.NotePoses notePos,Alliance currentAlliance){
     Pose2d returnPose=new Pose2d(0,0,new Rotation2d(0));
 
@@ -282,10 +305,22 @@ public class ChooseYourOwnAdventureAuto {
       if(currentAlliance==Alliance.Blue){
           returnPose=InvertPose(AutoConstants.presetAutoLongAmpNote1);
         }else{
-          returnPose=AutoConstants.presetAutoLongAmpNote1;
+          returnPose=AutoConstants.presetAutoLongSourceNote1;
+        }
+      break;
+      case LONGAMP1INTAKEPOS:
+      if(currentAlliance==Alliance.Blue){
+          returnPose=InvertPose(AutoConstants.longAmpNoteBlueIntakeWaypoint);
+        }else{
+          returnPose=AutoConstants.longSourceNoteRedIntakeWaypoint;
         }
       break;
       case LONGAMP2POS:
+      if(currentAlliance==Alliance.Blue){
+          returnPose=InvertPose(AutoConstants.presetAutoLongAmpNote2);
+        }else{
+          returnPose=AutoConstants.presetAutoLongSourceNote2;
+        }
       break;
       case LONGCENTERPOS:
       break;
@@ -293,10 +328,15 @@ public class ChooseYourOwnAdventureAuto {
       if(currentAlliance==Alliance.Blue){
           returnPose=InvertPose(AutoConstants.presetAutoLongSourceNote1);
         }else{
-          returnPose=AutoConstants.presetAutoLongSourceNote1;
+          returnPose=AutoConstants.presetAutoLongAmpNote1;
         }
       break;
       case LONGSOURCE2POS:
+      if(currentAlliance==Alliance.Blue){
+          returnPose=InvertPose(AutoConstants.presetAutoLongSourceNote2);
+        }else{
+          returnPose=AutoConstants.presetAutoLongAmpNote2;
+        }
       break;
     }
 
@@ -306,13 +346,6 @@ public class ChooseYourOwnAdventureAuto {
   public Pose2d getStartingPose(AutoConstants.StartingLocations location,Alliance currentAlliance){
     Pose2d returnPose=new Pose2d();
       switch(location){
-        case LEFTAMP:
-        if(currentAlliance==Alliance.Red){   
-          //returnPose=AutoConstants.redLeftAmpStartPos;     
-        }else{
-          //returnPose=AutoConstants.blueLeftAmpStartPos;
-        }
-        break;
         case LEFTSPEAKER:
         if(currentAlliance==Alliance.Red){
           returnPose=AutoConstants.redRightSpeakerStartPos;        

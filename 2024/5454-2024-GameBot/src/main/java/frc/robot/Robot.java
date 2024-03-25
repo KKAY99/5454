@@ -113,8 +113,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit(){
-    m_robot.stopRumble();
-    m_robot.disableBrakeMode(); // disable brake mode when disabled 
+    m_robot.DisabledInit();
   }
 
   /** This function is called periodically when disabled. */
@@ -123,6 +122,7 @@ public class Robot extends LoggedRobot {
     //only check during disabled to make sure we don't flip switch by accident in match
     //disabled can error testing
     // m_robot.checkBrakeButton();
+    m_robot.DisabledPeriodic();
    
   }
 

@@ -17,12 +17,13 @@ public class AmpScoreHopeCommand extends Command {
     private IntakeSubsystem m_intake;
     private NoteFlipperSubsystem m_flip;
 
-   private enum STATE{SETANGLE,WAITFORANGLE,SHOOTANDFEED,MOVEUPANGLE,WAITFORMOVEUPANGLE,END}
+   private enum STATE{STARTNOTEMOTOR,SETANGLE,WAITFORANGLE,SHOOTANDFEED,MOVEUPANGLE,WAITFORMOVEUPANGLE,END}
    private STATE m_state;
 
    private double m_angle;
    private double angleGap;
    private double m_startTime;
+   private double kGetGoing=-0.15;
    private double kTimeToRun=NoteFlipConstants.timeToRunAmpScore;
 
    public AmpScoreHopeCommand(ShooterSubsystem shooter,IntakeSubsystem intake,NoteFlipperSubsystem flip,double angle){
@@ -30,12 +31,11 @@ public class AmpScoreHopeCommand extends Command {
     m_intake=intake;
     m_flip=flip;
     m_angle=angle;
-
    }
 
   @Override
   public void initialize() {
-    m_state=STATE.SETANGLE;
+    m_state=STATE.STARTNOTEMOTOR;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -59,13 +59,17 @@ public class AmpScoreHopeCommand extends Command {
     boolean returnValue=false;
 
     switch(m_state){
+    case STARTNOTEMOTOR:
+         m_flip.run(NoteFlipConstants.noteFlipSpeed + kGetGoing);
+         m_state=STATE.SETANGLE;
+         break;
     case SETANGLE:    
-        m_shooter.setAngle(m_angle);
+        m_shooter.setAngle(m_angle);       
         m_state=STATE.WAITFORANGLE;
-    break;
+        break;
     case WAITFORANGLE:
-        angleGap=Math.abs(m_shooter.getRelativePosition())
-        -Math.abs(m_angle);
+        angleGap=(m_shooter.getRelativePosition())
+        -m_angle;
         if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
             m_shooter.stopRotate();
             m_startTime=Timer.getFPGATimestamp();
@@ -73,10 +77,9 @@ public class AmpScoreHopeCommand extends Command {
         }
         break;
     case SHOOTANDFEED:
+        m_flip.run(NoteFlipConstants.noteFlipSpeed); //now that it is moving slow it
         m_shooter.RunShootingMotors(ShooterConstants.ampScoreSpeed,ShooterConstants.ampScoreSpeed,true);
-        m_flip.run(NoteFlipConstants.noteFlipSpeed);
         m_intake.runIntake(IntakeConstants.intakeSpeed);
-
         if(m_startTime+kTimeToRun<Timer.getFPGATimestamp()){
             m_shooter.stopShooter();
             m_intake.stopIntake();
@@ -97,7 +100,7 @@ public class AmpScoreHopeCommand extends Command {
         break;
     case END:
      returnValue=true;
-    break;
+     break;
     }
     return returnValue;
   }

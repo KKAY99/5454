@@ -184,7 +184,7 @@ public class ShootCommand extends Command {
         if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_speed1,m_speed2)){
           m_currentTime=Timer.getFPGATimestamp();
           m_state=STATE.SHOOT;
-      }
+        }
       break;
         case SHOOT:           
           m_shooter.RunFeedRollers(ShooterConstants.feederSpeed);
