@@ -547,13 +547,15 @@ public class RobotContainer {
   }
 
   public void TeleopPeriodic(){
-         if(m_TurretLimelight.isTargetAvailible()){
-          m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.TARGETLOCK);
-        }else{
-          m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.NOTARGET);
-        }
-      
-      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ROBOTFRONTSIDE);
+    boolean isTurretStraight=(m_turret.GetEncoderValue()>=-0.25||m_turret.GetEncoderValue()<=0.25);
+
+    m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ROBOTFRONTSIDE);
+    m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.AMPSCORESIDE);
+    if(m_TurretLimelight.isTargetAvailible()){
+      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.TARGETLOCK);
+    }else{
+      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.NOTARGET);
+    }  
   }
 
   public void DisabledInit(){

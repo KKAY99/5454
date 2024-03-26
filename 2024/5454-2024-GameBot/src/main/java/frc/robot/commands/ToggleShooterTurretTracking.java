@@ -64,7 +64,7 @@ public class ToggleShooterTurretTracking extends Command {
         double limeLimelightDis=m_limelight.getDistance();
         double angleGap=0;
 
-        m_turret.TrackTarget(true);
+        m_turret.TrackTargetRobotVeloc(true);
 
         switch(m_shooterState){
             case VISIONCLEARANCE: 
@@ -116,7 +116,7 @@ public class ToggleShooterTurretTracking extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_turret.TrackTarget(false);
+        m_turret.TrackTargetRobotVeloc(false);
         m_turret.stop();
         m_shooter.SlowShootingMotors();  // also stops feeder 
         m_shooter.ResetControlType();

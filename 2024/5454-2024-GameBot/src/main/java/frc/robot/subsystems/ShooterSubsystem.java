@@ -273,8 +273,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setAngle(double targetAngle) {
         m_targetAngle = targetAngle;
-        m_anglePID.setReference(targetAngle, ControlType.kPosition);
-
+        
+        if(!isSetAnglePastRotateLimit(targetAngle)){
+            m_anglePID.setReference(targetAngle, ControlType.kPosition);
+        } else {
+            System.out.println("Set Angle out of Range");
+        }
+          
     }
 
     public double getCanCoderPosition() {

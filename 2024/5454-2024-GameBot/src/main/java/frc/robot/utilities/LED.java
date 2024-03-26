@@ -149,63 +149,69 @@ public class LED{
     }
 
     private void UpdateCANdleLEDS(LEDConstants.CANDLELEDStates ledState){
-        ArrayList<Integer> rgbValues=new ArrayList<>();
-        int startIndex=0;
-        int secondStartIndex=0;
-        int ledCount=0;
-        int secondledCount=0;
-        boolean noanimation=true;
-        switch(ledState){
-            case TARGETLOCK:
-            rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.PURPLE);
-            startIndex=LEDConstants.candleTargetLockIndex1;
-            ledCount=LEDConstants.candleLEDTargetLockLength1;
-            secondStartIndex=LEDConstants.candleTargetLockIndex2;
-            secondledCount=LEDConstants.candleLEDTargetLockLength2;
-            break;
-            case ROBOTFRONTSIDE:
-            rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.GREEN);
-            startIndex=LEDConstants.candleRobotFrontStartIndex;
-            secondStartIndex=LEDConstants.candleRobotFrontSecondStartIndex;
-            ledCount=LEDConstants.candleRobotFrontLEDCount;
-            secondledCount=LEDConstants.candleRobotFrontLEDCount2;
-            break;
-            case NOTARGET:
-            rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.RED);
-            startIndex=LEDConstants.candleTargetLockIndex1;
-            ledCount=LEDConstants.candleLEDTargetLockLength1;
-            secondStartIndex=LEDConstants.candleTargetLockIndex2;
-            secondledCount=LEDConstants.candleLEDTargetLockLength2;
-            break;
-            case AMPSCORESIDE:
-            rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.ORANGE);
-            startIndex=LEDConstants.candleAmpScoreIndex;
-            ledCount=LEDConstants.candleLEDAmpScoreLength;
-            break;
-            case DISABLED:
-                LarsonAnimation animation=new LarsonAnimation(160,32,240,0,0.8,
-                    LEDConstants.candleLEDCount,BounceMode.Center,7);
-            //RainbowAnimation animation = new RainbowAnimation(1,1,50);  
-            System.out.println("Starting Animation -" + ledState);
-                m_candle.animate(animation);
-                
+        try{
+            ArrayList<Integer> rgbValues=new ArrayList<>();
+            int startIndex=0;
+            int secondStartIndex=0;
+            int ledCount=0;
+            int secondledCount=0;
+            boolean noanimation=true;
+            switch(ledState){
+                case TARGETLOCK:
+                rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.PURPLE);
+                startIndex=LEDConstants.candleTargetLockIndex1;
+                ledCount=LEDConstants.candleLEDTargetLockLength1;
+                secondStartIndex=LEDConstants.candleTargetLockIndex2;
+                secondledCount=LEDConstants.candleLEDTargetLockLength2;
+                break;
+                case ROBOTFRONTSIDE:
+                rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.GREEN);
+                startIndex=LEDConstants.candleRobotFrontStartIndex;
+                secondStartIndex=LEDConstants.candleRobotFrontSecondStartIndex;
+                ledCount=LEDConstants.candleRobotFrontLEDCount;
+                secondledCount=LEDConstants.candleRobotFrontLEDCount2;
+                break;
+                case NOTARGET:
+                rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.RED);
+                    startIndex=LEDConstants.candleTargetLockIndex1;
+                    ledCount=LEDConstants.candleLEDTargetLockLength1;
+                    secondStartIndex=LEDConstants.candleTargetLockIndex2;
+                    secondledCount=LEDConstants.candleLEDTargetLockLength2;
+                break;
+                case AMPSCORESIDE:
+                rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.ORANGE);
+                startIndex=LEDConstants.candleAmpScoreIndex;
+                ledCount=LEDConstants.candleLEDAmpScoreLength;
+                break;
+                case DISABLED:
+                    LarsonAnimation animation=new LarsonAnimation(160,32,240,0,0.8,
+                        LEDConstants.candleLEDCount,BounceMode.Center,7);
+                //RainbowAnimation animation = new RainbowAnimation(1,1,50);  
+                System.out.println("Starting Animation -" + ledState);
+                    m_candle.animate(animation,0);
+                    
 
-                
-               noanimation=false;
-                break;
-            case NOSTATE:
-                break;
-        }
-         if(noanimation && ledCount>0){
-                m_candle.setLEDs(rgbValues.get(0),rgbValues.get(1),
-                                rgbValues.get(2),rgbValues.get(3),startIndex,ledCount);
-                if(secondStartIndex!=0){
+                    
+                noanimation=false;
+                    break;
+                case NOSTATE:
+                    break;
+            }
+            if(noanimation && ledState!=CANDLELEDStates.NOSTATE){
+                    m_candle.clearAnimation(0);
                     m_candle.setLEDs(rgbValues.get(0),rgbValues.get(1),
-                                rgbValues.get(2),rgbValues.get(3),secondStartIndex,
-                                secondledCount);
-                }
+                                    rgbValues.get(2),rgbValues.get(3),startIndex,ledCount);
+                    if(secondStartIndex!=0){
+                        m_candle.setLEDs(rgbValues.get(0),rgbValues.get(1),
+                                    rgbValues.get(2),rgbValues.get(3),secondStartIndex,
+                                    secondledCount);
+                    }
+            }
         }
-     
+     catch (Exception e){
+        //DO NOTHING
+    
+     }
     }
     private ArrayList<Integer> getCANdleLEDColors(LEDConstants.LEDColors ledColor){
         ArrayList<Integer> rgbValues=new ArrayList<>();

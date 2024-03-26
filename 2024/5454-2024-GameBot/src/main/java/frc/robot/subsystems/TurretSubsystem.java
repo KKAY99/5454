@@ -89,11 +89,12 @@ public class TurretSubsystem extends SubsystemBase{
      return returnValue;
     } 
 
-    public void TrackTarget(boolean bool){
+    public void TrackTargetRobotVeloc(boolean bool){
     double speed=0;
     double limelightDis=m_limeLight.getDistance();
     double x=m_limeLight.getXRaw()-m_shotTable.getCrosshairOffset(limelightDis);
     double multiplier=m_shotTable.getDistanceMultiplier(limelightDis);
+    double motorMultiplier=1;
     double yRobotSpeed=Math.abs(m_ySpeed.getAsDouble());
     // if robot is moving on Y Axis speed up turret
     if(yRobotSpeed>.2){
@@ -123,6 +124,61 @@ public class TurretSubsystem extends SubsystemBase{
           speed=Constants.LimeLightValues.limeLightTrackSpeed5;
         }
          System.out.println("Robot Speed: " + yRobotSpeed + " Turret Speed:"+ speed);
+   
+        //System.out.println("Distance X " + x + " - Speed: " + speed);
+        if(x<0 && speed!=0){
+          RunCheckLimits(speed);
+          m_speed=speed;
+        }else if(x>0 && speed!=0){
+          RunCheckLimits(-speed);
+          m_speed=-speed;
+        }else{
+          stop();          
+        }
+     }else {
+     // search mode
+        //set default speed
+        if(m_speed==0){
+          m_speed=speed=Constants.LimeLightValues.limeLightTrackSpeed5;
+        }
+        double oldspeed=m_speed; // speed gets set to zero in checklimits
+        if(RunCheckLimits(m_speed)) {
+          //System.out.println("reverse speed" + oldspeed);
+          m_speed=0-oldspeed;  // reverse speed when we hit a limit
+        }
+      
+     }
+    }
+
+    public void TrackTargetNormal(boolean bool){
+    double speed=0;
+    double limelightDis=m_limeLight.getDistance();
+    double x=m_limeLight.getXRaw()-m_shotTable.getCrosshairOffset(limelightDis);
+   
+   
+    if(m_limeLight.isTargetAvailible()){
+        if(Math.abs(x)<Constants.LimeLightValues.limeLightDeadBand){
+          speed=0;
+        }else if(Math.abs(x)<Constants.LimeLightValues.XCheck1){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed0Normal;
+        }else if(Math.abs(x)<Constants.LimeLightValues.XCheck2){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed1Normal;
+        }else if(Math.abs(x)<Constants.LimeLightValues.XCheck3){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed2Normal;
+        }else if(Math.abs(x)<Constants.LimeLightValues.XCheck4){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed3Normal;
+        }else if(Math.abs(x)<Constants.LimeLightValues.XCheck5){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed4Normal;
+        }else if(Math.abs(x)<Constants.LimeLightValues.XCheck6){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed5Normal;
+        }else if(Math.abs(x)<Constants.LimeLightValues.XCheck7){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed6Normal;
+        }else if(Math.abs(x)<Constants.LimeLightValues.XCheck8){
+          speed=Constants.LimeLightValues.limeLightTrackSpeed7Normal;
+        }else{
+          speed=Constants.LimeLightValues.limeLightTrackSpeed8Normal;
+        }
+         //System.out.println("Robot Speed: " + yRobotSpeed + " Turret Speed:"+ speed);
    
         //System.out.println("Distance X " + x + " - Speed: " + speed);
         if(x<0 && speed!=0){

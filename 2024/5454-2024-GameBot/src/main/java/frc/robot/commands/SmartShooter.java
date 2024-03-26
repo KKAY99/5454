@@ -246,7 +246,7 @@ public class SmartShooter extends Command {
             case TURRETFIND:
                 m_state=STATE.TURRETLOCKWAIT;
             case TURRETLOCKWAIT:                   
-                m_turret.TrackTarget(true);   
+                m_turret.TrackTargetNormal(true);   
                 setAngleandSpeedfromLimelight(limeLimelightDis);     
                 if(m_limelight.isTargetAvailible()){
                     
@@ -319,7 +319,7 @@ public class SmartShooter extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_turret.TrackTarget(false);
+        m_turret.TrackTargetNormal(false);
         m_turret.stop();
         m_shooter.SlowShootingMotors();  // also stops feeder 
         m_shooter.stopShooter();

@@ -17,7 +17,7 @@ public class AmpScoreHopeCommand extends Command {
     private IntakeSubsystem m_intake;
     private NoteFlipperSubsystem m_flip;
 
-   private enum STATE{STARTNOTEMOTOR,SETANGLE,WAITFORANGLE,SHOOTANDFEED,MOVEUPANGLE,WAITFORMOVEUPANGLE,END}
+   private enum STATE{STARTNOTEMOTOR,SETANGLE,WAITFORANGLE,STARTFEEDER,SHOOTANDFEED,MOVEUPANGLE,WAITFORMOVEUPANGLE,END}
    private STATE m_state;
 
    private double m_angle;
@@ -60,7 +60,7 @@ public class AmpScoreHopeCommand extends Command {
 
     switch(m_state){
     case STARTNOTEMOTOR:
-         m_flip.run(NoteFlipConstants.noteFlipSpeed + kGetGoing);
+         m_flip.run(NoteFlipConstants.startNoteFlipSpeed);
          m_state=STATE.SETANGLE;
          break;
     case SETANGLE:    
@@ -73,11 +73,14 @@ public class AmpScoreHopeCommand extends Command {
         if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
             m_shooter.stopRotate();
             m_startTime=Timer.getFPGATimestamp();
-            m_state=STATE.SHOOTANDFEED;
+            m_state=STATE.STARTFEEDER;
         }
         break;
-    case SHOOTANDFEED:
+    case STARTFEEDER:
         m_flip.run(NoteFlipConstants.noteFlipSpeed); //now that it is moving slow it
+        m_state=STATE.SHOOTANDFEED;    
+        break;
+    case SHOOTANDFEED:
         m_shooter.RunShootingMotors(ShooterConstants.ampScoreSpeed,ShooterConstants.ampScoreSpeed,true);
         m_intake.runIntake(IntakeConstants.intakeSpeed);
         if(m_startTime+kTimeToRun<Timer.getFPGATimestamp()){

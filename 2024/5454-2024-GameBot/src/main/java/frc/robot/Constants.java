@@ -309,7 +309,8 @@ public final class Constants {
 
    public static final class NoteFlipConstants{
     public static final int canID=12;
-    public static final double noteFlipSpeed=-0.20;//.35 on 3/25
+    public static final double noteFlipSpeed=-0.5;//.35 on 3/25
+    public static final double startNoteFlipSpeed=-0.9;
     public static final double timeToRunAmpScore=1;
    }
 
@@ -324,18 +325,18 @@ public final class Constants {
     public static final double blinkinRed=0.61;
 
     public static final int candleId=14;
-    public static final int candleLEDCount=200;
+    public static final int candleLEDCount=180;
 
     public static final int candleRobotFrontStartIndex=0;
     public static final int candleRobotFrontLEDCount=21;
     public static final int candleRobotFrontSecondStartIndex=146;
-    public static final int candleRobotFrontLEDCount2=200;
+    public static final int candleRobotFrontLEDCount2=34;
     public static final int candleTargetLockIndex1=106;
-    public static final int candleLEDTargetLockLength1=145;
+    public static final int candleLEDTargetLockLength1=74;
     public static final int candleTargetLockIndex2=22;
     public static final int candleLEDTargetLockLength2=40;
-    public static final int candleAmpScoreIndex=41;
-    public static final int candleLEDAmpScoreLength=70;
+    public static final int candleAmpScoreIndex=61;
+    public static final int candleLEDAmpScoreLength=45;
 
     public static enum PrimaryLEDStates{
       AUTO,TELEOP,TARGETLOCK,OFF,NOTARGET
@@ -402,6 +403,15 @@ public final class Constants {
       public static final double medXCheck=16;
       public static final double farXCheck=25;
 
+      public static final double XCheck1=1.5;
+      public static final double XCheck2=3;
+      public static final double XCheck3=5; 
+      public static final double XCheck4=7;
+      public static final double XCheck5=9;
+      public static final double XCheck6=13;
+      public static final double XCheck7=18;
+      public static final double XCheck8=25;
+
       public static final double limeLightDeadBand=0.7;
       public static final double limelightLastDisDeadband=0.1;
 
@@ -411,6 +421,16 @@ public final class Constants {
       public static final double limeLightTrackSpeed3=0.10;
       public static final double limeLightTrackSpeed4=0.5; //0.35
       public static final double limeLightTrackSpeed5=0.8;
+
+      public static final double limeLightTrackSpeed0Normal=0.04;
+      public static final double limeLightTrackSpeed1Normal=0.06;
+      public static final double limeLightTrackSpeed2Normal=0.10;
+      public static final double limeLightTrackSpeed3Normal=0.13;
+      public static final double limeLightTrackSpeed4Normal=0.15;
+      public static final double limeLightTrackSpeed5Normal=0.20;
+      public static final double limeLightTrackSpeed6Normal=0.25;
+      public static final double limeLightTrackSpeed7Normal=0.5; //0.35
+      public static final double limeLightTrackSpeed8Normal=0.8;
 
       public static final String turretLimelightName="";
       public static final String staticLimelightName="static-limelight";
@@ -446,7 +466,7 @@ public final class Constants {
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
 
-      public static final double homePos=95.8;
+      public static final double homePos=72.86;
       public static final double homeDeadband=0.05;
       public static final double homeRotateSpeed=0.05;
       public static final double rotateLowSoftLimit=-43.69;
@@ -463,9 +483,9 @@ public final class Constants {
       public static final int shooterAnglePort=23;
       public static final int encoderCanID=11;
       public static final double shooterStowAngle=58.78;
-      public static final double shooterVisionClearanceAngle=20;
-      public static final double shooterVisionClearanceHighPoint=20;
-      public static final double shooterAmpScoreAngle=-34; //-30.7 3/24
+      public static final double shooterVisionClearanceAngle=35;
+      public static final double shooterVisionClearanceHighPoint=35;
+      public static final double shooterAmpScoreAngle=-29.5; //-30.7 3/24
       public static final double shooterSourceIntakeAngle=55.28;
     }
 
@@ -587,31 +607,21 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
-          {17.4,-40,-40,20.5,4,1,0},
-          {26.1,-45,-45,26,5,1,0},
-          {27.6,-45,-45,31,5,1,0},
-          {27.6,-45,-45,31,5,1,0},   
-          {31.9,-45,-55,32.5,5,1,0},
-          {38.1,-50,-60,35.3,5,1,0},
-          {56,-55,-65,39.5,5,1,0},
-          {60,-60,-70,39.5,5,1,0},
-          {100,-70,-75,42,5,1,0},
-          /*{24.6,-40,-40,53,5,1,5.3},
-          {26.5,-45,-45,56,5,1,5.2},
-          {29.0,-45,-45,57,5,1,5.0},
-          {30.7,-45,-45,60,5,1,4.42},
-          {31.2,-45,-35,61,5,1,4.2},
-          {33.7,-50,-35,62.2,5,1,4.1},
-          {34.33,-50,-35,62.3,5,1,4.1},
-          {35.4,-50,-35,63,5,1,4.0},//
-          {37.6,-50,-35,66,5,1,3.9},
-          {39.8,-60,-30,68,5,1,3.7},
-          {41.5,-63,-43,71,5,1,3.5},
-          {43.9,-63,-43,72,5,1,3.2},
-          {45.7,-75,-50,72,5,1,3.0},
-          {48.0,-75,-50,66,5,1,2.3},
-          {68.5,-60,-40,68.5,5,1,2.3},
-          {72.1,-60,-40,69,5,1,2.3}*/
+          {17.4,-40,-40,21.5,1,1,0},
+          {19.08,-40,-40,22.5,5,1,0},
+          {22.8,-45,-48,27.5,5,1,0},
+          {24.9,-45,-48,30.5,5,1,0},
+          {27.1,-45,-48,31.5,5,1,0},
+          {29.4,-48,-51,33,5,1,0},
+          {31.4,-48,-51,34.4,5,1,0},
+          {34.1,-49,-54,36,5,1,0},
+          {35.6,-49,-54,37,5,1,0},
+          {37.1,-51,-56,37.3,5,1,0},
+          {39,-53,-60,37.6,5,1,0},
+          {40.2,-65,-70,37.9,5,1,0},
+          {42.5,-65,-70,38.2,5,1,0},
+          {44.1,-68,-73,39,5,1,0},
+          {72.1,-60,-40,69,5,1,2.3}
          
       };
        public static final double [][]olddistanceLookup={
