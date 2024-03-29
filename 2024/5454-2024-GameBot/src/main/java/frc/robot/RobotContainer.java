@@ -275,15 +275,27 @@ public class RobotContainer {
       custom3.onTrue(shootCustom3);
 
 
-      ShootCommand notePassCustom1=new ShootCommand(m_shooter,m_intake,Constants.notePass11Velocity1,Constants.notePass11Velocity2,Constants.notePass11Angle,true,false);
+      ShooterNotePass notePassCustom1Prime=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass10Velocity1,Constants.notePass10Velocity2,Constants.notePass10Angle,true);
+      JoystickButton custom4 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot4);
+      custom4.onTrue(notePassCustom1Prime);
+
+      ShooterNotePass notePassCustom2Prime=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass11Velocity1,Constants.notePass11Velocity2,Constants.notePass11Angle,true);
+      JoystickButton custom5 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot5);
+      custom5.onTrue(notePassCustom2Prime);
+
+      ShooterNotePass notePassCustom3Prime=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass12Velocity1,Constants.notePass12Velocity1,Constants.notePass12Angle,true);
+      JoystickButton custom6 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot6);
+      custom6.onTrue(notePassCustom3Prime);
+
+      ShooterNotePass notePassCustom1=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass10Velocity1,Constants.notePass10Velocity2,Constants.notePass10Angle,false);
       JoystickButton custom7 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot7);
       custom7.onTrue(notePassCustom1);
 
-      ShootCommand notePassCustom2=new ShootCommand(m_shooter,m_intake,Constants.notePass12Velocity1,Constants.notePass12Velocity2,Constants.notePass12Angle,true,false);
+      ShooterNotePass notePassCustom2=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass11Velocity1,Constants.notePass11Velocity2,Constants.notePass11Angle,false);
       JoystickButton custom8 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot8);
       custom8.onTrue(notePassCustom2);
 
-      ShootCommand notePassCustom3=new ShootCommand(m_shooter,m_intake,Constants.notePass10Velocity1,Constants.notePass10Velocity1,Constants.notePass10Angle,false,false);
+      ShooterNotePass notePassCustom3=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass12Velocity1,Constants.notePass12Velocity1,Constants.notePass12Angle,false);
       JoystickButton custom9 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot9);
       custom9.onTrue(notePassCustom3);
 
