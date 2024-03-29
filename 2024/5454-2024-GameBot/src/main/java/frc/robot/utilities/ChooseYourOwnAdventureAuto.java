@@ -260,9 +260,9 @@ public class ChooseYourOwnAdventureAuto {
     switch(location){
         case LEFTSPEAKER:
         if(currentAlliance==Alliance.Red){
-          returnAngle=TurretConstants.turretNonCenterShootPos;    
+          returnAngle=-TurretConstants.turretNonCenterShootPos;    
         }else{
-          returnAngle=-TurretConstants.turretNonCenterShootPos;  
+          returnAngle=TurretConstants.turretNonCenterShootPos;  
         }
         break;
         case RIGHTSPEAKER:
@@ -271,6 +271,9 @@ public class ChooseYourOwnAdventureAuto {
         }else{
           returnAngle=TurretConstants.turretNonCenterShootPos;  
         }
+        break;
+        case CENTER1:
+        returnAngle=0;
         break;
       }
     return returnAngle; 
@@ -333,10 +336,24 @@ public class ChooseYourOwnAdventureAuto {
       break;
       case LONGSOURCE2POS:
       if(currentAlliance==Alliance.Blue){
-          returnPose=InvertPose(AutoConstants.presetAutoLongSourceNote2);
+          returnPose=AutoConstants.presetAutoLongSourceNote2;
         }else{
           returnPose=AutoConstants.presetAutoLongAmpNote2;
         }
+      break;
+      case AMPNOTEWAYPOINT:
+      if(currentAlliance==Alliance.Blue){
+        returnPose=InvertPose(AutoConstants.presetAutoBlueAmpWaypoint);
+      }else{
+        returnPose=AutoConstants.presetAutoRedAmpWaypoint;
+      }
+      break;
+      case WINGSHOOTPOS:
+      if(currentAlliance==Alliance.Blue){
+        returnPose=InvertPose(AutoConstants.locationBlueLongAmpWing);
+      }else{
+        returnPose=AutoConstants.locationRedLongSourceWing;
+      }
       break;
     }
 

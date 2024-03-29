@@ -77,7 +77,7 @@ public class AmpScoreHopeCommand extends Command {
         }
         break;
     case STARTFEEDER:
-        m_flip.run(NoteFlipConstants.noteFlipSpeed); //now that it is moving slow it
+     //   m_flip.run(NoteFlipConstants.noteFlipSpeed); //now that it is moving slow it
         m_state=STATE.SHOOTANDFEED;    
         break;
     case SHOOTANDFEED:

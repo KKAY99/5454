@@ -18,6 +18,7 @@ public final class Constants {
   public static final double kRobotLoopTime = 0.020;
   public static final int k30Amp=30;
   public static final int k20Amp=20;
+  public static final int k26Amp=26;
   public static final int k15Amp=15;
   public static final int k40Amp=40;
   public static final int brakeButton=3;
@@ -53,7 +54,9 @@ public final class Constants {
           LONGAMP2POS,
           LONGCENTERPOS,
           LONGSOURCE1POS,
-          LONGSOURCE2POS
+          LONGSOURCE2POS,
+          AMPNOTEWAYPOINT,
+          WINGSHOOTPOS
         }
 
         public enum AutonomousRoutines {
@@ -90,11 +93,12 @@ public final class Constants {
         public static final String autoMode4="4=PP-Start Right, Source Long";
         public static final String autoMode5="5=PP-Start Center, Center Note, Amp Long";
         public static final String autoMode6="6=PP-Start Center, Center Note, Amp Note, Amp Long";
-        public static final String autoMode7="7=Legacy-Score, Straight Back Score";
-        public static final String autoMode8="8=Legacy-Score,Wait, Cross the Line Right";
-        public static final String autoMode9="9=Legacy-Score, Center Amp Short, Amp Short";
-        public static final String autoMode10="10=TBD";
-        public static final String autoMode11="11=TBD";
+        public static final String autoMode7="7=PP-TwoNote Center/Right";
+        public static final String autoMode8="8=Legacy-Score, Straight Back Score";
+        public static final String autoMode9="9=Legacy-Score,Wait, Cross the Line Right";
+        public static final String autoMode10="10=Legacy-Score, Center Amp Short, Amp Short";
+        public static final String autoMode11="10=TBD";
+        public static final String autoMode12="11=TBD";
 
         public static final String noPath="No Path";
         public static final String blueShortAmpNote="BlueShortAmpNote";
@@ -130,14 +134,16 @@ public final class Constants {
         public static final Pose2d blueSpeakerPos=new Pose2d(0.30,5.54,new Rotation2d(0));
 
         public static final Pose2d presetAutoBlueShortCenterNote=new Pose2d(2.6,5.54,new Rotation2d(0));
-        public static final Pose2d presetAutoBlueShortAmpNote=new Pose2d(2.6,6.99,new Rotation2d(0));
+        public static final Pose2d presetAutoBlueShortAmpNote=new Pose2d(2.6,7.01,new Rotation2d(0));
         public static final Pose2d presetAutoBlueShortSourceNote=new Pose2d(2.6,4.09,new Rotation2d(0));
+        public static final Pose2d presetAutoBlueAmpWaypoint=new Pose2d(2.6,6.3,new Rotation2d(0));
 
         public static final Pose2d presetAutoRedShortCenterNote=new Pose2d(13.5,5.57,new Rotation2d(0));
         public static final Pose2d presetAutoRedShortSourceNote=new Pose2d(13.5,4.09,new Rotation2d(0));
         public static final Pose2d presetAutoRedShortAmpNote=new Pose2d(13.5,7.01,new Rotation2d(0));
+        public static final Pose2d presetAutoRedAmpWaypoint=new Pose2d(13.5,6.3,new Rotation2d(0));
 
-        public static final Pose2d presetAutoLongAmpNote1=new Pose2d(8.30,  7.47,new Rotation2d(0));
+        public static final Pose2d presetAutoLongAmpNote1=new Pose2d(8.29,  7.45,new Rotation2d(0));
         public static final Pose2d presetAutoLongAmpNote2=new Pose2d(8.30,  5.75,new Rotation2d(0));
         public static final Pose2d presetAutoLongSourceNote1=new Pose2d(8.30,  0.78,new Rotation2d(0));
         public static final Pose2d presetAutoLongSourceNote2=new Pose2d(8.30,  2.45,new Rotation2d(0));
@@ -171,7 +177,7 @@ public final class Constants {
         public static final Pose2d redShortAmpNoteIntakeWaypoint=new Pose2d(14.39,7.01,new Rotation2d(0));
         public static final AutoPose2D redShortAmpAutoPoses=new AutoPose2D(locationRedShortAmpNote,redShortAmpNoteIntakeWaypoint,
                                                                           locationRedShortCenterNote,false,true);
-        public static final Pose2d locationLongAmpNote=new Pose2d(8.24,  7.47,new Rotation2d(0));
+        public static final Pose2d locationLongAmpNote=new Pose2d(8.29,  7.45,new Rotation2d(0));
         public static final Pose2d longAmpNoteRedIntakeWaypoint=new Pose2d(9.05,  7.47,new Rotation2d(0));
         public static final Pose2d longAmpNoteBlueIntakeWaypoint=new Pose2d(7.66,  7.47,new Rotation2d(0));
         public static final AutoPose2D longAmpAutoPoses=new AutoPose2D(locationLongAmpNote,false,true);
@@ -208,7 +214,7 @@ public final class Constants {
         public static final Pose2d blueRightAmpStartPos=new Pose2d(-1.22,-6.98,new Rotation2d(0));
 
         public static final Pose2d redLeftSpeakerStartPos=new Pose2d(15.73,4.23,new Rotation2d(0));
-        public static final Pose2d blueLeftSpeakerStartPos=new Pose2d(-0.73,-6.72,new Rotation2d(0));
+        public static final Pose2d blueLeftSpeakerStartPos=new Pose2d(-1.43,-6.99,new Rotation2d(0));
 
         public static final Pose2d redRightSpeakerStartPos=new Pose2d(15.73,6.72,new Rotation2d(0));
         public static final Pose2d blueRightSpeakerStartPos=new Pose2d(-0.73,-4.23,new Rotation2d(0));
@@ -539,15 +545,15 @@ public final class Constants {
     }
     public static final double customShot1Velocity1=-40;
     public static final double customShot1Velocity2=-40;
-    public static final double customShot1Angle=-44;
+    public static final double customShot1Angle=21.5;
  
     public static final double customShot2Velocity1=-45;
-    public static final double customShot2Velocity2=-45;
-    public static final double customShot2Angle=-44;
+    public static final double customShot2Velocity2=-48;
+    public static final double customShot2Angle=-27.8;
  
-    public static final double customShot3Velocity1=-75;
-    public static final double customShot3Velocity2=-50;
-    public static final double customShot3Angle=-66;
+    public static final double customShot3Velocity1=-48;
+    public static final double customShot3Velocity2=-51;
+    public static final double customShot3Angle=31.4;
 
     public static final double customShot4Velocity1=-30;
     public static final double customShot4Velocity2=-30;
@@ -560,6 +566,18 @@ public final class Constants {
     public static final double customShot6Velocity1=-30;
     public static final double customShot6Velocity2=-30;
     public static final double customShot6Angle=-30;
+
+    public static final double notePass10Velocity1=-40;
+    public static final double notePass10Velocity2=-40;
+    public static final double notePass10Angle=-29.5;
+
+    public static final double notePass11Velocity1=-50;
+    public static final double notePass11Velocity2=-50;
+    public static final double notePass11Angle=-29.5;
+
+    public static final double notePass12Velocity1=-60;
+    public static final double notePass12Velocity2=-60;
+    public static final double notePass12Angle=-29.5;
     
 
     /** General robot constants  from 3512*/
