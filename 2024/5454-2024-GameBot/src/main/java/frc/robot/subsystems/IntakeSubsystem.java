@@ -43,6 +43,9 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeTwo.burnFlash(); //ensure all settings are saved if a a browout happens
         m_breakbeam=new DigitalInput(sensorPort);
         m_intakeExtension=new CANSparkMax(intakeExtension,MotorType.kBrushless);
+        m_intakeExtension.setSmartCurrentLimit(Constants.k30Amp);
+        m_intakeExtension.setOpenLoopRampRate(0);
+        m_intakeExtension.setClosedLoopRampRate(0);
 
         m_turret=turret;
 

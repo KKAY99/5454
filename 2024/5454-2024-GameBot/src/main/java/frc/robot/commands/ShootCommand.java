@@ -82,7 +82,7 @@ public class ShootCommand extends Command {
     m_speed1=speed1;
     m_speed2=speed2;
     m_shooterAngle=angle;
-    m_setAngle=false;
+    m_setAngle=true;
     m_shouldCheckBoardVals=shouldCheckBoardValues;
     m_shouldUseDashBoardValuesSendable=null;
     addRequirements(m_shooter);
@@ -148,7 +148,7 @@ public class ShootCommand extends Command {
   @Override
   public boolean isFinished(){
     if(m_shouldUseDashBoardValuesSendable==null){
-      System.out.println("Looking up");
+    //  System.out.println("Looking up");
     }else{
       System.out.println(m_shouldUseDashBoardValuesSendable.getSelected().booleanValue());
     }
@@ -185,15 +185,15 @@ public class ShootCommand extends Command {
           m_currentTime=Timer.getFPGATimestamp();
           m_state=STATE.SHOOT;
         }
-      break;
+        break;
         case SHOOT:           
           m_shooter.RunFeedRollers(ShooterConstants.feederSpeed);
           m_intake.runIntake(Constants.IntakeConstants.autoIntakeSpeed);
                      
-          if(m_currentTime+kTimeToRun+5<Timer.getFPGATimestamp()){
+          if(m_currentTime+kTimeToRun<Timer.getFPGATimestamp()){
               m_motor1TargetSpeed=m_speed1;
               m_motor2TargetSpeed=m_speed2;
-              m_state=STATE.SLOW;
+              m_state=STATE.END;
           }
         break;
         case SLOW:
@@ -218,6 +218,9 @@ public class ShootCommand extends Command {
         }
         break;         
         case END:
+          m_shooter.StopFeedRollers();
+          m_intake.stopIntake();
+          m_shooter.stopShooter();
           returnValue=true;
       }
         }   

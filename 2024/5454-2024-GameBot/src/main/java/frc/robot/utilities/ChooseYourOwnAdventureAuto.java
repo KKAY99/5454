@@ -1,4 +1,5 @@
 package frc.robot.utilities;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pathplanner.lib.path.GoalEndState;
@@ -254,7 +255,7 @@ public class ChooseYourOwnAdventureAuto {
     return newPose2d;
   }
 
-  public double getTurretAngle(Alliance currentAlliance,AutoConstants.StartingLocations location){
+  public double getTurretAngle(Alliance currentAlliance,AutoConstants.ShootLocations location){
     double returnAngle=10.9;
 
     switch(location){
@@ -267,13 +268,31 @@ public class ChooseYourOwnAdventureAuto {
         break;
         case RIGHTSPEAKER:
         if(currentAlliance==Alliance.Red){ 
-          returnAngle=-TurretConstants.turretNonCenterShootPos;         
+          returnAngle=TurretConstants.turretNonCenterShootPos;         
         }else{
-          returnAngle=TurretConstants.turretNonCenterShootPos;  
+          returnAngle=-TurretConstants.turretNonCenterShootPos;  
         }
         break;
-        case CENTER1:
-        returnAngle=0;
+        case AMPSHOOT:
+        if(currentAlliance==Alliance.Red){ 
+          returnAngle=-TurretConstants.turretAmpNoteShootPos;         
+        }else{
+          returnAngle=TurretConstants.turretAmpNoteShootPos;
+        }
+        break;
+        case RIGHTWINGSHOOTPOS:
+        if(currentAlliance==Alliance.Red){ 
+          returnAngle=TurretConstants.turretWingShotPos;         
+        }else{
+          returnAngle=-TurretConstants.turretWingShotPos;  
+        }
+        break;
+        case LEFTWINGSHOOTPOS:
+        if(currentAlliance==Alliance.Red){ 
+          returnAngle=TurretConstants.turretWingShotPos;         
+        }else{
+          returnAngle=-TurretConstants.turretWingShotPos;  
+        }
         break;
       }
     return returnAngle; 
@@ -308,7 +327,7 @@ public class ChooseYourOwnAdventureAuto {
       if(currentAlliance==Alliance.Blue){
           returnPose=InvertPose(AutoConstants.presetAutoLongAmpNote1);
         }else{
-          returnPose=AutoConstants.presetAutoLongSourceNote1;
+          returnPose=AutoConstants.presetAutoRedLongSourceNote1;
         }
       break;
       case LONGAMP1INTAKEPOS:
@@ -322,21 +341,21 @@ public class ChooseYourOwnAdventureAuto {
       if(currentAlliance==Alliance.Blue){
           returnPose=InvertPose(AutoConstants.presetAutoLongAmpNote2);
         }else{
-          returnPose=AutoConstants.presetAutoLongSourceNote2;
+          returnPose=AutoConstants.presetAutoRedLongSourceNote2;
         }
       break;
       case LONGCENTERPOS:
       break;
       case LONGSOURCE1POS:
       if(currentAlliance==Alliance.Blue){
-          returnPose=InvertPose(AutoConstants.presetAutoLongSourceNote1);
+          returnPose=InvertPose(AutoConstants.presetAutoBlueLongSourceNote1);
         }else{
           returnPose=AutoConstants.presetAutoLongAmpNote1;
         }
       break;
       case LONGSOURCE2POS:
       if(currentAlliance==Alliance.Blue){
-          returnPose=AutoConstants.presetAutoLongSourceNote2;
+          returnPose=AutoConstants.presetAutoBlueLongSourceNote2;
         }else{
           returnPose=AutoConstants.presetAutoLongAmpNote2;
         }
@@ -350,11 +369,39 @@ public class ChooseYourOwnAdventureAuto {
       break;
       case WINGSHOOTPOS:
       if(currentAlliance==Alliance.Blue){
-        returnPose=InvertPose(AutoConstants.locationBlueLongAmpWing);
+        returnPose=InvertPose(AutoConstants.presetAutoBlueRightWingShootPose);
       }else{
-        returnPose=AutoConstants.locationRedLongSourceWing;
+        returnPose=AutoConstants.presetAutoRedRightWingShootPose;
       }
       break;
+      case AMPSHOOTPOS:
+      if(currentAlliance==Alliance.Blue){
+        returnPose=InvertPose(AutoConstants.presetAutoBlueShortAmpShootPos);
+      }else{
+        returnPose=AutoConstants.presetAutoRedShortAmpShootPos;
+      }
+      break;
+      case OUTOFBOUNDPOS:
+      if(currentAlliance==Alliance.Blue){
+        returnPose=InvertPose(AutoConstants.blueAmpMoveOutOfBoundPos);
+      }else{
+        returnPose=AutoConstants.redSourceMoveOutOfBoundPos;
+      }
+      break;
+      case TWONOTEMOVEOUT:
+      if(currentAlliance==Alliance.Blue){
+        returnPose=InvertPose(AutoConstants.presetAutoBlueTwoNoteMoveOut);
+      }else{
+        returnPose=AutoConstants.presetAutoRedTwoNoteMoveOut;
+      }
+      break;
+      case LONGSOURCE1WAYPOINT:
+        if(currentAlliance==Alliance.Blue){ 
+          returnPose=InvertPose(AutoConstants.longSourceNoteBlueIntakeWaypoint);
+        }else{
+          returnPose=AutoConstants.longAmpNoteRedIntakeWaypoint;
+        }
+        break;
     }
 
     return returnPose;
@@ -395,10 +442,17 @@ public class ChooseYourOwnAdventureAuto {
     return returnPose;
   }
 
-  public PathPlannerPath CreateAutoPath(Pose2d startPose,Pose2d desiredPose){
+  public PathPlannerPath CreateAutoPath(Pose2d... poses){
+    ArrayList<Pose2d> poseArray=new ArrayList<>();
+
+    for(Pose2d pose:poses){
+      if(pose!=null){
+        poseArray.add(pose);
+      }
+    }
+
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-      startPose,
-      desiredPose
+      poseArray
     );
 
     PathPlannerPath newPath = new PathPlannerPath(

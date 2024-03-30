@@ -280,7 +280,11 @@ public class SmartShooter extends Command {
                         m_state=STATE.SHOOT;
                     }
                     break;
-            case SHOOT:           
+            case SHOOT:        
+                System.out.println("Shooting - Distance:" + limeLimelightDis + " Target Angle:" + 
+                                     m_targetAngle + " Acutal Angle:" + m_shooter.getRelativePosition() + 
+                                     " Motor 1 Target:" + m_motor1TargetSpeed +" Motor 2 Target " + 
+                                     m_motor2TargetSpeed );   
                 m_intake.runIntake(Constants.IntakeConstants.autoIntakeSpeed);
                 m_shooter.RunFeedRollers(ShooterConstants.feederSpeed);
                      

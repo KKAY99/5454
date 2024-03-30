@@ -37,7 +37,7 @@ public class ShooterNotePass extends Command {
     private double m_motor2Veloc=0;
 
     private enum STATE{
-        PRIMEMOTORS,SETANGLE,WAITFORANGLE,SHOOT,END
+        PRIMEMOTORS,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,END
     }
 
     private STATE m_state=STATE.SETANGLE;
@@ -50,7 +50,7 @@ public class ShooterNotePass extends Command {
         m_motor1Veloc=motor1Veloc;
         m_motor2Veloc=motor2Veloc;
         m_targetAngle=angle;
-        addRequirements(shooter,turret,intake);
+        addRequirements(shooter,intake);
     }
 
 
@@ -71,21 +71,28 @@ public class ShooterNotePass extends Command {
         switch(m_state){
             case PRIMEMOTORS:
                 m_shooter.RunShootingMotors(m_motor1Veloc,m_motor2Veloc,false);
+                m_state=STATE.SETANGLE;
             break;        
             case SETANGLE: 
                 m_shooter.setAngle(m_targetAngle);
+                m_state=STATE.WAITFORANGLE;
             break;
             case WAITFORANGLE:
-                angleGap=Math.abs(m_shooter.getRelativePosition())
-                    -Math.abs(m_targetAngle);
+                angleGap=m_shooter.getRelativePosition()
+                    -m_targetAngle;
                 if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
                     m_shooter.stopRotate();
                     if(!m_shouldPrime){
                         m_startTime=Timer.getFPGATimestamp();
-                        m_state=STATE.SHOOT;
+                        m_state=STATE.RAMPUPSHOOTER;
                     }else{
                         m_state=STATE.END; 
                     }
+                }
+            break;
+            case RAMPUPSHOOTER:                   
+                if(m_shooter.isMotorVelocitysAtDesiredSpeed(m_motor1Veloc,m_motor2Veloc)){
+                m_state=STATE.SHOOT;
                 }
             break;
             case SHOOT:           

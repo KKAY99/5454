@@ -200,7 +200,7 @@ public class RobotContainer {
       AmpScoreHopeCommand noteFlip=new AmpScoreHopeCommand(m_shooter,m_intake,m_flip,Constants.ShooterConstants.shooterAmpScoreAngle);
       JoystickButton noteFlipButton=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorNoteFlip);
       SequentialCommandGroup ampSequential=new SequentialCommandGroup(turret90,noteFlip);
-      noteFlipButton.whileTrue(ampSequential);
+      noteFlipButton.onTrue(ampSequential);
 
       ShootCommand shooterIntakeOp=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.shooterIntakeSpeed,Constants.ShooterConstants.baseMotorSpeed,m_shouldUseDashBoardValues,true);
       JoystickButton shootIntakeOpButton= new JoystickButton(m_xBoxDriver,2);
@@ -289,15 +289,15 @@ public class RobotContainer {
 
       ShooterNotePass notePassCustom1=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass10Velocity1,Constants.notePass10Velocity2,Constants.notePass10Angle,false);
       JoystickButton custom7 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot7);
-      custom7.onTrue(notePassCustom1);
+      custom7.whileTrue(notePassCustom1);
 
       ShooterNotePass notePassCustom2=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass11Velocity1,Constants.notePass11Velocity2,Constants.notePass11Angle,false);
       JoystickButton custom8 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot8);
-      custom8.onTrue(notePassCustom2);
+      custom8.whileTrue(notePassCustom2);
 
       ShooterNotePass notePassCustom3=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass12Velocity1,Constants.notePass12Velocity1,Constants.notePass12Angle,false);
       JoystickButton custom9 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot9);
-      custom9.onTrue(notePassCustom3);
+      custom9.whileTrue(notePassCustom3);
 
       //ShootCommand shootCustom4=new ShootCommand(m_shooter,m_intake,Constants.customShot4Velocity1,Constants.customShot4Velocity2,Constants.customShot4Angle,false);
       //SourceIntakeCommand intakeCustom4=new SourceIntakeCommand(m_shooter,ShooterConstants.shooterSourceIntakeAngle);
@@ -497,23 +497,23 @@ public class RobotContainer {
       case Constants.AutoConstants.autoMode2: // 2=PP-Start Center,Score, Center Short, Amp Short
         returnCommand=PathPlanCenterScoreCenterAmp();
         break;
-      case Constants.AutoConstants.autoMode3: // 3=PP-Start Left, Amp Short, Amp Long
+      case Constants.AutoConstants.autoMode3: // 5=PP-Start Center, Center Note, Amp Long
+        returnCommand=PathPlanCenterScoreCenterAmpLongAmp();
+        break;
+      case Constants.AutoConstants.autoMode4: // 3=PP-Start Left, Amp Short, Amp Long
         returnCommand=PathPlanLeftScoreAmpLongAmp1();
         break;
-      case Constants.AutoConstants.autoMode4: // 4=PP-Start Right, Source Long
-        returnCommand=PathPlanRightScoreSource1();
-        break;
-      case Constants.AutoConstants.autoMode5: // 5=PP-Start Center, Center Note, Amp Long
-        returnCommand= PathPlanCenterScoreCenterLongAmp1();
+      case Constants.AutoConstants.autoMode5: // 5=PP-Start Right, LongSource1, LongSource2
+        returnCommand= PathPlanRightScoreLongSource1LongSource2();
         break;
       case Constants.AutoConstants.autoMode6: // 6=PP-Start Center, Center Note, Amp Note, Amp Long
-        returnCommand= PathPlanCenterScoreCenterAmpLongAmp();
+        returnCommand= PathPlanAnyTwoNote();
         break;
-      case Constants.AutoConstants.autoMode7: // Legacy-Score, Straight Back Score
-        returnCommand=PathPlanTwoNoteEitherRightOrCenter();
+      case Constants.AutoConstants.autoMode7: 
+        returnCommand=PathPlanShootWaitMove();
         break;
-      case Constants.AutoConstants.autoMode8: // Legacy-Score,Wait, Cross the Line Right
-        returnCommand=legacyAutoShootMoveBackShoot();
+      case Constants.AutoConstants.autoMode8: 
+        returnCommand=legacyAutoShootMoveBackShoot(currentAlliance);
         break;
       case Constants.AutoConstants.autoMode9: // Legacy-Score, Center Amp Short, Amp Short
         returnCommand=legacyAutoShootMoveBackShoot(currentAlliance);
@@ -737,17 +737,20 @@ public class RobotContainer {
     Pose2d leftStartPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.LEFTSPEAKER,currentAlliance);
     Pose2d shortAmpNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.AMPNOTEPOS,currentAlliance);
     Pose2d longAmp1NotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGAMP1POS,currentAlliance);
-    double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.StartingLocations.LEFTSPEAKER);
+    Pose2d shortAmpShootPos=autoBuilder.getNotePose(AutoConstants.NotePoses.AMPSHOOTPOS, currentAlliance);
+    double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.LEFTSPEAKER);
+    double ampShootAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.AMPSHOOT);
+    double wingShootAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.LEFTWINGSHOOTPOS);
 
-    SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
-    SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
-    SmartShooter shoot3=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
+    SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
+    SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
+    SmartShooter shoot3=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
 
     TurretPosCommand turretSet00=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     TurretPosCommand turretSet01=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     TurretPosCommand turretSetLeftShoot1=new TurretPosCommand(m_turret,turretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSetLeftShoot2=new TurretPosCommand(m_turret,turretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSetAmpShoot=new TurretPosCommand(m_turret,Constants.TurretConstants.turretAmpNoteShootPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    TurretPosCommand turretSetAmpShoot=new TurretPosCommand(m_turret,ampShootAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    TurretPosCommand turretSetWingShoot=new TurretPosCommand(m_turret,wingShootAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
 
     IntakeToggleCommand intake1=new IntakeToggleCommand(m_intake,IntakeConstants.autoIntakeSpeed,true);
     IntakeToggleCommand intake2=new IntakeToggleCommand(m_intake,IntakeConstants.autoIntakeSpeed,true);
@@ -757,11 +760,11 @@ public class RobotContainer {
 
     Command startToAmpNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(leftStartPos,shortAmpNotePos));
     Command shortAmpNoteToLongAmpNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(shortAmpNotePos,longAmp1NotePos));
-    Command longAmpNoteToAmpNotePos=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(longAmp1NotePos,shortAmpNotePos));
+    Command longAmpNoteToAmpNotePos=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(longAmp1NotePos,shortAmpShootPos));
 
     ParallelCommandGroup newMoveSetRef1=new ParallelCommandGroup(turretSet00,startToAmpNote,shooterSetRef1);
     ParallelCommandGroup newMoveSetRef2=new ParallelCommandGroup(turretSet01,shortAmpNoteToLongAmpNote,shooterSetRef2);
-    ParallelCommandGroup newMoveSetRef3=new ParallelCommandGroup(turretSetLeftShoot2,longAmpNoteToAmpNotePos);
+    ParallelCommandGroup newMoveSetRef3=new ParallelCommandGroup(turretSetWingShoot,longAmpNoteToAmpNotePos);
 
     m_swerve.resetOdometry(leftStartPos);
 
@@ -770,36 +773,57 @@ public class RobotContainer {
     return newSeq;
   }
 
-  public Command PathPlanTwoNoteEitherRightOrCenter(){
+  public Command PathPlanShootWaitMove(){
     ChooseYourOwnAdventureAuto autoBuilder=new ChooseYourOwnAdventureAuto(m_swerve, m_shooter, m_intake, m_turret, m_TurretLimelight);
     Alliance currentAlliance=DriverStation.getAlliance().get();
-    Pose2d leftStartPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.CENTER1,currentAlliance);
-    Pose2d shortAmpNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.CENTERNOTEPOS,currentAlliance);
-    double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.StartingLocations.CENTER1);
+    Pose2d leftStartPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.LEFTSPEAKER,currentAlliance);
+    Pose2d outOfStartPos=autoBuilder.getNotePose(AutoConstants.NotePoses.OUTOFBOUNDPOS,currentAlliance);
+    DelayCommand delay=new DelayCommand(AutoConstants.pathPlanDelay);
 
     SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
-    SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
-    SmartShooter shoot3=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
 
     TurretPosCommand turretSet00=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSet01=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSetLeftShoot1=new TurretPosCommand(m_turret,turretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSetLeftShoot2=new TurretPosCommand(m_turret,turretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSetAmpShoot=new TurretPosCommand(m_turret,Constants.TurretConstants.turretAmpNoteShootPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-
-    IntakeToggleCommand intake1=new IntakeToggleCommand(m_intake,IntakeConstants.autoIntakeSpeed,true);
-    IntakeToggleCommand intake2=new IntakeToggleCommand(m_intake,IntakeConstants.autoIntakeSpeed,true);
   
     ShootRotateSetReferenceCommand shooterSetRef1=new ShootRotateSetReferenceCommand(m_shooter,0);
-    ShootRotateSetReferenceCommand shooterSetRef2=new ShootRotateSetReferenceCommand(m_shooter,0);
 
-    Command startToAmpNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(leftStartPos,shortAmpNotePos));
+    Command startToAmpNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(leftStartPos,outOfStartPos));
 
     ParallelCommandGroup newMoveSetRef1=new ParallelCommandGroup(turretSet00,startToAmpNote,shooterSetRef1);
 
     m_swerve.resetOdometry(leftStartPos);
 
-    SequentialCommandGroup newSeq=new SequentialCommandGroup(turretSetLeftShoot1,shoot1,intake1,newMoveSetRef1,turretSetAmpShoot,shoot2);
+    SequentialCommandGroup newSeq=new SequentialCommandGroup(shoot1,delay,newMoveSetRef1);
+
+    return newSeq;
+  }
+
+  public Command PathPlanAnyTwoNote(){
+    ChooseYourOwnAdventureAuto autoBuilder=new ChooseYourOwnAdventureAuto(m_swerve, m_shooter, m_intake, m_turret, m_TurretLimelight);
+    Alliance currentAlliance=DriverStation.getAlliance().get();
+    Pose2d startPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.CENTER1,currentAlliance);
+    Pose2d notePos=autoBuilder.getNotePose(AutoConstants.NotePoses.CENTERNOTEPOS,currentAlliance);
+    Pose2d moveOutPos=autoBuilder.getNotePose(AutoConstants.NotePoses.TWONOTEMOVEOUT,currentAlliance);
+    double startTurretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.RIGHTSPEAKER);
+
+    SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
+    SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
+
+    TurretPosCommand turretSet00=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    TurretPosCommand turretShootPos1=new TurretPosCommand(m_turret,startTurretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    TurretPosCommand turretShootPos2=new TurretPosCommand(m_turret,startTurretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+
+    IntakeToggleCommand intake1=new IntakeToggleCommand(m_intake,IntakeConstants.autoIntakeSpeed,true);
+  
+    ShootRotateSetReferenceCommand shooterSetRef1=new ShootRotateSetReferenceCommand(m_shooter,0);
+
+    Command startToMoveOutPos=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(startPos,moveOutPos));
+    Command moveOutPosToAmpNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(moveOutPos,notePos));
+
+    ParallelCommandGroup newMoveSetRef1=new ParallelCommandGroup(turretSet00,moveOutPosToAmpNote,shooterSetRef1);
+
+    m_swerve.resetOdometry(startPos);
+
+    SequentialCommandGroup newSeq=new SequentialCommandGroup(turretShootPos1,startToMoveOutPos,shoot1,intake1,newMoveSetRef1,turretShootPos2,shoot2);
 
     return newSeq;
   }
@@ -809,7 +833,7 @@ public class RobotContainer {
     Alliance currentAlliance=DriverStation.getAlliance().get();
     Pose2d rightStartPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.RIGHTSPEAKER,currentAlliance);
     Pose2d longSource1NotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGSOURCE1POS,currentAlliance);
-    double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.StartingLocations.RIGHTSPEAKER);
+    double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.RIGHTSPEAKER);
 
     SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
     SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
@@ -879,7 +903,7 @@ public class RobotContainer {
     Pose2d ampNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.AMPNOTEPOS,currentAlliance);
     Pose2d longAmpNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGAMP1POS,currentAlliance);
     Pose2d longAmpIntakePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGAMP1INTAKEPOS,currentAlliance);
-    double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.StartingLocations.LEFTSPEAKER);
+    double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.LEFTSPEAKER);
 
     SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
     SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
@@ -917,25 +941,29 @@ public class RobotContainer {
     return newSeq;
   }
 
-  public Command PathPlanLeftScoreLongAmp1LongAmp2(){
+  public Command PathPlanRightScoreLongSource1LongSource2(){
     ChooseYourOwnAdventureAuto autoBuilder=new ChooseYourOwnAdventureAuto(m_swerve, m_shooter, m_intake, m_turret, m_TurretLimelight);
     Alliance currentAlliance=DriverStation.getAlliance().get();
     Pose2d rightStartPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.RIGHTSPEAKER,currentAlliance);
-    Pose2d longAmp1NotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGSOURCE1POS,currentAlliance);
-    Pose2d longAmp2NotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGSOURCE2POS,currentAlliance);
-    double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.StartingLocations.LEFTSPEAKER);
+    Pose2d longSource1NotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGSOURCE1POS,currentAlliance);
+    Pose2d longSource1IntakeWaypoint=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGSOURCE1WAYPOINT,currentAlliance);
+    Pose2d longSource2NotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGSOURCE2POS,currentAlliance);
+    double startTurretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.RIGHTSPEAKER);
+    double wingShootTurretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.RIGHTWINGSHOOTPOS);
     Pose2d shootPos=autoBuilder.getNotePose(AutoConstants.NotePoses.WINGSHOOTPOS, currentAlliance);
 
-    SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
-    SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
-    SmartShooter shoot3=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,true,false);
+
+    ShootCommand shoot1=new ShootCommand(m_shooter, m_intake,AutoConstants.autoCloseSpeed1,AutoConstants.autoCloseSpeed2,AutoConstants.autoCloseAngle,true,false);
+    ShootCommand shoot2=new ShootCommand(m_shooter, m_intake,AutoConstants.wingShotSpeed1,AutoConstants.wingShotSpeed1,AutoConstants.wingShotAngle,true,false);
+    SmartShooter shoot3=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
+
+    ShooterNotePass m_primeMotors=new ShooterNotePass(m_shooter, m_turret, m_intake,AutoConstants.wingShotSpeed1,AutoConstants.wingShotSpeed2,0,true);
 
     TurretPosCommand turretSet00=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSet01=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     TurretPosCommand turretSet90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSetLeftShoot1=new TurretPosCommand(m_turret,turretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSetLeftShoot2=new TurretPosCommand(m_turret,turretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSetAmpShoot=new TurretPosCommand(m_turret,Constants.TurretConstants.turretAmpNoteShootPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    TurretPosCommand turretSetRightShoot=new TurretPosCommand(m_turret,startTurretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    TurretPosCommand turretSetRightWingShoot1=new TurretPosCommand(m_turret,wingShootTurretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
+    TurretPosCommand turretSetRightWingShoot2=new TurretPosCommand(m_turret,wingShootTurretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
 
     IntakeToggleCommand intake1=new IntakeToggleCommand(m_intake,IntakeConstants.autoIntakeSpeed,true);
     IntakeToggleCommand intake2=new IntakeToggleCommand(m_intake,IntakeConstants.autoIntakeSpeed,true);
@@ -943,25 +971,17 @@ public class RobotContainer {
     ShootRotateSetReferenceCommand shooterSetRef1=new ShootRotateSetReferenceCommand(m_shooter,0);
     ShootRotateSetReferenceCommand shooterSetRef2=new ShootRotateSetReferenceCommand(m_shooter,0);
 
-    Command startToLongAmpNote1=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(rightStartPos,longAmp1NotePos));
-    Command LongAmpNote1ToWingShoot=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(longAmp1NotePos,shootPos));
-    Command WingShootToLongAmpNote2Waypoint=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(shootPos,longAmp1NotePos));
-    Command LongAmpNote2WaypointToLongAmpNote2=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(longAmp1NotePos,longAmp2NotePos));
-    Command LongAmpNote2ToLongAmpNote2Waypoint=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(longAmp2NotePos,longAmp1NotePos));
-    Command LongAmpNote1ToWingPos=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(shootPos,longAmp2NotePos));
+    Command startToShootPos=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(rightStartPos,longSource1IntakeWaypoint,longSource1NotePos,shootPos));
+    Command shotPosToSource2ToShotPos=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(shootPos,longSource1NotePos,longSource2NotePos,longSource1NotePos,shootPos));
 
-    ParallelCommandGroup newMoveSetRef1=new ParallelCommandGroup(turretSet00,startToLongAmpNote1,shooterSetRef1);
-    ParallelCommandGroup newMoveSetRef2=new ParallelCommandGroup(turretSetLeftShoot2,LongAmpNote1ToWingShoot);
-    ParallelCommandGroup newMoveSetRef3=new ParallelCommandGroup(turretSet90,WingShootToLongAmpNote2Waypoint,shooterSetRef2);
-    ParallelCommandGroup newMoveSetRef4=new ParallelCommandGroup(LongAmpNote2ToLongAmpNote2Waypoint,turretSet01);
+    ParallelCommandGroup newMoveSetRef1=new ParallelCommandGroup(turretSet00,startToShootPos);
+    ParallelCommandGroup newMoveSetRef2=new ParallelCommandGroup(shotPosToSource2ToShotPos,turretSet90);
 
     m_swerve.resetOdometry(rightStartPos);
 
-    SequentialCommandGroup newSeq=new SequentialCommandGroup(turretSetLeftShoot1,shoot1,intake1,newMoveSetRef1,newMoveSetRef2,
-                                                            shoot2,intake2,newMoveSetRef3,
-                                                            LongAmpNote2WaypointToLongAmpNote2,newMoveSetRef4,
-                                                            LongAmpNote1ToWingPos,shoot3);
-
+    SequentialCommandGroup newSeq=new SequentialCommandGroup(turretSetRightShoot,shoot1,intake1,newMoveSetRef1,
+                                                            turretSetRightWingShoot1,shoot2);//,intake2,newMoveSetRef2,
+                                                            //turretSetRightWingShoot2,shoot3);
     return newSeq;
   }
 }    
