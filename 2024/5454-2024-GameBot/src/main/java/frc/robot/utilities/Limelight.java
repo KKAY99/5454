@@ -24,6 +24,8 @@ public class Limelight {
     private static NetworkTableEntry ta;
     // does the limelight have a target
     private static NetworkTableEntry tv;
+    //limelight hearbeat
+    private static NetworkTableEntry hb;
     // robot pose based on limelight
     private static NetworkTableEntry robotPoseRed;
 
@@ -74,6 +76,8 @@ public class Limelight {
         ta = llTable.getEntry("ta");
         // does the limelight have a target
         tv = llTable.getEntry("tv");
+        hb = llTable.getEntry("hb");
+        
         // robot pose accoridng to limelight
         robotPoseRed = llTable.getEntry("botpose_wpiblue");
         
@@ -247,7 +251,9 @@ public class Limelight {
     public double GetDistanceMultipler(){
         return (getDistance()*0.2)+1;
     }
-
+    public double getHeartBeat(){
+        return hb.getDouble(0);
+    }
     public Pose2d GetPoseViaApriltag(){
         double[] empty=null;
         double[] robotPoseValues=robotPoseRed.getDoubleArray(empty);

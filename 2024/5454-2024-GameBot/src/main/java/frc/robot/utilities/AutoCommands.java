@@ -217,25 +217,6 @@ public class AutoCommands {
         }else{
         }
       break;
-      case AutoConstants.autoMode9:
-        if(currentAlliance==Alliance.Red){       
-        }else{
-        }
-      break;
-      case AutoConstants.autoMode10:
-        if(currentAlliance==Alliance.Red){
-          autoRoutine=redAutoScore4Notes();      
-        }else{
-          autoRoutine=blueAutoScore4Notes(); 
-        }
-      break;
-      case AutoConstants.autoMode11:
-        if(currentAlliance==Alliance.Red){ 
-          autoRoutine=redAutoScore4Notes();       
-        }else{
-          autoRoutine=blueAutoScore4Notes();
-        }
-      break;
     }
     return autoRoutine;
  }

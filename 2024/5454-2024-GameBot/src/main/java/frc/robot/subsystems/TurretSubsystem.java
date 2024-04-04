@@ -83,7 +83,8 @@ public class TurretSubsystem extends SubsystemBase{
 
     if(m_limeLight.isTargetAvailible()){
       if(Math.abs(x)<Constants.LimeLightValues.limeLightDeadBand*multiplier){
-          returnValue=true;
+        //System.out.println("IS On Target: " + x + "multiplier " + multiplier);
+        returnValue=true;
       }
      }
      return returnValue;
@@ -123,7 +124,7 @@ public class TurretSubsystem extends SubsystemBase{
         }else{
           speed=Constants.LimeLightValues.limeLightTrackSpeed5;
         }
-         System.out.println("Robot Speed: " + yRobotSpeed + " Turret Speed:"+ speed);
+         //System.out.println("Robot Speed: " + yRobotSpeed + " Turret Speed:"+ speed);
    
         //System.out.println("Distance X " + x + " - Speed: " + speed);
         if(x<0 && speed!=0){
@@ -180,7 +181,7 @@ public class TurretSubsystem extends SubsystemBase{
         }
          //System.out.println("Robot Speed: " + yRobotSpeed + " Turret Speed:"+ speed);
    
-        //System.out.println("Distance X " + x + " - Speed: " + speed);
+       // System.out.println("Distance X " + x + " - Speed: " + speed);
         if(x<0 && speed!=0){
           RunCheckLimits(speed);
           m_speed=speed;
@@ -252,6 +253,12 @@ public class TurretSubsystem extends SubsystemBase{
     
     //if gap between target pos and current position is less than deadband we return true
      return Math.abs((Math.abs(GetEncoderValue())-Math.abs(targetPos)))<deadband;
+  }
+
+  public boolean isAtPositionNOABS(double targetPos,double deadband){
+    
+    //if gap between target pos and current position is less than deadband we return true
+     return GetEncoderValue()-targetPos<deadband && GetEncoderValue()-targetPos>-deadband;
   }
 
   public boolean IsAtHardLimit(){

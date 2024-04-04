@@ -90,7 +90,7 @@ public class Swerve extends SubsystemBase {
           double rotationVal =
               rotationLimiter.calculate(
                   MathUtil.applyDeadband(
-                      -rotationSup.getAsDouble() * Math.max(1-speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed), Constants.DriveConstants.swerveDeadband));
+                      -rotationSup.getAsDouble() * Math.max(1-speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasPedalSpeed), Constants.DriveConstants.swerveRotateDeadband));
           SmartDashboard.putNumber("translationvalue",translationVal);
           SmartDashboard.putNumber("strafevalue",strafeVal);
           Logger.recordOutput("Swerve/Translation", translationVal);

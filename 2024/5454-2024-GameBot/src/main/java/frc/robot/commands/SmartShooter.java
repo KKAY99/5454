@@ -48,9 +48,10 @@ public class SmartShooter extends Command {
     private boolean m_shouldToggle;
     private double m_targetAngle=0;
     private double m_lastAngle=1000; // out of range value
+    private double m_lastlimelightHeartBeat=0;
     private static int kSlowDownDeadBand=2; 
     private enum STATE{
-        START,VISIONCLEARANCE,WAITFORVISIONCLEARANCE,CHECKROTATEMODE,TURRETFIND,TURRETLOCKWAIT,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
+        START,VISIONCLEARANCE,WAITFORVISIONCLEARANCE,CHECKROTATEMODE,TURRETFIND,TURRETLOCKWAIT,CHECKAGIN,THREETIMES,SETANGLE,WAITFORANGLE,RAMPUPSHOOTER,SHOOT,SLOW,END
     }
 
     private STATE m_state=STATE.SETANGLE;
@@ -252,11 +253,41 @@ public class SmartShooter extends Command {
                     
                     if(m_turret.IsOnTarget()&&!m_shouldToggle){
                         m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
+                        m_lastlimelightHeartBeat=m_limelight.getHeartBeat();
+                        m_state=STATE.CHECKAGIN;
+                    }
+                } // if not on target keep in track target mode
+             //stay in turret lock mode
+            break;           
+            case CHECKAGIN:                   
+                //System.out.print("Hearbeat:" + m_limelight.getHeartBeat());
+                m_turret.TrackTargetNormal(true);   
+                setAngleandSpeedfromLimelight(limeLimelightDis);     
+                if(m_limelight.isTargetAvailible() && (m_limelight.getHeartBeat()>m_lastlimelightHeartBeat)){
+                    
+                    if(m_turret.IsOnTarget()&&!m_shouldToggle){
+                        m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
+                        m_lastlimelightHeartBeat=m_limelight.getHeartBeat();
+                        m_state=STATE.THREETIMES;
+                    }
+                } // if not on target keep in track target mode
+             //stay in turret lock mode
+            break;           
+            case THREETIMES:                   
+                //System.out.print("Hearbeat:" + m_limelight.getHeartBeat());
+                m_turret.TrackTargetNormal(true);   
+                setAngleandSpeedfromLimelight(limeLimelightDis);     
+                if(m_limelight.isTargetAvailible() && (m_limelight.getHeartBeat()>m_lastlimelightHeartBeat)){
+                    
+                    if(m_turret.IsOnTarget()&&!m_shouldToggle){
+                        m_turret.stop(); //in case it wasn't stopped in TrackTarget - EDGE case
+                        m_lastlimelightHeartBeat=m_limelight.getHeartBeat();
                         m_state=STATE.SETANGLE;
                     }
                 } // if not on target keep in track target mode
              //stay in turret lock mode
             break;           
+    
             case SETANGLE: 
                 if(m_limelight.isTargetAvailible()){  
                     setAngleandSpeedfromLimelight(limeLimelightDis);

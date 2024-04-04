@@ -47,7 +47,7 @@ public class TurretPosCommand extends Command{
     Logger.recordOutput("Turret/TurretPosCommand",m_isRunning);
 
     boolean hasTimedOut=(Timer.getFPGATimestamp()>(m_startTime+m_timeOut));
-    boolean hasreachedPosition=m_turret.isAtPosition(m_turretPos,m_deadband);
+    boolean hasreachedPosition=m_turret.isAtPositionNOABS(m_turretPos,m_deadband);
     if(hasTimedOut||hasreachedPosition) {
       return true;
     }else{
