@@ -189,7 +189,8 @@ public class SmartShooter extends Command {
             if(angleGap<Constants.ShooterConstants.kAngleDeadband&&angleGap>-Constants.ShooterConstants.kAngleDeadband){
                     m_shooter.stopRotate();
                     returnValue=true;
-            }else if(m_lastAngle!=m_targetAngle){
+            }else if(!(m_lastAngle-m_targetAngle<Constants.ShooterConstants.kAngleDeadband &&
+                   m_lastAngle-m_targetAngle>-Constants.ShooterConstants.kAngleDeadband)){
                 m_motor1TargetSpeed=m_shotTable.getVelocity1(limeLimelightDis);   
                 m_motor2TargetSpeed=m_shotTable.getVelocity2(limeLimelightDis);    
                 Logger.recordOutput("Shooter/TargetMotorSpeed1",m_motor1TargetSpeed);

@@ -37,9 +37,10 @@ public final class Constants {
 
         public static final double wingShotSpeed1=-50;
         public static final double wingShotSpeed2=-80;
-        public static final double wingShotAngle=41;
+        public static final double wingShotAngle=40;
         
         public static final double autoCloseAngle=29;
+        public static final double autoCloseAmpAngle=32;  // changed 4/4
         public static final double autoCloseSpeed1=-50;
         public static final double autoCloseSpeed2=-50;
 
@@ -325,7 +326,8 @@ public final class Constants {
       public static final double turret90Pos=36.8;
       public static final double turretNonCenterShootPos=20.4;
       public static final double turretAmpNoteShootPos=15;
-      public static final double turretWingShotPos=16;
+      public static final double turretSourceWingShotPos=16;
+      public static final double turretAmpWingShotPos=19;
 
       public static final double turretP=0.050;
       public static final double turretI=0;
@@ -352,7 +354,7 @@ public final class Constants {
 
    public static final class NoteFlipConstants{
     public static final int canID=12;
-    public static final double noteFlipSpeed=-0.75;//.35 on 3/25
+    public static final double noteFlipSpeed=-1;//.35 on 3/25
     public static final double startNoteFlipSpeed=-0.3;
     public static final double timeToRunAmpScore=1;
    }
@@ -386,7 +388,9 @@ public final class Constants {
     }
 
     public static enum CANDLELEDStates{
-      TARGETLOCK,NOTARGET,ROBOTFRONTSIDE,AMPSCORESIDE,DISABLED,NOSTATE
+      TARGETLOCK,NOTARGET,ROBOTFRONTSIDE,AMPSCORESIDE,
+      DISABLED,DISABLEDNOHOME,NOSTATE,HASNOTE,ISATSTOW,INTAKERUNNING,
+      ISONTARGET
     }
 
     public static enum SecondaryLEDStates{
@@ -394,7 +398,7 @@ public final class Constants {
     }
 
     public static enum LEDColors{
-      GREEN,RED,ORANGE,BLUE,PURPLE
+      GREEN,RED,ORANGE,BLUE,PURPLE,YELLOW
     }
 
     public static enum LEDDisplayStates{
@@ -490,7 +494,7 @@ public final class Constants {
     public static final String CanivoreBus="5454Canivore";
    }
     public static final class ShooterConstants{
-      public static final double kAngleDeadband=0.3;
+      public static final double kAngleDeadband=0.2;
       public static final double kIntakeFeedAngleDeadband=10;
       public static final double kRampUpTime=1;
       public static final double kAccelCompFactor = 0.100; // in units of seconds
@@ -509,7 +513,7 @@ public final class Constants {
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
 
-      public static final double homePos=72.86;
+      public static final double homePos=228;
       public static final double homeDeadband=0.05;
       public static final double homeRotateSpeed=0.05;
       public static final double rotateLowSoftLimit=-43.69;
@@ -571,13 +575,13 @@ public final class Constants {
       public static final double triggerDeadband=0.1;
 
       public static final int customManual=3;
-      public static final int customShot1=10;//4
+      public static final int customShot1=4;
       public static final int customShot2=5;
       public static final int customShot3=6;
-      public static final int customShot4=4;//7
+      public static final int customShot4=7;
       public static final int customShot5=8;
       public static final int customShot6=9;
-      public static final int customShot7=7;//10
+      public static final int customShot7=10;
       public static final int customShot8=11;
       public static final int customShot9=12;
     }
@@ -585,10 +589,10 @@ public final class Constants {
     public static final double customShot1Velocity2=-40;
     public static final double customShot1Angle=21.5;
  
-    public static final double customShot2Velocity1=-45;
-    public static final double customShot2Velocity2=-48;
-    public static final double customShot2Angle=-27.8;
- 
+    public static final double customShot2Velocity1=-65;
+    public static final double customShot2Velocity2=-70;
+    public static final double customShot2Angle=37.9;
+
     public static final double customShot3Velocity1=-48;
     public static final double customShot3Velocity2=-51;
     public static final double customShot3Angle=31.4;
@@ -663,30 +667,30 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
-          {10.0,-40,-40,21.5,1,1,2},  
-          {17.4,-40,-40,21.5,1,1,2},
-          {19.1,-40,-40,22.5,5,1,4},
-          {22.8,-45,-48,27.5,5,1,5},
-          {24.9,-45,-48,30.5,5,1,5},
-          {27.1,-45,-48,31.5,5,1,7},
-          {29.4,-48,-51,33,5,1,7},
-          {31.4,-48,-51,34.4,5,1,7},
-          {34.1,-49,-54,36,5,1,7},
-          {35.6,-49,-54,37,5,1,7},
-          {37.1,-51,-56,37.3,5,1,7},
-          {39,-53,-60,37.6,5,1,7},
-          {40.2,-65,-70,37.9,5,1,7},
-          {43.9,-44,-75,38.6,5,1,7},
-          {44.1,-45,-75,38.8,5,1,7},
-          {45.4,-45,-75,39,5,1,7},
-          {46.5,-45,-75,39.5454,5,1,7},
-          {48.9,-46,-76,39.6,5,1,7},
-          {51.2,-50,-80,40,5,1,7},
-          {53.4,-50,-80,40.6,5,1,7},
-          {55.5,-50,-80,40.9,5,1,7},
-          {57.1,-50,-80,41.2,5,1,7},
-          {57.3,-50,-80,41.3,5,1,7},
-          {90.1,-58,-88,45,5,1,10} // dummy value
+          {10.0,-40,-40,21.5,1,1,-7}, //2  
+          {17.4,-40,-40,21.5,1,1,-7}, //2
+          {19.1,-40,-40,22.5,5,1,-7}, //4 
+          {22.8,-45,-48,27.5,5,1,-7}, //5
+          {24.9,-45,-48,30.5,5,1,-7},
+          {27.1,-45,-48,31.5,5,1,-6},
+          {29.4,-48,-51,33,5,1,1,-6},
+          {31.4,-48,-51,34.4,5,1,-2},
+          {34.1,-49,-54,36,5,1,-2},
+          {35.6,-49,-54,37,5,1,-2},
+          {37.1,-51,-56,37.3,5,1,-2},
+          {39,-53,-60,37.6,5,1,-2},
+          {40.2,-65,-70,37.9,5,1,0},
+          {43.9,-44,-75,38.6,5,1,0},
+          {44.1,-45,-75,38.8,5,1,0},
+          {45.4,-45,-75,39,5,1,0},
+          {46.5,-45,-75,39.5454,5,1,0},
+          {48.9,-46,-76,40,5,1,0},
+          {51.2,-50,-80,41.3,5,1,0},
+          {53.4,-50,-80,42.6,5,1,0},
+          {55.5,-50,-80,42.9,5,1,0},
+          {57.1,-50,-80,43,5,1,0},
+          {57.3,-50,-80,43,5,1,0},
+          {90.1,-58,-88,45,5,1,0} // dummy value
          
       };
        public static final double [][]olddistanceLookup={

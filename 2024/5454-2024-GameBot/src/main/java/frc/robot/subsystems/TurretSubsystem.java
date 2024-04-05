@@ -77,13 +77,15 @@ public class TurretSubsystem extends SubsystemBase{
     boolean returnValue=false;
     double limelightDis=m_limeLight.getDistance();
     double multiplier=m_shotTable.getDistanceMultiplier(limelightDis);
-    double x=m_limeLight.getXRaw()-m_shotTable.getCrosshairOffset(limelightDis); 
+    double offsetValue = m_shotTable.getCrosshairOffset(limelightDis);
+    double x=m_limeLight.getXRaw()-offsetValue; 
     
     m_limeLight.setOffSet(m_shotTable.getCrosshairOffset(limelightDis));
-
+    //System.out.println("IsOnTargetCheck - Raw X: " + m_limeLight.getXRaw() + " Adjusted X:" + x + " offset " +offsetValue +  " multiplier " + multiplier);
+  
     if(m_limeLight.isTargetAvailible()){
       if(Math.abs(x)<Constants.LimeLightValues.limeLightDeadBand*multiplier){
-        //System.out.println("IS On Target: " + x + "multiplier " + multiplier);
+        //System.out.println("IS On Target - Raw X: " + x + " offset " +offsetValue +  " multiplier " + multiplier);
         returnValue=true;
       }
      }
@@ -315,7 +317,9 @@ public class TurretSubsystem extends SubsystemBase{
   public double getCurrentSpeed(){
     return m_speed;
   }
-  
+ 
+ 
+
  public void aimAtGoal(Pose2d robotPose, Translation2d goal, boolean aimAtVision) {
   //FIX: TO DO Implemetnt AimAtGoal 
   /* Translation2d robotToGoal = goal.minus(robotPose.getTranslation());

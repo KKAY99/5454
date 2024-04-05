@@ -338,6 +338,22 @@ public class ShooterSubsystem extends SubsystemBase {
         return returnValue;
     }
 
+    public boolean isAtHomeValue(){
+        if(getCanCoderPosition()<=Constants.ShooterConstants.homePos+Constants.ShooterConstants.homeDeadband
+          &&  getCanCoderPosition()>=Constants.ShooterConstants.homePos-Constants.ShooterConstants.homeDeadband){    
+    
+    //         System.out.println("Is At Home Value");
+              return true;
+     } else {
+     //   System.out.println("Is Not At Home Value " + getCanCoderPosition());
+        return false;
+     }
+    }
+
+    public boolean isAtStow(){
+        return (getRelativePosition()-0.3<ShooterConstants.shooterStowAngle&&getRelativePosition()+0.3>ShooterConstants.shooterStowAngle);
+    }
+
     public boolean isAtMidShot() {
         boolean returnValue = false;
 

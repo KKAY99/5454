@@ -87,6 +87,9 @@ public class RobotContainer {
     private SendableChooser<AutoPose2D> m_autoPath3 = new SendableChooser<>(); 
     private SendableChooser<AutoPose2D> m_autoPath4 = new SendableChooser<>(); 
     private SendableChooser<AutoPose2D> m_autoPath5 = new SendableChooser<>(); 
+   
+    private Integer m_hasNoteLoopCounter=0;
+    private Integer khasNoteLoopLEDLimit=5;
 
     private Swerve m_swerve = new Swerve(new SwerveIO(){});
 //    private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
@@ -262,6 +265,10 @@ public class RobotContainer {
        SequentialCommandGroup stowAndStopD=new SequentialCommandGroup(new HardStopShooter(m_shooter),stowDCommand);
        driverStow.onTrue(stowAndStopD);
 
+      HomeShooterCommand reHomeCustom=new HomeShooterCommand(m_shooter);
+      JoystickButton reHomeCustomButton = new JoystickButton(m_CustomController,3);
+      reHomeCustomButton.onTrue(reHomeCustom);
+
       ShootCommand shootCustom1=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle,true,false);
       JoystickButton custom1 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot1);
       custom1.onTrue(shootCustom1);
@@ -283,9 +290,9 @@ public class RobotContainer {
       JoystickButton custom5 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot5);
       custom5.onTrue(notePassCustom2Prime);
 
-      ShooterNotePass notePassCustom3Prime=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass12Velocity1,Constants.notePass12Velocity1,Constants.notePass12Angle,true);
+      /*ShooterNotePass notePassCustom3Prime=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass12Velocity1,Constants.notePass12Velocity1,Constants.notePass12Angle,true);
       JoystickButton custom6 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot6);
-      custom6.onTrue(notePassCustom3Prime);
+      custom6.onTrue(notePassCustom3Prime);*/
 
       ShooterNotePass notePassCustom1=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass10Velocity1,Constants.notePass10Velocity2,Constants.notePass10Angle,false);
       JoystickButton custom7 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot7);
@@ -295,9 +302,9 @@ public class RobotContainer {
       JoystickButton custom8 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot8);
       custom8.whileTrue(notePassCustom2);
 
-      ShooterNotePass notePassCustom3=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass12Velocity1,Constants.notePass12Velocity1,Constants.notePass12Angle,false);
+      /*ShooterNotePass notePassCustom3=new ShooterNotePass(m_shooter,m_turret,m_intake,Constants.notePass12Velocity1,Constants.notePass12Velocity1,Constants.notePass12Angle,false);
       JoystickButton custom9 = new JoystickButton(m_CustomController, Constants.ButtonBindings.customShot9);
-      custom9.whileTrue(notePassCustom3);
+      custom9.whileTrue(notePassCustom3);*/
 
       //ShootCommand shootCustom4=new ShootCommand(m_shooter,m_intake,Constants.customShot4Velocity1,Constants.customShot4Velocity2,Constants.customShot4Angle,false);
       //SourceIntakeCommand intakeCustom4=new SourceIntakeCommand(m_shooter,ShooterConstants.shooterSourceIntakeAngle);
@@ -564,23 +571,55 @@ public class RobotContainer {
   public void TeleopPeriodic(){
     boolean isTurretStraight=(m_turret.GetEncoderValue()>=-0.25||m_turret.GetEncoderValue()<=0.25);
 
-    m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ROBOTFRONTSIDE);
-    m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.AMPSCORESIDE);
-    if(m_TurretLimelight.isTargetAvailible()){
-      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.TARGETLOCK);
+    if(!m_shooter.isAtStow()){
+      if (m_hasNoteLoopCounter>0 && m_hasNoteLoopCounter>khasNoteLoopLEDLimit){
+        //reset has note
+         m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.HASNOTE);
+         m_hasNoteLoopCounter++;
+      } else{
+      if(!m_intake.isBeamBroken() ){
+        m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ROBOTFRONTSIDE);
+      }else if(m_intake.isRunning()){
+        m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.INTAKERUNNING);
+      }else{
+           m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.HASNOTE);
+          m_hasNoteLoopCounter=1;
+      }
+    }
+       m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.AMPSCORESIDE);
+      
+      if(m_TurretLimelight.isTargetAvailible()){
+        if(m_turret.IsOnTarget()){
+          m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ISONTARGET);
+        }else{
+          m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.TARGETLOCK);
+        }
+      }else{
+        m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.NOTARGET);
+      }
     }else{
-      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.NOTARGET);
+      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ISATSTOW);
     }  
   }
 
+  private void setDisabledLEDS(){
+        if(m_shooter.isAtHomeValue()){
+          m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.DISABLED);
+       }else{
+          m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.DISABLEDNOHOME);
+ 
+}
+  }
   public void DisabledInit(){
     stopRumble();
     disableBrakeMode(); // disable brake mode when disabled 
       m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.NOSTATE);
-     m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.DISABLED);
+      setDisabledLEDS();
   }
-  
+   
   public void DisabledPeriodic(){
+    
+     setDisabledLEDS();
   }
   
   public void AutoPeriodic(){

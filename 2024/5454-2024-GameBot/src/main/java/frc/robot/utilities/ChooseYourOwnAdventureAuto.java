@@ -282,16 +282,16 @@ public class ChooseYourOwnAdventureAuto {
         break;
         case RIGHTWINGSHOOTPOS:
         if(currentAlliance==Alliance.Red){ 
-          returnAngle=TurretConstants.turretWingShotPos;         
+          returnAngle=TurretConstants.turretAmpWingShotPos;         
         }else{
-          returnAngle=-TurretConstants.turretWingShotPos;  
+          returnAngle=-TurretConstants.turretSourceWingShotPos;  
         }
         break;
         case LEFTWINGSHOOTPOS:
         if(currentAlliance==Alliance.Red){ 
-          returnAngle=TurretConstants.turretWingShotPos;         
+          returnAngle=-TurretConstants.turretSourceWingShotPos;         
         }else{
-          returnAngle=-TurretConstants.turretWingShotPos;  
+          returnAngle=TurretConstants.turretAmpWingShotPos;  
         }
         break;
       }
@@ -311,16 +311,16 @@ public class ChooseYourOwnAdventureAuto {
         break;
         case RIGHTSPEAKER:
         if(currentAlliance==Alliance.Red){ 
-          returnAngle=-AutoConstants.autoCloseAngle;            
+          returnAngle=AutoConstants.autoCloseAngle;            
         }else{
-          returnAngle=AutoConstants.autoCloseAngle;     
+          returnAngle=-AutoConstants.autoCloseAngle;     
         }
         break;
         case RIGHTWINGSHOOTPOS:
         if(currentAlliance==Alliance.Red){ 
-          returnAngle=-AutoConstants.wingShotAngle;         
+          returnAngle=AutoConstants.wingShotAngle;         
         }else{
-          returnAngle=AutoConstants.wingShotAngle;  
+          returnAngle=-AutoConstants.wingShotAngle;  
         }
         break;
         case LEFTWINGSHOOTPOS:
@@ -493,7 +493,8 @@ public class ChooseYourOwnAdventureAuto {
 
     PathPlannerPath newPath = new PathPlannerPath(
           bezierPoints,
-          new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+          //new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+         new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
           new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     );
 

@@ -17,6 +17,7 @@ import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
+import com.ctre.phoenix.led.StrobeAnimation;
 
 public class LED{
     private AddressableLED m_led;
@@ -155,7 +156,7 @@ public class LED{
             int secondStartIndex=0;
             int ledCount=0;
             int secondledCount=0;
-            boolean noanimation=true;
+            boolean animationState=false;
             switch(ledState){
                 case TARGETLOCK:
                 rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.PURPLE);
@@ -191,15 +192,69 @@ public class LED{
                 //RainbowAnimation animation = new RainbowAnimation(1,1,50);  
                 System.out.println("Starting Animation -" + ledState);
                     m_candle.animate(animation,0);
-                    
+                    animationState=true;
+                break;
+                case DISABLEDNOHOME:
+                    LarsonAnimation animationNH=new LarsonAnimation(255,0,0,0,0.8,
+                        LEDConstants.candleLEDCount,BounceMode.Center,7);
+                    //LarsonAnimation animation=new LarsonAnimation(160,32,240,0,0.8,
+                    //    150,BounceMode.Center,7);
+                //RainbowAnimation animation = new RainbowAnimation(1,1,50);  
+                System.out.println("Starting Animation -" + ledState);
+                    m_candle.animate(animationNH,0);
+                    animationState=true;
+                break;
+                case HASNOTE:
+                    rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.PURPLE);
+                    startIndex=LEDConstants.candleRobotFrontStartIndex;
+                    secondStartIndex=LEDConstants.candleRobotFrontSecondStartIndex;
+                    ledCount=LEDConstants.candleRobotFrontLEDCount;
+                    secondledCount=LEDConstants.candleRobotFrontLEDCount2;
 
-                    
-                noanimation=false;
-                    break;
+                    StrobeAnimation flash1=new StrobeAnimation(rgbValues.get(0), rgbValues.get(1), 
+                    rgbValues.get(2), rgbValues.get(3), 0.7, ledCount, startIndex);
+
+                    StrobeAnimation flash2=new StrobeAnimation(rgbValues.get(0), rgbValues.get(1), 
+                    rgbValues.get(2), rgbValues.get(3), 0.7, secondledCount, secondStartIndex);
+
+                    m_candle.animate(flash1,0);
+                    m_candle.animate(flash2,0);
+                break;
+                case ISATSTOW:
+                rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.BLUE);
+                startIndex=LEDConstants.candleTargetLockIndex1;
+                ledCount=LEDConstants.candleLEDTargetLockLength1;
+                secondStartIndex=LEDConstants.candleTargetLockIndex2;
+                secondledCount=LEDConstants.candleLEDTargetLockLength2;
+                break;
+                case INTAKERUNNING:
+                rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.YELLOW);
+                startIndex=LEDConstants.candleRobotFrontStartIndex;
+                secondStartIndex=LEDConstants.candleRobotFrontSecondStartIndex;
+                ledCount=LEDConstants.candleRobotFrontLEDCount;
+                secondledCount=LEDConstants.candleRobotFrontLEDCount2;
+                break;
+                case ISONTARGET:
+                    rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.GREEN);
+                    startIndex=LEDConstants.candleTargetLockIndex1;
+                    ledCount=LEDConstants.candleLEDTargetLockLength1;
+                    secondStartIndex=LEDConstants.candleTargetLockIndex2;
+                    secondledCount=LEDConstants.candleLEDTargetLockLength2;
+
+                    StrobeAnimation flashOnTarget1=new StrobeAnimation(rgbValues.get(0), rgbValues.get(1), 
+                    rgbValues.get(2), rgbValues.get(3), 0.7, ledCount, startIndex);
+
+                    StrobeAnimation flashOnTarget2=new StrobeAnimation(rgbValues.get(0), rgbValues.get(1), 
+                    rgbValues.get(2), rgbValues.get(3), 0.7, secondledCount, secondStartIndex);
+
+                    m_candle.animate(flashOnTarget1,0);
+                    m_candle.animate(flashOnTarget2,0);
+                    animationState=true;
+                break;
                 case NOSTATE:
-                    break;
+                break;
             }
-            if(noanimation && ledState!=CANDLELEDStates.NOSTATE){
+            if(!animationState && ledState!=CANDLELEDStates.NOSTATE){
                     m_candle.clearAnimation(0);
                     m_candle.setLEDs(rgbValues.get(0),rgbValues.get(1),
                                     rgbValues.get(2),rgbValues.get(3),startIndex,ledCount);
@@ -248,6 +303,12 @@ public class LED{
             break;
             case GREEN:
             rgbValues.add(0);
+            rgbValues.add(255);
+            rgbValues.add(0);
+            rgbValues.add(0);
+            break;
+            case YELLOW:
+            rgbValues.add(255);
             rgbValues.add(255);
             rgbValues.add(0);
             rgbValues.add(0);

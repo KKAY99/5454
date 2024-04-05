@@ -94,6 +94,10 @@ public class IntakeSubsystem extends SubsystemBase{
 
         stopIntakeExtension();
     }
+
+    public boolean isRunning(){
+        return (m_currentSpeed>0.1);
+    }
             
     public void setBrakeOn(){
         m_intakeOne.setIdleMode(IdleMode.kBrake);
