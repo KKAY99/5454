@@ -325,7 +325,7 @@ public final class Constants {
       public static final double turretStraightPos=0;
       public static final double turret90Pos=36.8;
       public static final double turretNonCenterShootPos=20.4;
-      public static final double turretAmpNoteShootPos=15;
+      public static final double turretAmpNoteShootPos=13.5;
       public static final double turretSourceWingShotPos=16;
       public static final double turretAmpWingShotPos=19;
 
@@ -354,8 +354,8 @@ public final class Constants {
 
    public static final class NoteFlipConstants{
     public static final int canID=12;
-    public static final double noteFlipSpeed=-1;//.35 on 3/25
-    public static final double startNoteFlipSpeed=-0.3;
+    public static final double noteFlipSpeed=-0.7;//-1;//.35 on 3/25
+    public static final double startNoteFlipSpeed=-0.7;
     public static final double timeToRunAmpScore=1;
    }
 
@@ -467,7 +467,7 @@ public final class Constants {
       public static final double limeLightTrackSpeed2=0.08;
       public static final double limeLightTrackSpeed3=0.10;
       public static final double limeLightTrackSpeed4=0.5; //0.35
-      public static final double limeLightTrackSpeed5=0.8;
+      public static final double limeLightTrackSpeed5=0.6;
 
       public static final double limeLightTrackSpeed0Normal=0.03;
       public static final double limeLightTrackSpeed1Normal=0.05;
@@ -513,8 +513,9 @@ public final class Constants {
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
 
-      public static final double homePos=228;
+      public static final double homePos=274.6;//272.4;
       public static final double homeDeadband=0.05;
+      public static final double homeLEDCheckDeadband=0.1;
       public static final double homeRotateSpeed=0.05;
       public static final double rotateLowSoftLimit=-43.69;
       public static final double rotateHighSoftLimit=58.78; 
@@ -667,30 +668,30 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
-          {10.0,-40,-40,21.5,1,1,-7}, //2  
-          {17.4,-40,-40,21.5,1,1,-7}, //2
-          {19.1,-40,-40,22.5,5,1,-7}, //4 
-          {22.8,-45,-48,27.5,5,1,-7}, //5
-          {24.9,-45,-48,30.5,5,1,-7},
-          {27.1,-45,-48,31.5,5,1,-6},
-          {29.4,-48,-51,33,5,1,1,-6},
-          {31.4,-48,-51,34.4,5,1,-2},
-          {34.1,-49,-54,36,5,1,-2},
-          {35.6,-49,-54,37,5,1,-2},
-          {37.1,-51,-56,37.3,5,1,-2},
-          {39,-53,-60,37.6,5,1,-2},
-          {40.2,-65,-70,37.9,5,1,0},
-          {43.9,-44,-75,38.6,5,1,0},
-          {44.1,-45,-75,38.8,5,1,0},
-          {45.4,-45,-75,39,5,1,0},
-          {46.5,-45,-75,39.5454,5,1,0},
-          {48.9,-46,-76,40,5,1,0},
-          {51.2,-50,-80,41.3,5,1,0},
-          {53.4,-50,-80,42.6,5,1,0},
-          {55.5,-50,-80,42.9,5,1,0},
-          {57.1,-50,-80,43,5,1,0},
-          {57.3,-50,-80,43,5,1,0},
-          {90.1,-58,-88,45,5,1,0} // dummy value
+          {10.0,-40,-40,21.5,1,1,7}, //2  
+          {17.4,-40,-40,21.5,1,1,7}, //2
+          {19.1,-40,-40,22.5,5,1,7}, //4 
+          {22.8,-45,-48,27.5,5,1,7}, //5
+          {24.9,-45,-48,30.5,5,1,7},
+          {27.1,-45,-48,31.5,5,1,7},
+          {29.4,-48,-51,33,5,1,1,7},
+          {31.4,-48,-51,34.4,5,1,7},
+          {34.1,-49,-54,36,5,1,7},
+          {35.6,-49,-54,37,5,1,7},
+          {37.1,-51,-56,37.3,5,1,8},
+          {39,-53,-60,37.6,5,1,8},
+          {40.2,-65,-70,37.9,5,1,8},
+          {43.9,-44,-75,38.6,5,1,8},
+          {44.1,-45,-75,38.8,5,1,8},
+          {45.4,-45,-75,39,5,1,8},
+          {46.5,-45,-75,39.5454,5,1,8},
+          {48.9,-46,-80,40,5,1,9},
+          {51.2,-50,-80,40,5.3,1,9},
+          {53.4,-50,-80,41.6,5,1,9},
+          {55.5,-50,-80,41.9,5,1,9},
+          {57.1,-50,-80,42,5,1,10},
+          {57.3,-50,-80,42,5,1,10},
+          {90.1,-58,-88,45,5,1,10} // dummy value
          
       };
        public static final double [][]olddistanceLookup={

@@ -190,7 +190,7 @@ public class LED{
                     //LarsonAnimation animation=new LarsonAnimation(160,32,240,0,0.8,
                     //    150,BounceMode.Center,7);
                 //RainbowAnimation animation = new RainbowAnimation(1,1,50);  
-                System.out.println("Starting Animation -" + ledState);
+                //System.out.println("Starting Animation -" + ledState);
                     m_candle.animate(animation,0);
                     animationState=true;
                 break;
@@ -200,7 +200,7 @@ public class LED{
                     //LarsonAnimation animation=new LarsonAnimation(160,32,240,0,0.8,
                     //    150,BounceMode.Center,7);
                 //RainbowAnimation animation = new RainbowAnimation(1,1,50);  
-                System.out.println("Starting Animation -" + ledState);
+                //System.out.println("Starting Animation -" + ledState);
                     m_candle.animate(animationNH,0);
                     animationState=true;
                 break;

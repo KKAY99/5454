@@ -71,7 +71,11 @@ public class IntakeSubsystem extends SubsystemBase{
             turretEncoderValue>turretEncoderValue-TurretConstants.turretDeadBand){
             m_intakeExtension.set(speed);
         }else{
-            m_intakeExtension.set(-speed);
+            if(speed<0){
+                m_intakeExtension.set(speed);
+            }else{
+                m_intakeExtension.set(-speed);
+            }
         }
     }
 
@@ -84,7 +88,12 @@ public class IntakeSubsystem extends SubsystemBase{
         m_intakeOne.set(speed);
         m_intakeTwo.set(speed);
 
-        runIntakeExtension(IntakeConstants.intakeExtensionSpeed);
+        //If Outtaking outake the intake extension
+        if(speed<0){
+            runIntakeExtension(-IntakeConstants.intakeExtensionSpeed);
+        }else{
+            runIntakeExtension(IntakeConstants.intakeExtensionSpeed);
+        }
     }
 
     public void stopIntake(){

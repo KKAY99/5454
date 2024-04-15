@@ -31,7 +31,10 @@ public class AmpScoreHopeCommand extends Command {
     m_intake=intake;
     m_flip=flip;
     m_angle=angle;
-   }
+    addRequirements(shooter);
+    addRequirements(intake);
+    addRequirements(flip);
+}
 
   @Override
   public void initialize() {
@@ -51,13 +54,15 @@ public class AmpScoreHopeCommand extends Command {
     m_intake.stopIntake();
     m_shooter.stopShooter();
     m_flip.stop();
+    m_state=STATE.STARTNOTEMOTOR;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
-
+    Logger.recordOutput("Amp/AmpScoreState",m_state.toString());
+     
     switch(m_state){
     case STARTNOTEMOTOR:
          m_flip.run(NoteFlipConstants.startNoteFlipSpeed);

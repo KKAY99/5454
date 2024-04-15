@@ -77,6 +77,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
         m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
         m_feederMotor.burnFlash();
+        Timer.delay(0.2);
 
         m_angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
         m_angleMotor.setSmartCurrentLimit(Constants.k40Amp);
@@ -84,7 +85,9 @@ public class ShooterSubsystem extends SubsystemBase {
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
         m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
-      
+        m_angleMotor.setIdleMode(IdleMode.kBrake);
+        m_angleMotor.burnFlash();
+        Timer.delay(0.2);
 
         m_anglePID = m_angleMotor.getPIDController();
         m_canCoder = new WPI_CANCoder(canCoderId);
@@ -92,7 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 
         m_angleEncoder = m_angleMotor.getEncoder();
 
-        double anglekP = 0.8;// 0.1
+        double anglekP = 0.4;// 0.8
         double anglekI = 0.00;
         double anglekD = 0.00;
         double anglekIz = 0;
@@ -339,8 +342,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean isAtHomeValue(){
-        if(getCanCoderPosition()<=Constants.ShooterConstants.homePos+Constants.ShooterConstants.homeDeadband
-          &&  getCanCoderPosition()>=Constants.ShooterConstants.homePos-Constants.ShooterConstants.homeDeadband){    
+        if(getCanCoderPosition()<=Constants.ShooterConstants.homePos+Constants.ShooterConstants.homeLEDCheckDeadband
+          &&  getCanCoderPosition()>=Constants.ShooterConstants.homePos-Constants.ShooterConstants.homeLEDCheckDeadband){    
     
     //         System.out.println("Is At Home Value");
               return true;
