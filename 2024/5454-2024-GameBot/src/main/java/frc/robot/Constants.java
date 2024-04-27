@@ -552,8 +552,10 @@ public final class Constants {
       public static final int driverStow=6;
       public static final int driverGyroResetButton=7;
 
-      public static final int driverturretPOVLeft=270;
-      public static final int driverturretPOVRight=90;
+      public static final int driverPOVLeft=270;
+      public static final int driverPOVRight=90;
+      public static final int driverPOVUp=0;
+      public static final int driverPOVDown=180;
 
       public static final int operatorintakeToggleButtonIn=1;
       public static final int operatorNoteFlip=2;
@@ -590,12 +592,12 @@ public final class Constants {
     public static final double customShot1Velocity2=-40;
     public static final double customShot1Angle=21.5;
  
-    public static final double customShot2Velocity1=-65;
-    public static final double customShot2Velocity2=-70;
+    public static final double customShot2Velocity1=-50;
+    public static final double customShot2Velocity2=-60;
     public static final double customShot2Angle=37.9;
 
-    public static final double customShot3Velocity1=-48;
-    public static final double customShot3Velocity2=-51;
+    public static final double customShot3Velocity1=-60;
+    public static final double customShot3Velocity2=-70;
     public static final double customShot3Angle=31.4;
 
     public static final double customShot4Velocity1=-30;
@@ -621,6 +623,8 @@ public final class Constants {
     public static final double notePass12Velocity1=-60;
     public static final double notePass12Velocity2=-60;
     public static final double notePass12Angle=-24;
+
+    public static final double customShotAngleDEMO=21.5;
     
 
     /** General robot constants  from 3512*/
