@@ -51,7 +51,7 @@ import frc.robot.utilities.ADABreakBeam;
 import frc.robot.utilities.AutoCommands;
 import frc.robot.utilities.AutoPose2D;
 import frc.robot.utilities.Blinkin;
-import frc.robot.utilities.CANSparkMaxWrapper;
+//import frc.robot.utilities.CANSparkMaxWrapper;
 import frc.robot.utilities.LED;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ChooseYourOwnAdventureAuto;
@@ -144,6 +144,9 @@ public class RobotContainer {
      // JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
      // intakeToggleTrueButtonIn.onTrue(intakeToggleTrueIn);
 
+      
+      //IntakeToggleCommand intakeConveyIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,false);
+      //intake smart 
       IntakeToggleCommand intakeConveyIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,false);
       JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
       intakeToggleTrueButtonIn.whileTrue(intakeConveyIn);
@@ -163,6 +166,10 @@ public class RobotContainer {
       IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed);
       JoystickButton intakeConveyButton=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeConveyButtonIn);
       intakeConveyButton.onTrue(intakeConvey);
+
+      IntakeConveyCommand intakeConveyDriv=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed);
+      JoystickButton intakeConveyButtonDriv=new JoystickButton(m_xBoxDriver,ButtonBindings.operatorintakeConveyButtonIn);
+      intakeConveyButtonDriv.onTrue(intakeConveyDriv);
 
       /*TurretCommand turretLeft=new TurretCommand(m_turret,Constants.TurretConstants.turretSpeed);
       POVButton turretLeftButton=new POVButton(m_xBoxDriver,Constants.ButtonBindings.driverturretPOVLeft);
@@ -323,15 +330,15 @@ public class RobotContainer {
       //JoystickButton testButton=new JoystickButton(m_xBoxDriver,ButtonBindings.driverturret90);
       //testButton.whileTrue(test);
 
-       ShootCommand shootCustom1Driv=new ShootCommand(m_shooter,m_intake,Constants.customShotAngleDEMO,Constants.customShot1Velocity2,Constants.customShot1Angle,true,false);
+       ShootCommand shootCustom1Driv=new ShootCommand(m_shooter,m_intake,Constants.customShot1Velocity1,Constants.customShot1Velocity2,Constants.customShot1Angle,true,false);
       POVButton custom1Driv = new POVButton(m_xBoxDriver, Constants.ButtonBindings.driverPOVLeft);
       custom1Driv.onTrue(shootCustom1Driv);
 
-      ShootCommand shootCustom2Driv=new ShootCommand(m_shooter,m_intake,Constants.customShotAngleDEMO,Constants.customShot2Velocity2,Constants.customShot2Angle,true,false);
+      ShootCommand shootCustom2Driv=new ShootCommand(m_shooter,m_intake,-30,-30,0,true,false);
       POVButton custom2Driv = new POVButton(m_xBoxDriver, Constants.ButtonBindings.driverPOVUp);
       custom2Driv.onTrue(shootCustom2Driv);
 
-      ShootCommand shootCustom3Driv=new ShootCommand(m_shooter,m_intake,Constants.customShotAngleDEMO,Constants.customShot3Velocity2,Constants.customShot3Angle,true,false);
+      ShootCommand shootCustom3Driv=new ShootCommand(m_shooter,m_intake,Constants.customShot3Velocity1,Constants.customShot3Velocity2,Constants.customShot3Angle,true,false);
       POVButton custom3Driv = new POVButton(m_xBoxDriver, Constants.ButtonBindings.driverPOVRight);
       custom3Driv.onTrue(shootCustom3Driv);
 
