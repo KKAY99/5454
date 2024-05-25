@@ -9,20 +9,19 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utilities.ObsidianCANSparkMax;
 import frc.robot.Constants;
 
 public class ClimbSubsystem extends SubsystemBase{
-    private CANSparkMax m_climbOne;
+    private ObsidianCANSparkMax m_climbOne;
 
     private double m_speed;
 
     private double m_isExtended;
 
     public ClimbSubsystem(int motorOne){
-        m_climbOne= new CANSparkMax(motorOne,MotorType.kBrushless);
-        m_climbOne.setSmartCurrentLimit(Constants.k30Amp);
-        m_climbOne.setIdleMode(IdleMode.kBrake);
-        m_climbOne.burnFlash();
+        final boolean kBrakeMode=true;
+        m_climbOne= new ObsidianCANSparkMax(motorOne,MotorType.kBrushless,kBrakeMode,Constants.k30Amp);
        
     }
 

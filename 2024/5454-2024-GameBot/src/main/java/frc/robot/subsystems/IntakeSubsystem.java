@@ -18,13 +18,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.utilities.ObsidianCANSparkMax;
 public class IntakeSubsystem extends SubsystemBase{
     private TurretSubsystem m_turret;
 
-    private CANSparkMax m_intakeOne;
-    private CANSparkMax m_intakeTwo;
-    private CANSparkMax m_intakeExtension;
+    private ObsidianCANSparkMax m_intakeOne;
+    private ObsidianCANSparkMax m_intakeTwo;
+    private ObsidianCANSparkMax m_intakeExtension;
 
     private double m_currentSpeed;
 
@@ -33,20 +33,12 @@ public class IntakeSubsystem extends SubsystemBase{
     private DigitalInput m_breakbeam;
 
     public IntakeSubsystem(TurretSubsystem turret,int motorOne,int motorTwo,int intakeExtension,int sensorPort){
-        m_intakeOne= new CANSparkMax(motorOne,MotorType.kBrushless);
-        m_intakeOne.setSmartCurrentLimit(Constants.k30Amp);
-        m_intakeOne.setIdleMode(IdleMode.kBrake);
-        m_intakeTwo= new CANSparkMax(motorTwo,MotorType.kBrushless);
-        m_intakeTwo.setIdleMode(IdleMode.kBrake);
-        m_intakeTwo.setSmartCurrentLimit(Constants.k30Amp);
-        m_intakeOne.burnFlash(); //ensure all settings are saved if a a browout happens
-        m_intakeTwo.burnFlash(); //ensure all settings are saved if a a browout happens
+        final boolean brakeMode=true;
+        final boolean coastMode=false;
+        m_intakeOne= new ObsidianCANSparkMax(motorOne,MotorType.kBrushless,brakeMode,Constants.k30Amp);
+        m_intakeTwo= new ObsidianCANSparkMax(motorTwo,MotorType.kBrushless,brakeMode,Constants.k30Amp);
         m_breakbeam=new DigitalInput(sensorPort);
-        m_intakeExtension=new CANSparkMax(intakeExtension,MotorType.kBrushless);
-        m_intakeExtension.setSmartCurrentLimit(Constants.k30Amp);
-        m_intakeExtension.setOpenLoopRampRate(0);
-        m_intakeExtension.setClosedLoopRampRate(0);
-
+        m_intakeExtension=new ObsidianCANSparkMax(intakeExtension,MotorType.kBrushless,coastMode,Constants.k30Amp);
         m_turret=turret;
 
         //TODO: REMOVE CONSTANT - EVIL CONSTANT

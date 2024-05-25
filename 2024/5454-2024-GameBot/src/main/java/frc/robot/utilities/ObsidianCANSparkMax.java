@@ -1,6 +1,9 @@
 package frc.robot.utilities;
-import com.revrobotics.CANSparkMax;
+import javax.lang.model.util.ElementScanner14;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Timer;
 public class ObsidianCANSparkMax extends CANSparkMax{
 
@@ -11,18 +14,23 @@ public class ObsidianCANSparkMax extends CANSparkMax{
      * @param canID Motor ID
      * @param MotorType MotorType: Brushed or Brushless
     */
-    public ObsidianCANSparkMax(int canID,MotorType motorType){
+    public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode){
         super(canID,motorType);
-        setSmartCurrentLimit(30);
+        setSmartCurrentLimit(Constants.k30Amp); // default motors to 30 amp
         setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
         setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
         setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
         setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000); 
         setClosedLoopRampRate(0);
         setOpenLoopRampRate(0);
-        Timer.delay(0.5); 
+            if(breakMode){
+            setIdleMode(IdleMode.kBrake);
+        } else{
+            setIdleMode(IdleMode.kCoast);
+        }
+        Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
         burnFlash();
-        Timer.delay(0.5);
+        Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
     }
 
     /**
@@ -32,7 +40,7 @@ public class ObsidianCANSparkMax extends CANSparkMax{
      * @param curentLimit SmartCurrentLimit for the Motor
      * @param MotorType MotorType: Brushed or Brushless
     */
-    public ObsidianCANSparkMax(int canID,MotorType motorType,int currentLimit){
+    public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit){  
         super(canID,motorType);
         setSmartCurrentLimit(currentLimit);
         setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
@@ -41,9 +49,14 @@ public class ObsidianCANSparkMax extends CANSparkMax{
         setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000); 
         setClosedLoopRampRate(0);
         setOpenLoopRampRate(0);
-        Timer.delay(0.5); 
+        if(breakMode){
+            setIdleMode(IdleMode.kBrake);
+        } else{
+            setIdleMode(IdleMode.kCoast);
+        }
+        Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
         burnFlash();
-        Timer.delay(0.5);
+        Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
     }
 
     /**
@@ -56,7 +69,7 @@ public class ObsidianCANSparkMax extends CANSparkMax{
      * @param periodicStatus5 Sets the Status Frame 3 rate in ms
      * @param periodicStatus6 Sets the Status Frame 3 rate in ms
     */
-    public ObsidianCANSparkMax(int canID,MotorType motorType,int currentLimit,int periodicStatus3,
+    public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit,int periodicStatus3,
                             int periodicStatus4,int periodicStatus5,int periodicStatus6){
         super(canID,motorType);
         setSmartCurrentLimit(currentLimit);
@@ -66,8 +79,14 @@ public class ObsidianCANSparkMax extends CANSparkMax{
         setPeriodicFramePeriod(PeriodicFrame.kStatus6,periodicStatus6); 
         setClosedLoopRampRate(0);
         setOpenLoopRampRate(0); 
-        Timer.delay(0.5);
+        if(breakMode){
+            setIdleMode(IdleMode.kBrake);
+        } else{
+            setIdleMode(IdleMode.kCoast);
+        }
+        Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
         burnFlash();
-        Timer.delay(0.5);
+        Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
+   
     }
 }
