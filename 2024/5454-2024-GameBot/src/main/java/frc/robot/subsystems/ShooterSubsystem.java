@@ -14,7 +14,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax;
+import frc.robot.utilities.ObsidianCANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -46,8 +46,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private TalonFX m_ShootingMotor1;
     private TalonFX m_ShootingMotor2;
-    private CANSparkMax m_feederMotor;
-    private CANSparkMax m_angleMotor;
+    private ObsidianCANSparkMax m_feederMotor;
+    private ObsidianCANSparkMax m_angleMotor;
 
     private SparkMaxPIDController m_anglePID;
 
@@ -70,25 +70,9 @@ public class ShooterSubsystem extends SubsystemBase {
         configmotor(m_ShootingMotor1);
         m_ShootingMotor2 = new TalonFX(shootingMotor2);
         configmotor(m_ShootingMotor2);
-        m_feederMotor = new CANSparkMax(feedMotor, MotorType.kBrushless);
-        m_feederMotor.setSmartCurrentLimit(Constants.k30Amp);
-        m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
-        m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
-        m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
-        m_feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
-        m_feederMotor.burnFlash();
-        Timer.delay(0.2);
-
-        m_angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
-        m_angleMotor.setSmartCurrentLimit(Constants.k40Amp);
-        m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
-        m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
-        m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
-        m_angleMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
-        m_angleMotor.setIdleMode(IdleMode.kBrake);
-        m_angleMotor.burnFlash();
-        Timer.delay(0.2);
-
+        m_feederMotor =new ObsidianCANSparkMax(feedMotor,MotorType.kBrushless,false,Constants.k30Amp);
+        m_angleMotor = new ObsidianCANSparkMax(angleMotor, MotorType.kBrushless,true,Constants.k40Amp);
+ 
         m_anglePID = m_angleMotor.getPIDController();
         m_canCoder = new WPI_CANCoder(canCoderId);
         m_canCoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 1000);
