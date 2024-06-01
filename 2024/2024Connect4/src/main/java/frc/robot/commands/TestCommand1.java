@@ -6,20 +6,22 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class TestCommand1 extends Command{
 private TestSubsystem1 m_subsystem;
-    private double m_startTime;
+    //private double m_startTime;
+    private double m_speed;
 
-   public TestCommand1(TestSubsystem1 sub){
+   public TestCommand1(TestSubsystem1 sub,double speed){
     m_subsystem=sub;
+    m_speed=speed;
    } 
    
    @Override
    public void initialize() {
-       m_startTime=Timer.getFPGATimestamp();
+       //m_startTime=Timer.getFPGATimestamp();
    }
 
    @Override
    public void execute(){
-    m_subsystem.run(0.4);
+    m_subsystem.run(m_speed);
    }
 
    @Override
@@ -32,9 +34,9 @@ private TestSubsystem1 m_subsystem;
    public boolean isFinished() {
     boolean returnValue=false;
 
-        if(Timer.getFPGATimestamp()>m_startTime+1){
-            returnValue=true;
-        } 
+    //    if(Timer.getFPGATimestamp()>m_startTime+1){
+    //        returnValue=true;
+   //     } 
         
         return returnValue;
     }

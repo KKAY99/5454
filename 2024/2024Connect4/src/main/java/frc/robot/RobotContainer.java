@@ -42,12 +42,12 @@ import frc.robot.utils.LED;
  */
 public class RobotContainer {
 
-   // private ShooterSubsystem m_Shooter=new ShooterSubsystem(ShooterConstants.shootingMotor1Port,
-   //                                         ShooterConstants.shootingMotor2Port,
-   //                                         ShooterConstants.feederMotorPort);
+   private ShooterSubsystem m_Shooter=new ShooterSubsystem(ShooterConstants.shootingMotor1Port,
+                                          ShooterConstants.shootingMotor2Port,
+                                          ShooterConstants.feederMotorPort);
    
-   private TestSubsystem1 m_spark = new TestSubsystem1(16);
-   private TestSubsystem1 m_THEBETTERSPARK= new TestSubsystem1(11); 
+  // private TestSubsystem1 m_spark = new TestSubsystem1(16);
+  // private TestSubsystem1 m_THEBETTERSPARK= new TestSubsystem1(11); 
    private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
     private LED m_led= new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
  //   private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.breakBeamDIO);
@@ -90,17 +90,25 @@ public class RobotContainer {
         JoystickButton shoot4=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton4);
         shoot4.whileTrue(shooter4Command);
         */
-        final TestCommand1 sparkMotor = new TestCommand1(m_spark);
+        final ShooterCommand shoot1 = new ShooterCommand(m_Shooter,0.6);
         JoystickButton test1 = new JoystickButton(m_xBoxDriver, 1);
-        test1.whileTrue(sparkMotor);
+        test1.whileTrue(shoot1);
 
-        final TestCommand1 talonMotor = new TestCommand1(m_THEBETTERSPARK);
+        final ShooterCommand shoot2 = new ShooterCommand(m_Shooter,0.8);
         JoystickButton test2 = new JoystickButton(m_xBoxDriver, 2);
-        test2.whileTrue(talonMotor);
+        test2.whileTrue(shoot2);
 
-        final Commander commander=new Commander(m_spark, m_THEBETTERSPARK);
-        JoystickButton commanderButton=new JoystickButton(m_xBoxDriver, 3);
-        commanderButton.whileTrue(commander);
+        final ShooterCommand shoot3 = new ShooterCommand(m_Shooter,1);
+        JoystickButton test3 = new JoystickButton(m_xBoxDriver, 3);
+        test3.whileTrue(shoot3);
+
+        //final TestCommand1 talonMotor = new TestCommand1(m_THEBETTERSPARK);
+        //JoystickButton test2 = new JoystickButton(m_xBoxDriver, 2);
+        //test2.whileTrue(talonMotor);
+
+        //final Commander commander=new Commander(m_spark, m_THEBETTERSPARK);
+        //JoystickButton commanderButton=new JoystickButton(m_xBoxDriver, 3);
+        //commanderButton.whileTrue(commander);
 
     }
        

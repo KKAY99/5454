@@ -19,7 +19,7 @@ public class Commander extends Command{
 
     @Override
     public boolean isFinished() {
-        switch(m_states) {
+        /*switch(m_states) {
             case SPARK1:
             m_testCommand=new TestCommand1(m_testSub1);
             CommandScheduler.getInstance().schedule(m_testCommand);
@@ -42,10 +42,10 @@ public class Commander extends Command{
                 m_states=STATE.SPARK1;    
             } 
             break;
-            CommandScheduler.getInstance().rem
+            //CommandScheduler.getInstance().rem
         }
 
-        System.out.println("Current State: "+m_states);
+        System.out.println("Current State: "+m_states);*/
         return false;
     }
 }

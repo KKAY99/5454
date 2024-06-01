@@ -17,10 +17,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class ShooterSubsystem extends SubsystemBase{
     //private TalonSRX m_ShootingMotor1;
     //private TalonSRX m_ShootingMotor2;
-    //private CANSparkMax m_ShootingMotor1;
-    //private CANSparkMax m_ShootingMotor2;
-    private WPI_TalonFX m_ShootingMotor1;
-    private WPI_TalonFX m_ShootingMotor2;
+    private CANSparkMax m_ShootingMotor1;
+    private CANSparkMax m_ShootingMotor2;
+    //private WPI_TalonFX m_ShootingMotor1;
+    //private WPI_TalonFX m_ShootingMotor2;
     private CANSparkMax m_feederMotor;
     private SparkMaxPIDController m_pidController1;
     private SparkMaxPIDController m_pidController2;
@@ -30,13 +30,13 @@ public class ShooterSubsystem extends SubsystemBase{
     public ShooterSubsystem(int shootingMotor1,int shootingMotor2,int feedMotor){
         //m_ShootingMotor1=new TalonSRX(shootingMotor1);  
         //m_ShootingMotor2=new TalonSRX(shootingMotor2);
-        //m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
-        //m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
-        m_ShootingMotor1=new WPI_TalonFX(shootingMotor1);  
-        m_ShootingMotor2=new WPI_TalonFX(shootingMotor2);
-        configmotor(m_ShootingMotor1);
-        configmotor(m_ShootingMotor2);
-        m_feederMotor=new CANSparkMax(feedMotor, MotorType.kBrushless);
+        m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
+        m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
+        //m_ShootingMotor1=new WPI_TalonFX(shootingMotor1);  
+        //m_ShootingMotor2=new WPI_TalonFX(shootingMotor2);
+        //configmotor(m_ShootingMotor1);
+        //configmotor(m_ShootingMotor2);
+        //m_feederMotor=new CANSparkMax(feedMotor, MotorType.kBrushless);
         /*m_pidController1 = m_ShootingMotor1.getPIDController();
         m_pidController2 = m_ShootingMotor2.getPIDController();
 
@@ -84,17 +84,18 @@ public class ShooterSubsystem extends SubsystemBase{
    
        }
  public void RunShootingMotors(double speed){
-        //m_ShootingMotor1.set(speed);    
-        //m_ShootingMotor2.set(speed);
+        System.out.println("Speed - " + speed);
+        m_ShootingMotor1.set(-speed);    
+        m_ShootingMotor2.set(speed);
         //speed=speed*maxRPM;
 //        m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
 //        m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
        // m_ShootingMotor1.set(ControlMode.Velocity, speed);
        // m_ShootingMotor2.set(ControlMode.Velocity, speed);
        System.out.println("Motor Output 1");
-       m_ShootingMotor1.set(ControlMode.PercentOutput, -1); 
-       m_ShootingMotor2.set(ControlMode.PercentOutput, -1); 
-       m_feederMotor.set(ShooterConstants.feederSpeed);
+       //m_ShootingMotor1.set(ControlMode.PercentOutput, -1); 
+       //m_ShootingMotor2.set(ControlMode.PercentOutput, -1); 
+       //m_feederMotor.set(ShooterConstants.feederSpeed);
       //  speed=0.88;
        // System.out.println("overriding shooter to set percentge - " + speed);
       // m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
