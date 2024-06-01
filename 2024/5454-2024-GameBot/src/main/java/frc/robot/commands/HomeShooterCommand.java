@@ -22,7 +22,8 @@ public class HomeShooterCommand extends CommandBase{
     @Override
     public boolean isFinished(){
         boolean returnValue=false;
-
+        System.out.println("CANCoder:" + m_shooter.getCanCoderPosition());
+        System.out.println("Target:" + Constants.ShooterConstants.homePos);
         if(m_shooter.getCanCoderPosition()<Constants.ShooterConstants.homePos){
             m_shooter.RotateShooter(Constants.ShooterConstants.homeRotateSpeed);
         }else{

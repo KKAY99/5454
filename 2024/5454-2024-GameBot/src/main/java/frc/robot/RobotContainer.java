@@ -643,9 +643,10 @@ public class RobotContainer {
   }
   public void DisabledInit(){
     stopRumble();
+    System.out.println("Putting Motors in Coast");
     disableBrakeMode(); // disable brake mode when disabled 
-      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.NOSTATE);
-      setDisabledLEDS();
+    m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.NOSTATE);
+    setDisabledLEDS();
   }
    
   public void DisabledPeriodic(){

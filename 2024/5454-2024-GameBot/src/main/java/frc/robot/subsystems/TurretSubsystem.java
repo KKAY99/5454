@@ -13,9 +13,8 @@ import javax.sound.midi.SysexMessage;
 import org.littletonrobotics.junction.LogDataReceiver;
 import org.littletonrobotics.junction.Logger;
 
-import com.revrobotics.CANSparkMax;
+import frc.robot.utilities.ObsidianCANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -35,7 +34,7 @@ public class TurretSubsystem extends SubsystemBase{
   private TurretSubsystemIOInputsAutoLogged m_turretAutoLogged=new TurretSubsystemIOInputsAutoLogged();
   private ShotTable m_shotTable = new ShotTable();
 
-  private CANSparkMax m_turretMotor;
+  private ObsidianCANSparkMax m_turretMotor;
 
   private SparkMaxPIDController m_pidController;
 
@@ -55,13 +54,10 @@ public class TurretSubsystem extends SubsystemBase{
   private DoubleSupplier m_ySpeed;
 
   public TurretSubsystem(int turretMotorPort, int limitSwitchPort, Limelight limelight,DoubleSupplier getYSpeed){
+    final boolean kBrakeMode=false; //coast mode
     m_limeLight=limelight;
-    m_turretMotor=new CANSparkMax(turretMotorPort,MotorType.kBrushless);
-    m_turretMotor.setSmartCurrentLimit(Constants.k15Amp);
-    m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
-    m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
-    m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
-    m_turretMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
+    
+    m_turretMotor = new ObsidianCANSparkMax(turretMotorPort,MotorType.kBrushless,kBrakeMode,Constants.k15Amp);
     m_ySpeed=getYSpeed;
     m_limitSwitch=new DigitalInput(limitSwitchPort);
     m_encoder=m_turretMotor.getEncoder();
@@ -310,7 +306,7 @@ public class TurretSubsystem extends SubsystemBase{
     m_turretMotor.setIdleMode(IdleMode.kBrake);  
   } 
   
-    public void setCoastOn(){
+  public void setCoastOn(){
     m_turretMotor.setIdleMode(IdleMode.kCoast);
   }
 
