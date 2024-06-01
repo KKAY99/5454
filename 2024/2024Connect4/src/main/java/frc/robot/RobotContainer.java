@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.awt.Color;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.subsystems.*;
@@ -90,15 +92,15 @@ public class RobotContainer {
         JoystickButton shoot4=new JoystickButton(m_xBoxDriver,Constants.ButtonConstants.shooterButton4);
         shoot4.whileTrue(shooter4Command);
         */
-        final ShooterCommand shoot1 = new ShooterCommand(m_Shooter,0.6);
+        final ShooterCommand shoot1 = new ShooterCommand(m_Shooter,0.6,-1);
         JoystickButton test1 = new JoystickButton(m_xBoxDriver, 1);
         test1.whileTrue(shoot1);
 
-        final ShooterCommand shoot2 = new ShooterCommand(m_Shooter,0.8);
+        final ShooterCommand shoot2 = new ShooterCommand(m_Shooter,0.8,-1);
         JoystickButton test2 = new JoystickButton(m_xBoxDriver, 2);
         test2.whileTrue(shoot2);
 
-        final ShooterCommand shoot3 = new ShooterCommand(m_Shooter,1);
+        final ShooterCommand shoot3 = new ShooterCommand(m_Shooter,1,-1);
         JoystickButton test3 = new JoystickButton(m_xBoxDriver, 3);
         test3.whileTrue(shoot3);
 
