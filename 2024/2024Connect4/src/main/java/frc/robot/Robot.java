@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    System.out.println("update LED");
+    //System.out.println("update LED");
     m_robotContainer.DisableMode();
   }
 
