@@ -1,12 +1,13 @@
 
+
 package frc.robot.commands;
-import frc.robot.Constants;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
-public class ShooterCommand extends Command {
+public class ShooterInclineCommand extends Command {
   private ShooterSubsystem m_shooter;
   private double m_power;
-  public ShooterCommand(ShooterSubsystem shooter,double power) {
+  public ShooterInclineCommand(ShooterSubsystem shooter,double power) {
     m_shooter = shooter;
     m_power = power;
   }
@@ -18,15 +19,13 @@ public class ShooterCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.runShooterMotors(m_power);
-   // m_shooter.runFeeder(Constants.Shooter.ShooterFeederSpeed);
+  m_shooter.runShooterIncline(m_power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.stopShooterMotors();
-    //m_shooter.stopFeeder();
+    m_shooter.stopShooterIncline();
   }
 
   // Returns true when the command should end.

@@ -52,36 +52,19 @@ public final class Constants {
                     TOPCONE,MIDDLECONE,BOTTOMCONE,TOPCUBE,MIDDLECUBE,BOTTOMCUBE,PLAYERSTATION,SLIDE;	
     }
     
-    public class Spindexer {
-     //   public static final int motorPort=17;
-     // haha failed thing
-        public static final double spinForward=1;
-        public static final double spinBack=-1;
-        public static final double spinForwardSlow=0.6;
-        public static final double spinBackSlow=-0.6;
-    }    
-    public class Elevator{
-        public static final int elevatorPort=19;
-        public static final double elevatorSpeed=.50;
-        public static final double elevatorLimitSpeed=.50;
-        public static final double homeTimeOut=.6;
-        public static final int limitSwitch=3;
-        public static final double maxLimit = -153;
+
+    public class BreakBeam{
+        public static final int breakBeamPort=0;
     }
-    public class Claw{
-        public static final int clawMotorPort=24;
-        public static final double clawSpeed=1;
-    }
-    public class RotateArm{
-        public static final int rotateArmPort1=50;
-        public static final int rotateArmPort2=51;
-        public static final int absoluteEncoder=0;
-        public static final double manualSpeed=0.4;
-        public static final double manualLimitSpeed=0.4;
-        public static final double encodervalueHomePos=.536;
-        public static final double encoderFrontLimit=.415;
-        public static final double encoderBackLimit=.613;
-        
+    
+    public class Shooter{
+        public static final int shooterMotor1=11;
+        public static final int shooterMotor2=16;
+        public static final int shooterInclineMotor=10;
+        public static final double shooterInclineSpeed=.5;
+        public static final double ShooterSpeed=-1;
+        public static final double ShooterFeederSpeed=-.5;
+        public static final int shooterFeederMotor = 4;
     }
     public class swerveDrive{
         public static final double driveDeadband=0.05;
@@ -172,21 +155,9 @@ public final class Constants {
 
     public static final class FloorIntake{
         public static final double intakeSpeed=.9;
-        public static final double intakeRotateSpeed=0.5;
      
-        public static final double intakehomeRotateSpeed=-0.15;
-        public static final int intakeMotorPort1=44;
-        public static final int intakeMotorPort2=17;
-        public static final int rotateMotorPort=42;
-        public static final double rotateHighLimit=2;
-        public static final double rotateLowLimit=130;
-     
-        public static final double rotateOuttakePos=98;
-        
-        public static final double rotateHandOff=30;
-        public static final int intakeRotateEncoderPort=4;
-        public static final double homeTimeOut=2;
-        public static final double autoTimeOut=5;
+        public static final int intakeLeftMotorPort=8;
+        public static final int intakeRightMotorPort=12;
     }
 
     public static final class Pneumatics {
@@ -199,45 +170,11 @@ public final class Constants {
     }
 
     public static final class ButtonConstants{
-        public static final int DriverSolenoidPunch=1;
-        public static final int DriverAutoBalance=2;
-        public static final int DriverIntakeIn=3;
-        public static final int DriverDownSpeed=5;
-        public static final int DriverUpSpeed=6;
-        public static final int DriverDriveMode=7;
-        public static final int DriverGyroReset=8;
-        
-        public static final int OperatorWrist=1;
-        public static final int OperatorRetractElevator=2;
-        public static final int OperatorClawSwap=3;
-        public static final int OperatorPlayerStation=4;
-        public static final int OperatorAutoLow=5;
-        public static final int OperatorAutoMiddle=6;
-        public static final int OperatorIntakeIn=7;
-        public static final int OperatorIntakeOut=8;
-     
-        public static final int OperatorPOVRotateUp=0;
-        public static final int OperatorPOVRotatedown=180;
-        public static final int OperatorPOVIntakeIn=270;
-        public static final int OperatorPOVIntakeOut=90;
-       
-        public static final int CustomCtlRetract=3;
-        public static final int TargetTopLeft=4;
-        public static final int TargetMiddleLeft=7;
-        public static final int TargetBottomLeft=10;
-        public static final int TargetTopCenter=5;
-        public static final int TargetMiddleCenter=8;
-        public static final int TargetBottomCenter=11;
-        public static final int TargetTopRight=6;
-        public static final int TargetMiddleRight=9;
-        public static final int TargetBottomRight=12;
-
-        public static final double JoystickDeadBand = 0.10;
-        public static final double ElevatorDeadBand = 0.10;
-        public static final double RotateDeadBand = 0.10;
-        public static final double IntakeDeadBand = 0.30;
-        public static final double LeftTriggerDeadBand = 0.05;
-        public static final double RightTriggerDeadBand = 0.05;
+        public static final int DriverIntakeIn=1;
+        public static final int DriverIntakeOut=3;
+        public static final int DriverInclineUp=5;
+        public static final int DriverInclineDown=6;
+        public static final int DriverShoot = 2;
     }
 
     public static final class LimitSwitches{
@@ -342,7 +279,7 @@ public final class Constants {
     
         public static final int DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 12; // CAN
         public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 1; // Analog
-        public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 11; // CAN
+        public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 13; // CAN
     }
     
    public static final class PIDSteering{

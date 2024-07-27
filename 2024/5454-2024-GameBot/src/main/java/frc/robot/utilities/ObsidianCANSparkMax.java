@@ -1,10 +1,11 @@
 package frc.robot.utilities;
 import javax.lang.model.util.ElementScanner14;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import frc.robot.Constants;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.Timer;
+
 public class ObsidianCANSparkMax extends CANSparkMax{
 
     /**
@@ -16,6 +17,7 @@ public class ObsidianCANSparkMax extends CANSparkMax{
     */
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode){
         super(canID,motorType);
+        setInverted(false);
         setSmartCurrentLimit(Constants.k30Amp); // default motors to 30 amp
         setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
         setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
@@ -42,6 +44,7 @@ public class ObsidianCANSparkMax extends CANSparkMax{
     */
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit){  
         super(canID,motorType);
+        setInverted(false);
         setSmartCurrentLimit(currentLimit);
         setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
         setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
@@ -72,6 +75,7 @@ public class ObsidianCANSparkMax extends CANSparkMax{
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit,int periodicStatus3,
                             int periodicStatus4,int periodicStatus5,int periodicStatus6){
         super(canID,motorType);
+        setInverted(false);
         setSmartCurrentLimit(currentLimit);
         setPeriodicFramePeriod(PeriodicFrame.kStatus3,periodicStatus3);
         setPeriodicFramePeriod(PeriodicFrame.kStatus4,periodicStatus4);

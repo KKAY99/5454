@@ -263,7 +263,7 @@ public void spin (double direction,double speed)
         SmartDashboard.putNumber("Front Right Module Angle", Math.toDegrees(frontRightModule.getCurrentAngle()));
         SmartDashboard.putNumber("Back Left Module Angle", Math.toDegrees(backLeftModule.getCurrentAngle()));
         SmartDashboard.putNumber("Back Right Module Angle", Math.toDegrees(backRightModule.getCurrentAngle()));
-
+        
         //SmartDashboard.putNumber("Front Left Module Radian", Math.toDegrees(frontLeftModule);
         //SmartDashboard.putNumber("Front Right Module Radian", Math.toDegrees(frontRightModule.getCurrentAngle()));
         //SmartDashboard.putNumber("Back Left Module Radain", Math.toDegrees(backLeftModule.getCurrentAngle()));
