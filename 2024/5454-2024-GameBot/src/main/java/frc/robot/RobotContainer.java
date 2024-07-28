@@ -51,11 +51,7 @@ import frc.robot.utilities.ADABreakBeam;
 import frc.robot.utilities.AutoCommands;
 import frc.robot.utilities.AutoPose2D;
 import frc.robot.utilities.Blinkin;
-<<<<<<< Updated upstream
-//import frc.robot.utilities.CANSparkMaxWrapper;
-=======
 import frc.robot.utilities.ObsidianCANSparkMax;
->>>>>>> Stashed changes
 import frc.robot.utilities.LED;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ChooseYourOwnAdventureAuto;

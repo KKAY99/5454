@@ -25,6 +25,7 @@ public final class Constants {
     public static final int shootingMotor1Port=11;
     public static final int shootingMotor2Port=16;
     public static final int feederMotorPort=0; //PWM for the Win
+    public static final int breakBeamPort=1;
     public static final double feederSpeed=-1;
     public static final double shooterSpeed1=.25;
   //  public static final double shooterSpeed2=0.446;

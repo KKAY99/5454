@@ -46,7 +46,8 @@ public class RobotContainer {
 
    private ShooterSubsystem m_Shooter=new ShooterSubsystem(ShooterConstants.shootingMotor1Port,
                                           ShooterConstants.shootingMotor2Port,
-                                          ShooterConstants.feederMotorPort);
+                                          ShooterConstants.feederMotorPort,
+                                          ShooterConstants.breakBeamPort);
    
   // private TestSubsystem1 m_spark = new TestSubsystem1(16);
   // private TestSubsystem1 m_THEBETTERSPARK= new TestSubsystem1(11); 
@@ -96,13 +97,21 @@ public class RobotContainer {
         JoystickButton test1 = new JoystickButton(m_xBoxDriver, 1);
         test1.whileTrue(shoot1);
 
-        final ShooterCommand shoot2 = new ShooterCommand(m_Shooter,0.8,-1);
-        JoystickButton test2 = new JoystickButton(m_xBoxDriver, 2);
-        test2.whileTrue(shoot2);
+       // final ShooterCommand shoot2 = new ShooterCommand(m_Shooter,0.8,-1);
+       // JoystickButton test2 = new JoystickButton(m_xBoxDriver, 2);
+       // test2.whileTrue(shoot2);
 
         final ShooterCommand shoot3 = new ShooterCommand(m_Shooter,1,-1);
         JoystickButton test3 = new JoystickButton(m_xBoxDriver, 3);
         test3.whileTrue(shoot3);
+
+        final FeederOnlyCommand feedme = new FeederOnlyCommand(m_Shooter, -1);
+        JoystickButton testfeed=new JoystickButton(m_xBoxDriver, 2);
+        testfeed.whileTrue(feedme);
+
+        final ShooterOnlyCommand shootme = new ShooterOnlyCommand(m_Shooter, 1);
+        JoystickButton testshoot=new JoystickButton(m_xBoxDriver, 4);
+        testshoot.whileTrue(shootme);
 
         //final TestCommand1 talonMotor = new TestCommand1(m_THEBETTERSPARK);
         //JoystickButton test2 = new JoystickButton(m_xBoxDriver, 2);

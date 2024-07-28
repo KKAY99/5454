@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -27,84 +28,34 @@ public class ShooterSubsystem extends SubsystemBase{
     private VictorSP m_feederMotor;
     private SparkMaxPIDController m_pidController1;
     private SparkMaxPIDController m_pidController2;
+    private DigitalInput m_breakbeam;
 
     private double maxRPM;
 
-    public ShooterSubsystem(int shootingMotor1,int shootingMotor2,int feedMotor){
-        //m_ShootingMotor1=new TalonSRX(shootingMotor1);  
-        //m_ShootingMotor2=new TalonSRX(shootingMotor2);
+    public ShooterSubsystem(int shootingMotor1,int shootingMotor2,int feedMotor,int sensorPort){
          m_ShootingMotor1=new CANSparkMax(shootingMotor2,MotorType.kBrushless);  
         m_ShootingMotor2=new CANSparkMax(shootingMotor1,MotorType.kBrushless);
-        //m_ShootingMotor1=new WPI_TalonFX(shootingMotor1);  
-        //m_ShootingMotor2=new WPI_TalonFX(shootingMotor2);
-        //configmotor(m_ShootingMotor1);
-        //configmotor(m_ShootingMotor2);
         m_feederMotor=new VictorSP(feedMotor);
-        /*m_pidController1 = m_ShootingMotor1.getPIDController();
-        m_pidController2 = m_ShootingMotor2.getPIDController();
+        m_breakbeam=new DigitalInput(sensorPort);
 
-        double kP = 6e-5; 
-        double kI = 0;
-        double kD = 0; 
-        double kIz = 0; 
-        double kFF = 0.000015; 
-        double kMaxOutput = 1; 
-        double  kMinOutput = -1;
-        maxRPM = 5676;
-
-        m_pidController1.setP(kP);
-        m_pidController1.setI(kI);
-        m_pidController1.setD(kD);
-        m_pidController1.setIZone(kIz);
-        m_pidController1.setFF(kFF);
-        m_pidController1.setOutputRange(kMinOutput, kMaxOutput);
-
-        m_pidController2.setP(kP);
-        m_pidController2.setI(kI);
-        m_pidController2.setD(kD);
-        m_pidController2.setIZone(kIz);
-        m_pidController2.setFF(kFF);
-        m_pidController2.setOutputRange(kMinOutput, kMaxOutput);
-        */
     }
-
- public void configmotor(WPI_TalonFX motor){
-   motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
-                                        0,30);
-   motor.configNominalOutputForward(0,30);
-   motor.configNominalOutputReverse(0,30);
-   motor.configPeakOutputForward(1,30);
-   motor.configPeakOutputReverse(-1,30);
-   motor.config_kF(0, 1023/2066.0,30);
-   motor.config_kP(0, .1,30);
-   motor.config_kI(0, 0.001,30);
-   motor.config_kD(0, 5,30);
-   
-   
- }
- public void RunTopMotor(double speed){
-  //      m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
-   
-       }
  public void RunShootingMotors(double speed,double feederSpeed){
         System.out.println("Speed - " + speed);
         m_ShootingMotor1.set(-speed);    
         m_ShootingMotor2.set(speed);
         m_feederMotor.set(feederSpeed);
-        //speed=speed*maxRPM;
-//        m_pidController1.setReference(speed,CANSparkMax.ControlType.kVelocity);
-//        m_pidController2.setReference(speed,CANSparkMax.ControlType.kVelocity);
-       // m_ShootingMotor1.set(ControlMode.Velocity, speed);
-       // m_ShootingMotor2.set(ControlMode.Velocity, speed);
-       System.out.println("Motor Output 1");
-       //m_ShootingMotor1.set(ControlMode.PercentOutput, -1); 
-       //m_ShootingMotor2.set(ControlMode.PercentOutput, -1); 
-       //m_feederMotor.set(ShooterConstants.feederSpeed);
-      //  speed=0.88;
-       // System.out.println("overriding shooter to set percentge - " + speed);
-      // m_ShootingMotor1.set(ControlMode.PercentOutput,speed);
-      //  m_ShootingMotor2.set(ControlMode.PercentOutput, speed);   
-}  
+
+} 
+public void RunShootingMotorsOnly (double speed){
+        System.out.println("Shooter  Only Speed - " + speed);
+        m_ShootingMotor1.set(-speed);    
+        m_ShootingMotor2.set(speed);
+       
+} 
+public void RunFeedingMotorOnly (double speed){
+        m_feederMotor.set(speed);       
+       
+} 
 
     public void StopShootingMotors(){
         System.out.print("stop Motor Subsysem");
