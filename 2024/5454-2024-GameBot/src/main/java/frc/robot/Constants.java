@@ -513,11 +513,8 @@ public final class Constants {
       public static final double rotateSpeed=0.99;
       public static final double rotateSlowSpeed=0.3;
 
-<<<<<<< HEAD
-      public static final double homePos=186.416;//272.4;
-=======
+
       public static final double homePos=186.680;//274.6;//272.4;
->>>>>>> a3ea2ceb30266b11d97c3786841e08a5129be065
       public static final double homeDeadband=0.05;
       public static final double homeLEDCheckDeadband=0.1;
       public static final double homeRotateSpeed=0.05;

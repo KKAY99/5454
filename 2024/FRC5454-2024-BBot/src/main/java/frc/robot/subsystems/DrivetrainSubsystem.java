@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.Constants.RobotMap;
+import frc.robot.classes.ObsidianCANSparkMax;
+
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.LoggedRobot;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -23,6 +25,8 @@ import frc.robot.common.drivers.NavX;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.classes.ObsidianCANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 25;
@@ -36,18 +40,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
 //USE RADIANS
 //3.04 radians is half a rotation
 // π/180
-private static final double FRONT_LEFT_ANGLE_OFFSET = -0.75; ///-0.850
+private static final double FRONT_LEFT_ANGLE_OFFSET = 1.69; ///-0.850
 
 //private static final double FRONT_RIGHT_ANGLE_OFFSET = 3.29; //0.25; //-4.72+3.04;//-1.45
-private static final double FRONT_RIGHT_ANGLE_OFFSET = 3.39; //0.25; //-4.72+3.04;//-1.45
+private static final double FRONT_RIGHT_ANGLE_OFFSET = 3.13-3.82; //0.25; //-4.72+3.04;//-1.45
 
 //private static final double BACK_LEFT_ANGLE_OFFSET = -1.25;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = 1.75;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = 1.95;//-77+3.04;//-0.78
-private static final double BACK_LEFT_ANGLE_OFFSET = 1.95+3.04;//-77+3.04;//-0.78
+private static final double BACK_LEFT_ANGLE_OFFSET = 0.01-0.56-3.14;//-77+3.04;//-0.78
 
 //private static final double BACK_RIGHT_ANGLE_OFFSET =-2.17-3.04; //-2.42-3.04
-private static final double BACK_RIGHT_ANGLE_OFFSET =-2.17-3.04; //-2.42-3.04
+private static final double BACK_RIGHT_ANGLE_OFFSET =6.27-0.7-3.14; //-2.42-3.04
 
 
 private boolean m_autoControl = false;
@@ -58,33 +62,33 @@ private boolean m_autoControl = false;
     private final SwerveModule frontLeftModule = new Mk2SwerveModuleBuilder(
             new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0))
             .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER), FRONT_LEFT_ANGLE_OFFSET)
-            .angleMotor(new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-                    Mk2SwerveModuleBuilder.MotorType.NEO)
-            .driveMotor(new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+            .angleMotor(new ObsidianCANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, MotorType.kBrushless,
+            true),Mk2SwerveModuleBuilder.MotorType.NEO)
+            .driveMotor(new ObsidianCANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR, MotorType.kBrushless, true),
                     Mk2SwerveModuleBuilder.MotorType.NEO)
             .build();
     private final SwerveModule frontRightModule = new Mk2SwerveModuleBuilder(
             new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
             .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER), FRONT_RIGHT_ANGLE_OFFSET)
-            .angleMotor(new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-                    Mk2SwerveModuleBuilder.MotorType.NEO)
-            .driveMotor(new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+            .angleMotor(new ObsidianCANSparkMax(RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR, MotorType.kBrushless,
+                    true),Mk2SwerveModuleBuilder.MotorType.NEO)
+            .driveMotor(new ObsidianCANSparkMax(RobotMap.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR, MotorType.kBrushless, true),
                     Mk2SwerveModuleBuilder.MotorType.NEO)
             .build();
     private final SwerveModule backLeftModule = new Mk2SwerveModuleBuilder(
             new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0))
             .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER), BACK_LEFT_ANGLE_OFFSET)
-            .angleMotor(new CANSparkMax(RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+            .angleMotor(new ObsidianCANSparkMax(RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR, MotorType.kBrushless, true),
                     Mk2SwerveModuleBuilder.MotorType.NEO)
-            .driveMotor(new CANSparkMax(RobotMap.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+            .driveMotor(new ObsidianCANSparkMax(RobotMap.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR, MotorType.kBrushless, true),
                     Mk2SwerveModuleBuilder.MotorType.NEO)
             .build();
     private final SwerveModule backRightModule = new Mk2SwerveModuleBuilder(
             new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
             .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER), BACK_RIGHT_ANGLE_OFFSET)
-            .angleMotor(new CANSparkMax(RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+            .angleMotor(new ObsidianCANSparkMax(RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR, MotorType.kBrushless, true),
                     Mk2SwerveModuleBuilder.MotorType.NEO)
-            .driveMotor(new CANSparkMax(RobotMap.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+            .driveMotor(new ObsidianCANSparkMax(RobotMap.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR, MotorType.kBrushless, true),
                     Mk2SwerveModuleBuilder.MotorType.NEO)
             .build();
 
@@ -263,7 +267,6 @@ public void spin (double direction,double speed)
         SmartDashboard.putNumber("Front Right Module Angle", Math.toDegrees(frontRightModule.getCurrentAngle()));
         SmartDashboard.putNumber("Back Left Module Angle", Math.toDegrees(backLeftModule.getCurrentAngle()));
         SmartDashboard.putNumber("Back Right Module Angle", Math.toDegrees(backRightModule.getCurrentAngle()));
-
         //SmartDashboard.putNumber("Front Left Module Radian", Math.toDegrees(frontLeftModule);
         //SmartDashboard.putNumber("Front Right Module Radian", Math.toDegrees(frontRightModule.getCurrentAngle()));
         //SmartDashboard.putNumber("Back Left Module Radain", Math.toDegrees(backLeftModule.getCurrentAngle()));

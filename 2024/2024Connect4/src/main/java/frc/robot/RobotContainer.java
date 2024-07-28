@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -26,12 +28,11 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.subsystems.*;
-import frc.robot.utils.ADABreakBeam;
-import frc.robot.utils.Lasercan;
 import frc.robot.commands.*;
 import frc.robot.Constants.*;
 import frc.robot.Constants.LEDConstants.LEDColors;
 import frc.robot.utils.LED;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -54,7 +55,7 @@ public class RobotContainer {
    private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
     private LED m_led= new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
  //   private ADABreakBeam m_adaBreakBeam=new ADABreakBeam(Constants.ADABreakBeamConstants.breakBeamDIO);
-
+    private DigitalInput m_breakbeam = new DigitalInput(0);
     //private Lasercan m_laserCan=new Lasercan(6);
 
     public RobotContainer() {
@@ -126,7 +127,8 @@ public class RobotContainer {
     public void refreshSmartDashboard(){  
         //System.out.println("ADA Break Beam: "+m_adaBreakBeam.BreakBeam());
         //System.out.println("Laser Can Measurement: "+m_laserCan.GetDistanceInMM());
-
+        System.out.println("Digital Sensor-" + m_breakbeam.get());
+    
     }
     
     public void disabledPerioidicUpdates(){

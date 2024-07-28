@@ -52,6 +52,7 @@ import frc.robot.utilities.AutoCommands;
 import frc.robot.utilities.AutoPose2D;
 import frc.robot.utilities.Blinkin;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import frc.robot.utilities.ObsidianCANSparkMax;
 import frc.robot.utilities.LED;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ChooseYourOwnAdventureAuto;

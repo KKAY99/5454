@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoModes;
 import frc.robot.Constants.ButtonConstants;
+import frc.robot.Constants.FloorIntake;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.TargetHeight;
@@ -58,6 +59,9 @@ public class RobotContainer {
     private final LoggedDashboardChooser<Command> autoDelay = new LoggedDashboardChooser<>("Auto Delay");
    // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
     private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
+    private final IntakeSubsystem m_Intake=new IntakeSubsystem(Constants.FloorIntake.intakeLeftMotorPort, Constants.FloorIntake.intakeRightMotorPort);
+    private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.Shooter.shooterMotor1, Constants.Shooter.shooterMotor2, 
+                                                                    Constants.Shooter.shooterInclineMotor,Constants.Shooter.shooterFeederMotor);
     //private final WPIDriveTrainSubsystem m_WPIDrive=new WPIDriveTrainSubsystem(m_NavX);
     private final DriveControlMode m_DriveControlMode = new DriveControlMode();
     
@@ -103,12 +107,27 @@ public class RobotContainer {
      * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
-    private void configureButtonBindings() {
+    private void configureButtonBindings(){
+        IntakeCommand intakeIn = new IntakeCommand(m_Intake,m_Shooter, Constants.FloorIntake.intakeSpeed);
+        JoystickButton intakeInButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeIn);
+        intakeInButton.whileTrue(intakeIn);
 
-    }
-       
-    public void refreshSmartDashboard()
-    {  
+        IntakeCommand intakeOut = new IntakeCommand(m_Intake,m_Shooter, -Constants.FloorIntake.intakeSpeed);
+        JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeOut);
+        intakeOutButton.whileTrue(intakeOut);
+
+        ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, Constants.Shooter.shooterInclineSpeed);
+        JoystickButton InclineUpButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverInclineUp);
+        InclineUpButton.whileTrue(InclineUp);
+
+        ShooterInclineCommand InclineDown = new ShooterInclineCommand(m_Shooter, -Constants.Shooter.shooterInclineSpeed);
+        JoystickButton InclineDownButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverInclineDown);
+        InclineDownButton.whileTrue(InclineDown);
+
+        ShooterCommand Shoot = new ShooterCommand(m_Shooter, Constants.Shooter.ShooterSpeed);
+        JoystickButton ShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
+        ShootButton.whileTrue(Shoot);
+
 }
     
      
