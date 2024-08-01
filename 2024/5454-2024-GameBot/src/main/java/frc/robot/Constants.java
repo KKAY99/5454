@@ -589,16 +589,16 @@ public final class Constants {
       public static final int customShot8=11;
       public static final int customShot9=12;
     }
-    public static final double customShot1Velocity1=-40;
-    public static final double customShot1Velocity2=-40;
+    public static final double customShot1Velocity1=-25;
+    public static final double customShot1Velocity2=-25;
     public static final double customShot1Angle=21.5;
  
-    public static final double customShot2Velocity1=-50;
-    public static final double customShot2Velocity2=-60;
+    public static final double customShot2Velocity1=-30;
+    public static final double customShot2Velocity2=-40;
     public static final double customShot2Angle=37.9;
 
-    public static final double customShot3Velocity1=-60;
-    public static final double customShot3Velocity2=-70;
+    public static final double customShot3Velocity1=-40;
+    public static final double customShot3Velocity2=-50;
     public static final double customShot3Angle=31.4;
 
     public static final double customShot4Velocity1=-30;
