@@ -49,22 +49,28 @@ public final class Constants {
 
     public static enum TargetHeight
     {
-                    TOPCONE,MIDDLECONE,BOTTOMCONE,TOPCUBE,MIDDLECUBE,BOTTOMCUBE,PLAYERSTATION,SLIDE;	
+        TOPCONE,MIDDLECONE,BOTTOMCONE,TOPCUBE,MIDDLECUBE,BOTTOMCUBE,PLAYERSTATION,SLIDE;	
     }
     
 
     public class BreakBeam{
-        public static final int breakBeamPort=0;
+        public static final int BreakBeamPort=0;
+        public static final int BreakDistance=0;
     }
     
     public class Shooter{
         public static final int shooterMotor1=11;
         public static final int shooterMotor2=16;
         public static final int shooterInclineMotor=10;
-        public static final double shooterInclineSpeed=.5;
         public static final double ShooterSpeed=-1;
         public static final double ShooterFeederSpeed=-.5;
         public static final int shooterFeederMotor = 4;
+
+        public static final double feederTimeToRun=0.5;
+
+        public static final double shooterInclinePosHigh=-0.10;
+        public static final double shooterInclinePosMiddle=-0.20;
+        public static final double shooterInclinePosLow=-0.28;
     }
     public class swerveDrive{
         public static final double driveDeadband=0.05;
@@ -175,6 +181,9 @@ public final class Constants {
         public static final int DriverInclineUp=5;
         public static final int DriverInclineDown=6;
         public static final int DriverShoot = 2;
+        public static final int DriverSetInclineLow = 6;
+        public static final int DriverSetInclineHigh = 5;
+        public static final int DriverSetInclineMiddle = 7;
     }
 
     public static final class LimitSwitches{
@@ -213,6 +222,12 @@ public final class Constants {
         public static final double DistanceToDock=30;
     }
             
+
+    public static final class LaserCANConstants {
+        public static final int LaserCANID = 0;
+        public static final double DelfaultDistane = 0;
+        public static final double BreakPointDistance = 0;
+    }
         
     public static final class InputControllers {
         public static final int kXboxDrive = 0;

@@ -34,6 +34,7 @@ import frc.robot.common.drivers.NavX.Axis;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.classes.BreakBeam;
 
 import java.awt.Color;
 
@@ -64,6 +65,7 @@ public class RobotContainer {
                                                                     Constants.Shooter.shooterInclineMotor,Constants.Shooter.shooterFeederMotor);
     //private final WPIDriveTrainSubsystem m_WPIDrive=new WPIDriveTrainSubsystem(m_NavX);
     private final DriveControlMode m_DriveControlMode = new DriveControlMode();
+    //private final BreakBeam m_BreakBeam=new BreakBeam(Constants.BreakBeam.breakBeamPort,Constants.BreakBeam.breakDistance);
     
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
@@ -108,6 +110,10 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
+        /*IntakeAutoStopCommand intakeIn = new IntakeAutoStopCommand(m_Intake,m_Shooter,m_BreakBeam, Constants.FloorIntake.intakeSpeed);
+        JoystickButton intakeInButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeIn);
+        intakeInButton.toggleOnTrue(intakeIn);*/
+
         IntakeCommand intakeIn = new IntakeCommand(m_Intake,m_Shooter, Constants.FloorIntake.intakeSpeed);
         JoystickButton intakeInButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeIn);
         intakeInButton.whileTrue(intakeIn);
@@ -116,17 +122,32 @@ public class RobotContainer {
         JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeOut);
         intakeOutButton.whileTrue(intakeOut);
 
-        ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, Constants.Shooter.shooterInclineSpeed);
+        /*ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, 0.5);
         JoystickButton InclineUpButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverInclineUp);
         InclineUpButton.whileTrue(InclineUp);
 
-        ShooterInclineCommand InclineDown = new ShooterInclineCommand(m_Shooter, -Constants.Shooter.shooterInclineSpeed);
+        ShooterInclineCommand InclineDown = new ShooterInclineCommand(m_Shooter, -0.5);
         JoystickButton InclineDownButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverInclineDown);
-        InclineDownButton.whileTrue(InclineDown);
+        InclineDownButton.whileTrue(InclineDown);*/
 
-        ShooterCommand Shoot = new ShooterCommand(m_Shooter, Constants.Shooter.ShooterSpeed);
+        ShooterSetCommand SetInclineHigh = new ShooterSetCommand(m_Shooter, Constants.Shooter.shooterInclinePosHigh);
+        JoystickButton SetInclineHighButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverSetInclineHigh);
+        SetInclineHighButton.onTrue(SetInclineHigh);
+        ShooterSetCommand SetInclineLow = new ShooterSetCommand(m_Shooter, Constants.Shooter.shooterInclinePosLow);
+        JoystickButton SetInclineLowButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverSetInclineLow);
+        SetInclineLowButton.onTrue(SetInclineLow);
+
+        ShooterSetCommand SetInclineMiddle = new ShooterSetCommand(m_Shooter, Constants.Shooter.shooterInclinePosMiddle);
+        JoystickButton SetInclineMiddleButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverSetInclineMiddle);
+        SetInclineMiddleButton.onTrue(SetInclineMiddle);
+
+        /*ManualShootCommand Shoot = new ManualShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed);
         JoystickButton ShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
-        ShootButton.whileTrue(Shoot);
+        ShootButton.whileTrue(Shoot);*/
+
+        SmartShootCommand SmartShoot = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed);
+        JoystickButton SmartShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
+        SmartShootButton.toggleOnTrue(SmartShoot);
 
 }
     
@@ -149,7 +170,7 @@ public class RobotContainer {
 
         }  
         public void TeleopMode(){
-
+            System.out.println(m_Shooter.getEncoderValue());
         }
 
 

@@ -3,10 +3,10 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
-public class ShooterCommand extends Command {
+public class ManualShootCommand extends Command {
   private ShooterSubsystem m_shooter;
   private double m_power;
-  public ShooterCommand(ShooterSubsystem shooter,double power) {
+  public ManualShootCommand(ShooterSubsystem shooter,double power) {
     m_shooter = shooter;
     m_power = power;
   }
