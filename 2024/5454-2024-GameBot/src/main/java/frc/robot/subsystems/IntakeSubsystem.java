@@ -35,8 +35,8 @@ public class IntakeSubsystem extends SubsystemBase{
     public IntakeSubsystem(TurretSubsystem turret,int motorOne,int motorTwo,int intakeExtension,int sensorPort){
         final boolean brakeMode=true;
         final boolean coastMode=false;
-        m_intakeOne= new ObsidianCANSparkMax(motorOne,MotorType.kBrushless,brakeMode,Constants.k30Amp);
-        m_intakeTwo= new ObsidianCANSparkMax(motorTwo,MotorType.kBrushless,brakeMode,Constants.k30Amp);
+        m_intakeOne= new ObsidianCANSparkMax(motorOne,MotorType.kBrushless,brakeMode,Constants.k40Amp);
+        m_intakeTwo= new ObsidianCANSparkMax(motorTwo,MotorType.kBrushless,brakeMode,Constants.k40Amp);
         m_breakbeam=new DigitalInput(sensorPort);
         m_intakeExtension=new ObsidianCANSparkMax(intakeExtension,MotorType.kBrushless,coastMode,Constants.k30Amp);
         m_turret=turret;
