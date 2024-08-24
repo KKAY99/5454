@@ -8,26 +8,27 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackTy
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Shooter;
 import frc.robot.classes.BreakBeam;
+import frc.robot.classes.LaserCAN;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-public class IntakeAutoStopCommand extends Command {
+public class IntakeAutoStopCommand extends Command{
   private IntakeSubsystem m_intake;
   private ShooterSubsystem m_shooter;
-  private BreakBeam m_breakBeam;
+  private LaserCAN m_laserCan;
+
 
   private double m_power;
 
   private enum States{
-    INTAKE,WAITFORBREAKBEAM,END
-  }
+    INTAKE,WAITFORBREAKBEAM,END}
 
   private States m_currentState=States.INTAKE;
 
-  public IntakeAutoStopCommand(IntakeSubsystem intake, ShooterSubsystem shooter, BreakBeam breakBeam, double power) {
+  public IntakeAutoStopCommand(IntakeSubsystem intake, ShooterSubsystem shooter, LaserCAN laserCAN, double power) {
     m_intake = intake;
     m_power = power;
     m_shooter = shooter;
-    m_breakBeam=breakBeam;
+    m_laserCan = laserCAN;
   }
 
   // Called when the command is initially scheduled.
@@ -37,6 +38,7 @@ public class IntakeAutoStopCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
+     m_currentState=States.INTAKE;
   }
 
   // Called once the command ends or is interrupted.
@@ -60,11 +62,11 @@ public class IntakeAutoStopCommand extends Command {
         m_currentState=States.WAITFORBREAKBEAM;
       break;
       case WAITFORBREAKBEAM:
-        //if(m_breakBeam.GetBreakBeam()){
+        if(m_laserCan.IsBroken()){
           m_currentState=States.END;
-        //}
+        }
 
-        //System.out.println(m_breakBeam.GetBreakBeam());
+        System.out.println(m_laserCan.IsBroken());
       break;
       case END:
         returnValue=true;
@@ -73,3 +75,5 @@ public class IntakeAutoStopCommand extends Command {
     return returnValue;
   }
 }
+
+

@@ -5,6 +5,8 @@
 package frc.robot;
 
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,7 +18,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.AutoModes;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.FloorIntake;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -56,14 +59,16 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private NavX m_NavX = new NavX(SPI.Port.kMXP);
     // Dashboard inputs
-    private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Autonomous Program");
+    
+    private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
     private final LoggedDashboardChooser<Command> autoDelay = new LoggedDashboardChooser<>("Auto Delay");
    // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
     private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
     private final IntakeSubsystem m_Intake=new IntakeSubsystem(Constants.FloorIntake.intakeLeftMotorPort, Constants.FloorIntake.intakeRightMotorPort);
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.Shooter.shooterMotor1, Constants.Shooter.shooterMotor2, 
                                                                     Constants.Shooter.shooterInclineMotor,Constants.Shooter.shooterFeederMotor);
-    //private final WPIDriveTrainSubsystem m_WPIDrive=new WPIDriveTrainSubsystem(m_NavX);
+    private final ClimbSubsystem m_Climb=new ClimbSubsystem(Constants.Climber.climberPort);
+                                                                    //private final WPIDriveTrainSubsystem m_WPIDrive=new WPIDriveTrainSubsystem(m_NavX);
     private final DriveControlMode m_DriveControlMode = new DriveControlMode();
     //private final BreakBeam m_BreakBeam=new BreakBeam(Constants.BreakBeam.breakBeamPort,Constants.BreakBeam.breakDistance);
     
@@ -122,6 +127,15 @@ public class RobotContainer {
         JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeOut);
         intakeOutButton.whileTrue(intakeOut);
 
+        ClimbCommand climbUp = new ClimbCommand(m_Climb, Constants.Climber.climbUpSpeed);
+        POVButton climbUpPOV = new POVButton(m_xBoxDriver, Constants.ButtonConstants.DriverClimberUpPOV);
+        climbUpPOV.whileTrue(climbUp);
+
+        ClimbCommand climbDown = new ClimbCommand(m_Climb, Constants.Climber.climbDownSpeed);
+        POVButton climbDownPOV = new POVButton(m_xBoxDriver, Constants.ButtonConstants.DriverClimbDownPOV);
+        climbDownPOV.whileTrue(climbDown);
+
+ 
         /*ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, 0.5);
         JoystickButton InclineUpButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverInclineUp);
         InclineUpButton.whileTrue(InclineUp);
@@ -151,7 +165,22 @@ public class RobotContainer {
 
 }
     
-     
+    private void createAutoCommandsList(){
+    try{
+        SmartDashboard.putData("Auto Chooser", m_autoChooser);
+        m_autoChooser.setDefaultOption(AutoConstants.autoMode0, AutoConstants.autoMode0);
+        m_autoChooser.addOption(AutoConstants.autoMode1, AutoConstants.autoMode1);
+        m_autoChooser.addOption(AutoConstants.autoMode2, AutoConstants.autoMode2);
+        m_autoChooser.addOption(AutoConstants.autoMode3, AutoConstants.autoMode3);
+        m_autoChooser.addOption(AutoConstants.autoMode4, AutoConstants.autoMode4);
+        m_autoChooser.addOption(AutoConstants.autoMode5, AutoConstants.autoMode5);
+        m_autoChooser.addOption(AutoConstants.autoMode6, AutoConstants.autoMode6);
+
+
+    } catch(Exception e){
+        System.out.print("Create auto Exception" + e.getMessage());
+    }
+}  
 
      public void disabledPerioidicUpdates(){
 
@@ -191,8 +220,29 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  Command returnCommand;
   public Command getAutonomousCommand() {
-        return autoChooser.get();
+    SmartShootCommand shoot0 = new SmartShootCommand(m_Shooter, Constants.AutoConstants.shoot0Speed);
+    SmartShootCommand shoot1 = new SmartShootCommand(m_Shooter, Constants.AutoConstants.shoot1Speed);
+    ShooterInclineCommand incline0 = new ShooterInclineCommand(m_Shooter, Constants.AutoConstants.inclineSet0);
+    ShooterInclineCommand incline1 = new ShooterInclineCommand(m_Shooter, Constants.AutoConstants.inclineSet1);
+
+
+
+    String autoChosser = m_autoChooser.getSelected();
+        switch (autoChosser) {
+            case Constants.AutoConstants.autoMode0:
+                returnCommand=new AutoDoNothingCommand();
+                break;
+            case Constants.AutoConstants.autoMode1:
+                returnCommand = new SequentialCommandGroup(incline0, shoot0);
+                break;
+                
+            default: 
+                returnCommand=new AutoDoNothingCommand();
+                break;
+        } 
+        return returnCommand;
   }
 
 

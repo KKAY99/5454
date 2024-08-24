@@ -6,20 +6,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.classes.ObsidianCANSparkMax;
 
 public class ClimbSubsystem extends SubsystemBase {
-  private TalonSRX m_motor1;
-  private TalonSRX m_motor2;
+  private ObsidianCANSparkMax m_motor1;
 
-  public ClimbSubsystem(int motor1ID,int motor2ID) {
-    m_motor1 = new TalonSRX (motor1ID);
-    m_motor2 = new TalonSRX(motor2ID);
+
+  public ClimbSubsystem(int motor1ID) {
+    m_motor1 = new ObsidianCANSparkMax (motor1ID, MotorType.kBrushless, true);
+  
   }
   public void run(double power) {
-    m_motor1.set(TalonSRXControlMode.PercentOutput, power);
-    m_motor2.set(TalonSRXControlMode.PercentOutput,power);
+    m_motor1.set(power);
+
   }
   public void stop() {
-    m_motor1.set(TalonSRXControlMode.PercentOutput,0);
-    m_motor2.set(TalonSRXControlMode.PercentOutput,0);
+    m_motor1.set(0);
+   
   }
   @Override
   public void periodic() {

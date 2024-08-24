@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.networktables.Publisher;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public final class Constants {
@@ -52,6 +53,13 @@ public final class Constants {
         TOPCONE,MIDDLECONE,BOTTOMCONE,TOPCUBE,MIDDLECUBE,BOTTOMCUBE,PLAYERSTATION,SLIDE;	
     }
     
+
+    public class Climber{
+        public static final int climberPort=48;
+        public static final double climbDownSpeed=-0.5;
+        public static final double climbUpSpeed=0.5;
+
+    }
 
     public class BreakBeam{
         public static final int BreakBeamPort=0;
@@ -184,27 +192,23 @@ public final class Constants {
         public static final int DriverSetInclineLow = 6;
         public static final int DriverSetInclineHigh = 5;
         public static final int DriverSetInclineMiddle = 7;
+        public static final int DriverClimberUpPOV=0;
+        public static final int DriverClimbDownPOV=180;
     }
 
     public static final class LimitSwitches{
         public static final int brakeButtonPort=2;
     }
 
-    public static final class AutoModes {
+    public static final class AutoConstants {
         public static final String autoMode0="0-Do Nothing";
         public static final String autoMode1="1=Score";
-        public static final String autoMode2="1=Score / Move out of Zone";
-        public static final String autoMode3="1-Score / Engage Charging Station";
-        public static final String autoMode4="1-Score / Move Out Of Zone / Engage Charging Station";
-        public static final String autoMode5="2-Score / Leave / Get Cone / Score";
-
-        public static final int autoNothing = 0;
-        public static final int autoMoveBack = 1;
-        public static final int autoScoreLeave = 2;
-        public static final int autoScoreDock = 3;
-        public static final int autoScoreEngage = 4;
-        public static final int autoScore2=5;
-        
+        public static final String autoMode2="2=Score / Move / Score center short note";
+        public static final String autoMode3="3-Blue amp / Score / Move / Score short amp";
+        public static final String autoMode4="4-Blue source / Score / Move / Score short source";
+        public static final String autoMode5="5-Red amp / Score / Move / Score short amp";
+        public static final String autoMode6="6-Red source / Score / Move / Score short source";
+       
         public static final String delayMode0="0 Seconds";
         public static final String delayMode1="3 Seconds";
         public static final String delayMode2="5 Seconds";
@@ -216,12 +220,17 @@ public final class Constants {
         public static final int defaultDelayMode=0;
         public static final double MoveSpeed=0.5;
         //128 was last match
-        public static final double LeaveCommunityDistance=155;//115; // 120  // 15 feet = 174-30
-        public static final double pushDistance = 5;
-        public static final double DistanceToCharging=20;// x feet
-        public static final double DistanceToDock=30;
+
+        public static final double shoot0Speed = 0.5;
+        public static final double shoot1Speed = 1;
+
+        public static final double inclineSet0 = 0.5;
+        public static final double inclineSet1 = 1;
+
+ 
     }
             
+
 
     public static final class LaserCANConstants {
         public static final int LaserCANID = 0;

@@ -1,0 +1,9 @@
+[
+  {
+    "type": "java",
+    "name": "frcJava",
+    "port": 8349,
+    "target": "172.22.11.2",
+    "project": "SwerveBase-Imported"
+  }
+]
