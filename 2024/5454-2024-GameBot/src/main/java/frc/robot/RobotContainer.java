@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import java.sql.DrivferPropertyInfo;
+import java.sql.DriverPropertyInfo;
 import java.util.List;
 import javax.swing.JToggleButton;
 import com.pathplanner.lib.auto.NamedCommands;
