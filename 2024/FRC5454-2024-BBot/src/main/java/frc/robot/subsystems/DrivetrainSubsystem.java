@@ -158,7 +158,14 @@ private boolean m_autoControl = false;
     public void moveGyroNodistance(double direction, double rotation, double speed){
         automove(direction,rotation,speed,0,false,true);
     }
-   
+
+    public double legacyGetDistancefromWheel(){
+        return 0;//TODO:GetDistance
+      }
+      public void stopAutoDrive(){
+        //TODO:Make Stop
+      }
+    
     private void automove(double direction, double rotation,double speed, double distance, boolean stopAtEnd,boolean fieldCentric)
 {       double startDistance;
         double forward=0;

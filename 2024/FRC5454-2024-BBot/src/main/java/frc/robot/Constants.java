@@ -56,8 +56,8 @@ public final class Constants {
 
     public class Climber{
         public static final int climberPort=48;
-        public static final double climbDownSpeed=-0.5;
-        public static final double climbUpSpeed=0.5;
+        public static final double climbDownSpeed=0.7;
+        public static final double climbUpSpeed=-0.7;
 
     }
 
