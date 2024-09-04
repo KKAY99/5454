@@ -68,10 +68,15 @@ import frc.robot.utilities.ChooseYourOwnAdventureAuto;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-
+    //STANDARD DRIVING
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
+    //DRONE DRIVING
+    //private final int translationAxis = XboxController.Axis.kRightY.value;
+    //private final int strafeAxis = XboxController.Axis.kRightX.value;
+    //private final int rotationAxis = XboxController.Axis.kLeftX.value;
+    
     private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
     private final int leftTriggerAxis = XboxController.Axis.kLeftTrigger.value;
  
@@ -196,9 +201,9 @@ public class RobotContainer {
       POVButton turretOperatorRightButton=new POVButton(m_xBoxOperator,Constants.ButtonBindings.operatorturretPOVRight);
       turretOperatorRightButton.whileTrue(turretOperatorRight);
 
-      //ShootCommand shoot1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed);
-      //JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.drivermanualShootButton);
-      //shootButton1.toggleOnTrue(shoot1);
+      ShootCommand shoot1=new ShootCommand(m_shooter,m_intake,Constants.ShooterConstants.testShooterSpeed1,Constants.ShooterConstants.baseMotorSpeed,m_shouldUseDashBoardValues,true);
+      JoystickButton shootButton1=new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.drivermanualShootButton);
+      shootButton1.toggleOnTrue(shoot1);
 
       SmartShooter smartToggleTurret=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake, false,false,true,true);
       Trigger smartToggleTurretButton= new Trigger(() -> m_xBoxOperator.getRawAxis(leftTriggerAxis)>Constants.ButtonBindings.triggerDeadband);
@@ -349,7 +354,7 @@ public class RobotContainer {
       //TODO: ADD BACK WHEN LIMELIGHT ON
       //m_TurretLimelight.LimeLightPeriodic(true);
 //      m_swerve.getPose();
-
+        System.out.println(m_TurretLimelight.getDistance());
       //if(m_turret.IsAtLeftLimit()||m_turret.IsAtRightLimit()){
       //  m_blinkin.SetLEDPrimaryState(LEDStates.ISATLIMIT);
       //}else{

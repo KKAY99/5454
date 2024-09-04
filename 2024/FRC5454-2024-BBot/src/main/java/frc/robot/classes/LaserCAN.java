@@ -13,9 +13,9 @@ public class LaserCAN {
     public LaserCAN(int canID){
         laserCan=new LaserCan(canID);
         try{
-        laserCan.setRangingMode(LaserCan.RangingMode.LONG);
+        laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
         laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
-        laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+        //laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(10, 10, 16, 16));
         }catch(ConfigurationFailedException e){
             System.out.println("LaserCan Config Failed + " + e);
         }
@@ -23,10 +23,10 @@ public class LaserCAN {
 
     public double Getdistance(){
       Measurement Distance = laserCan.getMeasurement();
+      System.out.println(Distance.status);
 
       if(Distance != null && Distance.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT){
         return Distance.distance_mm;
-        
        
       } else{
         return 0.0;

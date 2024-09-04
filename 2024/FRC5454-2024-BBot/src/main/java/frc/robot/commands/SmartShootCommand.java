@@ -10,16 +10,21 @@ public class SmartShootCommand extends Command {
 
   private double m_startTime;
   private double kTimeToRun=Constants.Shooter.feederTimeToRun;
-
+  private double m_angle;
+  private boolean m_useAngle;
+  private boolean m_useLimeLight;
   private enum States{
-    STARTMOTORS,WAITFORVELOC,SHOOT,END
+    STARTMOTORS,VISIONGETANGLE,SETANGLE,WAITFORANGLE,WAITFORVELOC,SHOOT,END
   }
 
   private States m_currentState=States.STARTMOTORS;
 
-  public SmartShootCommand(ShooterSubsystem shooter,double power) {
+  public SmartShootCommand(ShooterSubsystem shooter,double power, boolean useLimeLight, boolean setAngle, double angle) {
     m_shooter = shooter;
     m_power = power;
+    m_useAngle=setAngle;
+    m_angle=angle;
+    m_useLimeLight=useLimeLight;
   }
 
   @Override
@@ -38,12 +43,35 @@ public class SmartShootCommand extends Command {
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
-
+    System.out.println(m_currentState.toString());
     switch(m_currentState){
       case STARTMOTORS:
         m_shooter.runShooterMotors(m_power);
+        if(m_useLimeLight == true){
+          m_currentState=States.VISIONGETANGLE;
+        }else if(m_useAngle == true){
+          m_currentState=States.SETANGLE;
+        }else{
+          m_currentState=States.WAITFORVELOC;
+        }
+        
+        
+        
+      break;
+      case VISIONGETANGLE:
 
-        m_currentState=States.WAITFORVELOC;
+        //get current angle target from limelight and set m_angle to it
+
+        m_currentState=States.SETANGLE;
+      break;
+      case SETANGLE:
+        m_shooter.SetReference(m_angle);
+        m_currentState=States.WAITFORANGLE;
+        break;
+      case WAITFORANGLE:
+        if(m_shooter.isAtAngleWithDeadband(m_angle)){
+          m_currentState=States.WAITFORVELOC;
+        }
       break;
       case WAITFORVELOC:
         if(m_shooter.isAtVeloc(m_power)){

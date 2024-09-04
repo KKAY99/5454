@@ -28,6 +28,7 @@ import frc.robot.Constants.TargetHeight;
 import frc.robot.Constants.LEDS.Colors;
 import frc.robot.classes.DriveControlMode;
 import frc.robot.classes.LEDStrip;
+import frc.robot.classes.LaserCAN;
 import frc.robot.classes.LEDSChargedup;
 import frc.robot.classes.Limelight;
 import frc.robot.classes.LEDSChargedup.LEDMode;
@@ -70,6 +71,7 @@ public class RobotContainer {
     private final ClimbSubsystem m_Climb=new ClimbSubsystem(Constants.Climber.climberPort);
                                                                     //private final WPIDriveTrainSubsystem m_WPIDrive=new WPIDriveTrainSubsystem(m_NavX);
     private final DriveControlMode m_DriveControlMode = new DriveControlMode();
+    private final LaserCAN m_LaserCAN = new LaserCAN(Constants.LaserCANConstants.LaserCANID);
     //private final BreakBeam m_BreakBeam=new BreakBeam(Constants.BreakBeam.breakBeamPort,Constants.BreakBeam.breakDistance);
     
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
@@ -115,13 +117,13 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings(){
-        /*IntakeAutoStopCommand intakeIn = new IntakeAutoStopCommand(m_Intake,m_Shooter,m_BreakBeam, Constants.FloorIntake.intakeSpeed);
+        IntakeAutoStopCommand intakeIn = new IntakeAutoStopCommand(m_Intake,m_Shooter,m_LaserCAN, Constants.FloorIntake.intakeSpeed);
         JoystickButton intakeInButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeIn);
-        intakeInButton.toggleOnTrue(intakeIn);*/
+        intakeInButton.toggleOnTrue(intakeIn);
 
-        IntakeCommand intakeIn = new IntakeCommand(m_Intake,m_Shooter, Constants.FloorIntake.intakeSpeed);
+        /*IntakeCommand intakeIn = new IntakeCommand(m_Intake,m_Shooter, Constants.FloorIntake.intakeSpeed);
         JoystickButton intakeInButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeIn);
-        intakeInButton.whileTrue(intakeIn);
+        intakeInButton.whileTrue(intakeIn);*/
 
         IntakeCommand intakeOut = new IntakeCommand(m_Intake,m_Shooter, -Constants.FloorIntake.intakeSpeed);
         JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeOut);
@@ -136,13 +138,13 @@ public class RobotContainer {
         climbDownPOV.whileTrue(climbDown);
 
  
-        /*ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, 0.5);
-        JoystickButton InclineUpButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverInclineUp);
+        ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, 0.5);
+        JoystickButton InclineUpButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.DriverInclineUp);
         InclineUpButton.whileTrue(InclineUp);
 
         ShooterInclineCommand InclineDown = new ShooterInclineCommand(m_Shooter, -0.5);
-        JoystickButton InclineDownButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverInclineDown);
-        InclineDownButton.whileTrue(InclineDown);*/
+        JoystickButton InclineDownButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.DriverInclineDown);
+        InclineDownButton.whileTrue(InclineDown);
 
         ShooterSetCommand SetInclineHigh = new ShooterSetCommand(m_Shooter, Constants.Shooter.shooterInclinePosHigh);
         JoystickButton SetInclineHighButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverSetInclineHigh);
@@ -159,9 +161,21 @@ public class RobotContainer {
         JoystickButton ShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
         ShootButton.whileTrue(Shoot);*/
 
-        SmartShootCommand SmartShoot = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed);
+        SmartShootCommand SmartShoot = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,false,0);
         JoystickButton SmartShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
         SmartShootButton.toggleOnTrue(SmartShoot);
+
+        SmartShootCommand ShootLow = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosLow);
+        JoystickButton ShootLowButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorShootClose);
+        ShootLowButton.toggleOnTrue(ShootLow);
+
+        SmartShootCommand ShootHigh = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosHigh);
+        JoystickButton ShootHighButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorShootMid);
+        ShootHighButton.toggleOnTrue(ShootHigh);
+
+        
+
+
 
 }
     
@@ -199,7 +213,9 @@ public class RobotContainer {
 
         }  
         public void TeleopMode(){
-            System.out.println(m_Shooter.getEncoderValue());
+            //System.out.println(m_Shooter.getInclineEncoderValue());
+            //System.out.println("LaserCan Distance: " + m_LaserCAN.Getdistance());
+            System.out.println("Shooter Angle: " + m_Shooter.getInclineEncoderValue());
         }
 
 
@@ -209,7 +225,8 @@ public class RobotContainer {
 
     
     public void DisableMode(){
-
+       System.out.println("LaserCan Distance: " + m_LaserCAN.Getdistance());
+        System.out.println("Shooter Angle: " + m_Shooter.getInclineEncoderValue());
     }
     public void EnableMode(){
 
@@ -222,8 +239,8 @@ public class RobotContainer {
    */
   Command returnCommand;
   public Command getAutonomousCommand() {
-    SmartShootCommand shoot0 = new SmartShootCommand(m_Shooter, Constants.AutoConstants.shoot0Speed);
-    SmartShootCommand shoot1 = new SmartShootCommand(m_Shooter, Constants.AutoConstants.shoot1Speed);
+    SmartShootCommand shoot0 = new SmartShootCommand(m_Shooter, Constants.AutoConstants.shoot0Speed, false, false, Constants.Shooter.shooterInclinePosHigh);
+    //SmartShootCommand shoot1 = new SmartShootCommand(m_Shooter, Constants.AutoConstants.shoot1Speed);
     ShooterInclineCommand incline0 = new ShooterInclineCommand(m_Shooter, Constants.AutoConstants.inclineSet0);
     ShooterInclineCommand incline1 = new ShooterInclineCommand(m_Shooter, Constants.AutoConstants.inclineSet1);
 
