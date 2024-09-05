@@ -121,6 +121,10 @@ public class RobotContainer {
         JoystickButton intakeInButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeIn);
         intakeInButton.toggleOnTrue(intakeIn);
 
+        IntakeAutoStopCommand intakeInO = new IntakeAutoStopCommand(m_Intake,m_Shooter,m_LaserCAN, Constants.FloorIntake.intakeSpeed);
+        JoystickButton intakeInButtonO = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.DriverIntakeIn);
+        intakeInButtonO.toggleOnTrue(intakeInO);
+
         /*IntakeCommand intakeIn = new IntakeCommand(m_Intake,m_Shooter, Constants.FloorIntake.intakeSpeed);
         JoystickButton intakeInButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeIn);
         intakeInButton.whileTrue(intakeIn);*/
@@ -138,11 +142,11 @@ public class RobotContainer {
         climbDownPOV.whileTrue(climbDown);
 
  
-        ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, 0.5);
+        ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, Constants.Shooter.inclineSpeed);
         JoystickButton InclineUpButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.DriverInclineUp);
         InclineUpButton.whileTrue(InclineUp);
 
-        ShooterInclineCommand InclineDown = new ShooterInclineCommand(m_Shooter, -0.5);
+        ShooterInclineCommand InclineDown = new ShooterInclineCommand(m_Shooter, -Constants.Shooter.inclineSpeed);
         JoystickButton InclineDownButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.DriverInclineDown);
         InclineDownButton.whileTrue(InclineDown);
 
@@ -165,12 +169,12 @@ public class RobotContainer {
         JoystickButton SmartShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
         SmartShootButton.toggleOnTrue(SmartShoot);
 
-        SmartShootCommand ShootLow = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosLow);
-        JoystickButton ShootLowButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorShootClose);
-        ShootLowButton.toggleOnTrue(ShootLow);
+        SmartShootCommand ShootMid = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosMiddle);
+        JoystickButton ShootMidButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorShootLow);
+        ShootMidButton.toggleOnTrue(ShootMid);
 
         SmartShootCommand ShootHigh = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosHigh);
-        JoystickButton ShootHighButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorShootMid);
+        JoystickButton ShootHighButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorShootHigh);
         ShootHighButton.toggleOnTrue(ShootHigh);
 
         
@@ -225,7 +229,8 @@ public class RobotContainer {
 
     
     public void DisableMode(){
-       System.out.println("LaserCan Distance: " + m_LaserCAN.Getdistance());
+        m_Shooter.stopShooterIncline();
+        System.out.println("LaserCan Distance: " + m_LaserCAN.Getdistance());
         System.out.println("Shooter Angle: " + m_Shooter.getInclineEncoderValue());
     }
     public void EnableMode(){

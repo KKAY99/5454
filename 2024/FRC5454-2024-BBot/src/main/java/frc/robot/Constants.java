@@ -70,15 +70,15 @@ public final class Constants {
         public static final int shooterMotor1=11;
         public static final int shooterMotor2=16;
         public static final int shooterInclineMotor=10;
-        public static final double ShooterSpeed=-0.9;
+        public static final double ShooterSpeed=-1.0;
         public static final double ShooterFeederSpeed=-.5;
         public static final int shooterFeederMotor = 4;
-
+        public static final double inclineSpeed=.75;
         public static final double feederTimeToRun=0.5;
 
-        public static final double shooterInclinePosHigh=-0.30; //-0.10;
-        public static final double shooterInclinePosMiddle=-0.40;//-0.17;
-        public static final double shooterInclinePosLow=-0.52;
+        public static final double shooterInclinePosHigh=-0.01; //-0.10;
+        public static final double shooterInclinePosMiddle=-0.18;//-0.17;
+        public static final double shooterInclinePosLow=-0.38;
     }
     public class swerveDrive{
         public static final double driveDeadband=0.05;
@@ -194,9 +194,9 @@ public final class Constants {
         public static final int DriverSetInclineMiddle = 7;
         public static final int DriverClimberUpPOV=0;
         public static final int DriverClimbDownPOV=180;
-        public static final int OperatorShootClose = 1;
-        public static final int OperatorShootMid = 2;
-        public static final int OperatorShootFar = 3;
+        public static final int OperatorShootClose = 2;
+        public static final int OperatorShootHigh = 3;
+        public static final int OperatorShootLow= 4;
     }
 
     public static final class LimitSwitches{

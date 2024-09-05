@@ -27,6 +27,11 @@ public class SmartShootCommand extends Command {
     m_useLimeLight=useLimeLight;
   }
 
+ // Called when the command is initially scheduled.
+ @Override
+ public void initialize() {
+    m_currentState=States.STARTMOTORS;
+ }
   @Override
   public void execute() {
   }
