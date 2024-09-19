@@ -42,6 +42,8 @@ import frc.robot.classes.BreakBeam;
 
 import java.awt.Color;
 
+import javax.swing.tree.ExpandVetoException;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardBoolean;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
@@ -63,12 +65,13 @@ public class RobotContainer {
     
     private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
     private final LoggedDashboardChooser<Command> autoDelay = new LoggedDashboardChooser<>("Auto Delay");
-   // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
+    private final SendableChooser<Boolean> m_IsDrone = new SendableChooser<>();
+    // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
     private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
     private final IntakeSubsystem m_Intake=new IntakeSubsystem(Constants.FloorIntake.intakeLeftMotorPort, Constants.FloorIntake.intakeRightMotorPort);
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem(Constants.Shooter.shooterMotor1, Constants.Shooter.shooterMotor2, 
                                                                     Constants.Shooter.shooterInclineMotor,Constants.Shooter.shooterFeederMotor);
-    private final ClimbSubsystem m_Climb=new ClimbSubsystem(Constants.Climber.climberPort);
+//    private final ClimbSubsystem m_Climb=new ClimbSubsystem(Constants.Climber.climberPort);
                                                                     //private final WPIDriveTrainSubsystem m_WPIDrive=new WPIDriveTrainSubsystem(m_NavX);
     private final DriveControlMode m_DriveControlMode = new DriveControlMode();
     private final LaserCAN m_LaserCAN = new LaserCAN(Constants.LaserCANConstants.LaserCANID);
@@ -87,12 +90,18 @@ public class RobotContainer {
         // Configure the button bindings
         createAutoCommands();
         configureButtonBindings();
-        m_RobotDrive.setDefaultCommand(
+      /* m_RobotDrive.setDefaultCommand(
+                new DefaultDriveCommand(m_RobotDrive,
+                        () -> m_xBoxDriver.getLeftX(),
+                        () -> m_xBoxDriver.getRightY(),
+                        () -> m_xBoxDriver.getRightX(),
+                        () -> m_DriveControlMode.isFieldOrientated()));  */  
+                m_RobotDrive.setDefaultCommand(
                 new DefaultDriveCommand(m_RobotDrive,
                         () -> m_xBoxDriver.getRightX(),
                         () -> m_xBoxDriver.getLeftY(),
                         () -> m_xBoxDriver.getLeftX(),
-                        () -> m_DriveControlMode.isFieldOrientated()));
+                        () -> m_DriveControlMode.isFieldOrientated())); 
        /* m_WPIDrive.setDefaultCommand(
                 new WPIDriveCommand(m_WPIDrive,
                         () -> m_xBoxDriver.getRightX(),
@@ -133,13 +142,17 @@ public class RobotContainer {
         JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeOut);
         intakeOutButton.whileTrue(intakeOut);
 
-        ClimbCommand climbUp = new ClimbCommand(m_Climb, Constants.Climber.climbUpSpeed);
-        POVButton climbUpPOV = new POVButton(m_xBoxDriver, Constants.ButtonConstants.DriverClimberUpPOV);
-        climbUpPOV.whileTrue(climbUp);
+        OuttakeCommand intakeOut2 = new OuttakeCommand(m_Intake,m_Shooter, -Constants.FloorIntake.intakeSpeed);
+        JoystickButton intakeOut2Button = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorIntakeOut);
+        intakeOut2Button.whileTrue(intakeOut2);
 
-        ClimbCommand climbDown = new ClimbCommand(m_Climb, Constants.Climber.climbDownSpeed);
-        POVButton climbDownPOV = new POVButton(m_xBoxDriver, Constants.ButtonConstants.DriverClimbDownPOV);
-        climbDownPOV.whileTrue(climbDown);
+       // ClimbCommand climbUp = new ClimbCommand(m_Climb, Constants.Climber.climbUpSpeed);
+       // POVButton climbUpPOV = new POVButton(m_xBoxDriver, Constants.ButtonConstants.DriverClimberUpPOV);
+       // climbUpPOV.whileTrue(climbUp);
+
+       // ClimbCommand climbDown = new ClimbCommand(m_Climb, Constants.Climber.climbDownSpeed);
+       // POVButton climbDownPOV = new POVButton(m_xBoxDriver, Constants.ButtonConstants.DriverClimbDownPOV);
+       // climbDownPOV.whileTrue(climbDown);
 
  
         ShooterInclineCommand InclineUp = new ShooterInclineCommand(m_Shooter, Constants.Shooter.inclineSpeed);
@@ -153,6 +166,7 @@ public class RobotContainer {
         ShooterSetCommand SetInclineHigh = new ShooterSetCommand(m_Shooter, Constants.Shooter.shooterInclinePosHigh);
         JoystickButton SetInclineHighButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverSetInclineHigh);
         SetInclineHighButton.onTrue(SetInclineHigh);
+        
         ShooterSetCommand SetInclineLow = new ShooterSetCommand(m_Shooter, Constants.Shooter.shooterInclinePosLow);
         JoystickButton SetInclineLowButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverSetInclineLow);
         SetInclineLowButton.onTrue(SetInclineLow);
@@ -193,10 +207,13 @@ public class RobotContainer {
         m_autoChooser.addOption(AutoConstants.autoMode4, AutoConstants.autoMode4);
         m_autoChooser.addOption(AutoConstants.autoMode5, AutoConstants.autoMode5);
         m_autoChooser.addOption(AutoConstants.autoMode6, AutoConstants.autoMode6);
+         
+        SmartDashboard.putData("Is drive inverted", m_IsDrone);
+        m_IsDrone.setDefaultOption("Defualt drive", false);
+        m_IsDrone.addOption("Inverted drive", true);
 
-
-    } catch(Exception e){
-        System.out.print("Create auto Exception" + e.getMessage());
+    }catch(Exception e){
+        
     }
 }  
 
@@ -219,7 +236,7 @@ public class RobotContainer {
         public void TeleopMode(){
             //System.out.println(m_Shooter.getInclineEncoderValue());
             //System.out.println("LaserCan Distance: " + m_LaserCAN.Getdistance());
-            System.out.println("Shooter Angle: " + m_Shooter.getInclineEncoderValue());
+           // System.out.println("Shooter Angle: " + m_Shooter.getInclineEncoderValue());
         }
 
 
@@ -257,7 +274,7 @@ public class RobotContainer {
                 returnCommand=new AutoDoNothingCommand();
                 break;
             case Constants.AutoConstants.autoMode1:
-                returnCommand = new SequentialCommandGroup(incline0, shoot0);
+                returnCommand = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosHigh);
                 break;
                 
             default: 

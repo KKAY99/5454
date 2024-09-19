@@ -72,13 +72,14 @@ public final class Constants {
         public static final int shooterInclineMotor=10;
         public static final double ShooterSpeed=-1.0;
         public static final double ShooterFeederSpeed=-.5;
+        public static final double ShooterOutTakeSpeed=.25;
         public static final int shooterFeederMotor = 4;
-        public static final double inclineSpeed=.75;
+        public static final double inclineSpeed=.50;
         public static final double feederTimeToRun=0.5;
 
-        public static final double shooterInclinePosHigh=-0.01; //-0.10;
-        public static final double shooterInclinePosMiddle=-0.18;//-0.17;
-        public static final double shooterInclinePosLow=-0.38;
+        public static final double shooterInclinePosHigh=0.210; //-0.10;
+        public static final double shooterInclinePosMiddle=0.048;//-0.17;
+        public static final double shooterInclinePosLow=0.03;
     }
     public class swerveDrive{
         public static final double driveDeadband=0.05;
@@ -186,6 +187,7 @@ public final class Constants {
     public static final class ButtonConstants{
         public static final int DriverIntakeIn=1;
         public static final int DriverIntakeOut=3;
+        public static final int OperatorIntakeOut=8;
         public static final int DriverInclineUp=5;
         public static final int DriverInclineDown=6;
         public static final int DriverShoot = 2;

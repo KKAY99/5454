@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -23,30 +24,58 @@ public class ShooterSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_motor2;
   private ObsidianCANSparkMax m_inclineMotor;
   private VictorSP m_feederMotor;
-  private double kAngledeadband = 0.05;
+  private double kAngledeadband = 0.01;
+  private double kMaxInclineSpeed=0.6;  
+  private double kSlowerInclineSpeed=0.4;  
   private SparkPIDController m_pidController;
   private RelativeEncoder m_inclineEncoder;
   private double kkMotor1Modifier=1.0;
-  private double kMotorDeadBand=400; // was 200
-
+  private double kMotorDeadBand=450; // was 2000
+  private DutyCycleEncoder m_AngleEncoder;
   public ShooterSubsystem(int motor1ID,int motor2ID, int inclineMotorID, int feederMotorID) {
     m_motor1 = new ObsidianCANSparkMax(motor1ID,MotorType.kBrushless,true);
     m_motor2 = new ObsidianCANSparkMax(motor2ID,MotorType.kBrushless,true);
     m_motor1.setSmartCurrentLimit(Constants.k30Amp);
     m_motor2.setSmartCurrentLimit(Constants.k30Amp);
     m_inclineMotor = new ObsidianCANSparkMax(inclineMotorID, MotorType.kBrushed, true);
+    m_inclineMotor.setInverted(true); // THanks Jackson!
+    m_AngleEncoder=new DutyCycleEncoder(0);
     m_feederMotor=new VictorSP(feederMotorID);
-
-    m_inclineEncoder=m_inclineMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature,8192);
+    m_inclineEncoder=m_inclineMotor.getEncoder(EncoderType.kQuadrature,8192);
+   // m_inclineEncoder=m_inclineMotor.getEncoder(EncoderType.kQuadrature,8192);
+    
+//    m_inclineEncoder=m_inclineMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature,8192);
     m_pidController=m_inclineMotor.getPIDController();
     m_pidController.setFeedbackDevice(m_inclineEncoder);
 
     //TODO: Needs more tuning overshoots by around 2.5 
-    m_pidController.setP(2.5);
-    m_pidController.setI(0.0018);
-    m_pidController.setD(0.0015);
-    m_pidController.setOutputRange(-1,1);
+    m_pidController.setP(1.6);
+    m_pidController.setI(0.0);
+    m_pidController.setD(0.0001);
+    m_pidController.setOutputRange(-kMaxInclineSpeed,kMaxInclineSpeed);
     
+  }
+  public void gotoPosition(double targetAngle){ 
+    if(isAtAngleWithDeadband(targetAngle)){
+      m_inclineMotor.set(0);
+    } else {
+       double angleGap=targetAngle-getInclineEncoderValue();
+       double inclineSpeed=0;
+       if (angleGap>0){
+          if(angleGap>.06){
+               inclineSpeed=(kMaxInclineSpeed);
+          } else{
+               inclineSpeed=kSlowerInclineSpeed;
+          }
+       } else {
+          if(angleGap<-0.06){
+             inclineSpeed=-kMaxInclineSpeed;
+          } else{
+             inclineSpeed=-kSlowerInclineSpeed;
+          }
+       }
+       m_inclineMotor.set(inclineSpeed);
+    }
   }
 
   public void runFeeder(double power) {
@@ -79,8 +108,8 @@ public class ShooterSubsystem extends SubsystemBase {
     boolean returnValue=false;
     double desiredVeloc1=Math.abs(power*kkMotor1Modifier*5676); // was 56760
     double desiredVeloc2=Math.abs(power*5676); // was 56760
-    desiredVeloc1=desiredVeloc1*.95; //FRICTION
-    desiredVeloc2=desiredVeloc2*.95; //FRICTION
+    desiredVeloc1=desiredVeloc1*1; //FRICTION
+    desiredVeloc2=desiredVeloc2*1; //FRICTION
     if(Math.abs(getMotor1Veloc())-kMotorDeadBand<desiredVeloc1&&Math.abs(getMotor1Veloc())+kMotorDeadBand>desiredVeloc1&&
       Math.abs(getMotor2Veloc())-kMotorDeadBand<desiredVeloc2&&Math.abs(getMotor2Veloc())+kMotorDeadBand>desiredVeloc2){
         returnValue=true;
@@ -100,7 +129,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public double getInclineEncoderValue(){
-    return m_inclineEncoder.getPosition();
+    return m_AngleEncoder.get();
+    // return m_inclineEncoder.getPosition();
   }
 
   public boolean isAtAngleWithDeadband(double targetAngle){

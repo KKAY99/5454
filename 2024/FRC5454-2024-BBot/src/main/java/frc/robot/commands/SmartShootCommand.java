@@ -14,7 +14,7 @@ public class SmartShootCommand extends Command {
   private boolean m_useAngle;
   private boolean m_useLimeLight;
   private enum States{
-    STARTMOTORS,VISIONGETANGLE,SETANGLE,WAITFORANGLE,WAITFORVELOC,SHOOT,END
+    STARTMOTORS,VISIONGETANGLE,SETANGLE,WAITFORANGLE,WAITFORVELOC,SHOOT,LOWER,WAITFORSHOOTERLOWER,END
   }
 
   private States m_currentState=States.STARTMOTORS;
@@ -41,6 +41,7 @@ public class SmartShootCommand extends Command {
   public void end(boolean interrupted) {
     m_shooter.stopShooterMotors();
     m_shooter.stopFeeder();
+    m_shooter.stopShooterIncline();
     m_currentState=States.STARTMOTORS;
   }
 
@@ -70,12 +71,15 @@ public class SmartShootCommand extends Command {
         m_currentState=States.SETANGLE;
       break;
       case SETANGLE:
-        m_shooter.SetReference(m_angle);
+        //m_shooter.SetReference(m_angle);
+        m_shooter.gotoPosition(m_angle);
         m_currentState=States.WAITFORANGLE;
         break;
       case WAITFORANGLE:
         if(m_shooter.isAtAngleWithDeadband(m_angle)){
+          m_shooter.stopShooterIncline();
           m_currentState=States.WAITFORVELOC;
+         
         }
       break;
       case WAITFORVELOC:
@@ -88,9 +92,17 @@ public class SmartShootCommand extends Command {
         m_shooter.runFeeder(Constants.Shooter.ShooterFeederSpeed);
 
         if(Timer.getFPGATimestamp()>m_startTime+kTimeToRun){
-          m_currentState=States.END;
+          m_currentState=States.LOWER;
         }
       break;
+      case LOWER:
+      m_shooter.SetReference(Constants.Shooter.shooterInclinePosLow);
+      m_currentState=States.WAITFORSHOOTERLOWER;
+      case WAITFORSHOOTERLOWER:
+      if(m_shooter.isAtAngleWithDeadband(Constants.Shooter.shooterInclinePosLow)){
+        m_shooter.stopShooterIncline();
+        m_currentState=States.END;
+      }
       case END:
       returnValue=true;
       break;

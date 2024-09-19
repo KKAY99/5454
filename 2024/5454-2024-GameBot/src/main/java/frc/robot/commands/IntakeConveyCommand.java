@@ -1,6 +1,9 @@
 package frc.robot.commands;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -13,16 +16,23 @@ public class IntakeConveyCommand extends Command{
   private LED m_led;
   private double m_speed;
 
+  private XboxController m_driver;
+  private XboxController m_operator;
+
+  private double m_startTime;
+
   private enum STATE{
     SETANGLE,WAITFORANGLE,INTAKINGNOTE,NOTEINSHOOTPOS
   }
 
   private STATE m_state=STATE.INTAKINGNOTE;
-  public IntakeConveyCommand(IntakeSubsystem intake,ShooterSubsystem shooter,double intakeSpeed){
+  public IntakeConveyCommand(IntakeSubsystem intake,ShooterSubsystem shooter,double intakeSpeed,XboxController driver, XboxController operator){
     m_intake=intake;
     m_shooter=shooter;
     //m_led=led;
     m_speed=intakeSpeed;
+    m_driver=driver;
+    m_operator=operator;
     addRequirements(m_intake);
     addRequirements(m_shooter);
   }
@@ -35,6 +45,8 @@ public class IntakeConveyCommand extends Command{
   @Override
   public void end(boolean interrupted){
     m_intake.stopIntake();
+    m_driver.setRumble(RumbleType.kBothRumble,0);
+    m_operator.setRumble(RumbleType.kBothRumble,0);
     Logger.recordOutput("Intake/IntakeConveyCommand","Not Running");
 
   }
@@ -62,11 +74,18 @@ public class IntakeConveyCommand extends Command{
 
       if(m_intake.isBeamBroken()){
         m_intake.stopIntake();
+        m_driver.setRumble(RumbleType.kBothRumble,0.5);
+        m_operator.setRumble(RumbleType.kBothRumble,0.5);
+        m_startTime=Timer.getFPGATimestamp();
         m_state=STATE.NOTEINSHOOTPOS;
       }
       break;
       case NOTEINSHOOTPOS:
-      returnValue=true;
+      if(Timer.getFPGATimestamp()>(m_startTime+0.3)){
+        m_driver.setRumble(RumbleType.kBothRumble,0);
+        m_operator.setRumble(RumbleType.kBothRumble,0);
+        returnValue=true;
+      }
       break;
     }
     Logger.recordOutput("Intake/IntakeConveyCommand",m_state.toString());

@@ -12,7 +12,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeToggleCommand extends Command{
   private IntakeSubsystem m_intake;
-  private XboxController m_xboxController;
+  private XboxController m_driver;
+  private XboxController m_controller;
   
   private double m_speed;
   private boolean m_isRunning;
@@ -30,7 +31,7 @@ public class IntakeToggleCommand extends Command{
     m_intake=intake;
     m_shouldToggle=shouldToggle;
     m_speed=speed;
-    m_xboxController=xboxController;
+    m_controller=xboxController;
     m_isRunning=false;
     addRequirements(m_intake);
   }
@@ -42,7 +43,7 @@ public class IntakeToggleCommand extends Command{
   public void execute(){
     m_isRunning=true;
     if(m_shouldToggle){
-      m_intake.ToggleIntake(m_speed,m_xboxController);
+      m_intake.ToggleIntake(m_speed,m_driver);
     }
   }
   

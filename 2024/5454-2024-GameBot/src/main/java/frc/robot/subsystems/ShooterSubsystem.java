@@ -79,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 
         m_angleEncoder = m_angleMotor.getEncoder();
 
-        double anglekP = 0.4;// 0.8
+        double anglekP = 0.3;// 0.8
         double anglekI = 0.00;
         double anglekD = 0.00;
         double anglekIz = 0;

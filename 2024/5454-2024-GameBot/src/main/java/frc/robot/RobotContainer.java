@@ -96,7 +96,7 @@ public class RobotContainer {
     private SendableChooser<AutoPose2D> m_autoPath5 = new SendableChooser<>(); 
    
     private Integer m_hasNoteLoopCounter=0;
-    private Integer khasNoteLoopLEDLimit=5;
+    private Integer khasNoteLoopLEDLimit=50;
 
     private Swerve m_swerve = new Swerve(new SwerveIO(){});
 //    private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
@@ -169,11 +169,11 @@ public class RobotContainer {
       JoystickButton intakeToggleOperatorTrueButtonOut=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonOut);
       intakeToggleOperatorTrueButtonOut.whileTrue(intakeToggleOperatorTrueOut);
 
-      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed);
+      IntakeConveyCommand intakeConvey=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed,m_xBoxDriver,m_xBoxOperator);
       JoystickButton intakeConveyButton=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeConveyButtonIn);
       intakeConveyButton.onTrue(intakeConvey);
 
-      IntakeConveyCommand intakeConveyDriv=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed);
+      IntakeConveyCommand intakeConveyDriv=new IntakeConveyCommand(m_intake,m_shooter,Constants.IntakeConstants.intakeSpeed,m_xBoxDriver,m_xBoxOperator);
       JoystickButton intakeConveyButtonDriv=new JoystickButton(m_xBoxDriver,ButtonBindings.operatorintakeConveyButtonIn);
       intakeConveyButtonDriv.onTrue(intakeConveyDriv);
 
@@ -604,22 +604,21 @@ public class RobotContainer {
   public void TeleopPeriodic(){
     boolean isTurretStraight=(m_turret.GetEncoderValue()>=-0.25||m_turret.GetEncoderValue()<=0.25);
 
-    if(!m_shooter.isAtStow()){
-      if (m_hasNoteLoopCounter>0 && m_hasNoteLoopCounter>khasNoteLoopLEDLimit){
-        //reset has note
-         m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.HASNOTE);
-         m_hasNoteLoopCounter++;
+    if(m_shooter.isAtStow()){
+      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ISATSTOW);
+    }else{
+      if ((m_hasNoteLoopCounter>0) && (m_hasNoteLoopCounter<khasNoteLoopLEDLimit)){
+           m_hasNoteLoopCounter++; // KEEP LED
       } else{
-      if(!m_intake.isBeamBroken() ){
+         if(!m_intake.isBeamBroken() ){
         m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ROBOTFRONTSIDE);
-      }else if(m_intake.isRunning()){
+        }else if(m_intake.isRunning()){
         m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.INTAKERUNNING);
-      }else{
+        }else{
            m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.HASNOTE);
           m_hasNoteLoopCounter=1;
-      }
-    }
-       m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.AMPSCORESIDE);
+        }
+        m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.AMPSCORESIDE);
       
       if(m_TurretLimelight.isTargetAvailible()){
         if(m_turret.IsOnTarget()){
@@ -630,9 +629,10 @@ public class RobotContainer {
       }else{
         m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.NOTARGET);
       }
-    }else{
-      m_candle.SetCANdleLEDS(LEDConstants.CANDLELEDStates.ISATSTOW);
-    }  
+
+      }
+    }
+ 
   }
 
   private void setDisabledLEDS(){

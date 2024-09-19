@@ -520,7 +520,7 @@ public final class Constants {
       public static final double homeLEDCheckDeadband=0.1;
       public static final double homeRotateSpeed=0.05;
       public static final double rotateLowSoftLimit=-43.69;
-      public static final double rotateHighSoftLimit=58.78; 
+      public static final double rotateHighSoftLimit=61.5454; 
 
       public static final double podiumShotEncoderVal=-66;
       public static final double midShotEncoderVal=0;
@@ -532,7 +532,7 @@ public final class Constants {
       public static final int feederMotorPort=21;
       public static final int shooterAnglePort=23;
       public static final int encoderCanID=11;
-      public static final double shooterStowAngle=58.78;
+      public static final double shooterStowAngle=61.5454;
       public static final double shooterVisionClearanceAngle=35;
       public static final double shooterVisionClearanceHighPoint=35;
       public static final double shooterAmpScoreAngle=-26; //-29.5
@@ -674,34 +674,27 @@ public final class Constants {
       
        public static final double [][]distanceLookup={
            //distance , speed1,speed2, angle, shottime,limelight multiplier for deadband, limelight offset
-          {17.0,-40,-40,21.5,1,1,-19.5}, //2  
-          {21.1,-40,-40,26.2,1,1,-16.5}, //2
-          {23.3,-35,-35,28.0,5,1,-15.2}, //4 
-          {27.5,-40,-40,31.0,5,1,-13.7}, //5
-          {29.0,-40,-40,33,5,1,-12.4},
-          {31.8,-40,-50,35,5,1,-11.2},
-          {33.3,-40,-55,36,5,1,1,-10.6},
-
-          //NEW VALUES ^^^^^^^
-          //BAD OLD VALUES BELOW
-          {31.4,-48,-51,34.4,5,1,7},
-          {34.1,-49,-54,36,5,1,7},
-          {35.6,-49,-54,37,5,1,7},
-          {37.1,-51,-56,37.3,5,1,8},
-          {39,-53,-60,37.6,5,1,8},
-          {40.2,-65,-70,37.9,5,1,8},
-          {43.9,-44,-75,38.6,5,1,8},
-          {44.1,-45,-75,38.8,5,1,8},
-          {45.4,-45,-75,39,5,1,8},
-          {46.5,-45,-75,39.5454,5,1,8},
-          {48.9,-46,-80,40,5,1,9},
-          {51.2,-50,-80,40,5.3,1,9},
-          {53.4,-50,-80,41.6,5,1,9},
-          {55.5,-50,-80,41.9,5,1,9},
-          {57.1,-50,-80,42,5,1,10},
-          {57.3,-50,-80,42,5,1,10},
-          {90.1,-58,-88,45,5,1,10} // dummy value
-         
+          {17.0,-40,-40,21.5,1,1,-4.5}, //2  
+          {21.1,-40,-40,26.2,1,1,-4.2}, //2
+          {23.3,-35,-35,28.0,5,1,-4}, //4 
+          {27.5,-40,-40,31.0,5,1,-4}, //5
+          {29.0,-40,-40,33,5,1,-3.9},
+          {31.8,-40,-50,35,5,1,-3.9},
+          {33.3,-40,-55,35.8,5,1,1,-3.6},
+          {35.3,-40,-55,36.5,5,1,1,-3.3},
+          {37.6,-45,-70,37.8,5,1,1,-3},
+          {40.2,-45,-70,38.6,5,1,1,-4.5},
+          {43.0,-50,-80,39.4,5,1,1,-3.9},
+          {44.9,-50,-80,40.2,5,1,1,9.8},
+          {46.6,-45,-80,41.2,5,1,1,9.5},
+          {47.4,-45,-80,41.5,5,1,1,9.2},
+          {49.8,-45,-80,41.7,5,1,1,9.1},
+          {53.1,-45,-80,42.8,5,1,1,9},
+          {56.1,-45,-80,42.9,5,1,1,9},
+          {58.8,-45,-80,43,5,1,1,8.9},
+          {60.0,-45,-80,43,5,1,1,8.9},
+          {62.7,-45,-80,43,5,1,1,8.8},
+          {90,-45,-80,43,5,1,1,8.8},
       };
        public static final double [][]olddistanceLookup={
            //distance , spe65555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555588ed, angle, shottime
@@ -728,6 +721,7 @@ public final class Constants {
           public static final int GREEN = 5;
           public static final int YELLOW = 6;
           public static final int ORANGE = 7;
+       
       }
   }
 

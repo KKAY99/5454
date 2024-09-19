@@ -31,7 +31,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class TurretSubsystem extends SubsystemBase{
   private TurretSubsystemIO m_turretIO;
-  private TurretSubsystemIOInputsAutoLogged m_turretAutoLogged=new TurretSubsystemIOInputsAutoLogged();
+  //private TurretSubsystemIOInputsAutoLogged m_turretAutoLogged=new TurretSubsystemIOInputsAutoLogged();
   private ShotTable m_shotTable = new ShotTable();
 
   private ObsidianCANSparkMax m_turretMotor;
@@ -153,7 +153,7 @@ public class TurretSubsystem extends SubsystemBase{
     double speed=0;
     double limelightDis=m_limeLight.getDistance();
     double x=m_limeLight.getXRaw()-m_shotTable.getCrosshairOffset(limelightDis);
-   
+    System.out.println(m_shotTable.getCrosshairOffset(limelightDis));
    
     if(m_limeLight.isTargetAvailible()){
         if(Math.abs(x)<Constants.LimeLightValues.limeLightDeadBand){

@@ -205,20 +205,17 @@ public class LED{
                     animationState=true;
                 break;
                 case HASNOTE:
-                    rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.PURPLE);
-                    startIndex=LEDConstants.candleRobotFrontStartIndex;
-                    secondStartIndex=LEDConstants.candleRobotFrontSecondStartIndex;
-                    ledCount=LEDConstants.candleRobotFrontLEDCount;
-                    secondledCount=LEDConstants.candleRobotFrontLEDCount2;
 
-                    StrobeAnimation flash1=new StrobeAnimation(rgbValues.get(0), rgbValues.get(1), 
-                    rgbValues.get(2), rgbValues.get(3), 0.7, ledCount, startIndex);
-
-                    StrobeAnimation flash2=new StrobeAnimation(rgbValues.get(0), rgbValues.get(1), 
-                    rgbValues.get(2), rgbValues.get(3), 0.7, secondledCount, secondStartIndex);
-
+                
+                rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.PURPLE);
+               
+                startIndex=LEDConstants.candleRobotFrontStartIndex;
+                ledCount=LEDConstants.candleLEDCount;
+                 
+                StrobeAnimation flash1=new StrobeAnimation(rgbValues.get(0), rgbValues.get(1), 
+                rgbValues.get(2), rgbValues.get(3), 0.7, ledCount, startIndex);
                     m_candle.animate(flash1,0);
-                    m_candle.animate(flash2,0);
+                animationState=true;
                 break;
                 case ISATSTOW:
                 rgbValues=getCANdleLEDColors(LEDConstants.LEDColors.BLUE);
