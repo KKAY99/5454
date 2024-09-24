@@ -20,7 +20,7 @@ public class IntakeAutoStopCommand extends Command{
   private double m_power;
 
   private enum States{
-    INTAKE,WAITFORBREAKBEAM,END}
+    STARTLOWER,WAITFORLOWER,INTAKE,WAITFORBREAKBEAM,END}
 
   private States m_currentState=States.INTAKE;
 
@@ -34,7 +34,7 @@ public class IntakeAutoStopCommand extends Command{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_currentState=States.INTAKE;
+    m_currentState=States.STARTLOWER;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,7 +47,7 @@ public class IntakeAutoStopCommand extends Command{
   public void end(boolean interrupted) {
     m_intake.stop();
     m_shooter.stopFeeder();
-    m_currentState=States.INTAKE;
+    m_currentState=States.STARTLOWER;
   }
 
   // Returns true when the command should end.
@@ -56,6 +56,16 @@ public class IntakeAutoStopCommand extends Command{
     boolean returnValue=false;
 
     switch(m_currentState){
+      case STARTLOWER:
+        m_shooter.gotoPosition(Constants.Shooter.shooterInclinePosLow);
+        m_currentState=States.WAITFORLOWER;
+      break;
+      case WAITFORLOWER:
+        if(m_shooter.isAtAngleWithDeadband(Constants.Shooter.shooterInclinePosLow)){
+          m_shooter.stopShooterIncline();
+          m_currentState=States.INTAKE;
+        }
+        break;
       case INTAKE:
         m_intake.run(m_power);
         m_shooter.runFeeder(Constants.Shooter.ShooterFeederSpeed);

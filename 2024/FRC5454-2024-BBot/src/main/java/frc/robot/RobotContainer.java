@@ -96,18 +96,12 @@ public class RobotContainer {
                         () -> m_xBoxDriver.getRightY(),
                         () -> m_xBoxDriver.getRightX(),
                         () -> m_DriveControlMode.isFieldOrientated()));  */  
-                m_RobotDrive.setDefaultCommand(
+       m_RobotDrive.setDefaultCommand(
                 new DefaultDriveCommand(m_RobotDrive,
                         () -> m_xBoxDriver.getRightX(),
                         () -> m_xBoxDriver.getLeftY(),
                         () -> m_xBoxDriver.getLeftX(),
-                        () -> m_DriveControlMode.isFieldOrientated())); 
-       /* m_WPIDrive.setDefaultCommand(
-                new WPIDriveCommand(m_WPIDrive,
-                        () -> m_xBoxDriver.getRightX(),
-                        () -> m_xBoxDriver.getLeftY(),
-                        () -> m_xBoxDriver.getLeftX(),
-                        () -> m_DriveControlMode.isFieldOrientated()));*/
+                        () -> m_DriveControlMode.isFieldOrientated()));
                 
 
     }
@@ -179,8 +173,8 @@ public class RobotContainer {
         JoystickButton ShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
         ShootButton.whileTrue(Shoot);*/
 
-        SmartShootCommand SmartShoot = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,false,0);
-        JoystickButton SmartShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
+        SmartShootCommand SmartShoot = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosLow);
+        JoystickButton SmartShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.DriverShoot);
         SmartShootButton.toggleOnTrue(SmartShoot);
 
         SmartShootCommand ShootMid = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosMiddle);
@@ -209,7 +203,7 @@ public class RobotContainer {
         m_autoChooser.addOption(AutoConstants.autoMode6, AutoConstants.autoMode6);
          
         SmartDashboard.putData("Is drive inverted", m_IsDrone);
-        m_IsDrone.setDefaultOption("Defualt drive", false);
+        m_IsDrone.setDefaultOption("Default drive", false);
         m_IsDrone.addOption("Inverted drive", true);
 
     }catch(Exception e){
@@ -223,6 +217,24 @@ public class RobotContainer {
 
     }
 
+    public void setDriveMode(){
+        if(m_IsDrone.getSelected()){
+            m_RobotDrive.setDefaultCommand(
+                new DefaultDriveCommand(m_RobotDrive,
+                        () -> m_xBoxDriver.getLeftX(),
+                        () -> m_xBoxDriver.getRightY(),
+                        () -> m_xBoxDriver.getRightX(),
+                        () -> m_DriveControlMode.isFieldOrientated()));
+        }else{
+            m_RobotDrive.setDefaultCommand(
+                new DefaultDriveCommand(m_RobotDrive,
+                        () -> m_xBoxDriver.getRightX(),
+                        () -> m_xBoxDriver.getLeftY(),
+                        () -> m_xBoxDriver.getLeftX(),
+                        () -> m_DriveControlMode.isFieldOrientated()));
+        }
+    }
+
 
     public void resetDriveModes(){
        //m_RobotDrive.resetDriveMode();
@@ -234,9 +246,11 @@ public class RobotContainer {
 
         }  
         public void TeleopMode(){
+            //setDriveMode();
             //System.out.println(m_Shooter.getInclineEncoderValue());
             //System.out.println("LaserCan Distance: " + m_LaserCAN.Getdistance());
-           // System.out.println("Shooter Angle: " + m_Shooter.getInclineEncoderValue());
+            System.out.println("Shooter Angle: " + m_Shooter.getInclineEncoderValue());
+        
         }
 
 
