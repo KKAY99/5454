@@ -88,27 +88,26 @@ public class RobotContainer {
     private boolean bNoOpenClawatEnd=false;
     public RobotContainer() {
         // Configure the button bindings
-        createAutoCommands();
+        createAutoCommandsList();
+       
         configureButtonBindings();
-      /* m_RobotDrive.setDefaultCommand(
+
+      m_RobotDrive.setDefaultCommand(
                 new DefaultDriveCommand(m_RobotDrive,
                         () -> m_xBoxDriver.getLeftX(),
                         () -> m_xBoxDriver.getRightY(),
                         () -> m_xBoxDriver.getRightX(),
-                        () -> m_DriveControlMode.isFieldOrientated()));  */  
-       m_RobotDrive.setDefaultCommand(
+                        () -> m_DriveControlMode.isFieldOrientated()));    
+       /*m_RobotDrive.setDefaultCommand(
                 new DefaultDriveCommand(m_RobotDrive,
                         () -> m_xBoxDriver.getRightX(),
                         () -> m_xBoxDriver.getLeftY(),
                         () -> m_xBoxDriver.getLeftX(),
                         () -> m_DriveControlMode.isFieldOrientated()));
-                
+      */          
 
     }
 
-    private void createAutoCommands(){
-
-}
 
     
     /**
@@ -131,6 +130,10 @@ public class RobotContainer {
         /*IntakeCommand intakeIn = new IntakeCommand(m_Intake,m_Shooter, Constants.FloorIntake.intakeSpeed);
         JoystickButton intakeInButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeIn);
         intakeInButton.whileTrue(intakeIn);*/
+
+        IntakeCommand intakeIn2 = new IntakeCommand(m_Intake,m_Shooter, Constants.FloorIntake.intakeSpeed);
+        JoystickButton intakeInButton2 = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorIntakeIn);
+        intakeInButton2.whileTrue(intakeIn2);
 
         IntakeCommand intakeOut = new IntakeCommand(m_Intake,m_Shooter, -Constants.FloorIntake.intakeSpeed);
         JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeOut);
@@ -169,12 +172,12 @@ public class RobotContainer {
         JoystickButton SetInclineMiddleButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverSetInclineMiddle);
         SetInclineMiddleButton.onTrue(SetInclineMiddle);
 
-        /*ManualShootCommand Shoot = new ManualShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed);
-        JoystickButton ShootButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverShoot);
-        ShootButton.whileTrue(Shoot);*/
+        SmartShootManualAimCommand Shoot = new SmartShootManualAimCommand(m_Shooter, Constants.Shooter.ShooterSpeed);
+        JoystickButton ShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorShootManual);
+        ShootButton.toggleOnTrue(Shoot);
 
         SmartShootCommand SmartShoot = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosLow);
-        JoystickButton SmartShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.DriverShoot);
+        JoystickButton SmartShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorShootClose);
         SmartShootButton.toggleOnTrue(SmartShoot);
 
         SmartShootCommand ShootMid = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosMiddle);
@@ -197,10 +200,10 @@ public class RobotContainer {
         m_autoChooser.setDefaultOption(AutoConstants.autoMode0, AutoConstants.autoMode0);
         m_autoChooser.addOption(AutoConstants.autoMode1, AutoConstants.autoMode1);
         m_autoChooser.addOption(AutoConstants.autoMode2, AutoConstants.autoMode2);
-        m_autoChooser.addOption(AutoConstants.autoMode3, AutoConstants.autoMode3);
-        m_autoChooser.addOption(AutoConstants.autoMode4, AutoConstants.autoMode4);
-        m_autoChooser.addOption(AutoConstants.autoMode5, AutoConstants.autoMode5);
-        m_autoChooser.addOption(AutoConstants.autoMode6, AutoConstants.autoMode6);
+        //m_autoChooser.addOption(AutoConstants.autoMode3, AutoConstants.autoMode3);
+        //m_autoChooser.addOption(AutoConstants.autoMode4, AutoConstants.autoMode4);
+        //m_autoChooser.addOption(AutoConstants.autoMode5, AutoConstants.autoMode5);
+        //m_autoChooser.addOption(AutoConstants.autoMode6, AutoConstants.autoMode6);
          
         SmartDashboard.putData("Is drive inverted", m_IsDrone);
         m_IsDrone.setDefaultOption("Default drive", false);
@@ -288,9 +291,13 @@ public class RobotContainer {
                 returnCommand=new AutoDoNothingCommand();
                 break;
             case Constants.AutoConstants.autoMode1:
-                returnCommand = new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,Constants.Shooter.shooterInclinePosHigh);
+                returnCommand = new SmartShootManualAimCommand(m_Shooter, Constants.Shooter.ShooterSpeed) ;   break;
+            case Constants.AutoConstants.autoMode2:
+                returnCommand = new SequentialCommandGroup(
+                         new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,
+                         Constants.Shooter.shooterInclinePosHigh),
+                         new AutoMoveCommand(m_RobotDrive, 0,5));
                 break;
-                
             default: 
                 returnCommand=new AutoDoNothingCommand();
                 break;

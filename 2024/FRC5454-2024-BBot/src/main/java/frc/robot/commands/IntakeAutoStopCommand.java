@@ -57,11 +57,11 @@ public class IntakeAutoStopCommand extends Command{
 
     switch(m_currentState){
       case STARTLOWER:
-        m_shooter.gotoPosition(Constants.Shooter.shooterInclinePosLow);
+        m_shooter.gotoPosition(Constants.Shooter.shooterInclinePosMiddle);
         m_currentState=States.WAITFORLOWER;
       break;
       case WAITFORLOWER:
-        if(m_shooter.isAtAngleWithDeadband(Constants.Shooter.shooterInclinePosLow)){
+        if(m_shooter.isAtAngleWithDeadband(Constants.Shooter.shooterInclinePosMiddle)){
           m_shooter.stopShooterIncline();
           m_currentState=States.INTAKE;
         }

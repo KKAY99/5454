@@ -164,6 +164,7 @@ private boolean m_autoControl = false;
       }
       public void stopAutoDrive(){
         //TODO:Make Stop
+        m_autoControl=false;
       }
     
     private void automove(double direction, double rotation,double speed, double distance, boolean stopAtEnd,boolean fieldCentric)
@@ -219,7 +220,7 @@ private boolean m_autoControl = false;
                 drive(new Translation2d(forward, strafe), rotation, fieldCentric);
                 periodic();
                 distanceTravelled=Math.abs(backLeftModule.getCurrentDistance()-startDistance);
-                //      System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
+                 System.out.print("(" + forward + ", "+ strafe +") " + distanceTravelled + " / " + distance );
                 } 
         }
         if (stopAtEnd) {
@@ -319,7 +320,9 @@ public void spin (double direction,double speed)
        // System.out.println("Gyro " + m_gyroscope.getAngle().toDegrees() + " " + frontLeftModule.getCurrentAngle() + " " + fieldOriented);
 
 }
-
+public boolean isNotInAutoControl(){
+        return m_autoControl==false;
+}
 //TOODO:
     public double getFrontLeftAngleDegrees(){
         return frontLeftModule.getCurrentAngle();

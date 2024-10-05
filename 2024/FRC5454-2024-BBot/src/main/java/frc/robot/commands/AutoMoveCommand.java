@@ -71,6 +71,7 @@ public class AutoMoveCommand extends Command {
         System.out.println("Distance to Go:" + distancetoGo + "Current Distance:"+ Math.abs(m_drive.legacyGetDistancefromWheel()) + "Direction:" + m_direction + " Rotation:" + m_rcw );
         if(m_driveStarted==false){
           //TODO: Need to Fix
+        m_drive.movenodistance(m_direction,m_rcw,Constants.AutoConstants.MoveSpeed);
          // m_drive.moveNoDistance(m_direction,m_rcw,Constants.AutoConstants.MoveSpeed);   
           m_driveStarted=true;
         }

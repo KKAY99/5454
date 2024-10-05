@@ -77,9 +77,9 @@ public final class Constants {
         public static final double inclineSpeed=.50;
         public static final double feederTimeToRun=0.5;
 
-        public static final double shooterInclinePosHigh=0.20; //-0.10;
-        public static final double shooterInclinePosMiddle=0.1;//-0.17;
-        public static final double shooterInclinePosLow=0;
+        public static final double shooterInclinePosHigh=1.2; //-0.10;
+        public static final double shooterInclinePosMiddle=1.05;//-0.17;
+        public static final double shooterInclinePosLow=0.95;
     }
     public class swerveDrive{
         public static final double driveDeadband=0.05;
@@ -187,7 +187,7 @@ public final class Constants {
     public static final class ButtonConstants{
         public static final int DriverIntakeIn=1;
         public static final int DriverIntakeOut=3;
-        public static final int OperatorIntakeOut=8;
+        public static final int OperatorIntakeOut=11;
         public static final int DriverInclineUp=5;
         public static final int DriverInclineDown=6;
         public static final int DriverShoot = 2;
@@ -199,6 +199,8 @@ public final class Constants {
         public static final int OperatorShootClose = 2;
         public static final int OperatorShootHigh = 3;
         public static final int OperatorShootLow= 4;
+        public static final int OperatorShootManual=8;
+        public static final int OperatorIntakeIn=7;
     }
 
     public static final class LimitSwitches{
@@ -208,7 +210,7 @@ public final class Constants {
     public static final class AutoConstants {
         public static final String autoMode0="0-Do Nothing";
         public static final String autoMode1="1=Score";
-        public static final String autoMode2="2=Score / Move / Score center short note";
+        public static final String autoMode2="2=Score / Move";
         public static final String autoMode3="3-Blue amp / Score / Move / Score short amp";
         public static final String autoMode4="4-Blue source / Score / Move / Score short source";
         public static final String autoMode5="5-Red amp / Score / Move / Score short amp";
@@ -223,7 +225,7 @@ public final class Constants {
         public static final int delayValMode2=5;
         public static final int delayValMode3=8;
         public static final int defaultDelayMode=0;
-        public static final double MoveSpeed=0.5;
+        public static final double MoveSpeed=0.3;
         //128 was last match
 
         public static final double shoot0Speed = 0.5;

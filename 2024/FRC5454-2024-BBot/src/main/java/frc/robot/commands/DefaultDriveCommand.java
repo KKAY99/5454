@@ -54,13 +54,14 @@ public class DefaultDriveCommand extends Command {
     // Square the rotation stick
     rotation = Math.copySign(Math.pow(rotation, 2.0), rotation);
     //System.out.println(forward + " -- " + strafe + " -- " + rotation);
-    if(m_fieldMode.getAsBoolean()){
-      m_drive.drive(new Translation2d(forward, strafe), rotation, true);
-    
-    } else{
-      m_drive.drive(new Translation2d(forward, strafe), rotation, false);
-    }
-    
+  //  if(m_drive.isNotInAutoControl()){
+      if(m_fieldMode.getAsBoolean()){
+        m_drive.drive(new Translation2d(forward, strafe), rotation, true);
+      
+      } else{
+        m_drive.drive(new Translation2d(forward, strafe), rotation, false);
+      }
+    }   
    
-  }
+ // }
 }

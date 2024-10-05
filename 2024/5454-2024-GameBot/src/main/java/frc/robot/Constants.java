@@ -515,7 +515,7 @@ public final class Constants {
       public static final double rotateSlowSpeed=0.3;
 
 
-      public static final double homePos=186.680;//274.6;//272.4;
+      public static final double homePos=185.5;
       public static final double homeDeadband=0.05;
       public static final double homeLEDCheckDeadband=0.1;
       public static final double homeRotateSpeed=0.05;
@@ -535,7 +535,7 @@ public final class Constants {
       public static final double shooterStowAngle=61.5454;
       public static final double shooterVisionClearanceAngle=35;
       public static final double shooterVisionClearanceHighPoint=35;
-      public static final double shooterAmpScoreAngle=-26; //-29.5
+      public static final double shooterAmpScoreAngle=-25;//-26; //-29.5
       public static final double shooterSourceIntakeAngle=55.28;
     }
 
