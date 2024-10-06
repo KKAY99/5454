@@ -92,19 +92,19 @@ public class RobotContainer {
        
         configureButtonBindings();
 
-      m_RobotDrive.setDefaultCommand(
+     /*  m_RobotDrive.setDefaultCommand(
                 new DefaultDriveCommand(m_RobotDrive,
                         () -> m_xBoxDriver.getLeftX(),
                         () -> m_xBoxDriver.getRightY(),
                         () -> m_xBoxDriver.getRightX(),
                         () -> m_DriveControlMode.isFieldOrientated()));    
-       /*m_RobotDrive.setDefaultCommand(
+      */ m_RobotDrive.setDefaultCommand(
                 new DefaultDriveCommand(m_RobotDrive,
                         () -> m_xBoxDriver.getRightX(),
                         () -> m_xBoxDriver.getLeftY(),
                         () -> m_xBoxDriver.getLeftX(),
                         () -> m_DriveControlMode.isFieldOrientated()));
-      */          
+                
 
     }
 
@@ -135,9 +135,9 @@ public class RobotContainer {
         JoystickButton intakeInButton2 = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorIntakeIn);
         intakeInButton2.whileTrue(intakeIn2);
 
-        IntakeCommand intakeOut = new IntakeCommand(m_Intake,m_Shooter, -Constants.FloorIntake.intakeSpeed);
-        JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeOut);
-        intakeOutButton.whileTrue(intakeOut);
+       // IntakeCommand intakeOut = new IntakeCommand(m_Intake,m_Shooter, -Constants.FloorIntake.intakeSpeed);
+       // JoystickButton intakeOutButton = new JoystickButton(m_xBoxDriver, Constants.ButtonConstants.DriverIntakeOut);
+       // intakeOutButton.whileTrue(intakeOut);
 
         OuttakeCommand intakeOut2 = new OuttakeCommand(m_Intake,m_Shooter, -Constants.FloorIntake.intakeSpeed);
         JoystickButton intakeOut2Button = new JoystickButton(m_xBoxOperator, Constants.ButtonConstants.OperatorIntakeOut);

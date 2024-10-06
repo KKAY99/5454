@@ -26,7 +26,7 @@ public class OuttakeCommand extends Command {
   @Override
   public void execute() {
     m_intake.run(m_power);
-    m_shooter.runFeeder(Constants.Shooter.ShooterFeederSpeed);
+    m_shooter.runFeeder(-Constants.Shooter.ShooterFeederSpeed);
     m_shooter.runShooterMotors(Constants.Shooter.ShooterOutTakeSpeed);
   }
 

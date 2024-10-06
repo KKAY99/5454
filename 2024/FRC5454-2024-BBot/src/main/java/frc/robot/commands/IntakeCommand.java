@@ -27,7 +27,7 @@ public class IntakeCommand extends Command {
   public void execute() {
     m_intake.run(m_power);
     m_shooter.runFeeder(Constants.Shooter.ShooterFeederSpeed);
-    
+
   }
 
   // Called once the command ends or is interrupted.

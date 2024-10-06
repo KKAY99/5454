@@ -97,12 +97,12 @@ public class SmartShootCommand extends Command {
       break;
       case STOP:
         m_shooter.stopFeeder();
-        m_shooter.gotoPosition(Constants.Shooter.shooterInclinePosLow);
+        m_shooter.gotoPosition(Constants.Shooter.shooterInclinePosMiddle);
         m_currentState=States.WAITFORSHOOTERLOWER;
       break;
       case WAITFORSHOOTERLOWER:
       System.out.print("Is at Angle: "+m_shooter.isAtAngleWithDeadband(Constants.Shooter.shooterInclinePosLow));
-      if(m_shooter.isAtAngleWithDeadband(Constants.Shooter.shooterInclinePosLow)){
+      if(m_shooter.isAtAngleWithDeadband(Constants.Shooter.shooterInclinePosMiddle)){
         m_shooter.stopShooterIncline();
         m_currentState=States.END;
       }

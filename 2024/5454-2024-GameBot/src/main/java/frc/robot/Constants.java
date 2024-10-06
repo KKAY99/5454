@@ -535,7 +535,7 @@ public final class Constants {
       public static final double shooterStowAngle=61.5454;
       public static final double shooterVisionClearanceAngle=35;
       public static final double shooterVisionClearanceHighPoint=35;
-      public static final double shooterAmpScoreAngle=-25;//-26; //-29.5
+      public static final double shooterAmpScoreAngle=-24;//-26; //-29.5
       public static final double shooterSourceIntakeAngle=55.28;
     }
 
