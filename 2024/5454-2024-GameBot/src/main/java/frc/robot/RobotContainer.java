@@ -1000,6 +1000,7 @@ public class RobotContainer {
     //ParallelCommandGroup newMoveSetRef3=new ParallelCommandGroup(turretSet01,ampNoteToCenterNote);
     ParallelCommandGroup newMoveSetRef4=new ParallelCommandGroup(turretSet01,centerNoteLongAmpIntake,shooterSetRef3);
 
+
     m_swerve.resetOdometry(centerStartPos);
     SequentialCommandGroup newSeq=new SequentialCommandGroup(shoot1,intake1,newMoveSetRef1,shoot2,
                                                             intake2,newMoveSetRef2,turretSetLeftShoot,
@@ -1007,6 +1008,7 @@ public class RobotContainer {
 
     return newSeq;
   }
+
 
   public Command PathPlanRightScoreLongSource1LongSource2(){
     ChooseYourOwnAdventureAuto autoBuilder=new ChooseYourOwnAdventureAuto(m_swerve, m_shooter, m_intake, m_turret, m_TurretLimelight);

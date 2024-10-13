@@ -13,7 +13,7 @@ public class NoteFlipperSubsystem extends SubsystemBase{
 
     public NoteFlipperSubsystem(int canid){
         final boolean kisBrakeMode=false;
-        m_motor=new ObsidianCANSparkMax(canid,MotorType.kBrushless,kisBrakeMode,Constants.k30Amp);
+        m_motor=new ObsidianCANSparkMax(canid,MotorType.kBrushless,kisBrakeMode,Constants.k40Amp);
      
     }
 

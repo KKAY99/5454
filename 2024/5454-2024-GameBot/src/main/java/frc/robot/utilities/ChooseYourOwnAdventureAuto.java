@@ -438,6 +438,14 @@ public class ChooseYourOwnAdventureAuto {
           returnPose=AutoConstants.longSourceNoteRedIntakeWaypoint;
         }
         break;
+
+      case PREROTATEWHEELS:
+        if(currentAlliance==Alliance.Blue){ 
+          returnPose=InvertPose(AutoConstants.BlueAmpPreRotateWheels);
+        }else{
+          returnPose=AutoConstants.RedAmpPreRotateWheels;
+        }
+        break;
     }
 
     return returnPose;

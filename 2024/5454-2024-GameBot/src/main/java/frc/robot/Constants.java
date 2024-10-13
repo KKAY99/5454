@@ -74,7 +74,8 @@ public final class Constants {
           OUTOFBOUNDPOS,
           TWONOTEMOVEOUT,
           LONGSOURCE1WAYPOINT,
-          BLUESIDEAMPREDSIDESOURCE
+          BLUESIDEAMPREDSIDESOURCE,
+          PREROTATEWHEELS
         }
 
         public enum ShootLocations{
@@ -266,6 +267,12 @@ public final class Constants {
         public static final AutoPose2D moveOutBlueSourceAutoPose=new AutoPose2D(blueSourceMoveOutOfBoundPos,blueSourceMoveOutOfBoundPos,blueSourceMoveOutOfBoundPos,false,false);
         public static final AutoPose2D moveOutBlueAmpAutoPose=new AutoPose2D(blueAmpMoveOutOfBoundPos,blueAmpMoveOutOfBoundPos,blueAmpMoveOutOfBoundPos,false,false);
       
+
+        public static final Pose2d RedAmpPreRotateWheels=new Pose2d(13.68,5.7,new Rotation2d(0));
+        public static final Pose2d BlueAmpPreRotateWheels=new Pose2d(2.89,5.7,new Rotation2d(0));
+        
+
+
         public static final double distancetoShortNote=2.0;
         public static final double distancBacktoNoteLine=0.15;
         public static final double distanceBetweeNotes=1.6;
