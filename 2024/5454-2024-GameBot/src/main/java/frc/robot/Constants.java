@@ -162,10 +162,11 @@ public final class Constants {
         public static final Pose2d redSpeakerPos=new Pose2d(16.32,5.54,new Rotation2d(0));
         public static final Pose2d blueSpeakerPos=new Pose2d(0.30,5.54,new Rotation2d(0));
 
-        public static final Pose2d presetAutoBlueShortCenterNote=new Pose2d(2.6,5.54,new Rotation2d(0));
-        public static final Pose2d presetAutoBlueShortAmpNote=new Pose2d(2.6,7.01,new Rotation2d(0));
-        public static final Pose2d presetAutoBlueShortSourceNote=new Pose2d(2.6,4.09,new Rotation2d(0));
-        public static final Pose2d presetAutoBlueAmpWaypoint=new Pose2d(2.6,6.3,new Rotation2d(0));
+        //WAS x=2.6 CHANGED PRE COWTOWN 
+        public static final Pose2d presetAutoBlueShortCenterNote=new Pose2d(2.9,5.54,new Rotation2d(0));
+        public static final Pose2d presetAutoBlueShortAmpNote=new Pose2d(2.9,7.01,new Rotation2d(0));
+        public static final Pose2d presetAutoBlueShortSourceNote=new Pose2d(2.9,4.09,new Rotation2d(0));
+        public static final Pose2d presetAutoBlueAmpWaypoint=new Pose2d(2.9,6.3,new Rotation2d(0));
 
         public static final Pose2d presetAutoBlueShortAmpShootPos=new Pose2d(3.9,7.01,new Rotation2d(0));
         public static final Pose2d presetAutoRedShortAmpShootPos=new Pose2d(12.5,7.01,new Rotation2d(0));
@@ -269,7 +270,7 @@ public final class Constants {
       
 
         public static final Pose2d RedAmpPreRotateWheels=new Pose2d(13.68,5.7,new Rotation2d(0));
-        public static final Pose2d BlueAmpPreRotateWheels=new Pose2d(2.89,5.7,new Rotation2d(0));
+        public static final Pose2d BlueAmpPreRotateWheels=new Pose2d(2.9,5.7,new Rotation2d(0));
         
 
 

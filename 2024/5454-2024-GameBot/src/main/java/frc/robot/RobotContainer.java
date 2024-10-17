@@ -967,11 +967,11 @@ public class RobotContainer {
     Alliance currentAlliance=DriverStation.getAlliance().get();
     Pose2d centerStartPos=autoBuilder.getStartingPose(AutoConstants.StartingLocations.CENTER1,currentAlliance);
     Pose2d centerNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.CENTERNOTEPOS,currentAlliance);
+    Pose2d preRotateWheelsPos=autoBuilder.getNotePose(AutoConstants.NotePoses.PREROTATEWHEELS, currentAlliance);
     Pose2d ampNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.AMPNOTEPOS,currentAlliance);
     Pose2d longAmpNotePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGAMP1POS,currentAlliance);
-    Pose2d longAmpIntakePos=autoBuilder.getNotePose(AutoConstants.NotePoses.LONGAMP1INTAKEPOS,currentAlliance);
     double turretAngle=autoBuilder.getTurretAngle(currentAlliance,AutoConstants.ShootLocations.AMPSHOOT);
-    System.out.println("Turret Angle Set to +" + turretAngle);
+
     SmartShooter shoot1=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
     SmartShooter shoot2=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
     SmartShooter shoot3=new SmartShooter(m_shooter, m_turret, m_swerve, m_TurretLimelight, m_intake,false,false,false,false);
@@ -979,7 +979,6 @@ public class RobotContainer {
     TurretPosCommand turretSet00=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     TurretPosCommand turretSetLeftShoot=new TurretPosCommand(m_turret,turretAngle,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     TurretPosCommand turretSet01=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
-    TurretPosCommand turretSet02=new TurretPosCommand(m_turret,Constants.TurretConstants.turretStraightPos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
     TurretPosCommand turretSet90=new TurretPosCommand(m_turret,Constants.TurretConstants.turret90Pos,Constants.TurretConstants.turretMoveTimeOut,Constants.TurretConstants.deadband);
 
     IntakeToggleCommand intake1=new IntakeToggleCommand(m_intake,IntakeConstants.autoIntakeSpeed,true);
@@ -991,24 +990,23 @@ public class RobotContainer {
     ShootRotateSetReferenceCommand shooterSetRef3=new ShootRotateSetReferenceCommand(m_shooter,0);
 
     Command startToCenterNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(centerStartPos,centerNotePos));
-    Command centerNoteToAmpNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(centerNotePos,ampNotePos));
+    Command preRotWheels=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(centerNotePos,preRotateWheelsPos));
+    Command moveToAmpNote=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(preRotateWheelsPos,ampNotePos));
     Command centerNoteLongAmpIntake=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(ampNotePos,longAmpNotePos));
-    Command longAmpIntakeToLongAmpPos=m_swerve.createPathCommand(autoBuilder.CreateAutoPath(longAmpIntakePos,longAmpNotePos));
 
     ParallelCommandGroup newMoveSetRef1=new ParallelCommandGroup(turretSet00,startToCenterNote,shooterSetRef1);
-    ParallelCommandGroup newMoveSetRef2=new ParallelCommandGroup(turretSet90,centerNoteToAmpNote,shooterSetRef2);
-    //ParallelCommandGroup newMoveSetRef3=new ParallelCommandGroup(turretSet01,ampNoteToCenterNote);
+    ParallelCommandGroup newMoveSetRef2=new ParallelCommandGroup(preRotWheels);
+    ParallelCommandGroup newMoveSetRef3=new ParallelCommandGroup(turretSet90,moveToAmpNote,shooterSetRef2);
     ParallelCommandGroup newMoveSetRef4=new ParallelCommandGroup(turretSet01,centerNoteLongAmpIntake,shooterSetRef3);
 
 
     m_swerve.resetOdometry(centerStartPos);
     SequentialCommandGroup newSeq=new SequentialCommandGroup(shoot1,intake1,newMoveSetRef1,shoot2,
-                                                            intake2,newMoveSetRef2,turretSetLeftShoot,
+                                                            newMoveSetRef2,intake2,newMoveSetRef3,turretSetLeftShoot,
                                                             shoot3,intake3,newMoveSetRef4);
 
     return newSeq;
   }
-
 
   public Command PathPlanRightScoreLongSource1LongSource2(){
     ChooseYourOwnAdventureAuto autoBuilder=new ChooseYourOwnAdventureAuto(m_swerve, m_shooter, m_intake, m_turret, m_TurretLimelight);
