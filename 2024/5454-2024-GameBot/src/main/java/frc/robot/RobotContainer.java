@@ -153,11 +153,11 @@ public class RobotContainer {
       
       //IntakeToggleCommand intakeConveyIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,false);
       //intake smart 
-      IntakeToggleCommand intakeConveyIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,false);
+      IntakeToggleCommand intakeConveyIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,m_xBoxDriver,false);
       JoystickButton intakeToggleTrueButtonIn=new JoystickButton(m_xBoxDriver,ButtonBindings.driverintakeToggleButtonIn);
       intakeToggleTrueButtonIn.whileTrue(intakeConveyIn);
 
-      IntakeToggleCommand intakeToggleOperatorTrueIn=new IntakeToggleCommand(m_intake,Constants.IntakeConstants.intakeSpeed,false);
+      IntakeToggleCommand intakeToggleOperatorTrueIn=new IntakeToggleCommand(m_intake, Constants.IntakeConstants.intakeSpeed,m_xBoxDriver,false);
       JoystickButton intakeToggleTrueOperatorButtonIn=new JoystickButton(m_xBoxOperator,ButtonBindings.operatorintakeToggleButtonIn);
       intakeToggleTrueOperatorButtonIn.whileTrue(intakeToggleOperatorTrueIn);
 

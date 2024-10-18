@@ -74,7 +74,7 @@ public class IntakeConveyCommand extends Command{
 
       if(m_intake.isBeamBroken()){
         m_intake.stopIntake();
-        m_driver.setRumble(RumbleType.kBothRumble,0.5);
+        m_driver.setRumble(RumbleType.kBothRumble,0.95);
         m_operator.setRumble(RumbleType.kBothRumble,0.5);
         m_startTime=Timer.getFPGATimestamp();
         m_state=STATE.NOTEINSHOOTPOS;

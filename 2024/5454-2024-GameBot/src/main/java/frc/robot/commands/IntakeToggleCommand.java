@@ -7,22 +7,23 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeToggleCommand extends Command{
   private IntakeSubsystem m_intake;
   private XboxController m_driver;
-  private XboxController m_controller;
   
   private double m_speed;
   private boolean m_isRunning;
   private boolean m_shouldToggle;
-
+  private boolean m_bRumbleTime=false;
   public IntakeToggleCommand(IntakeSubsystem intake,double speed,boolean shouldToggle){
     m_intake=intake;
     m_shouldToggle=shouldToggle;
     m_speed=speed;
+    m_bRumbleTime=false;
     m_isRunning=false;
     addRequirements(m_intake);
   }
@@ -31,7 +32,8 @@ public class IntakeToggleCommand extends Command{
     m_intake=intake;
     m_shouldToggle=shouldToggle;
     m_speed=speed;
-    m_controller=xboxController;
+    m_driver=xboxController;
+    m_bRumbleTime=true;
     m_isRunning=false;
     addRequirements(m_intake);
   }
@@ -56,13 +58,21 @@ public class IntakeToggleCommand extends Command{
      if(!m_shouldToggle){
       m_intake.stopIntake();
      }
+     if(m_bRumbleTime){
+        m_driver.setRumble(RumbleType.kBothRumble, 0);
+     }
 
   }
 
   @Override 
   public boolean isFinished() {
     boolean returnValue=m_shouldToggle;
-      Logger.recordOutput("Intake/IntakeToggleCommand",m_isRunning);
+    if (m_bRumbleTime){
+     if(m_intake.isBeamBroken()){
+        m_driver.setRumble(RumbleType.kBothRumble,0.95);
+      } 
+    }
+    Logger.recordOutput("Intake/IntakeToggleCommand",m_isRunning);
       if(!m_shouldToggle){
         m_intake.runIntake(m_speed);
       }
