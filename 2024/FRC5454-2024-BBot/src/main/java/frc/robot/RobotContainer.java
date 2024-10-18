@@ -291,12 +291,13 @@ public class RobotContainer {
                 returnCommand=new AutoDoNothingCommand();
                 break;
             case Constants.AutoConstants.autoMode1:
-                returnCommand = new SmartShootManualAimCommand(m_Shooter, Constants.Shooter.ShooterSpeed) ;   break;
+                returnCommand = new SmartShootManualAimCommand(m_Shooter, Constants.Shooter.ShooterSpeed) ;   
+                break;
             case Constants.AutoConstants.autoMode2:
                 returnCommand = new SequentialCommandGroup(
                          new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,
                          Constants.Shooter.shooterInclinePosHigh),
-                         new AutoMoveCommand(m_RobotDrive, 0,5));
+                         new AutoMoveTimeCommand(m_RobotDrive,0,2,0.3));
                 break;
             default: 
                 returnCommand=new AutoDoNothingCommand();
