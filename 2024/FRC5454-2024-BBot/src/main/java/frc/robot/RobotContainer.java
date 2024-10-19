@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
@@ -297,6 +298,7 @@ public class RobotContainer {
                 returnCommand = new SequentialCommandGroup(
                          new SmartShootCommand(m_Shooter, Constants.Shooter.ShooterSpeed,false,true,
                          Constants.Shooter.shooterInclinePosHigh),
+                         new WaitCommand(7),
                          new AutoMoveTimeCommand(m_RobotDrive,0,2,0.3));
                 break;
             default: 

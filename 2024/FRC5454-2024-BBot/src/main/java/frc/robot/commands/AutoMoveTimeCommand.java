@@ -60,6 +60,7 @@ public class AutoMoveTimeCommand extends Command {
     switch(m_currentState){
       case STARTTIME:
         m_startTime=Timer.getFPGATimestamp();
+        m_currentState=STATES.MOVE;
       break;
       case MOVE:
         m_drive.moveGyroNodistance(m_direction, m_direction, m_speed);

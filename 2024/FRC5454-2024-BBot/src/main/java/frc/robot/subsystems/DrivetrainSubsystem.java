@@ -40,18 +40,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 //USE RADIANS
 //3.04 radians is half a rotation
 // π/180
-private static final double FRONT_LEFT_ANGLE_OFFSET = 4.63-3.04; ///-0.850
+private static final double FRONT_LEFT_ANGLE_OFFSET = 4.04;//4.63-3.04; ///-0.850
 
-//private static final double FRONT_RIGHT_ANGLE_OFFSET = 3.29; //0.25; //-4.72+3.04;//-1.45
-private static final double FRONT_RIGHT_ANGLE_OFFSET =0.9+3.04;//0.5+3.04;1.02;// -0.73; //0.25; //-4.72+3.04;//-1.45
+//private static final double FRONT_RIGHT_ANGLE_OFFSET = 0.9+3.04; //0.25; //-4.72+3.04;//-1.45
+private static final double FRONT_RIGHT_ANGLE_OFFSET =0.6+3.04;//0.5+3.04;1.02;// -0.73; //0.25; //-4.72+3.04;//-1.45
 //private static final double FRONT_RIGHT_ANGLE_OFFSET=-Math.toRadians(205.4);
 //private static final double BACK_LEFT_ANGLE_OFFSET = -1.25;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = 1.75;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = 1.95;//-77+3.04;//-0.78
-private static final double BACK_LEFT_ANGLE_OFFSET = -0.55-3.04;//-77+3.04;//-0.78
+//private static final double BACK_LEFT_ANGLE_OFFSET = -0.55-3.04;//-77+3.04;//-0.78
+private static final double BACK_LEFT_ANGLE_OFFSET = -0.77-3.04;//-0.55-3.04;//-77+3.04;//-0.78
 
 //private static final double BACK_RIGHT_ANGLE_OFFSET =-2.17-3.04; //-2.42-3.04
-private static final double BACK_RIGHT_ANGLE_OFFSET = -1.24-3.04; //-2.42-3.04
+private static final double BACK_RIGHT_ANGLE_OFFSET = -1.42-3.04;//-1.24-3.04; //-2.42-3.04
 
 
 private boolean m_autoControl = false;

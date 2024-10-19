@@ -363,8 +363,8 @@ public final class Constants {
 
    public static final class NoteFlipConstants{
     public static final int canID=12;
-    public static final double noteFlipSpeed=-0.7;//-1;//.35 on 3/25
-    public static final double startNoteFlipSpeed=-0.7;
+    public static final double noteFlipSpeed=-0.7;//-1                                                                                                                                     ;//.35 on 3/25
+    public static final double startNoteFlipSpeed=-0.8; // was -0.7
     public static final double timeToRunAmpScore=1;
    }
 
@@ -543,7 +543,7 @@ public final class Constants {
       public static final double shooterStowAngle=61.5454;
       public static final double shooterVisionClearanceAngle=35;
       public static final double shooterVisionClearanceHighPoint=35;
-      public static final double shooterAmpScoreAngle=-24;//-26; //-29.5
+      public static final double shooterAmpScoreAngle=-17.5454;//-24;//-26; //-29.5
       public static final double shooterSourceIntakeAngle=55.28;
     }
 

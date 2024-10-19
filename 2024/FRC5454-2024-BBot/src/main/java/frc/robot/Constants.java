@@ -77,8 +77,8 @@ public final class Constants {
         public static final double inclineSpeed=.50;
         public static final double feederTimeToRun=0.5;
 
-        public static final double shooterInclinePosHigh=0.70; //-0.10;
-        public static final double shooterInclinePosMiddle=0.59;//-0.17;
+        public static final double shooterInclinePosHigh=0.69; //-0.10;
+        public static final double shooterInclinePosMiddle=0.53;//-0.17;
         public static final double shooterInclinePosLow=0.47;
     }
     public class swerveDrive{
