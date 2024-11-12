@@ -28,12 +28,9 @@ import frc.robot.swervelib.telemetry.SwerveDriveTelemetry;
 import frc.robot.swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import frc.robot.utilities.FieldRelativeAccel;
 import frc.robot.utilities.FieldRelativeSpeed;
-import org.littletonrobotics.junction.Logger;
 
 public class Swerve extends SubsystemBase {
   private final SwerveDrive swerve;
-  private SwerveIO m_swerveIO;
-  private SwerveIOInputsAutoLogged m_swerveAutoLogged=new SwerveIOInputsAutoLogged();
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(Units.feetToMeters(14.5));
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(Units.feetToMeters(14.5));
@@ -45,32 +42,15 @@ public class Swerve extends SubsystemBase {
   private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();;
 
   /** Subsystem class for the swerve drive. */
-  public Swerve(SwerveIO swerveIO) {
-    m_swerveIO=swerveIO;
+  public Swerve() {
+    //TODO: FIX
+    swerve=new SwerveDrive(null, null);
   // TODO: ReplaceTuning Mode for Logging verbosity
     //  if (SpartanEntryManager.isTuningMode()) {
   //    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
   //  } else {
       SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
   //  }
-
-    try {
-      swerve =
-          new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve")).createSwerveDrive();
-      //KK Add AutoBuilder
-      AutoBuilder.configureHolonomic(
-      this::getPose, 
-      this::resetOdometry, 
-      this::getRobotVelocity, 
-      this::setChassisSpeeds, 
-      Constants.Swerve.pathFollowerConfig,
-      this.FlipPath(),
-      this
-    );
-
-        } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
    
   }
 
@@ -93,10 +73,6 @@ public class Swerve extends SubsystemBase {
                       -rotationSup.getAsDouble() * Math.max(1-speedMultiplier.getAsDouble(),Constants.DriveConstants.MinGasRotateSpeed), Constants.DriveConstants.swerveRotateDeadband));
           SmartDashboard.putNumber("translationvalue",translationVal);
           SmartDashboard.putNumber("strafevalue",strafeVal);
-          Logger.recordOutput("Swerve/Translation", translationVal);
-          Logger.recordOutput("Swerve/Strafe Value",strafeVal);
-          Logger.recordOutput("Swerve/Rotation Value",rotationVal);
-          Logger.recordOutput("Swerve/Gas Pedal Value",speedMultiplier.getAsDouble());
           drive(
               new Translation2d(translationVal, strafeVal)
                   .times(swerve.swerveController.config.maxSpeed),
@@ -219,23 +195,10 @@ public class Swerve extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    m_swerveIO.updateInputs(m_swerveAutoLogged);
-
-    //Logger.processInputs("Swerve",m_swerveAutoLogged);
-  
     m_fieldRelVel = new FieldRelativeSpeed(swerve.getFieldVelocity(), swerve.getYaw());
     m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, Constants.kRobotLoopTime);
     m_lastFieldRelVel = m_fieldRelVel;
     
     swerve.updateOdometry();
-    Logger.recordOutput("Swerve/FieldRelativeSpeedX", m_fieldRelVel.vx);
-    Logger.recordOutput("Swerve/FieldRelativeSpeedY", m_fieldRelVel.vy);
-    //Logger.recordOutput("Swerve/FieldRelativeAccelX",m_fieldRelAccel.ax);
-    //Logger.recordOutput("Swerve/FieldRelativeAccelY",m_fieldRelAccel.ay);
-    Logger.recordOutput("Swerve/Gyro Yaw",swerve.getYaw());
-    //5454 Update 
-   // m_fieldRelVel = new FieldRelativeSpeed(getRobotVelolocity(),  );
-   // m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, GlobalConstants.kLoopTime);
-   // m_lastFieldRelVel = m_fieldRelVel;
   }
 }

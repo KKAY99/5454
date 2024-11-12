@@ -1,12 +1,16 @@
 package frc.robot.utilities;
 import javax.lang.model.util.ElementScanner14;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.wpilibj.Timer;
+import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 
-public class ObsidianCANSparkMax extends CANSparkMax{
+public class ObsidianCANSparkMax extends SparkBase{
 
     /**
      * <p> 5454 CANSparkMaxWrapper
@@ -16,22 +20,17 @@ public class ObsidianCANSparkMax extends CANSparkMax{
      * @param MotorType MotorType: Brushed or Brushless
     */
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode){
-        super(canID,motorType);
-        setInverted(false);
-        setSmartCurrentLimit(Constants.k30Amp); // default motors to 30 amp
-        setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000); 
-        setClosedLoopRampRate(0);
-        setOpenLoopRampRate(0);
-            if(breakMode){
-            setIdleMode(IdleMode.kBrake);
+        super(canID,motorType,SparkModel.SparkMax);
+        SparkBaseConfig newConfig =new SparkMaxConfig();
+        setInverted(true);
+        newConfig.smartCurrentLimit(Constants.k30Amp);
+        if(breakMode){
+            newConfig.idleMode(IdleMode.kBrake);
         } else{
-            setIdleMode(IdleMode.kCoast);
+            newConfig.idleMode(IdleMode.kBrake);
         }
         Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
-        burnFlash();
+        configure(newConfig,SparkBase.ResetMode.kResetSafeParameters,SparkBase.PersistMode.kNoPersistParameters);
         Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
     }
 
@@ -43,22 +42,17 @@ public class ObsidianCANSparkMax extends CANSparkMax{
      * @param MotorType MotorType: Brushed or Brushless
     */
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit){  
-        super(canID,motorType);
-        setInverted(false);
-        setSmartCurrentLimit(currentLimit);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000); 
-        setClosedLoopRampRate(0);
-        setOpenLoopRampRate(0);
+        super(canID,motorType,SparkModel.SparkMax);
+        SparkBaseConfig newConfig =new SparkMaxConfig();
+        setInverted(true);
+        newConfig.smartCurrentLimit(Constants.k30Amp);
         if(breakMode){
-            setIdleMode(IdleMode.kBrake);
+            newConfig.idleMode(IdleMode.kBrake);
         } else{
-            setIdleMode(IdleMode.kCoast);
+            newConfig.idleMode(IdleMode.kBrake);
         }
         Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
-        burnFlash();
+        configure(newConfig,SparkBase.ResetMode.kResetSafeParameters,SparkBase.PersistMode.kNoPersistParameters);
         Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
     }
 
@@ -74,22 +68,17 @@ public class ObsidianCANSparkMax extends CANSparkMax{
     */
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit,int periodicStatus3,
                             int periodicStatus4,int periodicStatus5,int periodicStatus6){
-        super(canID,motorType);
-        setInverted(false);
-        setSmartCurrentLimit(currentLimit);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus3,periodicStatus3);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus4,periodicStatus4);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus5,periodicStatus5);
-        setPeriodicFramePeriod(PeriodicFrame.kStatus6,periodicStatus6); 
-        setClosedLoopRampRate(0);
-        setOpenLoopRampRate(0); 
+    super(canID,motorType,SparkModel.SparkMax);
+        SparkBaseConfig newConfig =new SparkMaxConfig();
+        setInverted(true);
+        newConfig.smartCurrentLimit(Constants.k30Amp);
         if(breakMode){
-            setIdleMode(IdleMode.kBrake);
+            newConfig.idleMode(IdleMode.kBrake);
         } else{
-            setIdleMode(IdleMode.kCoast);
+            newConfig.idleMode(IdleMode.kBrake);
         }
         Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
-        burnFlash();
+        configure(newConfig,SparkBase.ResetMode.kResetSafeParameters,SparkBase.PersistMode.kNoPersistParameters);
         Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
    
     }

@@ -1,20 +1,19 @@
 package frc.robot.swervelib.imu;
 
-import com.ctre.phoenix.sensors.Pigeon2Configuration;
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.util.Optional;
 
-import org.littletonrobotics.junction.Logger;
+import com.ctre.phoenix.sensors.PigeonIMUConfiguration;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import java.util.Optional;
 
 /** SwerveIMU interface for the Pigeon2 */
 public class Pigeon2Swerve extends SwerveIMU {
 
   /** Pigeon2 IMU device. */
-  WPI_Pigeon2 imu;
+  WPI_PigeonIMU imu;
   /** Offset for the Pigeon 2. */
   private Rotation3d offset = new Rotation3d();
 
@@ -26,13 +25,12 @@ public class Pigeon2Swerve extends SwerveIMU {
    */
   public Pigeon2Swerve(int canid, String canbus) {
     try{
-      imu = new WPI_Pigeon2(canid, canbus);
-      Pigeon2Configuration config = new Pigeon2Configuration();
+      imu = new WPI_PigeonIMU(canid);
+      PigeonIMUConfiguration config = new PigeonIMUConfiguration();
       imu.configAllSettings(config);
       imu.setYaw(0); //5454 Add 1/8/24
       SmartDashboard.putData(imu);
     }catch(Exception e){
-      Logger.recordOutput("Pigeon State Down","Pigeon Bad");
     }
   }
 
@@ -49,8 +47,6 @@ public class Pigeon2Swerve extends SwerveIMU {
   @Override
   public void factoryDefault() {
     imu.configFactoryDefault();
-    imu.configEnableCompass(
-        false); // Compass utilization causes readings to jump dramatically in some cases.
   }
 
   /** Clear sticky faults on IMU. */

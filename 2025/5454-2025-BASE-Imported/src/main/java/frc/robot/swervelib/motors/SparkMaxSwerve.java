@@ -1,13 +1,14 @@
 package frc.robot.swervelib.motors;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.spark.SparkLowLevel.PeriodicStatus0;
+import com.revrobotics.spark.SparkClosedLoopController;
 import frc.robot.swervelib.encoders.SwerveAbsoluteEncoder;
 import frc.robot.swervelib.parser.PIDFConfig;
 
@@ -15,13 +16,13 @@ import frc.robot.swervelib.parser.PIDFConfig;
 public class SparkMaxSwerve extends SwerveMotor {
 
   /** SparkMAX Instance. */
-  public CANSparkMax motor;
+  public SparkMax motor;
   /** Integrated encoder. */
   public RelativeEncoder encoder;
   /** Absolute encoder attached to the SparkMax (if exists) */
   public AbsoluteEncoder absoluteEncoder;
   /** Closed-loop PID controller. */
-  public SparkPIDController pid;
+  public SparkClosedLoopController pid;
   /** Factory default already occurred. */
   private boolean factoryDefaultOccurred = false;
 
@@ -31,23 +32,17 @@ public class SparkMaxSwerve extends SwerveMotor {
    * @param motor The SwerveMotor as a SparkMax object.
    * @param isDriveMotor Is the motor being initialized a drive motor?
    */
-  public SparkMaxSwerve(CANSparkMax motor, boolean isDriveMotor) {
+  public SparkMaxSwerve(SparkMax motor, boolean isDriveMotor) {
     this.motor = motor;
     this.isDriveMotor = isDriveMotor;
     factoryDefaults();
     clearStickyFaults();
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1,50);
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2,50);
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus3,1000);
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus4,1000);
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus5,1000);
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus6,1000);
-    
     encoder = motor.getEncoder();
-    pid = motor.getPIDController();
-    pid.setFeedbackDevice(
+    pid = motor.getClosedLoopController();
+    //TODO: FIX
+    /*pid.set(
         encoder); // Configure feedback of the PID controller as the integrated encoder.
-
+    */
     motor.setCANTimeout(0); // Spin off configurations in a different thread.
   }
 
@@ -58,7 +53,7 @@ public class SparkMaxSwerve extends SwerveMotor {
    * @param isDriveMotor Is the motor being initialized a drive motor?
    */
   public SparkMaxSwerve(int id, boolean isDriveMotor) {
-    this(new CANSparkMax(id, MotorType.kBrushless), isDriveMotor);
+    this(new SparkMax(id, MotorType.kBrushless), isDriveMotor);
   }
 
   /**
@@ -68,7 +63,8 @@ public class SparkMaxSwerve extends SwerveMotor {
    */
   @Override
   public void setVoltageCompensation(double nominalVoltage) {
-    motor.enableVoltageCompensation(nominalVoltage);
+    //TODO: FIX
+    //motor.voltaVoltageCompensation(nominalVoltage);
   }
 
   /**
@@ -79,7 +75,8 @@ public class SparkMaxSwerve extends SwerveMotor {
    */
   @Override
   public void setCurrentLimit(int currentLimit) {
-    motor.setSmartCurrentLimit(currentLimit);
+    //TODO: FIX
+    //motor.setSmartCurrentLimit(currentLimit);
   }
 
   /**
@@ -89,8 +86,9 @@ public class SparkMaxSwerve extends SwerveMotor {
    */
   @Override
   public void setLoopRampRate(double rampRate) {
-    motor.setOpenLoopRampRate(rampRate);
-    motor.setClosedLoopRampRate(rampRate);
+    //TODO: FIX
+    //motor.setOpenLoopRampRate(rampRate);
+    //motor.setClosedLoopRampRate(rampRate);
   }
 
   /**
@@ -117,7 +115,7 @@ public class SparkMaxSwerve extends SwerveMotor {
   @Override
   public void factoryDefaults() {
     if (!factoryDefaultOccurred) {
-      motor.restoreFactoryDefaults();
+      //motor.restoreFactoryDefaults();
       factoryDefaultOccurred = true;
     }
   }
@@ -138,7 +136,7 @@ public class SparkMaxSwerve extends SwerveMotor {
   public SwerveMotor setAbsoluteEncoder(SwerveAbsoluteEncoder encoder) {
     if (encoder.getAbsoluteEncoder() instanceof AbsoluteEncoder) {
       absoluteEncoder = (AbsoluteEncoder) encoder.getAbsoluteEncoder();
-      pid.setFeedbackDevice(absoluteEncoder);
+      ///pid.setFeedbackDevice(absoluteEncoder);
     
     }
     return this;
@@ -153,8 +151,9 @@ public class SparkMaxSwerve extends SwerveMotor {
   @Override
   public void configureIntegratedEncoder(double positionConversionFactor) {
     if (absoluteEncoder == null) {
-      encoder.setPositionConversionFactor(positionConversionFactor);
-      encoder.setVelocityConversionFactor(positionConversionFactor / 60);
+      //TODO: FIX
+      //encoder.PositionConversionFactor(positionConversionFactor);
+      //encoder.setVelocityConversionFactor(positionConversionFactor / 60);
 
       // Taken from
       // https://github.com/frc3512/SwerveBot-2022/blob/9d31afd05df6c630d5acb4ec2cf5d734c9093bf8/src/main/java/frc/lib/util/CANSparkMaxUtil.java#L67
@@ -163,8 +162,9 @@ public class SparkMaxSwerve extends SwerveMotor {
    configureCANStatusFrames(10, 20, 20, 1000, 1000);
 
     } else {
-      absoluteEncoder.setPositionConversionFactor(positionConversionFactor);
-      absoluteEncoder.setVelocityConversionFactor(positionConversionFactor / 60);
+      //TODO: FIX
+      //absoluteEncoder.setPositionConversionFactor(positionConversionFactor);
+      //absoluteEncoder.setVelocityConversionFactor(positionConversionFactor / 60);
     }
   }
 
@@ -177,12 +177,13 @@ public class SparkMaxSwerve extends SwerveMotor {
   public void configurePIDF(PIDFConfig config) {
     int pidSlot =
         isDriveMotor ? SparkMAX_slotIdx.Velocity.ordinal() : SparkMAX_slotIdx.Position.ordinal();
-    pid.setP(config.p, pidSlot);
+        //TODO: FIX
+    /*pid.setP(config.p, pidSlot);
     pid.setI(config.i, pidSlot);
     pid.setD(config.d, pidSlot);
     pid.setFF(config.f, pidSlot);
     pid.setIZone(config.iz, pidSlot);
-    pid.setOutputRange(config.output.min, config.output.max, pidSlot);
+    pid.setOutputRange(config.output.min, config.output.max, pidSlot);*/
   }
 
   /**
@@ -193,9 +194,10 @@ public class SparkMaxSwerve extends SwerveMotor {
    */
   @Override
   public void configurePIDWrapping(double minInput, double maxInput) {
-    pid.setPositionPIDWrappingEnabled(true);
+    //TODO: FIX
+    /*pid.setPositionPIDWrappingEnabled(true);
     pid.setPositionPIDWrappingMinInput(minInput);
-    pid.setPositionPIDWrappingMaxInput(maxInput);
+    pid.setPositionPIDWrappingMaxInput(maxInput);*/
   }
 
   /**
@@ -209,11 +211,12 @@ public class SparkMaxSwerve extends SwerveMotor {
    */
   public void configureCANStatusFrames(
       int CANStatus0, int CANStatus1, int CANStatus2, int CANStatus3, int CANStatus4) {
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, CANStatus0);
+        //TODO: FIX
+    /*motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, CANStatus0);
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, CANStatus1);
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, CANStatus2);
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, CANStatus3);
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, CANStatus4);
+    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, CANStatus4);*/
   }
 
   /**
@@ -223,7 +226,8 @@ public class SparkMaxSwerve extends SwerveMotor {
    */
   @Override
   public void setMotorBrake(boolean isBrakeMode) {
-    motor.setIdleMode(isBrakeMode ? IdleMode.kBrake : IdleMode.kCoast);
+    //TODO: FIX
+    //motor.setIdleMode(isBrakeMode ? IdleMode.kBrake : IdleMode.kCoast);
   }
 
   /**
@@ -239,7 +243,8 @@ public class SparkMaxSwerve extends SwerveMotor {
   /** Save the configurations from flash to EEPROM. */
   @Override
   public void burnFlash() {
-    motor.burnFlash();
+    //TODO: FIX
+    //motor.burnFlash();
   }
 
   /**
@@ -263,9 +268,11 @@ public class SparkMaxSwerve extends SwerveMotor {
     int pidSlot =
         isDriveMotor ? SparkMAX_slotIdx.Velocity.ordinal() : SparkMAX_slotIdx.Position.ordinal();
     if (isDriveMotor) {
-      pid.setReference(setpoint, ControlType.kVelocity, pidSlot, feedforward);
+      //TODO: FIX
+      //pid.setReference(setpoint, ControlType.kVelocity, pidSlot, feedforward);
     } else {
-      pid.setReference(setpoint, ControlType.kPosition);
+      //TODO: FIX
+      //pid.setReference(setpoint, ControlType.kPosition);
     }
   }
 

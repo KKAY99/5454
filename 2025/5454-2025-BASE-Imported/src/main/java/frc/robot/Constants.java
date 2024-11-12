@@ -1,15 +1,11 @@
  
 package frc.robot;
-
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.wpilibj.XboxController;
 
 public final class Constants {
@@ -32,10 +28,10 @@ public final class Constants {
     public static final double MinGasRotateSpeed=0.30;
   }
 
- 
     public static final class AutoManual{
       public static final double autoDriveSpeed=0.7;
     }
+    
     public static final class InputControllers {
       public static final int kXboxDrive = 0;
       public static final int kXboxOperator = 1;
@@ -45,17 +41,6 @@ public final class Constants {
       public static final double kRumbleMedium=0.5;
       public static final double kRumbleFull=1.0;
     }
-
-
-    
-
-
-
-
-
-
-
-
 
     public static final class LimeLightValues {
       public static final double steeringP = 0.035;
@@ -239,14 +224,5 @@ public final class Constants {
     public static final Translation2d brModuleOffset = new Translation2d(-0.4, -0.4);
 
     public static final double maxModuleSpeed = 4.5; // M/S
-
-    public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(5.0, 0, 0), // Translation constants 
-      new PIDConstants(5.0, 0, 0), // Rotation constants 
-      maxModuleSpeed, 
-      flModuleOffset.getNorm(), // Drive base radius (distance from center to furthest module) 
-      new ReplanningConfig()
-    );
-
     }
 }
