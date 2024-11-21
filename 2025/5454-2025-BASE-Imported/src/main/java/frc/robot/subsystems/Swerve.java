@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.epilogue.EpilogueConfiguration;
+import edu.wpi.first.epilogue.Logged;
+import edu.wpi.first.epilogue.Logged.Strategy;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -8,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -18,10 +22,9 @@ import frc.robot.Constants;
 import java.io.File;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.epilogue.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import frc.robot.swervelib.SwerveDrive;
 import frc.robot.swervelib.parser.SwerveParser;
 import frc.robot.swervelib.telemetry.SwerveDriveTelemetry;
@@ -29,6 +32,7 @@ import frc.robot.swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import frc.robot.utilities.FieldRelativeAccel;
 import frc.robot.utilities.FieldRelativeSpeed;
 
+//@Logged(strategy = Strategy.OPT_IN)
 public class Swerve extends SubsystemBase {
   private final SwerveDrive swerve;
 
@@ -51,7 +55,7 @@ public class Swerve extends SubsystemBase {
   //  } else {
       SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
   //  }
-   
+    //DataLogManager.start();
   }
 
   public Command drive(
@@ -135,6 +139,7 @@ public class Swerve extends SubsystemBase {
     swerve.lockPose();
   }
 
+  // @Logged(name="Yaw")
   public double getYaw() {
     return swerve.getYaw().getDegrees();
   }
@@ -143,6 +148,7 @@ public class Swerve extends SubsystemBase {
 
   }
 
+  //@Logged(name="Pitch")
   public double getPitch() {
     return swerve.getPitch().getDegrees();
   }
@@ -151,9 +157,12 @@ public class Swerve extends SubsystemBase {
     swerve.resetOdometry(pose);
   }
 
+  //@Logged(name="RobotPose")
   public Pose2d getPose() {
     return swerve.getPose();
   }
+
+  //@Logged(name="RobotVelocity")
   public ChassisSpeeds getRobotVelocity(){
     return swerve.getRobotVelocity();
   }
@@ -193,6 +202,7 @@ public class Swerve extends SubsystemBase {
   public FieldRelativeAccel getRelativeAccel(){
     return m_fieldRelAccel;
   }
+
   @Override
   public void periodic() {
     m_fieldRelVel = new FieldRelativeSpeed(swerve.getFieldVelocity(), swerve.getYaw());

@@ -24,6 +24,12 @@ public class ObsidianCANSparkMax extends SparkBase{
         SparkBaseConfig newConfig =new SparkMaxConfig();
         setInverted(true);
         newConfig.smartCurrentLimit(Constants.k30Amp);
+        newConfig.signals.motorTemperaturePeriodMs(1000);
+        newConfig.signals.busVoltagePeriodMs(1000);
+        newConfig.signals.analogPositionPeriodMs(1000);
+        newConfig.signals.analogVelocityPeriodMs(1000);
+        newConfig.signals.analogVoltagePeriodMs(1000);
+
         if(breakMode){
             newConfig.idleMode(IdleMode.kBrake);
         } else{
@@ -46,6 +52,12 @@ public class ObsidianCANSparkMax extends SparkBase{
         SparkBaseConfig newConfig =new SparkMaxConfig();
         setInverted(true);
         newConfig.smartCurrentLimit(Constants.k30Amp);
+        newConfig.signals.motorTemperaturePeriodMs(1000);
+        newConfig.signals.busVoltagePeriodMs(1000);
+        newConfig.signals.analogPositionPeriodMs(1000);
+        newConfig.signals.analogVelocityPeriodMs(1000);
+        newConfig.signals.analogVoltagePeriodMs(1000);
+
         if(breakMode){
             newConfig.idleMode(IdleMode.kBrake);
         } else{
@@ -72,6 +84,12 @@ public class ObsidianCANSparkMax extends SparkBase{
         SparkBaseConfig newConfig =new SparkMaxConfig();
         setInverted(true);
         newConfig.smartCurrentLimit(Constants.k30Amp);
+        newConfig.signals.motorTemperaturePeriodMs(1000);
+        newConfig.signals.busVoltagePeriodMs(1000);
+        newConfig.signals.analogPositionPeriodMs(1000);
+        newConfig.signals.analogVelocityPeriodMs(1000);
+        newConfig.signals.analogVoltagePeriodMs(1000);
+        
         if(breakMode){
             newConfig.idleMode(IdleMode.kBrake);
         } else{

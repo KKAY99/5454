@@ -2,7 +2,8 @@ package frc.robot.utilities;
 
 import frc.robot.Constants;
 import java.util.Map;
-
+import edu.wpi.first.epilogue.Logged;
+import edu.wpi.first.epilogue.Logged.Strategy;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,6 +13,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+//@Logged(strategy = Strategy.OPT_IN)
 public class Limelight {
 
     private static NetworkTable llTable;

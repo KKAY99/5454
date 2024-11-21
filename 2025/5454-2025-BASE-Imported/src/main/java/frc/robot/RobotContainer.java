@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.epilogue.Logged.Strategy;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -49,6 +50,7 @@ import frc.robot.utilities.*;
  * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
+//@Logged(strategy=Strategy.OPT_IN)
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     //STANDARD DRIVING
