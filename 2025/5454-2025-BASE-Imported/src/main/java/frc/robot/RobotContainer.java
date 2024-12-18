@@ -38,9 +38,13 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.*;
-import frc.robot.Constants.InputControllers;
+import com.ctre.phoenix6.Utils;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
-import frc.robot.utilities.*;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import frc.robot.Constants.InputControllers;
+import frc.robot.utilities.Limelight;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -65,21 +69,19 @@ public class RobotContainer {
     private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
     private final int leftTriggerAxis = XboxController.Axis.kLeftTrigger.value;
  
-    private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
+    private final CommandXboxController m_xBoxDriver = new CommandXboxController(0); 
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
   
-    private Swerve m_swerve = new Swerve();
-//    private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
-    //private LED m_led= new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
-    private Limelight m_TurretLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
-                                        Constants.LimeLightValues.limelightTurretAngle);
-    /*private Limelight m_StaticLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
-                                        Constants.LimeLightValues.limelightTurretAngle,0,0,Constants.LimeLightValues.staticLimelightName);*/
-
+    private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
+   
     private boolean m_isBrakeButtonToggled=false;
     private boolean m_brakeButtonPressed=false;
     private boolean m_HasHomed=false;
+  
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+        .withDeadband(TunerConstants.kSpeedAt12VoltsMps * 0.1).withRotationalDeadband(TunerConstants.MaxAngularRate * 0.1) // Add a 10% deadband
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     public RobotContainer(){
       //Named Commands
@@ -88,37 +90,20 @@ public class RobotContainer {
         configureButtonBindings();
         //Create Auto Commands
         createAutonomousCommandList(); 
-        m_swerve.setDefaultCommand(
-        m_swerve.drive(
-            () -> m_xBoxDriver.getRawAxis(translationAxis),
-            () -> m_xBoxDriver.getRawAxis(strafeAxis),
-            () -> m_xBoxDriver.getRawAxis(rotationAxis),
-            () -> m_xBoxDriver.getRawAxis(rightTriggerAxis)));
+        drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getLeftY() * TunerConstants.kSpeedAt12VoltsMps) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-m_xBoxDriver.getLeftX() * TunerConstants.kSpeedAt12VoltsMps) // Drive left with negative X (left)
+            .withRotationalRate(-m_xBoxDriver.getRightX() * TunerConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+        ));
         
     }
-       
-    
-    /*m*
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-     * it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings(){
+  
+    private void configureButtonBindings() {
 
     }
        
     private void refreshSmartDashboard(){  
-      //TODO: ADD BACK WHEN LIMELIGHT ON
-      //m_TurretLimelight.LimeLightPeriodic(true);
-//      m_swerve.getPose();
-        //System.out.println(m_TurretLimelight.getDistance());
-      //if(m_turret.IsAtLeftLimit()||m_turret.IsAtRightLimit()){
-      //  m_blinkin.SetLEDPrimaryState(LEDStates.ISATLIMIT);
-      //}else{
-      
     }
     
     
@@ -167,12 +152,12 @@ public class RobotContainer {
   }
 
   private void resetDefaultCommand(){
-      m_swerve.setDefaultCommand(
-        m_swerve.drive(
-            () -> m_xBoxDriver.getRawAxis(translationAxis),
-            () -> m_xBoxDriver.getRawAxis(strafeAxis),
-            () -> m_xBoxDriver.getRawAxis(rotationAxis),
-            () -> m_xBoxDriver.getRawAxis(rightTriggerAxis)));
+    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+    drivetrain.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getLeftY() * TunerConstants.kSpeedAt12VoltsMps) // Drive forward with
+                                                                                       // negative Y (forward)
+        .withVelocityY(-m_xBoxDriver.getLeftX() * TunerConstants.kSpeedAt12VoltsMps) // Drive left with negative X (left)
+        .withRotationalRate(-m_xBoxDriver.getRightX() * TunerConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+    ));
 
   }
   public void TeleopMode(){

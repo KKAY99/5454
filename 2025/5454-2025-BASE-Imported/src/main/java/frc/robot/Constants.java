@@ -5,8 +5,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.wpilibj.XboxController;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 public final class Constants {
   
@@ -217,12 +221,17 @@ public final class Constants {
         public static final Translation3d chassisCG = new Translation3d(0, 0, Units.inchesToMeters(8));
         public static final double loopTime = 0.13;
     }
-   public static final class Swerve {
-    public static final Translation2d flModuleOffset = new Translation2d(0.4, 0.4);
-    public static final Translation2d frModuleOffset = new Translation2d(0.4, -0.4);
-    public static final Translation2d blModuleOffset = new Translation2d(-0.4, 0.4);
-    public static final Translation2d brModuleOffset = new Translation2d(-0.4, -0.4);
+    public static final class Swerve {
+      public static final Translation2d flModuleOffset = new Translation2d(0.4, 0.4);
+      public static final Translation2d frModuleOffset = new Translation2d(0.4, -0.4);
+      public static final Translation2d blModuleOffset = new Translation2d(-0.4, 0.4);
+      public static final Translation2d brModuleOffset = new Translation2d(-0.4, -0.4);
 
-    public static final double maxModuleSpeed = 4.5; // M/S
+      public static final double maxModuleSpeed = 4.5; // M/S
     }
+
+    public static final PPHolonomicDriveController pathPlanDriveController = new PPHolonomicDriveController(
+      new PIDConstants(5.0, 0, 0), // Translation constants 
+      new PIDConstants(5.0, 0, 0) // Rotation constants
+    );
 }
