@@ -1,14 +1,10 @@
 package frc.robot.utilities;
-import javax.lang.model.util.ElementScanner14;
-import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.wpilibj.Timer;
-import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 
 public class ObsidianCANSparkMax extends SparkBase{
 
@@ -22,7 +18,7 @@ public class ObsidianCANSparkMax extends SparkBase{
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode){
         super(canID,motorType,SparkModel.SparkMax);
         SparkBaseConfig newConfig =new SparkMaxConfig();
-        setInverted(true);
+        setInverted(false);
         newConfig.smartCurrentLimit(Constants.k30Amp);
         newConfig.signals.motorTemperaturePeriodMs(1000);
         newConfig.signals.busVoltagePeriodMs(1000);
@@ -50,7 +46,7 @@ public class ObsidianCANSparkMax extends SparkBase{
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit){  
         super(canID,motorType,SparkModel.SparkMax);
         SparkBaseConfig newConfig =new SparkMaxConfig();
-        setInverted(true);
+        setInverted(false);
         newConfig.smartCurrentLimit(Constants.k30Amp);
         newConfig.signals.motorTemperaturePeriodMs(1000);
         newConfig.signals.busVoltagePeriodMs(1000);
@@ -82,7 +78,7 @@ public class ObsidianCANSparkMax extends SparkBase{
                             int periodicStatus4,int periodicStatus5,int periodicStatus6){
     super(canID,motorType,SparkModel.SparkMax);
         SparkBaseConfig newConfig =new SparkMaxConfig();
-        setInverted(true);
+        setInverted(false);
         newConfig.smartCurrentLimit(Constants.k30Amp);
         newConfig.signals.motorTemperaturePeriodMs(1000);
         newConfig.signals.busVoltagePeriodMs(1000);

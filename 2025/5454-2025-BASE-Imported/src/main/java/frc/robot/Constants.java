@@ -1,16 +1,10 @@
  
 package frc.robot;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.wpilibj.XboxController;
-import com.pathplanner.lib.auto.AutoBuilder;
 
 public final class Constants {
   

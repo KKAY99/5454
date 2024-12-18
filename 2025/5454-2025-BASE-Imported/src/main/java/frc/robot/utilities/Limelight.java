@@ -1,12 +1,8 @@
 package frc.robot.utilities;
 
 import frc.robot.Constants;
-import java.util.Map;
-import edu.wpi.first.epilogue.Logged;
-import edu.wpi.first.epilogue.Logged.Strategy;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -280,19 +276,7 @@ public class Limelight {
         llTable.getEntry("ledMode").setNumber(3);
         m_LimelightLEDOn = true;
     }
-
-    private boolean isAtPodiumDis(){
-        return false;
-    }
-
-    private boolean isAtMidDis(){
-        return false;
-    }
-
-    private boolean isAtShortDis(){
-        return false;  
-    }
-
+    
     public void LimeLightPeriodic(boolean isEnabled) {
         updateDashboard();
     }
