@@ -4,27 +4,23 @@
 
 package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.InputControllers;
-/**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
+
 //@Logged(strategy=Strategy.OPT_IN)
 public class RobotContainer {
-    // The robot's subsystems and commands are defined here...
     //STANDARD DRIVING
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -40,8 +36,10 @@ public class RobotContainer {
     private final CommandXboxController m_xBoxDriver = new CommandXboxController(0); 
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
+
+    private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
   
-    private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
+    private final CommandSwerveDrivetrain m_swerve = TunerConstants.DriveTrain;
   
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(TunerConstants.kSpeedAt12VoltsMps * 0.1).withRotationalDeadband(TunerConstants.MaxAngularRate * 0.1) // Add a 10% deadband
@@ -54,11 +52,11 @@ public class RobotContainer {
         configureButtonBindings();
         //Create Auto Commands
         createAutonomousCommandList(); 
-        drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getLeftY() * TunerConstants.kSpeedAt12VoltsMps) // Drive forward with
+        m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
+        m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kSpeedAt12VoltsMps) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-m_xBoxDriver.getLeftX() * TunerConstants.kSpeedAt12VoltsMps) // Drive left with negative X (left)
-            .withRotationalRate(-m_xBoxDriver.getRightX() * TunerConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+            .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kSpeedAt12VoltsMps) // Drive left with negative X (left)
+            .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
         
     }
@@ -80,9 +78,13 @@ public class RobotContainer {
 
   private void createAutonomousCommandList(){
       try{
-       
+        m_autoChooser.setDefaultOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
+        m_autoChooser.setDefaultOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
+
+        SmartDashboard.putData("Auto Chooser",m_autoChooser);
+
       } catch (Exception e){
-          System.out.println("Create Auto Exception: " + e.getMessage());
+          System.out.println("Create Autos Failed, Exception: " + e.getMessage());
           }
       }
 
@@ -103,12 +105,33 @@ public class RobotContainer {
    
   }
 
+  public void TeleopMode(){
+
+  }
+
   public void TeleopPeriodic(){
    
   }
 
   public Command getAutonomousCommand(){
-        return null;
+    String autoChosen=m_autoChooser.getSelected();
+    Command command=getSelectedAuto(autoChosen);
+    
+    return command;
+  }
+
+  public Command getSelectedAuto(String chosenAuto){
+    Command command=null;
+    switch(chosenAuto){
+      case AutoConstants.autoMode1:
+      command=new AutoDoNothingCommand();
+      break;
+      case AutoConstants.autoMode2:
+      //command=m_swerve.createPathCommand();
+      break;
+    }
+
+    return command;
   }
 
   public void AllPeriodic(){
@@ -116,17 +139,15 @@ public class RobotContainer {
   }
 
   private void resetDefaultCommand(){
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-    drivetrain.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getLeftY() * TunerConstants.kSpeedAt12VoltsMps) // Drive forward with
+    m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
+    m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getLeftY() * TunerConstants.kSpeedAt12VoltsMps) // Drive forward with
                                                                                        // negative Y (forward)
         .withVelocityY(-m_xBoxDriver.getLeftX() * TunerConstants.kSpeedAt12VoltsMps) // Drive left with negative X (left)
         .withRotationalRate(-m_xBoxDriver.getRightX() * TunerConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
     ));
 
   }
-  public void TeleopMode(){
 
-  }
 }
 
 
