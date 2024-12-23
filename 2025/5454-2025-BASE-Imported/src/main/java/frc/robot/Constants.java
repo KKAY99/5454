@@ -42,7 +42,7 @@ public final class Constants {
       public static final Pose2d rightStart=new Pose2d(0,0,new Rotation2d(0));
 
       public static final Pose2d testPose1=new Pose2d(0,0,new Rotation2d(0));
-      public static final Pose2d testPose2=new Pose2d(0,0,new Rotation2d(0));
+      public static final Pose2d testPose2=new Pose2d(1,1,new Rotation2d(0));
     }
   }
   

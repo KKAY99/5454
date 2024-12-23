@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.*;
+import frc.robot.utilities.AutoPlanner;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -113,6 +114,10 @@ public class RobotContainer {
    
   }
 
+  public void AllPeriodic(){
+   
+  }
+
   public Command getAutonomousCommand(){
     String autoChosen=m_autoChooser.getSelected();
     Command command=getSelectedAuto(autoChosen);
@@ -121,21 +126,18 @@ public class RobotContainer {
   }
 
   public Command getSelectedAuto(String chosenAuto){
+    AutoPlanner autoPlan=new AutoPlanner();
     Command command=null;
     switch(chosenAuto){
       case AutoConstants.autoMode1:
       command=new AutoDoNothingCommand();
       break;
       case AutoConstants.autoMode2:
-      //command=m_swerve.createPathCommand();
+      command=m_swerve.createPathCommand(autoPlan.CreateAutoPath(AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2));
       break;
     }
 
     return command;
-  }
-
-  public void AllPeriodic(){
-   
   }
 
   private void resetDefaultCommand(){
