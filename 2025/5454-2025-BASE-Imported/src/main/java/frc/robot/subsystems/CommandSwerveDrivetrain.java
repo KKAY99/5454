@@ -87,7 +87,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds,DriveFeedforwards driveFF){
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-        .withDeadband(TunerConstants.kSpeedAt12VoltsMps * 0.1).withRotationalDeadband(TunerConstants.MaxAngularRate * 0.1) // Add a 10% deadband
+        .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
 
         this.applyRequest(() -> drive.withVelocityX(chassisSpeeds.vxMetersPerSecond)

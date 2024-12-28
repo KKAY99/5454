@@ -40,12 +40,14 @@ public class RobotContainer {
 
     private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
   
-    private final CommandSwerveDrivetrain m_swerve = TunerConstants.DriveTrain;
-  
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-        .withDeadband(TunerConstants.kSpeedAt12VoltsMps * 0.1).withRotationalDeadband(TunerConstants.MaxAngularRate * 0.1) // Add a 10% deadband
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+    public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
 
+    /* Setting up bindings for necessary control of the swerve drive platform */
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     public RobotContainer(){
       //Named Commands
       NamedCommands.registerCommand("autoscore",new AutoDoNothingCommand()); 
@@ -54,10 +56,10 @@ public class RobotContainer {
         //Create Auto Commands
         createAutonomousCommandList(); 
         m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
-        m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kSpeedAt12VoltsMps) // Drive forward with
+        m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kSpeedAt12VoltsMps) // Drive left with negative X (left)
-            .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+            .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed) // Drive counterclockwise with negative X (left)
         ));
         
     }
@@ -142,10 +144,10 @@ public class RobotContainer {
 
   private void resetDefaultCommand(){
     m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
-    m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getLeftY() * TunerConstants.kSpeedAt12VoltsMps) // Drive forward with
+    m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed) // Drive forward with
                                                                                        // negative Y (forward)
-        .withVelocityY(-m_xBoxDriver.getLeftX() * TunerConstants.kSpeedAt12VoltsMps) // Drive left with negative X (left)
-        .withRotationalRate(-m_xBoxDriver.getRightX() * TunerConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
+        .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed) // Drive left with negative X (left)
+        .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed) // Drive counterclockwise with negative X (left)
     ));
 
   }
