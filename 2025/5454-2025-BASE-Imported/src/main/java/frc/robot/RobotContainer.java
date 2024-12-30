@@ -3,56 +3,25 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import java.sql.DriverPropertyInfo;
-import java.util.List;
-import javax.swing.JToggleButton;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.GenericHID;
+
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.epilogue.Logged.Strategy;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.XboxController.Axis;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.*;
-import frc.robot.Constants.InputControllers;
+import frc.robot.utilities.AutoPlanner;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
-import frc.robot.utilities.*;
-/**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.InputControllers;
+
 //@Logged(strategy=Strategy.OPT_IN)
 public class RobotContainer {
-    // The robot's subsystems and commands are defined here...
     //STANDARD DRIVING
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -65,22 +34,20 @@ public class RobotContainer {
     private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
     private final int leftTriggerAxis = XboxController.Axis.kLeftTrigger.value;
  
-    private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
+    private final CommandXboxController m_xBoxDriver = new CommandXboxController(0); 
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
+
+    private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
   
-    private Swerve m_swerve = new Swerve();
-//    private LED m_led=new LED(Constants.LEDConstants.blinkInPWM,Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
-    //private LED m_led= new LED(Constants.LEDConstants.ledPWM,Constants.LEDConstants.ledCount);
-    private Limelight m_TurretLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
-                                        Constants.LimeLightValues.limelightTurretAngle);
-    /*private Limelight m_StaticLimelight = new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightTurretHeight,
-                                        Constants.LimeLightValues.limelightTurretAngle,0,0,Constants.LimeLightValues.staticLimelightName);*/
+    public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
 
-    private boolean m_isBrakeButtonToggled=false;
-    private boolean m_brakeButtonPressed=false;
-    private boolean m_HasHomed=false;
-
+    /* Setting up bindings for necessary control of the swerve drive platform */
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     public RobotContainer(){
       //Named Commands
       NamedCommands.registerCommand("autoscore",new AutoDoNothingCommand()); 
@@ -88,37 +55,20 @@ public class RobotContainer {
         configureButtonBindings();
         //Create Auto Commands
         createAutonomousCommandList(); 
-        m_swerve.setDefaultCommand(
-        m_swerve.drive(
-            () -> m_xBoxDriver.getRawAxis(translationAxis),
-            () -> m_xBoxDriver.getRawAxis(strafeAxis),
-            () -> m_xBoxDriver.getRawAxis(rotationAxis),
-            () -> m_xBoxDriver.getRawAxis(rightTriggerAxis)));
+        m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
+        m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed) // Drive counterclockwise with negative X (left)
+        ));
         
     }
-       
-    
-    /*m*
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-     * it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings(){
+  
+    private void configureButtonBindings() {
 
     }
        
     private void refreshSmartDashboard(){  
-      //TODO: ADD BACK WHEN LIMELIGHT ON
-      //m_TurretLimelight.LimeLightPeriodic(true);
-//      m_swerve.getPose();
-        //System.out.println(m_TurretLimelight.getDistance());
-      //if(m_turret.IsAtLeftLimit()||m_turret.IsAtRightLimit()){
-      //  m_blinkin.SetLEDPrimaryState(LEDStates.ISATLIMIT);
-      //}else{
-      
     }
     
     
@@ -131,9 +81,13 @@ public class RobotContainer {
 
   private void createAutonomousCommandList(){
       try{
-       
+        m_autoChooser.setDefaultOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
+        m_autoChooser.setDefaultOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
+
+        SmartDashboard.putData("Auto Chooser",m_autoChooser);
+
       } catch (Exception e){
-          System.out.println("Create Auto Exception: " + e.getMessage());
+          System.out.println("Create Autos Failed, Exception: " + e.getMessage());
           }
       }
 
@@ -154,30 +108,50 @@ public class RobotContainer {
    
   }
 
-  public void TeleopPeriodic(){
-   
+  public void TeleopMode(){
+
   }
 
-  public Command getAutonomousCommand(){
-        return null;
+  public void TeleopPeriodic(){
+   
   }
 
   public void AllPeriodic(){
    
   }
 
+  public Command getAutonomousCommand(){
+    String autoChosen=m_autoChooser.getSelected();
+    Command command=getSelectedAuto(autoChosen);
+    
+    return command;
+  }
+
+  public Command getSelectedAuto(String chosenAuto){
+    AutoPlanner autoPlan=new AutoPlanner();
+    Command command=null;
+    switch(chosenAuto){
+      case AutoConstants.autoMode1:
+      command=new AutoDoNothingCommand();
+      break;
+      case AutoConstants.autoMode2:
+      command=m_swerve.createPathCommand(autoPlan.CreateAutoPath(AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2));
+      break;
+    }
+
+    return command;
+  }
+
   private void resetDefaultCommand(){
-      m_swerve.setDefaultCommand(
-        m_swerve.drive(
-            () -> m_xBoxDriver.getRawAxis(translationAxis),
-            () -> m_xBoxDriver.getRawAxis(strafeAxis),
-            () -> m_xBoxDriver.getRawAxis(rotationAxis),
-            () -> m_xBoxDriver.getRawAxis(rightTriggerAxis)));
+    m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
+    m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed) // Drive forward with
+                                                                                       // negative Y (forward)
+        .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed) // Drive left with negative X (left)
+        .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed) // Drive counterclockwise with negative X (left)
+    ));
 
   }
-  public void TeleopMode(){
 
-  }
 }
 
 

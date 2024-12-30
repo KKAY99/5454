@@ -2,12 +2,8 @@ package frc.robot.swervelib.motors;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.PeriodicStatus0;
 import com.revrobotics.spark.SparkClosedLoopController;
 import frc.robot.swervelib.encoders.SwerveAbsoluteEncoder;
 import frc.robot.swervelib.parser.PIDFConfig;

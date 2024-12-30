@@ -46,17 +46,6 @@ public final class Constants {
       public static final double kRumbleFull=1.0;
     }
 
-
-    
-
-
-
-
-
-
-
-
-
     public static final class LimeLightValues {
       public static final double steeringP = 0.035;
       public static final double steeringI = 0;

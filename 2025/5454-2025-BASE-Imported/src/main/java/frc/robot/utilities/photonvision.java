@@ -1,6 +1,4 @@
 package frc.robot.utilities;
-import javax.xml.stream.events.EntityReference;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
