@@ -34,7 +34,7 @@ public class RobotContainer {
     private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
     private final int leftTriggerAxis = XboxController.Axis.kLeftTrigger.value;
  
-    private final CommandXboxController m_xBoxDriver = new CommandXboxController(0); 
+    private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive); 
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
 
@@ -48,6 +48,7 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
     public RobotContainer(){
       //Named Commands
       NamedCommands.registerCommand("autoscore",new AutoDoNothingCommand()); 

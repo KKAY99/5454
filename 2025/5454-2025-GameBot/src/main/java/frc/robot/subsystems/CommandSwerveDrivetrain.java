@@ -53,7 +53,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void configAutoBuilder(){
-        //TODO: THIS IS BAD 
         RobotConfig robotConfig=null;
 
         try{
