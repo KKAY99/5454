@@ -124,6 +124,21 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+    public boolean checkCANConnections(){
+        boolean returnValue=true;
+        try{
+            for(int i=0;i<this.getModules().length;i++){
+                this.getModule(i).getDriveMotor();
+                this.getModule(i).getSteerMotor();
+                this.getModule(i).getCANcoder();
+            }
+        }catch(Exception e){
+            returnValue=false;
+        }
+
+        return returnValue;
+    }
+
     @Override
     public void periodic() {
         /* Periodically try to apply the operator perspective */
