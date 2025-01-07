@@ -8,10 +8,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+
+import org.littletonrobotics.urcl.URCL;
+
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.epilogue.*;
 import edu.wpi.first.epilogue.logging.FileLogger;
 import edu.wpi.first.wpilibj.TimedRobot;
-
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,14 +36,27 @@ public class Robot extends TimedRobot {
     });*/
   }
   /**
+   * 
+   * 
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
-    
+  
+  //Enable Login
+  /*Epilogue.configure(config ->{
+      config.dataLogger=new FileLogger(DataLogManager.getLog());
+      config.minimumImportance=Logged.Importance.CRITICAL;
+    });*/
+
+  DataLogManager.start();
+  DriverStation.startDataLog(DataLogManager.getLog());
+  SignalLogger.setPath("/media/sda1/ctre-logs/");  
+  SignalLogger.start();
+  URCL.start();
   m_robot = new RobotContainer();
-    
+
  
   }
 
