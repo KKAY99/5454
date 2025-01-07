@@ -42,7 +42,10 @@ public final class Constants {
       public static final Pose2d rightStart=new Pose2d(0,0,new Rotation2d(0));
 
       public static final Pose2d testPose1=new Pose2d(0,0,new Rotation2d(0));
-      public static final Pose2d testPose2=new Pose2d(1,1,new Rotation2d(0));
+      public static final Pose2d testPose2=new Pose2d(0,5,new Rotation2d(90));
+      public static final Pose2d testPose3=new Pose2d(5,5,new Rotation2d(0));
+      public static final Pose2d testPose4=new Pose2d(5,0,new Rotation2d(270));
+      public static final Pose2d testPose5=new Pose2d(0,0,new Rotation2d(180));
     }
   }
   
@@ -113,7 +116,7 @@ public final class Constants {
   }
 
   public static final PPHolonomicDriveController pathPlanDriveController = new PPHolonomicDriveController(
-    new PIDConstants(5.0, 0, 0), // Translation constants 
-    new PIDConstants(5.0, 0, 0) // Rotation constants
+    new PIDConstants(10.0, 0, 1), // Translation constants 
+    new PIDConstants(10.0, 0, 1) // Rotation constants
   );
 }

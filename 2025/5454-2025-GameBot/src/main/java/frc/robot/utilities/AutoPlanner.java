@@ -26,13 +26,13 @@ public class AutoPlanner {
       }
     }
 
-    List<Waypoint> bezierPoints = PathPlannerPath.waypointsFromPoses(
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
         poseArray);
 
     PathPlannerPath newPath = new PathPlannerPath(
-        bezierPoints,
-        new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-        new IdealStartingState(0, Rotation2d.fromDegrees(0)),
+        waypoints,
+        new PathConstraints(1.0, 1.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+        null,
         new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     );
 

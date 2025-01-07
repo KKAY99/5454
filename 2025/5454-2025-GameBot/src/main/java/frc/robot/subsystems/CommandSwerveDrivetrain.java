@@ -35,6 +35,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean hasAppliedOperatorPerspective = false;
 
+    private SwerveRequest.ApplyRobotSpeeds drive = new SwerveRequest.ApplyRobotSpeeds();
+
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         if (Utils.isSimulation()) {
@@ -85,12 +87,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds,DriveFeedforwards driveFF){
-        SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-        .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed * 0.1) // Add a 10% deadband
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+        this.setControl(drive.withSpeeds(chassisSpeeds)
+        .withWheelForceFeedforwardsX(driveFF.robotRelativeForcesXNewtons())
+        .withWheelForceFeedforwardsY(driveFF.robotRelativeForcesYNewtons()));
 
-        this.applyRequest(() -> drive.withVelocityX(chassisSpeeds.vxMetersPerSecond)
-        .withVelocityY(chassisSpeeds.vyMetersPerSecond));
     }
 
     public Pose2d getPose2d(){
@@ -98,7 +98,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public ChassisSpeeds getChassisSpeeds(){
-        return this.getState().Speeds;
+        return this.getKinematics().toChassisSpeeds(this.getState().ModuleStates);
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -41,10 +42,12 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-          .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1) // Add a 10% deadband
-          .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+          .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1); // Add a 10% deadband // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+  private boolean isInTeleop=false;
+  private Command autocommand = null;
 
   public RobotContainer(){
     //Named Commands
@@ -53,12 +56,7 @@ public class RobotContainer {
     configureButtonBindings();
     //Create Auto Commands
     createAutonomousCommandList(); 
-    m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
-    m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed) // Drive forward with
-                                                                                        // negative Y (forward)
-        .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed) // Drive left with negative X (left)
-        .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed) // Drive counterclockwise with negative X (left)
-    ));
+    resetDefaultCommand();
       
   }
 
@@ -76,7 +74,7 @@ public class RobotContainer {
   private void createAutonomousCommandList(){
     try{
       m_autoChooser.setDefaultOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
-      m_autoChooser.setDefaultOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
+      m_autoChooser.addOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
 
       SmartDashboard.putData("Auto Chooser",m_autoChooser);
 
@@ -95,7 +93,6 @@ public class RobotContainer {
   }
   
   public void AutoPeriodic(){
-   
   }
 
   public void AutonMode(){
@@ -103,11 +100,10 @@ public class RobotContainer {
   }
 
   public void TeleopMode(){
-
+    System.out.println("autoo is" + CommandScheduler.getInstance().isScheduled(autocommand));
   }
 
   public void TeleopPeriodic(){
-   
   }
 
   public void AllPeriodic(){
@@ -124,26 +120,29 @@ public class RobotContainer {
   public Command getSelectedAuto(String chosenAuto){
     AutoPlanner autoPlan=new AutoPlanner();
     Command command=null;
+    
     switch(chosenAuto){
       case AutoConstants.autoMode1:
       command=new AutoDoNothingCommand();
       break;
       case AutoConstants.autoMode2:
-      command=m_swerve.createPathCommand(autoPlan.CreateAutoPath(AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2));
+      command=m_swerve.createPathCommand(
+        autoPlan.CreateAutoPath(AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2,
+                                AutoConstants.AutoPoses.testPose3,AutoConstants.AutoPoses.testPose4,
+                                AutoConstants.AutoPoses.testPose5));
       break;
     }
-
+    autocommand = command;
     return command;
   }
 
   private void resetDefaultCommand(){
     m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
     m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed) // Drive forward with
-                                                                                       // negative Y (forward)
+                                                                                        // negative Y (forward)
         .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed) // Drive left with negative X (left)
         .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed) // Drive counterclockwise with negative X (left)
     ));
-
   }
 
 }
