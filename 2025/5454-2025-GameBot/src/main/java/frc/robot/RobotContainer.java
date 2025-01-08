@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -37,6 +38,7 @@ public class RobotContainer {
   private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
 
   private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
+  private SendableChooser<String> m_autoStartPos = new SendableChooser<>(); 
 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
 
@@ -126,10 +128,10 @@ public class RobotContainer {
       command=new AutoDoNothingCommand();
       break;
       case AutoConstants.autoMode2:
-      command=m_swerve.createPathCommand(
-        autoPlan.CreateAutoPath(180,AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2));
-                                /*AutoConstants.AutoPoses.testPose3,AutoConstants.AutoPoses.testPose4,
-                                AutoConstants.AutoPoses.testPose5));*/
+      command=new SequentialCommandGroup(m_swerve.createPathCommand(
+        autoPlan.CreateAutoPath(0,AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2,
+                                AutoConstants.AutoPoses.testPose3,AutoConstants.AutoPoses.testPose4,
+                                AutoConstants.AutoPoses.testPose5)));
       break;
     }
     autocommand = command;

@@ -6,10 +6,13 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class AutoPlanner {
     
@@ -18,24 +21,24 @@ public class AutoPlanner {
     }
 
     public PathPlannerPath CreateAutoPath(double endPosRot,Pose2d... poses){
-    ArrayList<Pose2d> poseArray=new ArrayList<>();
+    List<PathPoint> poseArray=new ArrayList<PathPoint>();
 
     for(Pose2d pose:poses){
       if(pose!=null){
-        poseArray.add(pose);
+        poseArray.add(new PathPoint(new Translation2d(pose.getX(),pose.getY())));
       }
     }
 
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        poseArray);
-
-    PathPlannerPath newPath = new PathPlannerPath(
-        waypoints,
-        new PathConstraints(1.0, 1.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-        null,
-        new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    PathPlannerPath newPath = PathPlannerPath.fromPathPoints(
+        poseArray,
+        new PathConstraints(2.0, 2.0, 11.5, 11.5), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+        new GoalEndState(0.0, Rotation2d.fromDegrees(endPosRot)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     );
 
-    return newPath;
+    if(DriverStation.getAlliance().get()==Alliance.Blue){
+      return newPath;
+    }else{
+      return newPath.flipPath();
+    }
   }
 }
