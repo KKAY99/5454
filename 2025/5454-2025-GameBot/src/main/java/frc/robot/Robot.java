@@ -14,7 +14,7 @@ import org.littletonrobotics.urcl.URCL;
 import com.ctre.phoenix6.SignalLogger;
 
 import edu.wpi.first.epilogue.*;
-import edu.wpi.first.epilogue.logging.FileLogger;
+//import edu.wpi.first.epilogue.logging.FileLogger;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation;
 

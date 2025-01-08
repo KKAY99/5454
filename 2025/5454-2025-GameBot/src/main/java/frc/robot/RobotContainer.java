@@ -127,9 +127,9 @@ public class RobotContainer {
       break;
       case AutoConstants.autoMode2:
       command=m_swerve.createPathCommand(
-        autoPlan.CreateAutoPath(AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2,
-                                AutoConstants.AutoPoses.testPose3,AutoConstants.AutoPoses.testPose4,
-                                AutoConstants.AutoPoses.testPose5));
+        autoPlan.CreateAutoPath(180,AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2));
+                                /*AutoConstants.AutoPoses.testPose3,AutoConstants.AutoPoses.testPose4,
+                                AutoConstants.AutoPoses.testPose5));*/
       break;
     }
     autocommand = command;

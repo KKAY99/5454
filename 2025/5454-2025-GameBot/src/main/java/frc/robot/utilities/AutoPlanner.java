@@ -17,7 +17,7 @@ public class AutoPlanner {
 
     }
 
-    public PathPlannerPath CreateAutoPath(Pose2d... poses){
+    public PathPlannerPath CreateAutoPath(double endPosRot,Pose2d... poses){
     ArrayList<Pose2d> poseArray=new ArrayList<>();
 
     for(Pose2d pose:poses){
