@@ -31,21 +31,25 @@ public final class Constants {
   public static final class AutoConstants{
     public static final String autoMode1="1=AutoDoNothing";
     public static final String autoMode2="2=PathPlanTest";
+    public static final String autoMode3="3=PathfindingTest";
 
-    public static final String centerStart="";
-    public static final String leftStart="";
-    public static final String rightStart="";
+    public static final String centerStart="CenterStart";
+    public static final String leftStart="LeftStart";
+    public static final String rightStart="RightStart";
 
     public static final class AutoPoses{
-      public static final Pose2d centerStart=new Pose2d(0,0,new Rotation2d(0));
-      public static final Pose2d leftStart=new Pose2d(0,0,new Rotation2d(0));
-      public static final Pose2d rightStart=new Pose2d(0,0,new Rotation2d(0));
+      public static final Pose2d testStartPos=new Pose2d(0,0,new Rotation2d(0));
+      public static final Pose2d centerStart=new Pose2d(7.09,4.04,new Rotation2d(0));
+      public static final Pose2d leftStart=new Pose2d(7.09,6.28,new Rotation2d(0));
+      public static final Pose2d rightStart=new Pose2d(7.09,1.75,new Rotation2d(0));
 
       public static final Pose2d testPose1=new Pose2d(0,0,new Rotation2d(0));
       public static final Pose2d testPose2=new Pose2d(0,5,new Rotation2d(0));
       public static final Pose2d testPose3=new Pose2d(5,5,new Rotation2d(0));
       public static final Pose2d testPose4=new Pose2d(5,0,new Rotation2d(0));
       public static final Pose2d testPose5=new Pose2d(0,0,new Rotation2d(0));
+
+      public static final Pose2d pathFindingTestPose1=new Pose2d(2.184,4.04,new Rotation2d(0));
     }
   }
   

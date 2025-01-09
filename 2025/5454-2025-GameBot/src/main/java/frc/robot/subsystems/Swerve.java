@@ -34,7 +34,7 @@ public class Swerve extends SubsystemBase {
   //5454 Extensions based on 1706 SmartShooter from 2022
   private FieldRelativeSpeed m_fieldRelVel = new FieldRelativeSpeed();
   private FieldRelativeSpeed m_lastFieldRelVel = new FieldRelativeSpeed();
-  private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();;
+  private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();
 
   /** Subsystem class for the swerve drive. */
   public Swerve() {

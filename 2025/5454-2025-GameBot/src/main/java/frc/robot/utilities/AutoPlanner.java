@@ -2,6 +2,8 @@ package frc.robot.utilities;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -13,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoPlanner {
     
@@ -20,7 +23,7 @@ public class AutoPlanner {
 
     }
 
-    public PathPlannerPath CreateAutoPath(double endPosRot,Pose2d... poses){
+    public PathPlannerPath CreateAutoPath(double endPosRot,double endVelocity,Pose2d... poses){
     List<PathPoint> poseArray=new ArrayList<PathPoint>();
 
     for(Pose2d pose:poses){
@@ -31,8 +34,8 @@ public class AutoPlanner {
 
     PathPlannerPath newPath = PathPlannerPath.fromPathPoints(
         poseArray,
-        new PathConstraints(2.0, 2.0, 11.5, 11.5), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-        new GoalEndState(0.0, Rotation2d.fromDegrees(endPosRot)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+        new PathConstraints(2.0, 2.0, 11.5, 11.5), 
+        new GoalEndState(endVelocity, Rotation2d.fromDegrees(endPosRot))
     );
 
     if(DriverStation.getAlliance().get()==Alliance.Blue){
@@ -41,4 +44,12 @@ public class AutoPlanner {
       return newPath.flipPath();
     }
   }
+
+  public Command CreatePathfindingPath(double endVelocity,Pose2d targetPose){
+    Command pathFindingCommand=AutoBuilder.pathfindToPose(targetPose, 
+                              new PathConstraints(2.0, 2.0, 11.5, 11.5),endVelocity);
+
+    return pathFindingCommand;
+  }
+
 }
