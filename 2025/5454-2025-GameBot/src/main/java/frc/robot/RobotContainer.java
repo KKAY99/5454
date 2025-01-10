@@ -41,12 +41,8 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
 
-  /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-          .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1); // Add a 10% deadband // Use open-loop control for drive motors
-
-  private boolean isInTeleop=false;
-  private Command autocommand = null;
+          .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
 
   public double m_P;
   public double m_I;
@@ -60,11 +56,9 @@ public class RobotContainer {
     //Create Auto Commands
     createAutonomousCommandList(); 
     resetDefaultCommand();
-      
   }
 
-  private void configureButtonBindings() {
-
+  private void configureButtonBindings(){
   }
       
   private void refreshSmartDashboard(){  
@@ -85,8 +79,9 @@ public class RobotContainer {
       SmartDashboard.putNumber("D",m_D);
 
       SmartDashboard.putData("Auto Chooser",m_autoChooser);
-    } catch (Exception e){
-        System.out.println("Create Autos Failed, Exception: " + e.getMessage());
+
+    }catch(Exception e){
+      System.out.println("Create Autos Failed, Exception: " + e.getMessage());
     }
   }
 
@@ -97,31 +92,26 @@ public class RobotContainer {
   }
 
   public void DisabledInit(){
-    
   }
    
-  public void DisabledPeriodic(){
-    
-     
+  public void DisabledPeriodic(){ 
   }
   
   public void AutoPeriodic(){
   }
 
   public void AutonMode(){
-   
   }
 
   public void TeleopMode(){
-    System.out.println("autoo is" + CommandScheduler.getInstance().isScheduled(autocommand));
   }
 
   public void TeleopPeriodic(){
-    //GetPIDValues();
+    refreshSmartDashboard();
+    GetPIDValues();
   }
 
   public void AllPeriodic(){
-   
   }
 
   public Command getAutonomousCommand(){
@@ -141,17 +131,19 @@ public class RobotContainer {
       break;
       case AutoConstants.autoMode2:
       m_swerve.resetPose(AutoConstants.AutoPoses.testStartPos);
-      command=new SequentialCommandGroup(m_swerve.createPathCommand(
-        autoPlan.CreateAutoPath(0,0,AutoConstants.AutoPoses.testPose1,AutoConstants.AutoPoses.testPose2,
-                                AutoConstants.AutoPoses.testPose3,AutoConstants.AutoPoses.testPose4,
-                                AutoConstants.AutoPoses.testPose5)));
+      command=new SequentialCommandGroup(
+        m_swerve.createPathCommand(
+        autoPlan.CreateAutoPath(0,0,m_swerve.getPose2d(),AutoConstants.AutoPoses.testPose2)),
+        m_swerve.createPathCommand(
+        autoPlan.CreateAutoPath(0,0,AutoConstants.AutoPoses.testPose2,AutoConstants.AutoPoses.testPose3)));
+
       break;
       case AutoConstants.autoMode3:
       m_swerve.resetPose(AutoConstants.AutoPoses.centerStart);
       command=autoPlan.CreatePathfindingPath(0,AutoConstants.AutoPoses.pathFindingTestPose1);
       break;
     }
-    autocommand = command;
+
     return command;
   }
 

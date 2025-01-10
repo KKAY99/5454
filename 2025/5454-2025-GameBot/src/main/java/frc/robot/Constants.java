@@ -20,7 +20,7 @@ public final class Constants {
   public static final int pdhCAN=1;
   
   public static final class DriveConstants{
-      // Joystick axis deadband for the swerve drive
+    // Joystick axis deadband for the swerve drive
     public static final double swerveDeadband = 0.1;
     //Rotate Joystick axis deadband - bigger deadband to avoid rotational drift
     public static final double swerveRotateDeadband = 0.12; //0.17
@@ -97,8 +97,6 @@ public final class Constants {
   public static final class GeneralConstants {
     // Enable or disable competition mode
     public static final boolean tuningMode = true;
-
-  
 
     public static final double voltageComp = 10.0;
 

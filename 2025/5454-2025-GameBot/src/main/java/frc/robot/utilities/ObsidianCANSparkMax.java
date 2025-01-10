@@ -47,7 +47,7 @@ public class ObsidianCANSparkMax extends SparkBase{
         super(canID,motorType,SparkModel.SparkMax);
         SparkBaseConfig newConfig =new SparkMaxConfig();
         setInverted(false);
-        newConfig.smartCurrentLimit(Constants.k30Amp);
+        newConfig.smartCurrentLimit(currentLimit);
         newConfig.signals.motorTemperaturePeriodMs(1000);
         newConfig.signals.busVoltagePeriodMs(1000);
         newConfig.signals.analogPositionPeriodMs(1000);
