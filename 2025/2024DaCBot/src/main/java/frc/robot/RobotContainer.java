@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
+import frc.robot.utilities.Limelight;
 
 import frc.robot.Constants.*;
 
@@ -49,6 +49,7 @@ public class RobotContainer {
     private MotorControllerGroup m_left = new MotorControllerGroup(m_LeftMotor1,m_LeftMotor2);
     private MotorControllerGroup m_right = new MotorControllerGroup(m_RightMotor1,m_RightMotor2);
     private DifferentialDrive m_drive=new DifferentialDrive(m_left,m_right);
+    private Limelight m_Limelight=new Limelight();
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
@@ -69,7 +70,10 @@ public class RobotContainer {
     }
        
     public void refreshSmartDashboard(){  
-   
+      m_Limelight.setPipeline(5);
+      if(m_Limelight.isTargetAvailible()){
+        System.out.print("Object found");
+      }
     }
     
     public void disabledPerioidicUpdates(){

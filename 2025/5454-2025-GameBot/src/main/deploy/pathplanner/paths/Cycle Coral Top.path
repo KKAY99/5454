@@ -1,0 +1,209 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.608323863636363,
+        "y": 5.804928977272727
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.039099812434915,
+        "y": 5.58285201699695
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.965852272727273,
+        "y": 5.0969460227272725
+      },
+      "prevControl": {
+        "x": 5.636878981738276,
+        "y": 4.907147300616331
+      },
+      "nextControl": {
+        "x": 4.146931739125958,
+        "y": 5.328576252494164
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.769261363636364,
+        "y": 6.792116477272727
+      },
+      "prevControl": {
+        "x": 4.2665717988247325,
+        "y": 6.443404841037714
+      },
+      "nextControl": {
+        "x": 3.288112210265951,
+        "y": 7.129495902020442
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5057102272727272,
+        "y": 7.619758522727272
+      },
+      "prevControl": {
+        "x": 1.8599410214472976,
+        "y": 7.119737088339352
+      },
+      "nextControl": {
+        "x": 1.286337087394349,
+        "y": 7.929418986673586
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.769261363636364,
+        "y": 4.927428977272727
+      },
+      "prevControl": {
+        "x": 3.5853669054032853,
+        "y": 5.153894306969323
+      },
+      "nextControl": {
+        "x": 3.9620257097040605,
+        "y": 4.690040414259917
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5057102272727272,
+        "y": 7.619758522727272
+      },
+      "prevControl": {
+        "x": 1.8037882238012983,
+        "y": 7.2776963504218575
+      },
+      "nextControl": {
+        "x": 1.2449020989494715,
+        "y": 7.919051311756104
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.769261363636364,
+        "y": 4.927428977272727
+      },
+      "prevControl": {
+        "x": 3.593429340532543,
+        "y": 5.1472091815974546
+      },
+      "nextControl": {
+        "x": 3.98061684340061,
+        "y": 4.6632464369836395
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5057102272727272,
+        "y": 7.619758522727272
+      },
+      "prevControl": {
+        "x": 1.6863540230812666,
+        "y": 7.3996752056404445
+      },
+      "nextControl": {
+        "x": 1.189860752027824,
+        "y": 8.004566646919411
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.769261363636364,
+        "y": 4.927428977272727
+      },
+      "prevControl": {
+        "x": 3.6054773670317943,
+        "y": 5.116306722007871
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "drop coral",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Start cycle/coral pickup",
+      "waypointRelativePos": 3.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Drop Coral",
+      "waypointRelativePos": 4.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Coral pickup",
+      "waypointRelativePos": 5.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Drop Coral",
+      "waypointRelativePos": 6.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Coral pickup",
+      "waypointRelativePos": 7.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "drop coral",
+      "waypointRelativePos": 8.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -43.90251394661947
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,14 +1,20 @@
 package frc.robot;
 
-import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -37,26 +43,36 @@ public class RobotContainer {
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
 
-  private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
+//  private final SendableChooser<Command> m_autoChooser;
 
-  public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
+  //private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
+  public final CommandSwerveDrivetrain m_swerve = TunerConstantsOLD.createDrivetrain();
+  //private final PoseEstimator m_poseEstimator = new PoseEstimator(m_swerve);
+
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-          .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
+          .withDeadband(TunerConstantsOLD.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstantsOLD.kMaxAngularSpeed*0.1);
 
   public double m_P;
   public double m_I;
   public double m_D;
 
   public RobotContainer(){
-    //Named Commands
-    NamedCommands.registerCommand("autoscore",new AutoDoNothingCommand()); 
+    //m_autoChooser = AutoBuilder.buildAutoChooser();
+    //SmartDashboard.putData("Auto Chooser",m_autoChooser);
     // Configure the button bindings
     configureButtonBindings();
+    //createAutonomousCommandList(); 
     //Create Auto Commands
-    createAutonomousCommandList(); 
     resetDefaultCommand();
   }
+
+
+  public void configureNamedCommands() {
+
+
+    }
+
 
   private void configureButtonBindings(){
   }
@@ -64,21 +80,22 @@ public class RobotContainer {
   private void refreshSmartDashboard(){  
   }
   
-  private boolean checkCANConnections(){
-    return m_swerve.checkCANConnections();
+  /*private boolean checkCANConnections(){
+   return m_swerve.checkCANConnections();
   }
-
+  */
   private void createAutonomousCommandList(){
     try{
+      /* 
       m_autoChooser.setDefaultOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
       m_autoChooser.addOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
       m_autoChooser.addOption(AutoConstants.autoMode3,AutoConstants.autoMode3);
-
+*/
       SmartDashboard.putNumber("P",m_P);
       SmartDashboard.putNumber("I",m_I);
       SmartDashboard.putNumber("D",m_D);
 
-      SmartDashboard.putData("Auto Chooser",m_autoChooser);
+//      SmartDashboard.putData("Auto Chooser",m_autoChooser);
 
     }catch(Exception e){
       System.out.println("Create Autos Failed, Exception: " + e.getMessage());
@@ -115,14 +132,13 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    String autoChosen=m_autoChooser.getSelected();
-    Command command=getSelectedAuto(autoChosen);
-    
+    //Command command=m_autoChooser.getSelected();
+    Command command = new AutoDoNothingCommand();
     return command;
   }
-
+  /*
   public Command getSelectedAuto(String chosenAuto){
-    AutoPlanner autoPlan=new AutoPlanner();
+    /*AutoPlanner autoPlan=new AutoPlanner();
     Command command=null;
     
     switch(chosenAuto){
@@ -146,15 +162,17 @@ public class RobotContainer {
 
     return command;
   }
-
+ */
   private void resetDefaultCommand(){
     m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
-    m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed) // Drive forward with
+    m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstantsOLD.kMaxSpeed) // Drive forward with
                                                                                         // negative Y (forward)
-        .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed) // Drive left with negative X (left)
-        .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed) // Drive counterclockwise with negative X (left)
+        .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstantsOLD.kMaxSpeed) // Drive left with negative X (left)
+        .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstantsOLD.kMaxSpeed) // Drive counterclockwise with negative X (left)
     ));
-  }
+}
+
+  
 
 }
 

@@ -44,5 +44,15 @@ public final class Constants {
     public static final int shooterButton2=2;
     public static final int shooterButton3=3;
     public static final int shooterButton4=4;
+  } 
+  public static final class LimeLightValues {
+    public static final double steeringP = 0.035;
+    public static final double steeringI = 0;
+    public static final double steeringD = 0.0055;
+    public static final double steeringFeedForward = 0.0;
+    public static final double kVisionXOffset=0;
+    public static final double kVisionDistanceTolerance=0;
+    public static final double kVisionXTolerance=0;
   }
+
 }

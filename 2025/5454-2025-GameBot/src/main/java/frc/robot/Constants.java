@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.config.PIDConstants;
 
+
 public final class Constants {
   
   public static final double kRobotLoopTime = 0.020;
@@ -26,6 +27,8 @@ public final class Constants {
     public static final double swerveRotateDeadband = 0.12; //0.17
     public static final double MinGasPedalSpeed=0.30;
     public static final double MinGasRotateSpeed=0.30;
+    
+  
   }
 
   public static final class AutoConstants{
@@ -107,6 +110,15 @@ public final class Constants {
     public static final double chassisMass = robotMass;
     public static final Translation3d chassisCG = new Translation3d(0, 0, Units.inchesToMeters(8));
     public static final double loopTime = 0.13;
+  }
+  public static final class OperatorConstants {
+    public static final double kDeadband = 0.01;
+    public static final double kCubic = 0.95;
+    public static final double kLinear = 0.05;
+  }
+  public static final class VisionConstants {
+    public static final double kPoseErrorAcceptance = 3.0; // How much error there can be between current stimated pose
+                                                           // and vision pose in meters
   }
   public static final class Swerve {
     public static final Translation2d flModuleOffset = new Translation2d(0.4, 0.4);
