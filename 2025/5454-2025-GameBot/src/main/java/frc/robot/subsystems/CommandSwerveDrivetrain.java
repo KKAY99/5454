@@ -9,9 +9,16 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
+import frc.robot.Constants;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -44,6 +51,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
+    private SwerveRequest.ApplyRobotSpeeds drive = new SwerveRequest.ApplyRobotSpeeds();
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -183,6 +192,71 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
+    public void configAutoBuilder(){
+        RobotConfig robotConfig=null;
+
+        try{
+            robotConfig = RobotConfig.fromGUISettings();
+        }catch(Exception e){
+            System.out.println("RobotConfig Error, Error: "+e);
+        }
+        
+        try{
+            AutoBuilder.configure(
+                this::getPose2d,
+                this::resetPose,
+                this::getChassisSpeeds,
+                this::setChassisSpeeds,
+                Constants.pathPlanDriveController,
+                robotConfig,
+                ()->{
+                    Alliance alliance=DriverStation.getAlliance().get();
+                    if(alliance==Alliance.Red){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                },
+                this
+            );
+        }catch(Exception e){
+            System.out.println("AutoBuilder was not configured, Error: "+e);
+        }
+    }
+
+    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds,DriveFeedforwards driveFF){
+        this.setControl(drive.withSpeeds(chassisSpeeds)
+        .withWheelForceFeedforwardsX(driveFF.robotRelativeForcesXNewtons())
+        .withWheelForceFeedforwardsY(driveFF.robotRelativeForcesYNewtons()));
+
+    }
+
+    public ChassisSpeeds getChassisSpeeds(){
+        return this.getKinematics().toChassisSpeeds(this.getState().ModuleStates);
+    }
+
+    public Pose2d getPose2d(){
+        return getState().Pose;
+    }
+
+    public Command createPathCommand(PathPlannerPath path){
+        return AutoBuilder.followPath(path);
+    }
+
+    public boolean checkCANConnections(){
+        boolean returnValue=true;
+        try{
+            for(int i=0;i<this.getModules().length;i++){
+                this.getModule(i).getDriveMotor();
+                this.getModule(i).getSteerMotor();
+                this.getModule(i).getEncoder();
+            }
+        }catch(Exception e){
+            returnValue=false;
+        }
+
+        return returnValue;
+    }
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
      *
