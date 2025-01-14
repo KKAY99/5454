@@ -3,6 +3,7 @@ package frc.robot.utilities;
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -255,8 +256,8 @@ public class Limelight {
         double[] empty=null;
         double[] robotPoseValues=robotPoseRed.getDoubleArray(empty);
 
-        //Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
-        Pose2d pose=new Pose2d();
+        Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
+        //Pose2d pose=new Pose2d();
         return pose;
     }
 

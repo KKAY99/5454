@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
+import frc.robot.utilities.Limelight;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 import com.ctre.phoenix6.StatusSignal.SignalMeasurement;
@@ -42,11 +45,11 @@ public class RobotContainer {
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
 
-//  private final SendableChooser<Command> m_autoChooser;
+  private final SendableChooser<Command> m_autoChooser;
 
-  private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
+  //private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  //private final PoseEstimator m_poseEstimator = new PoseEstimator(m_swerve);
+  public final Limelight m_Limelight=new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightStaticHeight,Constants.LimeLightValues.limelightStaticAngle);
 
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -57,13 +60,14 @@ public class RobotContainer {
   public double m_D;
 
   public RobotContainer(){
-    //m_autoChooser = AutoBuilder.buildAutoChooser();
-    //SmartDashboard.putData("Auto Chooser",m_autoChooser);
+    m_autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser",m_autoChooser);
     // Configure the button bindings
     configureButtonBindings();
     //createAutonomousCommandList(); 
     //Create Auto Commands
     resetDefaultCommand();
+
   }
 
 
@@ -85,10 +89,9 @@ public class RobotContainer {
   */
   private void createAutonomousCommandList(){
     try{
-       
-      m_autoChooser.setDefaultOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
+     /* m_autoChooser.setDefaultOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
       m_autoChooser.addOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
-      m_autoChooser.addOption(AutoConstants.autoMode3,AutoConstants.autoMode3);
+      m_autoChooser.addOption(AutoConstants.autoMode3,AutoConstants.autoMode3);*/
 
       SmartDashboard.putNumber("P",m_P);
       SmartDashboard.putNumber("I",m_I);
@@ -125,6 +128,12 @@ public class RobotContainer {
   public void TeleopPeriodic(){
     refreshSmartDashboard();
     GetPIDValues();
+
+    if(m_Limelight.isTargetAvailible()){
+      System.out.println("Pose Via AprilTag: "+m_Limelight.GetPoseViaApriltag());
+    }else{
+      //System.out.println("No Target");
+    }
   }
 
   public void AllPeriodic(){
@@ -132,7 +141,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand(){
     //Command command=m_autoChooser.getSelected();
-    Command command = new AutoDoNothingCommand();
+    Command command = m_autoChooser.getSelected();
     return command;
   }
   

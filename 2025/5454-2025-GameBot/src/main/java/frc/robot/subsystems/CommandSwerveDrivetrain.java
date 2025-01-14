@@ -16,9 +16,11 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 
 import frc.robot.Constants;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -53,6 +55,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
     private SwerveRequest.ApplyRobotSpeeds drive = new SwerveRequest.ApplyRobotSpeeds();
+
+    private SwerveDrivePoseEstimator m_poseEstimator;
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -134,6 +138,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+        buildPoseEstimator();
+        configAutoBuilder();
     }
 
     /**
@@ -158,6 +165,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+        buildPoseEstimator();
+        configAutoBuilder();
     }
 
     /**
@@ -190,6 +200,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+        buildPoseEstimator();
+        configAutoBuilder();
+    }
+
+    public void buildPoseEstimator(){
+        m_poseEstimator=new SwerveDrivePoseEstimator(getKinematics(),
+                        new Rotation2d(this.getPigeon2().getYaw().getValue()),
+                        this.getState().ModulePositions,getPose2d());
     }
 
     public void configAutoBuilder(){
@@ -228,7 +247,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         this.setControl(drive.withSpeeds(chassisSpeeds)
         .withWheelForceFeedforwardsX(driveFF.robotRelativeForcesXNewtons())
         .withWheelForceFeedforwardsY(driveFF.robotRelativeForcesYNewtons()));
-
     }
 
     public ChassisSpeeds getChassisSpeeds(){
@@ -308,6 +326,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        m_poseEstimator.update(new Rotation2d(this.getPigeon2().getYaw().getValue()),
+                                this.getState().ModulePositions);
     }
 
     private void startSimThread() {
