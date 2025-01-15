@@ -78,7 +78,7 @@ public final class Constants {
     public static final double targetXPosRange=50;
     public static final double limelightTurretHeight = 17.5; //37
     public static final double limelightTurretAngle = 22.5; //40
-    public static final double limelightStaticHeight = 0;
+    public static final double limelightStaticHeight = 18;
     public static final double limelightStaticAngle = 0;
     public static final double kVisionDistanceTolerance = 5;
     public static final double kVisionXTolerance = .04;
@@ -88,6 +88,12 @@ public final class Constants {
 
     public static final String turretLimelightName="";
     public static final String staticLimelightName="static-limelight";
+
+    public static final double lineupDeadband0=0.3;
+    public static final double lineupDeadband1=0.7;
+    public static final double lineupDeadband2=3;
+    public static final double lineupDeadband3=9;
+    public static final double lineupDeadband4=15;
 
     public static final int redSpeakerPipeline=0;
     public static final int blueSpeakerPipeline=1;

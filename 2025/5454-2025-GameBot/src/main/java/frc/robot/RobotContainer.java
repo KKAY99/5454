@@ -7,6 +7,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +21,10 @@ import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
 import frc.robot.utilities.Limelight;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
+
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.StatusSignal.SignalMeasurement;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -41,7 +45,7 @@ public class RobotContainer {
   private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
   private final int leftTriggerAxis = XboxController.Axis.kLeftTrigger.value;
 
-  private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive); 
+  private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
 
@@ -67,7 +71,7 @@ public class RobotContainer {
     //createAutonomousCommandList(); 
     //Create Auto Commands
     resetDefaultCommand();
-
+    m_Limelight.setPipeline(1);
   }
 
 
@@ -78,6 +82,8 @@ public class RobotContainer {
 
 
   private void configureButtonBindings(){
+    ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve, m_Limelight);
+    m_xBoxDriver.a().whileTrue(lineup);
   }
       
   private void refreshSmartDashboard(){  
@@ -117,6 +123,11 @@ public class RobotContainer {
   }
   
   public void AutoPeriodic(){
+    if(m_Limelight.isTargetAvailible()){
+      System.out.println("Pose Via AprilTag: "+m_Limelight.GetPoseViaApriltag());
+      System.out.println("robot pos: " + m_swerve.getPose2d());
+      m_swerve.addVisionMeasurement(m_Limelight.GetPoseViaApriltag(),Utils.getCurrentTimeSeconds());
+    }
   }
 
   public void AutonMode(){
@@ -130,7 +141,8 @@ public class RobotContainer {
     GetPIDValues();
 
     if(m_Limelight.isTargetAvailible()){
-      System.out.println("Pose Via AprilTag: "+m_Limelight.GetPoseViaApriltag());
+      //System.out.println("Pose Via AprilTag: "+m_Limelight.GetPoseViaApriltag());
+      //m_swerve.addVisionMeasurement(m_Limelight.GetPoseViaApriltag(),Timer.getFPGATimestamp());
     }else{
       //System.out.println("No Target");
     }

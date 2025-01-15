@@ -25,7 +25,7 @@ public class Limelight {
     //limelight hearbeat
     private static NetworkTableEntry hb;
     // robot pose based on limelight
-    private static NetworkTableEntry robotPoseRed;
+    private static NetworkTableEntry robotPoseBlue;
 
     private static double kConvertInchestoMeters = 0.0254; //Multiple 
     private double m_limeLightHeight;
@@ -77,7 +77,7 @@ public class Limelight {
         hb = llTable.getEntry("hb");
         
         // robot pose accoridng to limelight
-        robotPoseRed = llTable.getEntry("botpose_wpiblue");
+        robotPoseBlue = llTable.getEntry("botpose_wpiblue");
         
         m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
@@ -254,7 +254,7 @@ public class Limelight {
     }
     public Pose2d GetPoseViaApriltag(){
         double[] empty=null;
-        double[] robotPoseValues=robotPoseRed.getDoubleArray(empty);
+        double[] robotPoseValues=robotPoseBlue.getDoubleArray(empty);
 
         Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
         //Pose2d pose=new Pose2d();
@@ -264,7 +264,7 @@ public class Limelight {
     public double[] GetDoublePosArray(){
         double[] empty=null;
 
-        return robotPoseRed.getDoubleArray(empty);
+        return robotPoseBlue.getDoubleArray(empty);
     }
 
     public void turnLEDOff() {
