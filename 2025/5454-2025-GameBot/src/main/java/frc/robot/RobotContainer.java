@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -53,8 +54,11 @@ public class RobotContainer {
 
   //private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  public final Limelight m_Limelight=new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightStaticHeight,Constants.LimeLightValues.limelightStaticAngle);
+  public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightOdomHeight,
+                                                  Constants.LimeLightValues.limelightOdomAngle,0,0,Constants.LimeLightValues.odomLimelightName);
 
+  public final Limelight m_NeuralLimelight=new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightNeuralHeight,
+                                                  Constants.LimeLightValues.limelightNeuralAngle,0,0,Constants.LimeLightValues.neuralLimelightName);
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
           .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
@@ -64,29 +68,44 @@ public class RobotContainer {
   public double m_D;
 
   public RobotContainer(){
+    configureNamedCommands();
     m_autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser",m_autoChooser);
     // Configure the button bindings
+    createAutonomousCommandList(); 
     configureButtonBindings();
-    //createAutonomousCommandList(); 
     //Create Auto Commands
     resetDefaultCommand();
-    m_Limelight.setPipeline(1);
   }
 
 
   public void configureNamedCommands() {
+    NamedCommands.registerCommand("PipelineCenterApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline));
+    NamedCommands.registerCommand("PipelineLeftApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.leftApriltagPipeline));
+    NamedCommands.registerCommand("PipelineRightApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline));
+    NamedCommands.registerCommand("ApriltagLineUp",new ApriltagLineupCommand(m_swerve, m_OdomLimelight));
 
-
-    }
+  }
 
 
   private void configureButtonBindings(){
-    ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve, m_Limelight);
-    m_xBoxDriver.a().whileTrue(lineup);
+    ApriltagLineupCommand lineupApriltag=new ApriltagLineupCommand(m_swerve, m_OdomLimelight);
+    m_xBoxDriver.leftTrigger().whileTrue(lineupApriltag);
+
+    ApriltagLineupCommand lineupObject=new ApriltagLineupCommand(m_swerve, m_NeuralLimelight);
+    m_xBoxDriver.rightTrigger().whileTrue(lineupObject);
+
+    PipelineSwapCommand piplineSwap0=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline);
+    m_xBoxDriver.b().onTrue(piplineSwap0);
+
+    PipelineSwapCommand piplineSwap1=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.leftApriltagPipeline);
+    m_xBoxDriver.leftBumper().onTrue(piplineSwap1);
+
+    PipelineSwapCommand piplineSwap2=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline);
+    m_xBoxDriver.rightBumper().onTrue(piplineSwap2);
   }
       
   private void refreshSmartDashboard(){  
+    SmartDashboard.putNumber("Limelight Distance", m_OdomLimelight.getDistance());
   }
   
   /*private boolean checkCANConnections(){
@@ -98,7 +117,7 @@ public class RobotContainer {
      /* m_autoChooser.setDefaultOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
       m_autoChooser.addOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
       m_autoChooser.addOption(AutoConstants.autoMode3,AutoConstants.autoMode3);*/
-
+      
       SmartDashboard.putNumber("P",m_P);
       SmartDashboard.putNumber("I",m_I);
       SmartDashboard.putNumber("D",m_D);
@@ -123,10 +142,10 @@ public class RobotContainer {
   }
   
   public void AutoPeriodic(){
-    if(m_Limelight.isTargetAvailible()){
-      System.out.println("Pose Via AprilTag: "+m_Limelight.GetPoseViaApriltag());
+    if(m_OdomLimelight.isTargetAvailible()){
+     System.out.println("Pose Via AprilTag: "+m_OdomLimelight.GetPoseViaApriltag());
       System.out.println("robot pos: " + m_swerve.getPose2d());
-      m_swerve.addVisionMeasurement(m_Limelight.GetPoseViaApriltag(),Utils.getCurrentTimeSeconds());
+      m_swerve.addVisionMeasurement(m_OdomLimelight.GetPoseViaApriltag(),Utils.getCurrentTimeSeconds());
     }
   }
 
@@ -140,9 +159,9 @@ public class RobotContainer {
     refreshSmartDashboard();
     GetPIDValues();
 
-    if(m_Limelight.isTargetAvailible()){
-      //System.out.println("Pose Via AprilTag: "+m_Limelight.GetPoseViaApriltag());
-      //m_swerve.addVisionMeasurement(m_Limelight.GetPoseViaApriltag(),Timer.getFPGATimestamp());
+    if(m_OdomLimelight.isTargetAvailible()){
+      //System.out.println("Pose Via AprilTag: "+m_OdomLimelight.GetPoseViaApriltag());
+      //m_swerve.addVisionMeasurement(m_OdomLimelight.GetPoseViaApriltag(),Timer.getFPGATimestamp());
     }else{
       //System.out.println("No Target");
     }

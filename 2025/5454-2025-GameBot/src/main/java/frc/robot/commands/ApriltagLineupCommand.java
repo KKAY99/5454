@@ -13,8 +13,11 @@ public class ApriltagLineupCommand extends Command {
   private CommandSwerveDrivetrain m_swerve;
   private Limelight m_Limelight;
 
+  private double m_targetDistance;
+  private double kDeadband = 1;
+
   private enum States{
-    CHECKFORTARGET,LINEUP,END
+    CHECKFORTARGET,ROTATETOWARDS,DRIVETOWARDS,LINEUP,END
   };
 
   private States m_currentState = States.CHECKFORTARGET;
@@ -30,6 +33,7 @@ public class ApriltagLineupCommand extends Command {
   @Override
   public void initialize() {
     m_currentState = States.CHECKFORTARGET;
+    //System.out.println("Command started");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,6 +50,11 @@ public class ApriltagLineupCommand extends Command {
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
+    double distance=m_Limelight.getDistance();
+    double rawX=m_Limelight.getXRaw();
+    double x=Math.abs(m_Limelight.getXRaw());
+    double flipValue=rawX/x;
+    double strafe=0;
 
     switch(m_currentState){
       case CHECKFORTARGET:
@@ -55,16 +64,22 @@ public class ApriltagLineupCommand extends Command {
           m_currentState = States.END;
         }
       break;
+      case ROTATETOWARDS:
+
+      break;
+      case DRIVETOWARDS:
+        if (m_targetDistance > distance + kDeadband){
+          m_swerve.drive(-0.2,0,0);
+        }else if(m_targetDistance < distance - kDeadband){
+          m_swerve.drive(0.2,0,0);
+        }
+
+        if (m_targetDistance < distance + kDeadband && m_targetDistance > distance - kDeadband){
+          m_swerve.drive(0,0,0);
+          m_currentState = States.LINEUP;
+        }
+      break;
       case LINEUP:
-        double distance=m_Limelight.getDistance();
-        double rawX=m_Limelight.getXRaw();
-        double x=Math.abs(m_Limelight.getXRaw());
-        double flipValue=rawX/x;
-        double strafe=0;
-
-        System.out.println("CurrentX: "+x);
-        System.out.println("FlipValue: "+flipValue);
-
         if(x>LimeLightValues.lineupDeadband4){
           strafe=0.4;
         }else if(x<LimeLightValues.lineupDeadband4&&x>LimeLightValues.lineupDeadband3){
@@ -82,7 +97,6 @@ public class ApriltagLineupCommand extends Command {
         if(x<0.1){
           m_swerve.drive(0,0,0);
           System.out.println("Stopping");
-          returnValue=true;
           m_currentState=States.END;
         }else{
           System.out.println("Moving At: "+strafe);
@@ -90,7 +104,8 @@ public class ApriltagLineupCommand extends Command {
         }
       break;
       case END:
-
+        returnValue=true;
+        //System.out.println("Command ended");
     }
 
     return returnValue;
