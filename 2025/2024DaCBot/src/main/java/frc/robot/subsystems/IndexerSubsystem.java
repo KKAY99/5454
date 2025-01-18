@@ -12,19 +12,19 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IndexerSubsystem extends SubsystemBase {
   private SparkMax m_motor1;
   private SparkMax m_motor2;
   /** Creates a new SpinMotor. */
-  public IntakeSubsystem(int CanID_1, int CanID_2) {
+  public IndexerSubsystem(int CanID_1, int CanID_2) {
     m_motor1 = new SparkMax(CanID_1, MotorType.kBrushless);
     m_motor2 = new SparkMax(CanID_2, MotorType.kBrushless);
 
   }
   
   public void motor_run(double speed){
-    m_motor1.set(-speed);
-    m_motor2.set(speed);
+    m_motor1.set(speed);
+    m_motor2.set(-speed);
   }
 
   public void motor_stop(){
