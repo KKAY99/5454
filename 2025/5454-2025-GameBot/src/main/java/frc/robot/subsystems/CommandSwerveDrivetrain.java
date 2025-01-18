@@ -275,6 +275,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         return returnValue;
     }
+
+    public void drive(double forward, double strafe, double rot){
+        SwerveRequest.RobotCentric newRequest=new SwerveRequest.RobotCentric();
+        newRequest.withVelocityX(forward).withVelocityY(strafe).withRotationalRate(rot);
+
+        this.setControl(newRequest);
+    }
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
      *

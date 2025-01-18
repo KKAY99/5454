@@ -9,6 +9,18 @@
           "data": {
             "pathName": "Coral Middle"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PipelineCenterApriltag"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ApriltagLineUp"
+          }
         }
       ]
     }

@@ -73,21 +73,26 @@ public final class Constants {
     public static final double steeringFeedForward = 0.0;
 
     public static final double targetHeight = 33.75; // 249 cm
-    public static final double targetXPosShoot = -1.5;
-    public static final double targetXPosSafeZone = 5;
-    public static final double targetXPosRange=50;
-    public static final double limelightTurretHeight = 17.5; //37
-    public static final double limelightTurretAngle = 22.5; //40
-    public static final double limelightStaticHeight = 0;
-    public static final double limelightStaticAngle = 0;
+    public static final double limelightNeuralHeight = 12; //37
+    public static final double limelightNeuralAngle = -10; //40
+    public static final double limelightOdomHeight = 18;
+    public static final double limelightOdomAngle = 0;
     public static final double kVisionDistanceTolerance = 5;
     public static final double kVisionXTolerance = .04;
     public static final double kVisionXOffset=4;
-    public static final double kVisionXMaxDistanceOffset=4.31; // was 1.7
-    public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
 
-    public static final String turretLimelightName="";
-    public static final String staticLimelightName="static-limelight";
+    public static final String odomLimelightName="limelight-odom";
+    public static final String neuralLimelightName="limelight-neural";
+
+    public static final int centerApriltagPipeline=0;
+    public static final int leftApriltagPipeline=1;
+    public static final int rightApriltagPipeline=2;
+
+    public static final double lineupDeadband0=0.3;
+    public static final double lineupDeadband1=0.7;
+    public static final double lineupDeadband2=3;
+    public static final double lineupDeadband3=9;
+    public static final double lineupDeadband4=15;
 
     public static final int redSpeakerPipeline=0;
     public static final int blueSpeakerPipeline=1;
