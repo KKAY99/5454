@@ -1,10 +1,17 @@
 package frc.robot.utilities;
 
 import frc.robot.Constants;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import com.fasterxml.jackson.databind.type.ArrayType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.DoubleArrayTopic;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.IntegerTopic;
@@ -35,33 +42,31 @@ public class Limelight {
 
     private DoubleTopic ledMode;
     private DoubleEntry pipeline;
+    private DoubleArraySubscriber rawfiducials;
 
-    private double kConvertInchestoMeters = 0.0254; //Multiple 
     private double m_limeLightHeight;
     private double m_mountingAngle;
-    private double m_targetDistance = 0;
+    private double  m_targetHeight=0;
     private double m_xStaticOffset = 0;
+    private ArrayList<Double> m_fiducialIDFilter=new ArrayList<>();
     private String m_limeLightName;
 
-    double  m_targetHeight=0;
-
-    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet,
-                    double targetDistance,String limeLightName) {
+    public Limelight(double limeLightHeight, double mountingAngle,double xoffSet,String limeLightName) {
         llTable = NetworkTableInstance.getDefault().getTable(limeLightName);
         tx = llTable.getDoubleTopic("tx").subscribe(0);
         ty = llTable.getDoubleTopic("ty").subscribe(0);
         ta = llTable.getDoubleTopic("ta").subscribe(0);
         tv = llTable.getDoubleTopic("tv").subscribe(0);
         hb = llTable.getDoubleTopic("hb").subscribe(0);
+        rawfiducials = llTable.getDoubleArrayTopic("rawfiducials").subscribe(new double[] {});
         ledMode = llTable.getDoubleTopic("ledMode");
         pipeline = llTable.getDoubleTopic("pipeline").getEntry(0);
         robotPoseBlue = llTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
         
-        m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
         m_mountingAngle = mountingAngle;
         m_xStaticOffset = xoffSet;
-        m_targetDistance = targetDistance;
+
         m_limeLightName=limeLightName;
     };
 
@@ -76,17 +81,46 @@ public class Limelight {
 
     public double getDistance() {
         double distance = 0;
-        // FROM Limelight Docs
-        // d = (h2-h1) / tan(a1+a2)
         double measuredAngle = getY();
         if (measuredAngle != 0) {
-           distance = (m_targetHeight - m_limeLightHeight) / Math.tan(Math.toRadians(m_mountingAngle + measuredAngle));
+            distance = (m_targetHeight - m_limeLightHeight) / Math.tan(Math.toRadians(m_mountingAngle + measuredAngle));
         }   
+
         return distance;
     }
 
-    public double getDistanceInMeters(){
-        return getDistance()*kConvertInchestoMeters;
+    public void setIDFilter(int... fiducialIDs){
+        m_fiducialIDFilter=new ArrayList<>();
+
+        for(double fiducialID:fiducialIDs){
+            m_fiducialIDFilter.add(fiducialID);
+        }
+    }
+
+    public ArrayList<Double> getRawFiducial(){
+        ArrayList<Double> returnArray=new ArrayList<>();
+        int numOfFiducials=rawfiducials.get().length/7;
+
+        for(int i=0;i<numOfFiducials;i++){
+            double currentFiducial=0;
+            if(rawfiducials.get().length>0+(7*i)){
+                currentFiducial=rawfiducials.get()[0+(7*i)];
+            }
+            
+            if(m_fiducialIDFilter.contains(currentFiducial)){
+                for(int j=i;j<i+7;j++){    
+                returnArray.add(j-i,rawfiducials.get()[j]);
+                }
+            }
+        }
+
+        if(returnArray.size()==0){
+            for(int i=0;i<7;i++){
+                returnArray.add(0.0);
+            }
+        }
+        
+        return returnArray;
     }
 
     public void setPipeline(int pipelineNum){
@@ -98,11 +132,19 @@ public class Limelight {
     }
 
     public double getX(){
-        return tx.get();
+        if(!m_fiducialIDFilter.isEmpty()){
+            return this.getRawFiducial().get(1);
+        }else{
+            return tx.get();
+        }
     }
 
     public double getY(){
-        return ty.get();
+        if(!m_fiducialIDFilter.isEmpty()){
+            return this.getRawFiducial().get(2);
+        }else{
+            return ty.get();
+        }
     }
 
     public double getArea() {
@@ -130,11 +172,7 @@ public class Limelight {
         }
     }
 
-    public void setTargetDistance(double distance) {
-        m_targetDistance = distance;
-    }
-
-    public void setTargetHeight (double height){
+    public void setTargetHeight(double height){
         m_targetHeight=height;
     }
 
@@ -144,12 +182,20 @@ public class Limelight {
     public double getHeartBeat(){
         return hb.get();
     }
-    public Pose2d GetPoseViaApriltag(){
+
+    public Pose2d GetPoseViaApriltagNT(){
         double[] robotPoseValues=robotPoseBlue.get();
 
-        Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
+        Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
         return pose;
     }
+
+    public Pose2d GetPoseViaHelper(double robotYaw){
+        LimelightHelpers.SetRobotOrientation(m_limeLightName,robotYaw,0,0,0,0,0);
+        LimelightHelpers.PoseEstimate poseEstimate=LimelightHelpers.getBotPoseEstimate_wpiBlue(m_limeLightName);
+
+        return poseEstimate.pose;
+    }   
 
     public double[] GetDoublePosArray(){
         double[] empty=null;

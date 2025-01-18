@@ -4,7 +4,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -53,11 +55,11 @@ public class RobotContainer {
 
   //private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightOdomHeight,
-                                                  Constants.LimeLightValues.limelightOdomAngle,0,0,Constants.LimeLightValues.odomLimelightName);
+  public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightOdomHeight,Constants.LimeLightValues.limelightOdomAngle,
+                                                0,Constants.LimeLightValues.odomLimelightName);
 
-  public final Limelight m_NeuralLimelight=new Limelight(Constants.LimeLightValues.targetHeight,Constants.LimeLightValues.limelightNeuralHeight,
-                                                  Constants.LimeLightValues.limelightNeuralAngle,0,0,Constants.LimeLightValues.neuralLimelightName);
+  public final Limelight m_NeuralLimelight=new Limelight(Constants.LimeLightValues.limelightNeuralHeight,Constants.LimeLightValues.limelightNeuralAngle,
+                                                0,Constants.LimeLightValues.neuralLimelightName);
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
           .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
@@ -80,15 +82,15 @@ public class RobotContainer {
     NamedCommands.registerCommand("PipelineCenterApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline));
     NamedCommands.registerCommand("PipelineLeftApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.leftApriltagPipeline));
     NamedCommands.registerCommand("PipelineRightApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline));
-    NamedCommands.registerCommand("ApriltagLineUp",new ApriltagLineupCommand(m_swerve,m_OdomLimelight));
-    NamedCommands.registerCommand("ObjectLineUp",new ApriltagLineupCommand(m_swerve,m_NeuralLimelight));
+    NamedCommands.registerCommand("ApriltagLineUp",new LimelightLineupCommand(m_swerve,m_OdomLimelight,30,21));
+    NamedCommands.registerCommand("ObjectLineUp",new LimelightLineupCommand(m_swerve,m_NeuralLimelight,40));
   }
 
   private void configureButtonBindings(){
-    ApriltagLineupCommand lineupApriltag=new ApriltagLineupCommand(m_swerve, m_OdomLimelight);
+    LimelightLineupCommand lineupApriltag=new LimelightLineupCommand(m_swerve, m_OdomLimelight,30,21);
     m_xBoxDriver.leftTrigger().whileTrue(lineupApriltag);
 
-    ApriltagLineupCommand lineupObject=new ApriltagLineupCommand(m_swerve, m_NeuralLimelight);
+    LimelightLineupCommand lineupObject=new LimelightLineupCommand(m_swerve, m_NeuralLimelight,40);
     m_xBoxDriver.rightTrigger().whileTrue(lineupObject);
 
     PipelineSwapCommand piplineSwap0=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline);
@@ -102,7 +104,9 @@ public class RobotContainer {
   }
       
   private void refreshSmartDashboard(){  
-    SmartDashboard.putNumber("Limelight Distance", m_OdomLimelight.getDistance());
+    SmartDashboard.putNumber("Odom Limelight Distance", m_OdomLimelight.getDistance());
+    SmartDashboard.putNumber("Odom Limelight X", m_OdomLimelight.getX());
+    SmartDashboard.putNumber("Neural Limelight Distance", m_NeuralLimelight.getDistance());
   }
   
   /*private boolean checkCANConnections(){
@@ -140,28 +144,31 @@ public class RobotContainer {
   
   public void AutoPeriodic(){
     if(m_OdomLimelight.isTargetAvailible()){
-     System.out.println("Pose Via AprilTag: "+m_OdomLimelight.GetPoseViaApriltag());
-      System.out.println("robot pos: " + m_swerve.getPose2d());
-      m_swerve.addVisionMeasurement(m_OdomLimelight.GetPoseViaApriltag(),Utils.getCurrentTimeSeconds());
+      Pose2d poseFromHelp=m_OdomLimelight.GetPoseViaHelper(m_swerve.getPigeon2().getYaw().getValueAsDouble());
+      m_swerve.addVisionMeasurement(new Pose2d(poseFromHelp.getX(),poseFromHelp.getY(),new Rotation2d(0)),
+                                    Utils.getCurrentTimeSeconds());
     }
   }
 
   public void AutonMode(){
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   }
 
   public void TeleopMode(){
+    m_OdomLimelight.setIDFilter(21);
   }
 
   public void TeleopPeriodic(){
     refreshSmartDashboard();
     GetPIDValues();
 
-    if(m_OdomLimelight.isTargetAvailible()){
-      //System.out.println("Pose Via AprilTag: "+m_OdomLimelight.GetPoseViaApriltag());
-      //m_swerve.addVisionMeasurement(m_OdomLimelight.GetPoseViaApriltag(),Timer.getFPGATimestamp());
-    }else{
-      //System.out.println("No Target");
-    }
+    //System.out.println("Distance to object: " + m_NeuralLimelight.getDistance());
+    /*if(m_OdomLimelight.isTargetAvailible()){
+      System.out.println("Pose Via AprilTagMG: "+m_OdomLimelight.GetPoseViaHelper(m_swerve.getPigeon2().getYaw().getValueAsDouble()));
+      System.out.println("Pose Via AprilTagNT: "+m_OdomLimelight.GetPoseViaApriltagNT());
+      //m_swerve.addVisionMeasurement(m_OdomLimelight.GetPoseViaHelper(m_swerve.getPigeon2().getYaw().getValueAsDouble()),
+      //                               Utils.getCurrentTimeSeconds());
+     }*/
   }
 
   public void AllPeriodic(){
