@@ -4,80 +4,58 @@ import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.DoubleTopic;
+import edu.wpi.first.networktables.IntegerTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
+import edu.wpi.first.networktables.PubSubOption;
+import edu.wpi.first.networktables.Topic;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.DoubleEntry;
 
 //@Logged(strategy = Strategy.OPT_IN)
 public class Limelight {
 
-    private static NetworkTable llTable;
+    private NetworkTable llTable;
     // x location of the target
-    private static NetworkTableEntry tx;
+    private DoubleSubscriber tx;
     // y location of the target
-    private static NetworkTableEntry ty;
+    private DoubleSubscriber ty;
     // area of the target
-    private static NetworkTableEntry ta;
+    private DoubleSubscriber ta;
     // does the limelight have a target
-    private static NetworkTableEntry tv;
+    private DoubleSubscriber tv;
     //limelight hearbeat
-    private static NetworkTableEntry hb;
+    private DoubleSubscriber hb;
     // robot pose based on limelight
-    private static NetworkTableEntry robotPoseBlue;
+    private DoubleArraySubscriber robotPoseBlue;
 
-    private static double kConvertInchestoMeters = 0.0254; //Multiple 
+    private DoubleTopic ledMode;
+    private DoubleEntry pipeline;
+
+    private double kConvertInchestoMeters = 0.0254; //Multiple 
     private double m_limeLightHeight;
     private double m_mountingAngle;
     private double m_targetDistance = 0;
     private double m_xStaticOffset = 0;
-    private boolean m_LimelightLEDOn = false;
     private String m_limeLightName;
 
-    private double kP = Constants.LimeLightValues.steeringP;
-    private double kI = Constants.LimeLightValues.steeringI;
-    private double kD = Constants.LimeLightValues.steeringD;
-    private double kFeedForward = Constants.LimeLightValues.steeringFeedForward;
-
-    PIDController limeLightSteeringController = new PIDController(kP, kI, kD);
-
-    boolean m_dynamicEnabled = false;
     double  m_targetHeight=0;
-    public Limelight() {
-        this(0.0, 0.0, 0.0);
-    };
-
-    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle) {
-        this(targetHeight, limeLightHeight, mountingAngle, Constants.LimeLightValues.kVisionXOffset);
-    };
-
-    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet) {
-        this(targetHeight, limeLightHeight, mountingAngle, xoffSet,0 );
-    };
-    public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet,
-    double targetDistance) {
-        //Default Name to limelight 
-        this(targetHeight, limeLightHeight, mountingAngle, xoffSet,targetDistance,"limelight" );
-        
-    }
 
     public Limelight(double targetHeight, double limeLightHeight, double mountingAngle, double xoffSet,
-            double targetDistance,String limeLightName) {
-        
+                    double targetDistance,String limeLightName) {
         llTable = NetworkTableInstance.getDefault().getTable(limeLightName);
-        // x location of the target
-        tx = llTable.getEntry("tx");
-        // y location of the target
-        ty = llTable.getEntry("ty");
-        // area of the target
-        ta = llTable.getEntry("ta");
-        // does the limelight have a target
-        tv = llTable.getEntry("tv");
-        hb = llTable.getEntry("hb");
-        
-        // robot pose accoridng to limelight
-        robotPoseBlue = llTable.getEntry("botpose_wpiblue");
+        tx = llTable.getDoubleTopic("tx").subscribe(0);
+        ty = llTable.getDoubleTopic("ty").subscribe(0);
+        ta = llTable.getDoubleTopic("ta").subscribe(0);
+        tv = llTable.getDoubleTopic("tv").subscribe(0);
+        hb = llTable.getDoubleTopic("hb").subscribe(0);
+        ledMode = llTable.getDoubleTopic("ledMode");
+        pipeline = llTable.getDoubleTopic("pipeline").getEntry(0);
+        robotPoseBlue = llTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
         
         m_targetHeight = targetHeight;
         m_limeLightHeight = limeLightHeight;
@@ -91,9 +69,11 @@ public class Limelight {
     public double getOffset(){
         return m_xStaticOffset;
     }
+
     public void setOffSet(double newValue){
         m_xStaticOffset=newValue;
     }
+
     public double getDistance() {
         double distance = 0;
         // FROM Limelight Docs
@@ -102,68 +82,40 @@ public class Limelight {
         if (measuredAngle != 0) {
            distance = (m_targetHeight - m_limeLightHeight) / Math.tan(Math.toRadians(m_mountingAngle + measuredAngle));
         }   
-        //System.out.println(distance + " - " + m_targetHeight + " -- " + m_limeLightHeight + " --- " + measuredAngle + "----" + m_mountingAngle);
         return distance;
     }
+
     public double getDistanceInMeters(){
         return getDistance()*kConvertInchestoMeters;
     }
-    public void setPipeline(int pipeline){
-        llTable.getEntry("pipeline").setNumber(pipeline);
-        
-        
+
+    public void setPipeline(int pipelineNum){
+        pipeline.set(pipelineNum);
     }
+
     public int getPipeline(){
-        return (int) llTable.getEntry("pipeline").getInteger(99);
+        return (int) pipeline.get();
     }
 
-    public double getRotationPower(double measurement) {
-        double returnVal = getRotationPower(measurement, 0.0);
-        // System.out.println("LL Steer: " + returnVal);
-        return returnVal;
+    public double getX(){
+        return tx.get();
     }
 
-    public double getRotationPower(double measurement, double setpoint) {
-        if (isTargetAvailible()) {
-            return limeLightSteeringController.calculate(measurement, setpoint) + kFeedForward;
-        }
-        return 0.0;
-    }
-
-
-     public double getXRaw(){
-        return tx.getDouble(0.0);
-     }
-    public double getX() {
- //       if (m_dynamicEnabled) {
-//            return tx.getDouble(0.0) + getOffset(offsetValues, getDistance());
- //       } else {
-            return tx.getDouble(0.0) + m_xStaticOffset;
- //       }
-    }
-
-    public double getactualX() {
-        return tx.getDouble(0.0);
-    }
-
-    public double getY() {
-        return ty.getDouble(0.0);
-    }
-    public double getYRaw(){
-        return ty.getDouble(0.0);
+    public double getY(){
+        return ty.get();
     }
 
     public double getArea() {
-        return ta.getDouble(0.0);
+        return ta.get();
     }
 
     public boolean isTargetAvailible() {
-        return tv.getDouble(0) == 1.0;
+        return tv.get() == 1.0;
     }
 
-    public static void ledMode(boolean on) {
+    public void setLedMode(boolean on) {
         double mode = on ? 0 : 1;
-        llTable.getEntry("ledMode").setNumber(mode);
+        ledMode.publish().set(mode);
     }
 
     public enum VisionModes {
@@ -178,107 +130,30 @@ public class Limelight {
         }
     }
 
-    public static void setVisionMode() {
-        setVisionMode(VisionModes.LOW);
-    }
-
-    public static void setVisionMode(VisionModes visionMode) {
-        llTable.getEntry("pipeline").setNumber(visionMode.mode);
-    }
-
-    public static String getVisionMode() {
-        return llTable.getEntry("getpipe").getString("0");
-    }
-
     public void setTargetDistance(double distance) {
         m_targetDistance = distance;
     }
+
     public void setTargetHeight (double height){
         m_targetHeight=height;
     }
 
-    private boolean isAtTargetDistance() {
-        boolean returnValue = false;
-        if (m_targetDistance > 0) {
-            if ((Math.abs(m_targetDistance - getDistance()) < Constants.LimeLightValues.kVisionDistanceTolerance)) {
-                returnValue = true;
-            }
-        }
-        return returnValue;
-    }
-
-    public boolean isOnTargetX() {
-        boolean returnValue = false;
-        if (isTargetAvailible()) {
-            if ((Math.abs(getX()) < Constants.LimeLightValues.kVisionXTolerance)) {
-                // System.out.println("On Target -" + Math.abs(getX()
-                // ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-                returnValue = true;
-            } else {
-                // System.out.println("Off Target -" + Math.abs(getX()
-                // ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-
-            }
-
-        } else {
-            // System.out.println("Off Target -" + Math.abs(getX()
-            // ) + " - " + Constants.LimeLightValues.kVisionXTolerance);
-
-        }
-
-        return returnValue;
-
-    }
-
-    private void updateDashboard() {
-   //     SmartDashboard.putNumber("limelight x", getX());
-   //     SmartDashboard.putNumber("limelight y", getY());
-   //     SmartDashboard.putNumber("limelight area", getArea());
-        SmartDashboard.putNumber("Our limelight distance", getDistance());
-        SmartDashboard.putBoolean("limelight Have Atleast 1 target", isTargetAvailible());
-        SmartDashboard.putBoolean("Targets>=2", DoesLimelightHaveTwoTargets());
-  //      SmartDashboard.putString("limelight mode", getVisionMode());
-        //SmartDashboard.putNumberArray("RobotPoseRedLimelight", GetDoublePosArray());
-
-    }
-
     public boolean DoesLimelightHaveTwoTargets(){
-        return tv.getDouble(0)>= 2.0;
-    }
-
-    public double GetDistanceMultipler(){
-        return (getDistance()*0.2)+1;
+        return tv.get()>= 2.0;
     }
     public double getHeartBeat(){
-        return hb.getDouble(0);
+        return hb.get();
     }
     public Pose2d GetPoseViaApriltag(){
-        double[] empty=null;
-        double[] robotPoseValues=robotPoseBlue.getDoubleArray(empty);
+        double[] robotPoseValues=robotPoseBlue.get();
 
         Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(0));
-        //Pose2d pose=new Pose2d();
         return pose;
     }
 
     public double[] GetDoublePosArray(){
         double[] empty=null;
 
-        return robotPoseBlue.getDoubleArray(empty);
-    }
-
-    public void turnLEDOff() {
-        llTable.getEntry("ledMode").setNumber(1);
-        m_LimelightLEDOn = false;
-    }
-
-    public void turnLEDOn() {
-        // turn off lED
-        llTable.getEntry("ledMode").setNumber(3);
-        m_LimelightLEDOn = true;
-    }
-    
-    public void LimeLightPeriodic(boolean isEnabled) {
-        updateDashboard();
+        return robotPoseBlue.get();
     }
 }

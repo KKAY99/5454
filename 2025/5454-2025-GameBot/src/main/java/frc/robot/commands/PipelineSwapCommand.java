@@ -17,7 +17,7 @@ public class PipelineSwapCommand extends Command {
   @Override
   public void execute(){
     m_Limelight.setPipeline(m_pipeline);
-    System.out.println("Set pipline");
+    System.out.println("Set pipeline");
   }
 
   // Called once the command ends or is interrupted.

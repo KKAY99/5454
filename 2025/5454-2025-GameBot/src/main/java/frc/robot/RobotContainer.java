@@ -24,7 +24,6 @@ import frc.robot.utilities.Limelight;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
-
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.StatusSignal.SignalMeasurement;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -77,15 +76,13 @@ public class RobotContainer {
     resetDefaultCommand();
   }
 
-
   public void configureNamedCommands() {
     NamedCommands.registerCommand("PipelineCenterApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline));
     NamedCommands.registerCommand("PipelineLeftApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.leftApriltagPipeline));
     NamedCommands.registerCommand("PipelineRightApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline));
-    NamedCommands.registerCommand("ApriltagLineUp",new ApriltagLineupCommand(m_swerve, m_OdomLimelight));
-
+    NamedCommands.registerCommand("ApriltagLineUp",new ApriltagLineupCommand(m_swerve,m_OdomLimelight));
+    NamedCommands.registerCommand("ObjectLineUp",new ApriltagLineupCommand(m_swerve,m_NeuralLimelight));
   }
-
 
   private void configureButtonBindings(){
     ApriltagLineupCommand lineupApriltag=new ApriltagLineupCommand(m_swerve, m_OdomLimelight);

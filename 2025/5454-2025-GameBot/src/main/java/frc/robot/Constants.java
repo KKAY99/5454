@@ -73,8 +73,8 @@ public final class Constants {
     public static final double steeringFeedForward = 0.0;
 
     public static final double targetHeight = 33.75; // 249 cm
-    public static final double limelightNeuralHeight = 17.5; //37
-    public static final double limelightNeuralAngle = 22.5; //40
+    public static final double limelightNeuralHeight = 12; //37
+    public static final double limelightNeuralAngle = -10; //40
     public static final double limelightOdomHeight = 18;
     public static final double limelightOdomAngle = 0;
     public static final double kVisionDistanceTolerance = 5;

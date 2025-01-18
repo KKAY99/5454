@@ -51,8 +51,8 @@ public class ApriltagLineupCommand extends Command {
   public boolean isFinished() {
     boolean returnValue=false;
     double distance=m_Limelight.getDistance();
-    double rawX=m_Limelight.getXRaw();
-    double x=Math.abs(m_Limelight.getXRaw());
+    double rawX=m_Limelight.getX();
+    double x=Math.abs(m_Limelight.getX());
     double flipValue=rawX/x;
     double strafe=0;
 
@@ -89,9 +89,9 @@ public class ApriltagLineupCommand extends Command {
         }else if(x<LimeLightValues.lineupDeadband2&&x>LimeLightValues.lineupDeadband1){
           strafe=0.1;
         }else if(x<LimeLightValues.lineupDeadband1&&x>LimeLightValues.lineupDeadband0){
-          strafe=0.08;
+          strafe=0.1;
         }else if(x<LimeLightValues.lineupDeadband0){
-          strafe=0.07;
+          strafe=0.08;
         }
 
         if(x<0.1){
