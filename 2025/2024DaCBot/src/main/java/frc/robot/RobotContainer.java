@@ -27,6 +27,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.utilities.Limelight;
 
 import frc.robot.Constants.*;
+import frc.robot.commands.SpinMotorCommand;
+import frc.robot.subsystems.SpinMotor;
 
 
 /**
@@ -42,14 +44,15 @@ public class RobotContainer {
 
     
     private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
-    private WPI_VictorSPX m_LeftMotor1=new WPI_VictorSPX(DriveConstants.leftMotor1Port);
+    /*private WPI_VictorSPX m_LeftMotor1=new WPI_VictorSPX(DriveConstants.leftMotor1Port);
     private WPI_VictorSPX m_LeftMotor2=new WPI_VictorSPX(DriveConstants.leftMotor2Port);
     private WPI_VictorSPX m_RightMotor1=new WPI_VictorSPX(DriveConstants.rightMotor1Port);
     private WPI_VictorSPX m_RightMotor2=new WPI_VictorSPX(DriveConstants.rightMotor2Port);
     private MotorControllerGroup m_left = new MotorControllerGroup(m_LeftMotor1,m_LeftMotor2);
     private MotorControllerGroup m_right = new MotorControllerGroup(m_RightMotor1,m_RightMotor2);
-    private DifferentialDrive m_drive=new DifferentialDrive(m_left,m_right);
-    private Limelight m_Limelight=new Limelight();
+    private DifferentialDrive m_drive=new DifferentialDrive(m_left,m_right);*/
+    private SpinMotor m_SpinMotor=new SpinMotor(14);
+   // private Limelight m_Limelight=new Limelight();
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
@@ -66,14 +69,25 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-   
+      JoystickButton runMotorButton_1 = new JoystickButton(m_xBoxDriver, 1);
+      SpinMotorCommand spinMotorSpeed_1 = new SpinMotorCommand(m_SpinMotor, -0.1);
+      runMotorButton_1.whileTrue(spinMotorSpeed_1);
+      JoystickButton runMotorButton_2 = new JoystickButton(m_xBoxDriver, 2);
+      SpinMotorCommand spinMotorSpeed_2 = new SpinMotorCommand(m_SpinMotor, -0.2);
+      runMotorButton_2.whileTrue(spinMotorSpeed_2);
+      JoystickButton runMotorButton_3 = new JoystickButton(m_xBoxDriver, 3);
+      SpinMotorCommand spinMotorSpeed_3 = new SpinMotorCommand(m_SpinMotor, -0.3);
+      runMotorButton_3.whileTrue(spinMotorSpeed_3);
+      JoystickButton runMotorButton_4 = new JoystickButton(m_xBoxDriver, 4);
+      SpinMotorCommand spinMotorSpeed_4 = new SpinMotorCommand(m_SpinMotor, -0.4);
+      runMotorButton_4.whileTrue(spinMotorSpeed_4);
     }
        
     public void refreshSmartDashboard(){  
-      m_Limelight.setPipeline(5);
+     /*  m_Limelight.setPipeline(5);
       if(m_Limelight.isTargetAvailible()){
         System.out.print("Object found");
-      }
+      }*/
     }
     
     public void disabledPerioidicUpdates(){
@@ -112,8 +126,8 @@ public class RobotContainer {
   }*/
   
   public void driveRobot(){
-        m_drive.arcadeDrive(m_xBoxDriver.getLeftX(),m_xBoxDriver.getLeftY());
-        m_drive.setDeadband(0.1);
+        //m_drive.arcadeDrive(m_xBoxDriver.getLeftX(),m_xBoxDriver.getLeftY());
+        //m_drive.setDeadband(0.1);
   }
   public void clearAllStickyFaults(){
   Alliance alliance = DriverStation.getAlliance().get();
