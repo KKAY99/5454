@@ -94,8 +94,7 @@ public final class Constants {
     public static final double lineupDeadband3=9;
     public static final double lineupDeadband4=15;
 
-    public static final int redSpeakerPipeline=0;
-    public static final int blueSpeakerPipeline=1;
+    public static final double reefAprilTagHeight=8.75;
   }
 
   public static final class ButtonBindings{
