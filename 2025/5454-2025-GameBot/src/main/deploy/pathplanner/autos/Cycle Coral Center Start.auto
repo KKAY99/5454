@@ -11,9 +11,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "PipelineLeftApriltag"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -31,7 +37,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.5
           }
         },
         {
@@ -47,9 +53,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "PipelineRightApriltag"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -59,21 +71,21 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Center Apriltag To Coral Station"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
             "name": "ObjectLineUp"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Apriltag To Coral Station"
           }
         }
       ]

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.type.ArrayType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleArrayTopic;
 import edu.wpi.first.networktables.DoubleSubscriber;
@@ -43,6 +44,8 @@ public class Limelight {
     private DoubleTopic ledMode;
     private DoubleEntry pipeline;
     private DoubleArraySubscriber rawfiducials;
+    private DoubleArrayEntry fiducialIDFilters;
+    private DoubleArraySubscriber targetPoseInRobotSpace;
 
     private double m_limeLightHeight;
     private double m_mountingAngle;
@@ -53,19 +56,21 @@ public class Limelight {
 
     public Limelight(double limeLightHeight, double mountingAngle,double xoffSet,String limeLightName) {
         llTable = NetworkTableInstance.getDefault().getTable(limeLightName);
-        tx = llTable.getDoubleTopic("tx").subscribe(0);
-        ty = llTable.getDoubleTopic("ty").subscribe(0);
-        ta = llTable.getDoubleTopic("ta").subscribe(0);
-        tv = llTable.getDoubleTopic("tv").subscribe(0);
-        hb = llTable.getDoubleTopic("hb").subscribe(0);
-        rawfiducials = llTable.getDoubleArrayTopic("rawfiducials").subscribe(new double[] {});
-        ledMode = llTable.getDoubleTopic("ledMode");
-        pipeline = llTable.getDoubleTopic("pipeline").getEntry(0);
-        robotPoseBlue = llTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
+        tx=llTable.getDoubleTopic("tx").subscribe(0);
+        ty=llTable.getDoubleTopic("ty").subscribe(0);
+        ta=llTable.getDoubleTopic("ta").subscribe(0);
+        tv=llTable.getDoubleTopic("tv").subscribe(0);
+        hb=llTable.getDoubleTopic("hb").subscribe(0);
+        rawfiducials=llTable.getDoubleArrayTopic("rawfiducials").subscribe(new double[] {});
+        targetPoseInRobotSpace=llTable.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[] {});
+        fiducialIDFilters=llTable.getDoubleArrayTopic("fiducial_id_filters_set").getEntry(new double[] {});
+        ledMode=llTable.getDoubleTopic("ledMode");
+        pipeline=llTable.getDoubleTopic("pipeline").getEntry(0);
+        robotPoseBlue=llTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
         
-        m_limeLightHeight = limeLightHeight;
-        m_mountingAngle = mountingAngle;
-        m_xStaticOffset = xoffSet;
+        m_limeLightHeight=limeLightHeight;
+        m_mountingAngle=mountingAngle;
+        m_xStaticOffset=xoffSet;
 
         m_limeLightName=limeLightName;
     };
@@ -80,16 +85,16 @@ public class Limelight {
     }
 
     public double getDistance() {
-        double distance = 0;
-        double measuredAngle = getY();
-        if (measuredAngle != 0) {
-            distance = (m_targetHeight - m_limeLightHeight) / Math.tan(Math.toRadians(m_mountingAngle + measuredAngle));
+        double distance=0;
+        double measuredAngle=getY();
+        if (measuredAngle!=0) {
+            distance=(m_targetHeight-m_limeLightHeight)/Math.tan(Math.toRadians(m_mountingAngle+measuredAngle));
         }   
 
         return distance;
     }
 
-    public void setIDFilter(int... fiducialIDs){
+    public void setCodeIDFilter(int... fiducialIDs){
         m_fiducialIDFilter=new ArrayList<>();
 
         for(double fiducialID:fiducialIDs){
@@ -97,25 +102,39 @@ public class Limelight {
         }
     }
 
+    public void resetCodeIDFilter(){
+        m_fiducialIDFilter=new ArrayList<>();
+    }
+
+    public void setLimelightIDFilter(double... fiducialIDS){
+        fiducialIDFilters.set(fiducialIDS);
+    }
+
+    public void resetLimelightIDFilter(){
+        fiducialIDFilters.set(new double[] {});
+    }
+
     public ArrayList<Double> getRawFiducial(){
         ArrayList<Double> returnArray=new ArrayList<>();
         int numOfFiducials=rawfiducials.get().length/7;
 
-        for(int i=0;i<numOfFiducials;i++){
-            double currentFiducial=0;
-            if(rawfiducials.get().length>0+(7*i)){
-                currentFiducial=rawfiducials.get()[0+(7*i)];
-            }
-            
-            if(m_fiducialIDFilter.contains(currentFiducial)){
-                for(int j=i;j<i+7;j++){    
-                returnArray.add(j-i,rawfiducials.get()[j]);
+        try{
+            for(int i=0;i<numOfFiducials;i++){
+                double currentFiducial=99;
+                if(rawfiducials.get().length>0+(7*i)&&rawfiducials.get().length!=0){
+                    currentFiducial=rawfiducials.get()[0+(7*i)];
+                }
+                
+                if(m_fiducialIDFilter.contains(currentFiducial)){
+                    for(int j=i;j<i+7;j++){    
+                    returnArray.add(j-i,rawfiducials.get()[j]);
+                    }
                 }
             }
-        }
+        }catch(Exception e){}
 
         if(returnArray.size()==0){
-            for(int i=0;i<7;i++){
+            for(int i=0;i<8;i++){
                 returnArray.add(0.0);
             }
         }
@@ -133,17 +152,34 @@ public class Limelight {
 
     public double getX(){
         if(!m_fiducialIDFilter.isEmpty()){
-            return this.getRawFiducial().get(1);
+            return this.getFiducialX();
         }else{
             return tx.get();
         }
     }
 
+    private double getFiducialX(){
+        if(getRawFiducial().get(1)!=null){
+            return this.getRawFiducial().get(1);
+        }else{
+            return 0.0;
+        }
+        
+    }
+
     public double getY(){
         if(!m_fiducialIDFilter.isEmpty()){
-            return this.getRawFiducial().get(2);
+            return this.getFiducialY();
         }else{
             return ty.get();
+        }
+    }
+
+    private double getFiducialY(){
+        if(getRawFiducial().get(2)!=null){
+            return this.getRawFiducial().get(2);
+        }else{
+            return 0.0;
         }
     }
 
@@ -151,8 +187,16 @@ public class Limelight {
         return ta.get();
     }
 
-    public boolean isTargetAvailible() {
-        return tv.get() == 1.0;
+    public boolean isAnyTargetAvailable() {
+        return tv.get()==1.0;
+    }
+
+    public boolean isFilteredTargetAvailable(){
+        if(!m_fiducialIDFilter.isEmpty()){
+            return m_fiducialIDFilter.contains(this.getRawFiducial().get(0))&&tv.get()==1.0;
+        }else{
+            return false;
+        }    
     }
 
     public void setLedMode(boolean on) {
@@ -179,6 +223,7 @@ public class Limelight {
     public boolean DoesLimelightHaveTwoTargets(){
         return tv.get()>= 2.0;
     }
+
     public double getHeartBeat(){
         return hb.get();
     }
@@ -190,16 +235,18 @@ public class Limelight {
         return pose;
     }
 
-    public Pose2d GetPoseViaHelper(double robotYaw){
-        LimelightHelpers.SetRobotOrientation(m_limeLightName,robotYaw,0,0,0,0,0);
+    public Pose2d GetPoseViaHelper(){//double robotYaw){
+        //LimelightHelpers.SetRobotOrientation(m_limeLightName,robotYaw,0,0,0,0,0);
         LimelightHelpers.PoseEstimate poseEstimate=LimelightHelpers.getBotPoseEstimate_wpiBlue(m_limeLightName);
 
         return poseEstimate.pose;
-    }   
-
-    public double[] GetDoublePosArray(){
-        double[] empty=null;
-
-        return robotPoseBlue.get();
+    } 
+    
+    public double GetYawOfAprilTag(){
+        if(targetPoseInRobotSpace.get()!=null&&targetPoseInRobotSpace.get().length!=0){
+            return this.targetPoseInRobotSpace.get()[4];
+        }else{
+            return 0.0;
+        }
     }
 }
