@@ -27,11 +27,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.utilities.Limelight;
 
 import frc.robot.Constants.*;
+import frc.robot.commands.EndEffectorCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SpinMotorCommand;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.SpinMotor;
 
 
@@ -58,6 +60,7 @@ public class RobotContainer {
     //private SpinMotor m_SpinMotor=new SpinMotor(14);
     private IndexerSubsystem m_Indexer=new IndexerSubsystem(19, 18);
     private IntakeSubsystem m_Intake=new IntakeSubsystem(20, 15);
+    private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(11,12);
    // private Limelight m_Limelight=new Limelight();
     public RobotContainer() {
         // Configure the button bindings
@@ -89,21 +92,25 @@ public class RobotContainer {
       SpinMotorCommand spinMotorSpeed_4 = new SpinMotorCommand(m_SpinMotor, -0.4);ver, 
       runMotorButton_4.whileTrue(spinMotorSpeed_4);*/
 
-      JoystickButton IntakeButton_1 = new JoystickButton(m_xBoxDriver,1);
-      IntakeCommand intakeCommand_1 = new IntakeCommand(m_Intake, 0.95);
-      IntakeButton_1.whileTrue(intakeCommand_1);
+      JoystickButton EndEffectorButton_1 = new JoystickButton(m_xBoxDriver,1);
+      EndEffectorCommand effectorCommand_1 = new EndEffectorCommand(m_endEffector,1,.5);
+      EndEffectorButton_1.whileTrue(effectorCommand_1);
 
-      JoystickButton IntakeButton_2 = new JoystickButton(m_xBoxDriver, 4);
-      IntakeCommand intakeCommand_2 = new IntakeCommand(m_Intake, 0.1);
-      IntakeButton_2.whileTrue(intakeCommand_2);
+      
+      JoystickButton EndEffectorButton_2 = new JoystickButton(m_xBoxDriver,2);
+      EndEffectorCommand effectorCommand_2 = new EndEffectorCommand(m_endEffector,1,-.5);
+      EndEffectorButton_2.whileTrue(effectorCommand_2);
 
-      JoystickButton IndexerButton_1 = new JoystickButton(m_xBoxDriver, 2);
-      IndexerCommand indexerCommandSpeed_1 = new IndexerCommand(m_Indexer, 0.5);
-      IndexerButton_1.whileTrue(indexerCommandSpeed_1);
+      
+      JoystickButton EndEffectorButton_3 = new JoystickButton(m_xBoxDriver,3);
+      EndEffectorCommand effectorCommand_3 = new EndEffectorCommand(m_endEffector,2,.5);
+      EndEffectorButton_3.whileTrue(effectorCommand_3);
 
-      JoystickButton IndexerButton_2 = new JoystickButton(m_xBoxDriver, 3);
-      IndexerCommand indexerCommandSpeed_2 = new IndexerCommand(m_Indexer, 0.1);
-      IndexerButton_2.whileTrue(indexerCommandSpeed_2);
+      
+      JoystickButton EndEffectorButton_4 = new JoystickButton(m_xBoxDriver,1);
+      EndEffectorCommand effectorCommand_4 = new EndEffectorCommand(m_endEffector,2,-.5);
+      EndEffectorButton_4.whileTrue(effectorCommand_4);
+     
     }
        
     public void refreshSmartDashboard(){  
