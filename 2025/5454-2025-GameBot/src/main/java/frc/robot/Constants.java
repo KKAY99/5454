@@ -75,13 +75,16 @@ public final class Constants {
     public static final double targetHeight = 33.75; // 249 cm
     public static final double limelightNeuralHeight = 12; //37
     public static final double limelightNeuralAngle = -10; //40
-    public static final double limelightOdomHeight = 18;
-    public static final double limelightOdomAngle = 0;
+    public static final double limelightBackOdomHeight = 18;
+    public static final double limelightBackOdomAngle = 0;
+    public static final double limelightFrontOdomHeight = 16;
+    public static final double limelightFrontOdomAngle = -2;
     public static final double kVisionDistanceTolerance = 5;
     public static final double kVisionXTolerance = .04;
     public static final double kVisionXOffset=4;
 
-    public static final String odomLimelightName="limelight-odom";
+    public static final String backOdomLimelightName="limelight-odom";
+    public static final String frontOdomLimelightName="limelight-odomfwd";
     public static final String neuralLimelightName="limelight-neural";
 
     public static final int centerApriltagPipeline=0;

@@ -40,11 +40,13 @@ public class Limelight {
     private DoubleSubscriber hb;
     // robot pose based on limelight
     private DoubleArraySubscriber robotPoseBlue;
+    private DoubleArraySubscriber robotPoseBlueOrb;
 
     private DoubleTopic ledMode;
     private DoubleEntry pipeline;
     private DoubleArraySubscriber rawfiducials;
     private DoubleArrayEntry fiducialIDFilters;
+    private DoubleArrayEntry setrobotOrientation;
     private DoubleArraySubscriber targetPoseInRobotSpace;
 
     private double m_limeLightHeight;
@@ -64,9 +66,11 @@ public class Limelight {
         rawfiducials=llTable.getDoubleArrayTopic("rawfiducials").subscribe(new double[] {});
         targetPoseInRobotSpace=llTable.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[] {});
         fiducialIDFilters=llTable.getDoubleArrayTopic("fiducial_id_filters_set").getEntry(new double[] {});
+        setrobotOrientation=llTable.getDoubleArrayTopic("robot_orientation_set").getEntry(new double [] {});
         ledMode=llTable.getDoubleTopic("ledMode");
         pipeline=llTable.getDoubleTopic("pipeline").getEntry(0);
         robotPoseBlue=llTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
+        robotPoseBlueOrb=llTable.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[] {});
         
         m_limeLightHeight=limeLightHeight;
         m_mountingAngle=mountingAngle;
@@ -183,12 +187,16 @@ public class Limelight {
         }
     }
 
-    public double getArea() {
-        return ta.get();
-    }
-
     public boolean isAnyTargetAvailable() {
         return tv.get()==1.0;
+    }
+
+    public double GetYawOfAprilTag(){
+        if(targetPoseInRobotSpace.get()!=null&&targetPoseInRobotSpace.get().length!=0){
+            return this.targetPoseInRobotSpace.get()[4];
+        }else{
+            return 0.0;
+        }
     }
 
     public boolean isFilteredTargetAvailable(){
@@ -224,29 +232,21 @@ public class Limelight {
         return tv.get()>= 2.0;
     }
 
-    public double getHeartBeat(){
-        return hb.get();
+    public void SetRobotOrientation(double yaw,double yawRate){
+        setrobotOrientation.set(new double[] {yaw,yawRate,0,0,0,0});
     }
 
-    public Pose2d GetPoseViaApriltagNT(){
+    public Pose2d GetPoseViaMegatag1(){
         double[] robotPoseValues=robotPoseBlue.get();
 
         Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
         return pose;
     }
 
-    public Pose2d GetPoseViaHelper(){//double robotYaw){
-        //LimelightHelpers.SetRobotOrientation(m_limeLightName,robotYaw,0,0,0,0,0);
-        LimelightHelpers.PoseEstimate poseEstimate=LimelightHelpers.getBotPoseEstimate_wpiBlue(m_limeLightName);
+    public Pose2d GetPoseViaMegatag2(){
+        double[] robotPoseValues=robotPoseBlueOrb.get();
 
-        return poseEstimate.pose;
-    } 
-    
-    public double GetYawOfAprilTag(){
-        if(targetPoseInRobotSpace.get()!=null&&targetPoseInRobotSpace.get().length!=0){
-            return this.targetPoseInRobotSpace.get()[4];
-        }else{
-            return 0.0;
-        }
+        Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
+        return pose;
     }
 }

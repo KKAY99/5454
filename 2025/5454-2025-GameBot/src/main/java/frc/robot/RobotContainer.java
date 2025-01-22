@@ -55,9 +55,10 @@ public class RobotContainer {
 
   //private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightOdomHeight,Constants.LimeLightValues.limelightOdomAngle,
-                                                0,Constants.LimeLightValues.odomLimelightName);
-
+  public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightBackOdomHeight,Constants.LimeLightValues.limelightBackOdomAngle,
+                                                0,Constants.LimeLightValues.backOdomLimelightName);
+  public final Limelight m_OdomFwdLimelight=new Limelight(Constants.LimeLightValues.limelightFrontOdomHeight,Constants.LimeLightValues.limelightFrontOdomAngle,
+                                                0,Constants.LimeLightValues.frontOdomLimelightName);
   public final Limelight m_NeuralLimelight=new Limelight(Constants.LimeLightValues.limelightNeuralHeight,Constants.LimeLightValues.limelightNeuralAngle,
                                                 0,Constants.LimeLightValues.neuralLimelightName);
 
@@ -144,10 +145,16 @@ public class RobotContainer {
   
   public void AutoPeriodic(){
     if(m_OdomLimelight.isAnyTargetAvailable()){
-      Pose2d poseFromHelp=m_OdomLimelight.GetPoseViaHelper();//(m_swerve.getPigeon2().getYaw().getValueAsDouble());
-      m_swerve.addVisionMeasurement(new Pose2d(poseFromHelp.getX(),poseFromHelp.getY(),poseFromHelp.getRotation()),
-                                    Utils.getCurrentTimeSeconds());
+      //Pose2d poseFromHelp=m_OdomLimelight.GetPoseViaHelper();//(m_swerve.getPigeon2().getYaw().getValueAsDouble());
+      m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
+                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+      m_swerve.addVisionMeasurement(m_OdomLimelight.GetPoseViaMegatag2(),Utils.getCurrentTimeSeconds());
       //System.out.println("Current X: "+poseFromHelp.getX()+" Current Y: "+poseFromHelp.getY()+" Current Rot: "+poseFromHelp.getRotation());
+    }
+
+    if(m_OdomFwdLimelight.isAnyTargetAvailable()){
+      m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
+                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
     }
   }
 
@@ -156,18 +163,20 @@ public class RobotContainer {
   }
 
   public void TeleopMode(){
-    m_OdomLimelight.setLimelightIDFilter(21);
+    m_OdomLimelight.resetLimelightIDFilter();
   }
 
   public void TeleopPeriodic(){
     refreshSmartDashboard();
     GetPIDValues();
+
     if(m_OdomLimelight.isAnyTargetAvailable()){
-      System.out.println("Target Yaw: "+m_OdomLimelight.GetYawOfAprilTag());
-      //Pose2d poseFromHelp=m_OdomLimelight.GetPoseViaHelper(m_swerve.getPigeon2().getYaw().getValueAsDouble());
-      //m_swerve.addVisionMeasurement(new Pose2d(poseFromHelp.getX(),poseFromHelp.getY(),poseFromHelp.getRotation()),
-      //                              Utils.getCurrentTimeSeconds());
-      //System.out.println("Current X: "+poseFromHelp.getX()+" Current Y: "+poseFromHelp.getY()+" Current Rot: "+poseFromHelp.getRotation());
+      m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
+                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+    }
+    if(m_OdomFwdLimelight.isAnyTargetAvailable()){
+      m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
+                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
     }
   }
 
