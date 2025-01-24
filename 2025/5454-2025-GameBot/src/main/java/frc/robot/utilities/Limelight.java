@@ -2,11 +2,11 @@ package frc.robot.utilities;
 
 import frc.robot.Constants;
 
+import static edu.wpi.first.units.Units.Newton;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
 import com.fasterxml.jackson.databind.type.ArrayType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,62 +26,52 @@ import edu.wpi.first.networktables.DoubleEntry;
 
 //@Logged(strategy = Strategy.OPT_IN)
 public class Limelight {
-
     private NetworkTable llTable;
-    // x location of the target
     private DoubleSubscriber tx;
-    // y location of the target
     private DoubleSubscriber ty;
-    // area of the target
     private DoubleSubscriber ta;
-    // does the limelight have a target
     private DoubleSubscriber tv;
-    //limelight hearbeat
-    private DoubleSubscriber hb;
-    // robot pose based on limelight
     private DoubleArraySubscriber robotPoseBlue;
-
-    private DoubleTopic ledMode;
-    private DoubleEntry pipeline;
+    private DoubleArraySubscriber robotPoseBlueOrb;
     private DoubleArraySubscriber rawfiducials;
-    private DoubleArrayEntry fiducialIDFilters;
     private DoubleArraySubscriber targetPoseInRobotSpace;
+    private DoubleArrayEntry fiducialIDFilters;
+    private DoubleArrayEntry setrobotOrientation;
+    private DoubleEntry pipeline;
+
+    private ArrayList<Double> m_fiducialIDFilter=new ArrayList<>();
+    private ArrayList<Double> m_previousPoseMean=new ArrayList<>();
+    private ArrayList<Pose2d> m_previousRobotPoses=new ArrayList<>();
+    private ArrayList<Double> m_previousPoseMeanDiff=new ArrayList<>();
 
     private double m_limeLightHeight;
     private double m_mountingAngle;
-    private double  m_targetHeight=0;
-    private double m_xStaticOffset = 0;
-    private ArrayList<Double> m_fiducialIDFilter=new ArrayList<>();
+    private double m_targetHeight=0;
+    
     private String m_limeLightName;
 
-    public Limelight(double limeLightHeight, double mountingAngle,double xoffSet,String limeLightName) {
+    public Limelight(double limeLightHeight,double mountingAngle,double xoffSet,String limeLightName) {
         llTable = NetworkTableInstance.getDefault().getTable(limeLightName);
         tx=llTable.getDoubleTopic("tx").subscribe(0);
         ty=llTable.getDoubleTopic("ty").subscribe(0);
         ta=llTable.getDoubleTopic("ta").subscribe(0);
         tv=llTable.getDoubleTopic("tv").subscribe(0);
-        hb=llTable.getDoubleTopic("hb").subscribe(0);
         rawfiducials=llTable.getDoubleArrayTopic("rawfiducials").subscribe(new double[] {});
-        targetPoseInRobotSpace=llTable.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[] {});
-        fiducialIDFilters=llTable.getDoubleArrayTopic("fiducial_id_filters_set").getEntry(new double[] {});
-        ledMode=llTable.getDoubleTopic("ledMode");
+        targetPoseInRobotSpace=llTable.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[]{});
+        fiducialIDFilters=llTable.getDoubleArrayTopic("fiducial_id_filters_set").getEntry(new double[]{});
+        setrobotOrientation=llTable.getDoubleArrayTopic("robot_orientation_set").getEntry(new double []{});
+        robotPoseBlue=llTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[]{});
+        robotPoseBlueOrb=llTable.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[]{});
         pipeline=llTable.getDoubleTopic("pipeline").getEntry(0);
-        robotPoseBlue=llTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
         
         m_limeLightHeight=limeLightHeight;
         m_mountingAngle=mountingAngle;
-        m_xStaticOffset=xoffSet;
 
         m_limeLightName=limeLightName;
     };
 
-
-    public double getOffset(){
-        return m_xStaticOffset;
-    }
-
-    public void setOffSet(double newValue){
-        m_xStaticOffset=newValue;
+    public void setTargetHeight(double height){
+        m_targetHeight=height;
     }
 
     public double getDistance() {
@@ -183,12 +173,16 @@ public class Limelight {
         }
     }
 
-    public double getArea() {
-        return ta.get();
-    }
-
     public boolean isAnyTargetAvailable() {
         return tv.get()==1.0;
+    }
+
+    public double GetYawOfAprilTag(){
+        if(targetPoseInRobotSpace.get()!=null&&targetPoseInRobotSpace.get().length!=0){
+            return this.targetPoseInRobotSpace.get()[4];
+        }else{
+            return 0.0;
+        }
     }
 
     public boolean isFilteredTargetAvailable(){
@@ -199,54 +193,100 @@ public class Limelight {
         }    
     }
 
-    public void setLedMode(boolean on) {
-        double mode = on ? 0 : 1;
-        ledMode.publish().set(mode);
+    public void SetRobotOrientation(double yaw,double yawRate){
+        setrobotOrientation.set(new double[]{yaw,yawRate,0,0,0,0});
     }
 
-    public enum VisionModes {
-        LOW(0),
-        LEFT(1),
-        RIGHT(2);
-
-        public double mode;
-
-        VisionModes(double mode) {
-            this.mode = mode;
-        }
-    }
-
-    public void setTargetHeight(double height){
-        m_targetHeight=height;
-    }
-
-    public boolean DoesLimelightHaveTwoTargets(){
-        return tv.get()>= 2.0;
-    }
-
-    public double getHeartBeat(){
-        return hb.get();
-    }
-
-    public Pose2d GetPoseViaApriltagNT(){
+    public Pose2d GetPoseViaMegatag1(){
         double[] robotPoseValues=robotPoseBlue.get();
 
         Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
+        m_previousRobotPoses.add(pose);
+
         return pose;
     }
 
-    public Pose2d GetPoseViaHelper(){//double robotYaw){
-        //LimelightHelpers.SetRobotOrientation(m_limeLightName,robotYaw,0,0,0,0,0);
-        LimelightHelpers.PoseEstimate poseEstimate=LimelightHelpers.getBotPoseEstimate_wpiBlue(m_limeLightName);
+    public Pose2d GetPoseViaMegatag2(){
+        double[] robotPoseValues=robotPoseBlueOrb.get();
 
-        return poseEstimate.pose;
-    } 
+        Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
+        m_previousRobotPoses.add(pose);
+
+        return pose;
+    }
+
+    public void TrimPoseArray(int arraySize){
+        ArrayList<Pose2d> newArray=new ArrayList<>();
+
+        if(m_previousRobotPoses.size()>arraySize){
+            for(int i=0;i<arraySize;i++){
+                newArray.add(this.m_previousRobotPoses.get(m_previousRobotPoses.size()-(i+1)));
+            }
     
-    public double GetYawOfAprilTag(){
-        if(targetPoseInRobotSpace.get()!=null&&targetPoseInRobotSpace.get().length!=0){
-            return this.targetPoseInRobotSpace.get()[4];
-        }else{
-            return 0.0;
+            m_previousRobotPoses=newArray;
         }
+    }
+
+    public boolean GetConfidence(int posesToAverage){
+        ArrayList<Double> means=new ArrayList<>();
+        ArrayList<Double> newDiff=new ArrayList<>();
+        double[] vToAverage;
+        double xList=0;
+        double yList=0;
+        double rotList=0;
+
+        if(m_previousRobotPoses.size()+1>posesToAverage){
+            for(int i=m_previousRobotPoses.size()-posesToAverage;i<m_previousRobotPoses.size();i++){
+                xList+=m_previousRobotPoses.get(i).getX();
+                yList+=m_previousRobotPoses.get(i).getY();
+                rotList+=m_previousRobotPoses.get(i).getRotation().getDegrees();
+            }
+
+            vToAverage=new double[]{xList,yList,rotList};
+
+            for(int i=0;i<vToAverage.length;i++){
+                double mean=vToAverage[i]/posesToAverage;
+                means.add(mean);
+            }
+
+            if(m_previousPoseMean==null||m_previousPoseMean.size()==0){
+                m_previousPoseMean=means;
+                //System.out.println("previous pose mean" + m_previousPoseMean);
+                return true;
+            }
+
+            for(int i=0;i<means.size();i++){
+                newDiff.add(m_previousPoseMean.get(i)-means.get(i));
+                //System.out.println("new diff" + newDiff);
+            }
+
+            if(m_previousPoseMeanDiff.size()==0||m_previousPoseMeanDiff==null){
+                m_previousPoseMeanDiff=newDiff;
+                //System.out.println("previous pose mean diff"+ m_previousPoseMeanDiff);
+
+                return true;
+            }else{
+                for(int i=0;i<m_previousPoseMeanDiff.size();i++){
+                    double percentDiff=(Math.abs(newDiff.get(i))/Math.abs(m_previousPoseMeanDiff.get(i)))*100;
+                    //System.out.println("New Diff " + newDiff);
+                    //System.out.println("Previous Pose Mean diff " + m_previousPoseMeanDiff);
+                    //System.out.println("percent diff" + percentDiff);
+
+                    if(50.0>percentDiff){
+                        //System.out.println("Diffrence to great: "+percentDiff);
+                        m_previousPoseMean=means;
+                        m_previousPoseMeanDiff=newDiff;
+                        return false;
+                    }
+                }
+
+                m_previousPoseMean=means;
+                m_previousPoseMeanDiff=newDiff;
+                return true;
+            }
+        }else{
+            return false;
+        }
+
     }
 }

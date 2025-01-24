@@ -113,9 +113,9 @@ public class ApriltagLineupCommand extends Command {
         }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband2)&&distance>(m_targetDistance+LimeLightValues.driveDeadband1)){
           forward=0.6;
         }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband1)&&distance>(m_targetDistance+LimeLightValues.driveDeadband0)){
-          forward=0.5;
+          forward=0.3;
         }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband0)){
-          forward=0.4;
+          forward=0.2;
         }
 
         if(m_targetDistance<distance+kDriveDeadband){
