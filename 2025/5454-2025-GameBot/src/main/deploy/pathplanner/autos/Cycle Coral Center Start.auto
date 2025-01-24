@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PipelineLeftApriltag"
+            "name": "PipelineCenterApriltag"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ApriltagLineUp"
+            "name": "ApriltagLineUp21"
           }
         },
         {
@@ -35,6 +35,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Coral Station To Back Left Apriltag"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.5
@@ -43,49 +49,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ObjectLineUp"
+            "name": "ApriltagLineUp19"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Coral Station To Center Apriltag"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PipelineRightApriltag"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ApriltagLineUp"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Apriltag To Coral Station"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ObjectLineUp"
+            "pathName": "Back Left Apriltag To Coral Station"
           }
         }
       ]
