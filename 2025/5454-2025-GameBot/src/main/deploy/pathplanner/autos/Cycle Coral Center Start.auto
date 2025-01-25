@@ -19,7 +19,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.2
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.2
           }
         },
         {
@@ -56,6 +56,48 @@
           "type": "path",
           "data": {
             "pathName": "Back Left Apriltag To Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral Station To Back Left Apriltag"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ApriltagLineUp19"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back Left Apriltag To Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral Station To Back Left Apriltag"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ApriltagLineUp19"
           }
         }
       ]

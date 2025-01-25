@@ -93,8 +93,10 @@ public class ApriltagLineupCommand extends Command {
     double yaw=Math.abs(rawYaw);
     double strafeFlipValue=rawX/x;
     double rotFlipValue=rawYaw/yaw;
-    double strafe=0;
-    double rotation=0;
+    double rotMult=1;
+    double strafeMult=1;
+    double strafe=1;
+    double rotation=1;
     double forward=0;
 
     switch(m_currentState){
@@ -113,9 +115,9 @@ public class ApriltagLineupCommand extends Command {
         }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband2)&&distance>(m_targetDistance+LimeLightValues.driveDeadband1)){
           forward=0.6;
         }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband1)&&distance>(m_targetDistance+LimeLightValues.driveDeadband0)){
-          forward=0.3;
+          forward=0.5;
         }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband0)){
-          forward=0.2;
+          forward=0.3;
         }
 
         if(m_targetDistance<distance+kDriveDeadband){
@@ -130,49 +132,22 @@ public class ApriltagLineupCommand extends Command {
         }
       break;
       case LINEUP:
-        if(x>LimeLightValues.xLineupDeadband7){
-          strafe=1;
-        }else if(x<LimeLightValues.xLineupDeadband7&&x>LimeLightValues.xLineupDeadband6){
-          strafe=0.8;
-        }else if(x<LimeLightValues.xLineupDeadband6&&x>LimeLightValues.xLineupDeadband5){
-          strafe=0.6;
-        }else if(x<LimeLightValues.xLineupDeadband5&&x>LimeLightValues.xLineupDeadband4){
-          strafe=0.5;
-        }else if(x<LimeLightValues.xLineupDeadband4&&x>LimeLightValues.xLineupDeadband3){
-          strafe=0.3;
-        }else if(x<LimeLightValues.xLineupDeadband3&&x>LimeLightValues.xLineupDeadband2){
-          strafe=0.25;
-        }else if(x<LimeLightValues.xLineupDeadband2&&x>LimeLightValues.xLineupDeadband1){
-          strafe=0.2;
-        }else if(x<LimeLightValues.xLineupDeadband1&&x>LimeLightValues.xLineupDeadband0){
-          strafe=0.15;
-        }else if(x<LimeLightValues.xLineupDeadband0){
-          strafe=0.08;
+        if(yaw>LimeLightValues.yawLineupDeadband){
+          rotMult=1;
+        }else{
+          rotMult=(yaw/LimeLightValues.yawLineupDeadband)+0.1;
         }
 
-        if(yaw>LimeLightValues.yawLineupDeadband7){
-          rotation=1;
-        }else if(yaw<LimeLightValues.yawLineupDeadband7&&yaw>LimeLightValues.yawLineupDeadband6){
-          rotation=0.8;
-        }else if(yaw<LimeLightValues.yawLineupDeadband6&&yaw>LimeLightValues.yawLineupDeadband5){
-          rotation=0.6;
-        }else if(yaw<LimeLightValues.yawLineupDeadband5&&yaw>LimeLightValues.yawLineupDeadband4){
-          rotation=0.4;
-        }else if(yaw<LimeLightValues.yawLineupDeadband3&&yaw>LimeLightValues.yawLineupDeadband2){
-          rotation=0.3;
-        }else if(yaw<LimeLightValues.yawLineupDeadband2&&yaw>LimeLightValues.yawLineupDeadband1){
-          rotation=0.2;
-        }else if(yaw<LimeLightValues.yawLineupDeadband1&&yaw>LimeLightValues.yawLineupDeadband0){
-          rotation=0.15;
-        }else if(yaw<LimeLightValues.yawLineupDeadband0){
-          rotation=0.1;
+        if(x>LimeLightValues.xLineupDeadband){
+          strafeMult=1;
+        }else{
+          strafeMult=(x/LimeLightValues.xLineupDeadband)+0.1;
         }
 
         if(x<kLineupXDeadband&&yaw<kLineupYawDeadband){
           m_swerve.drive(0,0,0);
-          System.out.println("Stopping");
           if(m_driveTowards){
-            m_currentState = States.DRIVETOWARDS;
+            m_currentState=States.DRIVETOWARDS;
           }else{
             m_currentState=States.END;
           }
@@ -185,12 +160,11 @@ public class ApriltagLineupCommand extends Command {
             rotation=0;
           }
 
-          m_swerve.drive(0,strafe*strafeFlipValue,rotation*rotFlipValue);
+          m_swerve.drive(0,(strafe*strafeMult)*strafeFlipValue,(rotation*rotMult)*rotFlipValue);
         }
       break;
       case END:
         returnValue=true;
-        //System.out.println("Command ended");
     }
 
     return returnValue;

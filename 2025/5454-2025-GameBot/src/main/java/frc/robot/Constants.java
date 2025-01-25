@@ -27,8 +27,6 @@ public final class Constants {
     public static final double swerveRotateDeadband = 0.12; //0.17
     public static final double MinGasPedalSpeed=0.30;
     public static final double MinGasRotateSpeed=0.30;
-    
-  
   }
 
   public static final class AutoConstants{
@@ -91,23 +89,14 @@ public final class Constants {
     public static final int leftApriltagPipeline=1;
     public static final int rightApriltagPipeline=2;
 
-    public static final double xLineupDeadband0=0.3;
-    public static final double xLineupDeadband1=0.7;
-    public static final double xLineupDeadband2=3;
-    public static final double xLineupDeadband3=6;
-    public static final double xLineupDeadband4=9;
-    public static final double xLineupDeadband5=12;
-    public static final double xLineupDeadband6=15;
-    public static final double xLineupDeadband7=20;
+    public static final double confidenceDeadbandMin=60;
+    public static final double confidenceDeadbandMax=140;
+    //Tested Average of Differences in X coords
+    public static final double confidenceXMean=0.017692936661984578;
+    public static final double confidenceYMean=1.2286761570822624E-5;
 
-    public static final double yawLineupDeadband0=5;
-    public static final double yawLineupDeadband1=10;
-    public static final double yawLineupDeadband2=15;
-    public static final double yawLineupDeadband3=25;
-    public static final double yawLineupDeadband4=30;
-    public static final double yawLineupDeadband5=35;
-    public static final double yawLineupDeadband6=40;
-    public static final double yawLineupDeadband7=45;
+    public static final double xLineupDeadband=20;
+    public static final double yawLineupDeadband=45;
 
     public static final double driveDeadband0=30;
     public static final double driveDeadband1=60;

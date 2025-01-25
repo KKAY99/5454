@@ -1,6 +1,7 @@
 package frc.robot.utilities;
 
 import frc.robot.Constants;
+import frc.robot.Constants.LimeLightValues;
 
 import static edu.wpi.first.units.Units.Newton;
 
@@ -40,9 +41,9 @@ public class Limelight {
     private DoubleEntry pipeline;
 
     private ArrayList<Double> m_fiducialIDFilter=new ArrayList<>();
-    private ArrayList<Double> m_previousPoseMean=new ArrayList<>();
+    private ArrayList<Double> m_previousPoseDiffMean=new ArrayList<>();
     private ArrayList<Pose2d> m_previousRobotPoses=new ArrayList<>();
-    private ArrayList<Double> m_previousPoseMeanDiff=new ArrayList<>();
+    private ArrayList<ArrayList<Double>> m_previousPoseDiffMeanForAveraging=new ArrayList<>();
 
     private double m_limeLightHeight;
     private double m_mountingAngle;
@@ -208,9 +209,14 @@ public class Limelight {
 
     public Pose2d GetPoseViaMegatag2(){
         double[] robotPoseValues=robotPoseBlueOrb.get();
+        Pose2d pose;
 
-        Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
-        m_previousRobotPoses.add(pose);
+        if(robotPoseValues!=null||robotPoseValues.length!=0){
+            pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
+            m_previousRobotPoses.add(pose);
+        }else{
+            pose=new Pose2d(0,0,new Rotation2d(0));
+        }
 
         return pose;
     }
@@ -218,7 +224,7 @@ public class Limelight {
     public void TrimPoseArray(int arraySize){
         ArrayList<Pose2d> newArray=new ArrayList<>();
 
-        if(m_previousRobotPoses.size()>arraySize){
+        if(m_previousRobotPoses.size()>arraySize*2){
             for(int i=0;i<arraySize;i++){
                 newArray.add(this.m_previousRobotPoses.get(m_previousRobotPoses.size()-(i+1)));
             }
@@ -227,66 +233,65 @@ public class Limelight {
         }
     }
 
-    public boolean GetConfidence(int posesToAverage){
-        ArrayList<Double> means=new ArrayList<>();
-        ArrayList<Double> newDiff=new ArrayList<>();
+    public double[] AverageOfAllDiffMeans(){
+        double xAverage=0;
+        double yAverage=0;
+
+        for(int i=0;i<m_previousPoseDiffMeanForAveraging.size();i++){
+            xAverage+=m_previousPoseDiffMeanForAveraging.get(i).get(0);
+            yAverage+=m_previousPoseDiffMeanForAveraging.get(i).get(1);
+        }
+
+        xAverage=xAverage/m_previousPoseDiffMeanForAveraging.size();
+        yAverage=xAverage/m_previousPoseDiffMeanForAveraging.size();
+
+        return new double[]{xAverage,yAverage};
+    }
+
+    public boolean GetConfidence(int posesToAverage,Pose2d currentVisionPose){
+        boolean returnValue=false;
+        ArrayList<Double> diffMeans=new ArrayList<>();
         double[] vToAverage;
-        double xList=0;
-        double yList=0;
-        double rotList=0;
+        double xDiffList=0;
+        double yDiffList=0;
 
         if(m_previousRobotPoses.size()+1>posesToAverage){
             for(int i=m_previousRobotPoses.size()-posesToAverage;i<m_previousRobotPoses.size();i++){
-                xList+=m_previousRobotPoses.get(i).getX();
-                yList+=m_previousRobotPoses.get(i).getY();
-                rotList+=m_previousRobotPoses.get(i).getRotation().getDegrees();
+                xDiffList+=Math.abs((Math.abs(m_previousRobotPoses.get(i).getX())-Math.abs(currentVisionPose.getX())));
+                yDiffList+=Math.abs((Math.abs(m_previousRobotPoses.get(i).getY())-Math.abs(currentVisionPose.getY())));
             }
 
-            vToAverage=new double[]{xList,yList,rotList};
+            vToAverage=new double[]{xDiffList,yDiffList};
 
             for(int i=0;i<vToAverage.length;i++){
                 double mean=vToAverage[i]/posesToAverage;
-                means.add(mean);
+                diffMeans.add(mean);
             }
 
-            if(m_previousPoseMean==null||m_previousPoseMean.size()==0){
-                m_previousPoseMean=means;
-                //System.out.println("previous pose mean" + m_previousPoseMean);
-                return true;
-            }
+            //m_previousPoseDiffMeanForAveraging.add(diffMeans);
 
-            for(int i=0;i<means.size();i++){
-                newDiff.add(m_previousPoseMean.get(i)-means.get(i));
-                //System.out.println("new diff" + newDiff);
-            }
-
-            if(m_previousPoseMeanDiff.size()==0||m_previousPoseMeanDiff==null){
-                m_previousPoseMeanDiff=newDiff;
-                //System.out.println("previous pose mean diff"+ m_previousPoseMeanDiff);
-
-                return true;
+            if(m_previousPoseDiffMean==null||m_previousPoseDiffMean.size()==0){
+                m_previousPoseDiffMean=diffMeans;
+                returnValue=true;
             }else{
-                for(int i=0;i<m_previousPoseMeanDiff.size();i++){
-                    double percentDiff=(Math.abs(newDiff.get(i))/Math.abs(m_previousPoseMeanDiff.get(i)))*100;
-                    //System.out.println("New Diff " + newDiff);
-                    //System.out.println("Previous Pose Mean diff " + m_previousPoseMeanDiff);
-                    //System.out.println("percent diff" + percentDiff);
+                double percentDiffX=((Math.abs(diffMeans.get(0)))/Math.abs(m_previousPoseDiffMean.get(0)))*100;
+                double percentDiffY=((Math.abs(diffMeans.get(1)))/Math.abs(m_previousPoseDiffMean.get(0)))*100;
+                /*System.out.println("DiffMean X: "+diffMeans.get(0));
+                System.out.println("DiffMean Y: "+diffMeans.get(1));
+                System.out.println("PercentDiff X: "+percentDiffX);
+                System.out.println("PercentDiff Y: "+percentDiffY);*/
 
-                    if(50.0>percentDiff){
-                        //System.out.println("Diffrence to great: "+percentDiff);
-                        m_previousPoseMean=means;
-                        m_previousPoseMeanDiff=newDiff;
-                        return false;
-                    }
+                if(LimeLightValues.confidenceDeadbandMin<percentDiffX&&LimeLightValues.confidenceDeadbandMin<percentDiffY&&
+                    LimeLightValues.confidenceDeadbandMax>percentDiffX&&LimeLightValues.confidenceDeadbandMax>percentDiffY){
+                    returnValue=true;
+                }else{
+                    returnValue=false;
                 }
 
-                m_previousPoseMean=means;
-                m_previousPoseMeanDiff=newDiff;
-                return true;
+                m_previousPoseDiffMean=diffMeans;
             }
-        }else{
-            return false;
         }
 
+            return returnValue;
     }
 }

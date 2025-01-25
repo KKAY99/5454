@@ -149,13 +149,12 @@ public class RobotContainer {
       //Pose2d poseFromHelp=m_OdomLimelight.GetPoseViaHelper();//(m_swerve.getPigeon2().getYaw().getValueAsDouble());
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-      m_OdomLimelight.GetPoseViaMegatag2();
+      Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
       m_OdomLimelight.TrimPoseArray(3);
-      System.out.println("confidence: " + m_OdomLimelight.GetConfidence(3));
-      if(m_OdomLimelight.GetConfidence(3)){
-        m_swerve.addVisionMeasurement(m_OdomLimelight.GetPoseViaMegatag2(),Utils.getCurrentTimeSeconds());
+      System.out.println("confidence: " + m_OdomLimelight.GetConfidence(3,currentPose));
+      if(m_OdomLimelight.GetConfidence(3,currentPose)){
+        m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
       }
-      //System.out.println("Current X: "+poseFromHelp.getX()+" Current Y: "+poseFromHelp.getY()+" Current Rot: "+poseFromHelp.getRotation());
     }
 
     if(m_OdomFwdLimelight.isAnyTargetAvailable()){
@@ -180,6 +179,9 @@ public class RobotContainer {
     if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+      Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
+      m_OdomLimelight.TrimPoseArray(3);
+      System.out.println(m_OdomLimelight.GetConfidence(3,currentPose));
     }
     if(m_OdomFwdLimelight.isAnyTargetAvailable()){
       m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
