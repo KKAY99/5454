@@ -23,8 +23,8 @@ public class IndexerSubsystem extends SubsystemBase {
   }
   
   public void motor_run(double speed){
-    m_motor1.set(speed);
-    m_motor2.set(-speed);
+    m_motor1.set(-speed);
+    m_motor2.set(speed);
   }
 
   public void motor_stop(){

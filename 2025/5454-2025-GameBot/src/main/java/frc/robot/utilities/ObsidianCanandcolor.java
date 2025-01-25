@@ -1,5 +1,7 @@
 package frc.robot.utilities;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.reduxrobotics.sensors.canandcolor.Canandcolor;
 import com.reduxrobotics.sensors.canandcolor.CanandcolorSettings;
 import com.reduxrobotics.sensors.canandcolor.DigoutChannel;
@@ -27,7 +29,20 @@ public class ObsidianCanandcolor {
     public void setProximityFramePeriod(double period){
         m_settings.setProximityFramePeriod(period);
     }
-
-
+    public double getProximity(){
+        //Gets the currently sensed proximity normalized between [0..1] inclusive.
+        //The value decreases as an object gets closer to the sensor.        
+        //Note that proximity is not given a unit as different materials and sensor
+        //configurations can greatly vary how the proximity value translates to actual 
+        //real-world units. It is generally presumed that users will have to finetune 
+        //specific thresholds for applications anyway and units may not be meaningful or accurate.
+      return m_sensor.getProximity();
+      
     }
+    public String getColorHexString(){
+        Logger.recordOutput("CanandColor", null);
+        return m_sensor.getColor().toWpilibColor().toHexString();
+    }
+    
+}
  
