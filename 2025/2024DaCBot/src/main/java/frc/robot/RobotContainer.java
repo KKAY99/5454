@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.utilities.Limelight;
-
+import frc.robot.utilities.ObsidianCanandcolor;
 import frc.robot.Constants.*;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
@@ -58,7 +58,8 @@ public class RobotContainer {
     //private SpinMotor m_SpinMotor=new SpinMotor(14);
     private IndexerSubsystem m_Indexer=new IndexerSubsystem(19, 18);
     private IntakeSubsystem m_Intake=new IntakeSubsystem(20, 15);
-   // private Limelight m_Limelight=new Limelight();
+    private ObsidianCanandcolor m_canColor = new ObsidianCanandcolor(29);
+    // private Limelight m_Limelight=new Limelight();
     public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
@@ -106,11 +107,12 @@ public class RobotContainer {
       IndexerButton_2.whileTrue(indexerCommandSpeed_2);
     }
        
-    public void refreshSmartDashboard(){  
+    public void   refreshSmartDashboard(){  
      /*  m_Limelight.setPipeline(5);
       if(m_Limelight.isTargetAvailible()){
         System.out.print("Object found");
       }*/
+      System.out.println("CanColor:" + m_canColor.getProximity());
     }
     
     public void disabledPerioidicUpdates(){
