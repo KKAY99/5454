@@ -5,6 +5,7 @@ import frc.robot.Constants.LimeLightValues;
 
 import static edu.wpi.first.units.Units.Newton;
 
+import java.net.http.HttpResponse.BodySubscriber;
 import java.util.ArrayList;
 import java.util.Collection;
 import com.fasterxml.jackson.databind.type.ArrayType;
@@ -27,18 +28,34 @@ import edu.wpi.first.networktables.DoubleEntry;
 
 //@Logged(strategy = Strategy.OPT_IN)
 public class Limelight {
+    //****Limelight Network Table Values****
+    //Limelight Network Table
     private NetworkTable llTable;
+    //X Value
     private DoubleSubscriber tx;
+    //Y Value
     private DoubleSubscriber ty;
+    //Area Value
     private DoubleSubscriber ta;
+    //Can See a Target
     private DoubleSubscriber tv;
+    //Calculated RobotPose Megatag1
     private DoubleArraySubscriber robotPoseBlue;
+    //Calculated RobotPose Megatag2
     private DoubleArraySubscriber robotPoseBlueOrb;
+    //Information From All Apriltags
     private DoubleArraySubscriber rawfiducials;
+    //Target Pose Based On Robot
     private DoubleArraySubscriber targetPoseInRobotSpace;
+    //Robot Pose Based On Target
+    private DoubleArraySubscriber botPoseInTargetSpace;
+    //Targets To Look For
     private DoubleArrayEntry fiducialIDFilters;
+    //Give Current Gyro Angle
     private DoubleArrayEntry setrobotOrientation;
+    //Get/Set Pipeline
     private DoubleEntry pipeline;
+    //****
 
     private ArrayList<Double> m_fiducialIDFilter=new ArrayList<>();
     private ArrayList<Double> m_previousPoseDiffMean=new ArrayList<>();
@@ -59,8 +76,9 @@ public class Limelight {
         tv=llTable.getDoubleTopic("tv").subscribe(0);
         rawfiducials=llTable.getDoubleArrayTopic("rawfiducials").subscribe(new double[] {});
         targetPoseInRobotSpace=llTable.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[]{});
+        botPoseInTargetSpace=llTable.getDoubleArrayTopic("botpose_targetspace").subscribe(new double[]{});
         fiducialIDFilters=llTable.getDoubleArrayTopic("fiducial_id_filters_set").getEntry(new double[]{});
-        setrobotOrientation=llTable.getDoubleArrayTopic("robot_orientation_set").getEntry(new double []{});
+        setrobotOrientation=llTable.getDoubleArrayTopic("robot_orientation_set").getEntry(new double[]{});
         robotPoseBlue=llTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[]{});
         robotPoseBlueOrb=llTable.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[]{});
         pipeline=llTable.getDoubleTopic("pipeline").getEntry(0);
@@ -71,38 +89,42 @@ public class Limelight {
         m_limeLightName=limeLightName;
     };
 
+    public String getLimelightName(){
+        return this.m_limeLightName;
+    }
+
     public void setTargetHeight(double height){
-        m_targetHeight=height;
+        this.m_targetHeight=height;
     }
 
     public double getDistance() {
         double distance=0;
         double measuredAngle=getY();
         if (measuredAngle!=0) {
-            distance=(m_targetHeight-m_limeLightHeight)/Math.tan(Math.toRadians(m_mountingAngle+measuredAngle));
+            distance=(this.m_targetHeight-this.m_limeLightHeight)/Math.tan(Math.toRadians(this.m_mountingAngle+measuredAngle));
         }   
 
         return distance;
     }
 
-    public void setCodeIDFilter(int... fiducialIDs){
-        m_fiducialIDFilter=new ArrayList<>();
+    public void setCodeIDFilter(double... fiducialIDs){
+        this.m_fiducialIDFilter=new ArrayList<>();
 
         for(double fiducialID:fiducialIDs){
-            m_fiducialIDFilter.add(fiducialID);
+            this.m_fiducialIDFilter.add(fiducialID);
         }
     }
 
     public void resetCodeIDFilter(){
-        m_fiducialIDFilter=new ArrayList<>();
+        this.m_fiducialIDFilter=new ArrayList<>();
     }
 
     public void setLimelightIDFilter(double... fiducialIDS){
-        fiducialIDFilters.set(fiducialIDS);
+        this.fiducialIDFilters.set(fiducialIDS);
     }
 
     public void resetLimelightIDFilter(){
-        fiducialIDFilters.set(new double[] {});
+        this.fiducialIDFilters.set(new double[] {});
     }
 
     public ArrayList<Double> getRawFiducial(){
@@ -112,13 +134,13 @@ public class Limelight {
         try{
             for(int i=0;i<numOfFiducials;i++){
                 double currentFiducial=99;
-                if(rawfiducials.get().length>0+(7*i)&&rawfiducials.get().length!=0){
-                    currentFiducial=rawfiducials.get()[0+(7*i)];
+                if(this.rawfiducials.get().length>0+(7*i)&&this.rawfiducials.get().length!=0){
+                    currentFiducial=this.rawfiducials.get()[0+(7*i)];
                 }
                 
-                if(m_fiducialIDFilter.contains(currentFiducial)){
+                if(this.m_fiducialIDFilter.contains(currentFiducial)){
                     for(int j=i;j<i+7;j++){    
-                    returnArray.add(j-i,rawfiducials.get()[j]);
+                    returnArray.add(j-i,this.rawfiducials.get()[j]);
                     }
                 }
             }
@@ -133,24 +155,35 @@ public class Limelight {
         return returnArray;
     }
 
+    public double[] getAllVisibleFiducialIDs(){
+        int numOfFiducials=rawfiducials.get().length/7;
+        double[] fiducialIDs=new double[]{};
+
+        for(int i=0;i<numOfFiducials;i++){
+            fiducialIDs[i]=this.rawfiducials.get()[0+(7*i)];
+        }
+
+        return fiducialIDs;
+    }
+
     public void setPipeline(int pipelineNum){
-        pipeline.set(pipelineNum);
+        this.pipeline.set(pipelineNum);
     }
 
     public int getPipeline(){
-        return (int) pipeline.get();
+        return (int) this.pipeline.get();
     }
 
     public double getX(){
-        if(!m_fiducialIDFilter.isEmpty()){
+        if(!this.m_fiducialIDFilter.isEmpty()){
             return this.getFiducialX();
         }else{
-            return tx.get();
+            return this.tx.get();
         }
     }
 
     private double getFiducialX(){
-        if(getRawFiducial().get(1)!=null){
+        if(this.getRawFiducial().get(1)!=null){
             return this.getRawFiducial().get(1);
         }else{
             return 0.0;
@@ -159,7 +192,7 @@ public class Limelight {
     }
 
     public double getY(){
-        if(!m_fiducialIDFilter.isEmpty()){
+        if(!this.m_fiducialIDFilter.isEmpty()){
             return this.getFiducialY();
         }else{
             return ty.get();
@@ -167,7 +200,7 @@ public class Limelight {
     }
 
     private double getFiducialY(){
-        if(getRawFiducial().get(2)!=null){
+        if(this.getRawFiducial().get(2)!=null){
             return this.getRawFiducial().get(2);
         }else{
             return 0.0;
@@ -175,31 +208,57 @@ public class Limelight {
     }
 
     public boolean isAnyTargetAvailable() {
-        return tv.get()==1.0;
+        return this.tv.get()==1.0;
     }
 
-    public double GetYawOfAprilTag(){
-        if(targetPoseInRobotSpace.get()!=null&&targetPoseInRobotSpace.get().length!=0){
+    public double getYawOfAprilTag(){
+        if(this.targetPoseInRobotSpace.get()!=null&&this.targetPoseInRobotSpace.get().length!=0){
             return this.targetPoseInRobotSpace.get()[4];
         }else{
             return 0.0;
         }
     }
 
+    public double[] getBotPoseInTargetSpace(){
+        if(this.botPoseInTargetSpace.get()!=null&&this.botPoseInTargetSpace.get().length!=0){
+            return this.botPoseInTargetSpace.get();
+        }else{
+            return new double[]{};
+        }
+    }
+
+    public ArrayList<double[]> getBotPoseInAllTargetSpaces(){
+        double[] previousFilters=this.fiducialIDFilters.get();
+        ArrayList<double[]> botPoses=new ArrayList<double[]>();
+        this.resetCodeIDFilter();
+
+        double[] currentFiducials=this.getAllVisibleFiducialIDs();
+        for(int i=0;i<currentFiducials.length;i++){
+            this.setCodeIDFilter(currentFiducials[i]);
+            botPoses.add(this.getBotPoseInTargetSpace());
+        }
+
+        if(previousFilters!=null||previousFilters.length!=0){
+            this.setCodeIDFilter(previousFilters);
+        }
+        
+        return botPoses;
+    }
+
     public boolean isFilteredTargetAvailable(){
-        if(!m_fiducialIDFilter.isEmpty()){
-            return m_fiducialIDFilter.contains(this.getRawFiducial().get(0))&&tv.get()==1.0;
+        if(!this.m_fiducialIDFilter.isEmpty()){
+            return this.m_fiducialIDFilter.contains(this.getRawFiducial().get(0))&&this.tv.get()==1.0;
         }else{
             return false;
         }    
     }
 
     public void SetRobotOrientation(double yaw,double yawRate){
-        setrobotOrientation.set(new double[]{yaw,yawRate,0,0,0,0});
+        this.setrobotOrientation.set(new double[]{yaw,yawRate,0,0,0,0});
     }
 
     public Pose2d GetPoseViaMegatag1(){
-        double[] robotPoseValues=robotPoseBlue.get();
+        double[] robotPoseValues=this.robotPoseBlue.get();
 
         Pose2d pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
         m_previousRobotPoses.add(pose);
@@ -208,7 +267,7 @@ public class Limelight {
     }
 
     public Pose2d GetPoseViaMegatag2(){
-        double[] robotPoseValues=robotPoseBlueOrb.get();
+        double[] robotPoseValues=this.robotPoseBlueOrb.get();
         Pose2d pose;
 
         if(robotPoseValues!=null||robotPoseValues.length!=0){
@@ -224,12 +283,12 @@ public class Limelight {
     public void TrimPoseArray(int arraySize){
         ArrayList<Pose2d> newArray=new ArrayList<>();
 
-        if(m_previousRobotPoses.size()>arraySize*2){
+        if(this.m_previousRobotPoses.size()>arraySize*2){
             for(int i=0;i<arraySize;i++){
-                newArray.add(this.m_previousRobotPoses.get(m_previousRobotPoses.size()-(i+1)));
+                newArray.add(this.m_previousRobotPoses.get(this.m_previousRobotPoses.size()-(i+1)));
             }
     
-            m_previousRobotPoses=newArray;
+            this.m_previousRobotPoses=newArray;
         }
     }
 
@@ -237,13 +296,13 @@ public class Limelight {
         double xAverage=0;
         double yAverage=0;
 
-        for(int i=0;i<m_previousPoseDiffMeanForAveraging.size();i++){
-            xAverage+=m_previousPoseDiffMeanForAveraging.get(i).get(0);
-            yAverage+=m_previousPoseDiffMeanForAveraging.get(i).get(1);
+        for(int i=0;i<this.m_previousPoseDiffMeanForAveraging.size();i++){
+            xAverage+=this.m_previousPoseDiffMeanForAveraging.get(i).get(0);
+            yAverage+=this.m_previousPoseDiffMeanForAveraging.get(i).get(1);
         }
 
-        xAverage=xAverage/m_previousPoseDiffMeanForAveraging.size();
-        yAverage=xAverage/m_previousPoseDiffMeanForAveraging.size();
+        xAverage=xAverage/this.m_previousPoseDiffMeanForAveraging.size();
+        yAverage=xAverage/this.m_previousPoseDiffMeanForAveraging.size();
 
         return new double[]{xAverage,yAverage};
     }
@@ -255,10 +314,10 @@ public class Limelight {
         double xDiffList=0;
         double yDiffList=0;
 
-        if(m_previousRobotPoses.size()+1>posesToAverage){
-            for(int i=m_previousRobotPoses.size()-posesToAverage;i<m_previousRobotPoses.size();i++){
-                xDiffList+=Math.abs((Math.abs(m_previousRobotPoses.get(i).getX())-Math.abs(currentVisionPose.getX())));
-                yDiffList+=Math.abs((Math.abs(m_previousRobotPoses.get(i).getY())-Math.abs(currentVisionPose.getY())));
+        if(this.m_previousRobotPoses.size()+1>posesToAverage){
+            for(int i=this.m_previousRobotPoses.size()-posesToAverage;i<this.m_previousRobotPoses.size();i++){
+                xDiffList+=Math.abs((Math.abs(this.m_previousRobotPoses.get(i).getX())-Math.abs(currentVisionPose.getX())));
+                yDiffList+=Math.abs((Math.abs(this.m_previousRobotPoses.get(i).getY())-Math.abs(currentVisionPose.getY())));
             }
 
             vToAverage=new double[]{xDiffList,yDiffList};
@@ -268,18 +327,12 @@ public class Limelight {
                 diffMeans.add(mean);
             }
 
-            //m_previousPoseDiffMeanForAveraging.add(diffMeans);
-
-            if(m_previousPoseDiffMean==null||m_previousPoseDiffMean.size()==0){
-                m_previousPoseDiffMean=diffMeans;
+            if(this.m_previousPoseDiffMean==null||this.m_previousPoseDiffMean.size()==0){
+                this.m_previousPoseDiffMean=diffMeans;
                 returnValue=true;
             }else{
-                double percentDiffX=((Math.abs(diffMeans.get(0)))/Math.abs(m_previousPoseDiffMean.get(0)))*100;
-                double percentDiffY=((Math.abs(diffMeans.get(1)))/Math.abs(m_previousPoseDiffMean.get(0)))*100;
-                /*System.out.println("DiffMean X: "+diffMeans.get(0));
-                System.out.println("DiffMean Y: "+diffMeans.get(1));
-                System.out.println("PercentDiff X: "+percentDiffX);
-                System.out.println("PercentDiff Y: "+percentDiffY);*/
+                double percentDiffX=((Math.abs(diffMeans.get(0)))/Math.abs(this.m_previousPoseDiffMean.get(0)))*100;
+                double percentDiffY=((Math.abs(diffMeans.get(1)))/Math.abs(this.m_previousPoseDiffMean.get(0)))*100;
 
                 if(LimeLightValues.confidenceDeadbandMin<percentDiffX&&LimeLightValues.confidenceDeadbandMin<percentDiffY&&
                     LimeLightValues.confidenceDeadbandMax>percentDiffX&&LimeLightValues.confidenceDeadbandMax>percentDiffY){
@@ -288,7 +341,7 @@ public class Limelight {
                     returnValue=false;
                 }
 
-                m_previousPoseDiffMean=diffMeans;
+                this.m_previousPoseDiffMean=diffMeans;
             }
         }
 

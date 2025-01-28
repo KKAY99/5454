@@ -89,7 +89,7 @@ public class ApriltagLineupCommand extends Command {
     double distance=Math.abs(m_Limelight.getDistance());
     double rawX=m_Limelight.getX();
     double x=Math.abs(rawX);
-    double rawYaw=m_Limelight.GetYawOfAprilTag();
+    double rawYaw=m_Limelight.getYawOfAprilTag();
     double yaw=Math.abs(rawYaw);
     double strafeFlipValue=rawX/x;
     double rotFlipValue=rawYaw/yaw;

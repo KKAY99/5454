@@ -40,7 +40,7 @@ public class ObsidianCanandcolor {
       
     }
     public String getColorHexString(){
-        Logger.recordOutput("CanandColor", null);
+        //Logger.recordOutput("CanandColor", null);
         return m_sensor.getColor().toWpilibColor().toHexString();
     }
     

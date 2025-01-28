@@ -2,34 +2,22 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
 import frc.robot.utilities.Limelight;
+import frc.robot.utilities.LimelightManager;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.StatusSignal.SignalMeasurement;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.InputControllers;
 
@@ -61,6 +49,8 @@ public class RobotContainer {
                                                 0,Constants.LimeLightValues.frontOdomLimelightName);
   //public final Limelight m_NeuralLimelight=new Limelight(Constants.LimeLightValues.limelightNeuralHeight,Constants.LimeLightValues.limelightNeuralAngle,
                                                 //0,Constants.LimeLightValues.neuralLimelightName);
+
+  public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
           .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
@@ -146,7 +136,6 @@ public class RobotContainer {
   
   public void AutoPeriodic(){
     if(m_OdomLimelight.isAnyTargetAvailable()){
-      //Pose2d poseFromHelp=m_OdomLimelight.GetPoseViaHelper();//(m_swerve.getPigeon2().getYaw().getValueAsDouble());
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();

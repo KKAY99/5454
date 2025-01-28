@@ -1,16 +1,11 @@
- package frc.robot;
+package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.config.PIDConstants;
 
-
 public final class Constants {
-  
   public static final double kRobotLoopTime = 0.020;
   public static final int k30Amp=30;
   public static final int k20Amp=20;
@@ -55,31 +50,22 @@ public final class Constants {
   }
   
   public static final class InputControllers {
-    public static final int kXboxDrive = 0;
-    public static final int kXboxOperator = 1;
-    public static final int kCustomController = 2;
+    public static final int kXboxDrive=0;
+    public static final int kXboxOperator=1;
+    public static final int kCustomController=2;
     public static final double kRumbleoff=0;
-    public static final double kRumbleLight =0.25;
+    public static final double kRumbleLight=0.25;
     public static final double kRumbleMedium=0.5;
     public static final double kRumbleFull=1.0;
   }
 
   public static final class LimeLightValues {
-    public static final double steeringP = 0.035;
-    public static final double steeringI = 0;
-    public static final double steeringD = 0.0055;
-    public static final double steeringFeedForward = 0.0;
-
-    public static final double targetHeight = 33.75; // 249 cm
-    public static final double limelightNeuralHeight = 12; //37
-    public static final double limelightNeuralAngle = -10; //40
-    public static final double limelightBackOdomHeight = 18;
-    public static final double limelightBackOdomAngle = 0;
-    public static final double limelightFrontOdomHeight = 16;
-    public static final double limelightFrontOdomAngle = -2;
-    public static final double kVisionDistanceTolerance = 5;
-    public static final double kVisionXTolerance = .04;
-    public static final double kVisionXOffset=4;
+    public static final double limelightNeuralHeight=12; //37
+    public static final double limelightNeuralAngle=-10; //40
+    public static final double limelightBackOdomHeight=18;
+    public static final double limelightBackOdomAngle=0;
+    public static final double limelightFrontOdomHeight=16;
+    public static final double limelightFrontOdomAngle=-2;
 
     public static final String backOdomLimelightName="limelight-odom";
     public static final String frontOdomLimelightName="limelight-odomfwd";
@@ -89,10 +75,16 @@ public final class Constants {
     public static final int leftApriltagPipeline=1;
     public static final int rightApriltagPipeline=2;
 
+    //Confidence Max and Min Deadband Values
     public static final double confidenceDeadbandMin=60;
     public static final double confidenceDeadbandMax=140;
+
+    //Multiplier to Turn Pathplanner X & Y Pos to Meters
+    public static final double cartPointToMeterMult=0;
+
     //Tested Average of Differences in X coords
     public static final double confidenceXMean=0.017692936661984578;
+    //Tested Average of Differences in Y coords
     public static final double confidenceYMean=1.2286761570822624E-5;
 
     public static final double xLineupDeadband=20;
@@ -109,37 +101,10 @@ public final class Constants {
   public static final class ButtonBindings{
   }
 
-  /** General robot constants  from 3512*/
-  public static final class GeneralConstants {
-    // Enable or disable competition mode
-    public static final boolean tuningMode = true;
-
-    public static final double voltageComp = 10.0;
-
-    // Hold time on motor brakes when disabled
-    public static final double wheelLockTime = 10;
-
-    public static final double robotMass = (148 - 20.3) * 0.453592;
-    public static final double chassisMass = robotMass;
-    public static final Translation3d chassisCG = new Translation3d(0, 0, Units.inchesToMeters(8));
-    public static final double loopTime = 0.13;
-  }
   public static final class OperatorConstants {
     public static final double kDeadband = 0.01;
     public static final double kCubic = 0.95;
     public static final double kLinear = 0.05;
-  }
-  public static final class VisionConstants {
-    public static final double kPoseErrorAcceptance = 3.0; // How much error there can be between current stimated pose
-                                                           // and vision pose in meters
-  }
-  public static final class Swerve {
-    public static final Translation2d flModuleOffset = new Translation2d(0.4, 0.4);
-    public static final Translation2d frModuleOffset = new Translation2d(0.4, -0.4);
-    public static final Translation2d blModuleOffset = new Translation2d(-0.4, 0.4);
-    public static final Translation2d brModuleOffset = new Translation2d(-0.4, -0.4);
-
-    public static final double maxModuleSpeed = 4.5; // M/S
   }
 
   public static final PPHolonomicDriveController pathPlanDriveController = new PPHolonomicDriveController(
