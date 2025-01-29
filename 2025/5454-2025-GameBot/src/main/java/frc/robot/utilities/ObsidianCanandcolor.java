@@ -74,13 +74,14 @@ public class ObsidianCanandcolor {
         m_settings.setAlignColorFramesToIntegrationPeriod(false);
 
         //Sets digital output port 1 to use the digital logic system, setting it to normally closed
-        m_settings.setDigoutPinConfig(m_sensor.digout1().channelIndex(), DigoutPinConfig.kDigoutLogicNormallyClosed);
-
+       // m_settings.setDigoutPinConfig(m_sensor.digout1().channelIndex(), DigoutPinConfig.kDigoutLogicNormallyClosed);
+       m_settings.setDigoutPinConfig(m_sensor.digout1().channelIndex(), DigoutPinConfig.kDigoutLogicActiveHigh);
+       
         //Sets the digout frame trigger to send when the digout goes high or low
         m_settings.setDigoutFrameTrigger(m_sensor.digout1().channelIndex(), DigoutFrameTrigger.kRisingAndFalling);
 
         //Save settings to device
-        m_sensor.setSettings(settings);
+        m_sensor.setSettings(m_settings);
 
         //Configure the digout slot to trigger when proximity is between 0 and 0.5
         m_sensor.digout1().configureSlots(new HSVDigoutConfig()
@@ -91,7 +92,7 @@ public class ObsidianCanandcolor {
     //canandcolor.digout1().getValue() will be updated every time the sensor enters or exit a digout trigger state.
     }
     public String getColorHexString(){
-        Logger.recordOutput("CanandColor", null);
+       // Logger.recordOutput("CanandColor", null);
         return m_sensor.getColor().toWpilibColor().toHexString();
     }
     
