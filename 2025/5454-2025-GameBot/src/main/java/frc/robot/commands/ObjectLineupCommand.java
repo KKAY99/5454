@@ -73,19 +73,6 @@ public class ObjectLineupCommand extends Command {
         }
       break;
       case ROTATETOWARDS:
-        if(x>LimeLightValues.xLineupDeadband4){
-          rotation=1;
-        }else if(x<LimeLightValues.xLineupDeadband4&&x>LimeLightValues.xLineupDeadband3){
-          rotation=0.8;
-        }else if(x<LimeLightValues.xLineupDeadband3&&x>LimeLightValues.xLineupDeadband2){
-          rotation=0.5;
-        }else if(x<LimeLightValues.xLineupDeadband2&&x>LimeLightValues.xLineupDeadband1){
-          rotation=0.33;
-        }else if(x<LimeLightValues.xLineupDeadband1&&x>LimeLightValues.xLineupDeadband0){
-          rotation=0.3;
-        }else if(x<LimeLightValues.xLineupDeadband0){
-          rotation=0.3;
-        }
 
         if(x<0.1){
           m_swerve.drive(0,0,0);

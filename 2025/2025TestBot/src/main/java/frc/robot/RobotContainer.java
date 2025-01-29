@@ -27,12 +27,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.utilities.Limelight;
 
 import frc.robot.Constants.*;
+import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.EndEffectorCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SpinMotorCommand;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.SpinMotor;
 
@@ -50,17 +52,19 @@ public class RobotContainer {
 
     
     private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
+    /* 
     private WPI_VictorSPX m_LeftMotor1=new WPI_VictorSPX(DriveConstants.leftMotor1Port);
     private WPI_VictorSPX m_LeftMotor2=new WPI_VictorSPX(DriveConstants.leftMotor2Port);
     private WPI_VictorSPX m_RightMotor1=new WPI_VictorSPX(DriveConstants.rightMotor1Port);
     private WPI_VictorSPX m_RightMotor2=new WPI_VictorSPX(DriveConstants.rightMotor2Port);
     private MotorControllerGroup m_left = new MotorControllerGroup(m_LeftMotor1,m_LeftMotor2);
     private MotorControllerGroup m_right = new MotorControllerGroup(m_RightMotor1,m_RightMotor2);
-    private DifferentialDrive m_drive=new DifferentialDrive(m_left,m_right);
+    private DifferentialDrive m_drive=new DifferentialDrive(m_left,m_right);*/
     //private SpinMotor m_SpinMotor=new SpinMotor(14);
-    private IndexerSubsystem m_Indexer=new IndexerSubsystem(19, 18);
-    private IntakeSubsystem m_Intake=new IntakeSubsystem(20, 15);
-    private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(11,12);
+   // private IndexerSubsystem m_Indexer=new IndexerSubsystem(19, 18);
+    //private IntakeSubsystem m_Intake=new IntakeSubsystem(20, 15);
+    //private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(11,12);
+    private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(11, 10);
    // private Limelight m_Limelight=new Limelight();
     public RobotContainer() {
         // Configure the button bindings
@@ -92,6 +96,7 @@ public class RobotContainer {
       SpinMotorCommand spinMotorSpeed_4 = new SpinMotorCommand(m_SpinMotor, -0.4);ver, 
       runMotorButton_4.whileTrue(spinMotorSpeed_4);*/
 
+      /* 
       JoystickButton EndEffectorButton_1 = new JoystickButton(m_xBoxDriver,1);
       EndEffectorCommand effectorCommand_1 = new EndEffectorCommand(m_endEffector,1,.5);
       EndEffectorButton_1.whileTrue(effectorCommand_1);
@@ -109,8 +114,23 @@ public class RobotContainer {
       
       JoystickButton EndEffectorButton_4 = new JoystickButton(m_xBoxDriver,1);
       EndEffectorCommand effectorCommand_4 = new EndEffectorCommand(m_endEffector,2,-.5);
-      EndEffectorButton_4.whileTrue(effectorCommand_4);
+      EndEffectorButton_4.whileTrue(effectorCommand_4);*/
      
+
+      Trigger Left_up = new Trigger(() -> Math.abs(m_xBoxDriver.getLeftY())>0.1);
+      ElevatorCommand ElevatortCommand= new ElevatorCommand(m_Elevator,() -> m_xBoxDriver.getLeftY());
+      Left_up.whileTrue(ElevatortCommand);
+
+            
+      JoystickButton Button_A = new JoystickButton(m_xBoxDriver,1);
+      ElevatorCommand ElevatorCommand_4 = new ElevatorCommand(m_Elevator,() -> -0.2);
+      Button_A.whileTrue(ElevatorCommand_4);
+
+      JoystickButton Button_B = new JoystickButton(m_xBoxDriver,2);
+      ElevatorCommand ElevatorCommand_3 = new ElevatorCommand(m_Elevator,() -> 0.2);
+      Button_B.whileTrue(ElevatorCommand_3);
+
+
     }
        
     public void refreshSmartDashboard(){  
@@ -156,8 +176,9 @@ public class RobotContainer {
   }*/
   
   public void driveRobot(){
-      m_drive.arcadeDrive(m_xBoxDriver.getLeftX(),m_xBoxDriver.getLeftY());
-      m_drive.setDeadband(0.1);
+      
+      //m_drive.arcadeDrive(m_xBoxDriver.getLeftX(),m_xBoxDriver.getLeftY());
+     // m_drive.setDeadband(0.1);
   }
   public void clearAllStickyFaults(){
   Alliance alliance = DriverStation.getAlliance().get();
