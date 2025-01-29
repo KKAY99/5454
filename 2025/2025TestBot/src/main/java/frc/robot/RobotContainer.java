@@ -28,16 +28,11 @@ import frc.robot.utilities.Limelight;
 
 import frc.robot.Constants.*;
 import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.EndEffectorCommand;
-import frc.robot.commands.IndexerCommand;
+import frc.robot.commands.EndEffectorRotateCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.SpinMotorCommand;
-import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.SpinMotor;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -63,8 +58,8 @@ public class RobotContainer {
     //private SpinMotor m_SpinMotor=new SpinMotor(14);
    // private IndexerSubsystem m_Indexer=new IndexerSubsystem(19, 18);
     //private IntakeSubsystem m_Intake=new IntakeSubsystem(20, 15);
-    //private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(11,12);
-    private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(11, 10);
+    private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(12,13,10);
+    private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(11);
    // private Limelight m_Limelight=new Limelight();
     public RobotContainer() {
         // Configure the button bindings
@@ -115,6 +110,18 @@ public class RobotContainer {
       JoystickButton EndEffectorButton_4 = new JoystickButton(m_xBoxDriver,1);
       EndEffectorCommand effectorCommand_4 = new EndEffectorCommand(m_endEffector,2,-.5);
       EndEffectorButton_4.whileTrue(effectorCommand_4);*/
+
+      Trigger Right_Stick_Y = new Trigger(() -> Math.abs(m_xBoxDriver.getRightY())>0.1);
+      EndEffectorRotateCommand endEffectorRotateCommand = new EndEffectorRotateCommand(m_endEffector, () -> m_xBoxDriver.getRightY());
+      Right_Stick_Y.whileTrue(endEffectorRotateCommand);
+
+      JoystickButton Button_X = new JoystickButton(m_xBoxDriver,3);
+      EndEffectorRotateCommand endEffectorRotateCommand_2 = new EndEffectorRotateCommand(m_endEffector,() -> 0.1);
+      Button_X.whileTrue(endEffectorRotateCommand_2);
+
+      JoystickButton Button_Y = new JoystickButton(m_xBoxDriver,4);
+      EndEffectorRotateCommand endEffectorRotateCommand_3 = new EndEffectorRotateCommand(m_endEffector,() -> -0.1);
+      Button_Y.whileTrue(endEffectorRotateCommand_3);
      
 
       Trigger Left_up = new Trigger(() -> Math.abs(m_xBoxDriver.getLeftY())>0.1);

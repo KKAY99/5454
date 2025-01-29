@@ -14,6 +14,7 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final int k30Amp=30;
   public static final class DriveConstants {
     public static final int leftMotor1Port=10;
     public static final int leftMotor2Port=11;
