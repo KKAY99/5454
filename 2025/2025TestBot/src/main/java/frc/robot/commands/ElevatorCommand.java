@@ -14,9 +14,9 @@ public class ElevatorCommand extends Command {
   private ElevatorSubsystem  m_elevator;
   private DoubleSupplier m_speed;
   /** Creates a new IntakeCommand. */
-  public ElevatorCommand(ElevatorSubsystem intake, DoubleSupplier speed) {
+  public ElevatorCommand(ElevatorSubsystem elevator, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_elevator = intake;
+    m_elevator = elevator;
     m_speed = speed;
   }
 

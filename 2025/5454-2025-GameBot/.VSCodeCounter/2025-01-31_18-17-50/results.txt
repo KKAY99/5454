@@ -1,0 +1,100 @@
+Date : 2025-01-31 18:17:50
+Directory : c:\FRCProjects\5454\2025\5454-2025-GameBot
+Total : 51 files,  3217 codes, 511 comments, 525 blanks, all 4253 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| Java               |         27 |      1,936 |        459 |        470 |      2,865 |
+| JSON               |         18 |      1,081 |          0 |          1 |      1,082 |
+| Groovy             |          2 |         98 |         20 |         28 |        146 |
+| Batch              |          1 |         41 |         32 |         22 |         95 |
+| JSON with Comments |          1 |         32 |          0 |          0 |         32 |
+| Markdown           |          1 |         22 |          0 |          3 |         25 |
+| Java Properties    |          1 |          7 |          0 |          1 |          8 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                       | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                          |         51 |      3,217 |        511 |        525 |      4,253 |
+| . (Files)                                                                                                  |          4 |        161 |         52 |         53 |        266 |
+| .wpilib                                                                                                    |          1 |          6 |          0 |          0 |          6 |
+| gradle                                                                                                     |          1 |          7 |          0 |          1 |          8 |
+| gradle\wrapper                                                                                             |          1 |          7 |          0 |          1 |          8 |
+| src                                                                                                        |         37 |      2,134 |        459 |        470 |      3,063 |
+| src\main                                                                                                   |         37 |      2,134 |        459 |        470 |      3,063 |
+| src\main\deploy                                                                                            |         10 |        198 |          0 |          0 |        198 |
+| src\main\deploy\pathplanner                                                                                |          2 |         33 |          0 |          0 |         33 |
+| src\main\deploy\swerve                                                                                     |          8 |        165 |          0 |          0 |        165 |
+| src\main\deploy\swerve (Files)                                                                             |          2 |         24 |          0 |          0 |         24 |
+| src\main\deploy\swerve\modules                                                                             |          6 |        141 |          0 |          0 |        141 |
+| src\main\java                                                                                              |         27 |      1,936 |        459 |        470 |      2,865 |
+| src\main\java\frc                                                                                          |         27 |      1,936 |        459 |        470 |      2,865 |
+| src\main\java\frc\robot                                                                                    |         27 |      1,936 |        459 |        470 |      2,865 |
+| src\main\java\frc\robot (Files)                                                                            |          6 |        598 |        208 |        150 |        956 |
+| src\main\java\frc\robot\commands                                                                           |          4 |        268 |         16 |         65 |        349 |
+| src\main\java\frc\robot\subsystems                                                                         |          5 |        314 |         98 |         75 |        487 |
+| src\main\java\frc\robot\utilities                                                                          |         12 |        756 |        137 |        180 |      1,073 |
+| vendordeps                                                                                                 |          8 |        909 |          0 |          1 |        910 |
++------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                                   | language           | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\.wpilib\wpilib_preferences.json                                 | JSON               |          6 |          0 |          0 |          6 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\WPILib-License.md                                               | Markdown           |         22 |          0 |          3 |         25 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\build.gradle                                                    | Groovy             |         70 |         20 |         25 |        115 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\gradle\wrapper\gradle-wrapper.properties                        | Java Properties    |          7 |          0 |          1 |          8 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\gradlew.bat                                                     | Batch              |         41 |         32 |         22 |         95 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\settings.gradle                                                 | Groovy             |         28 |          0 |          3 |         31 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\pathplanner\navgrid.json                        | JSON               |          1 |          0 |          0 |          1 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\pathplanner\settings.json                       | JSON with Comments |         32 |          0 |          0 |         32 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\swerve\controllerproperties.json                | JSON               |          8 |          0 |          0 |          8 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\swerve\modules\backleft.json                    | JSON               |         26 |          0 |          0 |         26 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\swerve\modules\backright.json                   | JSON               |         26 |          0 |          0 |         26 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\swerve\modules\frontleft.json                   | JSON               |         26 |          0 |          0 |         26 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\swerve\modules\frontright.json                  | JSON               |         26 |          0 |          0 |         26 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\swerve\modules\physicalproperties.json          | JSON               |         21 |          0 |          0 |         21 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\swerve\modules\pidfproperties.json              | JSON               |         16 |          0 |          0 |         16 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\deploy\swerve\swervedrive.json                         | JSON               |         16 |          0 |          0 |         16 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\Constants.java                          | Java               |         87 |          6 |         22 |        115 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\Main.java                               | Java               |          8 |         13 |          5 |         26 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\Robot.java                              | Java               |         82 |         63 |         29 |        174 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\RobotContainer.java                     | Java               |        163 |         24 |         43 |        230 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\Telemetry.java                          | Java               |         79 |         16 |         16 |        111 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\TunerConstants.java                     | Java               |        179 |         86 |         35 |        300 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\commands\ApriltagLineupCommand.java     | Java               |        142 |          4 |         27 |        173 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\commands\AutoDoNothingCommand.java      | Java               |         17 |          5 |          9 |         31 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\commands\ObjectLineupCommand.java       | Java               |         87 |          4 |         21 |        112 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\commands\PipelineSwapCommand.java       | Java               |         22 |          3 |          8 |         33 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\subsystems\ClimbSubsystem.java          | Java               |         19 |          1 |          8 |         28 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\subsystems\CommandSwerveDrivetrain.java | Java               |        222 |         94 |         40 |        356 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\subsystems\CoralScorerSubsystem.java    | Java               |         19 |          1 |          8 |         28 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\subsystems\ElevatorSubsystem.java       | Java               |         35 |          1 |         11 |         47 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\subsystems\IntakeSubsystem.java         | Java               |         19 |          1 |          8 |         28 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\AutoPlanner.java              | Java               |         56 |          1 |         12 |         69 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\FieldRelativeAccel.java       | Java               |         30 |          1 |          6 |         37 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\FieldRelativeSpeed.java       | Java               |         23 |          1 |          5 |         29 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\Limelight.java                | Java               |        270 |         16 |         64 |        350 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\LimelightManager.java         | Java               |         19 |          0 |          9 |         28 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\MathUtils.java                | Java               |         55 |          0 |         13 |         68 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\ObsidianCANSparkMax.java      | Java               |         67 |         24 |          9 |        100 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\ObsidianCanandcolor.java      | Java               |         66 |         19 |         16 |        101 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\VisionConstants.java          | Java               |         27 |         22 |          9 |         58 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\VisionIO.java                 | Java               |         28 |         14 |          9 |         51 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\VisionIOLimelight.java        | Java               |         96 |         38 |         22 |        156 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\src\main\java\frc\robot\utilities\photonvision.java             | Java               |         19 |          1 |          6 |         26 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\vendordeps\AdvantageKit.json                                    | JSON               |         35 |          0 |          0 |         35 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\vendordeps\PathplannerLib.json                                  | JSON               |         38 |          0 |          0 |         38 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\vendordeps\Phoenix5-frc2025-latest.json                         | JSON               |        171 |          0 |          0 |        171 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\vendordeps\Phoenix6-frc2025-latest.json                         | JSON               |        419 |          0 |          0 |        419 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\vendordeps\REVLib.json                                          | JSON               |         71 |          0 |          0 |         71 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\vendordeps\ReduxLib-2025.0.1.json                               | JSON               |         72 |          0 |          0 |         72 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\vendordeps\URCL.json                                            | JSON               |         65 |          0 |          0 |         65 |
+| c:\FRCProjects\5454\2025\5454-2025-GameBot\vendordeps\WPILibNewCommands.json                               | JSON               |         38 |          0 |          1 |         39 |
+| Total                                                                                                      |                    |      3,217 |        511 |        525 |      4,253 |
++------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
