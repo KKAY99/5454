@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.events.TriggerEvent;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -9,17 +11,30 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.LimelightManager;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.InputControllers;
+import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.ElevatorPosCommand;
+import frc.robot.commands.DunkinDonutRotateCommand;
+import frc.robot.commands.DunkinDonutPosCommand;
+import frc.robot.commands.DunkinDonutCoralCommand;
+import frc.robot.commands.DunkinDonutAlgeaCommand;
+import frc.robot.subsystems.DunkinDonutSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+
+
 
 //@Logged(strategy=Strategy.OPT_IN)
 public class RobotContainer {
@@ -38,6 +53,12 @@ public class RobotContainer {
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
+
+  //DunkinSubsystem
+  private DunkinDonutSubsystem m_DunkinDonut = new DunkinDonutSubsystem(Constants.DunkinDonutConstants.coralCanID, Constants.DunkinDonutConstants.algaeCanID, Constants.DunkinDonutConstants.rotateCanID);
+
+  //ElevatorSubsystem
+  private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(Constants.ElevatorConstants.elevatorCanID);
 
   private final SendableChooser<Command> m_autoChooser;
 
@@ -58,6 +79,8 @@ public class RobotContainer {
   public double m_P;
   public double m_I;
   public double m_D;
+
+  public boolean hasRotateHome;
 
   public RobotContainer(){
     configureNamedCommands();
@@ -93,6 +116,28 @@ public class RobotContainer {
 
     PipelineSwapCommand piplineSwap2=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline);
     m_xBoxDriver.rightBumper().onTrue(piplineSwap2);
+
+    //DunkinDonutCommands
+    DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_DunkinDonut, () -> m_xBoxOperator.getRightX());
+    Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
+    operatorRightXJoystick.whileTrue(DunkinRotateCommand);
+
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_DunkinDonut, 0.1);
+    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinCoralButton);
+    operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
+
+    DunkinDonutAlgeaCommand DunkinAlgeaCommand = new DunkinDonutAlgeaCommand(m_DunkinDonut, 0.1);
+    JoystickButton operatorDunkinAlgeaButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinAlgeaButton);
+    operatorDunkinAlgeaButton.whileTrue(DunkinAlgeaCommand);
+
+    DunkinDonutPosCommand DunkinPosCommand = new DunkinDonutPosCommand(m_DunkinDonut, Constants.DunkinDonutConstants.TestPos);
+    JoystickButton operatorDunkinPosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinRotatePosButton);
+    operatorDunkinPosButton.whileTrue(DunkinPosCommand);
+    
+    //ElevatorCommands
+    ElevatorCommand ElevatorCommand = new ElevatorCommand(m_Elevator, () -> m_xBoxOperator.getLeftY());
+    Trigger operatorLeftYJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
+    operatorLeftYJoystick.whileTrue(ElevatorCommand);
   }
       
   private void refreshSmartDashboard(){  
@@ -157,6 +202,7 @@ public class RobotContainer {
   }
 
   public void TeleopMode(){
+    homeRobot();
     //m_OdomLimelight.resetLimelightIDFilter();
     m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   }
@@ -179,6 +225,13 @@ public class RobotContainer {
   }
 
   public void AllPeriodic(){
+  }
+
+  public void homeRobot(){
+    if(!hasRotateHome){
+      hasRotateHome = true;
+      CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_DunkinDonut));
+    }
   }
 
   public Command getAutonomousCommand(){

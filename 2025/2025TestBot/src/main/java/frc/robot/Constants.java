@@ -22,6 +22,19 @@ public final class Constants {
     public static final int rightMotor2Port=13;
   }
 
+  public final class LedConstants{
+    public static final int LedCanID = 14;
+    public static final int LedCount = 0;
+
+    public static enum LEDStates{
+      TELEOP,DISABLED
+    }
+
+    public static enum ColorState{
+      GREEN, PURPLE, RED, BLUE, YELLOW, ORANGE, PINK
+    }
+  }
+
   public static final class ShooterConstants{
     public static final int shootingMotor1Port=21;
     public static final int shootingMotor2Port=22;

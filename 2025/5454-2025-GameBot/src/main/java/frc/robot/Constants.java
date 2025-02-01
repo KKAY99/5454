@@ -99,14 +99,27 @@ public final class Constants {
   }
 
   public static final class DunkinDonutConstants{
+    public static final int CANcoderID = 0;
+    public static final int coralCanID = 23;
+    public static final int algaeCanID = 25;
+    public static final int rotateCanID = 24;
+
     public static final double posDeadband=5;
+
+    public static final double homePosDeadband = 0.1;
+    public static final double rotateHomePos = 0;
+    public static final double homeSpeed = 0.1;
   }
 
   public static final class ElevatorConstants{
+    public static final int elevatorCanID = 21;
     public static final double posDeadband=1;
   }
 
   public static final class ButtonBindings{
+    public static final int DunkinCoralButton = 0;
+    public static final int DunkinAlgeaButton = 0;
+    public static final double joystickDeadband = 0.1;
   }
 
   public static final class OperatorConstants {

@@ -27,12 +27,15 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.utilities.Limelight;
 
 import frc.robot.Constants.*;
+import frc.robot.Constants.LedConstants.LEDStates;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.EndEffectorRotateCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
+
+import frc.robot.utilities.Leds;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -58,6 +61,7 @@ public class RobotContainer {
     //private SpinMotor m_SpinMotor=new SpinMotor(14);
    // private IndexerSubsystem m_Indexer=new IndexerSubsystem(19, 18);
     //private IntakeSubsystem m_Intake=new IntakeSubsystem(20, 15);
+    private Leds m_leds = new Leds(Constants.LedConstants.LedCanID);
     private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(12,13,10);
     private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(11);
    // private Limelight m_Limelight=new Limelight();
@@ -164,10 +168,11 @@ public class RobotContainer {
                 
         }  
         public void TeleopMode(){
-                
+                m_leds.setLedState(LEDStates.TELEOP);
         }
     
     public void DisableMode(){
+      m_leds.setLedState(LEDStates.DISABLED);
        
     }
     public void EnableMode(){

@@ -1,15 +1,19 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import com.ctre.phoenix6.hardware.CANcoder;
+
 
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.spark.*;
 
 public class DunkinDonutSubsystem extends SubsystemBase {
+  private CANcoder m_CANcoder;
   private ObsidianCANSparkMax m_coralMotor;
   private ObsidianCANSparkMax m_algaeMotor;
   private ObsidianCANSparkMax m_rotateMotor;
@@ -22,8 +26,17 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true);
     m_algaeMotor= new ObsidianCANSparkMax(algaeCanID, MotorType.kBrushless, true);
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true);
+    m_CANcoder = new CANcoder(rotateCanID);
 
     m_loopController=m_rotateMotor.getClosedLoopController();
+  }
+
+  public double getAbsoluteEncoderPos(){
+    return m_CANcoder.getAbsolutePosition().getValueAsDouble();
+  }
+
+  public void resetRotateRelative(){
+    m_rotateMotor.getEncoder().setPosition(0);
   }
 
   public double get_rotatemotorpos(){
@@ -57,11 +70,11 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_algaeSpeed=speed;
     m_algaeMotor.set(speed);
   }
-  public void stopCoralMotor(double speed){
+  public void stopCoralMotor(){
     m_coralMotor.stopMotor();
     m_coralSpeed=0;
   }
-  public void stopAlgeaMotor(double speed){
+  public void stopAlgeaMotor(){
     m_algaeMotor.stopMotor();
     m_algaeSpeed=0;
   }
