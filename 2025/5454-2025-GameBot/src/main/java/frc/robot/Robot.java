@@ -32,7 +32,7 @@ public class Robot extends LoggedRobot {
   private RobotContainer m_robot;
   
   public Robot(){
-  Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+    Logger.recordMetadata("ProjectName", "5454-2025-GameBot"); // Set a metadata value
 
 if (isReal()) {
     Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
