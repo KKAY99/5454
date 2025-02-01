@@ -1,42 +1,39 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.utilities.ObsidianCANSparkMax;
-import com.ctre.phoenix6.controls.ControlRequest;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  private TalonFX m_motor1;
-  private TalonFX m_motor2;
+  private ObsidianCANSparkMax m_motor1;
+  private SparkClosedLoopController m_loopController;
 
-  private PositionDutyCycle m_posDutyCycle;
-  private VelocityDutyCycle m_VelocityDutyCycle;
+  public ElevatorSubsystem(int CanID_1) {
+    m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless, true);
+    m_loopController=m_motor1.getClosedLoopController();
 
-  private double MaxVeloc = 7530;
-
-  public ElevatorSubsystem(int Motor1ID, int Motor2ID){
-    m_motor1 = new TalonFX(Motor1ID);
-    m_motor2 = new TalonFX(Motor2ID);
   }
 
-  public void run(double speed){
-    m_VelocityDutyCycle = new VelocityDutyCycle(speed*MaxVeloc);
-    m_motor1.setControl(m_VelocityDutyCycle);
-    m_motor2.setControl(m_VelocityDutyCycle);
+  public double get_motor1pos(){
+    return m_motor1.getEncoder().getPosition();
   }
 
-  public void stop(){
+  public void set_referance(double pos){
+    m_loopController.setReference(pos, ControlType.kPosition);
+  }
+
+  public void reset_referamce(){
+    m_loopController.setReference(0, ControlType.kVelocity);
+  }
+  
+  public void motor_run(double speed){
+    m_motor1.set(speed);
+  }
+
+  public void motor_stop(){
     m_motor1.stopMotor();
-    m_motor2.stopMotor();
-  }
-
-  public void setPos(double pos){
-    m_posDutyCycle = new PositionDutyCycle(pos);
-    m_motor1.setControl(m_posDutyCycle);
   }
 
   @Override

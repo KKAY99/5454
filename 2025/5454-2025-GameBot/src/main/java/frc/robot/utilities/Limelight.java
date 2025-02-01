@@ -5,6 +5,8 @@ import frc.robot.Constants.LimeLightValues;
 import java.net.http.HttpResponse.BodySubscriber;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.type.ArrayType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -62,6 +64,7 @@ public class Limelight {
     private double m_limeLightHeight;
     private double m_mountingAngle;
     private double m_targetHeight=0;
+    private double[] m_lastConfidenceVals;
     
     private String m_limeLightName;
 
@@ -304,6 +307,12 @@ public class Limelight {
         return new double[]{xAverage,yAverage};
     }
 
+    public double[] getLastConfidenceVals(){
+        boolean check=(m_lastConfidenceVals.length!=0);
+        
+        return check?m_lastConfidenceVals:new double[] {};
+    }
+
     public boolean GetConfidence(int posesToAverage,Pose2d currentVisionPose){
         boolean returnValue=false;
         ArrayList<Double> diffMeans=new ArrayList<>();
@@ -338,10 +347,14 @@ public class Limelight {
                     returnValue=false;
                 }
 
+                this.m_lastConfidenceVals= new double[] {((((LimeLightValues.confidenceDeadbandMax-percentDiffX)/2)/
+                                            (LimeLightValues.confidenceDeadbandMax-LimeLightValues.confidenceDeadbandMin))*100),
+                                            ((((LimeLightValues.confidenceDeadbandMax-percentDiffY)/2)/
+                                            (LimeLightValues.confidenceDeadbandMax-LimeLightValues.confidenceDeadbandMin))*100)};
                 this.m_previousPoseDiffMean=diffMeans;
             }
         }
 
-            return returnValue;
+        return returnValue;
     }
 }

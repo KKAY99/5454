@@ -19,12 +19,36 @@ public class LimelightManager{
         return Math.sqrt(Math.pow((x1-x2),2)+Math.pow((y1-y2),2));
     }
 
-    public Pose2d MultiCameraPoseEstimationCustom(){
-        return null;
-    }
+    public Pose2d MultiCameraPoseEstimation(int posesToAverage){
+        Pose2d[] limelightsMT2=new Pose2d[]{};
+        boolean[] MT2ValShouldUse=new boolean[]{};
+        double xCoordsToAv=0;
+        double yCoordsToAv=0;
+        double rotToAv=0;
+        double confidenceLevelX;
+        double confidenceLevelY;
+        double newPosX;
+        double newPosY;
+        double newPosRot;
 
-    public Pose2d MultiCameraPoseEstimation(){
+        for(int i=0;i<m_limeLights.length;i++){
+            limelightsMT2[i]=m_limeLights[i].GetPoseViaMegatag2();
+            xCoordsToAv+=m_limeLights[i].GetPoseViaMegatag2().getX();
+            yCoordsToAv+=m_limeLights[i].GetPoseViaMegatag2().getY();
+            rotToAv+=m_limeLights[i].GetPoseViaMegatag2().getRotation().getDegrees();
+            MT2ValShouldUse[i]=m_limeLights[i].GetConfidence(posesToAverage,limelightsMT2[i]);
+            confidenceLevelX=m_limeLights[i].getLastConfidenceVals()[0];
+            confidenceLevelX=m_limeLights[i].getLastConfidenceVals()[1];
+        }
+
+        newPosX=xCoordsToAv/m_limeLights.length;
+        newPosY=yCoordsToAv/m_limeLights.length;
+        newPosRot=rotToAv/m_limeLights.length;
+        
         return null;
     }
     
+    public Pose2d MultiCameraPoseEstimationFullyCustom(){
+        return null;
+    }
 }

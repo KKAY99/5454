@@ -98,6 +98,14 @@ public final class Constants {
     public static final double reefAprilTagHeight=8.75;
   }
 
+  public static final class DunkinDonutConstants{
+    public static final double posDeadband=5;
+  }
+
+  public static final class ElevatorConstants{
+    public static final double posDeadband=1;
+  }
+
   public static final class ButtonBindings{
   }
 
