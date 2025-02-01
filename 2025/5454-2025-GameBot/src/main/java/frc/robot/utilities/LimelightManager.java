@@ -36,7 +36,7 @@ public class LimelightManager{
 
         for(int i=0;i<m_limeLights.length;i++){
             limelightsMT2[i]=m_limeLights[i].GetPoseViaMegatag2();
-            MT2ValShouldUse[i]=m_limeLights[i].GetConfidence(posesToAverage,limelightsMT2[i]);
+            MT2ValShouldUse[i]=m_limeLights[i].getConfidence(posesToAverage,limelightsMT2[i]);
 
             if(MT2ValShouldUse[i]){
                 confidenceLevelX[i]=m_limeLights[i].getLastConfidenceVals()[0];

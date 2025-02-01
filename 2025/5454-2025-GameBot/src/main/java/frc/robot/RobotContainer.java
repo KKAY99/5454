@@ -185,8 +185,8 @@ public class RobotContainer {
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
       m_OdomLimelight.TrimPoseArray(3);
-      System.out.println("confidence: " + m_OdomLimelight.GetConfidence(3,currentPose));
-      if(m_OdomLimelight.GetConfidence(3,currentPose)){
+      System.out.println("confidence: " + m_OdomLimelight.getConfidence(3,currentPose));
+      if(m_OdomLimelight.getConfidence(3,currentPose)){
         m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
       }
     }
@@ -216,7 +216,7 @@ public class RobotContainer {
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
       m_OdomLimelight.TrimPoseArray(3);
-      System.out.println(m_OdomLimelight.GetConfidence(3,currentPose));
+      System.out.println(m_OdomLimelight.getConfidence(3,currentPose));
     }
     if(m_OdomFwdLimelight.isAnyTargetAvailable()){
       m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),

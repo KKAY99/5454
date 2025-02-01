@@ -19,7 +19,6 @@ public class DunkinDonutPosCommand extends Command {
     m_dunkin.set_referance(m_pos);
   }
 
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

@@ -82,6 +82,9 @@ public final class Constants {
     //Multiplier to Turn Pathplanner X & Y Pos to Meters
     public static final double cartPointToMeterMult=0;
 
+    public static final double maxMeterDiff=0.1;
+    public static final double maxRotDiff=5;
+
     //Tested Average of Differences in X coords
     public static final double confidenceXMean=0.017692936661984578;
     //Tested Average of Differences in Y coords
