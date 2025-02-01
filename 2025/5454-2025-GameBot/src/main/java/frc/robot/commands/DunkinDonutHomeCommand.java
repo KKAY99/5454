@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 
 public class DunkinDonutHomeCommand extends Command {
@@ -20,11 +21,24 @@ public class DunkinDonutHomeCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_dunkin.resetRotateRelative();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    boolean returnValue = false;
+    if (m_dunkin.getAbsoluteEncoderPos()>Constants.DunkinDonutConstants.rotateHomePos){
+      m_dunkin.run_rotatemotor(Constants.DunkinDonutConstants.homeSpeed);
+    }else{
+      m_dunkin.run_rotatemotor(-Constants.DunkinDonutConstants.homeSpeed);
+    }
+
+    if (m_dunkin.getAbsoluteEncoderPos()>Constants.DunkinDonutConstants.rotateHomePos-Constants.DunkinDonutConstants.posDeadband && 
+        m_dunkin.getAbsoluteEncoderPos()<Constants.DunkinDonutConstants.rotateHomePos+Constants.DunkinDonutConstants.posDeadband){
+          returnValue = true;
+        }
+    return returnValue; 
   }
 }

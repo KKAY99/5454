@@ -61,7 +61,7 @@ public class RobotContainer {
     //private SpinMotor m_SpinMotor=new SpinMotor(14);
    // private IndexerSubsystem m_Indexer=new IndexerSubsystem(19, 18);
     //private IntakeSubsystem m_Intake=new IntakeSubsystem(20, 15);
-    private Leds m_leds = new Leds(Constants.LedConstants.LedCanID);
+    private Leds m_leds = new Leds(Constants.LedConstants.LedCanID, Constants.LedConstants.LedCount);
     private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(12,13,10);
     private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(11);
    // private Limelight m_Limelight=new Limelight();
@@ -163,14 +163,14 @@ public class RobotContainer {
        //m_RobotDrive.resetDriveMode();
     }
    
-        public void AutoMode(){
-                EnableMode();
+    public void AutoMode(){
+      EnableMode();
                 
-        }  
-        public void TeleopMode(){
-                m_leds.setLedState(LEDStates.TELEOP);
-        }
-    
+    }  
+    public void TeleopMode(){
+      m_leds.setLedState(LEDStates.TELEOP);
+    }
+
     public void DisableMode(){
       m_leds.setLedState(LEDStates.DISABLED);
        
