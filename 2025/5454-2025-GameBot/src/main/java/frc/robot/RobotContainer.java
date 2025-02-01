@@ -130,7 +130,7 @@ public class RobotContainer {
     JoystickButton operatorDunkinAlgeaButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinAlgeaButton);
     operatorDunkinAlgeaButton.whileTrue(DunkinAlgeaCommand);
 
-    DunkinDonutPosCommand DunkinPosCommand = new DunkinDonutPosCommand(m_DunkinDonut, Constants.DunkinDonutConstants.TestPos);
+    DunkinDonutPosCommand DunkinPosCommand = new DunkinDonutPosCommand(m_DunkinDonut, Constants.DunkinDonutConstants.testPos);
     JoystickButton operatorDunkinPosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinRotatePosButton);
     operatorDunkinPosButton.whileTrue(DunkinPosCommand);
     

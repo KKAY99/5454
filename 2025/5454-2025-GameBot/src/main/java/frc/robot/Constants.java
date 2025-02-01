@@ -108,7 +108,7 @@ public final class Constants {
     public static final int rotateCanID = 24;
 
     public static final double posDeadband=5;
-
+    public static final double testPos=0;
     public static final double homePosDeadband = 0.1;
     public static final double rotateHomePos = 0;
     public static final double homeSpeed = 0.1;
@@ -122,6 +122,7 @@ public final class Constants {
   public static final class ButtonBindings{
     public static final int DunkinCoralButton = 0;
     public static final int DunkinAlgeaButton = 0;
+    public static final int DunkinRotatePosButton=0;
     public static final double joystickDeadband = 0.1;
   }
 
