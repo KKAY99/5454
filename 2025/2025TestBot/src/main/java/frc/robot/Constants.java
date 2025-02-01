@@ -24,14 +24,18 @@ public final class Constants {
 
   public final class LedConstants{
     public static final int LedCanID = 14;
-    public static final int LedCount = 0;
+    public static final int LedCount = 300;
 
     public static enum LEDStates{
-      TELEOP,DISABLED
+      TELEOP, DISABLED, HASCORAL, HASALGEA, LINEDUP, SCORED
     }
 
-    public static enum ColorState{
-      GREEN, PURPLE, RED, BLUE, YELLOW, ORANGE, PINK
+    public static enum ColorStates{
+      GREEN, PURPLE, RED, BLUE, WHITE
+    }
+
+    public static enum AnimationStates{
+      FIRE, RAINBOW, LARSON, NULL
     }
   }
 
