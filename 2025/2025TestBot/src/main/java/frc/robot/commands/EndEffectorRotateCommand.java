@@ -4,18 +4,20 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SpinMotor;
+import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class SpinMotorCommand extends Command {
-  /** Creates a new SpinMotorCommand. */
-  private SpinMotor m_spinmotor;
-  private double m_speed;
-  public SpinMotorCommand(SpinMotor spinmotor, double speed) {
-    m_spinmotor = spinmotor;
-    m_speed = speed;
+public class EndEffectorRotateCommand extends Command {
+  private EndEffectorSubsystem m_subSystem;
+  private DoubleSupplier m_speed;
+  /** Creates a new IntakeCommand. */
+  public EndEffectorRotateCommand(EndEffectorSubsystem system, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_subSystem = system;
+    m_speed = speed;
   }
 
   // Called when the command is initially scheduled.
@@ -25,14 +27,13 @@ public class SpinMotorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("running motort at:" + m_speed);
-    m_spinmotor.motor_run(m_speed);
+    m_subSystem.run_rotatemotor(m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_spinmotor.motor_stop();
+    m_subSystem.stop_rotatemotor();
   }
 
   // Returns true when the command should end.

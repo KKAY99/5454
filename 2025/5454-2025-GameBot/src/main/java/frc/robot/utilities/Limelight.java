@@ -2,9 +2,6 @@ package frc.robot.utilities;
 
 import frc.robot.Constants;
 import frc.robot.Constants.LimeLightValues;
-
-import static edu.wpi.first.units.Units.Newton;
-
 import java.net.http.HttpResponse.BodySubscriber;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -62,13 +62,13 @@ public final class Constants {
   public static final class LimeLightValues {
     public static final double limelightNeuralHeight=12; //37
     public static final double limelightNeuralAngle=-10; //40
-    public static final double limelightBackOdomHeight=18;
+    public static final double limelightBackOdomHeight=5;
     public static final double limelightBackOdomAngle=0;
-    public static final double limelightFrontOdomHeight=16;
-    public static final double limelightFrontOdomAngle=-2;
+    public static final double limelightFrontOdomHeight=3;
+    public static final double limelightFrontOdomAngle=0;
 
-    public static final String backOdomLimelightName="limelight-odom";
-    public static final String frontOdomLimelightName="limelight-odomfwd";
+    public static final String frontOdomLimelightName="limelight-odom";
+    public static final String backOdomLimelightName="limelight-odombwd";
     public static final String neuralLimelightName="limelight-neural";
 
     public static final int centerApriltagPipeline=0;

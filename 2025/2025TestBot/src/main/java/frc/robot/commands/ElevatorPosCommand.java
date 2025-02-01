@@ -5,40 +5,47 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class EndEffectorCommand extends Command {
-  private EndEffectorSubsystem m_subSystem;
-  private double m_speed;
-  private int m_motor;
-  /** Creates a new IntakeCommand. */
-  public EndEffectorCommand(EndEffectorSubsystem system, int motor, double speed) {
+public class ElevatorPosCommand extends Command {
+  private ElevatorSubsystem m_subSystem;
+  private double m_pos;
+  private double kDeadband = 5;
+  /** Creates a new EndEffectorPosCommand. */
+  public ElevatorPosCommand(ElevatorSubsystem subSystem, double pos) {
+    m_subSystem = subSystem;
+    m_pos = pos;
     // Use addRequirements() here to declare subsystem dependencies.
-    m_subSystem = system;
-    m_speed = speed;
-    m_motor=motor;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_subSystem.set_referance(m_pos);
+  }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subSystem.motor_runmotor(m_motor, m_speed); 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subSystem.motor_stop(m_motor);
+     m_subSystem.reset_referamce();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    boolean returnValue=false;
+
+    if (m_subSystem.get_motor1pos()>m_pos-kDeadband&&m_subSystem.get_motor1pos()<m_pos+kDeadband){
+       returnValue=true;
+    }
+     
+    return returnValue;
   }
 }

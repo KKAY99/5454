@@ -1,25 +1,48 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-
-
-
+import frc.robot.utilities.ObsidianCANSparkMax;
+import com.revrobotics.spark.*;
 
 public class EndEffectorSubsystem extends SubsystemBase {
-  private SparkMax m_motor1;
-  private SparkMax m_motor2;
-  /** Creates a new SpinMotor. */
-  public EndEffectorSubsystem(int CanID_1, int CanID_2) {
-    m_motor1 = new SparkMax(CanID_1, MotorType.kBrushless);
-    m_motor2 = new SparkMax(CanID_2, MotorType.kBrushless);
+  private ObsidianCANSparkMax m_motor1;
+  private ObsidianCANSparkMax m_motor2;
+  private ObsidianCANSparkMax m_rotateMotor;
 
+  private SparkClosedLoopController m_loopController;
+  
+  /** Creates a new SpinMotor. */
+  public EndEffectorSubsystem(int CanID_1, int CanID_2, int rotateCanID) {
+    m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless, true);
+    m_motor2 = new ObsidianCANSparkMax(CanID_2, MotorType.kBrushless, true);
+    m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true);
+
+    m_loopController=m_rotateMotor.getClosedLoopController();
+  }
+
+  public double get_rotatemotorpos(){
+    return m_rotateMotor.getEncoder().getPosition();
+     
+  }
+
+  public void set_referance(double pos){
+    m_loopController.setReference(pos, ControlType.kPosition);
+  }
+
+  public void reset_referamce(){
+    m_loopController.setReference(0, ControlType.kVelocity);
+  }
+
+  public void run_rotatemotor(double speed){
+    m_rotateMotor.set(speed);
+  }
+
+  public void stop_rotatemotor(){
+    m_rotateMotor.stopMotor();
   }
   
   public void motor_runmotor(int motorNumber,double speed){

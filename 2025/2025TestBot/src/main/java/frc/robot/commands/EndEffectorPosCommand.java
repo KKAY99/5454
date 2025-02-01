@@ -5,38 +5,47 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IndexerCommand extends Command {
-  private IndexerSubsystem m_indexer;
-  private double m_speed;
-  /** Creates a new IndexerCommand. */
-  public IndexerCommand(IndexerSubsystem Indexer, double speed) {
+public class EndEffectorPosCommand extends Command {
+  private EndEffectorSubsystem m_subSystem;
+  private double m_pos;
+  private double kDeadband = 5;
+  /** Creates a new EndEffectorPosCommand. */
+  public EndEffectorPosCommand(EndEffectorSubsystem subSystem, double pos) {
+    m_subSystem = subSystem;
+    m_pos = pos;
     // Use addRequirements() here to declare subsystem dependencies.
-    m_indexer = Indexer;
-    m_speed = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_subSystem.set_referance(m_pos);
+  }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_indexer.motor_run(m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_indexer.motor_stop();
+     m_subSystem.reset_referamce();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    boolean returnValue=false;
+
+    if (m_subSystem.get_rotatemotorpos()>m_pos-kDeadband&&m_subSystem.get_rotatemotorpos()<m_pos+kDeadband){
+       returnValue=true;
+    }
+     
+    return returnValue;
   }
 }

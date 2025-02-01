@@ -7,18 +7,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-
-
-
+import frc.robot.utilities.ObsidianCANSparkMax;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private SparkMax m_motor1;
-  private SparkMax m_motor2;
+  private ObsidianCANSparkMax m_motor1;
+  private ObsidianCANSparkMax m_motor2;
   /** Creates a new SpinMotor. */
   public IntakeSubsystem(int CanID_1, int CanID_2) {
-    m_motor1 = new SparkMax(CanID_1, MotorType.kBrushless);
-    m_motor2 = new SparkMax(CanID_2, MotorType.kBrushless);
+    m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless, true);
+    m_motor2 = new ObsidianCANSparkMax(CanID_2, MotorType.kBrushless, true);
 
   }
   

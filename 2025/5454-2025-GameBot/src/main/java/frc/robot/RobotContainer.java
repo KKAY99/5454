@@ -50,7 +50,7 @@ public class RobotContainer {
   //public final Limelight m_NeuralLimelight=new Limelight(Constants.LimeLightValues.limelightNeuralHeight,Constants.LimeLightValues.limelightNeuralAngle,
                                                 //0,Constants.LimeLightValues.neuralLimelightName);
 
-  public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
+  //public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
           .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
@@ -73,16 +73,16 @@ public class RobotContainer {
     NamedCommands.registerCommand("PipelineCenterApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline));
     NamedCommands.registerCommand("PipelineLeftApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.leftApriltagPipeline));
     NamedCommands.registerCommand("PipelineRightApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline));
-    NamedCommands.registerCommand("ApriltagLineUp21",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,30,21,true));
-    NamedCommands.registerCommand("ApriltagLineUp19",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,30,19,true));
-    //NamedCommands.registerCommand("ObjectLineUp",new ObjectLineupCommand(m_swerve,m_NeuralLimelight,40));
+    NamedCommands.registerCommand("ApriltagLineUp21",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,00,21,true));
+    NamedCommands.registerCommand("ApriltagLineUp19",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,00,19,true));
+    //NamedCommands.registerCommand("ObjectLineUp",new ObjectLineupCommand(m_swerve,m_NeuralLimelight,40));*/
   }
 
   private void configureButtonBindings(){
     ApriltagLineupCommand lineupApriltag=new ApriltagLineupCommand(m_swerve, m_OdomLimelight,30,21,false);
     m_xBoxDriver.leftTrigger().whileTrue(lineupApriltag);
 
-   // ObjectLineupCommand lineupObject=new ObjectLineupCommand(m_swerve, m_NeuralLimelight,40);
+    //ObjectLineupCommand lineupObject=new ObjectLineupCommand(m_swerve, m_NeuralLimelight,40);
     //m_xBoxDriver.rightTrigger().whileTrue(lineupObject);
 
     PipelineSwapCommand piplineSwap0=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline);
@@ -98,7 +98,7 @@ public class RobotContainer {
   private void refreshSmartDashboard(){  
     SmartDashboard.putNumber("Odom Limelight Distance", m_OdomLimelight.getDistance());
     SmartDashboard.putNumber("Odom Limelight X", m_OdomLimelight.getX());
-   // SmartDashboard.putNumber("Neural Limelight Distance", m_NeuralLimelight.getDistance());
+    //SmartDashboard.putNumber("Neural Limelight Distance", m_NeuralLimelight.getDistance());
   }
   
   /*private boolean checkCANConnections(){
@@ -157,7 +157,7 @@ public class RobotContainer {
   }
 
   public void TeleopMode(){
-    m_OdomLimelight.resetLimelightIDFilter();
+    //m_OdomLimelight.resetLimelightIDFilter();
     m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   }
 

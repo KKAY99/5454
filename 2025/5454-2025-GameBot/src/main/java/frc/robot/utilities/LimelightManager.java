@@ -19,8 +19,11 @@ public class LimelightManager{
         return Math.sqrt(Math.pow((x1-x2),2)+Math.pow((y1-y2),2));
     }
 
-    public Pose2d MultiCameraPoseEstimation(){
+    public Pose2d MultiCameraPoseEstimationCustom(){
+        return null;
+    }
 
+    public Pose2d MultiCameraPoseEstimation(){
         return null;
     }
     
