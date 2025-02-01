@@ -2,22 +2,23 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkBase.ControlType;
-
 import org.littletonrobotics.junction.Logger;
-
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import frc.robot.utilities.ObsidianCanandcolor;
 
 public class ElevatorSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_motor1;
   private SparkClosedLoopController m_loopController;
+  private ObsidianCanandcolor m_canAndColor;
   private double m_speed=0;
   private double m_positionTarget=0;
   private String m_controlType;
 
-  public ElevatorSubsystem(int CanID_1) {
+  public ElevatorSubsystem(int CanID_1,int canColorID) {
     m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless, true);
+    //m_canAndColor=new ObsidianCanandcolor(canColorID);
     m_loopController=m_motor1.getClosedLoopController();
     m_controlType="Default-Velocity";
   }
@@ -43,6 +44,17 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void motor_stop(){
     m_motor1.stopMotor();
+  }
+
+  public boolean checkCANConnections(){
+    boolean returnValue=true;
+    try{
+      m_motor1.getDeviceId();
+    }catch(Exception e){
+      returnValue=false;
+    }
+
+    return returnValue;
   }
 
   @Override

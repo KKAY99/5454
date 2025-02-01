@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import com.ctre.phoenix6.hardware.CANcoder;
 
@@ -22,11 +24,11 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private double m_algaeSpeed=0;
   private SparkClosedLoopController m_loopController;
   
-  public DunkinDonutSubsystem(int coralCanID, int algaeCanID, int rotateCanID) {
+  public DunkinDonutSubsystem(int coralCanID, int algaeCanID, int rotateCanID,int canCoderID) {
     m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true);
     m_algaeMotor= new ObsidianCANSparkMax(algaeCanID, MotorType.kBrushless, true);
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true);
-    m_CANcoder = new CANcoder(rotateCanID);
+    m_CANcoder = new CANcoder(canCoderID);
 
     m_loopController=m_rotateMotor.getClosedLoopController();
   }
@@ -35,13 +37,26 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     return m_CANcoder.getAbsolutePosition().getValueAsDouble();
   }
 
+  public void runRotateWithLimits(double speed){
+    if(speed>0&&get_rotatemotorpos()<DunkinDonutConstants.relativeHighLimit){
+      run_rotatemotor(speed);
+    }else{
+      stop_rotatemotor();
+    }
+
+    if(speed<0&&get_rotatemotorpos()>DunkinDonutConstants.relativeLowLimit){
+      run_rotatemotor(speed);
+    }else{
+      stop_rotatemotor();
+    }
+  }
+
   public void resetRotateRelative(){
     m_rotateMotor.getEncoder().setPosition(0);
   }
 
   public double get_rotatemotorpos(){
     return m_rotateMotor.getEncoder().getPosition();
-     
   }
 
   public void set_referance(double pos){
@@ -79,6 +94,19 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_algaeSpeed=0;
   }
 
+  public boolean checkCANConnections(){
+    boolean returnValue=true;
+    try{
+      m_CANcoder.getDeviceID();
+      m_algaeMotor.getDeviceId();
+      m_coralMotor.getDeviceId();
+      m_rotateMotor.getDeviceId();
+    }catch(Exception e){
+      returnValue=false;
+    }
+
+    return returnValue;
+  }
 
   @Override
   public void periodic() {

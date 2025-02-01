@@ -3,7 +3,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.TriggerEvent;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,15 +14,20 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
+import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.LimelightManager;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import java.util.function.BooleanSupplier;
 import frc.robot.commands.*;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.CoolPanelConstants;
+import frc.robot.Constants.DunkinDonutConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ElevatorPosCommand;
@@ -34,18 +38,10 @@ import frc.robot.commands.DunkinDonutAlgeaCommand;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-
-
-//@Logged(strategy=Strategy.OPT_IN)
 public class RobotContainer {
-  //STANDARD DRIVING
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-  //DRONE DRIVING
-  //private final int translationAxis = XboxController.Axis.kRightY.value;
-  //private final int strafeAxis = XboxController.Axis.kRightX.value;
-  //private final int rotationAxis = XboxController.Axis.kLeftX.value;
   
   private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
   private final int leftTriggerAxis = XboxController.Axis.kLeftTrigger.value;
@@ -55,36 +51,37 @@ public class RobotContainer {
   private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
 
   //DunkinSubsystem
-  private DunkinDonutSubsystem m_DunkinDonut = new DunkinDonutSubsystem(Constants.DunkinDonutConstants.coralCanID, Constants.DunkinDonutConstants.algaeCanID, Constants.DunkinDonutConstants.rotateCanID);
-
+  private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID,
+                                                                        DunkinDonutConstants.rotateCanID,DunkinDonutConstants.canCoderID);
+  
   //ElevatorSubsystem
-  private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(Constants.ElevatorConstants.elevatorCanID);
+  private ElevatorSubsystem m_elevator = new ElevatorSubsystem(ElevatorConstants.elevatorCanID,ElevatorConstants.canAndColorID);
 
-  private final SendableChooser<Command> m_autoChooser;
-
-  //private SendableChooser<String> m_autoChooser = new SendableChooser<>(); 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightBackOdomHeight,Constants.LimeLightValues.limelightBackOdomAngle,
+  /*public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightBackOdomHeight,Constants.LimeLightValues.limelightBackOdomAngle,
                                                 0,Constants.LimeLightValues.backOdomLimelightName);
   public final Limelight m_OdomFwdLimelight=new Limelight(Constants.LimeLightValues.limelightFrontOdomHeight,Constants.LimeLightValues.limelightFrontOdomAngle,
-                                                0,Constants.LimeLightValues.frontOdomLimelightName);
-  //public final Limelight m_NeuralLimelight=new Limelight(Constants.LimeLightValues.limelightNeuralHeight,Constants.LimeLightValues.limelightNeuralAngle,
-                                                //0,Constants.LimeLightValues.neuralLimelightName);
+                                                0,Constants.LimeLightValues.frontOdomLimelightName);*/
 
-  public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
+  //public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
+
+  public final JacksonsCoolPanel m_JacksonsCoolPanel=new JacksonsCoolPanel(CoolPanelConstants.greenPWM,CoolPanelConstants.redPWM);
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
           .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
+  
+  private final SendableChooser<Command> m_autoChooser;
 
   public double m_P;
   public double m_I;
   public double m_D;
 
-  public boolean hasRotateHome;
+  public boolean hasRotateHome=false;
 
   public RobotContainer(){
     configureNamedCommands();
     m_autoChooser = AutoBuilder.buildAutoChooser();
+    m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     // Configure the button bindings
     createAutonomousCommandList(); 
     configureButtonBindings();
@@ -93,20 +90,16 @@ public class RobotContainer {
   }
 
   public void configureNamedCommands() {
-    NamedCommands.registerCommand("PipelineCenterApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline));
+    /*NamedCommands.registerCommand("PipelineCenterApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline));
     NamedCommands.registerCommand("PipelineLeftApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.leftApriltagPipeline));
     NamedCommands.registerCommand("PipelineRightApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline));
     NamedCommands.registerCommand("ApriltagLineUp21",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,00,21,true));
-    NamedCommands.registerCommand("ApriltagLineUp19",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,00,19,true));
-    //NamedCommands.registerCommand("ObjectLineUp",new ObjectLineupCommand(m_swerve,m_NeuralLimelight,40));*/
+    NamedCommands.registerCommand("ApriltagLineUp19",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,00,19,true));*/
   }
 
   private void configureButtonBindings(){
-    ApriltagLineupCommand lineupApriltag=new ApriltagLineupCommand(m_swerve, m_OdomLimelight,30,21,false);
+    /*ApriltagLineupCommand lineupApriltag=new ApriltagLineupCommand(m_swerve, m_OdomLimelight,30,21,false);
     m_xBoxDriver.leftTrigger().whileTrue(lineupApriltag);
-
-    //ObjectLineupCommand lineupObject=new ObjectLineupCommand(m_swerve, m_NeuralLimelight,40);
-    //m_xBoxDriver.rightTrigger().whileTrue(lineupObject);
 
     PipelineSwapCommand piplineSwap0=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline);
     m_xBoxDriver.b().onTrue(piplineSwap0);
@@ -115,47 +108,40 @@ public class RobotContainer {
     m_xBoxDriver.leftBumper().onTrue(piplineSwap1);
 
     PipelineSwapCommand piplineSwap2=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline);
-    m_xBoxDriver.rightBumper().onTrue(piplineSwap2);
+    m_xBoxDriver.rightBumper().onTrue(piplineSwap2);*/
 
     //DunkinDonutCommands
-    DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_DunkinDonut, () -> m_xBoxOperator.getRightX());
+    DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_dunkinDonut, () -> m_xBoxOperator.getRightX());
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_DunkinDonut, 0.1);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, 0.1);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinCoralButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutAlgeaCommand DunkinAlgeaCommand = new DunkinDonutAlgeaCommand(m_DunkinDonut, 0.1);
+    DunkinDonutAlgeaCommand DunkinAlgeaCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 0.1);
     JoystickButton operatorDunkinAlgeaButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinAlgeaButton);
     operatorDunkinAlgeaButton.whileTrue(DunkinAlgeaCommand);
 
-    DunkinDonutPosCommand DunkinPosCommand = new DunkinDonutPosCommand(m_DunkinDonut, Constants.DunkinDonutConstants.testPos);
+    DunkinDonutPosCommand DunkinPosCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.testPos);
     JoystickButton operatorDunkinPosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinRotatePosButton);
     operatorDunkinPosButton.whileTrue(DunkinPosCommand);
     
     //ElevatorCommands
-    ElevatorCommand ElevatorCommand = new ElevatorCommand(m_Elevator, () -> m_xBoxOperator.getLeftY());
+    ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY());
     Trigger operatorLeftYJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
   }
       
   private void refreshSmartDashboard(){  
-    SmartDashboard.putNumber("Odom Limelight Distance", m_OdomLimelight.getDistance());
-    SmartDashboard.putNumber("Odom Limelight X", m_OdomLimelight.getX());
-    //SmartDashboard.putNumber("Neural Limelight Distance", m_NeuralLimelight.getDistance());
+    /*SmartDashboard.putNumber("Odom Limelight Distance", m_OdomLimelight.getDistance());
+    SmartDashboard.putNumber("Odom Limelight X", m_OdomLimelight.getX());*/
+    SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
+    SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
   }
   
-  /*private boolean checkCANConnections(){
-   return m_swerve.checkCANConnections();
-  }
-  */
   private void createAutonomousCommandList(){
     try{
-     /* m_autoChooser.setDefaultOption(AutoConstants.autoMode1,AutoConstants.autoMode1);
-      m_autoChooser.addOption(AutoConstants.autoMode2,AutoConstants.autoMode2);
-      m_autoChooser.addOption(AutoConstants.autoMode3,AutoConstants.autoMode3);*/
-      
       SmartDashboard.putNumber("P",m_P);
       SmartDashboard.putNumber("I",m_I);
       SmartDashboard.putNumber("D",m_D);
@@ -173,6 +159,10 @@ public class RobotContainer {
     m_D=SmartDashboard.getNumber("D",0);
   }
 
+  public BooleanSupplier checkCan(){
+    return (() ->(m_swerve.checkCANConnections()&&m_dunkinDonut.checkCANConnections()&&m_elevator.checkCANConnections()));
+  }
+
   public void DisabledInit(){
   }
    
@@ -180,7 +170,7 @@ public class RobotContainer {
   }
   
   public void AutoPeriodic(){
-    if(m_OdomLimelight.isAnyTargetAvailable()){
+    /*if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
@@ -194,7 +184,7 @@ public class RobotContainer {
     if(m_OdomFwdLimelight.isAnyTargetAvailable()){
       m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-    }
+    }*/
   }
 
   public void AutonMode(){
@@ -211,7 +201,7 @@ public class RobotContainer {
     refreshSmartDashboard();
     GetPIDValues();
 
-    if(m_OdomLimelight.isAnyTargetAvailable()){
+    /*if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
@@ -221,7 +211,7 @@ public class RobotContainer {
     if(m_OdomFwdLimelight.isAnyTargetAvailable()){
       m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-    }
+    }*/
   }
 
   public void AllPeriodic(){
@@ -230,7 +220,7 @@ public class RobotContainer {
   public void homeRobot(){
     if(!hasRotateHome){
       hasRotateHome = true;
-      CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_DunkinDonut));
+      CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
     }
   }
 

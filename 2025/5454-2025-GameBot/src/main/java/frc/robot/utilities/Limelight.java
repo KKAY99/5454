@@ -355,7 +355,7 @@ public class Limelight {
         double currentRotROC=swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble();
         double xDisplacement=currentVisionPose.getX()+((currentXMPS*timeStampDiff)/LimeLightValues.cartPointToMeterMult);
         double yDisplacement=currentVisionPose.getY()+((currentYMPS*timeStampDiff)/LimeLightValues.cartPointToMeterMult);
-        double rotDisplacement=currentVisionPose.getRotation().getDegrees()+(currentRotROC*timeStampDiff);;
+        double rotDisplacement=currentVisionPose.getRotation().getDegrees()+(currentRotROC*timeStampDiff);
         
         m_lastTimeStamp=currentTimeStamp;
 
@@ -366,6 +366,7 @@ public class Limelight {
             double yMetersDiff=(Math.abs(m_derivedPose.getY())-Math.abs(currentVisionPose.getY()))*LimeLightValues.cartPointToMeterMult;
             double rotDiff=Math.abs(m_derivedPose.getRotation().getDegrees())-Math.abs(currentVisionPose.getRotation().getDegrees());
 
+            m_derivedPose=new Pose2d(xDisplacement,yDisplacement,new Rotation2d(rotDisplacement));
             returnValue=(xMetersDiff<LimeLightValues.maxMeterDiff)&&(yMetersDiff<LimeLightValues.maxMeterDiff)&&(rotDiff<LimeLightValues.maxRotDiff);
         }
 

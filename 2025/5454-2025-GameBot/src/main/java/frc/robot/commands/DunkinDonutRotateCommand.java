@@ -20,7 +20,7 @@ public class DunkinDonutRotateCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_dunkin.run_rotatemotor(m_speed.getAsDouble());
+    //m_dunkin.run_rotatemotor(m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
@@ -32,6 +32,7 @@ public class DunkinDonutRotateCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    m_dunkin.runRotateWithLimits(m_speed.getAsDouble());
     return false;
   }
 }
