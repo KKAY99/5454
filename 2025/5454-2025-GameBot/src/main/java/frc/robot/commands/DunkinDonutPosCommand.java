@@ -19,7 +19,6 @@ public class DunkinDonutPosCommand extends Command {
     m_dunkin.set_referance(m_pos);
   }
 
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -28,7 +27,7 @@ public class DunkinDonutPosCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-     m_dunkin.reset_referamce();
+     m_dunkin.reset_referance();
   }
 
   // Returns true when the command should end.
