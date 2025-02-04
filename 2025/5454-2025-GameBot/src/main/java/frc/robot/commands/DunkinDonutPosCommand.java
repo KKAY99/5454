@@ -16,7 +16,6 @@ public class DunkinDonutPosCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_dunkin.set_referance(m_pos);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -27,18 +26,13 @@ public class DunkinDonutPosCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-     m_dunkin.reset_referance();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean returnValue=false;
-
-    if (m_dunkin.get_rotatemotorpos()>m_pos-DunkinDonutConstants.posDeadband&&m_dunkin.get_rotatemotorpos()<m_pos+DunkinDonutConstants.posDeadband){
-       returnValue=true;
-    }
-     
-    return returnValue;
+    m_dunkin.set_referance(m_pos);
+    
+    return true;
   }
 }

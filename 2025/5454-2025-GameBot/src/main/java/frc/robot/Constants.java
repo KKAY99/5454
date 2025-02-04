@@ -110,19 +110,34 @@ public final class Constants {
     public static final double posDeadband=5;
     public static final double testPos=3;
 
-    public static final double homePosDeadband = 0.001;
-    public static final double rotateHomePos = 0.02;
-    public static final double homeSpeed = 0.02;
+    public static final double homePosDeadband=0.001;
+    public static final double rotateHomePos=0.02;
+    public static final double homeSpeed=0.02;
 
-    public static final double relativeHighLimit=5;
-    public static final double relativeLowLimit=-15;
+    public static final double dunkinP=0.01;
+    public static final double dunkinI=0;
+    public static final double dunkinD=0;
+    public static final double dunkinMaxAndMin=0.20;
+
+    public static final double relativeHighLimitABS=0.15;
+    public static final double relativeLowLimitABS=-0.23;
   }
 
   public static final class ElevatorConstants{
-    public static final int elevatorCanID = 21;
+    public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
+    public static final double elevatorP=0.07;
+    public static final double elevatorI=0;
+    public static final double elevatorD=0;
+    public static final double elevatorMaxAndMin=0.20;
+
+    public static final double elevatorHighLimit=-103;
+    public static final double elevatorLowLimit=-0.2;
+
     public static final double posDeadband=1;
+    public static final double test1Pos=-20;
+    public static final double test2Pos=-56;
   }
 
   public static final class CoolPanelConstants{
@@ -131,9 +146,12 @@ public final class Constants {
   }
 
   public static final class ButtonBindings{
-    public static final int DunkinCoralButton = 1;
-    public static final int DunkinAlgeaButton = 2;
-    public static final int DunkinRotatePosButton = 3;
+    public static final int dunkinCoralButton = 1;
+    public static final int dunkinAlgeaButton = 2;
+    public static final int dunkinRotatePosButton = 3;
+    public static final int elevatorPos1Button = 5;
+    public static final int elevatorPos2Button = 6;
+    
     public static final double joystickDeadband = 0.1;
   }
 

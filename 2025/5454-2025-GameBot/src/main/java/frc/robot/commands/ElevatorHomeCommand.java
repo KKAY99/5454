@@ -4,38 +4,31 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ElevatorCommand extends Command {
+public class ElevatorHomeCommand extends Command {
   private ElevatorSubsystem  m_elevator;
-  private DoubleSupplier m_speed;
 
-  public ElevatorCommand(ElevatorSubsystem elevator, DoubleSupplier speed) {
+  public ElevatorHomeCommand(ElevatorSubsystem elevator) {
     m_elevator = elevator;
-    m_speed = speed;
-
-    addRequirements(m_elevator);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize(){
-    m_elevator.reset_referance();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elevator.runWithLimits(m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_elevator.motor_stop();
+    m_elevator.resetRelative();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

@@ -5,6 +5,8 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import org.littletonrobotics.junction.Logger;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import frc.robot.utilities.ObsidianCanandcolor;
 
@@ -12,30 +14,55 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_motor1;
   private SparkClosedLoopController m_loopController;
   private ObsidianCanandcolor m_canAndColor;
+
   private double m_speed=0;
   private double m_positionTarget=0;
   private String m_controlType;
 
   public ElevatorSubsystem(int CanID_1,int canColorID) {
-    m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless, true);
+    m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless,true,40,
+              ElevatorConstants.elevatorP,ElevatorConstants.elevatorI,ElevatorConstants.elevatorD,ElevatorConstants.elevatorMaxAndMin);
     //m_canAndColor=new ObsidianCanandcolor(canColorID);
     m_loopController=m_motor1.getClosedLoopController();
+
     m_controlType="Default-Velocity";
   }
 
-  public double get_motor1pos(){
+  public void resetRelative(){
+    m_motor1.getEncoder().setPosition(0);
+  }
+
+  public double getRelativePos(){
     return m_motor1.getEncoder().getPosition();
   }
 
   public void set_referance(double pos){
     m_controlType="Position";
     m_positionTarget=pos;
-    m_loopController.setReference(pos, ControlType.kPosition);
+    m_loopController.setReference(pos,ControlType.kPosition);
   }
 
   public void reset_referance(){
     m_controlType="Velocity";
     m_loopController.setReference(0, ControlType.kVelocity);
+  }
+
+  public void runWithLimits(double speed){
+    if(speed<0){
+      if(getRelativePos()>ElevatorConstants.elevatorHighLimit){
+        motor_run(speed);
+      }else{
+        System.out.println("AT HIGH LIMIT ELEVATOR");
+        motor_stop();
+      }
+    }else{
+      if(getRelativePos()<ElevatorConstants.elevatorLowLimit){
+        motor_run(speed);
+      }else{
+        System.out.println("AT LOW LIMIT ELEVATOR");
+        motor_stop();
+      }
+    }
   }
   
   public void motor_run(double speed){
@@ -63,6 +90,5 @@ public class ElevatorSubsystem extends SubsystemBase {
     Logger.recordOutput("Elevator/Speed",m_speed);
     Logger.recordOutput("Elevator/ControlType", m_controlType);
     Logger.recordOutput("Elevator/PositionTarget",m_positionTarget);
-    Logger.recordOutput("Elevator/CurrentPosition",get_motor1pos());
   }
 }

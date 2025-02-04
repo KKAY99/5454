@@ -27,7 +27,8 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   public DunkinDonutSubsystem(int coralCanID, int algaeCanID, int rotateCanID,int canCoderID) {
     m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true);
     m_algaeMotor= new ObsidianCANSparkMax(algaeCanID, MotorType.kBrushless, true);
-    m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true);
+    m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,40,
+                    DunkinDonutConstants.dunkinP,DunkinDonutConstants.dunkinI,DunkinDonutConstants.dunkinD,DunkinDonutConstants.dunkinMaxAndMin);
     m_CANcoder = new CANcoder(canCoderID);
 
     m_loopController=m_rotateMotor.getClosedLoopController();
@@ -38,16 +39,20 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   }
 
   public void runRotateWithLimits(double speed){
-    if(speed>0&&get_rotatemotorpos()<DunkinDonutConstants.relativeHighLimit){
-      run_rotatemotor(speed);
+    if(speed<0){
+      if(getAbsoluteEncoderPos()<DunkinDonutConstants.relativeHighLimitABS){
+        run_rotatemotor(speed);
+      }else{
+        System.out.println("AT LIMIT HIGH ROTATE");
+        stop_rotatemotor();
+      }
     }else{
-      stop_rotatemotor();
-    }
-
-    if(speed<0&&get_rotatemotorpos()>DunkinDonutConstants.relativeLowLimit){
-      run_rotatemotor(speed);
-    }else{
-      stop_rotatemotor();
+      if(getAbsoluteEncoderPos()>DunkinDonutConstants.relativeLowLimitABS){
+        run_rotatemotor(speed);
+      }else{
+        System.out.println("AT LIMIT LOW ROTATE");
+        stop_rotatemotor();
+      }
     }
   }
 

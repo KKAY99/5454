@@ -29,12 +29,6 @@ import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
-import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.ElevatorPosCommand;
-import frc.robot.commands.DunkinDonutRotateCommand;
-import frc.robot.commands.DunkinDonutPosCommand;
-import frc.robot.commands.DunkinDonutCoralCommand;
-import frc.robot.commands.DunkinDonutAlgeaCommand;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
@@ -111,31 +105,41 @@ public class RobotContainer {
     m_xBoxDriver.rightBumper().onTrue(piplineSwap2);*/
 
     //DunkinDonutCommands
-    DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_dunkinDonut, () -> m_xBoxOperator.getRightX());
+    DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_dunkinDonut, () -> m_xBoxOperator.getRightX()*0.5);
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, 0.1);
-    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinCoralButton);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -1);
+    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinCoralButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutAlgeaCommand DunkinAlgeaCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 0.1);
-    JoystickButton operatorDunkinAlgeaButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinAlgeaButton);
+    DunkinDonutAlgeaCommand DunkinAlgeaCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1);
+    JoystickButton operatorDunkinAlgeaButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaButton);
     operatorDunkinAlgeaButton.whileTrue(DunkinAlgeaCommand);
 
     DunkinDonutPosCommand DunkinPosCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.testPos);
-    JoystickButton operatorDunkinPosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.DunkinRotatePosButton);
+    JoystickButton operatorDunkinPosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosButton);
     operatorDunkinPosButton.whileTrue(DunkinPosCommand);
     
     //ElevatorCommands
-    ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY());
+    ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY()*0.5);
     Trigger operatorLeftYJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
+
+    ElevatorPosCommand elevatorTest1Pos= new ElevatorPosCommand(m_elevator, Constants.ElevatorConstants.test1Pos);
+    JoystickButton operatorTest1PosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.elevatorPos1Button);
+    operatorTest1PosButton.onTrue(elevatorTest1Pos);
+
+    ElevatorPosCommand elevatorTest2Pos= new ElevatorPosCommand(m_elevator, Constants.ElevatorConstants.test2Pos);
+    JoystickButton operatorTest2PosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.elevatorPos2Button);
+    operatorTest2PosButton.onTrue(elevatorTest2Pos);
+    
   }
       
   private void refreshSmartDashboard(){  
     /*SmartDashboard.putNumber("Odom Limelight Distance", m_OdomLimelight.getDistance());
     SmartDashboard.putNumber("Odom Limelight X", m_OdomLimelight.getX());*/
+    SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
     SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
   }
@@ -221,6 +225,7 @@ public class RobotContainer {
     if(!hasRotateHome){
       hasRotateHome = true;
       CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
+      CommandScheduler.getInstance().schedule(new ElevatorHomeCommand(m_elevator));
     }
   }
 
