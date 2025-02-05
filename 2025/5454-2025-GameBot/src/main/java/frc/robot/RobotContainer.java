@@ -113,13 +113,25 @@ public class RobotContainer {
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinCoralButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutAlgeaCommand DunkinAlgeaCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1);
-    JoystickButton operatorDunkinAlgeaButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaButton);
-    operatorDunkinAlgeaButton.whileTrue(DunkinAlgeaCommand);
+    DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1); 
+    JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaShootButton);
+    operatorDunkinAlgeaShootButton.whileTrue(DunkinAlgeaShootCommand);
 
-    DunkinDonutPosCommand DunkinPosCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.testPos);
-    JoystickButton operatorDunkinPosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosButton);
-    operatorDunkinPosButton.whileTrue(DunkinPosCommand);
+    DunkinDonutAlgeaCommand DunkinAlgeaPullCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 1); 
+    JoystickButton operatorDunkinAlgeaPullButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaPullButton);
+    operatorDunkinAlgeaPullButton.whileTrue(DunkinAlgeaPullCommand);
+
+    DunkinDonutPosCommand DunkinPosScoreMidCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.ScoreMidPos);
+    JoystickButton operatorDunkinPosScoreButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreMidButton);
+    operatorDunkinPosScoreButton.whileTrue(DunkinPosScoreMidCommand);
+
+    DunkinDonutPosCommand DunkinPosHumanPlayerCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.HumanPlayerPos);
+    JoystickButton operatorDunkinPosHumanPlayerButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosHumanPlayerButton);
+    operatorDunkinPosHumanPlayerButton.whileTrue(DunkinPosHumanPlayerCommand);
+
+    DunkinDonutPosCommand DunkinPosScoreHighCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.ScorehighPos);
+    JoystickButton operatorDunkinPosScoreHighButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreHighButton);
+    operatorDunkinPosScoreHighButton.whileTrue(DunkinPosScoreHighCommand);
     
     //ElevatorCommands
     ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY()*0.5);

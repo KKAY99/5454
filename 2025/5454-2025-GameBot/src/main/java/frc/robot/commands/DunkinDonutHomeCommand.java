@@ -30,8 +30,9 @@ public class DunkinDonutHomeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    
     boolean returnValue=false;
-
+    
     if(m_dunkin.getAbsoluteEncoderPos()>DunkinDonutConstants.rotateHomePos){
       m_dunkin.run_rotatemotor(DunkinDonutConstants.homeSpeed);
     }else{
@@ -43,5 +44,8 @@ public class DunkinDonutHomeCommand extends Command {
         returnValue=true;
     }
     return returnValue;
+     
+    
+    
   }
 }

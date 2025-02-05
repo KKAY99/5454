@@ -30,7 +30,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,40,
                     DunkinDonutConstants.dunkinP,DunkinDonutConstants.dunkinI,DunkinDonutConstants.dunkinD,DunkinDonutConstants.dunkinMaxAndMin);
     m_CANcoder = new CANcoder(canCoderID);
-
+  
     m_loopController=m_rotateMotor.getClosedLoopController();
   }
 

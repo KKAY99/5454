@@ -108,19 +108,21 @@ public final class Constants {
     public static final int rotateCanID = 24;
 
     public static final double posDeadband=5;
-    public static final double testPos=3;
+    public static final double ScoreMidPos=-27;
+    public static final double ScorehighPos = 0;
+    public static final double HumanPlayerPos = 0;
 
     public static final double homePosDeadband=0.001;
-    public static final double rotateHomePos=0.02;
+    public static final double rotateHomePos=0.18;
     public static final double homeSpeed=0.02;
 
-    public static final double dunkinP=0.01;
+    public static final double dunkinP=0.08;
     public static final double dunkinI=0;
     public static final double dunkinD=0;
     public static final double dunkinMaxAndMin=0.20;
 
-    public static final double relativeHighLimitABS=0.15;
-    public static final double relativeLowLimitABS=-0.23;
+    public static final double relativeHighLimitABS=0.48;
+    public static final double relativeLowLimitABS=0; //no limit 
   }
 
   public static final class ElevatorConstants{
@@ -137,7 +139,7 @@ public final class Constants {
 
     public static final double posDeadband=1;
     public static final double test1Pos=-20;
-    public static final double test2Pos=-56;
+    public static final double test2Pos=-54;
   }
 
   public static final class CoolPanelConstants{
@@ -145,10 +147,30 @@ public final class Constants {
     public static final int redPWM=1;
   }
 
+  public final class LedConstants{
+    public static final int LedCanID = 14;
+    public static final int LedCount = 300;
+  }
+
+  public static enum LEDStates{
+      TELEOP, DISABLED, HASCORAL, HASALGEA, LINEDUP, SCORED
+  }
+
+  public static enum ColorStates{
+      GREEN, PURPLE, RED, BLUE, WHITE
+  }
+
+  public static enum AnimationStates{
+      FIRE, RAINBOW, LARSON, NULL
+  }
+
   public static final class ButtonBindings{
-    public static final int dunkinCoralButton = 1;
-    public static final int dunkinAlgeaButton = 2;
-    public static final int dunkinRotatePosButton = 3;
+    public static final int dunkinCoralButton = 1; //a
+    public static final int dunkinAlgeaPullButton = 2; //b
+    public static final int dunkinAlgeaShootButton = 4; //y
+    public static final int dunkinRotatePosScoreMidButton = 3; //x
+    public static final int dunkinRotatePosScoreHighButton = 8; // right bumper
+    public static final int dunkinRotatePosHumanPlayerButton = 7; 
     public static final int elevatorPos1Button = 5;
     public static final int elevatorPos2Button = 6;
     

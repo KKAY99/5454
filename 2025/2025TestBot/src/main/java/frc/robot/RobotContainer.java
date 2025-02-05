@@ -37,6 +37,8 @@ import frc.robot.subsystems.EndEffectorSubsystem;
 
 import frc.robot.utilities.Leds;
 
+import frc.robot.utilities.Elastic;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -61,6 +63,7 @@ public class RobotContainer {
     //private SpinMotor m_SpinMotor=new SpinMotor(14);
    // private IndexerSubsystem m_Indexer=new IndexerSubsystem(19, 18);
     //private IntakeSubsystem m_Intake=new IntakeSubsystem(20, 15);
+    
     private Leds m_leds = new Leds(Constants.LedConstants.LedCanID, Constants.LedConstants.LedCount);
     private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(12,13,10);
     private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(11);
@@ -168,6 +171,7 @@ public class RobotContainer {
                 
     }  
     public void TeleopMode(){
+      
       m_leds.setLedState(LEDStates.TELEOP);
     }
 

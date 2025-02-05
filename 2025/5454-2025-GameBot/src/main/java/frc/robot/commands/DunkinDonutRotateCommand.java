@@ -32,7 +32,7 @@ public class DunkinDonutRotateCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    m_dunkin.runRotateWithLimits(m_speed.getAsDouble());
+    m_dunkin.runRotateWithLimits(-m_speed.getAsDouble());
     return false;
   }
 }
