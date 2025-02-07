@@ -19,18 +19,22 @@ import frc.robot.utilities.Limelight;
 import frc.robot.utilities.LimelightManager;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.function.BooleanSupplier;
 import frc.robot.commands.*;
 import com.ctre.phoenix6.Utils;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ButtonBindings;
 import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 
 public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -70,7 +74,9 @@ public class RobotContainer {
   public double m_I;
   public double m_D;
 
-  public boolean hasRotateHome=false;
+  public boolean hasHomed=false;
+
+  public ElevatorScoreLevel m_currentScoreLevel=ElevatorScoreLevel.L1;
 
   public RobotContainer(){
     configureNamedCommands();
@@ -113,23 +119,23 @@ public class RobotContainer {
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinCoralButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1); 
+    DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1,false); 
     JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaShootButton);
     operatorDunkinAlgeaShootButton.whileTrue(DunkinAlgeaShootCommand);
 
-    DunkinDonutAlgeaCommand DunkinAlgeaPullCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 1); 
+    DunkinDonutAlgeaCommand DunkinAlgeaPullCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 1,false); 
     JoystickButton operatorDunkinAlgeaPullButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaPullButton);
     operatorDunkinAlgeaPullButton.whileTrue(DunkinAlgeaPullCommand);
 
-    DunkinDonutPosCommand DunkinPosScoreMidCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.ScoreMidPos);
+    DunkinDonutPosCommand DunkinPosScoreMidCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.l3Pos);
     JoystickButton operatorDunkinPosScoreButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreMidButton);
-    operatorDunkinPosScoreButton.whileTrue(DunkinPosScoreMidCommand);
+    operatorDunkinPosScoreButton.onTrue(DunkinPosScoreMidCommand);
 
-    DunkinDonutPosCommand DunkinPosHumanPlayerCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.HumanPlayerPos);
+    DunkinDonutPosCommand DunkinPosHumanPlayerCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.humanPlayerPos);
     JoystickButton operatorDunkinPosHumanPlayerButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosHumanPlayerButton);
     operatorDunkinPosHumanPlayerButton.whileTrue(DunkinPosHumanPlayerCommand);
 
-    DunkinDonutPosCommand DunkinPosScoreHighCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.ScorehighPos);
+    DunkinDonutPosCommand DunkinPosScoreHighCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.l4Pos);
     JoystickButton operatorDunkinPosScoreHighButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreHighButton);
     operatorDunkinPosScoreHighButton.whileTrue(DunkinPosScoreHighCommand);
     
@@ -138,14 +144,38 @@ public class RobotContainer {
     Trigger operatorLeftYJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    ElevatorPosCommand elevatorTest1Pos= new ElevatorPosCommand(m_elevator, Constants.ElevatorConstants.test1Pos);
-    JoystickButton operatorTest1PosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.elevatorPos1Button);
-    operatorTest1PosButton.onTrue(elevatorTest1Pos);
+    //Score Level Swap Commands
+    ElevatorScoreLevelCommand scoreLevelL1=new ElevatorScoreLevelCommand(this,ElevatorScoreLevel.L1);
+    POVButton pov0=new POVButton(m_xBoxOperator,ButtonBindings.setScoreLevelL1POV0);
+    pov0.onTrue(scoreLevelL1);
 
-    ElevatorPosCommand elevatorTest2Pos= new ElevatorPosCommand(m_elevator, Constants.ElevatorConstants.test2Pos);
-    JoystickButton operatorTest2PosButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.elevatorPos2Button);
-    operatorTest2PosButton.onTrue(elevatorTest2Pos);
-    
+    ElevatorScoreLevelCommand scoreLevelL2=new ElevatorScoreLevelCommand(this,ElevatorScoreLevel.L2);
+    POVButton pov90=new POVButton(m_xBoxOperator,ButtonBindings.setScoreLevelL2POV90);
+    pov90.onTrue(scoreLevelL2);
+
+    ElevatorScoreLevelCommand scoreLevelL3=new ElevatorScoreLevelCommand(this,ElevatorScoreLevel.L3);
+    POVButton pov180=new POVButton(m_xBoxOperator,ButtonBindings.setScoreLevelL3POV180);
+    pov180.onTrue(scoreLevelL3);
+    ElevatorScoreLevelCommand scoreLevelL4=new ElevatorScoreLevelCommand(this,ElevatorScoreLevel.L4);
+    POVButton pov270=new POVButton(m_xBoxOperator,ButtonBindings.setScoreLevelL4POV270);
+    pov270.onTrue(scoreLevelL4);
+
+    //Sequential
+
+    ParallelCommandGroup retract=new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT),
+                                  new DunkinDonutPosCommand(m_dunkinDonut,()->ElevatorScoreLevel.RETRACT,0));
+    JoystickButton operatorRetractButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.retractButton);
+    operatorRetractButton.onTrue(retract);
+    SequentialCommandGroup seqScore=new SequentialCommandGroup(new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
+                                  new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel),
+                                  new DunkinDonutPosCommand(m_dunkinDonut,()->m_currentScoreLevel,0.5)),
+                                  new ElevatorAndRotateAtPos(m_elevator, m_dunkinDonut,()->m_currentScoreLevel),
+                                  new DunkinDonutCoralCommand(m_dunkinDonut,-1,1),
+                                  new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT),
+                                  new DunkinDonutPosCommand(m_dunkinDonut,()->ElevatorScoreLevel.RETRACT,0)),
+                                  new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true));
+    JoystickButton operatorSeqScoreButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
+    operatorSeqScoreButton.onTrue(seqScore);
   }
       
   private void refreshSmartDashboard(){  
@@ -154,6 +184,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
     SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
+    SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
   }
   
   private void createAutonomousCommandList(){
@@ -234,8 +265,8 @@ public class RobotContainer {
   }
 
   public void homeRobot(){
-    if(!hasRotateHome){
-      hasRotateHome = true;
+    if(!hasHomed){
+      hasHomed = true;
       CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
       CommandScheduler.getInstance().schedule(new ElevatorHomeCommand(m_elevator));
     }

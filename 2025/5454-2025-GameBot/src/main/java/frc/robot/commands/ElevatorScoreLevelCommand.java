@@ -1,0 +1,34 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
+import frc.robot.RobotContainer;
+
+public class ElevatorScoreLevelCommand extends Command {
+  private RobotContainer m_robotContainer;
+  private ElevatorScoreLevel m_scoreLevel;
+
+  public ElevatorScoreLevelCommand(RobotContainer robotContainer,ElevatorScoreLevel scoreLevel){
+    m_robotContainer=robotContainer;
+    m_scoreLevel=scoreLevel;
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize(){}
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute(){}
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted){}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished(){
+    m_robotContainer.m_currentScoreLevel=m_scoreLevel;
+    return true;
+  }
+}

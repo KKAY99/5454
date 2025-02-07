@@ -11,11 +11,15 @@ public class DunkinDonutRotateCommand extends Command {
   public DunkinDonutRotateCommand(DunkinDonutSubsystem dunkin, DoubleSupplier speed) {
     m_dunkin=dunkin;
     m_speed = speed;
+
+    addRequirements(dunkin);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_dunkin.reset_referance();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

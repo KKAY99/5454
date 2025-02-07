@@ -3,20 +3,49 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
+import java.util.function.Supplier;
 
 public class ElevatorPosCommand extends Command {
   private ElevatorSubsystem m_elevator;
+
+  private Supplier<ElevatorScoreLevel> m_scoreLevel;
+
   private double m_pos;
 
   public ElevatorPosCommand(ElevatorSubsystem elevator, double pos) {
-    m_elevator = elevator;
-    m_pos = pos;
+    m_elevator=elevator;
+    m_pos=pos;
+  }
+
+  public ElevatorPosCommand(ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel) {
+    m_elevator=elevator;
+    m_scoreLevel=scoreLevel;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize(){
+    if(m_scoreLevel!=null){
+      switch(m_scoreLevel.get()){
+        case L1:
+        m_pos=ElevatorConstants.l1Pos;
+        break;
+        case L2:
+        m_pos=ElevatorConstants.l2Pos;
+        break;
+        case L3:
+        m_pos=ElevatorConstants.l3Pos;
+        break;
+        case L4:
+        m_pos=ElevatorConstants.l4Pos;
+        break;
+        case RETRACT:
+        m_pos=ElevatorConstants.elevatorLowLimit;
+        break;
+      }
+    }
+  }  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

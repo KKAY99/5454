@@ -11,10 +11,12 @@ import frc.robot.subsystems.DunkinDonutSubsystem;
 public class DunkinDonutAlgeaCommand extends Command {
   private DunkinDonutSubsystem m_dunkin;
   private double m_speed;
+  private boolean m_toggle=false;
  
-  public DunkinDonutAlgeaCommand(DunkinDonutSubsystem dunkin, double speed) {
+  public DunkinDonutAlgeaCommand(DunkinDonutSubsystem dunkin,double speed,boolean toggle) {
     m_dunkin = dunkin;
     m_speed = speed;
+    m_toggle=toggle;
   }
 
   // Called when the command is initially scheduled.
@@ -24,17 +26,27 @@ public class DunkinDonutAlgeaCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-     m_dunkin.runAlgaeMotor(m_speed);
+    if(m_toggle){
+      m_dunkin.algeaToggle(m_speed);
+    }else{
+      m_dunkin.runAlgaeMotor(m_speed);
+    }
   }
    
   @Override
   public void end(boolean interrupted) {
-    m_dunkin.stopAlgeaMotor();
+    if(!m_toggle){
+      m_dunkin.stopAlgeaMotor();
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(m_toggle){
+      return true;
+    }else{
+      return false;
+    }
   }
 }

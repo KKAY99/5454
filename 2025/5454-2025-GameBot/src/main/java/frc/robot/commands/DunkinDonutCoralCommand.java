@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 
@@ -11,16 +13,27 @@ import frc.robot.subsystems.DunkinDonutSubsystem;
 public class DunkinDonutCoralCommand extends Command {
   private DunkinDonutSubsystem m_dunkin;
   private double m_speed;
+  private double m_timeToRun;
+  private double m_startTime;
 
 
   public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double speed) {
     m_dunkin = dunkin;
     m_speed = speed;
+    m_timeToRun=0;
+  }
+
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double speed,double timeToRun) {
+    m_dunkin = dunkin;
+    m_speed = speed;
+    m_timeToRun=timeToRun;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize(){
+    m_startTime=Timer.getFPGATimestamp();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -37,6 +50,9 @@ public class DunkinDonutCoralCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(m_timeToRun!=0&&m_timeToRun+m_startTime<Timer.getFPGATimestamp()){
+      return true;
+    }
     return false;
   }
 }

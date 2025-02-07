@@ -23,6 +23,8 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private double m_coralSpeed=0;
   private double m_algaeSpeed=0;
   private SparkClosedLoopController m_loopController;
+
+  private boolean m_algaeToggle=false;
   
   public DunkinDonutSubsystem(int coralCanID, int algaeCanID, int rotateCanID,int canCoderID) {
     m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true);
@@ -94,9 +96,20 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_coralMotor.stopMotor();
     m_coralSpeed=0;
   }
+
   public void stopAlgeaMotor(){
     m_algaeMotor.stopMotor();
     m_algaeSpeed=0;
+  }
+
+  public void algeaToggle(double speed){
+    if(!m_algaeToggle){
+      runAlgaeMotor(speed);
+      m_algaeToggle=true;
+    }else{
+      stopAlgeaMotor();
+      m_algaeToggle=false;
+    }
   }
 
   public boolean checkCANConnections(){

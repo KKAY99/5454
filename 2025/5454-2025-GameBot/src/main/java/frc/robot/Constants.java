@@ -107,19 +107,22 @@ public final class Constants {
     public static final int algaeCanID = 25;
     public static final int rotateCanID = 24;
 
-    public static final double posDeadband=5;
-    public static final double ScoreMidPos=-27;
-    public static final double ScorehighPos = 0;
-    public static final double HumanPlayerPos = 0;
+    public static final double posDeadband=1.2;
 
     public static final double homePosDeadband=0.001;
     public static final double rotateHomePos=0.18;
-    public static final double homeSpeed=0.02;
+    public static final double homeSpeed=0.05;
 
-    public static final double dunkinP=0.08;
+    public static final double dunkinP=0.25;
     public static final double dunkinI=0;
     public static final double dunkinD=0;
-    public static final double dunkinMaxAndMin=0.20;
+    public static final double dunkinMaxAndMin=0.30;
+
+    public static final double l1Pos=-0;
+    public static final double l2Pos=-30;
+    public static final double l3Pos=-27;
+    public static final double l4Pos=-0;
+    public static final double humanPlayerPos=-0;
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0; //no limit 
@@ -129,17 +132,24 @@ public final class Constants {
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorP=0.07;
+    public static final double elevatorP=0.8;
     public static final double elevatorI=0;
-    public static final double elevatorD=0;
-    public static final double elevatorMaxAndMin=0.20;
+    public static final double elevatorD=1;
+    public static final double elevatorMaxAndMin=0.50;
 
-    public static final double elevatorHighLimit=-103;
+    public static final double elevatorHighLimit=-98;
     public static final double elevatorLowLimit=-0.2;
 
-    public static final double posDeadband=1;
-    public static final double test1Pos=-20;
-    public static final double test2Pos=-54;
+    public static final double posDeadband=1.2;
+
+    public static final double l1Pos=-20;
+    public static final double l2Pos=-30;
+    public static final double l3Pos=-54;
+    public static final double l4Pos=-100;
+
+    public static enum ElevatorScoreLevel{
+      L1,L2,L3,L4,RETRACT
+    }
   }
 
   public static final class CoolPanelConstants{
@@ -168,11 +178,16 @@ public final class Constants {
     public static final int dunkinCoralButton = 1; //a
     public static final int dunkinAlgeaPullButton = 2; //b
     public static final int dunkinAlgeaShootButton = 4; //y
-    public static final int dunkinRotatePosScoreMidButton = 3; //x
-    public static final int dunkinRotatePosScoreHighButton = 8; // right bumper
-    public static final int dunkinRotatePosHumanPlayerButton = 7; 
-    public static final int elevatorPos1Button = 5;
-    public static final int elevatorPos2Button = 6;
+    public static final int dunkinRotatePosScoreMidButton = 7;
+    public static final int dunkinRotatePosScoreHighButton = 8; 
+    public static final int dunkinRotatePosHumanPlayerButton = 3; 
+    public static final int retractButton= 5;
+    public static final int elevatorScoreLevelButton = 6;
+
+    public static final int setScoreLevelL1POV0=00;
+    public static final int setScoreLevelL2POV90=90;
+    public static final int setScoreLevelL3POV180=180;
+    public static final int setScoreLevelL4POV270=270;
     
     public static final double joystickDeadband = 0.1;
   }
