@@ -43,7 +43,7 @@ public class Leds {
         m_currentState = state;
         switch(m_currentState){
             case TELEOP: 
-                setColorState(ColorStates.WHITE);
+                setAnimationState(m_currentAnimationState.RAINBOW);
                 break;
             
             case DISABLED:

@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringTopic;
+import frc.robot.Constants.NotificationLevel;
 
 public final class Elastic {
   private static final StringTopic notificationTopic =
@@ -378,13 +379,6 @@ public final class Elastic {
      * Represents the possible levels of notifications for the Elastic dashboard. These levels are
      * used to indicate the severity or type of notification.
      */
-    public enum NotificationLevel {
-      /** Informational Message */
-      INFO,
-      /** Warning message */
-      WARNING,
-      /** Error message */
-      ERROR
-    }
+
   }
 }

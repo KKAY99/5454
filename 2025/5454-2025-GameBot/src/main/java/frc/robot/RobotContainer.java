@@ -7,8 +7,11 @@ import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,11 +39,10 @@ import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
-import frc.robot.subsystems.DunkinDonutSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 
 public class RobotContainer {
+  private final Field2d m_Field2d = new Field2d();
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
@@ -83,6 +85,7 @@ public class RobotContainer {
   public ElevatorScoreLevel m_currentScoreLevel=ElevatorScoreLevel.L1;
 
   public RobotContainer(){
+    SmartDashboard.putData("field", m_Field2d); //used for elastic
     configureNamedCommands();
     m_autoChooser = AutoBuilder.buildAutoChooser();
     m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
@@ -205,6 +208,11 @@ public class RobotContainer {
   private void refreshSmartDashboard(){  
     SmartDashboard.putNumber("Odom Limelight Distance", m_OdomLimelight.getDistance());
     SmartDashboard.putNumber("Odom Limelight X", m_OdomLimelight.getX());
+    /*SmartDashboard.putNumber("Odom Limelight Distance", m_OdomLimelight.getDistance());
+    SmartDashboard.putNumber("Odom Limelight X", m_OdomLimelight.getX());*/
+    
+    SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+    SmartDashboard.putNumber("Votaage",RobotController.getBatteryVoltage());
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
     SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());

@@ -22,6 +22,10 @@ public final class Constants {
     public static final int rightMotor2Port=13;
   }
 
+  public static enum NotificationLevel {
+    INFO, WARNING, ERROR, QUESTION
+  }
+
   public final class LedConstants{
     public static final int LedCanID = 14;
     public static final int LedCount = 300;

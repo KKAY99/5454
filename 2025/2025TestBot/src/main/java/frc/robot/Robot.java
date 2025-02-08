@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.WebServer;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.utilities.Elastic;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,6 +27,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
     // Configure default commands and condition bindings on robot startup
     m_robotContainer=new RobotContainer();
   }
@@ -37,6 +41,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+      m_robotContainer.refreshSmartDashboard();
+    
+
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -56,6 +63,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_robotContainer.AutoMode();
+
+
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -82,7 +92,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_robotContainer.driveRobot();
-    m_robotContainer.refreshSmartDashboard();
   }
 
   @Override
