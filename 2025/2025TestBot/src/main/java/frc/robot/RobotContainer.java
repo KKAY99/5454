@@ -3,15 +3,20 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -34,9 +39,8 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.EndEffectorSubsystem;
-
 import frc.robot.utilities.Leds;
-
+import frc.robot.Constants.NotificationLevel;
 import frc.robot.utilities.Elastic;
 
 /**
@@ -49,9 +53,10 @@ import frc.robot.utilities.Elastic;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
-    
-    private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
+  Elastic.Notification notification = new Elastic.Notification(Constants.NotificationLevel.QUESTION, "Telop enabled", ".");
+  private boolean test = false;
+  private final Field2d m_Field2d = new Field2d();
+  private XboxController m_xBoxDriver=new XboxController(Constants.ButtonConstants.xBoxDriverPort);
     /* 
     private WPI_VictorSPX m_LeftMotor1=new WPI_VictorSPX(DriveConstants.leftMotor1Port);
     private WPI_VictorSPX m_LeftMotor2=new WPI_VictorSPX(DriveConstants.leftMotor2Port);
@@ -147,11 +152,15 @@ public class RobotContainer {
 
     }
        
-    public void refreshSmartDashboard(){  
-     /*  m_Limelight.setPipeline(5);
-      if(m_Limelight.isTargetAvailible()){
-        System.out.print("Object found");
-      }*/
+    public void refreshSmartDashboard(){ 
+      SmartDashboard.putBoolean("Lined Up", test);
+      SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+      SmartDashboard.putNumber("Votaage",RobotController.getBatteryVoltage());
+      SmartDashboard.putData("field", m_Field2d);
+      SmartDashboard.putData("auto chooser", m_Elevator); //place holder code for auto chooser
+      //m_Field2d.getRobotPose() code needed for robot pose
+      
+     
     }
     
     public void disabledPerioidicUpdates(){
@@ -166,16 +175,22 @@ public class RobotContainer {
        //m_RobotDrive.resetDriveMode();
     }
    
+
     public void AutoMode(){
+      Elastic.selectTab("Autonomous");
       EnableMode();
                 
     }  
     public void TeleopMode(){
+      test = true;
+      Elastic.sendNotification(notification);
+      Elastic.selectTab("Teleoperated");
       
       m_leds.setLedState(LEDStates.TELEOP);
     }
 
     public void DisableMode(){
+      test = false;
       m_leds.setLedState(LEDStates.DISABLED);
        
     }

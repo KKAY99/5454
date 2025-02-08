@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import org.littletonrobotics.urcl.URCL;
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.epilogue.*;
+import edu.wpi.first.net.WebServer;
 //import edu.wpi.first.epilogue.logging.FileLogger;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -60,7 +63,8 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
    */
   @Override
   public void robotInit() {
-  
+        WebServer.start(5800, Filesystem.getDeployDirectory().getPath()); //remote elstic dashboard download
+
   //Enable Login
   /*Epilogue.configure(config ->{
       config.dataLogger=new FileLogger(DataLogManager.getLog());
