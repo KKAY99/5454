@@ -27,7 +27,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private boolean m_algaeToggle=false;
   
   public DunkinDonutSubsystem(int coralCanID, int algaeCanID, int rotateCanID,int canCoderID) {
-    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true);
+    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushed, true);
     m_algaeMotor= new ObsidianCANSparkMax(algaeCanID, MotorType.kBrushless, true);
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,40,
                     DunkinDonutConstants.dunkinP,DunkinDonutConstants.dunkinI,DunkinDonutConstants.dunkinD,DunkinDonutConstants.dunkinMaxAndMin);

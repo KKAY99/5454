@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 import frc.robot.commands.*;
 import com.ctre.phoenix6.Utils;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -116,8 +117,12 @@ public class RobotContainer {
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);
 
     DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -1);
-    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinCoralButton);
+    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
+
+    DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 1);
+    JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,3);
+    operatorDunkinCoralButtonIn.whileTrue(DunkinCoralCommandIn);
 
     DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1,false); 
     JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaShootButton);
@@ -131,9 +136,9 @@ public class RobotContainer {
     JoystickButton operatorDunkinPosScoreButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreMidButton);
     operatorDunkinPosScoreButton.onTrue(DunkinPosScoreMidCommand);
 
-    DunkinDonutPosCommand DunkinPosHumanPlayerCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.humanPlayerPos);
+   /*DunkinDonutPosCommand DunkinPosHumanPlayerCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.humanPlayerPos);
     JoystickButton operatorDunkinPosHumanPlayerButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosHumanPlayerButton);
-    operatorDunkinPosHumanPlayerButton.whileTrue(DunkinPosHumanPlayerCommand);
+    operatorDunkinPosHumanPlayerButton.whileTrue(DunkinPosHumanPlayerCommand);*/
 
     DunkinDonutPosCommand DunkinPosScoreHighCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.l4Pos);
     JoystickButton operatorDunkinPosScoreHighButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreHighButton);
@@ -144,38 +149,40 @@ public class RobotContainer {
     Trigger operatorLeftYJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    //Score Level Swap Commands
-    ElevatorScoreLevelCommand scoreLevelL1=new ElevatorScoreLevelCommand(this,ElevatorScoreLevel.L1);
-    POVButton pov0=new POVButton(m_xBoxOperator,ButtonBindings.setScoreLevelL1POV0);
-    pov0.onTrue(scoreLevelL1);
-
-    ElevatorScoreLevelCommand scoreLevelL2=new ElevatorScoreLevelCommand(this,ElevatorScoreLevel.L2);
-    POVButton pov90=new POVButton(m_xBoxOperator,ButtonBindings.setScoreLevelL2POV90);
-    pov90.onTrue(scoreLevelL2);
-
-    ElevatorScoreLevelCommand scoreLevelL3=new ElevatorScoreLevelCommand(this,ElevatorScoreLevel.L3);
-    POVButton pov180=new POVButton(m_xBoxOperator,ButtonBindings.setScoreLevelL3POV180);
-    pov180.onTrue(scoreLevelL3);
-    ElevatorScoreLevelCommand scoreLevelL4=new ElevatorScoreLevelCommand(this,ElevatorScoreLevel.L4);
-    POVButton pov270=new POVButton(m_xBoxOperator,ButtonBindings.setScoreLevelL4POV270);
-    pov270.onTrue(scoreLevelL4);
-
     //Sequential
-
     ParallelCommandGroup retract=new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT),
-                                  new DunkinDonutPosCommand(m_dunkinDonut,()->ElevatorScoreLevel.RETRACT,0));
+                                  new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT));
     JoystickButton operatorRetractButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.retractButton);
     operatorRetractButton.onTrue(retract);
-    SequentialCommandGroup seqScore=new SequentialCommandGroup(new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
+    /*SequentialCommandGroup seqScore=new SequentialCommandGroup(new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
                                   new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel),
-                                  new DunkinDonutPosCommand(m_dunkinDonut,()->m_currentScoreLevel,0.5)),
+                                  new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)),
                                   new ElevatorAndRotateAtPos(m_elevator, m_dunkinDonut,()->m_currentScoreLevel),
                                   new DunkinDonutCoralCommand(m_dunkinDonut,-1,1),
-                                  new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT),
-                                  new DunkinDonutPosCommand(m_dunkinDonut,()->ElevatorScoreLevel.RETRACT,0)),
-                                  new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true));
+                                  new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true),
+                                  new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT),
+                                  new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));*/
+    SequentialCommandGroup seqScore=new SequentialCommandGroup(new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel),
+                                                              new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)));                       
     JoystickButton operatorSeqScoreButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
     operatorSeqScoreButton.onTrue(seqScore);
+  }
+
+  public void setScoreLevelPOV(Supplier<Integer> pov){
+    switch(pov.get()){
+      case 0:
+      m_currentScoreLevel=ElevatorScoreLevel.L1;
+      break;
+      case 90:
+      m_currentScoreLevel=ElevatorScoreLevel.L2;
+      break;
+      case 180:
+      m_currentScoreLevel=ElevatorScoreLevel.L3;
+      break;
+      case 270:
+      m_currentScoreLevel=ElevatorScoreLevel.L4;
+      break;
+    }
   }
       
   private void refreshSmartDashboard(){  
@@ -262,6 +269,7 @@ public class RobotContainer {
   }
 
   public void AllPeriodic(){
+    setScoreLevelPOV(()->m_xBoxOperator.getPOV());
   }
 
   public void homeRobot(){

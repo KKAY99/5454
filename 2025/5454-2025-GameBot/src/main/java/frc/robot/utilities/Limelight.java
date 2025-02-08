@@ -231,6 +231,12 @@ public class Limelight {
         return botPoses;
     }
 
+    public Pose2d findGlobalPoseFromTargetPoseRobotSpace(){
+        Pose2d returnPose=new Pose2d();
+
+        return returnPose;
+    }
+
     public boolean isFilteredTargetAvailable(){
         return (!this.m_fiducialIDFilter.isEmpty())?this.m_fiducialIDFilter.contains(this.getRawFiducial().get(0)
         )&&this.tv.get()==1.0:false;

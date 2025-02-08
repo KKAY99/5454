@@ -121,7 +121,7 @@ public final class Constants {
     public static final double l1Pos=-0;
     public static final double l2Pos=-30;
     public static final double l3Pos=-27;
-    public static final double l4Pos=-0;
+    public static final double l4Pos=-27;
     public static final double humanPlayerPos=-0;
 
     public static final double relativeHighLimitABS=0.48;
@@ -132,12 +132,12 @@ public final class Constants {
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorP=0.8;
+    public static final double elevatorP=0.25;
     public static final double elevatorI=0;
-    public static final double elevatorD=1;
-    public static final double elevatorMaxAndMin=0.50;
+    public static final double elevatorD=0;
+    public static final double elevatorMaxAndMin=0.90;
 
-    public static final double elevatorHighLimit=-98;
+    public static final double elevatorHighLimit=-99.5;
     public static final double elevatorLowLimit=-0.2;
 
     public static final double posDeadband=1.2;
@@ -145,7 +145,9 @@ public final class Constants {
     public static final double l1Pos=-20;
     public static final double l2Pos=-30;
     public static final double l3Pos=-54;
-    public static final double l4Pos=-100;
+    public static final double l4Pos=-96;
+
+    public static final double aboveTroughPos=-20;
 
     public static enum ElevatorScoreLevel{
       L1,L2,L3,L4,RETRACT

@@ -90,5 +90,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     Logger.recordOutput("Elevator/Speed",m_speed);
     Logger.recordOutput("Elevator/ControlType", m_controlType);
     Logger.recordOutput("Elevator/PositionTarget",m_positionTarget);
+    Logger.recordOutput("Elevator/Current",m_motor1.getOutputCurrent());
   }
 }
