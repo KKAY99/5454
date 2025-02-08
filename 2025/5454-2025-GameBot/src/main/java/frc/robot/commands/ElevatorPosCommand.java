@@ -6,21 +6,32 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 import java.util.function.Supplier;
 
+import com.revrobotics.spark.ClosedLoopSlot;
+
 public class ElevatorPosCommand extends Command {
   private ElevatorSubsystem m_elevator;
 
   private Supplier<ElevatorScoreLevel> m_scoreLevel;
+  private ClosedLoopSlot m_closedLoopSlot;
 
   private double m_pos;
 
   public ElevatorPosCommand(ElevatorSubsystem elevator, double pos) {
     m_elevator=elevator;
+    m_closedLoopSlot=ClosedLoopSlot.kSlot0;
     m_pos=pos;
   }
 
   public ElevatorPosCommand(ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel) {
     m_elevator=elevator;
+    m_closedLoopSlot=ClosedLoopSlot.kSlot0;
     m_scoreLevel=scoreLevel;
+  }
+
+  public ElevatorPosCommand(ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel,ClosedLoopSlot closedLoopSlot) {
+    m_elevator=elevator;
+    m_scoreLevel=scoreLevel;
+    m_closedLoopSlot=closedLoopSlot;
   }
 
   // Called when the command is initially scheduled.
@@ -60,7 +71,7 @@ public class ElevatorPosCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    m_elevator.set_referance(m_pos);
+    m_elevator.set_referance(m_pos,m_closedLoopSlot);
      
     return true;
   }

@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import org.littletonrobotics.junction.Logger;
+
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -21,7 +23,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem(int CanID_1,int canColorID) {
     m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless,true,40,
-              ElevatorConstants.elevatorP,ElevatorConstants.elevatorI,ElevatorConstants.elevatorD,ElevatorConstants.elevatorMaxAndMin);
+              ElevatorConstants.elevatorPK1,ElevatorConstants.elevatorIK1,ElevatorConstants.elevatorDK1,ElevatorConstants.elevatorMaxAndMinK1,
+              ElevatorConstants.elevatorPK2,ElevatorConstants.elevatorIK2,ElevatorConstants.elevatorDK2,ElevatorConstants.elevatorMaxAndMinK2);
     //m_canAndColor=new ObsidianCanandcolor(canColorID);
     m_loopController=m_motor1.getClosedLoopController();
 
@@ -39,7 +42,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void set_referance(double pos){
     m_controlType="Position";
     m_positionTarget=pos;
+
     m_loopController.setReference(pos,ControlType.kPosition);
+  }
+
+  public void set_referance(double pos,ClosedLoopSlot closedLoopSlot){
+    m_controlType="Position";
+    m_positionTarget=pos;
+
+    m_loopController.setReference(pos,ControlType.kPosition,closedLoopSlot);
   }
 
   public void reset_referance(){

@@ -2,6 +2,9 @@ package frc.robot.utilities;
 
 import frc.robot.Constants.LimeLightValues;
 import java.util.ArrayList;
+
+import com.ctre.phoenix6.controls.NeutralOut;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArrayEntry;
@@ -231,10 +234,15 @@ public class Limelight {
         return botPoses;
     }
 
-    public Pose2d findGlobalPoseFromTargetPoseRobotSpace(){
-        Pose2d returnPose=new Pose2d();
+    public Pose2d findGlobalPoseFromTargetPoseRobotSpace(double gyroAngle){
+        double[] targetPoseRobotSpace=this.targetpose_robotspace.get();
+        Pose2d botPose=this.GetPoseViaMegatag2();
 
-        return returnPose;
+        double newX=botPose.getX()+(targetPoseRobotSpace[0]+LimeLightValues.odomLineUpXOffset);
+        double newY=botPose.getY()+(targetPoseRobotSpace[1]+LimeLightValues.odomLineUpYOffset);
+        double newRot=gyroAngle+this.getYawOfAprilTag();
+
+        return new Pose2d(newX,newY,new Rotation2d().fromDegrees(newRot));
     }
 
     public boolean isFilteredTargetAvailable(){
@@ -251,7 +259,7 @@ public class Limelight {
         Pose2d pose;
 
         if(robotPoseValues!=null){
-        pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
+        pose =new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d().fromDegrees(robotPoseValues[5]));
         m_previousRobotPoses.add(pose);
         }else{
             pose=new Pose2d(0,0,new Rotation2d(0));
@@ -265,7 +273,7 @@ public class Limelight {
         Pose2d pose;
 
         if(robotPoseValues!=null){
-            pose=new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d(robotPoseValues[2]));
+            pose=new Pose2d(robotPoseValues[0],robotPoseValues[1],new Rotation2d().fromDegrees(robotPoseValues[5]));
             m_previousRobotPoses.add(pose);
         }else{
             pose=new Pose2d(0,0,new Rotation2d(0));
