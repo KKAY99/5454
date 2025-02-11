@@ -19,6 +19,7 @@ public class DunkinDonutRotateCommand extends Command {
   @Override
   public void initialize() {
     m_dunkin.reset_referance();
+    m_dunkin.resetShouldRunPID();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -17,7 +17,8 @@ public class OdomLineupCommand extends Command{
 
     @Override
     public void initialize(){
-        Command newCommand=m_swerve.createPathCommand(new AutoPlanner().CreateOdomLineUpPath(m_limeLight.findGlobalPoseFromTargetPoseRobotSpace(
+        AutoPlanner autoPlan=new AutoPlanner();
+        Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(m_swerve.getPose2d(),m_limeLight.findGlobalPoseFromTargetPoseRobotSpace(
                             m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble())));
 
         CommandScheduler.getInstance().schedule(newCommand);

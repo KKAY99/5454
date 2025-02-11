@@ -8,14 +8,14 @@ import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.function.Supplier;
 
-public class RotateAtPos extends Command{
+public class ABSRotateAtPos extends Command{
     private DunkinDonutSubsystem m_dunkin;
 
     private Supplier<ElevatorScoreLevel> m_scoreLevel;
 
     private double m_rotatePos;
     
-    public RotateAtPos(DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scoreLevel){
+    public ABSRotateAtPos(DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scoreLevel){
         m_dunkin=dunkin;
         m_scoreLevel=scoreLevel;
     }
@@ -24,19 +24,19 @@ public class RotateAtPos extends Command{
     public void initialize(){
         switch(m_scoreLevel.get()){
         case L1:
-        m_rotatePos=DunkinDonutConstants.l1Pos;
+        m_rotatePos=DunkinDonutConstants.l1PosABS;
         break;
         case L2:
-        m_rotatePos=DunkinDonutConstants.l2Pos;
+        m_rotatePos=DunkinDonutConstants.l2PosABS;
         break;
         case L3:
-        m_rotatePos=DunkinDonutConstants.l3Pos;
+        m_rotatePos=DunkinDonutConstants.l3PosABS;
         break;
         case L4:
-        m_rotatePos=DunkinDonutConstants.l4Pos;
+        m_rotatePos=DunkinDonutConstants.l4PosABS;
         break;
         case RETRACT:
-        m_rotatePos=0;
+        m_rotatePos=DunkinDonutConstants.rotateHomePos;
         break;
         }
     }
@@ -45,7 +45,7 @@ public class RotateAtPos extends Command{
     public boolean isFinished(){
         boolean returnValue=false;
 
-        if(m_dunkin.get_rotatemotorpos()>m_rotatePos-DunkinDonutConstants.posDeadband&&m_dunkin.get_rotatemotorpos()<m_rotatePos+DunkinDonutConstants.posDeadband){
+        if(m_dunkin.getAbsoluteEncoderPos()>m_rotatePos-DunkinDonutConstants.posDeadband&&m_dunkin.getAbsoluteEncoderPos()<m_rotatePos+DunkinDonutConstants.posDeadband){
             returnValue=true;
         }
 

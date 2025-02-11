@@ -23,8 +23,8 @@ public class AutoPlanner {
     private PathConstraints pathConstraints;
 
     //Default Constraint Values
-    private double m_velocityMPS=1.5;
-    private double m_maxAccelMPS=1.5;
+    private double m_velocityMPS=2;
+    private double m_maxAccelMPS=2;
     private double m_angularVelocityMPS=11.5;
     private double m_angularMaxAccelMPS=11.5;
     
@@ -32,14 +32,15 @@ public class AutoPlanner {
       pathConstraints=new PathConstraints(m_velocityMPS,m_maxAccelMPS,m_angularVelocityMPS,m_angularMaxAccelMPS);
     }
 
-    public PathPlannerPath CreateOdomLineUpPath(Pose2d pose){
+    public PathPlannerPath CreateOdomLineUpPath(Pose2d startPose,Pose2d targetPose){
     List<PathPoint> targets=new ArrayList<PathPoint>();
 
-    targets.add(new PathPoint(pose.getTranslation()));
+    targets.add(new PathPoint(startPose.getTranslation()));
+    targets.add(new PathPoint(targetPose.getTranslation()));
 
     PathPlannerPath newPath = PathPlannerPath.fromPathPoints(
         targets,pathConstraints, 
-        new GoalEndState(0,Rotation2d.fromDegrees(pose.getRotation().getDegrees()))
+        new GoalEndState(0,targetPose.getRotation())
     );
 
     return newPath;

@@ -114,20 +114,22 @@ public final class Constants {
 
     public static final double homePosDeadband=0.001;
     public static final double rotateHomePos=0.18;
-    public static final double homeSpeed=0.07;
+    public static final double homeSpeed=0.03;
 
-    public static final double dunkinP=0.10;//0.25
-    public static final double dunkinI=0;
-    public static final double dunkinD=0;
-    public static final double dunkinMaxAndMin=0.30;
+    public static final double localPIDkP=0.1;
+    public static final double localPIDkI=0;
+    public static final double localPIDkD=0;
+    public static final double localPIDMaxAndMin=0.5;
 
-    public static final double l1Pos=-0;
-    public static final double l2Pos=-25;
-    public static final double l3Pos=-26;
-    public static final double l4Pos=-26.7;
-    public static final double humanPlayerPos=-0;
+    public static final double l1PosABS=0.18;
+    public static final double l2PosABS=0.18;
+    //8.5 inches from reef to robot frame
+    public static final double l3PosABS=0.433;
+    //14 inches from reef to robot frame
+    public static final double l4PosABS=0.444;
+    public static final double humanPlayerPosABS=0.18;
 
-    public static final double relativeHighLimitABS=0.44;
+    public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
   }
 
@@ -188,10 +190,10 @@ public final class Constants {
     public static final int dunkinCoralButton = 1; //a
     public static final int dunkinAlgeaPullButton = 2; //b
     public static final int dunkinAlgeaShootButton = 4; //y
-    public static final int piplineSwapLeftTarget=7;
-    public static final int dunkinRotatePosScoreHighButton = 8; 
+    public static final int pipelineSwap=7;
+    public static final int pidTestButton=8; 
     public static final int dunkinRotatePosHumanPlayerButton = 3; 
-    public static final int retractButton= 5;
+    public static final int retractButton=5;
     public static final int elevatorScoreLevelButton = 6;
 
     public static final int setScoreLevelL1POV0=00;

@@ -28,23 +28,23 @@ public class ElevatorAndRotateAtPos extends Command{
         switch(m_scoreLevel.get()){
         case L1:
         m_elevatorPos=ElevatorConstants.l1Pos;
-        m_rotatePos=DunkinDonutConstants.l1Pos;
+        m_rotatePos=DunkinDonutConstants.l1PosABS;
         break;
         case L2:
         m_elevatorPos=ElevatorConstants.l2Pos;
-        m_rotatePos=DunkinDonutConstants.l2Pos;
+        m_rotatePos=DunkinDonutConstants.l2PosABS;
         break;
         case L3:
         m_elevatorPos=ElevatorConstants.l3Pos;
-        m_rotatePos=DunkinDonutConstants.l3Pos;
+        m_rotatePos=DunkinDonutConstants.l3PosABS;
         break;
         case L4:
         m_elevatorPos=ElevatorConstants.l4Pos;
-        m_rotatePos=DunkinDonutConstants.l4Pos;
+        m_rotatePos=DunkinDonutConstants.l4PosABS;
         break;
         case RETRACT:
         m_elevatorPos=ElevatorConstants.elevatorLowLimit;
-        m_rotatePos=0;
+        m_rotatePos=DunkinDonutConstants.rotateHomePos;
         break;
         }
     }
@@ -54,7 +54,7 @@ public class ElevatorAndRotateAtPos extends Command{
         boolean returnValue=false;
 
         if(m_elevator.getRelativePos()>m_elevatorPos-ElevatorConstants.posDeadband&&m_elevator.getRelativePos()<m_elevatorPos+ElevatorConstants.posDeadband&&
-            m_dunkin.get_rotatemotorpos()>m_rotatePos-DunkinDonutConstants.posDeadband&&m_dunkin.get_rotatemotorpos()<m_rotatePos+DunkinDonutConstants.posDeadband){
+            m_dunkin.getAbsoluteEncoderPos()>m_rotatePos-DunkinDonutConstants.posDeadband&&m_dunkin.getAbsoluteEncoderPos()<m_rotatePos+DunkinDonutConstants.posDeadband){
             returnValue=true;
         }
 

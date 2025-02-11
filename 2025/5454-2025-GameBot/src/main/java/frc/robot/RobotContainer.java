@@ -88,7 +88,6 @@ public class RobotContainer {
     SmartDashboard.putData("field", m_Field2d); //used for elastic
     configureNamedCommands();
     m_autoChooser = AutoBuilder.buildAutoChooser();
-    m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     // Configure the button bindings
     createAutonomousCommandList(); 
     configureButtonBindings();
@@ -119,11 +118,11 @@ public class RobotContainer {
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -1);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.5);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 1);
+    DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 0.5);
     JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,3);
     operatorDunkinCoralButtonIn.whileTrue(DunkinCoralCommandIn);
 
@@ -134,14 +133,6 @@ public class RobotContainer {
     DunkinDonutAlgeaCommand DunkinAlgeaPullCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 1,false); 
     JoystickButton operatorDunkinAlgeaPullButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaPullButton);
     operatorDunkinAlgeaPullButton.whileTrue(DunkinAlgeaPullCommand);
-
-   /*DunkinDonutPosCommand DunkinPosHumanPlayerCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.humanPlayerPos);
-    JoystickButton operatorDunkinPosHumanPlayerButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosHumanPlayerButton);
-    operatorDunkinPosHumanPlayerButton.whileTrue(DunkinPosHumanPlayerCommand);*/
-
-    DunkinDonutPosCommand DunkinPosScoreHighCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.l4Pos);
-    JoystickButton operatorDunkinPosScoreHighButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreHighButton);
-    operatorDunkinPosScoreHighButton.whileTrue(DunkinPosScoreHighCommand);
     
     //ElevatorCommands
     ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY()*0.5);
@@ -149,43 +140,35 @@ public class RobotContainer {
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
     //Sequential
-    SequentialCommandGroup retract=new SequentialCommandGroup(new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT),
-                                                              new RotateAtPos(m_dunkinDonut,()->ElevatorScoreLevel.RETRACT),
+    SequentialCommandGroup retract=new SequentialCommandGroup(new ToggleLocalDunkinPID(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT,true),
+                                                              new ABSRotateAtPos(m_dunkinDonut,()->ElevatorScoreLevel.RETRACT),
                                                               new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT,ClosedLoopSlot.kSlot1),
                                                               new ElevatorAndRotateAtPos(m_elevator,m_dunkinDonut,()->ElevatorScoreLevel.RETRACT),
-                                                              new WaitCommand(0.3),
-                                                              new DunkinDonutHomeCommand(m_dunkinDonut));
+                                                              new ToggleLocalDunkinPID(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT));
     JoystickButton operatorRetractButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.retractButton);
     operatorRetractButton.onTrue(retract);
-    /*SequentialCommandGroup seqScore=new SequentialCommandGroup(new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
-                                  new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel),
-                                  new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)),
-                                  new ElevatorAndRotateAtPos(m_elevator, m_dunkinDonut,()->m_currentScoreLevel),
-                                  new DunkinDonutCoralCommand(m_dunkinDonut,-1,1),
-                                  new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true),
-                                  new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT),
-                                  new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));*/
-    SequentialCommandGroup seqScore=new SequentialCommandGroup(new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
+
+    SequentialCommandGroup seqScore=new SequentialCommandGroup(//new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
                                                               new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel),
-                                                              new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)),
-                                                              new ElevatorAndRotateAtPos(m_elevator, m_dunkinDonut,()->m_currentScoreLevel),
+                                                              new ToggleLocalDunkinPID(m_dunkinDonut,m_elevator,()->m_currentScoreLevel,true)),
+                                                              new ElevatorAndRotateAtPos(m_elevator,m_dunkinDonut,()->m_currentScoreLevel),
                                                               new WaitCommand(0.75),
-                                                              new DunkinDonutCoralCommand(m_dunkinDonut,1,1),
-                                                              new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true));                       
+                                                              new DunkinDonutCoralCommand(m_dunkinDonut,0.5,1));
+                                                              //new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true));              
     JoystickButton operatorSeqScoreButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
     operatorSeqScoreButton.onTrue(seqScore);
 
     //Lineup
-    PipelineSwapCommand pipelineSwapRight=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline);
-    JoystickButton pipelineRightButton=new JoystickButton(m_xBoxOperator,ButtonBindings.piplineSwapLeftTarget);
-    pipelineRightButton.onTrue(pipelineSwapRight);
+   /*PipelineSwapCommand pipelineSwapRight=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline);
+    JoystickButton pipelineRightButton=new JoystickButton(m_xBoxOperator,ButtonBindings.pipelineSwap);
+    pipelineRightButton.onTrue(pipelineSwapRight);*/
 
     /*ApriltagLineupCommand lineupApriltag=new ApriltagLineupCommand(m_swerve,m_OdomLimelight,29,20,false);
     Trigger lineUpTrigger=new Trigger(()->(m_xBoxOperator.getLeftTriggerAxis()>ButtonBindings.joystickDeadband));
     lineUpTrigger.whileTrue(lineupApriltag);*/
 
-   /*Command odomLineup=new AutoPlanner().CreateOdomLineUpPath(()->m_OdomLimelight.findGlobalPoseFromTargetPoseRobotSpace()
-    ,0);*/
+   OdomLineupCommand odomLineup=new OdomLineupCommand(m_OdomLimelight, m_swerve);
+   m_xBoxDriver.leftBumper().onTrue(odomLineup);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
@@ -281,35 +264,24 @@ public class RobotContainer {
     refreshSmartDashboard();
     GetPIDValues();
 
-    /*if(m_OdomLimelight.isAnyTargetAvailable()){
+    if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-      SmartDashboard.putNumber("Current Pose X",m_OdomLimelight.GetPoseViaMegatag2().getX());
-      SmartDashboard.putNumber("Current Pose Y",m_OdomLimelight.GetPoseViaMegatag2().getY());
-      SmartDashboard.putNumber("Current Pose Rot",m_OdomLimelight.GetPoseViaMegatag2().getRotation().getDegrees());
-
-      SmartDashboard.putNumber("NEW TARGET X",m_OdomLimelight.findGlobalPoseFromTargetPoseRobotSpace(m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()).getX());
-      SmartDashboard.putNumber("NEW TARGET Y",m_OdomLimelight.findGlobalPoseFromTargetPoseRobotSpace(m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()).getY());
-      SmartDashboard.putNumber("NEW TARGET Rot",m_OdomLimelight.findGlobalPoseFromTargetPoseRobotSpace(m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()).getRotation().getDegrees());
-      
-      SmartDashboard.putNumber("Current Limelight Yaw",m_OdomLimelight.getYawOfAprilTag());*/
-      //Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
-      //m_OdomLimelight.TrimPoseArray(3);
-      //System.out.println(m_OdomLimelight.getConfidence(3,currentPose));
     }
     /*if(m_OdomFwdLimelight.isAnyTargetAvailable()){
       m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
-                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-    }*/
+                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());*/
+    }
 
   public void AllPeriodic(){
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
+    m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
   }
 
   public void homeRobot(){
     if(!hasHomed){
       hasHomed = true;
-      CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
+      //CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
       CommandScheduler.getInstance().schedule(new ElevatorHomeCommand(m_elevator));
     }
   }
