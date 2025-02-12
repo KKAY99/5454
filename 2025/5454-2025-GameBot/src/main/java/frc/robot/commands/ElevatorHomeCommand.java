@@ -9,6 +9,7 @@ public class ElevatorHomeCommand extends Command {
 
   public ElevatorHomeCommand(ElevatorSubsystem elevator) {
     m_elevator = elevator;
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.

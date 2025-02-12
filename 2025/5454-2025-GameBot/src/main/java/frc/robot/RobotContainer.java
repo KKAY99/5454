@@ -125,7 +125,7 @@ public class RobotContainer {
     DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 0.5);
     JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,3);
     operatorDunkinCoralButtonIn.whileTrue(DunkinCoralCommandIn);
-
+ 
     DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1,false); 
     JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaShootButton);
     operatorDunkinAlgeaShootButton.whileTrue(DunkinAlgeaShootCommand);

@@ -19,6 +19,7 @@ public class ElevatorAndRotateAtPos extends Command{
     
     public ElevatorAndRotateAtPos(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scoreLevel){
         m_elevator=elevator;
+        addRequirements(elevator);
         m_dunkin=dunkin;
         m_scoreLevel=scoreLevel;
     }

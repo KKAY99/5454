@@ -15,8 +15,10 @@ public class DunkinDonutAlgeaCommand extends Command {
  
   public DunkinDonutAlgeaCommand(DunkinDonutSubsystem dunkin,double speed,boolean toggle) {
     m_dunkin = dunkin;
+    addRequirements(m_dunkin);
     m_speed = speed;
     m_toggle=toggle;
+    
   }
 
   // Called when the command is initially scheduled.

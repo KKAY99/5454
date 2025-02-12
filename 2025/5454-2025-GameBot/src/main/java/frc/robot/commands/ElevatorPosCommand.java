@@ -18,6 +18,7 @@ public class ElevatorPosCommand extends Command {
 
   public ElevatorPosCommand(ElevatorSubsystem elevator, double pos) {
     m_elevator=elevator;
+    addRequirements(elevator);
     m_closedLoopSlot=ClosedLoopSlot.kSlot0;
     m_pos=pos;
   }

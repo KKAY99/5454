@@ -19,6 +19,7 @@ public class DunkinDonutCoralCommand extends Command {
 
   public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double speed) {
     m_dunkin = dunkin;
+    addRequirements(m_dunkin);
     m_speed = speed;
     m_timeToRun=0;
   }
