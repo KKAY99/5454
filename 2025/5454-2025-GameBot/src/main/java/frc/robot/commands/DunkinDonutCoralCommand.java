@@ -19,6 +19,7 @@ public class DunkinDonutCoralCommand extends Command {
 
   public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double speed) {
     m_dunkin = dunkin;
+    addRequirements(m_dunkin);
     m_speed = speed;
     m_timeToRun=0;
   }
@@ -50,9 +51,11 @@ public class DunkinDonutCoralCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    boolean returnValue=false;
+
     if(m_timeToRun!=0&&m_timeToRun+m_startTime<Timer.getFPGATimestamp()){
-      return true;
+      returnValue=true;
     }
-    return false;
+    return returnValue;
   }
 }

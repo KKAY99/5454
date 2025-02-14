@@ -1,17 +1,18 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import frc.robot.utilities.ObsidianPID;
+
 import com.ctre.phoenix6.hardware.CANcoder;
-
-
 import org.littletonrobotics.junction.Logger;
-
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.*;
 
 public class DunkinDonutSubsystem extends SubsystemBase {
@@ -19,21 +20,32 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_coralMotor;
   private ObsidianCANSparkMax m_algaeMotor;
   private ObsidianCANSparkMax m_rotateMotor;
+  
+  private PIDController m_codeBoundPID;
+  private SparkClosedLoopController m_loopController;
+  private RelativeEncoder m_rotateRelative;
+
   private double m_rotateSpeed=0;
   private double m_coralSpeed=0;
   private double m_algaeSpeed=0;
-  private SparkClosedLoopController m_loopController;
+
+  private double m_pidInputGain=60;
+  private double m_setPoint=0;
+  private double m_pidOutput=0;
 
   private boolean m_algaeToggle=false;
+  private boolean m_shouldRunPID=false;
   
   public DunkinDonutSubsystem(int coralCanID, int algaeCanID, int rotateCanID,int canCoderID) {
     m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true);
     m_algaeMotor= new ObsidianCANSparkMax(algaeCanID, MotorType.kBrushless, true);
-    m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,40,
-                    DunkinDonutConstants.dunkinP,DunkinDonutConstants.dunkinI,DunkinDonutConstants.dunkinD,DunkinDonutConstants.dunkinMaxAndMin);
+    m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,40);
+                    //DunkinDonutConstants.dunkinP,DunkinDonutConstants.dunkinI,DunkinDonutConstants.dunkinD,DunkinDonutConstants.dunkinMaxAndMin);
     m_CANcoder = new CANcoder(canCoderID);
+    m_rotateRelative=m_rotateMotor.getEncoder();
   
     m_loopController=m_rotateMotor.getClosedLoopController();
+    m_codeBoundPID=new PIDController(DunkinDonutConstants.localPIDkP,DunkinDonutConstants.localPIDkI,DunkinDonutConstants.localPIDkD);
   }
 
   public double getAbsoluteEncoderPos(){
@@ -59,19 +71,19 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   }
 
   public void resetRotateRelative(){
-    m_rotateMotor.getEncoder().setPosition(0);
+    m_rotateRelative.setPosition(0);
   }
 
   public double get_rotatemotorpos(){
-    return m_rotateMotor.getEncoder().getPosition();
+    return m_rotateRelative.getPosition();
   }
 
   public void set_referance(double pos){
-    m_loopController.setReference(pos, ControlType.kPosition);
+    m_loopController.setReference(pos,ControlType.kPosition);
   }
 
   public void reset_referance(){
-    m_loopController.setReference(0, ControlType.kVelocity);
+    m_loopController.setReference(0,ControlType.kVelocity);
   }
 
   public void run_rotatemotor(double speed){
@@ -112,6 +124,34 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     }
   }
 
+  public void toggleLocalPid(double setPoint){
+    m_setPoint=setPoint;
+    m_shouldRunPID=!m_shouldRunPID?true:false;
+  }
+
+  public void runLocalPID(){
+    if(m_shouldRunPID){
+      double calculatedSpeed=m_codeBoundPID.calculate(getAbsoluteEncoderPos()*m_pidInputGain,m_setPoint*m_pidInputGain)*-1;
+
+      if(calculatedSpeed>DunkinDonutConstants.localPIDMaxAndMin){
+        calculatedSpeed=DunkinDonutConstants.localPIDMaxAndMin;
+      }else if(calculatedSpeed<-DunkinDonutConstants.localPIDMaxAndMin){
+        calculatedSpeed=-DunkinDonutConstants.localPIDMaxAndMin;
+      }
+
+      m_pidOutput=calculatedSpeed;
+      m_rotateMotor.set(calculatedSpeed);
+    }
+  }
+
+  public boolean getShouldRunPID(){
+    return m_shouldRunPID;
+  }
+
+  public void resetShouldRunPID(){
+    m_shouldRunPID=false;
+  }
+
   public boolean checkCANConnections(){
     boolean returnValue=true;
     try{
@@ -134,5 +174,10 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     Logger.recordOutput("Dunkin/CoralSpeed", m_coralSpeed);
     Logger.recordOutput("Dunkin/AlgeaSpeed",m_algaeSpeed);
     //Logger.recordOutput("Dunkinr/CurrentPosition",get_motor1pos());    
+    SmartDashboard.putBoolean("ShouldRunPID",m_shouldRunPID);
+    SmartDashboard.putNumber("PIDOutput",m_pidOutput);
+    SmartDashboard.putNumber("Setpoint",m_setPoint);
+
+    runLocalPID();
   }
 }

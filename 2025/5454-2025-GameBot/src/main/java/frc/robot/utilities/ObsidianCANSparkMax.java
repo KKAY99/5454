@@ -2,6 +2,8 @@ package frc.robot.utilities;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import frc.robot.Constants;
+
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.wpilibj.Timer;
@@ -135,4 +137,47 @@ public class ObsidianCANSparkMax extends SparkBase{
             Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
        
         }
+
+        /**
+     * <p> 5454 CANSparkMaxWrapper
+     * @param canID Motor ID
+     * @param MotorType MotorType: Brushed or Brushless
+     * @param currentLimit SmartCurrentLimit for the Motor
+     * @param p Sets Closed Loop P
+     * @param i Sets Closed Loop I
+     * @param d Sets Closed Loop D
+     * @param maxAndMin Sets Max and Min Percent Output
+    */
+    public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit,double pK1,double iK1,double dK1,
+    double maxAndMinK1,double pK2,double iK2,double dK2,double maxAndMinK2){
+super(canID,motorType,SparkModel.SparkMax);
+SparkBaseConfig newConfig =new SparkMaxConfig();
+newConfig.inverted(false);
+newConfig.smartCurrentLimit(currentLimit);
+newConfig.closedLoop.p(pK1,ClosedLoopSlot.kSlot0);
+newConfig.closedLoop.i(iK1,ClosedLoopSlot.kSlot0);
+newConfig.closedLoop.d(dK1,ClosedLoopSlot.kSlot0);
+newConfig.closedLoop.maxOutput(maxAndMinK1,ClosedLoopSlot.kSlot0);
+newConfig.closedLoop.minOutput(-maxAndMinK1,ClosedLoopSlot.kSlot0);
+newConfig.closedLoop.p(pK2,ClosedLoopSlot.kSlot1);
+newConfig.closedLoop.i(iK2,ClosedLoopSlot.kSlot1);
+newConfig.closedLoop.d(dK2,ClosedLoopSlot.kSlot1);
+newConfig.closedLoop.maxOutput(maxAndMinK2,ClosedLoopSlot.kSlot1);
+newConfig.closedLoop.minOutput(-maxAndMinK2,ClosedLoopSlot.kSlot1);
+newConfig.signals.motorTemperaturePeriodMs(1000);
+newConfig.signals.busVoltagePeriodMs(1000);
+newConfig.signals.analogPositionPeriodMs(1000);
+newConfig.signals.analogVelocityPeriodMs(1000);
+newConfig.signals.analogVoltagePeriodMs(1000);
+
+if(breakMode){
+newConfig.idleMode(IdleMode.kBrake);
+} else{
+newConfig.idleMode(IdleMode.kCoast);
+}
+Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
+configure(newConfig,SparkBase.ResetMode.kResetSafeParameters,SparkBase.PersistMode.kNoPersistParameters);
+Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
+
+}
 }

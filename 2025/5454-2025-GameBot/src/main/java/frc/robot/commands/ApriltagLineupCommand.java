@@ -10,8 +10,8 @@ public class ApriltagLineupCommand extends Command {
   private Limelight m_Limelight;
 
   private double m_targetDistance;
-  private double kDriveDeadband=4;
-  private double kLineupXDeadband=0.2;
+  private double kDriveDeadband=0.5;
+  private double kLineupXDeadband=0.5454;
   private double kLineupYawDeadband=1;
 
   private boolean m_driveTowards = false;
@@ -91,8 +91,8 @@ public class ApriltagLineupCommand extends Command {
     double rotFlipValue=rawYaw/yaw;
     double rotMult=1;
     double strafeMult=1;
-    double strafe=1;
-    double rotation=1;
+    double strafe=0.7;
+    double rotation=0.7;
     double forward=0;
 
     switch(m_currentState){
@@ -105,15 +105,15 @@ public class ApriltagLineupCommand extends Command {
       break;
       case DRIVETOWARDS:
         if(distance>(m_targetDistance+LimeLightValues.driveDeadband3)){
-          forward=0.8;
-        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband3)&&distance>(m_targetDistance+LimeLightValues.driveDeadband2)){
-          forward=0.7;
-        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband2)&&distance>(m_targetDistance+LimeLightValues.driveDeadband1)){
           forward=0.6;
-        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband1)&&distance>(m_targetDistance+LimeLightValues.driveDeadband0)){
+        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband3)&&distance>(m_targetDistance+LimeLightValues.driveDeadband2)){
           forward=0.5;
-        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband0)){
+        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband2)&&distance>(m_targetDistance+LimeLightValues.driveDeadband1)){
+          forward=0.4;
+        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband1)&&distance>(m_targetDistance+LimeLightValues.driveDeadband0)){
           forward=0.3;
+        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband0)){
+          forward=0.2;
         }
 
         if(m_targetDistance<distance+kDriveDeadband){
@@ -129,15 +129,15 @@ public class ApriltagLineupCommand extends Command {
       break;
       case LINEUP:
         if(yaw>LimeLightValues.yawLineupDeadband){
-          rotMult=1;
+          rotMult=0.7;
         }else{
-          rotMult=(yaw/LimeLightValues.yawLineupDeadband)+0.1;
+          rotMult=(yaw/LimeLightValues.yawLineupDeadband)+0.09;
         }
 
         if(x>LimeLightValues.xLineupDeadband){
-          strafeMult=1;
+          strafeMult=0.7;
         }else{
-          strafeMult=(x/LimeLightValues.xLineupDeadband)+0.1;
+          strafeMult=(x/LimeLightValues.xLineupDeadband)+0.09;
         }
 
         if(x<kLineupXDeadband&&yaw<kLineupYawDeadband){

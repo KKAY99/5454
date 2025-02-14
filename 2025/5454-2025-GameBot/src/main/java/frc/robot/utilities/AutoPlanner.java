@@ -2,6 +2,8 @@ package frc.robot.utilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
@@ -15,13 +17,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import java.util.function.Supplier;
 
 public class AutoPlanner {
     private PathConstraints pathConstraints;
 
     //Default Constraint Values
-    private double m_velocityMPS=2.0;
-    private double m_maxAccelMPS=2.0;
+    private double m_velocityMPS=2;
+    private double m_maxAccelMPS=2;
     private double m_angularVelocityMPS=11.5;
     private double m_angularMaxAccelMPS=11.5;
     
@@ -29,25 +32,18 @@ public class AutoPlanner {
       pathConstraints=new PathConstraints(m_velocityMPS,m_maxAccelMPS,m_angularVelocityMPS,m_angularMaxAccelMPS);
     }
 
-    public PathPlannerPath CreateAutoPath(double endPosRot,double endVelocity,Pose2d... poses){
-    List<PathPoint> pathPointArray=new ArrayList<PathPoint>();
+    public PathPlannerPath CreateOdomLineUpPath(Pose2d startPose,Pose2d targetPose){
+    List<PathPoint> targets=new ArrayList<PathPoint>();
 
-    for(Pose2d pose:poses){
-      if(pose!=null){
-        pathPointArray.add(new PathPoint(new Translation2d(pose.getX(),pose.getY())));
-      }
-    }
+    targets.add(new PathPoint(startPose.getTranslation()));
+    targets.add(new PathPoint(targetPose.getTranslation()));
 
     PathPlannerPath newPath = PathPlannerPath.fromPathPoints(
-        pathPointArray,pathConstraints, 
-        new GoalEndState(endVelocity, Rotation2d.fromDegrees(endPosRot))
+        targets,pathConstraints, 
+        new GoalEndState(0,targetPose.getRotation())
     );
 
-    if(DriverStation.getAlliance().get()==Alliance.Blue){
-      return newPath;
-    }else{
-      return newPath.flipPath();
-    }
+    return newPath;
   }
 
   public Command CreatePathfindingPath(double endVelocity,Pose2d targetPose){

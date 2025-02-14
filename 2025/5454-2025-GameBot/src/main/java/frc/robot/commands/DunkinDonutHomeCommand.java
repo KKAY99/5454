@@ -10,6 +10,7 @@ public class DunkinDonutHomeCommand extends Command {
 
   public DunkinDonutHomeCommand(DunkinDonutSubsystem dunkin) {
     m_dunkin=dunkin;
+    addRequirements(m_dunkin);
   }
 
   // Called when the command is initially scheduled.
