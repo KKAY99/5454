@@ -155,7 +155,7 @@ public class RobotContainer {
     public void refreshSmartDashboard(){ 
       SmartDashboard.putBoolean("Lined Up", test);
       SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-      SmartDashboard.putNumber("Votaage",RobotController.getBatteryVoltage());
+      SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage());
       SmartDashboard.putData("field", m_Field2d);
       SmartDashboard.putData("auto chooser", m_Elevator); //place holder code for auto chooser
       //m_Field2d.getRobotPose() code needed for robot pose
