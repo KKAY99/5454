@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.Supplier;
 
@@ -23,26 +24,27 @@ public class AutoPlanner {
     private PathConstraints pathConstraints;
 
     //Default Constraint Values
-    private double m_velocityMPS=2;
-    private double m_maxAccelMPS=2;
-    private double m_angularVelocityMPS=11.5;
-    private double m_angularMaxAccelMPS=11.5;
+    private double m_velocityMPS=1;
+    private double m_maxAccelMPS=1;
+    private double m_angularVelocityMPS=6;
+    private double m_angularMaxAccelMPS=6;
     
     public AutoPlanner(){
       pathConstraints=new PathConstraints(m_velocityMPS,m_maxAccelMPS,m_angularVelocityMPS,m_angularMaxAccelMPS);
     }
-
+ 
     public PathPlannerPath CreateOdomLineUpPath(Pose2d startPose,Pose2d targetPose){
-    List<PathPoint> targets=new ArrayList<PathPoint>();
 
-    targets.add(new PathPoint(startPose.getTranslation()));
-    targets.add(new PathPoint(targetPose.getTranslation()));
-
-    PathPlannerPath newPath = PathPlannerPath.fromPathPoints(
-        targets,pathConstraints, 
-        new GoalEndState(0,targetPose.getRotation())
+    List<Waypoint> waypoints= PathPlannerPath.waypointsFromPoses(
+        startPose,targetPose
     );
 
+    PathPlannerPath newPath=new PathPlannerPath(
+    waypoints, 
+    pathConstraints,
+    new IdealStartingState(0,startPose.getRotation()),
+    new GoalEndState(0,targetPose.getRotation()));
+    
     return newPath;
   }
 

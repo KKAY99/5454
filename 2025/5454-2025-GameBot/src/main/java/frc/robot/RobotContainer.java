@@ -40,6 +40,7 @@ import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
+import frc.robot.Constants.LimeLightValues.LimelightLineUpOffsets;
 
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -167,8 +168,11 @@ public class RobotContainer {
     Trigger lineUpTrigger=new Trigger(()->(m_xBoxOperator.getLeftTriggerAxis()>ButtonBindings.joystickDeadband));
     lineUpTrigger.whileTrue(lineupApriltag);*/
 
-   OdomLineupCommand odomLineup=new OdomLineupCommand(m_OdomLimelight, m_swerve);
-   m_xBoxDriver.leftBumper().onTrue(odomLineup);
+   OdomLineupCommand odomLineupLeft=new OdomLineupCommand(m_OdomLimelight,m_swerve,LimelightLineUpOffsets.LEFT);
+   m_xBoxDriver.leftBumper().onTrue(odomLineupLeft);
+
+   OdomLineupCommand odomLineupRight=new OdomLineupCommand(m_OdomLimelight,m_swerve,LimelightLineUpOffsets.RIGHT);
+   m_xBoxDriver.rightBumper().onTrue(odomLineupRight);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
@@ -267,10 +271,16 @@ public class RobotContainer {
     if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+
+      Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
+      m_OdomLimelight.TrimPoseArray(3);
+      System.out.println(m_OdomLimelight.getDerivationConfidence(m_swerve,3,currentPose,Utils.getCurrentTimeSeconds()));
+      
+      if(m_OdomLimelight.getDerivationConfidence(m_swerve,3,currentPose,Utils.getCurrentTimeSeconds())){
+        m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
+      }
     }
-    /*if(m_OdomFwdLimelight.isAnyTargetAvailable()){
-      m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
-                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());*/
+
     }
 
   public void AllPeriodic(){
