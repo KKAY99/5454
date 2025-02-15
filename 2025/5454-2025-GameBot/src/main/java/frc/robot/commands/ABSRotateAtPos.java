@@ -8,6 +8,8 @@ import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import java.util.function.Supplier;
 
+
+
 public class ABSRotateAtPos extends Command{
     private DunkinDonutSubsystem m_dunkin;
 
@@ -17,6 +19,7 @@ public class ABSRotateAtPos extends Command{
     
     public ABSRotateAtPos(DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scoreLevel){
         m_dunkin=dunkin;
+        addRequirements(dunkin);
         m_scoreLevel=scoreLevel;
     }
 
