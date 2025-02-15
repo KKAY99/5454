@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,10 +33,12 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
+import frc.robot.Constants.LimeLightValues.LimelightLineUpOffsets;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 
 public class RobotContainer {
@@ -53,16 +56,19 @@ public class RobotContainer {
   private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
 
   //DunkinSubsystem
-  private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID,
+  private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID1,DunkinDonutConstants.algaeCanID2,
                                                                         DunkinDonutConstants.rotateCanID,DunkinDonutConstants.canCoderID);
   
   //ElevatorSubsystem
   private ElevatorSubsystem m_elevator = new ElevatorSubsystem(ElevatorConstants.elevatorCanID,ElevatorConstants.canAndColorID);
 
+  //ClimbSubsystem
+  private ClimbSubsystem m_climb=new ClimbSubsystem(ClimbConstants.climbCanID,ClimbConstants.encoderDIO);
+
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  /*public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightBackOdomHeight,Constants.LimeLightValues.limelightBackOdomAngle,
+  public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightBackOdomHeight,Constants.LimeLightValues.limelightBackOdomAngle,
                                                 0,Constants.LimeLightValues.backOdomLimelightName);
-  public final Limelight m_OdomFwdLimelight=new Limelight(Constants.LimeLightValues.limelightFrontOdomHeight,Constants.LimeLightValues.limelightFrontOdomAngle,
+ /*public final Limelight m_OdomFwdLimelight=new Limelight(Constants.LimeLightValues.limelightFrontOdomHeight,Constants.LimeLightValues.limelightFrontOdomAngle,
                                                 0,Constants.LimeLightValues.frontOdomLimelightName);*/
 
   //public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
@@ -103,50 +109,44 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings(){
-    /*ApriltagLineupCommand lineupApriltag=new ApriltagLineupCommand(m_swerve, m_OdomLimelight,30,21,false);
-    m_xBoxDriver.leftTrigger().whileTrue(lineupApriltag);
+    //QOL Drive
+    ResetGyroCommand resetGyro=new ResetGyroCommand(m_swerve);
+    m_xBoxDriver.start().onTrue(resetGyro);
 
-    PipelineSwapCommand piplineSwap0=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline);
-    m_xBoxDriver.b().onTrue(piplineSwap0);
+    //Climb
+    ClimbRotateCommand rotateFwd=new ClimbRotateCommand(m_climb,1);
+    m_xBoxDriver.a().whileTrue(rotateFwd);
 
-    PipelineSwapCommand piplineSwap1=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.leftApriltagPipeline);
-    m_xBoxDriver.leftBumper().onTrue(piplineSwap1);
+    ClimbRotateCommand rotateBwd=new ClimbRotateCommand(m_climb,-1);
+    m_xBoxDriver.b().whileTrue(rotateBwd);
+    
+    ToggleClimbPID testPID1=new ToggleClimbPID(m_climb,ClimbConstants.climbPos1);
+    m_xBoxDriver.leftBumper().onTrue(testPID1);
 
-    PipelineSwapCommand piplineSwap2=new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline);
-    m_xBoxDriver.rightBumper().onTrue(piplineSwap2);*/
+    ToggleClimbPID testPID2=new ToggleClimbPID(m_climb,ClimbConstants.climbPos2);
+    m_xBoxDriver.rightBumper().onTrue(testPID2);
 
     //DunkinDonutCommands
-    DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_dunkinDonut, () -> m_xBoxOperator.getRightX()*0.5);
+    /*DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_dunkinDonut, () -> m_xBoxOperator.getRightX()*0.5);
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
-    operatorRightXJoystick.whileTrue(DunkinRotateCommand);
+    operatorRightXJoystick.whileTrue(DunkinRotateCommand);*/
 
     DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -1);
-    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralButton);
+    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
     DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 1);
-    JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,3);
+    JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIn.whileTrue(DunkinCoralCommandIn);
 
-    DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1,false); 
-    JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaShootButton);
+    
+    /*DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1,false); 
+    JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator,2);
     operatorDunkinAlgeaShootButton.whileTrue(DunkinAlgeaShootCommand);
 
-    DunkinDonutAlgeaCommand DunkinAlgeaPullCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 1,false); 
-    JoystickButton operatorDunkinAlgeaPullButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinAlgeaPullButton);
-    operatorDunkinAlgeaPullButton.whileTrue(DunkinAlgeaPullCommand);
-/* 
-    DunkinDonutPosCommand DunkinPosScoreMidCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.l3Pos);
-    JoystickButton operatorDunkinPosScoreButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreMidButton);
-    operatorDunkinPosScoreButton.onTrue(DunkinPosScoreMidCommand);*/
-
-   /*DunkinDonutPosCommand DunkinPosHumanPlayerCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.humanPlayerPos);
-    JoystickButton operatorDunkinPosHumanPlayerButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosHumanPlayerButton);
-    operatorDunkinPosHumanPlayerButton.whileTrue(DunkinPosHumanPlayerCommand);*/
-/*
-    DunkinDonutPosCommand DunkinPosScoreHighCommand = new DunkinDonutPosCommand(m_dunkinDonut, Constants.DunkinDonutConstants.l4Pos);
-    JoystickButton operatorDunkinPosScoreHighButton = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.dunkinRotatePosScoreHighButton);
-    operatorDunkinPosScoreHighButton.whileTrue(DunkinPosScoreHighCommand); */
+    DunkinDonutAlgeaCommand DunkinAlgeaPullCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 0.5,false); 
+    JoystickButton operatorDunkinAlgeaPullButton = new JoystickButton(m_xBoxOperator,3);
+    operatorDunkinAlgeaPullButton.whileTrue(DunkinAlgeaPullCommand);*/
     
     //ElevatorCommands
     ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY()*0.5);
@@ -154,27 +154,32 @@ public class RobotContainer {
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
     //Sequential
-    /* 
-    ParallelCommandGroup retract=new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT),
-                                  new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT));
+    
+    ParallelCommandGroup retract=new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
+                                  //new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT));
     JoystickButton operatorRetractButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.retractButton);
-    operatorRetractButton.onTrue(retract);*/
+    operatorRetractButton.onTrue(retract);
 
 
-    /*SequentialCommandGroup seqScore=new SequentialCommandGroup(new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
-                                  new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel),
-                                  new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)),
-                                  new ElevatorAndRotateAtPos(m_elevator, m_dunkinDonut,()->m_currentScoreLevel),
+    SequentialCommandGroup seqScore=new SequentialCommandGroup(//new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
+                                  new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel)),
+                                  //new ToggleDunkinPID(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)),
+                                  new ElevatorAndRotateAtPos(m_elevator,m_dunkinDonut,()->m_currentScoreLevel),
                                   new DunkinDonutCoralCommand(m_dunkinDonut,-1,1),
-                                  new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true),
-                                  new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT),
-                                  new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));*/
-
-/* 
-    SequentialCommandGroup seqScore=new SequentialCommandGroup(new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel),
-                                                              new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)));                     
+                                  //new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true),
+                                  //new ToggleDunkinPID(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT),
+                                  new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
     JoystickButton operatorSeqScoreButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
-    operatorSeqScoreButton.onTrue(seqScore); */ 
+                                  operatorSeqScoreButton.onTrue(seqScore);
+ 
+
+    OdomLineupCommand odomLineupLeft=new OdomLineupCommand(m_OdomLimelight,m_swerve,AutoConstants.fiducial21LeftReef);
+    JoystickButton odomLineupLeftButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpLeftButton);
+    odomLineupLeftButton.onTrue(odomLineupLeft);
+
+    OdomLineupCommand odomLineupRight=new OdomLineupCommand(m_OdomLimelight,m_swerve,AutoConstants.fiducial21RightReef);
+    JoystickButton odomLineupRightButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpRightButton);
+    odomLineupRightButton.onTrue(odomLineupRight);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
@@ -201,6 +206,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
     SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
+    SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
   }
   
   private void createAutonomousCommandList(){
@@ -265,17 +271,18 @@ public class RobotContainer {
     refreshSmartDashboard();
     GetPIDValues();
 
-    /*if(m_OdomLimelight.isAnyTargetAvailable()){
+    if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp=Timer.getFPGATimestamp();
       m_OdomLimelight.TrimPoseArray(3);
-      System.out.println(m_OdomLimelight.getConfidence(3,currentPose));
+
+      System.out.println(m_OdomLimelight.getDerivationConfidence(m_swerve,3,currentPose,currentTimeStamp));
+      if(m_OdomLimelight.getDerivationConfidence(m_swerve,3,currentPose,currentTimeStamp)){
+        m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
+      }
     }
-    if(m_OdomFwdLimelight.isAnyTargetAvailable()){
-      m_OdomFwdLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
-                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-    }*/
   }
 
   public void AllPeriodic(){
@@ -288,7 +295,6 @@ public class RobotContainer {
   public void homeRobot(){
     if(!hasHomed){
       hasHomed = true;
-      CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
       CommandScheduler.getInstance().schedule(new ElevatorHomeCommand(m_elevator));
     }
   }
@@ -298,39 +304,13 @@ public class RobotContainer {
     Command command = m_autoChooser.getSelected();
     return command;
   }
-  
-  public Command getSelectedAuto(String chosenAuto){
-    AutoPlanner autoPlan=new AutoPlanner();
-    Command command=null;
-    
-    switch(chosenAuto){
-      case AutoConstants.autoMode1:
-      command=new AutoDoNothingCommand();
-      break;
-      case AutoConstants.autoMode2:
-      m_swerve.resetPose(AutoConstants.AutoPoses.testStartPos);
-      command=new SequentialCommandGroup();
-       // m_swerve.createPathCommand(
-       // autoPlan.CreateAutoPath(0,0,m_swerve.getPose2d(),AutoConstants.AutoPoses.testPose2)),
-       // m_swerve.createPathCommand(
-        //autoPlan.CreateAutoPath(0,0,AutoConstants.AutoPoses.testPose2,AutoConstants.AutoPoses.testPose3)));
-
-      break;
-      case AutoConstants.autoMode3:
-      m_swerve.resetPose(AutoConstants.AutoPoses.centerStart);
-      command=autoPlan.CreatePathfindingPath(0,AutoConstants.AutoPoses.pathFindingTestPose1);
-      break;
-    }
-
-    return command;
-  }
  
   private void resetDefaultCommand(){
     m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
-    m_swerve.applyRequest(() -> drive.withVelocityX(-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed) // Drive forward with
+    m_swerve.applyRequest(() -> drive.withVelocityX((-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed)) // Drive forward with
                                                                                         // negative Y (forward)
-        .withVelocityY(-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed) // Drive left with negative X (left)
-        .withRotationalRate(-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed) // Drive counterclockwise with negative X (left)
+        .withVelocityY((-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed)) // Drive left with negative X (left)
+        .withRotationalRate((-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed)) // Drive counterclockwise with negative X (left)
     ));
   }
 

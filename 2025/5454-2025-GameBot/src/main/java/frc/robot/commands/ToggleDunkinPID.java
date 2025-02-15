@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -9,7 +8,7 @@ import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ToggleLocalDunkinPID extends Command{
+public class ToggleDunkinPID extends Command{
     private DunkinDonutSubsystem m_dunkin;
     private ElevatorSubsystem m_elevator;
 
@@ -19,18 +18,18 @@ public class ToggleLocalDunkinPID extends Command{
 
     private boolean m_resetToggle;
 
-    public ToggleLocalDunkinPID(DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scoreLevel){
+    public ToggleDunkinPID(DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scoreLevel){
         m_dunkin=dunkin;
         m_scoreLevel=scoreLevel;
     }
 
-    public ToggleLocalDunkinPID(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel){
+    public ToggleDunkinPID(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel){
         m_dunkin=dunkin;
         m_elevator=elevator;
         m_scoreLevel=scoreLevel;
     }
 
-    public ToggleLocalDunkinPID(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel,
+    public ToggleDunkinPID(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel,
                                 boolean resetToggle){
         m_dunkin=dunkin;
         m_elevator=elevator;

@@ -24,8 +24,8 @@ public class AutoPlanner {
     private PathConstraints pathConstraints;
 
     //Default Constraint Values
-    private double m_velocityMPS=1;
-    private double m_maxAccelMPS=1;
+    private double m_velocityMPS=0.7;
+    private double m_maxAccelMPS=0.7;
     private double m_angularVelocityMPS=6;
     private double m_angularMaxAccelMPS=6;
     

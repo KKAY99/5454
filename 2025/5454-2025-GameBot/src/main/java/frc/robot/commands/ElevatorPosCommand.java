@@ -28,21 +28,26 @@ public class ElevatorPosCommand extends Command {
 
   public ElevatorPosCommand(ElevatorSubsystem elevator, double pos) {
     m_elevator=elevator;
-    addRequirements(elevator);
     m_closedLoopSlot=ClosedLoopSlot.kSlot0;
     m_pos=pos;
+
+    addRequirements(elevator);
   }
 
   public ElevatorPosCommand(ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel) {
     m_elevator=elevator;
     m_closedLoopSlot=ClosedLoopSlot.kSlot0;
     m_scoreLevel=scoreLevel;
+
+    addRequirements(elevator);
   }
 
   public ElevatorPosCommand(ElevatorSubsystem elevator,Supplier<ElevatorScoreLevel> scoreLevel,ClosedLoopSlot closedLoopSlot) {
     m_elevator=elevator;
     m_scoreLevel=scoreLevel;
     m_closedLoopSlot=closedLoopSlot;
+
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
@@ -70,12 +75,10 @@ public class ElevatorPosCommand extends Command {
         elevatorlevel = "Retract";
         m_pos=ElevatorConstants.elevatorLowLimit;
         break;    
-     
-      
       }
-      notification.setDescription(elevatorlevel);
+      //notification.setDescription(elevatorlevel);
 
-      Elastic.sendNotification(notification);
+      //Elastic.sendNotification(notification);
 
     }else{
       elevatorlevel = "null";

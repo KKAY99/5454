@@ -18,11 +18,12 @@ import com.revrobotics.spark.*;
 public class DunkinDonutSubsystem extends SubsystemBase {
   private CANcoder m_CANcoder;
   private ObsidianCANSparkMax m_coralMotor;
-  private ObsidianCANSparkMax m_algaeMotor;
+  private ObsidianCANSparkMax m_algaeMotor1;
+  private ObsidianCANSparkMax m_algaeMotor2;
   private ObsidianCANSparkMax m_rotateMotor;
   
   private PIDController m_codeBoundPID;
-  private SparkClosedLoopController m_loopController;
+  private ObsidianPID m_obsidianPID;
   private RelativeEncoder m_rotateRelative;
 
   private double m_rotateSpeed=0;
@@ -36,15 +37,16 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private boolean m_algaeToggle=false;
   private boolean m_shouldRunPID=false;
   
-  public DunkinDonutSubsystem(int coralCanID, int algaeCanID, int rotateCanID,int canCoderID) {
+  public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int algaeCanID2,int rotateCanID,int canCoderID) {
     m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true);
-    m_algaeMotor= new ObsidianCANSparkMax(algaeCanID, MotorType.kBrushless, true);
+    m_algaeMotor1= new ObsidianCANSparkMax(algaeCanID1, MotorType.kBrushless, true);
+    m_algaeMotor2= new ObsidianCANSparkMax(algaeCanID2, MotorType.kBrushless, true);
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,40);
                     //DunkinDonutConstants.dunkinP,DunkinDonutConstants.dunkinI,DunkinDonutConstants.dunkinD,DunkinDonutConstants.dunkinMaxAndMin);
     m_CANcoder = new CANcoder(canCoderID);
     m_rotateRelative=m_rotateMotor.getEncoder();
-  
-    m_loopController=m_rotateMotor.getClosedLoopController();
+    m_obsidianPID=new ObsidianPID(DunkinDonutConstants.localPIDkP,DunkinDonutConstants.localPIDkI,DunkinDonutConstants.localPIDkD,
+                                  DunkinDonutConstants.localPIDMaxAndMin,-DunkinDonutConstants.localPIDMaxAndMin);
     m_codeBoundPID=new PIDController(DunkinDonutConstants.localPIDkP,DunkinDonutConstants.localPIDkI,DunkinDonutConstants.localPIDkD);
   }
 
@@ -78,14 +80,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     return m_rotateRelative.getPosition();
   }
 
-  public void set_referance(double pos){
-    m_loopController.setReference(pos,ControlType.kPosition);
-  }
-
-  public void reset_referance(){
-    m_loopController.setReference(0,ControlType.kVelocity);
-  }
-
   public void run_rotatemotor(double speed){
     m_rotateSpeed=speed;
     m_rotateMotor.set(speed);
@@ -102,7 +96,8 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   }
   public void runAlgaeMotor(double speed){
     m_algaeSpeed=speed;
-    m_algaeMotor.set(speed);
+    m_algaeMotor1.set(speed);
+    m_algaeMotor2.set(-speed);
   }
   public void stopCoralMotor(){
     m_coralMotor.stopMotor();
@@ -110,7 +105,8 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   }
 
   public void stopAlgeaMotor(){
-    m_algaeMotor.stopMotor();
+    m_algaeMotor1.stopMotor();
+    m_algaeMotor2.stopMotor();
     m_algaeSpeed=0;
   }
 
@@ -156,7 +152,8 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     boolean returnValue=true;
     try{
       m_CANcoder.getDeviceID();
-      m_algaeMotor.getDeviceId();
+      m_algaeMotor1.getDeviceId();
+      m_algaeMotor2.getDeviceId();
       m_coralMotor.getDeviceId();
       m_rotateMotor.getDeviceId();
     }catch(Exception e){

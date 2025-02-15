@@ -54,8 +54,8 @@ public class ElevatorAndRotateAtPos extends Command{
     public boolean isFinished(){
         boolean returnValue=false;
 
-        if(m_elevator.getRelativePos()>m_elevatorPos-ElevatorConstants.posDeadband&&m_elevator.getRelativePos()<m_elevatorPos+ElevatorConstants.posDeadband&&
-            m_dunkin.getAbsoluteEncoderPos()>m_rotatePos-DunkinDonutConstants.posDeadband&&m_dunkin.getAbsoluteEncoderPos()<m_rotatePos+DunkinDonutConstants.posDeadband){
+        if(m_elevator.getRelativePos()>m_elevatorPos-ElevatorConstants.posDeadband&&m_elevator.getRelativePos()<m_elevatorPos+ElevatorConstants.posDeadband){
+            //m_dunkin.getAbsoluteEncoderPos()>m_rotatePos-DunkinDonutConstants.posDeadband&&m_dunkin.getAbsoluteEncoderPos()<m_rotatePos+DunkinDonutConstants.posDeadband){
             returnValue=true;
         }
 

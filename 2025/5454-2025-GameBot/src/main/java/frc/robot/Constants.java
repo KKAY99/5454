@@ -25,28 +25,21 @@ public final class Constants {
   }
 
   public static final class AutoConstants{
-    public static final String autoMode1="1=AutoDoNothing";
-    public static final String autoMode2="2=PathPlanTest";
-    public static final String autoMode3="3=PathfindingTest";
+    public static final Pose2d fiducial20LeftReef=new Pose2d(5.315,5.047,new Rotation2d().fromDegrees(-60));
+    public static final Pose2d fiducial20RightReef=new Pose2d(4.996,5.227,new Rotation2d().fromDegrees(-60));
+ 
+    public static final Pose2d fiducial21LeftReef=new Pose2d(5.27,3.85,new Rotation2d().fromDegrees(0));
+    public static final Pose2d fiducial21RightReef=new Pose2d(5.27,4.180,new Rotation2d().fromDegrees(0));
 
-    public static final String centerStart="CenterStart";
-    public static final String leftStart="LeftStart";
-    public static final String rightStart="RightStart";
-
-    public static final class AutoPoses{
-      public static final Pose2d testStartPos=new Pose2d(0,0,new Rotation2d(0));
-      public static final Pose2d centerStart=new Pose2d(7.09,4.04,new Rotation2d(0));
-      public static final Pose2d leftStart=new Pose2d(7.09,6.28,new Rotation2d(0));
-      public static final Pose2d rightStart=new Pose2d(7.09,1.75,new Rotation2d(0));
-
-      public static final Pose2d testPose1=new Pose2d(0,0,new Rotation2d(0));
-      public static final Pose2d testPose2=new Pose2d(0,5,new Rotation2d(0));
-      public static final Pose2d testPose3=new Pose2d(5,5,new Rotation2d(0));
-      public static final Pose2d testPose4=new Pose2d(5,0,new Rotation2d(0));
-      public static final Pose2d testPose5=new Pose2d(0,0,new Rotation2d(0));
-
-      public static final Pose2d pathFindingTestPose1=new Pose2d(2.184,4.04,new Rotation2d(0));
-    }
+    public static final Pose2d[] fiducialLeftPoses=new Pose2d[]{
+      fiducial20LeftReef,
+      fiducial21LeftReef
+    };
+    
+    public static final Pose2d[] fiducialRightPoses=new Pose2d[]{
+      fiducial20RightReef,
+      fiducial21RightReef
+    };
   }
   
   public static final class InputControllers {
@@ -115,7 +108,8 @@ public final class Constants {
   public static final class DunkinDonutConstants{
     public static final int canCoderID = 59;
     public static final int coralCanID = 23;
-    public static final int algaeCanID = 25;
+    public static final int algaeCanID1 = 25;
+    public static final int algaeCanID2 = 27;
     public static final int rotateCanID = 24;
 
     public static final double posDeadband=1.2;
@@ -129,13 +123,13 @@ public final class Constants {
     public static final double localPIDkD=0;
     public static final double localPIDMaxAndMin=0.5;
 
-    public static final double l1PosABS=0.18;
-    public static final double l2PosABS=0.18;
+    public static final double l1PosABS=0;
+    public static final double l2PosABS=0;
     //8.5 inches from reef to robot frame
-    public static final double l3PosABS=0.433;
+    public static final double l3PosABS=0;
     //14 inches from reef to robot frame
-    public static final double l4PosABS=0.444;
-    public static final double humanPlayerPosABS=0.18;
+    public static final double l4PosABS=0;
+    public static final double humanPlayerPosABS=0;
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
@@ -160,16 +154,33 @@ public final class Constants {
 
     public static final double posDeadband=1.2;
 
-    public static final double l1Pos=-0;
-    public static final double l2Pos=-23;
-    public static final double l3Pos=-47.5;
-    public static final double l4Pos=-98;
+    public static final double l1Pos=-13;
+    public static final double l2Pos=-28.5;
+    public static final double l3Pos=-58;
+    public static final double l4Pos=-99;
 
     public static final double aboveTroughPos=-20;
 
     public static enum ElevatorScoreLevel{
       L1,L2,L3,L4,RETRACT
     }
+  }
+
+  public static final class ClimbConstants{
+    public static final int climbCanID=26;
+    public static final int encoderDIO=2;
+
+    public static final double climbP=0.2;
+    public static final double climbI=0;//DONT USE
+    public static final double climbD=0.1;
+    public static final double climbMaxAndMin=1;
+    public static final double climbInputGain=100;
+
+    public static final double climbPos1=0.15;
+    public static final double climbPos2=0.51;
+
+    public static final double climbLimitLow=0.15;
+    public static final double climbLimitHigh=0.51;
   }
 
   public static final class CoolPanelConstants{
@@ -195,12 +206,10 @@ public final class Constants {
   }
 
   public static final class ButtonBindings{
-    public static final int dunkinCoralButton = 1; //a
-    public static final int dunkinAlgeaPullButton = 2; //b
-    public static final int dunkinAlgeaShootButton = 4; //y
-    public static final int pipelineSwap=7;
-    public static final int pidTestButton=8; 
-    public static final int dunkinRotatePosHumanPlayerButton = 3; 
+    public static final int dunkinCoralOutakeButton=1; //a
+    public static final int lineUpRightButton=2;
+    public static final int lineUpLeftButton=3;
+    public static final int dunkinCoralIntakeButton=4;
     public static final int retractButton=5;
     public static final int elevatorScoreLevelButton = 6;
 
@@ -216,6 +225,10 @@ public final class Constants {
     public static final double kDeadband = 0.01;
     public static final double kCubic = 0.95;
     public static final double kLinear = 0.05;
+  }
+
+  public static enum NotificationLevel {
+    INFO, WARNING, ERROR, QUESTION
   }
 
   public static final PPHolonomicDriveController pathPlanDriveController = new PPHolonomicDriveController(
