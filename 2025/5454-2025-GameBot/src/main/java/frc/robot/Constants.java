@@ -24,20 +24,40 @@ public final class Constants {
   }
 
   public static final class AutoConstants{
-    public static final Pose2d fiducial20LeftReef=new Pose2d(5.315,5.047,new Rotation2d().fromDegrees(-60));
-    public static final Pose2d fiducial20RightReef=new Pose2d(4.996,5.227,new Rotation2d().fromDegrees(-60));
+    public static final Pose2d fiducial17LeftReef=new Pose2d(3.955,3.438,new Rotation2d().fromDegrees(120));
+    public static final Pose2d fiducial17RightReef=new Pose2d(4.234,3.284,new Rotation2d().fromDegrees(120));
+
+    public static final Pose2d fiducial18LeftReef=new Pose2d(3.695,4.179,new Rotation2d().fromDegrees(180));
+    public static final Pose2d fiducial18RightReef=new Pose2d(3.695,3.861,new Rotation2d().fromDegrees(180));
+
+    public static final Pose2d fiducial19LeftReef=new Pose2d(4.253,4.756,new Rotation2d().fromDegrees(-120));
+    public static final Pose2d fiducial19RightReef=new Pose2d(3.964,4.593,new Rotation2d().fromDegrees(-120));
+ 
+    public static final Pose2d fiducial20LeftReef=new Pose2d(5.023,4.593,new Rotation2d().fromDegrees(-60));
+    public static final Pose2d fiducial20RightReef=new Pose2d(4.724,4.756,new Rotation2d().fromDegrees(-60));
  
     public static final Pose2d fiducial21LeftReef=new Pose2d(5.27,3.85,new Rotation2d().fromDegrees(0));
     public static final Pose2d fiducial21RightReef=new Pose2d(5.27,4.180,new Rotation2d().fromDegrees(0));
 
+    public static final Pose2d fiducial22LeftReef=new Pose2d(4.734,3.284,new Rotation2d().fromDegrees(60));
+    public static final Pose2d fiducial22RightReef=new Pose2d(5.003,3.438,new Rotation2d().fromDegrees(60));
+
     public static final Pose2d[] fiducialLeftPoses=new Pose2d[]{
+      fiducial17LeftReef,
+      fiducial18LeftReef,
+      fiducial19LeftReef,
       fiducial20LeftReef,
-      fiducial21LeftReef
+      fiducial21LeftReef,
+      fiducial22LeftReef
     };
     
     public static final Pose2d[] fiducialRightPoses=new Pose2d[]{
+      fiducial17RightReef,
+      fiducial18RightReef,
+      fiducial19RightReef,
       fiducial20RightReef,
-      fiducial21RightReef
+      fiducial21RightReef,
+      fiducial22RightReef
     };
   }
   

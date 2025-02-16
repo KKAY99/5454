@@ -339,6 +339,7 @@ public class Limelight {
         return check?m_lastConfidenceVals:new double[] {};
     }
 
+    //OLD DO NOT USE!!
     public boolean getConfidence(int posesToAverage,Pose2d currentVisionPose){
         boolean returnValue=false;
         ArrayList<Double> diffMeans=new ArrayList<>();
