@@ -1,7 +1,6 @@
 package frc.robot.utilities;
 
 import org.littletonrobotics.junction.Logger;
-
 import com.reduxrobotics.sensors.canandcolor.*;
 
 public class ObsidianCanandcolor {

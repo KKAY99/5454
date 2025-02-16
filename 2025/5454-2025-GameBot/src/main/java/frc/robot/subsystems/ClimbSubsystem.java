@@ -42,6 +42,18 @@ public class ClimbSubsystem extends SubsystemBase {
     return m_obsidianPID.getToggle();
   }
 
+  public boolean checkCANConnections(){
+    boolean returnValue=true;
+    try{
+      m_motor.getDeviceId();
+      m_encoder.get();
+    }catch(Exception e){
+      returnValue=false;
+    }
+
+    return returnValue;
+  }
+
   public void runWithLimits(double speed){
     if(speed<0){
       if(getAbsoluteEncoderPos()<ClimbConstants.climbLimitHigh){

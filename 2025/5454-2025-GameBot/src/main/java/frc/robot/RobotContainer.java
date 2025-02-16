@@ -47,13 +47,9 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-  
-  private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
-  private final int leftTriggerAxis = XboxController.Axis.kLeftTrigger.value;
 
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
-  private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
 
   //DunkinSubsystem
   private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID1,DunkinDonutConstants.algaeCanID2,
@@ -68,17 +64,16 @@ public class RobotContainer {
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightBackOdomHeight,Constants.LimeLightValues.limelightBackOdomAngle,
                                                 0,Constants.LimeLightValues.backOdomLimelightName);
- /*public final Limelight m_OdomFwdLimelight=new Limelight(Constants.LimeLightValues.limelightFrontOdomHeight,Constants.LimeLightValues.limelightFrontOdomAngle,
+  /*public final Limelight m_OdomFwdLimelight=new Limelight(Constants.LimeLightValues.limelightFrontOdomHeight,Constants.LimeLightValues.limelightFrontOdomAngle,
                                                 0,Constants.LimeLightValues.frontOdomLimelightName);*/
 
   //public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
 
   public final JacksonsCoolPanel m_JacksonsCoolPanel=new JacksonsCoolPanel(CoolPanelConstants.greenPWM,CoolPanelConstants.redPWM);
-
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-          .withDeadband(TunerConstants.kMaxSpeed * 0.1).withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
   
   private final SendableChooser<Command> m_autoChooser;
+
+  public ElevatorScoreLevel m_currentScoreLevel=ElevatorScoreLevel.L1;
 
   public double m_P;
   public double m_I;
@@ -86,17 +81,12 @@ public class RobotContainer {
 
   public boolean hasHomed=false;
 
-  public ElevatorScoreLevel m_currentScoreLevel=ElevatorScoreLevel.L1;
-
   public RobotContainer(){
     SmartDashboard.putData("field", m_Field2d); //used for elastic
     configureNamedCommands();
-    m_autoChooser = AutoBuilder.buildAutoChooser();
-    m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
-    // Configure the button bindings
+    m_autoChooser=AutoBuilder.buildAutoChooser();
     createAutonomousCommandList(); 
     configureButtonBindings();
-    //Create Auto Commands
     resetDefaultCommand();
   }
 
@@ -110,15 +100,18 @@ public class RobotContainer {
 
   private void configureButtonBindings(){
     //QOL Drive
-    ResetGyroCommand resetGyro=new ResetGyroCommand(m_swerve);
-    m_xBoxDriver.start().onTrue(resetGyro);
+    ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve);
+    m_xBoxDriver.start().onTrue(resetGyroCommand);
+
+    GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
+    m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
     //Climb
-    ClimbRotateCommand rotateFwd=new ClimbRotateCommand(m_climb,1);
-    m_xBoxDriver.a().whileTrue(rotateFwd);
+    ClimbRotateCommand rotateFwdCommand=new ClimbRotateCommand(m_climb,1);
+    m_xBoxDriver.a().whileTrue(rotateFwdCommand);
 
-    ClimbRotateCommand rotateBwd=new ClimbRotateCommand(m_climb,-1);
-    m_xBoxDriver.b().whileTrue(rotateBwd);
+    ClimbRotateCommand rotateBwdCommand=new ClimbRotateCommand(m_climb,-1);
+    m_xBoxDriver.b().whileTrue(rotateBwdCommand);
     
     ToggleClimbPID testPID1=new ToggleClimbPID(m_climb,ClimbConstants.climbPos1);
     m_xBoxDriver.leftBumper().onTrue(testPID1);
@@ -138,7 +131,6 @@ public class RobotContainer {
     DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 1);
     JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIn.whileTrue(DunkinCoralCommandIn);
-
     
     /*DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1,false); 
     JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator,2);
@@ -154,32 +146,30 @@ public class RobotContainer {
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
     //Sequential
-    
-    ParallelCommandGroup retract=new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
-                                  //new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT));
-    JoystickButton operatorRetractButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.retractButton);
-    operatorRetractButton.onTrue(retract);
+    ParallelCommandGroup retractCommand=new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
+                                      //new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT));
+    JoystickButton operatorRetractButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.retractButton);
+    operatorRetractButton.onTrue(retractCommand);
 
-
-    SequentialCommandGroup seqScore=new SequentialCommandGroup(//new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
-                                  new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel)),
-                                  //new ToggleDunkinPID(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)),
-                                  new ElevatorAndRotateAtPos(m_elevator,m_dunkinDonut,()->m_currentScoreLevel),
-                                  new DunkinDonutCoralCommand(m_dunkinDonut,-1,1),
-                                  //new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true),
-                                  //new ToggleDunkinPID(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT),
-                                  new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
-    JoystickButton operatorSeqScoreButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
-                                  operatorSeqScoreButton.onTrue(seqScore);
+    SequentialCommandGroup seqScoreCommand=new SequentialCommandGroup(//new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
+                                          new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel)),
+                                          //new ToggleDunkinPID(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)),
+                                          new ElevatorAndRotateAtPos(m_elevator,m_dunkinDonut,()->m_currentScoreLevel),
+                                          new DunkinDonutCoralCommand(m_dunkinDonut,-1,1),
+                                          //new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true),
+                                          //new ToggleDunkinPID(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT),
+                                          new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
+    JoystickButton operatorSeqScoreButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
+    operatorSeqScoreButton.onTrue(seqScoreCommand);
  
-
-    OdomLineupCommand odomLineupLeft=new OdomLineupCommand(m_OdomLimelight,m_swerve,AutoConstants.fiducial21LeftReef);
+    //Lineup
+    OdomLineupCommand odomLineupLeftCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,AutoConstants.fiducial21LeftReef);
     JoystickButton odomLineupLeftButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpLeftButton);
-    odomLineupLeftButton.onTrue(odomLineupLeft);
+    odomLineupLeftButton.onTrue(odomLineupLeftCommand);
 
-    OdomLineupCommand odomLineupRight=new OdomLineupCommand(m_OdomLimelight,m_swerve,AutoConstants.fiducial21RightReef);
+    OdomLineupCommand odomLineupRightCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,AutoConstants.fiducial21RightReef);
     JoystickButton odomLineupRightButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpRightButton);
-    odomLineupRightButton.onTrue(odomLineupRight);
+    odomLineupRightButton.onTrue(odomLineupRightCommand);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
@@ -200,8 +190,6 @@ public class RobotContainer {
   }
       
   private void refreshSmartDashboard(){  
-    /*SmartDashboard.putNumber("Odom Limelight Distance", m_OdomLimelight.getDistance());
-    SmartDashboard.putNumber("Odom Limelight X", m_OdomLimelight.getX());*/
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
     SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
@@ -229,15 +217,12 @@ public class RobotContainer {
   }
 
   public BooleanSupplier checkCan(){
-    return (() ->(m_swerve.checkCANConnections()&&m_dunkinDonut.checkCANConnections()&&m_elevator.checkCANConnections()));
+    return (() ->(m_swerve.checkCANConnections()&&m_dunkinDonut.checkCANConnections()&&m_elevator.checkCANConnections()&&m_climb.checkCANConnections()));
   }
 
-  public void DisabledInit(){
-  }
+  public void DisabledInit(){}
    
-  public void DisabledPeriodic(){ 
-    
-  }
+  public void DisabledPeriodic(){}
   
   public void AutoPeriodic(){
     /*if(m_OdomLimelight.isAnyTargetAvailable()){
@@ -274,11 +259,11 @@ public class RobotContainer {
     if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Timer.getFPGATimestamp();
       m_OdomLimelight.TrimPoseArray(3);
 
-      System.out.println(m_OdomLimelight.getDerivationConfidence(m_swerve,3,currentPose,currentTimeStamp));
       if(m_OdomLimelight.getDerivationConfidence(m_swerve,3,currentPose,currentTimeStamp)){
         m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
       }
@@ -286,9 +271,10 @@ public class RobotContainer {
   }
 
   public void AllPeriodic(){
-    m_Field2d.setRobotPose(m_swerve.getPose2d()); // elastic
+    m_Field2d.setRobotPose(m_swerve.getPose2d()); //elastic
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
+    m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
   }
 
@@ -300,21 +286,13 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    //Command command=m_autoChooser.getSelected();
-    Command command = m_autoChooser.getSelected();
+    Command command=m_autoChooser.getSelected();
     return command;
   }
  
   private void resetDefaultCommand(){
-    m_swerve.setDefaultCommand( // m_swerve will execute this command periodically
-    m_swerve.applyRequest(() -> drive.withVelocityX((-m_xBoxDriver.getRawAxis(translationAxis) * TunerConstants.kMaxSpeed)) // Drive forward with
-                                                                                        // negative Y (forward)
-        .withVelocityY((-m_xBoxDriver.getRawAxis(strafeAxis) * TunerConstants.kMaxSpeed)) // Drive left with negative X (left)
-        .withRotationalRate((-m_xBoxDriver.getRawAxis(rotationAxis) * TunerConstants.kMaxSpeed)) // Drive counterclockwise with negative X (left)
-    ));
+    m_swerve.setDefaultCommand(m_swerve.applyRequestDrive(m_xBoxDriver,translationAxis,strafeAxis,rotationAxis));
   }
-
-
 }
 
 

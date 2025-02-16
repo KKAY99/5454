@@ -12,6 +12,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import frc.robot.Constants;
+import frc.robot.TunerConstants;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.TunerConstants.TunerSwerveDrivetrain;
 import org.littletonrobotics.junction.Logger;
@@ -50,9 +52,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-    private SwerveRequest.ApplyRobotSpeeds drive = new SwerveRequest.ApplyRobotSpeeds();
+    private SwerveRequest.ApplyRobotSpeeds autoDrive = new SwerveRequest.ApplyRobotSpeeds();
 
     private SwerveDrivePoseEstimator m_poseEstimator;
+
+    private double m_gasPedalMult=1;
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -240,7 +244,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds,DriveFeedforwards driveFF){
-        this.setControl(drive.withSpeeds(chassisSpeeds)
+        this.setControl(autoDrive.withSpeeds(chassisSpeeds)
         .withWheelForceFeedforwardsX(driveFF.robotRelativeForcesXNewtons())
         .withWheelForceFeedforwardsY(driveFF.robotRelativeForcesYNewtons()));
     }
@@ -286,6 +290,27 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
+    }
+
+    /**
+     * Returns a command that applies the specified control request to this swerve drivetrain.
+     * 5454 Custom, Applies Gas Pedal
+     * 
+     * @param request Function returning the request to apply
+     * @return Command to run
+     */
+    public Command applyRequestDrive(CommandXboxController driveController,int translationAxis,int strafeAxis,int rotationAxis) {
+        SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDeadband(TunerConstants.kMaxSpeed*0.1)
+            .withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
+
+        return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
+            .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
+            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
+        );
+    }
+
+    public void setGasPedalMult(double mult){
+        m_gasPedalMult=mult;
     }
 
     /**
