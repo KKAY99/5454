@@ -23,7 +23,7 @@ public final class Constants {
     public static final double MinGasPedalSpeed=0.20;
   }
 
-  public static final class AutoConstants{
+  public static final class LineupConstants{
     public static final Pose2d fiducial17LeftReef=new Pose2d(3.955,3.438,new Rotation2d().fromDegrees(120));
     public static final Pose2d fiducial17RightReef=new Pose2d(4.234,3.284,new Rotation2d().fromDegrees(120));
 
@@ -42,7 +42,7 @@ public final class Constants {
     public static final Pose2d fiducial22LeftReef=new Pose2d(4.734,3.284,new Rotation2d().fromDegrees(60));
     public static final Pose2d fiducial22RightReef=new Pose2d(5.003,3.438,new Rotation2d().fromDegrees(60));
 
-    public static final Pose2d[] fiducialLeftPoses=new Pose2d[]{
+    public static final Pose2d[] fiducialBlueLeftPoses=new Pose2d[]{
       fiducial17LeftReef,
       fiducial18LeftReef,
       fiducial19LeftReef,
@@ -51,7 +51,7 @@ public final class Constants {
       fiducial22LeftReef
     };
     
-    public static final Pose2d[] fiducialRightPoses=new Pose2d[]{
+    public static final Pose2d[] fiducialBlueRightPoses=new Pose2d[]{
       fiducial17RightReef,
       fiducial18RightReef,
       fiducial19RightReef,
@@ -59,6 +59,11 @@ public final class Constants {
       fiducial21RightReef,
       fiducial22RightReef
     };
+
+    public static final Pose2d[] fiducialRedLeftPoses=new Pose2d[]{};
+    public static final Pose2d[] fiducialRedRightPoses=new Pose2d[]{};
+
+    public static final double lineUpDeadband=0.05;
   }
   
   public static final class InputControllers {
@@ -174,9 +179,9 @@ public final class Constants {
     public static final double posDeadband=1.2;
 
     public static final double l1Pos=-13;
-    public static final double l2Pos=-28.5;
-    public static final double l3Pos=-58;
-    public static final double l4Pos=-99;
+    public static final double l2Pos=-26;
+    public static final double l3Pos=-53;
+    public static final double l4Pos=-96;
 
     public static final double aboveTroughPos=-20;
 
@@ -195,11 +200,11 @@ public final class Constants {
     public static final double climbMaxAndMin=1;
     public static final double climbInputGain=100;
 
-    public static final double climbPos1=0.15;
-    public static final double climbPos2=0.51;
+    public static final double climbPos1=0.70;
+    public static final double climbPos2=0.96;
 
-    public static final double climbLimitLow=0.15;
-    public static final double climbLimitHigh=0.51;
+    public static final double climbLimitLow=0.70;
+    public static final double climbLimitHigh=0.96;
   }
 
   public static final class CoolPanelConstants{
@@ -225,12 +230,10 @@ public final class Constants {
   }
 
   public static final class ButtonBindings{
-    public static final int dunkinCoralOutakeButton=1; //a
-    public static final int lineUpRightButton=2;
-    public static final int lineUpLeftButton=3;
+    public static final int dunkinCoralOutakeButton=2; //a
     public static final int dunkinCoralIntakeButton=4;
-    public static final int retractButton=5;
-    public static final int elevatorScoreLevelButton = 6;
+    public static final int lineUpButton=5;
+    public static final int elevatorScoreLevelButton=6;
 
     public static final int setScoreLevelL1POV0=00;
     public static final int setScoreLevelL2POV90=90;

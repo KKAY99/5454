@@ -31,7 +31,6 @@ import frc.robot.commands.*;
 import com.ctre.phoenix6.Utils;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.CoolPanelConstants;
@@ -80,6 +79,7 @@ public class RobotContainer {
   public double m_D;
 
   public boolean hasHomed=false;
+  public boolean m_isRightLineup=false;
 
   public RobotContainer(){
     SmartDashboard.putData("field", m_Field2d); //used for elastic
@@ -124,11 +124,11 @@ public class RobotContainer {
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);*/
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -1);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.75);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 1);
+    DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 0.75);
     JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIn.whileTrue(DunkinCoralCommandIn);
     
@@ -142,34 +142,29 @@ public class RobotContainer {
     
     //ElevatorCommands
     ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY()*0.5);
-    Trigger operatorLeftYJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
+    Trigger operatorLeftYJoystick = new Trigger(()->Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    //Sequential
-    ParallelCommandGroup retractCommand=new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
-                                      //new DunkinDonutPosCommand(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT));
-    JoystickButton operatorRetractButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.retractButton);
-    operatorRetractButton.onTrue(retractCommand);
-
-    SequentialCommandGroup seqScoreCommand=new SequentialCommandGroup(//new DunkinDonutAlgeaCommand(m_dunkinDonut,1,true),
-                                          new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel)),
-                                          //new ToggleDunkinPID(m_dunkinDonut,m_elevator,()->m_currentScoreLevel)),
+    SequentialCommandGroup seqScoreCommandManual=new SequentialCommandGroup(new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel)),
                                           new ElevatorAndRotateAtPos(m_elevator,m_dunkinDonut,()->m_currentScoreLevel),
-                                          new DunkinDonutCoralCommand(m_dunkinDonut,-1,1),
-                                          //new DunkinDonutAlgeaCommand(m_dunkinDonut,0,true),
-                                          //new ToggleDunkinPID(m_dunkinDonut,m_elevator,()->ElevatorScoreLevel.RETRACT),
+                                          new DunkinDonutCoralCommand(m_dunkinDonut,1,0.5),
                                           new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
-    JoystickButton operatorSeqScoreButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
-    operatorSeqScoreButton.onTrue(seqScoreCommand);
+    JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
+    operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
  
-    //Lineup
-    OdomLineupCommand odomLineupLeftCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,AutoConstants.fiducial21LeftReef);
-    JoystickButton odomLineupLeftButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpLeftButton);
-    odomLineupLeftButton.onTrue(odomLineupLeftCommand);
+    /*SequentialCommandGroup seqScoreCommandAuto = new SequentialCommandGroup(new OdomLineupCommand(m_OdomLimelight, m_swerve, m_isRightLineup),
+                                          new ParallelCommandGroup(new ElevatorPosCommand(m_elevator, ()-> m_currentScoreLevel)),
+                                          new ElevatorAndRotateAtPos(m_elevator, m_dunkinDonut, ()->m_currentScoreLevel),
+                                          new DunkinDonutCoralCommand(m_dunkinDonut, -1,1),
+                                          new ElevatorPosCommand(m_elevator, ()-> ElevatorScoreLevel.RETRACT));
+    JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator, ButtonBindings.lineUpButton);
+    operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
 
-    OdomLineupCommand odomLineupRightCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,AutoConstants.fiducial21RightReef);
-    JoystickButton odomLineupRightButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpRightButton);
-    odomLineupRightButton.onTrue(odomLineupRightCommand);
+
+    //Lineup
+    OdomLineupCommand odomLineupCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,m_isRightLineup);
+    JoystickButton odomLineupButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpButton);
+    odomLineupButton.onTrue(odomLineupCommand);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
@@ -188,6 +183,16 @@ public class RobotContainer {
       break;
     }
   }
+
+  public void setLineupSide(Supplier<Boolean> x,Supplier<Boolean> a){
+    if(x.get()){
+      m_isRightLineup=true;
+    }
+
+    if(a.get()){
+      m_isRightLineup=false;
+    }
+  } 
       
   private void refreshSmartDashboard(){  
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
@@ -248,7 +253,6 @@ public class RobotContainer {
 
   public void TeleopMode(){
     homeRobot();
-    //m_OdomLimelight.resetLimelightIDFilter();
     m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   }
 
@@ -276,6 +280,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
     m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
+    setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getAButtonPressed());
   }
 
   public void homeRobot(){

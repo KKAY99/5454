@@ -54,9 +54,9 @@ public class ObsidianPID{
 
         double error=setPoint-pos;
         double errorRate=(m_lastError!=0)?error-m_lastError/currentTimeStamp-m_prevTimeStamp:0;
-        m_iAccum=m_iAccum+m_i*error;
+        m_iAccum=m_iAccum+error*(currentTimeStamp-m_prevTimeStamp);
 
-        double calculatedOutput=(m_p*error)+(m_iAccum)+(m_d*errorRate);
+        double calculatedOutput=(m_p*error)+(m_iAccum*m_i)+(m_d*errorRate);
         calculatedOutput=(calculatedOutput>m_max)?m_max:calculatedOutput;
         calculatedOutput=(calculatedOutput<m_min)?m_min:calculatedOutput;
 

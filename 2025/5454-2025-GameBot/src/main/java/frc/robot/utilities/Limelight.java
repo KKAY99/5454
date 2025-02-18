@@ -161,12 +161,12 @@ public class Limelight {
         return returnArray;
     }
 
-    public double[] getAllVisibleFiducialIDs(){
+    public int[] getAllVisibleFiducialIDs(){
         int numOfFiducials=rawfiducials.get().length/7;
-        double[] fiducialIDs=new double[]{};
+        int[] fiducialIDs=new int[]{};
 
         for(int i=0;i<numOfFiducials;i++){
-            fiducialIDs[i]=this.rawfiducials.get()[0+(7*i)];
+            fiducialIDs[i]=(int) this.rawfiducials.get()[0+(7*i)];
         }
 
         return fiducialIDs;
@@ -223,7 +223,7 @@ public class Limelight {
         ArrayList<double[]> botPoses=new ArrayList<double[]>();
         this.resetCodeIDFilter();
 
-        double[] currentFiducials=this.getAllVisibleFiducialIDs();
+        int[] currentFiducials=this.getAllVisibleFiducialIDs();
         for(int i=0;i<currentFiducials.length;i++){
             this.setCodeIDFilter(currentFiducials[i]);
             botPoses.add(this.getBotPoseTargetSpace());
