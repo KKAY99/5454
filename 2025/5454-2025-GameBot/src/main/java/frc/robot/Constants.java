@@ -64,6 +64,7 @@ public final class Constants {
     public static final Pose2d[] fiducialRedRightPoses=new Pose2d[]{};
 
     public static final double lineUpDeadband=0.05;
+    public static final double maxWaitTime=5;
   }
   
   public static final class InputControllers {
@@ -157,6 +158,10 @@ public final class Constants {
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
+
+    public static final double autoScoreAlgaeSpeed=1;
+    public static final double autoScoreCoralSpeed=1;
+    public static final double autoTimeToRun=0.5;
   }
 
   public static final class ElevatorConstants{
@@ -166,7 +171,7 @@ public final class Constants {
     public static final double elevatorPK1=0.1;//0.25
     public static final double elevatorIK1=0;
     public static final double elevatorDK1=0;
-    public static final double elevatorMaxAndMinK1=0.90;
+    public static final double elevatorMaxAndMinK1=1;
 
     public static final double elevatorPK2=0.1;//0.25
     public static final double elevatorIK2=0;

@@ -91,11 +91,8 @@ public class RobotContainer {
   }
 
   public void configureNamedCommands() {
-    /*NamedCommands.registerCommand("PipelineCenterApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.centerApriltagPipeline));
-    NamedCommands.registerCommand("PipelineLeftApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.leftApriltagPipeline));
-    NamedCommands.registerCommand("PipelineRightApriltag",new PipelineSwapCommand(m_OdomLimelight,Constants.LimeLightValues.rightApriltagPipeline));
-    NamedCommands.registerCommand("ApriltagLineUp21",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,00,21,true));
-    NamedCommands.registerCommand("ApriltagLineUp19",new ApriltagLineupCommand(m_swerve,m_OdomLimelight,00,19,true));*/
+    NamedCommands.registerCommand("AutoScoreLeft",new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,false));
+    NamedCommands.registerCommand("AutoScoreRight",new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,true));
   }
 
   private void configureButtonBindings(){
@@ -145,18 +142,11 @@ public class RobotContainer {
     Trigger operatorLeftYJoystick = new Trigger(()->Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    SequentialCommandGroup seqScoreCommandManual=new SequentialCommandGroup(new ParallelCommandGroup(new ElevatorPosCommand(m_elevator,()->m_currentScoreLevel)),
-                                          new ElevatorAndRotateAtPos(m_elevator,m_dunkinDonut,()->m_currentScoreLevel),
-                                          new DunkinDonutCoralCommand(m_dunkinDonut,1,0.5),
-                                          new ElevatorPosCommand(m_elevator,()->ElevatorScoreLevel.RETRACT));
+    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,m_isRightLineup);
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
  
-    /*SequentialCommandGroup seqScoreCommandAuto = new SequentialCommandGroup(new OdomLineupCommand(m_OdomLimelight, m_swerve, m_isRightLineup),
-                                          new ParallelCommandGroup(new ElevatorPosCommand(m_elevator, ()-> m_currentScoreLevel)),
-                                          new ElevatorAndRotateAtPos(m_elevator, m_dunkinDonut, ()->m_currentScoreLevel),
-                                          new DunkinDonutCoralCommand(m_dunkinDonut, -1,1),
-                                          new ElevatorPosCommand(m_elevator, ()-> ElevatorScoreLevel.RETRACT));
+    /*SequentialCommandGroup seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,m_isRightLineup);
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator, ButtonBindings.lineUpButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
 

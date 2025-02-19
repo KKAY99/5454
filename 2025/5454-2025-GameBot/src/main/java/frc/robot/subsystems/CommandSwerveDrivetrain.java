@@ -300,8 +300,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      * @return Command to run
      */
     public Command applyRequestDrive(CommandXboxController driveController,int translationAxis,int strafeAxis,int rotationAxis) {
-        SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDeadband(TunerConstants.kMaxSpeed*0.1)
-            .withRotationalDeadband(TunerConstants.kMaxAngularSpeed*0.1);
+        SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDeadband((TunerConstants.kMaxSpeed*0.1)*m_gasPedalMult)
+            .withRotationalDeadband((TunerConstants.kMaxAngularSpeed*0.1)*m_gasPedalMult);
 
         return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
             .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)

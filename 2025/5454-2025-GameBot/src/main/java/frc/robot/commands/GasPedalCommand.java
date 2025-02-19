@@ -24,6 +24,6 @@ public class GasPedalCommand extends Command{
         double gasPedalValue=Math.abs(m_speed.getAsDouble()-(1-DriveConstants.MinGasPedalSpeed));
 
         m_swerve.setGasPedalMult(gasPedalValue);
-        return false;
+        return true;
     }
 }
