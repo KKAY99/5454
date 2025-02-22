@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +45,7 @@
     "rotation": 135.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Cycle Coral Right Start 3 Score",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

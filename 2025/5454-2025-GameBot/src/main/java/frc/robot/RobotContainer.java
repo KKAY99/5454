@@ -37,7 +37,6 @@ import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
-import frc.robot.Constants.LimeLightValues.LimelightLineUpOffsets;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 
 public class RobotContainer {
@@ -110,11 +109,11 @@ public class RobotContainer {
     ClimbRotateCommand rotateBwdCommand=new ClimbRotateCommand(m_climb,-1);
     m_xBoxDriver.b().whileTrue(rotateBwdCommand);
     
-    ToggleClimbPID testPID1=new ToggleClimbPID(m_climb,ClimbConstants.climbPos1);
+    /*ToggleClimbPID testPID1=new ToggleClimbPID(m_climb,ClimbConstants.climbPos1);
     m_xBoxDriver.leftBumper().onTrue(testPID1);
 
     ToggleClimbPID testPID2=new ToggleClimbPID(m_climb,ClimbConstants.climbPos2);
-    m_xBoxDriver.rightBumper().onTrue(testPID2);
+    m_xBoxDriver.rightBumper().onTrue(testPID2);*/
 
     //DunkinDonutCommands
     /*DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_dunkinDonut, () -> m_xBoxOperator.getRightX()*0.5);
@@ -125,7 +124,7 @@ public class RobotContainer {
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 0.75);
+    DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 0.20);
     JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIn.whileTrue(DunkinCoralCommandIn);
     
@@ -142,14 +141,13 @@ public class RobotContainer {
     Trigger operatorLeftYJoystick = new Trigger(()->Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,m_isRightLineup);
+    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,false);
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
  
     /*SequentialCommandGroup seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,m_isRightLineup);
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator, ButtonBindings.lineUpButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
-
 
     //Lineup
     OdomLineupCommand odomLineupCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,m_isRightLineup);

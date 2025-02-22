@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.558,
-        "y": 4.059900568181818
+        "x": 7.3490625,
+        "y": 5.336264204545455
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.630642045454543,
-        "y": 4.069872159090909
+        "x": 6.421704545454543,
+        "y": 5.346235795454546
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.27,
-        "y": 4.18
+        "x": 4.724,
+        "y": 4.756
       },
       "prevControl": {
-        "x": 5.9480795454545445,
-        "y": 4.160056818181818
+        "x": 5.402079545454545,
+        "y": 4.736056818181819
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Cycle Coral Right Start 3 Score",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

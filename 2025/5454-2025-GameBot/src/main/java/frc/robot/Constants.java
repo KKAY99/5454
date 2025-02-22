@@ -186,7 +186,7 @@ public final class Constants {
     public static final double l1Pos=-13;
     public static final double l2Pos=-26;
     public static final double l3Pos=-53;
-    public static final double l4Pos=-96;
+    public static final double l4Pos=-99.5;
 
     public static final double aboveTroughPos=-20;
 
@@ -201,15 +201,15 @@ public final class Constants {
 
     public static final double climbP=0.2;
     public static final double climbI=0;//DONT USE
-    public static final double climbD=0.1;
+    public static final double climbD=0;
     public static final double climbMaxAndMin=1;
     public static final double climbInputGain=100;
 
-    public static final double climbPos1=0.70;
-    public static final double climbPos2=0.96;
+    public static final double climbPos1=0.28;
+    public static final double climbPos2=0.49;
 
-    public static final double climbLimitLow=0.70;
-    public static final double climbLimitHigh=0.96;
+    public static final double climbLimitLow=0.17;
+    public static final double climbLimitHigh=0.49;
   }
 
   public static final class CoolPanelConstants{

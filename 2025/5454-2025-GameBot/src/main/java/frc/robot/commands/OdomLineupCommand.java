@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.FlippingUtil;
 
@@ -34,6 +35,7 @@ public class OdomLineupCommand extends Command{
         AutoPlanner autoPlan=new AutoPlanner();
 
         if(m_limeLight.isAnyTargetAvailable()){
+            //System.out.println("CURRENT TARGET ID"+m_limeLight.getAllVisibleFiducialIDs()[0]);
             try{
                 if(DriverStation.getAlliance().get()==Alliance.Blue){
                     m_limeLight.setCodeIDFilter(17,18,19,20,21,22);
@@ -60,11 +62,15 @@ public class OdomLineupCommand extends Command{
                 Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(m_swerve.getPose2d(),m_target));
                 CommandScheduler.getInstance().schedule(newCommand);
             }catch(Exception e){}
+        }else{
+            System.out.println("NO TARGET");
         }
     }
 
     @Override
-    public void end(boolean interrupted){}
+    public void end(boolean interrupted){
+        m_swerve.drive(0,0,0);
+    }
 
     @Override
     public boolean isFinished(){

@@ -35,22 +35,37 @@ public class AutoScoreCommand extends Command{
     private double m_startTime;
 
     private boolean m_isRightLineup;
-    private boolean m_isManual=false;
+    private boolean m_isManual = false;
+    private boolean m_doAlgae = false;
     
     private enum States{
-        CHECKFORTARGET,PRESCOREELEV,LINEUP,WAITFORLINEUP,ALGAE,ELEVATOR,WAITFORELEVATOR,CORAL,RETRACT,END
+        CHECKFORTARGET,PRESCOREELEV,LINEUP,WAITFORLINEUP,ALGAE,ELEVATOR,WAITFORELEVATOR,CORAL,RETRACT,WAITFORRETRACT,END
     }
 
     private States m_currentState=States.CHECKFORTARGET;
 
-    public AutoScoreCommand(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<ElevatorScoreLevel> scorelevel,boolean isRightLineup){
+    public AutoScoreCommand(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<ElevatorScoreLevel> scorelevel){
         m_elevator=elevator;
         m_dunkin=dunkin;
         m_limeLight=limeLight;
 
         m_scoreLevel=scorelevel;
-        m_isRightLineup=isRightLineup;
-        m_isManual=true;
+        m_isRightLineup=true;
+        m_isManual = true;
+        m_doAlgae = false;
+
+        addRequirements(m_elevator,m_dunkin);
+    }
+
+    public AutoScoreCommand(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<ElevatorScoreLevel> scorelevel,boolean doesAlgea){
+        m_elevator=elevator;
+        m_dunkin=dunkin;
+        m_limeLight=limeLight;
+
+        m_scoreLevel=scorelevel;
+        m_doAlgae = doesAlgea;
+        m_isRightLineup=true;
+        m_isManual = true;
 
         addRequirements(m_elevator,m_dunkin);
     }
@@ -64,6 +79,23 @@ public class AutoScoreCommand extends Command{
 
         m_scoreLevel=scorelevel;
         m_isRightLineup=isRightLineup;
+        m_isManual=false;
+        m_doAlgae = false;
+
+        addRequirements(m_swerve,m_elevator,m_dunkin);
+    }
+
+    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<ElevatorScoreLevel> scorelevel,
+                            boolean isRightLineup,boolean doesAlgea){
+        m_swerve=swerve;
+        m_elevator=elevator;
+        m_dunkin=dunkin;
+        m_limeLight=limeLight;
+
+        m_scoreLevel=scorelevel;
+        m_isRightLineup=isRightLineup;
+        m_doAlgae = doesAlgea;
+        m_isManual=false;
 
         addRequirements(m_swerve,m_elevator,m_dunkin);
     }
@@ -107,7 +139,11 @@ public class AutoScoreCommand extends Command{
         switch(m_currentState){
         case CHECKFORTARGET:     
             if(m_isManual){
-                m_currentState=States.ALGAE;
+                if(m_doAlgae){
+                    m_currentState=States.ALGAE;
+                }else{
+                    m_currentState=States.ELEVATOR;
+                }
             }else{
                 if(m_limeLight.isAnyTargetAvailable()){
                     m_currentState=States.PRESCOREELEV;
@@ -152,6 +188,7 @@ public class AutoScoreCommand extends Command{
 
                     m_currentState=States.WAITFORLINEUP;
                 }catch(Exception e){
+                    m_swerve.drive(0,0,0);
                     m_currentState=States.END;
                 }
             }else{
@@ -181,12 +218,15 @@ public class AutoScoreCommand extends Command{
         case ELEVATOR:
             m_elevator.set_referance(m_elevatorFPos);
 
+            System.out.println("ELEVATOR SET REF");
             m_currentState=States.WAITFORELEVATOR;
         break;
         case WAITFORELEVATOR:
             double elevatorPos=m_elevator.getRelativePos();
 
-            if(m_elevator.getRelativePos()>elevatorPos-ElevatorConstants.posDeadband&&m_elevator.getRelativePos()<elevatorPos+ElevatorConstants.posDeadband){
+            if(elevatorPos>m_elevatorFPos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorFPos+ElevatorConstants.posDeadband){
+                System.out.println("ELEVATOR IS AT POS");
+
                 m_startTime=Timer.getFPGATimestamp();
                 m_currentState=States.CORAL;
             }
@@ -195,14 +235,26 @@ public class AutoScoreCommand extends Command{
             m_dunkin.runCoralMotor(DunkinDonutConstants.autoScoreCoralSpeed);
 
             if(DunkinDonutConstants.autoTimeToRun+m_startTime<Timer.getFPGATimestamp()){
+                System.out.println("CORAL FINISHED");
+
                 m_dunkin.stopCoralMotor();
                 m_currentState=States.RETRACT;
             }
         break;
         case RETRACT:
             m_elevator.set_referance(ElevatorConstants.elevatorLowLimit);
+            System.out.println("ELEVATOR RETRACT");
+
+            m_currentState=States.WAITFORRETRACT;
+        break;
+        case WAITFORRETRACT:
+        elevatorPos=m_elevator.getRelativePos();
+
+        if(elevatorPos>ElevatorConstants.elevatorLowLimit-ElevatorConstants.posDeadband&&ElevatorConstants.elevatorLowLimit<elevatorPos+ElevatorConstants.posDeadband){
+            System.out.println("ELEVATOR IS AT POS");
 
             m_currentState=States.END;
+        }
         break;
         case END:
             returnValue=true;

@@ -2,10 +2,13 @@
   "robotWidth": 0.0,
   "robotLength": 0.0,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Cycle Coral Right Start 3 Score",
+    "Cycle Coral Left Start 3 Score"
+  ],
   "autoFolders": [],
-  "defaultMaxVel": 2.5,
-  "defaultMaxAccel": 2.5,
+  "defaultMaxVel": 2.0,
+  "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
