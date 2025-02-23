@@ -51,13 +51,13 @@ public class RobotContainer {
 
   //DunkinSubsystem
   private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID1,DunkinDonutConstants.algaeCanID2,
-                                                                        DunkinDonutConstants.rotateCanID,DunkinDonutConstants.canCoderID);
+                                                                        DunkinDonutConstants.rotateCanID,DunkinDonutConstants.canCoderID,DunkinDonutConstants.limitSwitchDIO,DunkinDonutConstants.coralIndexerID);
   
   //ElevatorSubsystem
   private ElevatorSubsystem m_elevator = new ElevatorSubsystem(ElevatorConstants.elevatorCanID,ElevatorConstants.canAndColorID);
 
   //ClimbSubsystem
-  private ClimbSubsystem m_climb=new ClimbSubsystem(ClimbConstants.climbCanID,ClimbConstants.encoderDIO);
+  private ClimbSubsystem m_climb=new ClimbSubsystem(ClimbConstants.climbCanID1,ClimbConstants.climbCanID2,ClimbConstants.encoderDIO);
 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightBackOdomHeight,Constants.LimeLightValues.limelightBackOdomAngle,
@@ -103,10 +103,10 @@ public class RobotContainer {
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
     //Climb
-    ClimbRotateCommand rotateFwdCommand=new ClimbRotateCommand(m_climb,1);
+    ClimbRotateCommand rotateFwdCommand=new ClimbRotateCommand(m_climb,0.5);
     m_xBoxDriver.a().whileTrue(rotateFwdCommand);
 
-    ClimbRotateCommand rotateBwdCommand=new ClimbRotateCommand(m_climb,-1);
+    ClimbRotateCommand rotateBwdCommand=new ClimbRotateCommand(m_climb,-0.5);
     m_xBoxDriver.b().whileTrue(rotateBwdCommand);
     
     /*ToggleClimbPID testPID1=new ToggleClimbPID(m_climb,ClimbConstants.climbPos1);
@@ -120,14 +120,18 @@ public class RobotContainer {
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);*/
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.75);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.75, false, true, -0.5);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIn = new DunkinDonutCoralCommand(m_dunkinDonut, 0.20);
-    JoystickButton operatorDunkinCoralButtonIn = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
-    operatorDunkinCoralButtonIn.whileTrue(DunkinCoralCommandIn);
+    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, 0.20, true, true, 0.5);
+    JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
+    operatorDunkinCoralButtonIntake.whileTrue(DunkinCoralCommandIntake);
+
+    //will need a spreate DunkinCoralCommand for scoring
     
+
+
     /*DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1,false); 
     JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator,2);
     operatorDunkinAlgeaShootButton.whileTrue(DunkinAlgeaShootCommand);

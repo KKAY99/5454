@@ -2,27 +2,55 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import frc.robot.utilities.ObsidianPID;
 
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
+import com.revrobotics.servohub.ServoHub.ResetMode;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkFlexExternalEncoder;
+
+
 public class ClimbSubsystem extends SubsystemBase {
-  private ObsidianCANSparkMax m_motor;
+  private ObsidianCANSparkMax m_leaderMotor;
+  private ObsidianCANSparkMax m_followerMotor;
+
   private DutyCycleEncoder m_encoder;
 
   private ObsidianPID m_obsidianPID;
 
   private double m_setPoint;
 
-  public ClimbSubsystem(int CanID,int encoderDIO){
-    m_motor = new ObsidianCANSparkMax(CanID,MotorType.kBrushed,true,80);
+
+
+  public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO){
+    m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,80);
+    m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,80);
+    
+    /*
+    SparkMaxConfig followconfig = new SparkMaxConfig();
+    followconfig
+      .follow(CanID1)
+      .inverted(true)
+      .limitSwitch.reverseLimitSwitchEnabled(false).forwardLimitSwitchEnabled(false);
+
+
+    m_followerMotor.configure(followconfig, null, PersistMode.kPersistParameters); */
+
     m_encoder=new DutyCycleEncoder(encoderDIO);
 
     m_obsidianPID=new ObsidianPID(ClimbConstants.climbP,ClimbConstants.climbI,ClimbConstants.climbD,
                                   ClimbConstants.climbMaxAndMin,-ClimbConstants.climbMaxAndMin);
     m_obsidianPID.setInputGain(ClimbConstants.climbInputGain);
+
+
+
   }
 
   public double getAbsoluteEncoderPos(){
@@ -45,7 +73,8 @@ public class ClimbSubsystem extends SubsystemBase {
   public boolean checkCANConnections(){
     boolean returnValue=true;
     try{
-      m_motor.getDeviceId();
+      m_leaderMotor.getDeviceId();
+      m_followerMotor.getDeviceId();
       m_encoder.get();
     }catch(Exception e){
       returnValue=false;
@@ -62,8 +91,8 @@ public class ClimbSubsystem extends SubsystemBase {
         System.out.println("AT LIMIT HIGH ROTATE");
         stop();
       }
-    }else{
-      if(getAbsoluteEncoderPos()>ClimbConstants.climbLimitLow){
+  }else{
+       if(getAbsoluteEncoderPos()>ClimbConstants.climbLimitLow){
         run(speed);
       }else{
         System.out.println("AT LIMIT LOW ROTATE");
@@ -73,11 +102,14 @@ public class ClimbSubsystem extends SubsystemBase {
   }
 
   public void run(double speed){
-    m_motor.set(speed);
+    m_leaderMotor.set(speed);
+    m_followerMotor.set(speed);
+    
   }
 
   public void stop(){
-    m_motor.stopMotor();
+    m_leaderMotor.stopMotor();
+    m_followerMotor.stopMotor();
   }
 
   @Override
@@ -85,7 +117,8 @@ public class ClimbSubsystem extends SubsystemBase {
     if(m_obsidianPID.getToggle()){
       double pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
       System.out.println(pidOutput);
-      m_motor.set(pidOutput);
+      m_leaderMotor.set(pidOutput);
+      m_followerMotor.set(pidOutput);
     }
   }
 }

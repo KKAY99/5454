@@ -131,10 +131,12 @@ public final class Constants {
   }
 
   public static final class DunkinDonutConstants{
+    public static final int coralIndexerID = 27;
+    public static final int limitSwitchDIO = 3;
     public static final int canCoderID = 59;
     public static final int coralCanID = 23;
     public static final int algaeCanID1 = 25;
-    public static final int algaeCanID2 = 27;
+    public static final int algaeCanID2 = 60;
     public static final int rotateCanID = 24;
 
     public static final double posDeadband=1.2;
@@ -161,7 +163,7 @@ public final class Constants {
 
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=1;
-    public static final double autoTimeToRun=0.5;
+    public static final double autoTimeToRun=1;
   }
 
   public static final class ElevatorConstants{
@@ -184,7 +186,7 @@ public final class Constants {
     public static final double posDeadband=1.2;
 
     public static final double l1Pos=-13;
-    public static final double l2Pos=-26;
+    public static final double l2Pos=-26; //24
     public static final double l3Pos=-53;
     public static final double l4Pos=-99.5;
 
@@ -196,7 +198,8 @@ public final class Constants {
   }
 
   public static final class ClimbConstants{
-    public static final int climbCanID=26;
+    public static final int climbCanID1=26;
+    public static final int climbCanID2=20;
     public static final int encoderDIO=2;
 
     public static final double climbP=0.2;
@@ -208,7 +211,7 @@ public final class Constants {
     public static final double climbPos1=0.28;
     public static final double climbPos2=0.49;
 
-    public static final double climbLimitLow=0.17;
+    public static final double climbLimitLow=0.0; // was 0.17 
     public static final double climbLimitHigh=0.49;
   }
 
@@ -235,7 +238,7 @@ public final class Constants {
   }
 
   public static final class ButtonBindings{
-    public static final int dunkinCoralOutakeButton=2; //a
+    public static final int dunkinCoralOutakeButton=2; 
     public static final int dunkinCoralIntakeButton=4;
     public static final int lineUpButton=5;
     public static final int elevatorScoreLevelButton=6;
