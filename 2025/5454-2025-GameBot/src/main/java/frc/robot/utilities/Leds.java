@@ -62,6 +62,9 @@ public class Leds {
                 break;
             
             case SCORED:
+                setAnimationState(AnimationStates.LARSON);
+
+            case ATHUMANPLAYER:
                 break;
             
         }

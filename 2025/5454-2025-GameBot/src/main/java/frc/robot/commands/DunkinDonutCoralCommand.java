@@ -11,7 +11,7 @@ import frc.robot.subsystems.DunkinDonutSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DunkinDonutCoralCommand extends Command {
   private DunkinDonutSubsystem m_dunkin;
-  private double m_speed;
+  private double m_coralSpeed;
   private double m_timeToRun;
   private double m_startTime;
   private boolean m_uselimit;
@@ -19,32 +19,32 @@ public class DunkinDonutCoralCommand extends Command {
   private double m_indxerspeed;
 
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double speed) {
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralSpeed) {
     m_dunkin = dunkin;
     addRequirements(m_dunkin);
-    m_speed = speed;
+    m_coralSpeed = coralSpeed;
     m_timeToRun=0;
     m_uselimit = false;
     m_useIndexer = false;
     m_indxerspeed = 0;
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double speed,double timeToRun) {
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralSpeed,double timeToRun) {
     m_dunkin = dunkin;
-    m_speed = speed;
+    m_coralSpeed = coralSpeed;
     m_timeToRun=timeToRun;
     m_uselimit = false;
     m_useIndexer = false;
     m_indxerspeed = 0;
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double speed,boolean useLimit, boolean useIndexer, double indexerspeed){
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralSpeed,boolean useLimit, boolean useIndexer, double indexerSpeed){
     m_dunkin = dunkin;
-    m_speed = speed;
+    m_coralSpeed = coralSpeed;
     m_timeToRun=0;
     m_uselimit = useLimit;
     m_useIndexer = useIndexer;
-    m_indxerspeed = indexerspeed;
+    m_indxerspeed = indexerSpeed;
 
   }
 
@@ -57,7 +57,7 @@ public class DunkinDonutCoralCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_dunkin.runCoralMotor(m_speed);
+      m_dunkin.runCoralMotor(m_coralSpeed);
       if(m_useIndexer){
         m_dunkin.runIndexer(m_indxerspeed);
     }
@@ -76,9 +76,9 @@ public class DunkinDonutCoralCommand extends Command {
     boolean returnValue=false;
     if(m_uselimit){
       if(!m_dunkin.isCoralAtLimit()){//for some reason its inverted
-        System.out.println("limit hit");
+        m_dunkin.stopCoralMotor();
         m_dunkin.stopIndexer();
-        m_dunkin.runCoralWithEncoder(0.9, 0.10);
+        m_dunkin.runCoralWithEncoder(0.9, 0.05);
         returnValue=true;
     }
     }else{

@@ -35,7 +35,7 @@ public class OdomLineupCommand extends Command{
         AutoPlanner autoPlan=new AutoPlanner();
 
         if(m_limeLight.isAnyTargetAvailable()){
-            //System.out.println("CURRENT TARGET ID"+m_limeLight.getAllVisibleFiducialIDs()[0]);
+            System.out.println("CURRENT TARGET ID"+m_limeLight.getAllVisibleFiducialIDs()[0]);
             try{
                 if(DriverStation.getAlliance().get()==Alliance.Blue){
                     m_limeLight.setCodeIDFilter(17,18,19,20,21,22);
@@ -58,7 +58,7 @@ public class OdomLineupCommand extends Command{
                         m_target=new Pose2d(flippedPoint.getX(),flippedPoint.getY(),m_target.getRotation());
                     }
                 } 
-        
+                System.out.println("Moving to "+ m_target.toString());
                 Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(m_swerve.getPose2d(),m_target));
                 CommandScheduler.getInstance().schedule(newCommand);
             }catch(Exception e){}

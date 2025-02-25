@@ -74,16 +74,16 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   public void runCoralWithEncoder(double ticks, double speed){
     double currentPos = m_coralRelative.getPosition();
     double targetpos = currentPos + ticks;
-    boolean returnvalue = false;
+    boolean finshed = false;
 
-    while (!returnvalue){
+    while (!finshed){
       if(m_coralRelative.getPosition()<targetpos){
-        System.out.println("less than");
+        //System.out.println("less than");
         m_coralMotor.set(speed);
       }else if(m_coralRelative.getPosition()>targetpos){
-        System.out.println("greater than or = to");
+        //System.out.println("greater than or = to");
         m_coralMotor.stopMotor();
-        returnvalue = true;
+        finshed = true;
       }
     }
 

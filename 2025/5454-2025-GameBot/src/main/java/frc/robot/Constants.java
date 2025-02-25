@@ -136,7 +136,7 @@ public final class Constants {
     public static final int canCoderID = 59;
     public static final int coralCanID = 23;
     public static final int algaeCanID1 = 25;
-    public static final int algaeCanID2 = 60;
+    public static final int algaeCanID2 = 60; //place holder ID
     public static final int rotateCanID = 24;
 
     public static final double posDeadband=1.2;
@@ -186,9 +186,9 @@ public final class Constants {
     public static final double posDeadband=1.2;
 
     public static final double l1Pos=-13;
-    public static final double l2Pos=-26; //24
+    public static final double l2Pos=-20; //26
     public static final double l3Pos=-53;
-    public static final double l4Pos=-99.5;
+    public static final double l4Pos=-90; //99.5
 
     public static final double aboveTroughPos=-20;
 
@@ -226,7 +226,7 @@ public final class Constants {
   }
 
   public static enum LEDStates{
-      TELEOP, DISABLED, HASCORAL, HASALGEA, LINEDUP, SCORED
+      TELEOP, DISABLED, HASCORAL, HASALGEA, LINEDUP, SCORED, ATHUMANPLAYER
   }
 
   public static enum ColorStates{

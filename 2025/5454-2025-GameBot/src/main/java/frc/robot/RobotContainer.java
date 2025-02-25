@@ -103,7 +103,7 @@ public class RobotContainer {
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
     //Climb
-    ClimbRotateCommand rotateFwdCommand=new ClimbRotateCommand(m_climb,0.5);
+    ClimbRotateCommand rotateFwdCommand=new ClimbRotateCommand(m_climb,0.8); //0.5 was to strong and bent the shaft...so we decided to up the power XD
     m_xBoxDriver.a().whileTrue(rotateFwdCommand);
 
     ClimbRotateCommand rotateBwdCommand=new ClimbRotateCommand(m_climb,-0.5);
@@ -120,7 +120,7 @@ public class RobotContainer {
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);*/
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.75, false, true, -0.5);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.75, false, true, -0.25);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
