@@ -171,12 +171,12 @@ public final class Constants {
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorPK1=0.1;//0.25
+    public static final double elevatorPK1=0.05;//0.25
     public static final double elevatorIK1=0;
     public static final double elevatorDK1=0;
     public static final double elevatorMaxAndMinK1=1;
 
-    public static final double elevatorPK2=0.1;//0.25
+    public static final double elevatorPK2=0.05;//0.25
     public static final double elevatorIK2=0;
     public static final double elevatorDK2=0;
     public static final double elevatorMaxAndMinK2=0.50;
