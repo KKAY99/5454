@@ -161,15 +161,8 @@ public class Limelight {
         return returnArray;
     }
 
-    public int[] getAllVisibleFiducialIDs(){
-        int numOfFiducials=rawfiducials.get().length/7;
-        int[] fiducialIDs=new int[]{};
-
-        for(int i=0;i<numOfFiducials;i++){
-            fiducialIDs[i]=(int) this.rawfiducials.get()[0+(7*i)];
-        }
-
-        return fiducialIDs;
+    public int getFirstVisibleFiducialID(){
+        return (int) this.rawfiducials.get()[0];
     }
 
     public void setPipeline(int pipelineNum){
@@ -218,12 +211,13 @@ public class Limelight {
                 this.botpose_targetspace.get():new double[]{};
     }
 
+    //WONT WORK
     public ArrayList<double[]> getBotPoseInAllTargetSpaces(){
-        double[] previousFilters=this.fiducial_id_filters_set.get();
+      /* double[] previousFilters=this.fiducial_id_filters_set.get();
         ArrayList<double[]> botPoses=new ArrayList<double[]>();
         this.resetCodeIDFilter();
 
-        int[] currentFiducials=this.getAllVisibleFiducialIDs();
+        int[] currentFiducials=this.getFirstVisibleFiducialID();
         for(int i=0;i<currentFiducials.length;i++){
             this.setCodeIDFilter(currentFiducials[i]);
             botPoses.add(this.getBotPoseTargetSpace());
@@ -233,7 +227,8 @@ public class Limelight {
             this.setCodeIDFilter(previousFilters);
         }
         
-        return botPoses;
+        return botPoses;*/
+        return null;
     }
 
     public Pose2d findGlobalPoseFromTargetPoseRobotSpace(double gyroAngle,LimeLightValues.LimelightLineUpOffsets offsetState){

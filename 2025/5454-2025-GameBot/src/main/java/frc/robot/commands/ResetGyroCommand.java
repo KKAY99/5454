@@ -12,6 +12,7 @@ public class ResetGyroCommand extends Command{
 
     @Override
     public void initialize() {
+        System.out.println("RESET GYRO");
         m_swerve.getPigeon2().reset();
     }
 

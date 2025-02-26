@@ -163,7 +163,7 @@ public class AutoScoreCommand extends Command{
                 try{
                     if(DriverStation.getAlliance().get()==Alliance.Blue){
                         m_limeLight.setCodeIDFilter(17,18,19,20,21,22);
-                        int currentFiducial=m_limeLight.getAllVisibleFiducialIDs()[0];
+                        int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
                         if(m_isRightLineup){
                             m_odomTarget=LineupConstants.fiducialBlueRightPoses[currentFiducial-17]; 
                         }else{
@@ -171,7 +171,7 @@ public class AutoScoreCommand extends Command{
                         }
                     }else{
                         m_limeLight.setCodeIDFilter(6,7,8,9,10,11);
-                        int currentFiducial=m_limeLight.getAllVisibleFiducialIDs()[0];
+                        int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
                         if(m_isRightLineup){
                             m_odomTarget=LineupConstants.fiducialBlueRightPoses[currentFiducial-6]; 
                             Translation2d flippedPoint=FlippingUtil.flipFieldPosition(m_odomTarget.getTranslation());

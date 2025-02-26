@@ -51,7 +51,7 @@ public class RobotContainer {
 
   //DunkinSubsystem
   private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID1,DunkinDonutConstants.algaeCanID2,
-                                                                        DunkinDonutConstants.rotateCanID,DunkinDonutConstants.canCoderID,DunkinDonutConstants.limitSwitchDIO,DunkinDonutConstants.coralIndexerID);
+                                                                        DunkinDonutConstants.rotateCanID,DunkinDonutConstants.canCoderID,DunkinDonutConstants.limitSwitchDIO,DunkinDonutConstants.coralIndexerID,DunkinDonutConstants.indexerLimitSwitchDIO);
   
   //ElevatorSubsystem
   private ElevatorSubsystem m_elevator = new ElevatorSubsystem(ElevatorConstants.elevatorCanID,ElevatorConstants.canAndColorID);
@@ -124,9 +124,9 @@ public class RobotContainer {
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, 0.20, true, true, 0.5);
+    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, 0.20, true, true, 0.5, 0.25);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
-    operatorDunkinCoralButtonIntake.whileTrue(DunkinCoralCommandIntake);
+    operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
 
     //will need a spreate DunkinCoralCommand for scoring
     
@@ -192,6 +192,9 @@ public class RobotContainer {
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
     SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
     SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
+    try{
+      SmartDashboard.putNumber("Current Target Fiducial",m_OdomLimelight.getFirstVisibleFiducialID());
+    }catch(Exception e){}
   }
   
   private void createAutonomousCommandList(){
@@ -245,6 +248,7 @@ public class RobotContainer {
 
   public void TeleopMode(){
     homeRobot();
+    m_OdomLimelight.setCodeIDFilter(17,18,19,20,21,22);
     m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   }
 

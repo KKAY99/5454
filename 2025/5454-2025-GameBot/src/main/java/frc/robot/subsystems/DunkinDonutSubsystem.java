@@ -34,7 +34,9 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private RelativeEncoder m_rotateRelative;
   private RelativeEncoder m_coralRelative;
 
-  private DigitalInput m_limitSwitch;
+  private DigitalInput m_coralLimitSwitch;
+  private DigitalInput m_indexerLimitSwitch;
+
 
   private double m_rotateSpeed=0;
   private double m_coralSpeed=0;
@@ -47,7 +49,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private boolean m_algaeToggle=false;
   private boolean m_shouldRunPID=false;
   
-  public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int algaeCanID2,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID) {
+  public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int algaeCanID2,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID, int indexerLimitSwitchID) {
     m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, 80, 0.1,0,0);
     m_algaeMotor1= new ObsidianCANSparkMax(algaeCanID1, MotorType.kBrushless, true);
     m_algaeMotor2= new ObsidianCANSparkMax(algaeCanID2, MotorType.kBrushless, true);
@@ -61,7 +63,8 @@ public class DunkinDonutSubsystem extends SubsystemBase {
                                   DunkinDonutConstants.localPIDMaxAndMin,-DunkinDonutConstants.localPIDMaxAndMin);
     m_codeBoundPID=new PIDController(DunkinDonutConstants.localPIDkP,DunkinDonutConstants.localPIDkI,DunkinDonutConstants.localPIDkD);
 
-    m_limitSwitch = new DigitalInput(limitSwitch);
+    m_coralLimitSwitch = new DigitalInput(limitSwitch);
+    m_indexerLimitSwitch = new DigitalInput(indexerLimitSwitchID);
 
     m_loopController = m_coralMotor.getClosedLoopController();
     
@@ -76,7 +79,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     double targetpos = currentPos + ticks;
     boolean finshed = false;
 
-    while (!finshed){
+    while(!finshed){
       if(m_coralRelative.getPosition()<targetpos){
         //System.out.println("less than");
         m_coralMotor.set(speed);
@@ -115,9 +118,18 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_coralIndexer.stopMotor();
   }
 
-  public boolean isCoralAtLimit(){
-    if(m_limitSwitch!=null){
-      return m_limitSwitch.get();
+  public boolean isCoralAtIndexerLimit(){
+    if(m_indexerLimitSwitch!=null){
+      System.out.println("Indexer limit"+ m_indexerLimitSwitch.get());
+      return m_indexerLimitSwitch.get();
+    }else{
+      return false;
+    }
+  }
+
+  public boolean isCoralAtBoxLimit(){
+    if(m_coralLimitSwitch!=null){
+      return m_coralLimitSwitch.get()?false:true;
     }else{
       return false;
     }
@@ -218,6 +230,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   // This method will be called once per scheduler run
+    //System.out.println(isCoralAtBoxLimit());
     Logger.recordOutput("Dunkin/RotateSpeed", m_rotateSpeed);
     Logger.recordOutput("Dunkin/CoralSpeed", m_coralSpeed);
     Logger.recordOutput("Dunkin/AlgeaSpeed",m_algaeSpeed);

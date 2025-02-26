@@ -35,11 +35,11 @@ public class OdomLineupCommand extends Command{
         AutoPlanner autoPlan=new AutoPlanner();
 
         if(m_limeLight.isAnyTargetAvailable()){
-            System.out.println("CURRENT TARGET ID"+m_limeLight.getAllVisibleFiducialIDs()[0]);
             try{
                 if(DriverStation.getAlliance().get()==Alliance.Blue){
                     m_limeLight.setCodeIDFilter(17,18,19,20,21,22);
-                    int currentFiducial=m_limeLight.getAllVisibleFiducialIDs()[0];
+                    int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
+                    System.out.println("CURRENT TARGET ID"+m_limeLight.getFirstVisibleFiducialID());
                     if(m_isRightLineup){
                         m_target=LineupConstants.fiducialBlueRightPoses[currentFiducial-17]; 
                     }else{
@@ -47,7 +47,8 @@ public class OdomLineupCommand extends Command{
                     }
                 }else{
                     m_limeLight.setCodeIDFilter(6,7,8,9,10,11);
-                    int currentFiducial=m_limeLight.getAllVisibleFiducialIDs()[0];
+                    int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
+                    System.out.println("CURRENT TARGET ID"+m_limeLight.getFirstVisibleFiducialID());
                     if(m_isRightLineup){
                         m_target=LineupConstants.fiducialBlueRightPoses[currentFiducial-6]; 
                         Translation2d flippedPoint=FlippingUtil.flipFieldPosition(m_target.getTranslation());

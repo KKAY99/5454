@@ -131,6 +131,7 @@ public final class Constants {
   }
 
   public static final class DunkinDonutConstants{
+    public static final int indexerLimitSwitchDIO = 4;
     public static final int coralIndexerID = 27;
     public static final int limitSwitchDIO = 3;
     public static final int canCoderID = 59;
