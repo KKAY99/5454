@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.TriggerEvent;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
@@ -38,6 +39,7 @@ import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
+
 
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -76,6 +78,7 @@ public class RobotContainer {
   public double m_P;
   public double m_I;
   public double m_D;
+  public double m_elevatorPos;
 
   public boolean hasHomed=false;
   public boolean m_isRightLineup=false;
@@ -124,7 +127,7 @@ public class RobotContainer {
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, 0.20, true, true, 0.5, 0.25);
+    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, 0.7, true, true, 0.5, 0.25);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
 
@@ -145,16 +148,18 @@ public class RobotContainer {
     Trigger operatorLeftYJoystick = new Trigger(()->Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,false);
+    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel, false);
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
+
+    
  
     /*SequentialCommandGroup seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,m_isRightLineup);
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator, ButtonBindings.lineUpButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
 
     //Lineup
-    OdomLineupCommand odomLineupCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,m_isRightLineup);
+    OdomLineupCommand odomLineupCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,()->m_isRightLineup);
     JoystickButton odomLineupButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpButton);
     odomLineupButton.onTrue(odomLineupCommand);
   }
@@ -192,6 +197,9 @@ public class RobotContainer {
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
     SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
     SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
+    SmartDashboard.putBoolean("Lineup pos",m_isRightLineup);
+    SmartDashboard.putNumber("Current X",m_swerve.getPose2d().getX());
+    SmartDashboard.putNumber("Current Y",m_swerve.getPose2d().getY());
     try{
       SmartDashboard.putNumber("Current Target Fiducial",m_OdomLimelight.getFirstVisibleFiducialID());
     }catch(Exception e){}
@@ -202,12 +210,17 @@ public class RobotContainer {
       SmartDashboard.putNumber("P",m_P);
       SmartDashboard.putNumber("I",m_I);
       SmartDashboard.putNumber("D",m_D);
+      SmartDashboard.putNumber("Elevator pos",m_elevatorPos);
 
       SmartDashboard.putData("Auto Chooser",m_autoChooser);
 
     }catch(Exception e){
       System.out.println("Create Autos Failed, Exception: " + e.getMessage());
     }
+  }
+
+  public void GetElevatorPos(){
+    m_elevatorPos=SmartDashboard.getNumber("Elevator pos", 0);
   }
 
   public void GetPIDValues(){
@@ -243,13 +256,10 @@ public class RobotContainer {
   }
 
   public void AutonMode(){
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   }
 
   public void TeleopMode(){
     homeRobot();
-    m_OdomLimelight.setCodeIDFilter(17,18,19,20,21,22);
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   }
 
   public void TeleopPeriodic(){
@@ -261,10 +271,12 @@ public class RobotContainer {
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
 
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
+      System.out.println("Limelight Pose"+m_OdomLimelight.GetPoseViaMegatag2());
       double currentTimeStamp=Timer.getFPGATimestamp();
       m_OdomLimelight.TrimPoseArray(3);
 
-      if(m_OdomLimelight.getDerivationConfidence(m_swerve,3,currentPose,currentTimeStamp)){
+      System.out.println(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp));
+      if(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp)){
         m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
       }
     }

@@ -211,7 +211,10 @@ public class Limelight {
                 this.botpose_targetspace.get():new double[]{};
     }
 
-    //WONT WORK
+    /**
+     * DOES NOT WORK
+     * WILL RETURN NULL
+    */
     public ArrayList<double[]> getBotPoseInAllTargetSpaces(){
       /* double[] previousFilters=this.fiducial_id_filters_set.get();
         ArrayList<double[]> botPoses=new ArrayList<double[]>();
@@ -334,7 +337,12 @@ public class Limelight {
         return check?m_lastConfidenceVals:new double[] {};
     }
 
-    //OLD DO NOT USE!!
+    /**
+     * Old Confidence Algorithm (DO NOT USE)
+     * @param posesToAverage Number of poses to average, used to get a consistent grouping
+     * @param currentVisionPose Vision pose to get confidence of
+     * @return boolean: Whether or not to use inputted pose
+     */
     public boolean getConfidence(int posesToAverage,Pose2d currentVisionPose){
         boolean returnValue=false;
         ArrayList<Double> diffMeans=new ArrayList<>();
@@ -381,7 +389,14 @@ public class Limelight {
         return returnValue;
     }
 
-    public boolean getDerivationConfidence(CommandSwerveDrivetrain swerve,int posesToAverage,Pose2d currentVisionPose,double currentTimeStamp){
+    /** 
+     * Derives the future pose of the robot using the swerves speed
+     * @param swerve Swerve subsystem
+     * @param currentVisionPose Vision pose to get confidence of
+     * @param currentTimeStamp Current robot timestamp
+     * @return boolean: Whether or not to use inputted pose
+    */
+    public boolean getDerivationConfidence(CommandSwerveDrivetrain swerve,Pose2d currentVisionPose,double currentTimeStamp){
         boolean returnValue=false;
         double timeStampDiff=(m_lastTimeStamp!=0)?m_lastTimeStamp-currentTimeStamp:0;
         double currentXMPS=swerve.getChassisSpeeds().vxMetersPerSecond;

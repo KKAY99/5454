@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.FlippingUtil;
@@ -8,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.LineupConstants;
@@ -22,9 +25,9 @@ public class OdomLineupCommand extends Command{
 
     private Pose2d m_target;
 
-    private boolean m_isRightLineup;
+    private Supplier<Boolean> m_isRightLineup;
 
-    public OdomLineupCommand(Limelight limeLight,CommandSwerveDrivetrain swerve,boolean isRightLineup){
+    public OdomLineupCommand(Limelight limeLight,CommandSwerveDrivetrain swerve,Supplier<Boolean> isRightLineup){
         m_limeLight=limeLight;
         m_swerve=swerve;
         m_isRightLineup=isRightLineup;
@@ -40,7 +43,7 @@ public class OdomLineupCommand extends Command{
                     m_limeLight.setCodeIDFilter(17,18,19,20,21,22);
                     int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
                     System.out.println("CURRENT TARGET ID"+m_limeLight.getFirstVisibleFiducialID());
-                    if(m_isRightLineup){
+                    if(m_isRightLineup.get()){
                         m_target=LineupConstants.fiducialBlueRightPoses[currentFiducial-17]; 
                     }else{
                         m_target=LineupConstants.fiducialBlueLeftPoses[currentFiducial-17]; 
@@ -49,7 +52,7 @@ public class OdomLineupCommand extends Command{
                     m_limeLight.setCodeIDFilter(6,7,8,9,10,11);
                     int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
                     System.out.println("CURRENT TARGET ID"+m_limeLight.getFirstVisibleFiducialID());
-                    if(m_isRightLineup){
+                    if(m_isRightLineup.get()){
                         m_target=LineupConstants.fiducialBlueRightPoses[currentFiducial-6]; 
                         Translation2d flippedPoint=FlippingUtil.flipFieldPosition(m_target.getTranslation());
                         m_target=new Pose2d(flippedPoint.getX(),flippedPoint.getY(),m_target.getRotation());
@@ -59,7 +62,7 @@ public class OdomLineupCommand extends Command{
                         m_target=new Pose2d(flippedPoint.getX(),flippedPoint.getY(),m_target.getRotation());
                     }
                 } 
-                System.out.println("Moving to "+ m_target.toString());
+                SmartDashboard.putNumberArray("TARGET X,Y,ROT",new double[]{m_target.getX(),m_target.getY(),m_target.getRotation().getDegrees()});
                 Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(m_swerve.getPose2d(),m_target));
                 CommandScheduler.getInstance().schedule(newCommand);
             }catch(Exception e){}

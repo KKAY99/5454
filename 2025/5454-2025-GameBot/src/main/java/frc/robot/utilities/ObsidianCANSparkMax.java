@@ -138,15 +138,19 @@ public class ObsidianCANSparkMax extends SparkBase{
        
         }
 
-        /**
+    /**
      * <p> 5454 CANSparkMaxWrapper
      * @param canID Motor ID
      * @param MotorType MotorType: Brushed or Brushless
      * @param currentLimit SmartCurrentLimit for the Motor
-     * @param p Sets Closed Loop P
-     * @param i Sets Closed Loop I
-     * @param d Sets Closed Loop D
-     * @param maxAndMin Sets Max and Min Percent Output
+     * @param pK1 Sets Closed Loop P Slot 1
+     * @param iK1 Sets Closed Loop I Slot 1
+     * @param dK1 Sets Closed Loop D Slot 1
+     * @param maxAndMin Sets Max and Min Percent Output Slot 1
+     * @param pK2 Sets Closed Loop P Slot 2
+     * @param iK2 Sets Closed Loop I Slot 2
+     * @param dK2 Sets Closed Loop D Slot 2
+     * @param maxAndMinK2 Sets Max and Min Percent Output Slot 2
     */
     public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit,double pK1,double iK1,double dK1,
                                 double maxAndMinK1,double pK2,double iK2,double dK2,double maxAndMinK2){

@@ -1,6 +1,8 @@
 package frc.robot.commands;
-import java.security.spec.ECPublicKeySpec;
+import java.util.function.Supplier;
+
 import com.pathplanner.lib.util.FlippingUtil;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -8,16 +10,15 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.DunkinDonutConstants;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
+import frc.robot.Constants.LineupConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.utilities.AutoPlanner;
 import frc.robot.utilities.Limelight;
-import frc.robot.Constants.DunkinDonutConstants;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
-import frc.robot.Constants.LineupConstants;
-import java.util.function.Supplier;
 
 public class AutoScoreCommand extends Command{
     private CommandSwerveDrivetrain m_swerve;
@@ -33,6 +34,7 @@ public class AutoScoreCommand extends Command{
     private double m_elevatorFPos;
     private double m_algaePos;
     private double m_startTime;
+    public Supplier<Double> m_dashBoardPos;
 
     private boolean m_isRightLineup;
     private boolean m_isManual = false;
@@ -100,6 +102,21 @@ public class AutoScoreCommand extends Command{
         addRequirements(m_swerve,m_elevator,m_dunkin);
     }
 
+    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<Double> elevPos){
+        m_swerve=swerve;
+        m_elevator=elevator;
+        m_dunkin=dunkin;
+        m_limeLight=limeLight;
+
+        m_scoreLevel=()->ElevatorScoreLevel.TEST;
+        m_dashBoardPos=elevPos;
+        m_isRightLineup=false;
+        m_doAlgae = false;
+        m_isManual=false;
+
+        addRequirements(m_swerve,m_elevator,m_dunkin);
+    }
+
     @Override
     public void initialize(){
         m_currentState=States.CHECKFORTARGET;
@@ -120,6 +137,10 @@ public class AutoScoreCommand extends Command{
             m_elevatorFPos=ElevatorConstants.l4Pos;
             m_elevatorIPos=ElevatorConstants.l3Pos;
             break; 
+            case TEST:
+            m_elevatorFPos=m_dashBoardPos.get();
+            m_elevatorIPos= m_dashBoardPos.get();
+            break;
         }
     }
 
