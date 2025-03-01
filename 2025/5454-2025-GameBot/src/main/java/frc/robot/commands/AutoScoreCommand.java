@@ -204,8 +204,8 @@ public class AutoScoreCommand extends Command{
                         }
                     } 
             
-                    Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(m_swerve.getPose2d(),m_odomTarget));
-                    CommandScheduler.getInstance().schedule(newCommand);
+                    //Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(m_swerve.getPose2d(),m_odomTarget));
+                   // CommandScheduler.getInstance().schedule(newCommand);
 
                     m_currentState=States.WAITFORLINEUP;
                 }catch(Exception e){
@@ -255,7 +255,7 @@ public class AutoScoreCommand extends Command{
         case CORAL:
             m_dunkin.runCoralMotor(DunkinDonutConstants.autoScoreCoralSpeed);
 
-            if(DunkinDonutConstants.autoTimeToRun+m_startTime<Timer.getFPGATimestamp()){
+            if(DunkinDonutConstants.autoCoralTimeToRun+m_startTime<Timer.getFPGATimestamp()){
                 System.out.println("CORAL FINISHED");
 
                 m_dunkin.stopCoralMotor();
