@@ -72,10 +72,12 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public boolean checkCANConnections(){
     boolean returnValue=true;
+    double var=0;
+
     try{
-      m_leaderMotor.getDeviceId();
-      m_followerMotor.getDeviceId();
-      m_encoder.get();
+      var=m_leaderMotor.getDeviceId();
+      var=m_followerMotor.getDeviceId();
+      var=m_encoder.get();
     }catch(Exception e){
       returnValue=false;
     }

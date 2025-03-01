@@ -17,13 +17,15 @@ public class GasPedalCommand extends Command{
     }
 
     @Override
-    public void end(boolean interrupted){}
+    public void end(boolean interrupted){
+        m_swerve.setGasPedalMult(1);
+    }
 
     @Override
     public boolean isFinished(){
         double gasPedalValue=Math.abs(m_speed.getAsDouble()-(1-DriveConstants.MinGasPedalSpeed));
 
         m_swerve.setGasPedalMult(gasPedalValue);
-        return true;
+        return false;
     }
 }

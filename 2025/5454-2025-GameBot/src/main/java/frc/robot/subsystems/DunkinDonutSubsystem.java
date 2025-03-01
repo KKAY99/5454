@@ -203,12 +203,14 @@ public class DunkinDonutSubsystem extends SubsystemBase {
 
   public boolean checkCANConnections(){
     boolean returnValue=true;
+    double var=0;
+    
     try{
-      m_CANcoder.getDeviceID();
-      m_algaeMotor1.getDeviceId();
-      m_algaeMotor2.getDeviceId();
-      m_coralMotor.getDeviceId();
-      m_rotateMotor.getDeviceId();
+      var=m_CANcoder.getDeviceID();
+      var=m_algaeMotor1.getDeviceId();
+      var=m_algaeMotor2.getDeviceId();
+      var=m_coralMotor.getDeviceId();
+      var=m_rotateMotor.getDeviceId();
     }catch(Exception e){
       returnValue=false;
     }
