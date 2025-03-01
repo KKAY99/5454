@@ -1,6 +1,6 @@
 package frc.robot.common.drivers;
 
-import com.revrobotics.CANSparkMax;
+import frc.robot.classes.ObsidianCANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Notifier;
@@ -24,7 +24,7 @@ public class Mk2SwerveModule extends SwerveModule {
 
     private Spark steeringMotor;
     private AnalogInput angleEncoder;
-    private CANSparkMax driveMotor;
+    private ObsidianCANSparkMax driveMotor;
     private RelativeEncoder driveEncoder;
 
     private final Object canLock = new Object();
@@ -71,7 +71,7 @@ public class Mk2SwerveModule extends SwerveModule {
      * @param angleEncoder   The analog input for the angle encoder
      */
     public Mk2SwerveModule(Vector2 modulePosition, double angleOffset,
-                           Spark angleMotor, CANSparkMax driveMotor, AnalogInput angleEncoder) {
+                           Spark angleMotor, ObsidianCANSparkMax driveMotor, AnalogInput angleEncoder) {
         super(modulePosition);
         this.angleOffset = angleOffset;
         this.steeringMotor = angleMotor;
@@ -79,7 +79,7 @@ public class Mk2SwerveModule extends SwerveModule {
         this.driveMotor = driveMotor;
         this.driveEncoder = driveMotor.getEncoder();
 
-        driveMotor.setSmartCurrentLimit(60);
+        
 
         angleController.setInputRange(0.0, 2.0 * Math.PI);
         angleController.setContinuous(true);

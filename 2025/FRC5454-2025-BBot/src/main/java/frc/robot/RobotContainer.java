@@ -29,7 +29,6 @@ import frc.robot.Constants.TargetHeight;
 import frc.robot.Constants.LEDS.Colors;
 import frc.robot.classes.DriveControlMode;
 import frc.robot.classes.LEDStrip;
-import frc.robot.classes.LaserCAN;
 import frc.robot.classes.LEDSChargedup;
 import frc.robot.classes.Limelight;
 import frc.robot.classes.LEDSChargedup.LEDMode;
@@ -62,7 +61,7 @@ public class RobotContainer {
     private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
     private final SendableChooser<Boolean> m_IsDrone = new SendableChooser<>();
     // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
-    private final DrivetrainSubsystem m_RobotDrive = new DrivetrainSubsystem(m_NavX); 
+    private final DrivetrainSubsystem m_robotDrive = new DrivetrainSubsystem(m_NavX); 
 
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
@@ -79,18 +78,12 @@ public class RobotContainer {
        
         configureButtonBindings();
 
-     /*  m_RobotDrive.setDefaultCommand(
-                new DefaultDriveCommand(m_RobotDrive,
+         m_RobotDrive.setDefaultCommand(
+                  new DefaultDriveCommand(m_RobotDrive,
                         () -> m_xBoxDriver.getLeftX(),
                         () -> m_xBoxDriver.getRightY(),
                         () -> m_xBoxDriver.getRightX(),
                         () -> m_DriveControlMode.isFieldOrientated()));    
-      */ m_RobotDrive.setDefaultCommand(
-                new DefaultDriveCommand(m_RobotDrive,
-                        () -> m_xBoxDriver.getRightX(),
-                        () -> m_xBoxDriver.getLeftY(),
-                        () -> m_xBoxDriver.getLeftX(),
-                        () -> m_DriveControlMode.isFieldOrientated()));
                 
 
     }
