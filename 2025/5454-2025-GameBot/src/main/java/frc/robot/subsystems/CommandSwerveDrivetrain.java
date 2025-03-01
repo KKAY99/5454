@@ -43,7 +43,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
-    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.kZero;
+    private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
 
@@ -228,14 +228,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 this::setChassisSpeeds,
                 Constants.pathPlanDriveController,
                 robotConfig,
-                ()->{
+                ()->false,/*{
                     Alliance alliance=DriverStation.getAlliance().get();
                     if(alliance==Alliance.Red){
                         return true;
                     }else{
                         return false;
                     }
-                },
+                },*/
                 this
             );
         }catch(Exception e){
@@ -303,6 +303,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDeadband((TunerConstants.kMaxSpeed*0.1))
             .withRotationalDeadband((TunerConstants.kMaxAngularSpeed*0.1));
 
+        //System.out.println("VELOCITY X SPEED: "+(-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult);
+            
         return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
             .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
             .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
@@ -310,6 +312,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void setGasPedalMult(double mult){
+       // System.out.println("GAS PEDAL MULT: "+m_gasPedalMult);
         m_gasPedalMult=mult;
     }
 
@@ -337,8 +340,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     @Override
     public void periodic() {
-        /*
-         * Periodically try to apply the operator perspective.
+        
+        
+        /** Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
          * This allows us to correct the perspective in case the robot code restarts mid-match.
          * Otherwise, only check and apply the operator perspective if the DS is disabled.

@@ -32,7 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean CheckCANandColor(){
-    System.out.println(m_canAndColor.getProximity());
+    //System.out.println(m_canAndColor.getProximity());
     return true;
   }
 
@@ -91,8 +91,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean checkCANConnections(){
     boolean returnValue=true;
+    double var=0;
+
     try{
-      m_motor1.getDeviceId();
+      var=m_motor1.getDeviceId();
     }catch(Exception e){
       returnValue=false;
     }

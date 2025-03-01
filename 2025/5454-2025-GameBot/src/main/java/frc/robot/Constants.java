@@ -30,18 +30,41 @@ public final class Constants {
     public static final Pose2d fiducial18LeftReef=new Pose2d(3.695,4.179,new Rotation2d().fromDegrees(180));
     public static final Pose2d fiducial18RightReef=new Pose2d(3.695,3.861,new Rotation2d().fromDegrees(180));
 
-    //Changed by one in direction of origin
-    public static final Pose2d fiducial19LeftReef=new Pose2d(3.253,3.756,new Rotation2d().fromDegrees(120));
-    public static final Pose2d fiducial19RightReef=new Pose2d(2.964,3.593,new Rotation2d().fromDegrees(120));
+    public static final Pose2d fiducial19LeftReef=new Pose2d(3.63,5.2,new Rotation2d().fromDegrees(120));
+    public static final Pose2d fiducial19RightReef=new Pose2d(3.19,5.05,new Rotation2d().fromDegrees(120));
+    public static final Pose2d fiducial19LeftLineupReef=new Pose2d(3.35,5.65,new Rotation2d().fromDegrees(120));
+    public static final Pose2d fiducial19RightLineupReef=new Pose2d(3.03,3.36,new Rotation2d().fromDegrees(120));
  
-    public static final Pose2d fiducial20LeftReef=new Pose2d(5.023,4.593,new Rotation2d().fromDegrees(60));
-    public static final Pose2d fiducial20RightReef=new Pose2d(4.724,4.756,new Rotation2d().fromDegrees(60));
+    public static final Pose2d fiducial20LeftReef=new Pose2d(4.762,5.05,new Rotation2d().fromDegrees(60));
+    public static final Pose2d fiducial20RightReef=new Pose2d(4.45,5.12,new Rotation2d().fromDegrees(60));
+    public static final Pose2d fiducial20LeftLineupReef=new Pose2d(4.98,5.35,new Rotation2d().fromDegrees(60));
+    public static final Pose2d fiducial20RightLineupReef=new Pose2d(4.74,5.61,new Rotation2d().fromDegrees(60));
  
-    public static final Pose2d fiducial21LeftReef=new Pose2d(5.27,3.868,new Rotation2d().fromDegrees(0));
-    public static final Pose2d fiducial21RightReef=new Pose2d(5.27,4.229,new Rotation2d().fromDegrees(0));
+    public static final Pose2d fiducial21LeftReef=new Pose2d(5.27,3.900,new Rotation2d().fromDegrees(0));
+    public static final Pose2d fiducial21RightReef=new Pose2d(5.27,4.249,new Rotation2d().fromDegrees(0));
+    public static final Pose2d fiducial21LeftLineupReef=new Pose2d(6.27,3.900,new Rotation2d().fromDegrees(0));
+    public static final Pose2d fiducial21RightLineupReef=new Pose2d(6.27,4.249,new Rotation2d().fromDegrees(0));
 
     public static final Pose2d fiducial22LeftReef=new Pose2d(4.734,3.284,new Rotation2d().fromDegrees(-60));
     public static final Pose2d fiducial22RightReef=new Pose2d(5.003,3.438,new Rotation2d().fromDegrees(-60));
+
+    public static final Pose2d[] fiducialBlueLeftLineupPoses=new Pose2d[]{
+      fiducial17LeftReef,
+      fiducial18LeftReef,
+      fiducial19LeftLineupReef,
+      fiducial20LeftLineupReef,
+      fiducial21LeftLineupReef,
+      fiducial22LeftReef
+    };
+    
+    public static final Pose2d[] fiducialBlueRightLineupPoses=new Pose2d[]{
+      fiducial17RightReef,
+      fiducial18RightReef,
+      fiducial19RightLineupReef,
+      fiducial20RightLineupReef,
+      fiducial21RightLineupReef,
+      fiducial22RightReef
+    };
 
     public static final Pose2d[] fiducialBlueLeftPoses=new Pose2d[]{
       fiducial17LeftReef,
@@ -64,7 +87,7 @@ public final class Constants {
     public static final Pose2d[] fiducialRedLeftPoses=new Pose2d[]{};
     public static final Pose2d[] fiducialRedRightPoses=new Pose2d[]{};
 
-    public static final double lineUpDeadband=0.05;
+    public static final double lineUpDeadband=0.09;
     public static final double maxWaitTime=5;
   }
   
@@ -99,7 +122,7 @@ public final class Constants {
     public static final double confidenceDeadbandMax=140;
 
     //Multiplier to Turn Pathplanner X & Y Pos to Meters
-    public static final double cartPointToMeterMult=0.5;
+    public static final double cartPointToMeterMult=1;
 
     public static final double maxMeterDiff=0.1;
     public static final double maxRotDiff=5;
@@ -165,14 +188,14 @@ public final class Constants {
 
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=1;
-    public static final double autoTimeToRun=1;
+    public static final double autoCoralTimeToRun=1;
   }
 
   public static final class ElevatorConstants{
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorPK1=0.05;//0.25
+    public static final double elevatorPK1=0.07;//0.25
     public static final double elevatorIK1=0;
     public static final double elevatorDK1=0;
     public static final double elevatorMaxAndMinK1=1;
@@ -180,7 +203,7 @@ public final class Constants {
     public static final double elevatorPK2=0.05;//0.25
     public static final double elevatorIK2=0;
     public static final double elevatorDK2=0;
-    public static final double elevatorMaxAndMinK2=0.50;
+    public static final double elevatorMaxAndMinK2=0.60;
 
     public static final double elevatorHighLimit=-99.5;
     public static final double elevatorLowLimit=-0.2;

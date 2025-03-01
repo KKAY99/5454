@@ -32,10 +32,10 @@ public class AutoPlanner {
       pathConstraints=new PathConstraints(m_velocityMPS,m_maxAccelMPS,m_angularVelocityMPS,m_angularMaxAccelMPS);
     }
  
-    public PathPlannerPath CreateOdomLineUpPath(Pose2d startPose,Pose2d targetPose){
+    public PathPlannerPath CreateOdomLineUpPath(Pose2d startPose,Pose2d targetPose,Pose2d targetLineupPose){
 
     List<Waypoint> waypoints= PathPlannerPath.waypointsFromPoses(
-        startPose,targetPose
+        startPose,targetLineupPose,targetPose
     );
 
     PathPlannerPath newPath=new PathPlannerPath(
