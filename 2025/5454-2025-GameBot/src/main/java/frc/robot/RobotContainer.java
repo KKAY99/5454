@@ -240,7 +240,7 @@ public class RobotContainer {
   public void DisabledPeriodic(){}
   
   public void AutoPeriodic(){
-    if(m_OdomLimelight.isAnyTargetAvailable()){
+    /*if(m_OdomLimelight.isAnyTargetAvailable()){
       if(DriverStation.getAlliance().get()==Alliance.Blue){
         m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
@@ -248,7 +248,7 @@ public class RobotContainer {
         m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
         /*m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees()-180,
-                                          0-m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());*/
+                                          0-m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
       }
 
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
@@ -259,7 +259,42 @@ public class RobotContainer {
       if(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp)){
         m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
       }
-    }
+    }*/
+  }
+
+  public void AutonMode(){
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999));
+  }
+
+  public void TeleopMode(){
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999));
+    homeRobot();
+  }
+
+  public void TeleopPeriodic(){
+    refreshSmartDashboard();
+    GetPIDValues();
+
+    /*if(m_OdomLimelight.isAnyTargetAvailable()){
+      if(DriverStation.getAlliance().get()==Alliance.Blue){
+        m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),
+                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+      }else{
+        m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),
+                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+        /*m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees()-180,
+                                          0-m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+      }
+
+      Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp=Timer.getFPGATimestamp();
+      m_OdomLimelight.TrimPoseArray(3);
+
+      System.out.println(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp));
+      if(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp)){
+        m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
+      }
+    }*/
   }
 
   public void AutonMode(){
