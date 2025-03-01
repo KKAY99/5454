@@ -31,6 +31,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_controlType="Default-Velocity";
   }
 
+  public boolean CheckCANandColor(){
+    System.out.println(m_canAndColor.getProximity());
+    return true;
+  }
+
   public void resetRelative(){
     m_motor1.getEncoder().setPosition(0);
   }

@@ -1,12 +1,7 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import frc.robot.Constants.RobotMap;
 import frc.robot.classes.ObsidianCANSparkMax;
-
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.LoggedRobot;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.VecBuilder;

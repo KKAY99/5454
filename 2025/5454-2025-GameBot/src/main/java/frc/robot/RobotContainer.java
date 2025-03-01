@@ -136,11 +136,11 @@ public class RobotContainer {
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, CoralConstants.coralIntakeSpeed, true, true, 0.75, 0.35);
+    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, m_elevator, CoralConstants.coralIntakeSpeed, true, true, 0.75, 0.35);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
 
-    //will need a spreate DunkinCoralCommand for scoring
+    //might need a spreate DunkinCoralCommand for scoring
     
 
 
