@@ -37,8 +37,8 @@ public final class Constants {
     public static final Pose2d fiducial20LeftReef=new Pose2d(5.023,4.593,new Rotation2d().fromDegrees(60));
     public static final Pose2d fiducial20RightReef=new Pose2d(4.724,4.756,new Rotation2d().fromDegrees(60));
  
-    public static final Pose2d fiducial21LeftReef=new Pose2d(5.27,3.85,new Rotation2d().fromDegrees(0));
-    public static final Pose2d fiducial21RightReef=new Pose2d(5.27,4.180,new Rotation2d().fromDegrees(0));
+    public static final Pose2d fiducial21LeftReef=new Pose2d(5.27,3.868,new Rotation2d().fromDegrees(0));
+    public static final Pose2d fiducial21RightReef=new Pose2d(5.27,4.229,new Rotation2d().fromDegrees(0));
 
     public static final Pose2d fiducial22LeftReef=new Pose2d(4.734,3.284,new Rotation2d().fromDegrees(-60));
     public static final Pose2d fiducial22RightReef=new Pose2d(5.003,3.438,new Rotation2d().fromDegrees(-60));
@@ -165,7 +165,7 @@ public final class Constants {
 
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=1;
-    public static final double autoTimeToRun=1.3;
+    public static final double autoTimeToRun=1;
   }
 
   public static final class ElevatorConstants{
@@ -190,7 +190,7 @@ public final class Constants {
     public static final double l1Pos=-13;
     public static final double l2Pos=-14; //26
     public static final double l3Pos=-43;
-    public static final double l4Pos=-89; //99.5
+    public static final double l4Pos=-87; //-89
 
     public static final double aboveTroughPos=-20;
 

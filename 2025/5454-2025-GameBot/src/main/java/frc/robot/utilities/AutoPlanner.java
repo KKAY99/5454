@@ -3,7 +3,6 @@ package frc.robot.utilities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;

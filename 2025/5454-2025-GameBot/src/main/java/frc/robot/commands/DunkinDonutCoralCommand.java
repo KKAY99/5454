@@ -73,7 +73,7 @@ public class DunkinDonutCoralCommand extends Command {
   @Override
   public void initialize(){
     m_startTime=Timer.getFPGATimestamp();
-    if(!m_uselimit){
+    if(!m_uselimit&&m_coralSpeed>0){
       m_currentState = States.RUNCORALFORTIME;
     }else{
       m_currentState = States.INDEXERLOW;
@@ -108,7 +108,7 @@ public class DunkinDonutCoralCommand extends Command {
       case INDEXERLOW:
         m_dunkin.runCoralMotor(m_coralSpeed);
         m_dunkin.runIndexer(m_indexerLowSpeed);
-        if(m_dunkin.isCoralAtIndexerLimit()){
+        if(m_dunkin.isCoralAtIndexerLimit()&&m_coralSpeed>0){
           m_currentState = States.INDXERHIGH;
         }
       break;

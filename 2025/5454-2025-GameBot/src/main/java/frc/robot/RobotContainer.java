@@ -3,6 +3,8 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.TriggerEvent;
+import com.pathplanner.lib.util.FlippingUtil;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.util.sendable.Sendable;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,8 +31,12 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+
 import frc.robot.commands.*;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.signals.InvertedValue;
+
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import frc.robot.Constants.ButtonBindings;
@@ -38,6 +45,7 @@ import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
+import frc.robot.Constants.LineupConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 
 
@@ -123,11 +131,11 @@ public class RobotContainer {
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);*/
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.75, false, true, -0.25);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.4,true, true,-0.25, -0.25);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, 0.7, true, true, 0.5, 0.25);
+    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, 0.4, true, true, 0.75, 0.35);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
 
@@ -256,9 +264,11 @@ public class RobotContainer {
   }
 
   public void AutonMode(){
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0,0,0));
   }
 
   public void TeleopMode(){
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999));
     homeRobot();
   }
 
@@ -266,12 +276,20 @@ public class RobotContainer {
     refreshSmartDashboard();
     GetPIDValues();
 
+    System.out.println(DriverStation.getAlliance().get());
+    System.out.println(m_swerve.getPigeon2().getRotation2d().unaryMinus().getDegrees());
+
     if(m_OdomLimelight.isAnyTargetAvailable()){
-      m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),
+      if(DriverStation.getAlliance().get()==Alliance.Blue){
+        m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),
                                           m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+      }else{
+        m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees()-180,
+                                          0-m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+      }
 
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
-      System.out.println("Limelight Pose"+m_OdomLimelight.GetPoseViaMegatag2());
+      //System.out.println("Limelight Pose"+m_OdomLimelight.GetPoseViaMegatag2());
       double currentTimeStamp=Timer.getFPGATimestamp();
       m_OdomLimelight.TrimPoseArray(3);
 
