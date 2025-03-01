@@ -199,6 +199,11 @@ public final class Constants {
     }
   }
 
+  public static final class CoralConstants{
+    public static final double coralShootSpeed=0.6;
+    public static final double coralIntakeSpeed=0.3;
+    public static final double coralOutakeSpeed=-0.3;
+  }
   public static final class ClimbConstants{
     public static final int climbCanID1=26;
     public static final int climbCanID2=20;
@@ -215,6 +220,8 @@ public final class Constants {
 
     public static final double climbLimitLow=0.0; // was 0.17 
     public static final double climbLimitHigh=0.49;
+    public static final double climbForwardSpeed=0.8;
+    public static final double climbBackSpeed=-0.5;
   }
 
   public static final class CoolPanelConstants{

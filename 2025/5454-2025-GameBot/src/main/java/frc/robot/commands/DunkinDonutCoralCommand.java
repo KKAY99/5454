@@ -11,7 +11,8 @@ import frc.robot.subsystems.DunkinDonutSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DunkinDonutCoralCommand extends Command {
   private DunkinDonutSubsystem m_dunkin;
-  private double m_coralSpeed;
+  private double m_coralScoreSpeed=0;
+  private double m_coralIntakeSpeed=0;
   private double m_timeToRun;
   private double m_startTime;
   private boolean m_uselimit;
@@ -23,10 +24,10 @@ public class DunkinDonutCoralCommand extends Command {
   private States m_currentState = States.INDEXERLOW;
   
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralSpeed) {
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralIntakeSpeed) {
     m_dunkin = dunkin;
     addRequirements(m_dunkin);
-    m_coralSpeed = coralSpeed;
+    m_coralIntakeSpeed = coralIntakeSpeed;
     m_timeToRun=0;
     m_uselimit = false;
     m_useIndexer = false;
@@ -34,10 +35,10 @@ public class DunkinDonutCoralCommand extends Command {
     m_indexerLowSpeed = 0;
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralSpeed,double timeToRun) {
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralScoreSpeed,double timeToRun) {
     m_dunkin = dunkin;
     addRequirements(m_dunkin);
-    m_coralSpeed = coralSpeed;
+    m_coralScoreSpeed= coralScoreSpeed;
     m_timeToRun=timeToRun;
     m_uselimit = false;
     m_useIndexer = false;
@@ -45,10 +46,10 @@ public class DunkinDonutCoralCommand extends Command {
     m_indexerLowSpeed = 0;
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
     m_dunkin = dunkin;
     addRequirements(m_dunkin);
-    m_coralSpeed = coralSpeed;
+    m_coralIntakeSpeed = coralIntakeSpeed;
     m_timeToRun=0;
     m_uselimit = useLimit;
     m_useIndexer = useIndexer;
@@ -57,10 +58,10 @@ public class DunkinDonutCoralCommand extends Command {
 
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed, double indexerLowSpeed){
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed, double indexerLowSpeed){
     m_dunkin = dunkin;
     addRequirements(m_dunkin);
-    m_coralSpeed = coralSpeed;
+    m_coralIntakeSpeed = coralIntakeSpeed;
     m_timeToRun=0;
     m_uselimit = useLimit;
     m_useIndexer = useIndexer;
@@ -73,7 +74,7 @@ public class DunkinDonutCoralCommand extends Command {
   @Override
   public void initialize(){
     m_startTime=Timer.getFPGATimestamp();
-    if(!m_uselimit&&m_coralSpeed>0){
+    if(!m_uselimit&&m_coralScoreSpeed>0){
       m_currentState = States.RUNCORALFORTIME;
     }else{
       m_currentState = States.INDEXERLOW;
@@ -100,15 +101,15 @@ public class DunkinDonutCoralCommand extends Command {
     boolean returnValue=false;
     switch (m_currentState) {
       case RUNCORALFORTIME:
-        m_dunkin.runCoralMotor(m_coralSpeed);
+        m_dunkin.runCoralMotor(m_coralScoreSpeed);
         if(m_timeToRun!=0&&m_timeToRun+m_startTime<Timer.getFPGATimestamp()){
           m_currentState = States.END;
         }
       break;
       case INDEXERLOW:
-        m_dunkin.runCoralMotor(m_coralSpeed);
+        m_dunkin.runCoralMotor(m_coralIntakeSpeed);
         m_dunkin.runIndexer(m_indexerLowSpeed);
-        if(m_dunkin.isCoralAtIndexerLimit()&&m_coralSpeed>0){
+        if(m_dunkin.isCoralAtIndexerLimit()&&m_coralIntakeSpeed>0){
           m_currentState = States.INDXERHIGH;
         }
       break;

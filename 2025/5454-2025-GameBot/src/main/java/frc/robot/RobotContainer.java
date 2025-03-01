@@ -42,6 +42,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import frc.robot.Constants.ButtonBindings;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.CoolPanelConstants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
@@ -114,10 +115,10 @@ public class RobotContainer {
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
     //Climb
-    ClimbRotateCommand rotateFwdCommand=new ClimbRotateCommand(m_climb,0.8); //0.5 was to strong and bent the shaft...so we decided to up the power XD
+    ClimbRotateCommand rotateFwdCommand=new ClimbRotateCommand(m_climb,ClimbConstants.climbForwardSpeed); //0.5 was to strong and bent the shaft...so we decided to up the power XD
     m_xBoxDriver.a().whileTrue(rotateFwdCommand);
 
-    ClimbRotateCommand rotateBwdCommand=new ClimbRotateCommand(m_climb,-0.5);
+    ClimbRotateCommand rotateBwdCommand=new ClimbRotateCommand(m_climb,ClimbConstants.climbBackSpeed);
     m_xBoxDriver.b().whileTrue(rotateBwdCommand);
     
     /*ToggleClimbPID testPID1=new ToggleClimbPID(m_climb,ClimbConstants.climbPos1);
@@ -131,11 +132,11 @@ public class RobotContainer {
     Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);*/
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, -0.4,true, true,-0.25, -0.25);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, CoralConstants.coralOutakeSpeed,true, true,-0.25, -0.25);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, 0.4, true, true, 0.75, 0.35);
+    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, CoralConstants.coralIntakeSpeed, true, true, 0.75, 0.35);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
 
