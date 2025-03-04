@@ -22,16 +22,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonConstants;
-import frc.robot.Constants.FloorIntake;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.InputControllers;
-import frc.robot.Constants.TargetHeight;
 import frc.robot.Constants.LEDS.Colors;
 import frc.robot.classes.DriveControlMode;
 import frc.robot.classes.LEDStrip;
-import frc.robot.classes.LEDSChargedup;
-import frc.robot.classes.Limelight;
-import frc.robot.classes.LEDSChargedup.LEDMode;
 import frc.robot.commands.*;
 import frc.robot.common.drivers.NavX;
 import frc.robot.common.drivers.NavX.Axis;
@@ -39,6 +34,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.classes.BreakBeam;
+import frc.robot.classes.DriveControlMode;
 
 import java.awt.Color;
 
@@ -62,7 +58,7 @@ public class RobotContainer {
     private final SendableChooser<Boolean> m_IsDrone = new SendableChooser<>();
     // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
     private final DrivetrainSubsystem m_robotDrive = new DrivetrainSubsystem(m_NavX); 
-
+    private final DriveControlMode m_DriveControlMode = new DriveControlMode();
     private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
     private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
@@ -78,8 +74,8 @@ public class RobotContainer {
        
         configureButtonBindings();
 
-         m_RobotDrive.setDefaultCommand(
-                  new DefaultDriveCommand(m_RobotDrive,
+         m_robotDrive.setDefaultCommand(
+                  new DefaultDriveCommand(m_robotDrive,
                         () -> m_xBoxDriver.getLeftX(),
                         () -> m_xBoxDriver.getRightY(),
                         () -> m_xBoxDriver.getRightX(),
