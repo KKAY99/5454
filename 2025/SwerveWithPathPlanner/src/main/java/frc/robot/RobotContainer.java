@@ -11,7 +11,10 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +25,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
+    private Field2d m_Field2d=new Field2d();
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
@@ -46,6 +50,7 @@ public class RobotContainer {
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
+        SmartDashboard.putData("field", m_Field2d);
         drivetrain.resetPigeon(); // reset pigeon
         configureBindings();
     }
@@ -90,5 +95,17 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
         return autoChooser.getSelected();
+    }
+
+    public void resetGyroPose(){
+        if(DriverStation.Alliance.Blue==DriverStation.getAlliance().get()){
+            drivetrain.resetPose(new Pose2d(5,5,new Rotation2d().fromDegrees(0)));
+        }else{
+            drivetrain.resetPose(new Pose2d(5,5,new Rotation2d().fromDegrees(180)));
+        }
+    }
+
+    public void teleopPeriodic(){
+        m_Field2d.setRobotPose(drivetrain.getState().Pose);
     }
 }

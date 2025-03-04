@@ -41,10 +41,13 @@ public class OdomLineupCommand extends Command{
 
         if(m_limeLight.isAnyTargetAvailable()){
             try{
+                Pose2d startingPose2d=null;
+
                 if(DriverStation.getAlliance().get()==Alliance.Blue){
                     m_limeLight.setCodeIDFilter(17,18,19,20,21,22);
                     int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
                     System.out.println("CURRENT TARGET ID"+m_limeLight.getFirstVisibleFiducialID());
+                    startingPose2d=m_swerve.getPose2d();
                     if(m_isRightLineup.get()){
                         m_target=LineupConstants.fiducialBlueRightPoses[currentFiducial-17]; 
                         m_targetLineup=LineupConstants.fiducialBlueRightLineupPoses[currentFiducial-17]; 
@@ -56,23 +59,18 @@ public class OdomLineupCommand extends Command{
                     m_limeLight.setCodeIDFilter(6,7,8,9,10,11);
                     int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
                     System.out.println("CURRENT TARGET ID"+m_limeLight.getFirstVisibleFiducialID());
+                    startingPose2d=FlippingUtil.flipFieldPose(m_swerve.getPose2d());
                     if(m_isRightLineup.get()){
                         m_target=LineupConstants.fiducialBlueRightPoses[currentFiducial-6]; 
                         m_targetLineup=LineupConstants.fiducialBlueRightLineupPoses[currentFiducial-6];
-                        Translation2d flippedPointTarget=FlippingUtil.flipFieldPosition(m_target.getTranslation());
-                        Translation2d flippedPointTargetLineup=FlippingUtil.flipFieldPosition(m_targetLineup.getTranslation());
-                        m_target=new Pose2d(flippedPointTarget.getX(),flippedPointTarget.getY(),m_target.getRotation());
-                        m_targetLineup=new Pose2d(flippedPointTargetLineup.getX(),flippedPointTargetLineup.getY(),m_targetLineup.getRotation());
                     }else{
                         m_target=LineupConstants.fiducialBlueLeftPoses[currentFiducial-6]; 
                         m_targetLineup=LineupConstants.fiducialBlueLeftLineupPoses[currentFiducial-6];
-                        Translation2d flippedPointTarget=FlippingUtil.flipFieldPosition(m_target.getTranslation());
-                        Translation2d flippedPointTargetLineup=FlippingUtil.flipFieldPosition(m_targetLineup.getTranslation());
-                        m_target=new Pose2d(flippedPointTarget.getX(),flippedPointTarget.getY(),m_target.getRotation());
-                        m_targetLineup=new Pose2d(flippedPointTargetLineup.getX(),flippedPointTargetLineup.getY(),m_targetLineup.getRotation());
                     }
                 } 
-                Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(m_swerve.getPose2d(),m_target,m_targetLineup));
+                System.out.println("STARTING POSE: "+startingPose2d);
+                System.out.println("TARGET POSE: "+m_target);
+                Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(startingPose2d,m_target,m_targetLineup));
                 CommandScheduler.getInstance().schedule(newCommand);
             }catch(Exception e){}
         }else{
