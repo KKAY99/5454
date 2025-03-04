@@ -6,6 +6,7 @@ import com.pathplanner.lib.events.TriggerEvent;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -45,6 +46,8 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.LineupConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
+import frc.robot.Constants.LimeLightValues.LimelightLineUpOffsets;
+import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -89,7 +92,7 @@ public class RobotContainer {
   public boolean m_isRightLineup=false;
 
   public RobotContainer(){
-    SmartDashboard.putData("field", m_Field2d); //used for elastic
+    SmartDashboard.putData("field", m_Field2d);
     configureNamedCommands();
     m_autoChooser=AutoBuilder.buildAutoChooser();
     createAutonomousCommandList(); 
@@ -202,6 +205,13 @@ public class RobotContainer {
     SmartDashboard.putNumber("Current X",m_swerve.getPose2d().getX());
     SmartDashboard.putNumber("Current Y",m_swerve.getPose2d().getY());
 
+    Logger.recordOutput("BOT POSE:+",m_swerve.getState().Pose);
+    if(m_OdomLimelight.isAnyTargetAvailable()){
+        Logger.recordOutput("TARGET GLOBAL POSE",m_OdomLimelight.findGlobalPoseFromTargetPoseRobotSpace(
+        m_swerve.getState().Pose.getRotation().getDegrees(),LimelightLineUpOffsets.CENTER)
+      );
+    }
+
     try{
       SmartDashboard.putNumber("Current Target Fiducial",m_OdomLimelight.getFirstVisibleFiducialID());
     }catch(Exception e){}
@@ -235,9 +245,13 @@ public class RobotContainer {
     return (()->(m_swerve.checkCANConnections()&&m_dunkinDonut.checkCANConnections()&&m_elevator.checkCANConnections()&&m_climb.checkCANConnections()));
   }
 
-  public void DisabledInit(){}
+  public void DisabledInit(){
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(5,5,9999999));
+  }
    
-  public void DisabledPeriodic(){}
+  public void DisabledPeriodic(){
+    resetGyroPoseDisabled();
+  }
   
   public void AutoPeriodic(){
     /*if(m_OdomLimelight.isAnyTargetAvailable()){
@@ -263,11 +277,9 @@ public class RobotContainer {
   }
 
   public void AutonMode(){
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999));
   }
 
   public void TeleopMode(){
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999));
     homeRobot();
   }
 
@@ -275,62 +287,38 @@ public class RobotContainer {
     refreshSmartDashboard();
     GetPIDValues();
 
-    /*if(m_OdomLimelight.isAnyTargetAvailable()){
-      if(DriverStation.getAlliance().get()==Alliance.Blue){
-        m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),
-                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-      }else{
-        m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),
-                                          m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-        /*m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees()-180,
-                                          0-m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-      }
-
-      Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Timer.getFPGATimestamp();
-      m_OdomLimelight.TrimPoseArray(3);
-
-      System.out.println(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp));
-      if(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp)){
-        m_swerve.addVisionMeasurement(currentPose,Utils.getCurrentTimeSeconds());
-      }
-    }*/
-  }
-
-  public void AutonMode(){
-  }
-
-  public void TeleopMode(){
-    //m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(Math.toRadians(5),Math.toRadians(5),Math.toRadians(0.1)));
-    homeRobot();
-  }
-
-  public void TeleopPeriodic(){
-    refreshSmartDashboard();
-    GetPIDValues();
-
-    /*if(m_OdomLimelight.isAnyTargetAvailable()){
-      m_OdomLimelight.SetRobotOrientation(m_swerve.getPigeon2().getYaw().getValueAsDouble(),0);
-                                          //m_swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-
+    if(m_OdomLimelight.isAnyTargetAvailable()){
+      m_OdomLimelight.SetRobotOrientation(m_swerve.getState().Pose.getRotation().getDegrees(),0);
+  
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
       m_OdomLimelight.TrimPoseArray(3);
 
-      System.out.println(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp));
-      if(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp)){
+      //System.out.println(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp));
+      //if(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp)){
         m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-      }
-    }*/
+      //}
+    } 
   }
 
   public void AllPeriodic(){
-    m_Field2d.setRobotPose(m_swerve.getPose2d()); //elastic
+    m_Field2d.setRobotPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
     m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
     setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getAButtonPressed());
+  }
+
+  public void resetGyroPoseDisabled(){
+    if(m_OdomLimelight.isAnyTargetAvailable()){
+      Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
+      Rotation2d newRot=(DriverStation.getAlliance().get()==Alliance.Blue)?
+                        new Rotation2d().fromDegrees(0):
+                        new Rotation2d().fromDegrees(180);
+      m_swerve.resetPose(new Pose2d(currentPose.getX(),currentPose.getY(),newRot));
+      m_OdomLimelight.SetRobotOrientation(m_swerve.getState().Pose.getRotation().getDegrees(),0);
+    }
   }
 
   public void homeRobot(){

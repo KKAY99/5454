@@ -228,14 +228,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 this::setChassisSpeeds,
                 Constants.pathPlanDriveController,
                 robotConfig,
-                ()->false,/*{
+                ()->{
                     Alliance alliance=DriverStation.getAlliance().get();
                     if(alliance==Alliance.Red){
                         return true;
                     }else{
                         return false;
                     }
-                },*/
+                },
                 this
             );
         }catch(Exception e){

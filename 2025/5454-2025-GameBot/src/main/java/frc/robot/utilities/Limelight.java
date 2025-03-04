@@ -15,6 +15,8 @@ import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.IntegerEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.networktables.DoubleEntry;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -235,10 +237,13 @@ public class Limelight {
     }
 
     public Pose2d findGlobalPoseFromTargetPoseRobotSpace(double gyroAngle,LimeLightValues.LimelightLineUpOffsets offsetState){
-        double[] targetPoseRobotSpace=this.targetpose_robotspace.get();
+        double[] targetPoseRobotSpace=this.botpose_targetspace.get();
         Pose2d botPose=this.GetPoseViaMegatag2();
         double offsetX=0;
         double offsetY=0;
+        double newX=0;
+        double newY=0;
+        double newRot=0;
 
         if(targetPoseRobotSpace[0]!=0){
             switch(offsetState){
@@ -255,10 +260,16 @@ public class Limelight {
                 offsetY=LimeLightValues.odomLineUpYOffsetRight;
                 break;
             }
-    
-            double newX=botPose.getX()+(targetPoseRobotSpace[2]+offsetX);
-            double newY=botPose.getY()-(targetPoseRobotSpace[0]+offsetY);
-            double newRot=gyroAngle+this.getYawOfAprilTag();
+
+            if(DriverStation.getAlliance().get()==Alliance.Blue){
+                newX=botPose.getX()+(targetPoseRobotSpace[2]+offsetX);
+                newY=botPose.getY()-(targetPoseRobotSpace[0]+offsetY);
+                newRot=gyroAngle+this.getYawOfAprilTag();
+            }else{
+                newX=botPose.getX()-(targetPoseRobotSpace[2]+offsetX);
+                newY=botPose.getY()-(targetPoseRobotSpace[0]+offsetY);
+                newRot=gyroAngle+this.getYawOfAprilTag();
+            }
     
             return new Pose2d(newX,newY,new Rotation2d().fromDegrees(newRot));
 
@@ -416,7 +427,7 @@ public class Limelight {
             double rotDiff=Math.abs(m_derivedPose.getRotation().getDegrees())-Math.abs(currentVisionPose.getRotation().getDegrees());
 
             m_derivedPose=new Pose2d(xDisplacement,yDisplacement,new Rotation2d().fromDegrees(rotDisplacement));
-            returnValue=(xMetersDiff<LimeLightValues.maxMeterDiff)&&(yMetersDiff<LimeLightValues.maxMeterDiff)&&(rotDiff<LimeLightValues.maxRotDiff);
+            returnValue=(xMetersDiff<LimeLightValues.maxMeterDiff)&&(yMetersDiff<LimeLightValues.maxMeterDiff);
         }
 
         return returnValue;

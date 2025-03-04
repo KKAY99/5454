@@ -142,12 +142,12 @@ public final class Constants {
 
     public static final double reefAprilTagHeight=8.75;
 
-    public static final double odomLineUpXOffsetCenter=0.7;
+    public static final double odomLineUpXOffsetCenter=0;
     public static final double odomLineUpYOffsetCenter=0;
-    public static final double odomLineUpXOffsetLeft=0.7;
-    public static final double odomLineUpYOffsetLeft=0.3;
-    public static final double odomLineUpXOffsetRight=0.7;
-    public static final double odomLineUpYOffsetRight=-0.3;
+    public static final double odomLineUpXOffsetLeft=0;
+    public static final double odomLineUpYOffsetLeft=0;
+    public static final double odomLineUpXOffsetRight=0;
+    public static final double odomLineUpYOffsetRight=-0;
 
     public static enum LimelightLineUpOffsets{
       LEFT,CENTER,RIGHT
