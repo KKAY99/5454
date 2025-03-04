@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public final class Constants {
+    public static final int p = 0;
+    public static final int i = 0;
+    public static final int d = 0;
     public static final int k30Amp = 30;
     public static final class ChargedUp {
         public static final double targetHeightAprilTag=18;     // middle of April Tag in Distance
@@ -39,47 +42,9 @@ public final class Constants {
         public static final double AprilTagAlignmentToleranceX=1.5;
         public static final double AprilTagAlignmentToleranceArea=.25;
     }   
-
-    public static final class VisionPipelines{
-        public static final int AprilTag=0;
-        public static final int TopTape=1;
-        public static final int BottomTape=2;
-        public static final int PlayerStationTag=3;
-    }
-
-    public static enum TargetHeight
-    {
-        TOPCONE,MIDDLECONE,BOTTOMCONE,TOPCUBE,MIDDLECUBE,BOTTOMCUBE,PLAYERSTATION,SLIDE;	
-    }
     
-
-    public class Climber{
-        public static final int climberPort=48;
-        public static final double climbDownSpeed=0.7;
-        public static final double climbUpSpeed=-0.7;
-
-    }
-
-    public class BreakBeam{
-        public static final int BreakBeamPort=0;
-        public static final int BreakDistance=0;
-    }
     
-    public class Shooter{
-        public static final int shooterMotor1=11;
-        public static final int shooterMotor2=16;
-        public static final int shooterInclineMotor=10;
-        public static final double ShooterSpeed=-1.0;
-        public static final double ShooterFeederSpeed=-.5;
-        public static final double ShooterOutTakeSpeed=.25;
-        public static final int shooterFeederMotor = 4;
-        public static final double inclineSpeed=.50;
-        public static final double feederTimeToRun=0.5;
-
-        public static final double shooterInclinePosHigh=0.69; //-0.10;
-        public static final double shooterInclinePosMiddle=0.53;//-0.17;
-        public static final double shooterInclinePosLow=0.47;
-    }
+   
     public class swerveDrive{
         public static final double driveDeadband=0.05;
         public static final int kFrontLeftSteering = 1;
@@ -93,51 +58,6 @@ public final class Constants {
     }
 
 
-    public static final class Lift{
-        public static final double liftAutoExtendStage1Speed=-0.9; //-0.5
-        public static final double liftAutoExtendStage2Speed=-0.4; //-0.3
-        public static final double liftAutoRetract1Speed=0.9;
-        public static final double liftAutoRetract2Speed=0.6;
-        public static final double liftAutoRetractHomeSpeed=0.1;
-        public static final double kClawFlipOffset=6; // add a positive to decrease the stroke since it is negative values;
-        //low pos meeds to be higher so cones are near spindexer
-        public static final double posInitLift=-70-kClawFlipOffset;
-        //all other positions go lower
-        public static final double posCubeOutofLimelight=-60; 
-        public static final double posLiftOutfIntake=-25; 
-        public static final double posLiftCubeTransfer=-25;
-        public static final double posInitLiftRetract=-46+kClawFlipOffset; // was -26+kClawFip
-         public static final double posLowConeFullLiftStage1=-62+kClawFlipOffset;
-        public static final double posLowConeFullLiftStage2=-72+kClawFlipOffset;
-        public static final double posMiddleConeFullLiftStage1=-80;
-        public static final double posMiddleConeFullLiftStage2=-92; //mid cone auto for lift --JACKSON CHNG
-        public static final double posHighConeFullLiftStage1=-70; //was 95
-        public static final double posHighConeFullLiftStage2=-133; //was -136
-        public static final double posLowCubeFullLiftStage1=-62+kClawFlipOffset;
-        public static final double posLowCubeFullLiftStage2=-72+kClawFlipOffset;
-        public static final double posMiddleCubeFullLiftStage1=-70.00+kClawFlipOffset;
-        public static final double posMiddleCubeFullLiftStage2=-82; 
-        public static final double posHighCubeFullLiftStage1=-90+kClawFlipOffset;
-        public static final double posHighCubeFullLiftStage2=-110;
-        public static final double posPlayerLiftStage1=-55;  
-        public static final double posPlayerLiftStage2=-83; //WAS -76 --JACKSON
-        public static final double posSlideStage1=-70;   
-        public static final double posSlideStage2=-79; 
-        public static final double posShelf=-98+kClawFlipOffset;
-        public static final double posHome=10;
-        
-        public static final double liftKP = 0.1;
-        public static final double liftKI = 1e-4;
-        public static final double liftKD = 1;
-        public static final double liftKIZ = 0;
-        public static final double liftKFF = 0;
-        public static final double maxOutput = 1;
-        public static final double minOutPut = -1;
-
-        public static final int topTape = 0;
-        public static final int middleTape = 1;
-        public static final int apriltag = 2;
-    }
 
     public static final class Rotate{
         public static final double rotateAutoOutStage1Speed=-0.50;
@@ -167,21 +87,6 @@ public final class Constants {
         public static final double encoderLowScorePos=0;
     }
 
-    public static final class FloorIntake{
-        public static final double intakeSpeed=.9;
-     
-        public static final int intakeLeftMotorPort=8;
-        public static final int intakeRightMotorPort=12;
-    }
-
-    public static final class Pneumatics {
-        public static final int CompressorID=0; 
-        public static final int HubID=62;
-        public static final PneumaticsModuleType moduleType=PneumaticsModuleType.REVPH;
-    
-        public static final int clawSolenoid = 9; // was 8 -jackson
-        public static final int punchSolenoid=8; //was 9 -jackson
-    }
 
     public static final class ButtonConstants{
         public static final int DriverIntakeIn=1;
@@ -202,9 +107,6 @@ public final class Constants {
         public static final int OperatorIntakeIn=7;
     }
 
-    public static final class LimitSwitches{
-        public static final int brakeButtonPort=2;
-    }
 
     public static final class AutoConstants {
         public static final String autoMode0="0-Do Nothing";
@@ -236,46 +138,16 @@ public final class Constants {
  
     }
             
-
-
-    public static final class LaserCANConstants {
-        public static final int LaserCANID = 6;
-        public static final double DelfaultDistane = 0;
-        public static final double BreakPointDistance = 40;
-        public static final double RegionOfInterestSqrd=144;
-    }
         
     public static final class InputControllers {
         public static final int kXboxDrive = 0;
         public static final int kXboxOperator = 1;
         public static final int kCustomController = 2;
     }
-    public static final class PhotonVision{
-        public static String camera="";
-    }
 
     /*
      * Constant Values for Limelight based on target and mounting
      */
-    public static final class LimeLightValues {
-        public static final double steeringP = 0.035;
-        public static final double steeringI = 0;
-        public static final double steeringD = 0.0055;
-        public static final double steeringFeedForward = 0.0;
-
-        public static final double targetHeight = 18; // 249 cm
-        public static final double targetXPosShoot = -1.5;
-        public static final double targetXPosSafeZone = 5;
-        public static final double targetXPosRange=50;
-        public static final double limelightHeight = 19; //37
-        public static final double limelightAngle = 0; //40
-        public static final double kVisionDistanceTolerance = 5;
-        public static final double kVisionXTolerance = .04;
-        public static final double kVisionXOffset=4;
-        public static final double kVisionXMaxDistanceOffset=4.31; // was 1.7
-        public static final double kVisionXMinDistanceOffset=0.91; // was 1.7
-    }
-
     public class LEDS {
         public static final int UPPERPORT = 0;
         public static final int BOTTOMPORT = 9;

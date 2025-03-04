@@ -2,7 +2,7 @@ package frc.robot.common.drivers;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
-
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -10,10 +10,13 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.Constants;
 import frc.robot.common.control.PidConstants;
 import frc.robot.common.control.PidController;
 import frc.robot.common.drivers.SwerveModule;
@@ -25,6 +28,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
+
 
 public class Mk2SwerveModuleBuilder {
     /**
@@ -143,14 +147,12 @@ public class Mk2SwerveModuleBuilder {
      */
     public Mk2SwerveModuleBuilder angleMotor(SparkBase motor, PidConstants constants, double reduction) {
         RelativeEncoder encoder = motor.getEncoder();
-        encoder.setPositionConversionFactor(2.0 * Math.PI / reduction);
-
+        encoder.setPosition(2.0 * Math.PI / reduction);
         // KK 2/20 try
        SparkClosedLoopController controller = motor.getClosedLoopController();
-       // SparkMaxPIDController controller= motor.getPIDController();
-        controller.setP(constants.p);
-        controller.setI(constants.i);
-        controller.setD(constants.i);
+       //set PID values
+       
+       
 
         targetAngleConsumer = targetAngle -> {
             double currentAngle = encoder.getPosition();
@@ -183,16 +185,16 @@ public class Mk2SwerveModuleBuilder {
         final double sensorCoefficient = (2.0 * Math.PI) / (reduction * 2048.0);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.slot0.kP = constants.p;
-        config.slot0.kI = constants.i;
-        config.slot0.kD = constants.d;
+        config.Slot0.kP = constants.p;
+        config.Slot0.kI = constants.i;
+        config.Slot0.kD = constants.d;
 
         motor.setNeutralMode(NeutralModeValue.Brake);
 
-        motor.configAllSettings(config);
+        motor.getConfigurator().apply(config);
 
         targetAngleConsumer = targetAngle -> {
-            double currentAngle = sensorCoefficient * motor.getSensorCollection().getIntegratedSensorPosition();
+            double currentAngle = sensorCoefficient * motor.getPosition().getValueAsDouble();
             // Calculate the current angle in the range [0, 2pi)
             double currentAngleMod = currentAngle % (2.0 * Math.PI);
             if (currentAngleMod < 0.0) {
@@ -207,9 +209,9 @@ public class Mk2SwerveModuleBuilder {
                 newTarget += 2.0 * Math.PI;
             }
 
-            motor.set(ControlMode.Position, newTarget / sensorCoefficient);
+            motor.set(newTarget / sensorCoefficient);
         };
-        initializeAngleCallback = angle -> motor.getSensorCollection().setIntegratedSensorPosition(angle / sensorCoefficient, 50);
+        initializeAngleCallback = angle -> motor.setPosition(angle / sensorCoefficient, 50);
 
         return this;
     }
@@ -306,8 +308,8 @@ public class Mk2SwerveModuleBuilder {
      */
     public Mk2SwerveModuleBuilder driveMotor(SparkBase motor, double reduction, double wheelDiameter) {
         RelativeEncoder encoder = motor.getEncoder();
-        encoder.setPositionConversionFactor(wheelDiameter * Math.PI / reduction);
-        encoder.setVelocityConversionFactor(wheelDiameter * Math.PI / reduction * (1.0 / 60.0)); // RPM to units per second
+        encoder.setPosition(wheelDiameter * Math.PI / reduction);
+       // encoder.setvelocity(wheelDiameter * Math.PI / reduction * (1.0 / 60.0)); // RPM to units per second
 
         currentDrawSupplier = motor::getOutputCurrent;
         distanceSupplier = encoder::getPosition;
@@ -323,13 +325,13 @@ public class Mk2SwerveModuleBuilder {
 
     public Mk2SwerveModuleBuilder driveMotor(TalonFX motor, double reduction, double wheelDiameter) {
         TalonFXConfiguration config = new TalonFXConfiguration();
-        motor.configAllSettings(config);
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor.getConfigurator().apply(config);
+        motor.setNeutralMode(NeutralModeValue.Brake);
 
-        currentDrawSupplier = motor::getSupplyCurrent;
-        distanceSupplier = () -> (Math.PI * wheelDiameter * motor.getSensorCollectio().getIntegratedSensorPosition()) / (2048.0 * reduction);
-        velocitySupplier = () -> (10.0 * Math.PI * wheelDiameter * motor.getSensorCollection().getIntegratedSensorVelocity()) / (2048.0 * reduction);
-        driveOutputConsumer = output -> motor.set(ControlMode.PercentOutput, output);
+        currentDrawSupplier = () -> motor.getSupplyCurrent().getValueAsDouble();
+        distanceSupplier = () -> (Math.PI * wheelDiameter * motor.getPosition().getValueAsDouble()) / (2048.0 * reduction);
+        velocitySupplier = () -> (10.0 * Math.PI * wheelDiameter * motor.getVelocity().getValueAsDouble()) / (2048.0 * reduction);
+        driveOutputConsumer = output -> motor.set(output);
 
         return this;
     }
