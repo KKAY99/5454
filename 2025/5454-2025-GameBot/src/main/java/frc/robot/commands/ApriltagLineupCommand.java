@@ -4,61 +4,37 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.utilities.Limelight;
+import java.util.function.Supplier;
+import frc.robot.utilities.ObsidianPID;
 
 public class ApriltagLineupCommand extends Command {
   private CommandSwerveDrivetrain m_swerve;
-  private Limelight m_Limelight;
+  private Limelight m_leftLimelight;
+  private Limelight m_rightLimelight;
 
-  private double m_targetDistance;
-  private double kDriveDeadband=0.5;
-  private double kLineupXDeadband=0.5454;
-  private double kLineupYawDeadband=1;
+  private ObsidianPID m_pid;
 
-  private boolean m_driveTowards = false;
-  private boolean m_shouldReset=false;
+  private Supplier<Boolean> m_isRightLineup;
 
   private enum States{
-    CHECKFORTARGET,DRIVETOWARDS,LINEUP,END
+    CHECKFORTARGET,LEFTLINEUP,RIGHTLINEUP,END
   };
 
   private States m_currentState = States.CHECKFORTARGET;
 
-  public ApriltagLineupCommand(CommandSwerveDrivetrain swerve,Limelight limelight,int fiducialID) {
+  public ApriltagLineupCommand(CommandSwerveDrivetrain swerve,Limelight leftLimelight,Limelight rightLimelight,Supplier<Boolean> isRightLineup) {
     m_swerve=swerve;
-    m_Limelight=limelight;
-    m_driveTowards=false;
+    m_leftLimelight=leftLimelight;
+    m_rightLimelight=rightLimelight;
 
-    m_Limelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
-    m_Limelight.setLimelightIDFilter(fiducialID);
-    addRequirements(m_swerve);
-  }
+    m_isRightLineup=isRightLineup;
 
-  public ApriltagLineupCommand(CommandSwerveDrivetrain swerve,Limelight limelight,double distance,int fiducialID) {
-    m_swerve=swerve;
-    m_Limelight=limelight;
-    m_targetDistance=distance;
+    m_leftLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
+    m_rightLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
 
-    if(distance!=0){
-      m_driveTowards=true;
-    }
+    m_pid=new ObsidianPID(LimeLightValues.P,LimeLightValues.I,LimeLightValues.D,LimeLightValues.maxAndMin,-LimeLightValues.maxAndMin);
+    m_pid.setInputGain(LimeLightValues.inputGain);
 
-    m_Limelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
-    m_Limelight.setLimelightIDFilter(fiducialID);
-    addRequirements(m_swerve);
-  }
-
-  public ApriltagLineupCommand(CommandSwerveDrivetrain swerve,Limelight limelight,double distance,int fiducialID,boolean shouldReset) {
-    m_swerve=swerve;
-    m_Limelight=limelight;
-    m_targetDistance=distance;
-    m_shouldReset=shouldReset;
-
-    if(distance!=0){
-      m_driveTowards=true;
-    }
-
-    m_Limelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
-    m_Limelight.setLimelightIDFilter(fiducialID);
     addRequirements(m_swerve);
   }
 
@@ -72,9 +48,6 @@ public class ApriltagLineupCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted){
-    if(m_shouldReset){
-      m_Limelight.resetLimelightIDFilter();
-    }
     m_currentState = States.CHECKFORTARGET;
   }
 
@@ -82,86 +55,76 @@ public class ApriltagLineupCommand extends Command {
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
-    double distance=Math.abs(m_Limelight.getDistance());
-    double rawX=m_Limelight.getX();
-    double x=Math.abs(rawX);
-    double rawYaw=m_Limelight.getYawOfAprilTag();
-    double yaw=Math.abs(rawYaw);
-    double strafeFlipValue=rawX/x;
-    double rotFlipValue=rawYaw/yaw;
-    double rotMult=1;
-    double strafeMult=1;
-    double strafe=0.7;
-    double rotation=0.7;
-    double forward=0;
+    double rawX=0;
+    double x=0;
+    double strafeFlipValue=0;
+    double strafe=0;
 
     switch(m_currentState){
       case CHECKFORTARGET:
-        if(m_Limelight.isAnyTargetAvailable()){
-          m_currentState=States.LINEUP;
-        }else{
-          m_currentState=States.END;
-        }
-      break;
-      case DRIVETOWARDS:
-        if(distance>(m_targetDistance+LimeLightValues.driveDeadband3)){
-          forward=0.6;
-        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband3)&&distance>(m_targetDistance+LimeLightValues.driveDeadband2)){
-          forward=0.5;
-        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband2)&&distance>(m_targetDistance+LimeLightValues.driveDeadband1)){
-          forward=0.4;
-        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband1)&&distance>(m_targetDistance+LimeLightValues.driveDeadband0)){
-          forward=0.3;
-        }else if(distance<(m_targetDistance+LimeLightValues.driveDeadband0)){
-          forward=0.2;
-        }
-
-        if(m_targetDistance<distance+kDriveDeadband){
-          m_swerve.drive(forward*-1,0,0);
-        }else if(m_targetDistance>distance-kDriveDeadband){
-          m_swerve.drive(forward,0,0);
-        }
-
-        if(m_targetDistance<distance+kDriveDeadband&&m_targetDistance>distance-kDriveDeadband){
-          m_swerve.drive(0,0,0);
-          m_currentState = States.END;
-        }
-      break;
-      case LINEUP:
-        if(yaw>LimeLightValues.yawLineupDeadband){
-          rotMult=0.7;
-        }else{
-          rotMult=(yaw/LimeLightValues.yawLineupDeadband)+0.09;
-        }
-
-        if(x>LimeLightValues.xLineupDeadband){
-          strafeMult=0.7;
-        }else{
-          strafeMult=(x/LimeLightValues.xLineupDeadband)+0.09;
-        }
-
-        if(x<kLineupXDeadband&&yaw<kLineupYawDeadband){
-          m_swerve.drive(0,0,0);
-          if(m_driveTowards){
-            m_currentState=States.DRIVETOWARDS;
+        if(m_isRightLineup.get()){
+          if(m_leftLimelight.isAnyTargetAvailable()){
+            m_currentState=States.LEFTLINEUP;
+          }else if(m_leftLimelight.isAnyTargetAvailable()){
+            m_currentState=States.RIGHTLINEUP;
           }else{
             m_currentState=States.END;
           }
         }else{
-          if(x<kLineupXDeadband){
-            strafe=0;
+          if(m_rightLimelight.isAnyTargetAvailable()){
+            m_currentState=States.RIGHTLINEUP;
+          }else if(m_rightLimelight.isAnyTargetAvailable()){
+            m_currentState=States.LEFTLINEUP;
+          }else{
+            m_currentState=States.END;
           }
+        }
+      break;
+      case LEFTLINEUP:
+        rawX=m_leftLimelight.getX();
+        x=Math.abs(m_leftLimelight.getX());
+        strafeFlipValue=x/rawX;
 
-          if(yaw<kLineupYawDeadband){
-            rotation=0;
-          }
+        strafe=-m_pid.calculatePercentOutput(x,0);
 
-          m_swerve.drive(0,(strafe*strafeMult)*strafeFlipValue,(rotation*rotMult)*rotFlipValue);
+        if(x<LimeLightValues.leftLineupXDeadband&&m_isRightLineup.get()){
+          m_swerve.drive(0,0,0);
+          m_currentState=States.END;
+        }else{
+          m_swerve.drive(0,strafe*strafeFlipValue,0);
+        }
+
+        if(!m_leftLimelight.isAnyTargetAvailable()||(m_rightLimelight.isAnyTargetAvailable()&&!m_isRightLineup.get())){
+          m_currentState=States.RIGHTLINEUP;
+        }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
+          m_currentState=States.END;
+        }
+      break;
+      case RIGHTLINEUP:
+        rawX=m_rightLimelight.getX();
+        x=Math.abs(m_rightLimelight.getX());
+        strafeFlipValue=x/rawX;
+
+        strafe=m_pid.calculatePercentOutput(x,0);
+
+        if(x<LimeLightValues.rightLineupXDeadband&&!m_isRightLineup.get()){
+          m_swerve.drive(0,0,0);
+          m_currentState=States.END;
+        }else{
+          m_swerve.drive(0,strafe*strafeFlipValue,0);
+        }
+
+        if(!m_rightLimelight.isAnyTargetAvailable()||(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup.get())){
+          m_currentState=States.LEFTLINEUP;
+        }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
+          m_currentState=States.END;
         }
       break;
       case END:
         returnValue=true;
     }
+
+    System.out.println("CURRENT PID OUTPUT"+strafe);
 
     return returnValue;
   }
