@@ -65,7 +65,7 @@ public class ApriltagLineupCommand extends Command {
         if(m_isRightLineup.get()){
           if(m_leftLimelight.isAnyTargetAvailable()){
             m_currentState=States.LEFTLINEUP;
-          }else if(m_leftLimelight.isAnyTargetAvailable()){
+          }else if(m_rightLimelight.isAnyTargetAvailable()){
             m_currentState=States.RIGHTLINEUP;
           }else{
             m_currentState=States.END;
@@ -73,7 +73,7 @@ public class ApriltagLineupCommand extends Command {
         }else{
           if(m_rightLimelight.isAnyTargetAvailable()){
             m_currentState=States.RIGHTLINEUP;
-          }else if(m_rightLimelight.isAnyTargetAvailable()){
+          }else if(m_leftLimelight.isAnyTargetAvailable()){
             m_currentState=States.LEFTLINEUP;
           }else{
             m_currentState=States.END;
@@ -91,10 +91,13 @@ public class ApriltagLineupCommand extends Command {
           m_swerve.drive(0,0,0);
           m_currentState=States.END;
         }else{
+          //TODO: FINISH WHEN GET ROBOT
+          strafe=(m_isRightLineup.get())?strafe:-0.3;
+          strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
           m_swerve.drive(0,strafe*strafeFlipValue,0);
         }
 
-        if(!m_leftLimelight.isAnyTargetAvailable()||(m_rightLimelight.isAnyTargetAvailable()&&!m_isRightLineup.get())){
+        if(m_rightLimelight.isAnyTargetAvailable()&&!m_isRightLineup.get()){
           m_currentState=States.RIGHTLINEUP;
         }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
           m_currentState=States.END;
@@ -111,10 +114,13 @@ public class ApriltagLineupCommand extends Command {
           m_swerve.drive(0,0,0);
           m_currentState=States.END;
         }else{
+          //TODO: FINISH WHEN GET ROBOT
+          strafe=(!m_isRightLineup.get())?strafe:0.3;
+          strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
           m_swerve.drive(0,strafe*strafeFlipValue,0);
         }
 
-        if(!m_rightLimelight.isAnyTargetAvailable()||(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup.get())){
+        if(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup.get()){
           m_currentState=States.LEFTLINEUP;
         }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
           m_currentState=States.END;

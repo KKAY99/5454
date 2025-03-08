@@ -89,6 +89,7 @@ public class RobotContainer {
 
   public boolean hasHomed=false;
   public boolean m_isRightLineup=false;
+  public boolean m_doAlgae=false;
 
   public RobotContainer(){
     SmartDashboard.putData("field", m_Field2d);
@@ -100,8 +101,8 @@ public class RobotContainer {
   }
 
   public void configureNamedCommands() {
-    NamedCommands.registerCommand("AutoScoreLeft",new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,false));
-    NamedCommands.registerCommand("AutoScoreRight",new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,true));
+    NamedCommands.registerCommand("AutoScoreLeft",new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->false,()->false));
+    NamedCommands.registerCommand("AutoScoreRight",new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->true,()->false));
   }
 
   private void configureButtonBindings(){
@@ -126,39 +127,44 @@ public class RobotContainer {
     m_xBoxDriver.rightBumper().onTrue(testPID2);*/
 
     //DunkinDonutCommands
-    /*DunkinDonutRotateCommand DunkinRotateCommand = new DunkinDonutRotateCommand(m_dunkinDonut, () -> m_xBoxOperator.getRightX()*0.5);
-    Trigger operatorRightXJoystick = new Trigger(() -> Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
-    operatorRightXJoystick.whileTrue(DunkinRotateCommand);*/
+    DunkinDonutRotateCommand DunkinRotateCommand=new DunkinDonutRotateCommand(m_dunkinDonut,()->m_xBoxOperator.getRightX()*0.5);
+    Trigger operatorRightXJoystick=new Trigger(()->Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
+    operatorRightXJoystick.whileTrue(DunkinRotateCommand);
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, CoralConstants.coralOutakeSpeed,true, true,-0.25, -0.25);
+    /*DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, CoralConstants.coralOutakeSpeed,true, true,-0.25, -0.25);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
-    operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
+    operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);*/
+
+    ClawPIDScoreIntake clawProcessorScore=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.processorScorePos,DunkinDonutConstants.processorScorePos,DunkinDonutConstants.processorScoreSpeed,
+                                                                ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.rotateHomePos);
+    Trigger processorRightTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getRightTriggerAxis())>ButtonBindings.joystickDeadband);
+    processorRightTrigger.whileTrue(clawProcessorScore);
+
+    ClawPIDScoreIntake clawLollipopIntake=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.lollipopGrabPos,DunkinDonutConstants.lollipopGrabPos,DunkinDonutConstants.lollipopGrabSpeed,
+                                                              ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.algaeStowPos);
+    Trigger lollipopIntakeLeftTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getLeftTriggerAxis())>ButtonBindings.joystickDeadband);
+    lollipopIntakeLeftTrigger.whileTrue(clawLollipopIntake);
+
+    /*ClawPIDScoreIntake clawGroundIntake=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.groundIntakePos,DunkinDonutConstants.groundIntakePos,DunkinDonutConstants.groundIntakeSpeed,
+                                                              ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.algaeStowPos);
+    Trigger clawGroundIntakeLeftTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getLeftTriggerAxis())>ButtonBindings.joystickDeadband);
+    clawGroundIntakeLeftTrigger.whileTrue(clawGroundIntake);*/
 
     DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, m_elevator, CoralConstants.coralIntakeSpeed, true, true, 0.75, 0.35);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
-
-    //might need a spreate DunkinCoralCommand for scoring
-    
-    /*DunkinDonutAlgeaCommand DunkinAlgeaShootCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, -1,false); 
-    JoystickButton operatorDunkinAlgeaShootButton = new JoystickButton(m_xBoxOperator,2);
-    operatorDunkinAlgeaShootButton.whileTrue(DunkinAlgeaShootCommand);
-
-    DunkinDonutAlgeaCommand DunkinAlgeaPullCommand = new DunkinDonutAlgeaCommand(m_dunkinDonut, 0.5,false); 
-    JoystickButton operatorDunkinAlgeaPullButton = new JoystickButton(m_xBoxOperator,3);
-    operatorDunkinAlgeaPullButton.whileTrue(DunkinAlgeaPullCommand);*/
     
     //ElevatorCommands
     ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY()*0.5);
     Trigger operatorLeftYJoystick = new Trigger(()->Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel, false);
-    JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
+    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,()->m_doAlgae);
+    JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreManualButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
  
-    /*SequentialCommandGroup seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,m_isRightLineup);
-    JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator, ButtonBindings.lineUpButton);
+   /* SequentialCommandGroup seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
+    JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
 
     //Lineup
@@ -185,17 +191,21 @@ public class RobotContainer {
 
   public void setLineupSide(Supplier<Boolean> x,Supplier<Boolean> a){
     if(x.get()){
-      m_isRightLineup=true;
+      m_isRightLineup=false;
     }
 
     if(a.get()){
-      m_isRightLineup=false;
+      m_isRightLineup=true;
     }
+  } 
+
+  public void setDoesDoAlgae(Supplier<Boolean> leftBumperPress){
+    m_doAlgae=(m_doAlgae&&leftBumperPress.get())?false:true;
   } 
       
   private void refreshSmartDashboard(){  
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
-    SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
+    //SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
     SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
     SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
@@ -295,6 +305,7 @@ public class RobotContainer {
     m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
     setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getAButtonPressed());
+    setDoesDoAlgae(()->m_xBoxOperator.getLeftBumperButtonPressed());
   }
 
   public void resetGyroPoseDisabled(){
@@ -312,6 +323,7 @@ public class RobotContainer {
     if(!hasHomed){
       hasHomed = true;
       CommandScheduler.getInstance().schedule(new ElevatorHomeCommand(m_elevator));
+      CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
     }
   }
 

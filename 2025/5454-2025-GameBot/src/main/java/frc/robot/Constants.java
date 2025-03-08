@@ -136,7 +136,7 @@ public final class Constants {
 
     public static final double P=0.1;
     public static final double I=0;
-    public static final double D=0.05;
+    public static final double D=0.1;
     public static final double maxAndMin=0.5;
     public static final double inputGain=0.5;
   }
@@ -154,25 +154,28 @@ public final class Constants {
     public static final double posDeadband=1.2;
 
     public static final double homePosDeadband=0.001;
-    public static final double rotateHomePos=0.18;
+    public static final double rotateHomePos=0.15;
     public static final double homeSpeed=0.03;
 
     public static final double localPIDkP=0.1;
     public static final double localPIDkI=0;
     public static final double localPIDkD=0;
     public static final double localPIDMaxAndMin=0.5;
+    public static final double PIDInputGain=60;
 
-    public static final double l1PosABS=0;
-    public static final double l2PosABS=0;
-    //8.5 inches from reef to robot frame
-    public static final double l3PosABS=0;
-    //14 inches from reef to robot frame
-    public static final double l4PosABS=0;
-    public static final double humanPlayerPosABS=0;
+    public static final double groundIntakePos=0.33;
+    public static final double algaeStowPos=0.30;
+    public static final double lollipopGrabPos=0.328;
+    public static final double processorScorePos=0.328;
+    public static final double noGrabAlgaePos=0.22;
+    public static final double algaeGrabPos=0.328;
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
 
+    public static final double groundIntakeSpeed=1;
+    public static final double lollipopGrabSpeed=1;
+    public static final double processorScoreSpeed=-1;
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=1;
     public static final double autoCoralTimeToRun=1;
@@ -197,6 +200,11 @@ public final class Constants {
 
     public static final double posDeadband=1.2;
 
+    public static final double groundIntakePos=-5;
+    public static final double processorScorePos=-13;
+    public static final double lollipopGrabPos=-13;
+    public static final double l2AlgaePos=-43;
+    public static final double l3AlgaePos=-80;
     public static final double l1Pos=-13;
     public static final double l2Pos=-14; //26
     public static final double l3Pos=-43;
@@ -259,8 +267,8 @@ public final class Constants {
   public static final class ButtonBindings{
     public static final int dunkinCoralOutakeButton=2; 
     public static final int dunkinCoralIntakeButton=4;
-    public static final int lineUpButton=5;
-    public static final int elevatorScoreLevelButton=6;
+    public static final int elevatorScoreAutoButton=5;
+    public static final int elevatorScoreManualButton=6;
 
     public static final int setScoreLevelL1POV0=00;
     public static final int setScoreLevelL2POV90=90;

@@ -41,8 +41,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private double m_rotateSpeed=0;
   private double m_coralSpeed=0;
   private double m_algaeSpeed=0;
-
-  private double m_pidInputGain=60;
   private double m_setPoint=0;
   private double m_pidOutput=0;
 
@@ -61,7 +59,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_coralRelative = m_coralMotor.getEncoder();
     m_obsidianPID=new ObsidianPID(DunkinDonutConstants.localPIDkP,DunkinDonutConstants.localPIDkI,DunkinDonutConstants.localPIDkD,
                                   DunkinDonutConstants.localPIDMaxAndMin,-DunkinDonutConstants.localPIDMaxAndMin);
-    m_codeBoundPID=new PIDController(DunkinDonutConstants.localPIDkP,DunkinDonutConstants.localPIDkI,DunkinDonutConstants.localPIDkD);
+    m_obsidianPID.setInputGain(DunkinDonutConstants.PIDInputGain);
 
     m_coralLimitSwitch = new DigitalInput(limitSwitch);
     m_indexerLimitSwitch = new DigitalInput(indexerLimitSwitchID);
@@ -175,30 +173,15 @@ public class DunkinDonutSubsystem extends SubsystemBase {
 
   public void toggleLocalPid(double setPoint){
     m_setPoint=setPoint;
-    m_shouldRunPID=!m_shouldRunPID?true:false;
+    m_obsidianPID.togglePID();
   }
 
-  public void runLocalPID(){
-    if(m_shouldRunPID){
-      double calculatedSpeed=m_codeBoundPID.calculate(getAbsoluteEncoderPos()*m_pidInputGain,m_setPoint*m_pidInputGain)*-1;
-
-      if(calculatedSpeed>DunkinDonutConstants.localPIDMaxAndMin){
-        calculatedSpeed=DunkinDonutConstants.localPIDMaxAndMin;
-      }else if(calculatedSpeed<-DunkinDonutConstants.localPIDMaxAndMin){
-        calculatedSpeed=-DunkinDonutConstants.localPIDMaxAndMin;
-      }
-
-      m_pidOutput=calculatedSpeed;
-      m_rotateMotor.set(calculatedSpeed);
-    }
-  }
-
-  public boolean getShouldRunPID(){
-    return m_shouldRunPID;
+  public boolean getToggle(){
+    return m_obsidianPID.getToggle();
   }
 
   public void resetShouldRunPID(){
-    m_shouldRunPID=false;
+    m_obsidianPID.resetToggle();
   }
 
   public boolean checkCANConnections(){
@@ -231,6 +214,9 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("PIDOutput",m_pidOutput);
     SmartDashboard.putNumber("Setpoint",m_setPoint);
 
-    runLocalPID();
+    if(m_obsidianPID.getToggle()){
+      double pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
+      m_rotateMotor.set(pidOutput);
+    }
   }
 }

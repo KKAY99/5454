@@ -29,19 +29,19 @@ public class ElevatorAndRotateAtPos extends Command{
         switch(m_scoreLevel.get()){
         case L1:
         m_elevatorPos=ElevatorConstants.l1Pos;
-        m_rotatePos=DunkinDonutConstants.l1PosABS;
+        m_rotatePos=DunkinDonutConstants.noGrabAlgaePos;
         break;
         case L2:
         m_elevatorPos=ElevatorConstants.l2Pos;
-        m_rotatePos=DunkinDonutConstants.l2PosABS;
+        m_rotatePos=DunkinDonutConstants.noGrabAlgaePos;
         break;
         case L3:
         m_elevatorPos=ElevatorConstants.l3Pos;
-        m_rotatePos=DunkinDonutConstants.l3PosABS;
+        m_rotatePos=DunkinDonutConstants.noGrabAlgaePos;
         break;
         case L4:
         m_elevatorPos=ElevatorConstants.l4Pos;
-        m_rotatePos=DunkinDonutConstants.l4PosABS;
+        m_rotatePos=DunkinDonutConstants.noGrabAlgaePos;
         break;
         case RETRACT:
         m_elevatorPos=ElevatorConstants.elevatorLowLimit;
