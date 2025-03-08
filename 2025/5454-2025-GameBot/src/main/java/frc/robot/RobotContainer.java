@@ -87,6 +87,12 @@ public class RobotContainer {
   public double m_D;
   public double m_elevatorPos;
 
+  public boolean m_ElevatorLevel1;
+  public boolean m_ElevatorLevel2;
+  public boolean m_ElevatorLevel3;
+  public boolean m_ElevatorLevel4;
+
+
   public boolean hasHomed=false;
   public boolean m_isRightLineup=false;
   public boolean m_doAlgae=false;
@@ -176,15 +182,31 @@ public class RobotContainer {
     switch(pov.get()){
       case 0:
       m_currentScoreLevel=ElevatorScoreLevel.L1;
+      m_ElevatorLevel1 = true;
+      m_ElevatorLevel2 = false;
+      m_ElevatorLevel3 = false;
+      m_ElevatorLevel4 = false;
       break;
       case 90:
       m_currentScoreLevel=ElevatorScoreLevel.L2;
+      m_ElevatorLevel1 = false;
+      m_ElevatorLevel2 = true;
+      m_ElevatorLevel3 = false;
+      m_ElevatorLevel4 = false;
       break;
       case 180:
       m_currentScoreLevel=ElevatorScoreLevel.L3;
+      m_ElevatorLevel1 = false;
+      m_ElevatorLevel2 = false;
+      m_ElevatorLevel3 = true;
+      m_ElevatorLevel4 = false;
       break;
       case 270:
       m_currentScoreLevel=ElevatorScoreLevel.L4;
+      m_ElevatorLevel1 = false;
+      m_ElevatorLevel2 = false;
+      m_ElevatorLevel3 = false;
+      m_ElevatorLevel4 = true;
       break;
     }
   }
@@ -206,10 +228,16 @@ public class RobotContainer {
   private void refreshSmartDashboard(){  
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
     //SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
+    SmartDashboard.putBoolean("m_ElevatorLevel1", m_ElevatorLevel1);
+    SmartDashboard.putBoolean("m_ElevatorLevel2", m_ElevatorLevel2);
+    SmartDashboard.putBoolean("m_ElevatorLevel3", m_ElevatorLevel3);
+    SmartDashboard.putBoolean("m_ElevatorLevel4", m_ElevatorLevel4);
+    
+    SmartDashboard.putBoolean("Lineup pos",m_isRightLineup);
+    SmartDashboard.putBoolean("Do Algea", m_doAlgae);
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
     SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
     SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
-    SmartDashboard.putBoolean("Lineup pos",m_isRightLineup);
     SmartDashboard.putNumber("LEFT LIMELIGHT X",m_leftLimelight.getX());
     SmartDashboard.putNumber("RIGHT LIMELIGHT X",m_rightLimelight.getX());
   }
