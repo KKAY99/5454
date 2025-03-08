@@ -46,7 +46,6 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.LineupConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
-import frc.robot.Constants.LimeLightValues.LimelightLineUpOffsets;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
@@ -70,10 +69,10 @@ public class RobotContainer {
   private ClimbSubsystem m_climb=new ClimbSubsystem(ClimbConstants.climbCanID1,ClimbConstants.climbCanID2,ClimbConstants.encoderDIO,ClimbConstants.ServoPMW);
 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  public final Limelight m_OdomLimelight=new Limelight(Constants.LimeLightValues.limelightBackOdomHeight,Constants.LimeLightValues.limelightBackOdomAngle,
-                                                0,Constants.LimeLightValues.backOdomLimelightName);
-  /*public final Limelight m_OdomFwdLimelight=new Limelight(Constants.LimeLightValues.limelightFrontOdomHeight,Constants.LimeLightValues.limelightFrontOdomAngle,
-                                                0,Constants.LimeLightValues.frontOdomLimelightName);*/
+  public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
+                                                0,Constants.LimeLightValues.leftLimelightName);
+  public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
+                                                0,Constants.LimeLightValues.rightLimelightName);
 
   //public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
 
@@ -101,8 +100,8 @@ public class RobotContainer {
   }
 
   public void configureNamedCommands() {
-    NamedCommands.registerCommand("AutoScoreLeft",new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,false));
-    NamedCommands.registerCommand("AutoScoreRight",new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel,true));
+    NamedCommands.registerCommand("AutoScoreLeft",new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,false));
+    NamedCommands.registerCommand("AutoScoreRight",new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,true));
   }
 
   private void configureButtonBindings(){
@@ -154,7 +153,7 @@ public class RobotContainer {
     Trigger operatorLeftYJoystick = new Trigger(()->Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,m_OdomLimelight,()->m_currentScoreLevel, false);
+    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel, false);
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreLevelButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
  
@@ -163,9 +162,8 @@ public class RobotContainer {
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
 
     //Lineup
-    OdomLineupCommand odomLineupCommand=new OdomLineupCommand(m_OdomLimelight,m_swerve,()->m_isRightLineup);
-    JoystickButton odomLineupButton=new JoystickButton(m_xBoxOperator,ButtonBindings.lineUpButton);
-    odomLineupButton.onTrue(odomLineupCommand);
+    ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
+    m_xBoxDriver.rightBumper().whileTrue(lineup);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
@@ -202,19 +200,8 @@ public class RobotContainer {
     SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
     SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
     SmartDashboard.putBoolean("Lineup pos",m_isRightLineup);
-    SmartDashboard.putNumber("Current X",m_swerve.getPose2d().getX());
-    SmartDashboard.putNumber("Current Y",m_swerve.getPose2d().getY());
-
-    Logger.recordOutput("BOT POSE:+",m_swerve.getState().Pose);
-    if(m_OdomLimelight.isAnyTargetAvailable()){
-        Logger.recordOutput("TARGET GLOBAL POSE",m_OdomLimelight.findGlobalPoseFromTargetPoseRobotSpace(
-        m_swerve.getState().Pose.getRotation().getDegrees(),LimelightLineUpOffsets.CENTER)
-      );
-    }
-
-    try{
-      SmartDashboard.putNumber("Current Target Fiducial",m_OdomLimelight.getFirstVisibleFiducialID());
-    }catch(Exception e){}
+    SmartDashboard.putNumber("LEFT LIMELIGHT X",m_leftLimelight.getX());
+    SmartDashboard.putNumber("RIGHT LIMELIGHT X",m_rightLimelight.getX());
   }
   
   private void createAutonomousCommandList(){
@@ -287,7 +274,7 @@ public class RobotContainer {
     refreshSmartDashboard();
     GetPIDValues();
 
-    if(m_OdomLimelight.isAnyTargetAvailable()){
+    /*if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getState().Pose.getRotation().getDegrees(),0);
   
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
@@ -298,7 +285,7 @@ public class RobotContainer {
       //if(m_OdomLimelight.getDerivationConfidence(m_swerve,currentPose,currentTimeStamp)){
         m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
       //}
-    } 
+    } */
   }
 
   public void AllPeriodic(){
@@ -311,14 +298,14 @@ public class RobotContainer {
   }
 
   public void resetGyroPoseDisabled(){
-    if(m_OdomLimelight.isAnyTargetAvailable()){
+    /*if(m_OdomLimelight.isAnyTargetAvailable()){
       Pose2d currentPose=m_OdomLimelight.GetPoseViaMegatag2();
       Rotation2d newRot=(DriverStation.getAlliance().get()==Alliance.Blue)?
                         new Rotation2d().fromDegrees(0):
                         new Rotation2d().fromDegrees(180);
       m_swerve.resetPose(new Pose2d(currentPose.getX(),currentPose.getY(),newRot));
       m_OdomLimelight.SetRobotOrientation(m_swerve.getState().Pose.getRotation().getDegrees(),0);
-    }
+    }*/
   }
 
   public void homeRobot(){

@@ -236,8 +236,11 @@ public class Limelight {
         return null;
     }
 
-    public Pose2d findGlobalPoseFromTargetPoseRobotSpace(double gyroAngle,LimeLightValues.LimelightLineUpOffsets offsetState){
-        double[] targetPoseRobotSpace=this.botpose_targetspace.get();
+    /** 
+     * BAD DONT USE WILL RETURN NULL
+    */
+    public Pose2d findGlobalPoseFromTargetPoseRobotSpace(double gyroAngle){
+        /*double[] targetPoseRobotSpace=this.botpose_targetspace.get();
         Pose2d botPose=this.GetPoseViaMegatag2();
         double offsetX=0;
         double offsetY=0;
@@ -245,7 +248,7 @@ public class Limelight {
         double newY=0;
         double newRot=0;
 
-        if(targetPoseRobotSpace[0]!=0){
+       /*if(targetPoseRobotSpace[0]!=0){
             switch(offsetState){
                 case CENTER:
                 offsetX=LimeLightValues.odomLineUpXOffsetCenter;
@@ -275,7 +278,9 @@ public class Limelight {
 
         }else{
             return null;
-        }
+        }*/
+
+        return null;
     }
 
     public boolean isFilteredTargetAvailable(){

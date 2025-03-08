@@ -102,16 +102,13 @@ public final class Constants {
   }
 
   public static final class LimeLightValues {
-    public static final double limelightNeuralHeight=12; //37
-    public static final double limelightNeuralAngle=-10; //40
-    public static final double limelightBackOdomHeight=5;
-    public static final double limelightBackOdomAngle=0;
-    public static final double limelightFrontOdomHeight=3;
-    public static final double limelightFrontOdomAngle=0;
+    public static final double leftLimelightHeight=0;
+    public static final double leftLimelightAngle=0;
+    public static final double rightLimelightHeight=0;
+    public static final double rightLimelightAngle=0;
 
-    public static final String frontOdomLimelightName="limelight-odom";
-    public static final String backOdomLimelightName="limelight-odombwd";
-    public static final String neuralLimelightName="limelight-neural";
+    public static final String leftLimelightName="limelight-left";
+    public static final String rightLimelightName="limelight-right";
 
     public static final int centerApriltagPipeline=0;
     public static final int leftApriltagPipeline=1;
@@ -132,26 +129,16 @@ public final class Constants {
     //Tested Average of Differences in Y coords
     public static final double confidenceYMean=1.2286761570822624E-5;
 
-    public static final double xLineupDeadband=20;
-    public static final double yawLineupDeadband=45;
-
-    public static final double driveDeadband0=30;
-    public static final double driveDeadband1=60;
-    public static final double driveDeadband2=150;
-    public static final double driveDeadband3=200;
-
     public static final double reefAprilTagHeight=8.75;
 
-    public static final double odomLineUpXOffsetCenter=0;
-    public static final double odomLineUpYOffsetCenter=0;
-    public static final double odomLineUpXOffsetLeft=0;
-    public static final double odomLineUpYOffsetLeft=0;
-    public static final double odomLineUpXOffsetRight=0;
-    public static final double odomLineUpYOffsetRight=-0;
+    public static final double leftLineupXDeadband=0.2;
+    public static final double rightLineupXDeadband=0.2;
 
-    public static enum LimelightLineUpOffsets{
-      LEFT,CENTER,RIGHT
-    }
+    public static final double P=0.1;
+    public static final double I=0;
+    public static final double D=0.05;
+    public static final double maxAndMin=0.5;
+    public static final double inputGain=0.5;
   }
 
   public static final class DunkinDonutConstants{

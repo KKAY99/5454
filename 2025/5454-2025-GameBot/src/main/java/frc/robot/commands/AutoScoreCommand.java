@@ -24,7 +24,6 @@ public class AutoScoreCommand extends Command{
     private CommandSwerveDrivetrain m_swerve;
     private ElevatorSubsystem m_elevator;
     private DunkinDonutSubsystem m_dunkin;
-    private Limelight m_limeLight;
 
     private Supplier<ElevatorScoreLevel> m_scoreLevel;
 
@@ -41,15 +40,14 @@ public class AutoScoreCommand extends Command{
     private boolean m_doAlgae = false;
     
     private enum States{
-        CHECKFORTARGET,PRESCOREELEV,LINEUP,WAITFORLINEUP,ALGAE,ELEVATOR,WAITFORELEVATOR,CORAL,RETRACT,WAITFORRETRACT,END
+        CHECKFORTARGET,PRESCOREELEV,ALGAE,ELEVATOR,WAITFORELEVATOR,CORAL,RETRACT,WAITFORRETRACT,END
     }
 
     private States m_currentState=States.CHECKFORTARGET;
 
-    public AutoScoreCommand(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<ElevatorScoreLevel> scorelevel){
+    public AutoScoreCommand(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scorelevel){
         m_elevator=elevator;
         m_dunkin=dunkin;
-        m_limeLight=limeLight;
 
         m_scoreLevel=scorelevel;
         m_isRightLineup=true;
@@ -59,10 +57,9 @@ public class AutoScoreCommand extends Command{
         addRequirements(m_elevator,m_dunkin);
     }
 
-    public AutoScoreCommand(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<ElevatorScoreLevel> scorelevel,boolean doesAlgea){
+    public AutoScoreCommand(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scorelevel,boolean doesAlgea){
         m_elevator=elevator;
         m_dunkin=dunkin;
-        m_limeLight=limeLight;
 
         m_scoreLevel=scorelevel;
         m_doAlgae = doesAlgea;
@@ -72,12 +69,10 @@ public class AutoScoreCommand extends Command{
         addRequirements(m_elevator,m_dunkin);
     }
 
-    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<ElevatorScoreLevel> scorelevel,
-                            boolean isRightLineup){
+    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scorelevel,boolean isRightLineup){
         m_swerve=swerve;
         m_elevator=elevator;
         m_dunkin=dunkin;
-        m_limeLight=limeLight;
 
         m_scoreLevel=scorelevel;
         m_isRightLineup=isRightLineup;
@@ -87,12 +82,11 @@ public class AutoScoreCommand extends Command{
         addRequirements(m_swerve,m_elevator,m_dunkin);
     }
 
-    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<ElevatorScoreLevel> scorelevel,
-                            boolean isRightLineup,boolean doesAlgea){
+    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scorelevel,boolean isRightLineup,
+                            boolean doesAlgea){
         m_swerve=swerve;
         m_elevator=elevator;
         m_dunkin=dunkin;
-        m_limeLight=limeLight;
 
         m_scoreLevel=scorelevel;
         m_isRightLineup=isRightLineup;
@@ -102,11 +96,10 @@ public class AutoScoreCommand extends Command{
         addRequirements(m_swerve,m_elevator,m_dunkin);
     }
 
-    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Limelight limeLight,Supplier<Double> elevPos){
+    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<Double> elevPos){
         m_swerve=swerve;
         m_elevator=elevator;
         m_dunkin=dunkin;
-        m_limeLight=limeLight;
 
         m_scoreLevel=()->ElevatorScoreLevel.TEST;
         m_dashBoardPos=elevPos;
@@ -166,69 +159,13 @@ public class AutoScoreCommand extends Command{
                     m_currentState=States.ELEVATOR;
                 }
             }else{
-                if(m_limeLight.isAnyTargetAvailable()){
-                    m_currentState=States.PRESCOREELEV;
-                }else{
-                    m_currentState=States.END;
-                }
+                m_currentState=States.PRESCOREELEV;
             }
         break;
         case PRESCOREELEV:
             m_elevator.set_referance(m_elevatorIPos);
 
-            m_currentState=States.LINEUP;
-        break;
-        case LINEUP:
-            AutoPlanner autoPlan=new AutoPlanner();
-            if(m_limeLight.isAnyTargetAvailable()){
-                try{
-                    if(DriverStation.getAlliance().get()==Alliance.Blue){
-                        m_limeLight.setCodeIDFilter(17,18,19,20,21,22);
-                        int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
-                        if(m_isRightLineup){
-                            m_odomTarget=LineupConstants.fiducialBlueRightPoses[currentFiducial-17]; 
-                        }else{
-                            m_odomTarget=LineupConstants.fiducialBlueLeftPoses[currentFiducial-17]; 
-                        }
-                    }else{
-                        m_limeLight.setCodeIDFilter(6,7,8,9,10,11);
-                        int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
-                        if(m_isRightLineup){
-                            m_odomTarget=LineupConstants.fiducialBlueRightPoses[currentFiducial-6]; 
-                            Translation2d flippedPoint=FlippingUtil.flipFieldPosition(m_odomTarget.getTranslation());
-                            m_odomTarget=new Pose2d(flippedPoint.getX(),flippedPoint.getY(),m_odomTarget.getRotation());
-                        }else{
-                            m_odomTarget=LineupConstants.fiducialBlueLeftPoses[currentFiducial-6]; 
-                            Translation2d flippedPoint=FlippingUtil.flipFieldPosition(m_odomTarget.getTranslation());
-                            m_odomTarget=new Pose2d(flippedPoint.getX(),flippedPoint.getY(),m_odomTarget.getRotation());
-                        }
-                    } 
-            
-                    //Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(m_swerve.getPose2d(),m_odomTarget));
-                   // CommandScheduler.getInstance().schedule(newCommand);
-
-                    m_currentState=States.WAITFORLINEUP;
-                }catch(Exception e){
-                    m_swerve.drive(0,0,0);
-                    m_currentState=States.END;
-                }
-            }else{
-                m_startTime=Timer.getFPGATimestamp();
-
-                m_currentState=States.END;
-            }
-        break;
-        case WAITFORLINEUP:
-            Pose2d currentPose=m_swerve.getPose2d();
-
-            if(currentPose.getX()-LineupConstants.lineUpDeadband<m_odomTarget.getX()&&currentPose.getX()+LineupConstants.lineUpDeadband>m_odomTarget.getX()&&
-                currentPose.getY()-LineupConstants.lineUpDeadband<m_odomTarget.getY()&&currentPose.getY()+LineupConstants.lineUpDeadband>m_odomTarget.getY()){
-                m_currentState=States.ALGAE;
-            }
-
-            if(m_startTime+LineupConstants.maxWaitTime<Timer.getFPGATimestamp()){
-                m_currentState=States.END;
-            }
+            m_currentState=States.ALGAE;
         break;
         case ALGAE:
             m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
