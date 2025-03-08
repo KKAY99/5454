@@ -15,11 +15,13 @@ public class ClimbRotateCommand extends Command{
 
     @Override
     public void initialize(){
+        m_climb.disengageServo();
         m_climb.resetPID();
     }
 
     @Override
     public void end(boolean interrupted){
+        m_climb.engageServo();
         m_climb.stop();
     }
 

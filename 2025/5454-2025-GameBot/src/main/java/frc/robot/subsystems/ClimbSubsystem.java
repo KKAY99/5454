@@ -15,6 +15,9 @@ import com.revrobotics.servohub.ServoHub.ResetMode;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkFlexExternalEncoder;
+import edu.wpi.first.wpilibj.Servo;
+
+
 
 
 public class ClimbSubsystem extends SubsystemBase {
@@ -24,14 +27,16 @@ public class ClimbSubsystem extends SubsystemBase {
   private DutyCycleEncoder m_encoder;
 
   private ObsidianPID m_obsidianPID;
+  private Servo m_servo;
 
   private double m_setPoint;
 
 
 
-  public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO){
+  public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO, int ServoID){
     m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,80);
     m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,80);
+    m_servo = new Servo(ServoID);
     
     /*
     SparkMaxConfig followconfig = new SparkMaxConfig();
@@ -51,6 +56,14 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
 
+  }
+
+  public void engageServo(){
+      m_servo.setAngle(100);
+  }
+
+  public void disengageServo(){
+      m_servo.setAngle(80);
   }
 
   public double getAbsoluteEncoderPos(){

@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.classes.ObsidianCANSparkMax;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import org.littletonrobotics.junction.LoggedRobot;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 25;
@@ -279,23 +280,23 @@ public void spin (double direction,double speed)
 
         SmartDashboard.putNumber("Gyroscope Angle", m_gyroscope.getAngle().toDegrees());
 
-        /* 
+        
         frontLeftModule.updateState(LoggedRobot.defaultPeriodSecs);
-   frontRightModule.updateState(LoggedRobot.defaultPeriodSecs);
+        frontRightModule.updateState(LoggedRobot.defaultPeriodSecs);
         backLeftModule.updateState(LoggedRobot.defaultPeriodSecs);
-        backRightModule.updateState(LoggedRobot.defaultPeriodSecs);*/
+        backRightModule.updateState(LoggedRobot.defaultPeriodSecs);
 
-       /* SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
+        SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
         SwerveModulePosition frontRightPosition=new SwerveModulePosition(frontRightModule.getCurrentDistance(),new Rotation2d(frontRightModule.getCurrentAngle()));
         SwerveModulePosition backleftPosition=new SwerveModulePosition(backLeftModule.getCurrentDistance(),new Rotation2d(backLeftModule.getCurrentAngle()));
         SwerveModulePosition backRightPosition=new SwerveModulePosition(backRightModule.getCurrentDistance(),new Rotation2d(backRightModule.getCurrentAngle()));
-        estimator.update(getGyroscopeRotation(),  new SwerveModulePosition[] { 
-                frontLeftPosition,
-                frontRightPosition,
-                backleftPosition,
-                backRightPosition
-              });
-        */
+      //  estimator.update(getGyroscopeRotation(),  new SwerveModulePosition[] { 
+       //         frontLeftPosition,
+       //         frontRightPosition,
+       ////         backleftPosition,
+        //        backRightPosition
+         //     });
+        
               //System.out.println("Current Pose: " + estimator.getEstimatedPosition().toString());
     }
 
