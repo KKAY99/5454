@@ -221,11 +221,13 @@ public final class Constants {
     public static final double coralShootSpeed=0.6;
     public static final double coralIntakeSpeed=0.3;
     public static final double coralOutakeSpeed=-0.3;
+    
   }
   public static final class ClimbConstants{
     public static final int climbCanID1=26;
     public static final int climbCanID2=20;
     public static final int encoderDIO=2;
+    public static final int ServoPMW=0;
 
     public static final double climbP=0.2;
     public static final double climbI=0;//DONT USE
