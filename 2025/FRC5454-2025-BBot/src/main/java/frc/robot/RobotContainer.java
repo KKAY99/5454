@@ -76,9 +76,9 @@ public class RobotContainer {
 
          m_robotDrive.setDefaultCommand(
                   new DefaultDriveCommand(m_robotDrive,
-                        () -> m_xBoxDriver.getLeftX(),
-                        () -> m_xBoxDriver.getRightY(),
                         () -> m_xBoxDriver.getRightX(),
+                        () -> m_xBoxDriver.getLeftY(),
+                        () -> m_xBoxDriver.getLeftX(),
                         () -> m_DriveControlMode.isFieldOrientated()));    
                 
 

@@ -10,7 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
-
+import com.ctre.phoenix6.hardware.CANcoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
@@ -114,17 +114,17 @@ public class Mk2SwerveModuleBuilder {
      * The default PID constants and angle reduction are used. These values have been determined to work with all Mk2
      * modules controlled by this motor.
      * <p>
-     * To override this values see {@link #angleMotor(SparkBase, PidConstants, double)}
+     * To override this values see {@link #angleMotor(SparkMax, PidConstants, double)}
      *
      * @param motor The CAN Spark MAX to use as the angle motor. The NEO's encoder is set to output the module's angle
      *              in radians.
      * @return The builder.
      */
-    public Mk2SwerveModuleBuilder angleMotor(SparkBase motor) {
+    public Mk2SwerveModuleBuilder angleMotor(SparkMax motor) {
         return angleMotor(motor, DEFAULT_CAN_SPARK_MAX_ANGLE_CONSTANTS, DEFAULT_ANGLE_REDUCTION);
     }
 
-    public Mk2SwerveModuleBuilder angleMotor(SparkBase motor, MotorType motorType) {
+    public Mk2SwerveModuleBuilder angleMotor(SparkMax motor, MotorType motorType) {
         if (motorType == MotorType.NEO) {
             return angleMotor(motor, DEFAULT_CAN_SPARK_MAX_ANGLE_CONSTANTS, DEFAULT_ANGLE_REDUCTION);
         }
@@ -136,7 +136,7 @@ public class Mk2SwerveModuleBuilder {
      * Configures the swerve module to use a CAN Spark MAX driving a NEO as it's angle motor.
      * <p>
      * This method is usually used when custom PID tuning is required. If using the standard angle reduction
-     * and a NEO, {@link #angleMotor(SparkBase)} uses already tuned constants so no tuning is required.
+     * and a NEO, {@link #angleMotor(SparkMax)} uses already tuned constants so no tuning is required.
      *
      * @param motor     The CAN Spark MAX to use as the angle motor. The NEO's encoder is set to output the module's
      *                  angle in radians.
@@ -145,7 +145,7 @@ public class Mk2SwerveModuleBuilder {
      *                  For example, an 18:1 ratio should be specified by {@code 18.0 / 1.0}.
      * @return The builder.
      */
-    public Mk2SwerveModuleBuilder angleMotor(SparkBase motor, PidConstants constants, double reduction) {
+    public Mk2SwerveModuleBuilder angleMotor(SparkMax motor, PidConstants constants, double reduction) {
         RelativeEncoder encoder = motor.getEncoder();
         encoder.setPosition(2.0 * Math.PI / reduction);
         // KK 2/20 try
@@ -234,14 +234,14 @@ public class Mk2SwerveModuleBuilder {
             case CIM:
                 // Spark MAXs are special and drive brushed motors in the opposite direction of every other motor
                 // controller
-                if (motor instanceof Spark || motor instanceof SparkBase) {
+                if (motor instanceof Spark || motor instanceof SparkMax) {
                     motor.setInverted(true);
                 }
 
                 return angleMotor(motor, DEFAULT_ONBOARD_CIM_ANGLE_CONSTANTS);
             case MINI_CIM:
                 // Spark MAXs are special and drive brushed motors in the opposite direction of every other motor controller
-                if (motor instanceof Spark || motor instanceof SparkBase) {
+                if (motor instanceof Spark || motor instanceof SparkMax) {
                     motor.setInverted(true);
                 }
 
@@ -283,11 +283,11 @@ public class Mk2SwerveModuleBuilder {
      *              distance and current velocity in inches and inches per second.
      * @return The builder.
      */
-    public Mk2SwerveModuleBuilder driveMotor(SparkBase motor) {
+    public Mk2SwerveModuleBuilder driveMotor(SparkMax motor) {
         return driveMotor(motor, MotorType.NEO);
     }
 
-    public Mk2SwerveModuleBuilder driveMotor(SparkBase motor, MotorType motorType) {
+    public Mk2SwerveModuleBuilder driveMotor(SparkMax motor, MotorType motorType) {
         if (motorType == MotorType.NEO) {
             return driveMotor(motor, DEFAULT_DRIVE_REDUCTION, DEFAULT_WHEEL_DIAMETER);
         }
@@ -306,10 +306,10 @@ public class Mk2SwerveModuleBuilder {
      *                      inches.
      * @return The builder.
      */
-    public Mk2SwerveModuleBuilder driveMotor(SparkBase motor, double reduction, double wheelDiameter) {
+    public Mk2SwerveModuleBuilder driveMotor(SparkMax motor, double reduction, double wheelDiameter) {
         RelativeEncoder encoder = motor.getEncoder();
         encoder.setPosition(wheelDiameter * Math.PI / reduction);
-       // encoder.setvelocity(wheelDiameter * Math.PI / reduction * (1.0 / 60.0)); // RPM to units per second
+        motor.set(wheelDiameter * Math.PI / reduction * (1.0 / 60.0)); // RPM to units per second
 
         currentDrawSupplier = motor::getOutputCurrent;
         distanceSupplier = encoder::getPosition;
@@ -345,7 +345,7 @@ public class Mk2SwerveModuleBuilder {
      */
     public Mk2SwerveModuleBuilder driveMotor(MotorController motor, MotorType motorType) {
         // Spark MAXs are special and drive brushed motors in the opposite direction of every other motor controller
-        if (motorType != MotorType.NEO && (motor instanceof Spark || motor instanceof SparkBase)) {
+        if (motorType != MotorType.NEO && (motor instanceof Spark || motor instanceof SparkMax)) {
             motor.setInverted(true);
         }
 
