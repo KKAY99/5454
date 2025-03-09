@@ -108,7 +108,7 @@ public class ApriltagLineupCommand extends Command {
         x=Math.abs(m_rightLimelight.getX());
         strafeFlipValue=x/rawX;
 
-        strafe=m_pid.calculatePercentOutput(x,0);
+        strafe=-m_pid.calculatePercentOutput(x,0);
 
         if(x<LimeLightValues.rightLineupXDeadband&&!m_isRightLineup.get()){
           m_swerve.drive(0,0,0);

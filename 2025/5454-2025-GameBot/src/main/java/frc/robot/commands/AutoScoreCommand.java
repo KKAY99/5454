@@ -154,7 +154,7 @@ public class AutoScoreCommand extends Command{
         case ISMANUALORAUTO:     
             if(m_isManual){
                 if(m_doAlgae.get()&&m_scoreLevel.get()==ElevatorScoreLevel.L2||m_scoreLevel.get()==ElevatorScoreLevel.L3){
-                    m_currentState=States.ALGAE;
+                    m_currentState=States.ELEVATOR;
                 }else{
                     m_currentState=States.ELEVATOR;
                 }
@@ -217,7 +217,7 @@ public class AutoScoreCommand extends Command{
             x=Math.abs(m_rightLimelight.getX());
             strafeFlipValue=x/rawX;
 
-            strafe=m_pid.calculatePercentOutput(x,0);
+            strafe=-m_pid.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.rightLineupXDeadband&&!m_isRightLineup.get()){
                 m_swerve.drive(0,0,0);
@@ -239,26 +239,27 @@ public class AutoScoreCommand extends Command{
             }
         break;
         case ALGAE:
-            m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
-            m_dunkin.toggleLocalPid(m_algaePos);
+            //m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
+            //m_dunkin.toggleLocalPid(m_algaePos);
 
             m_currentState=States.ELEVATOR;
         break;
         case ALGAEGRAB:
-            m_elevator.set_referance(m_elevatorAlgaePos);
+            //m_elevator.set_referance(m_elevatorAlgaePos);
 
             m_currentState=States.WAITFORALGAEGRAB;
         break;
         case WAITFORALGAEGRAB:
-            elevatorPos=m_elevator.getRelativePos();
-            if(elevatorPos>m_elevatorAlgaePos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorAlgaePos+ElevatorConstants.posDeadband){
+            //elevatorPos=m_elevator.getRelativePos();
+            //if(elevatorPos>m_elevatorAlgaePos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorAlgaePos+ElevatorConstants.posDeadband){
 
                 m_currentState=States.ALGAERETRACT;
-            }
+            //}
         break;
         case ALGAERETRACT:
-            m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
-            m_dunkin.toggleLocalPid(DunkinDonutConstants.algaeStowPos);
+            //m_dunkin.resetShouldRunPID();
+            //m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
+            //m_dunkin.toggleLocalPid(DunkinDonutConstants.algaeStowPos);
 
             m_currentState=States.ELEVATOR;
         break;

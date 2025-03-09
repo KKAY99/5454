@@ -133,13 +133,9 @@ public class RobotContainer {
     m_xBoxDriver.rightBumper().onTrue(testPID2);*/
 
     //DunkinDonutCommands
-    DunkinDonutRotateCommand DunkinRotateCommand=new DunkinDonutRotateCommand(m_dunkinDonut,()->m_xBoxOperator.getRightX()*0.5);
+   /*DunkinDonutRotateCommand DunkinRotateCommand=new DunkinDonutRotateCommand(m_dunkinDonut,()->m_xBoxOperator.getRightX()*0.5);
     Trigger operatorRightXJoystick=new Trigger(()->Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);
-
-    /*DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, CoralConstants.coralOutakeSpeed,true, true,-0.25, -0.25);
-    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
-    operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);*/
 
     ClawPIDScoreIntake clawProcessorScore=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.processorScorePos,DunkinDonutConstants.processorScorePos,DunkinDonutConstants.processorScoreSpeed,
                                                                 ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.rotateHomePos);
@@ -149,7 +145,7 @@ public class RobotContainer {
     ClawPIDScoreIntake clawLollipopIntake=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.lollipopGrabPos,DunkinDonutConstants.lollipopGrabPos,DunkinDonutConstants.lollipopGrabSpeed,
                                                               ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.algaeStowPos);
     Trigger lollipopIntakeLeftTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getLeftTriggerAxis())>ButtonBindings.joystickDeadband);
-    lollipopIntakeLeftTrigger.whileTrue(clawLollipopIntake);
+    lollipopIntakeLeftTrigger.whileTrue(clawLollipopIntake);*/
 
     /*ClawPIDScoreIntake clawGroundIntake=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.groundIntakePos,DunkinDonutConstants.groundIntakePos,DunkinDonutConstants.groundIntakeSpeed,
                                                               ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.algaeStowPos);
@@ -159,13 +155,17 @@ public class RobotContainer {
     DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, m_elevator, CoralConstants.coralIntakeSpeed, true, true, 0.75, 0.35);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
+
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, CoralConstants.coralOutakeSpeed,false, true,-0.25, -0.25);
+    JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
+    operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
     
     //ElevatorCommands
     ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY()*0.5);
     Trigger operatorLeftYJoystick = new Trigger(()->Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,()->m_doAlgae);
+    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,()->false);
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreManualButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
  
@@ -175,33 +175,34 @@ public class RobotContainer {
 
     //Lineup
     ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
-    m_xBoxDriver.rightBumper().whileTrue(lineup);
+    JoystickButton lineupButton=new JoystickButton(m_xBoxOperator,5);
+    lineupButton.whileTrue(lineup);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
     switch(pov.get()){
-      case 0:
+      case 90:
       m_currentScoreLevel=ElevatorScoreLevel.L1;
       m_ElevatorLevel1 = true;
       m_ElevatorLevel2 = false;
       m_ElevatorLevel3 = false;
       m_ElevatorLevel4 = false;
       break;
-      case 90:
+      case 180:
       m_currentScoreLevel=ElevatorScoreLevel.L2;
       m_ElevatorLevel1 = false;
       m_ElevatorLevel2 = true;
       m_ElevatorLevel3 = false;
       m_ElevatorLevel4 = false;
       break;
-      case 180:
+      case 270:
       m_currentScoreLevel=ElevatorScoreLevel.L3;
       m_ElevatorLevel1 = false;
       m_ElevatorLevel2 = false;
       m_ElevatorLevel3 = true;
       m_ElevatorLevel4 = false;
       break;
-      case 270:
+      case 0:
       m_currentScoreLevel=ElevatorScoreLevel.L4;
       m_ElevatorLevel1 = false;
       m_ElevatorLevel2 = false;
@@ -211,18 +212,18 @@ public class RobotContainer {
     }
   }
 
-  public void setLineupSide(Supplier<Boolean> x,Supplier<Boolean> a){
+  public void setLineupSide(Supplier<Boolean> x,Supplier<Boolean> b){
     if(x.get()){
       m_isRightLineup=false;
     }
 
-    if(a.get()){
+    if(b.get()){
       m_isRightLineup=true;
     }
   } 
 
   public void setDoesDoAlgae(Supplier<Boolean> leftBumperPress){
-    m_doAlgae=(m_doAlgae&&leftBumperPress.get())?false:true;
+    m_doAlgae=false;//(m_doAlgae&&leftBumperPress.get())?false:true;
   } 
       
   private void refreshSmartDashboard(){  
@@ -233,7 +234,8 @@ public class RobotContainer {
     SmartDashboard.putBoolean("m_ElevatorLevel3", m_ElevatorLevel3);
     SmartDashboard.putBoolean("m_ElevatorLevel4", m_ElevatorLevel4);
     
-    SmartDashboard.putBoolean("Lineup pos",m_isRightLineup);
+    SmartDashboard.putBoolean("LEFT Lineup",m_isRightLineup==false);
+    SmartDashboard.putBoolean("RIGHT Lineup",m_isRightLineup==true);
     SmartDashboard.putBoolean("Do Algea", m_doAlgae);
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
     SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
@@ -332,8 +334,8 @@ public class RobotContainer {
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
     m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
-    setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getAButtonPressed());
-    setDoesDoAlgae(()->m_xBoxOperator.getLeftBumperButtonPressed());
+    setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getBButtonPressed());
+    //setDoesDoAlgae(()->m_xBoxOperator.getLeftBumperButtonPressed());
   }
 
   public void resetGyroPoseDisabled(){
@@ -351,7 +353,7 @@ public class RobotContainer {
     if(!hasHomed){
       hasHomed = true;
       CommandScheduler.getInstance().schedule(new ElevatorHomeCommand(m_elevator));
-      CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
+      //CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
     }
   }
 

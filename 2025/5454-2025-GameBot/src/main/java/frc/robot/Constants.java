@@ -131,10 +131,10 @@ public final class Constants {
 
     public static final double reefAprilTagHeight=8.75;
 
-    public static final double leftLineupXDeadband=0.2;
-    public static final double rightLineupXDeadband=0.2;
+    public static final double leftLineupXDeadband=0.05;
+    public static final double rightLineupXDeadband=0.05;
 
-    public static final double P=0.1;
+    public static final double P=0.15;
     public static final double I=0;
     public static final double D=0.1;
     public static final double maxAndMin=0.5;
@@ -154,7 +154,7 @@ public final class Constants {
     public static final double posDeadband=1.2;
 
     public static final double homePosDeadband=0.001;
-    public static final double rotateHomePos=0.15;
+    public static final double rotateHomePos=0.25;
     public static final double homeSpeed=0.03;
 
     public static final double localPIDkP=0.1;
@@ -208,18 +208,18 @@ public final class Constants {
     public static final double l1Pos=-13;
     public static final double l2Pos=-14; //26
     public static final double l3Pos=-43;
-    public static final double l4Pos=-87; //-89
+    public static final double l4Pos=-89;
 
     public static final double aboveTroughPos=-20;
 
     public static enum ElevatorScoreLevel{
-      L1,L2,L3,L4,RETRACT, TEST
+      L1,L2,L3,L4,RETRACT,TEST
     }
   }
 
   public static final class CoralConstants{
     public static final double coralShootSpeed=0.6;
-    public static final double coralIntakeSpeed=0.3;
+    public static final double coralIntakeSpeed=0.2;
     public static final double coralOutakeSpeed=-0.3;
     
   }
@@ -267,7 +267,7 @@ public final class Constants {
   }
 
   public static final class ButtonBindings{
-    public static final int dunkinCoralOutakeButton=2; 
+    public static final int dunkinCoralOutakeButton=1; 
     public static final int dunkinCoralIntakeButton=4;
     public static final int elevatorScoreAutoButton=5;
     public static final int elevatorScoreManualButton=6;

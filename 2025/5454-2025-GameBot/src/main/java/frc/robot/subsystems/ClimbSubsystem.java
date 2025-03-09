@@ -17,9 +17,6 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkFlexExternalEncoder;
 import edu.wpi.first.wpilibj.Servo;
 
-
-
-
 public class ClimbSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_leaderMotor;
   private ObsidianCANSparkMax m_followerMotor;
@@ -30,8 +27,6 @@ public class ClimbSubsystem extends SubsystemBase {
   private Servo m_servo;
 
   private double m_setPoint;
-
-
 
   public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO, int ServoID){
     m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,80);
@@ -53,9 +48,6 @@ public class ClimbSubsystem extends SubsystemBase {
     m_obsidianPID=new ObsidianPID(ClimbConstants.climbP,ClimbConstants.climbI,ClimbConstants.climbD,
                                   ClimbConstants.climbMaxAndMin,-ClimbConstants.climbMaxAndMin);
     m_obsidianPID.setInputGain(ClimbConstants.climbInputGain);
-
-
-
   }
 
   public void engageServo(){
