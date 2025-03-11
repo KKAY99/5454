@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
+import frc.robot.utilities.Elastic;
 import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.LimelightManager;
@@ -86,11 +87,6 @@ public class RobotContainer {
   public double m_I;
   public double m_D;
   public double m_elevatorPos;
-
-  public boolean m_ElevatorLevel1;
-  public boolean m_ElevatorLevel2;
-  public boolean m_ElevatorLevel3;
-  public boolean m_ElevatorLevel4;
 
 
   public boolean hasHomed=false;
@@ -183,31 +179,15 @@ public class RobotContainer {
     switch(pov.get()){
       case 90:
       m_currentScoreLevel=ElevatorScoreLevel.L1;
-      m_ElevatorLevel1 = true;
-      m_ElevatorLevel2 = false;
-      m_ElevatorLevel3 = false;
-      m_ElevatorLevel4 = false;
       break;
       case 180:
       m_currentScoreLevel=ElevatorScoreLevel.L2;
-      m_ElevatorLevel1 = false;
-      m_ElevatorLevel2 = true;
-      m_ElevatorLevel3 = false;
-      m_ElevatorLevel4 = false;
       break;
       case 270:
       m_currentScoreLevel=ElevatorScoreLevel.L3;
-      m_ElevatorLevel1 = false;
-      m_ElevatorLevel2 = false;
-      m_ElevatorLevel3 = true;
-      m_ElevatorLevel4 = false;
       break;
       case 0:
       m_currentScoreLevel=ElevatorScoreLevel.L4;
-      m_ElevatorLevel1 = false;
-      m_ElevatorLevel2 = false;
-      m_ElevatorLevel3 = false;
-      m_ElevatorLevel4 = true;
       break;
     }
   }
@@ -227,12 +207,13 @@ public class RobotContainer {
   } 
       
   private void refreshSmartDashboard(){  
+
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
     //SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
-    SmartDashboard.putBoolean("m_ElevatorLevel1", m_ElevatorLevel1);
-    SmartDashboard.putBoolean("m_ElevatorLevel2", m_ElevatorLevel2);
-    SmartDashboard.putBoolean("m_ElevatorLevel3", m_ElevatorLevel3);
-    SmartDashboard.putBoolean("m_ElevatorLevel4", m_ElevatorLevel4);
+    SmartDashboard.putBoolean("m_ElevatorLevel1", m_currentScoreLevel==ElevatorScoreLevel.L1);
+    SmartDashboard.putBoolean("m_ElevatorLevel2", m_currentScoreLevel==ElevatorScoreLevel.L2);
+    SmartDashboard.putBoolean("m_ElevatorLevel3", m_currentScoreLevel==ElevatorScoreLevel.L3);
+    SmartDashboard.putBoolean("m_ElevatorLevel4", m_currentScoreLevel==ElevatorScoreLevel.L4);
     
     SmartDashboard.putBoolean("LEFT Lineup",m_isRightLineup==false);
     SmartDashboard.putBoolean("RIGHT Lineup",m_isRightLineup==true);
@@ -329,6 +310,7 @@ public class RobotContainer {
   }
 
   public void AllPeriodic(){
+    
     m_Field2d.setRobotPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
