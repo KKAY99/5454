@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
+import frc.robot.utilities.Elastic;
 import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.LimelightManager;
@@ -207,6 +208,7 @@ public class RobotContainer {
   } 
       
   private void refreshSmartDashboard(){  
+
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
     //SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
     SmartDashboard.putBoolean("m_ElevatorLevel1", m_currentScoreLevel==ElevatorScoreLevel.L1);
@@ -308,6 +310,7 @@ public class RobotContainer {
   }
 
   public void AllPeriodic(){
+    
     m_Field2d.setRobotPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
