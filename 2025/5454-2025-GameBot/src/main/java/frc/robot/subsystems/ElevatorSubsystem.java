@@ -8,6 +8,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import frc.robot.utilities.ObsidianCanandcolor;
@@ -22,7 +23,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private String m_controlType;
 
   public ElevatorSubsystem(int CanID_1,int canColorID) {
-    m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless,true,40,
+    m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless,true,Constants.k40Amp,
               ElevatorConstants.elevatorPK1,ElevatorConstants.elevatorIK1,ElevatorConstants.elevatorDK1,ElevatorConstants.elevatorMaxAndMinK1,
               ElevatorConstants.elevatorPK2,ElevatorConstants.elevatorIK2,ElevatorConstants.elevatorDK2,ElevatorConstants.elevatorMaxAndMinK2);
     //m_canAndColor=new ObsidianCanandcolor(canColorID);

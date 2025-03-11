@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import frc.robot.Constants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import frc.robot.utilities.ObsidianPID;
@@ -48,10 +50,10 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private boolean m_shouldRunPID=false;
   
   public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int algaeCanID2,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID, int indexerLimitSwitchID) {
-    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, 80, 0.1,0,0);
+    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, Constants.k80Amp,DunkinDonutConstants.coralP,DunkinDonutConstants.coralI,DunkinDonutConstants.coralD);
     m_algaeMotor1= new ObsidianCANSparkMax(algaeCanID1, MotorType.kBrushless, true);
     m_algaeMotor2= new ObsidianCANSparkMax(algaeCanID2, MotorType.kBrushless, true);
-    m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,40);
+    m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,Constants.k40Amp);
     m_coralIndexer = new ObsidianCANSparkMax(coralIndexerID, MotorType.kBrushless, true);
                     //DunkinDonutConstants.dunkinP,DunkinDonutConstants.dunkinI,DunkinDonutConstants.dunkinD,DunkinDonutConstants.dunkinMaxAndMin);
     m_CANcoder = new CANcoder(canCoderID);
@@ -215,8 +217,8 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Setpoint",m_setPoint);
 
     if(m_obsidianPID.getToggle()){
-      double pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
-      m_rotateMotor.set(pidOutput);
+      m_pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
+      m_rotateMotor.set(m_pidOutput);
     }
   }
 }

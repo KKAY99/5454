@@ -87,12 +87,6 @@ public class RobotContainer {
   public double m_D;
   public double m_elevatorPos;
 
-  public boolean m_ElevatorLevel1;
-  public boolean m_ElevatorLevel2;
-  public boolean m_ElevatorLevel3;
-  public boolean m_ElevatorLevel4;
-
-
   public boolean hasHomed=false;
   public boolean m_isRightLineup=false;
   public boolean m_doAlgae=false;
@@ -133,7 +127,7 @@ public class RobotContainer {
     m_xBoxDriver.rightBumper().onTrue(testPID2);*/
 
     //DunkinDonutCommands
-   /*DunkinDonutRotateCommand DunkinRotateCommand=new DunkinDonutRotateCommand(m_dunkinDonut,()->m_xBoxOperator.getRightX()*0.5);
+   DunkinDonutRotateCommand DunkinRotateCommand=new DunkinDonutRotateCommand(m_dunkinDonut,()->m_xBoxOperator.getRightX()*0.5);
     Trigger operatorRightXJoystick=new Trigger(()->Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);
 
@@ -145,7 +139,7 @@ public class RobotContainer {
     ClawPIDScoreIntake clawLollipopIntake=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.lollipopGrabPos,DunkinDonutConstants.lollipopGrabPos,DunkinDonutConstants.lollipopGrabSpeed,
                                                               ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.algaeStowPos);
     Trigger lollipopIntakeLeftTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getLeftTriggerAxis())>ButtonBindings.joystickDeadband);
-    lollipopIntakeLeftTrigger.whileTrue(clawLollipopIntake);*/
+    lollipopIntakeLeftTrigger.whileTrue(clawLollipopIntake);
 
     /*ClawPIDScoreIntake clawGroundIntake=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.groundIntakePos,DunkinDonutConstants.groundIntakePos,DunkinDonutConstants.groundIntakeSpeed,
                                                               ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.algaeStowPos);
@@ -165,7 +159,7 @@ public class RobotContainer {
     Trigger operatorLeftYJoystick = new Trigger(()->Math.abs(m_xBoxOperator.getLeftY())>Constants.ButtonBindings.joystickDeadband);
     operatorLeftYJoystick.whileTrue(ElevatorCommand);
 
-    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,()->false);
+    AutoScoreCommand seqScoreCommandManual=new AutoScoreCommand(m_elevator,m_dunkinDonut,()->m_currentScoreLevel,()->m_doAlgae);
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreManualButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
  
@@ -174,40 +168,24 @@ public class RobotContainer {
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
 
     //Lineup
-    ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
+   /*ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve,m_dunkinDonut,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
     JoystickButton lineupButton=new JoystickButton(m_xBoxOperator,5);
-    lineupButton.whileTrue(lineup);
+    lineupButton.whileTrue(lineup);*/
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
     switch(pov.get()){
       case 90:
       m_currentScoreLevel=ElevatorScoreLevel.L1;
-      m_ElevatorLevel1 = true;
-      m_ElevatorLevel2 = false;
-      m_ElevatorLevel3 = false;
-      m_ElevatorLevel4 = false;
       break;
       case 180:
       m_currentScoreLevel=ElevatorScoreLevel.L2;
-      m_ElevatorLevel1 = false;
-      m_ElevatorLevel2 = true;
-      m_ElevatorLevel3 = false;
-      m_ElevatorLevel4 = false;
       break;
       case 270:
       m_currentScoreLevel=ElevatorScoreLevel.L3;
-      m_ElevatorLevel1 = false;
-      m_ElevatorLevel2 = false;
-      m_ElevatorLevel3 = true;
-      m_ElevatorLevel4 = false;
       break;
       case 0:
       m_currentScoreLevel=ElevatorScoreLevel.L4;
-      m_ElevatorLevel1 = false;
-      m_ElevatorLevel2 = false;
-      m_ElevatorLevel3 = false;
-      m_ElevatorLevel4 = true;
       break;
     }
   }
@@ -222,26 +200,27 @@ public class RobotContainer {
     }
   } 
 
-  public void setDoesDoAlgae(Supplier<Boolean> leftBumperPress){
-    m_doAlgae=false;//(m_doAlgae&&leftBumperPress.get())?false:true;
+  public void setDoesDoAlgae(Supplier<Boolean> leftBumper){
+    if(leftBumper.get()){
+      m_doAlgae=m_doAlgae?false:true;
+    }
   } 
       
   private void refreshSmartDashboard(){  
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
     //SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
-    SmartDashboard.putBoolean("m_ElevatorLevel1", m_ElevatorLevel1);
-    SmartDashboard.putBoolean("m_ElevatorLevel2", m_ElevatorLevel2);
-    SmartDashboard.putBoolean("m_ElevatorLevel3", m_ElevatorLevel3);
-    SmartDashboard.putBoolean("m_ElevatorLevel4", m_ElevatorLevel4);
-    
+    SmartDashboard.putBoolean("m_ElevatorLevel1", m_currentScoreLevel==ElevatorScoreLevel.L1);
+    SmartDashboard.putBoolean("m_ElevatorLevel2", m_currentScoreLevel==ElevatorScoreLevel.L2);
+    SmartDashboard.putBoolean("m_ElevatorLevel3", m_currentScoreLevel==ElevatorScoreLevel.L3);
+    SmartDashboard.putBoolean("m_ElevatorLevel4", m_currentScoreLevel==ElevatorScoreLevel.L4);
     SmartDashboard.putBoolean("LEFT Lineup",m_isRightLineup==false);
     SmartDashboard.putBoolean("RIGHT Lineup",m_isRightLineup==true);
     SmartDashboard.putBoolean("Do Algea", m_doAlgae);
     SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
     SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
     SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
-    SmartDashboard.putNumber("LEFT LIMELIGHT X",m_leftLimelight.getX());
-    SmartDashboard.putNumber("RIGHT LIMELIGHT X",m_rightLimelight.getX());
+    SmartDashboard.putNumber("LEFT LIMELIGHT DISTANCE",m_leftLimelight.getDistance());
+    SmartDashboard.putNumber("RIGHT LIMELIGHT DISTANCE",m_rightLimelight.getDistance());
   }
   
   private void createAutonomousCommandList(){
@@ -335,7 +314,7 @@ public class RobotContainer {
     m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
     setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getBButtonPressed());
-    //setDoesDoAlgae(()->m_xBoxOperator.getLeftBumperButtonPressed());
+    setDoesDoAlgae(()->m_xBoxOperator.getLeftBumperButtonPressed());
   }
 
   public void resetGyroPoseDisabled(){
@@ -353,7 +332,7 @@ public class RobotContainer {
     if(!hasHomed){
       hasHomed = true;
       CommandScheduler.getInstance().schedule(new ElevatorHomeCommand(m_elevator));
-      //CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
+      CommandScheduler.getInstance().schedule(new DunkinDonutHomeCommand(m_dunkinDonut));
     }
   }
 

@@ -12,6 +12,7 @@ public final class Constants {
   public static final int k26Amp=26;
   public static final int k15Amp=15;
   public static final int k40Amp=40;
+  public static final int k80Amp=80;
   public static final int brakeButton=3;
   public static final int pdhCAN=1;
   
@@ -134,11 +135,21 @@ public final class Constants {
     public static final double leftLineupXDeadband=0.05;
     public static final double rightLineupXDeadband=0.05;
 
-    public static final double P=0.15;
-    public static final double I=0;
-    public static final double D=0.1;
-    public static final double maxAndMin=0.5;
-    public static final double inputGain=0.5;
+    public static final double driveTargetDistanceRight=51;
+    public static final double driveTargetDistanceLeft=0;
+    public static final double driveDeadBand=2;
+
+    public static final double strafeP=0.15;
+    public static final double strafeI=0;
+    public static final double strafeD=0.1;
+    public static final double strafeMaxAndMin=0.5;
+    public static final double strafeInputGain=0.5;
+
+    public static final double driveP=0.15;
+    public static final double driveI=0;
+    public static final double driveD=0.1;
+    public static final double driveMaxAndMin=0.5;
+    public static final double driveInputGain=0.5;
   }
 
   public static final class DunkinDonutConstants{
@@ -157,18 +168,24 @@ public final class Constants {
     public static final double rotateHomePos=0.25;
     public static final double homeSpeed=0.03;
 
+    public static final double coralP=0.1;
+    public static final double coralI=0;
+    public static final double coralD=0;
+    public static final double coralMaxAndMin=1;
+
     public static final double localPIDkP=0.1;
     public static final double localPIDkI=0;
     public static final double localPIDkD=0;
     public static final double localPIDMaxAndMin=0.5;
     public static final double PIDInputGain=60;
 
+    public static final double outOfLimelightVisionPos=0.22;
     public static final double groundIntakePos=0.33;
     public static final double algaeStowPos=0.30;
     public static final double lollipopGrabPos=0.328;
     public static final double processorScorePos=0.328;
     public static final double noGrabAlgaePos=0.22;
-    public static final double algaeGrabPos=0.328;
+    public static final double algaeGrabPos=0.36;
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
@@ -179,6 +196,7 @@ public final class Constants {
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=1;
     public static final double autoCoralTimeToRun=1;
+    public static final double autoScoreAlgaeRunTime=1;
   }
 
   public static final class ElevatorConstants{
@@ -200,11 +218,12 @@ public final class Constants {
 
     public static final double posDeadband=1.2;
 
+    public static final double elevAlgeaGrabRetractPos=-20;
     public static final double groundIntakePos=-5;
     public static final double processorScorePos=-13;
     public static final double lollipopGrabPos=-13;
-    public static final double l2AlgaePos=-43;
-    public static final double l3AlgaePos=-80;
+    public static final double l3AlgaePos=-43;
+    public static final double l4AlgaePos=-65;
     public static final double l1Pos=-13;
     public static final double l2Pos=-14; //26
     public static final double l3Pos=-43;

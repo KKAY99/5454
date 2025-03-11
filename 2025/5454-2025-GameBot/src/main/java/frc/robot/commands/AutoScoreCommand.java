@@ -30,7 +30,8 @@ public class AutoScoreCommand extends Command{
     private Limelight m_leftLimelight;
     private Limelight m_rightLimelight;
 
-    private ObsidianPID m_pid;
+    private ObsidianPID m_drivePID;
+    private ObsidianPID m_strafePID;
 
     private Supplier<ElevatorScoreLevel> m_scoreLevel;
 
@@ -46,6 +47,8 @@ public class AutoScoreCommand extends Command{
     private Supplier<Boolean> m_isRightLineup;
     private Supplier<Boolean> m_doAlgae;
     private boolean m_isManual = false;
+    private boolean m_shouldRunAlgae;
+    private boolean m_startedCoral;
     
     private enum States{
         ISMANUALORAUTO,PRESCOREELEV,CHECKFORTARGET,LEFTLINEUP,RIGHTLINEUP,ALGAE,ALGAEGRAB,WAITFORALGAEGRAB,ALGAERETRACT,ELEVATOR,
@@ -82,8 +85,11 @@ public class AutoScoreCommand extends Command{
         m_leftLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
         m_rightLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
 
-        m_pid=new ObsidianPID(LimeLightValues.P,LimeLightValues.I,LimeLightValues.D,LimeLightValues.maxAndMin,-LimeLightValues.maxAndMin);
-        m_pid.setInputGain(LimeLightValues.inputGain);
+        m_strafePID=new ObsidianPID(LimeLightValues.strafeP,LimeLightValues.strafeI,LimeLightValues.strafeD,LimeLightValues.strafeMaxAndMin,-LimeLightValues.strafeMaxAndMin);
+        m_strafePID.setInputGain(LimeLightValues.strafeInputGain);
+
+        m_drivePID=new ObsidianPID(LimeLightValues.driveP,LimeLightValues.driveI,LimeLightValues.driveD,LimeLightValues.driveMaxAndMin,-LimeLightValues.driveMaxAndMin);
+        m_drivePID.setInputGain(LimeLightValues.driveInputGain);
 
         addRequirements(m_swerve,m_elevator,m_dunkin);
     }
@@ -104,38 +110,53 @@ public class AutoScoreCommand extends Command{
     @Override
     public void initialize(){
         m_currentState=States.ISMANUALORAUTO;
+        m_shouldRunAlgae=false;
+        m_startedCoral=false;
+
         switch(m_scoreLevel.get()){
             case L1:
             m_elevatorFPos=ElevatorConstants.l1Pos;
             m_elevatorIPos=ElevatorConstants.l1Pos;
+            m_algaePos=DunkinDonutConstants.noGrabAlgaePos;
             break;
             case L2:
             m_elevatorFPos=ElevatorConstants.l2Pos;
-            m_elevatorAlgaePos=ElevatorConstants.l2AlgaePos;
             m_elevatorIPos=ElevatorConstants.l2Pos;
-            m_algaePos=DunkinDonutConstants.algaeGrabPos;
             break;
             case L3:
             m_elevatorFPos=ElevatorConstants.l3Pos;
             m_elevatorAlgaePos=ElevatorConstants.l3AlgaePos;
             m_elevatorIPos=ElevatorConstants.l3Pos;
             m_algaePos=DunkinDonutConstants.algaeGrabPos;
+            if(m_doAlgae.get()){
+                m_shouldRunAlgae=true;
+            }
             break;
             case L4:
             m_elevatorFPos=ElevatorConstants.l4Pos;
+            m_elevatorAlgaePos=ElevatorConstants.l4AlgaePos;
             m_elevatorIPos=ElevatorConstants.l3Pos;
+            m_algaePos=DunkinDonutConstants.noGrabAlgaePos;
+            m_algaePos=DunkinDonutConstants.algaeGrabPos;
+            if(m_doAlgae.get()){
+                m_shouldRunAlgae=true;
+            }
             break; 
             case TEST:
             m_elevatorFPos=m_dashBoardPos.get();
             m_elevatorIPos= m_dashBoardPos.get();
             break;
         }
+
+        System.out.println("DOALGAE"+m_doAlgae.get());
+        System.out.println("SHOULDRUNALGAE"+m_shouldRunAlgae);
     }
 
     @Override
     public void end(boolean interrupted) {
         m_dunkin.stopAlgeaMotor();
         m_dunkin.stopCoralMotor();
+        m_dunkin.stop_rotatemotor();
         m_elevator.reset_referance();
         m_elevator.motor_stop();
         m_dunkin.resetShouldRunPID();
@@ -153,17 +174,15 @@ public class AutoScoreCommand extends Command{
         switch(m_currentState){
         case ISMANUALORAUTO:     
             if(m_isManual){
-                if(m_doAlgae.get()&&m_scoreLevel.get()==ElevatorScoreLevel.L2||m_scoreLevel.get()==ElevatorScoreLevel.L3){
-                    m_currentState=States.ELEVATOR;
-                }else{
-                    m_currentState=States.ELEVATOR;
-                }
+                m_currentState=States.ELEVATOR;
             }else{
                 m_currentState=States.PRESCOREELEV;
             }
         break;
         case PRESCOREELEV:
             m_elevator.set_referance(m_elevatorIPos);
+            m_dunkin.resetShouldRunPID();
+            m_dunkin.toggleLocalPid(DunkinDonutConstants.noGrabAlgaePos);
 
             m_currentState=States.CHECKFORTARGET;
         break;
@@ -191,15 +210,12 @@ public class AutoScoreCommand extends Command{
             x=Math.abs(m_leftLimelight.getX());
             strafeFlipValue=x/rawX;
 
-            strafe=-m_pid.calculatePercentOutput(x,0);
+            strafe=-m_strafePID.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.leftLineupXDeadband&&m_isRightLineup.get()){
                 m_swerve.drive(0,0,0);
-                if(m_doAlgae.get()&&m_scoreLevel.get()==ElevatorScoreLevel.L2||m_scoreLevel.get()==ElevatorScoreLevel.L3){
-                    m_currentState=States.ALGAE;
-                }else{
-                    m_currentState=States.ELEVATOR;
-                }
+                m_currentState=States.ELEVATOR;
+
             }else{
                 strafe=(m_isRightLineup.get())?strafe:-0.3;
                 strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
@@ -217,15 +233,11 @@ public class AutoScoreCommand extends Command{
             x=Math.abs(m_rightLimelight.getX());
             strafeFlipValue=x/rawX;
 
-            strafe=-m_pid.calculatePercentOutput(x,0);
+            strafe=-m_strafePID.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.rightLineupXDeadband&&!m_isRightLineup.get()){
                 m_swerve.drive(0,0,0);
-                if(m_doAlgae.get()&&m_scoreLevel.get()==ElevatorScoreLevel.L2||m_scoreLevel.get()==ElevatorScoreLevel.L3){
-                    m_currentState=States.ALGAE;
-                }else{
-                    m_currentState=States.ELEVATOR;
-                }
+                m_currentState=States.ELEVATOR;
             }else{
                 strafe=(!m_isRightLineup.get())?strafe:0.3;
                 strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
@@ -233,35 +245,11 @@ public class AutoScoreCommand extends Command{
             }
 
             if(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup.get()){
+                m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
                 m_currentState=States.LEFTLINEUP;
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
                 m_currentState=States.RETRACT;
             }
-        break;
-        case ALGAE:
-            //m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
-            //m_dunkin.toggleLocalPid(m_algaePos);
-
-            m_currentState=States.ELEVATOR;
-        break;
-        case ALGAEGRAB:
-            //m_elevator.set_referance(m_elevatorAlgaePos);
-
-            m_currentState=States.WAITFORALGAEGRAB;
-        break;
-        case WAITFORALGAEGRAB:
-            //elevatorPos=m_elevator.getRelativePos();
-            //if(elevatorPos>m_elevatorAlgaePos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorAlgaePos+ElevatorConstants.posDeadband){
-
-                m_currentState=States.ALGAERETRACT;
-            //}
-        break;
-        case ALGAERETRACT:
-            //m_dunkin.resetShouldRunPID();
-            //m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
-            //m_dunkin.toggleLocalPid(DunkinDonutConstants.algaeStowPos);
-
-            m_currentState=States.ELEVATOR;
         break;
         case ELEVATOR:
             m_elevator.set_referance(m_elevatorFPos);
@@ -286,23 +274,66 @@ public class AutoScoreCommand extends Command{
                 System.out.println("CORAL FINISHED");
 
                 m_dunkin.stopCoralMotor();
-                m_currentState=States.RETRACT;
+                m_currentState=m_shouldRunAlgae?States.ALGAEGRAB:States.RETRACT;
+            }
+
+            if(m_shouldRunAlgae&&!m_startedCoral){
+                m_dunkin.resetShouldRunPID();
+                m_dunkin.toggleLocalPid(m_algaePos);
+                m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
+                m_startedCoral=true;
             }
         break;
+        case ALGAEGRAB:
+            m_elevator.set_referance(m_elevatorAlgaePos);
+
+            m_currentState=States.WAITFORALGAEGRAB;
+        break;
+        case WAITFORALGAEGRAB:
+            elevatorPos=m_elevator.getRelativePos();
+
+            if(elevatorPos>m_elevatorAlgaePos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorAlgaePos+ElevatorConstants.posDeadband){
+                m_currentState=States.ALGAE;
+            }
+        break;
+        case ALGAE:
+            if(m_startTime+DunkinDonutConstants.autoScoreAlgaeRunTime<Timer.getFPGATimestamp()){
+                m_currentState=States.ALGAERETRACT;
+            }
+        break;
+        case ALGAERETRACT:
+            m_dunkin.resetShouldRunPID();
+            m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
+            m_dunkin.toggleLocalPid(DunkinDonutConstants.algaeStowPos);
+
+            m_currentState=States.RETRACT;
+        break;
         case RETRACT:
-            m_elevator.set_referance(ElevatorConstants.elevatorLowLimit);
+            if(m_shouldRunAlgae){
+                m_elevator.set_referance(ElevatorConstants.elevAlgeaGrabRetractPos);
+            }else{
+                m_elevator.set_referance(ElevatorConstants.elevatorLowLimit);
+            }
             System.out.println("ELEVATOR RETRACT");
 
             m_currentState=States.WAITFORRETRACT;
         break;
         case WAITFORRETRACT:
-        elevatorPos=m_elevator.getRelativePos();
+            elevatorPos=m_elevator.getRelativePos();
+            
+            if(m_shouldRunAlgae){
+                if(elevatorPos>ElevatorConstants.elevAlgeaGrabRetractPos-ElevatorConstants.posDeadband&&ElevatorConstants.elevAlgeaGrabRetractPos<elevatorPos+ElevatorConstants.posDeadband){
+                    System.out.println("ELEVATOR IS AT POS");
         
-        if(elevatorPos>ElevatorConstants.elevatorLowLimit-ElevatorConstants.posDeadband&&ElevatorConstants.elevatorLowLimit<elevatorPos+ElevatorConstants.posDeadband){
-            System.out.println("ELEVATOR IS AT POS");
-
-            m_currentState=States.END;
-        }
+                    m_currentState=States.END;
+                }
+            }else{
+                if(elevatorPos>ElevatorConstants.elevatorLowLimit-ElevatorConstants.posDeadband&&ElevatorConstants.elevatorLowLimit<elevatorPos+ElevatorConstants.posDeadband){
+                    System.out.println("ELEVATOR IS AT POS");
+        
+                    m_currentState=States.END;
+                }
+            }
         break;
         case END:
             returnValue=true;

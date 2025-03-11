@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
@@ -29,8 +30,8 @@ public class ClimbSubsystem extends SubsystemBase {
   private double m_setPoint;
 
   public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO, int ServoID){
-    m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,80);
-    m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,80);
+    m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,Constants.k80Amp);
+    m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,Constants.k80Amp);
     m_servo = new Servo(ServoID);
     
     /*
