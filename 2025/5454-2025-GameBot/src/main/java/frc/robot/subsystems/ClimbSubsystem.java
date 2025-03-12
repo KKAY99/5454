@@ -31,7 +31,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO, int ServoID){
     m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,Constants.k80Amp);
-    m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,Constants.k80Amp);
+    //m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,Constants.k80Amp);
     m_servo = new Servo(ServoID);
     
     /*
@@ -82,7 +82,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     try{
       var=m_leaderMotor.getDeviceId();
-      var=m_followerMotor.getDeviceId();
+      //var=m_followerMotor.getDeviceId();
       var=m_encoder.get();
     }catch(Exception e){
       returnValue=false;
@@ -111,13 +111,13 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public void run(double speed){
     m_leaderMotor.set(speed);
-    m_followerMotor.set(speed);
+    //m_followerMotor.set(speed);
     
   }
 
   public void stop(){
     m_leaderMotor.stopMotor();
-    m_followerMotor.stopMotor();
+    //m_followerMotor.stopMotor();
   }
 
   @Override
@@ -126,7 +126,7 @@ public class ClimbSubsystem extends SubsystemBase {
       double pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
       System.out.println(pidOutput);
       m_leaderMotor.set(pidOutput);
-      m_followerMotor.set(pidOutput);
+      //m_followerMotor.set(pidOutput);
     }
   }
 }
