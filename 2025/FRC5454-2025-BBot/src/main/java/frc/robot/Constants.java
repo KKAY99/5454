@@ -1,9 +1,6 @@
  package frc.robot;
-import edu.wpi.first.networktables.Publisher;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DigitalInput;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 public final class Constants {
     public static final int p = 0;
@@ -199,6 +196,11 @@ public final class Constants {
     public static final double forwardKD = -0;
     public static final double backwardKD = 0;
    }
+
+    public static final PPHolonomicDriveController pathPlanDriveController = new PPHolonomicDriveController(
+    new PIDConstants(5.0, 0, 0), // Translation constants 
+    new PIDConstants(25.0, 0, 1) // Rotation constants
+    );
 
    public static final class WPISwerve{
     public static final double wheelDiameter=1;

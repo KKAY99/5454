@@ -142,19 +142,11 @@ public class Robot extends TimedRobot{
    */
   @Override
   public void autonomousInit() {
-    
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-  }
     m_robotContainer.AutoMode();
-    //m_robotContainer.resetTurret(); move to command groups
-    
-    //USE AutoChooser / Rather than lookup
-     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+
+    m_autonomousCommand=m_robotContainer.getAutonomousCommand();
+    if(m_autonomousCommand!=null){
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
   }
 

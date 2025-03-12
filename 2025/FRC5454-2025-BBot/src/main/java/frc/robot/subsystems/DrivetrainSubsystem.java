@@ -1,31 +1,37 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.RobotMap;
-import frc.robot.classes.ObsidianCANSparkMax;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.hal.ThreadsJNI;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;    
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
- import frc.robot.common.drivers.SwerveModule;
-import frc.robot.common.math.Vector2;
-import frc.robot.common.drivers.Mk2SwerveModuleBuilder;
-import frc.robot.common.drivers.NavX;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.classes.ObsidianCANSparkMax;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import org.littletonrobotics.junction.LoggedRobot;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.RobotMap;
+import frc.robot.classes.ObsidianCANSparkMax;
+import frc.robot.common.drivers.Mk2SwerveModuleBuilder;
+import frc.robot.common.drivers.NavX;
+import frc.robot.common.drivers.SwerveModule;
+import frc.robot.common.math.Vector2;
+
 public class DrivetrainSubsystem extends SubsystemBase {
+        
     private static final double TRACKWIDTH = 25;
     private static final double WHEELBASE = 31;
 
@@ -50,6 +56,7 @@ private static final double BACK_LEFT_ANGLE_OFFSET = -0.6;//-0.55-3.04;//-77+3.0
 
 //private static final double BACK_RIGHT_ANGLE_OFFSET =-2.17-3.04; //-2.42-3.04
 private static final double BACK_RIGHT_ANGLE_OFFSET = 0.028;//-1.24-3.04; //-2.42-3.04
+private SwerveRequest.ApplyRobotSpeeds autoDrive = new SwerveRequest.ApplyRobotSpeeds();
 
 
 private boolean m_autoControl = false;
@@ -96,7 +103,21 @@ private boolean m_autoControl = false;
             new Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0),
             new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0)
     );
-   // private final SwerveDrivePoseEstimator estimator;
+
+    /////////////////////////////////////////////////////////////////////////////
+        SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
+        SwerveModulePosition frontRightPosition=new SwerveModulePosition(frontRightModule.getCurrentDistance(),new Rotation2d(frontRightModule.getCurrentAngle()));
+        SwerveModulePosition backleftPosition=new SwerveModulePosition(backLeftModule.getCurrentDistance(),new Rotation2d(backLeftModule.getCurrentAngle()));
+        SwerveModulePosition backRightPosition=new SwerveModulePosition(backRightModule.getCurrentDistance(),new Rotation2d(backRightModule.getCurrentAngle()));
+        SwerveDrivePoseEstimator estimator = new SwerveDrivePoseEstimator(kinematics,getGyroscopeRotation(),
+                new SwerveModulePosition[] { 
+                        frontLeftPosition,
+                        frontRightPosition,
+                        backleftPosition,
+                        backRightPosition
+                      },new Pose2d());
+
+   
 
         
     public DrivetrainSubsystem(NavX navX) {
@@ -104,26 +125,80 @@ private boolean m_autoControl = false;
         m_gyroscope.calibrate();
         m_gyroscope.setInverted(true); // You might not need to invert the gyro
 
-        //FIXME
-      /*   SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
+        /*  WORKING COMMETED OUT BC IT IS USED ELSE WHERE
+        SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
         SwerveModulePosition frontRightPosition=new SwerveModulePosition(frontRightModule.getCurrentDistance(),new Rotation2d(frontRightModule.getCurrentAngle()));
         SwerveModulePosition backleftPosition=new SwerveModulePosition(backLeftModule.getCurrentDistance(),new Rotation2d(backLeftModule.getCurrentAngle()));
         SwerveModulePosition backRightPosition=new SwerveModulePosition(backRightModule.getCurrentDistance(),new Rotation2d(backRightModule.getCurrentAngle()));
-        estimator = new SwerveDrivePoseEstimator(kinematics,getGyroscopeRotation(),
-        new SwerveModulePosition[] { 
-                frontLeftPosition,
-                frontRightPosition,
-                backleftPosition,
-                backRightPosition
-              },new Pose2d());           
-        Logger.getInstance().recordOutput("Odometry X", estimator.getEstimatedPosition().getX());
-        Logger.getInstance().recordOutput("Odometry Y", estimator.getEstimatedPosition().getY());
+        SwerveDrivePoseEstimator estimator = new SwerveDrivePoseEstimator(kinematics,getGyroscopeRotation(),
+                new SwerveModulePosition[] { 
+                        frontLeftPosition,
+                        frontRightPosition,
+                        backleftPosition,
+                        backRightPosition
+                      },new Pose2d());    */   
+
+                //Logger.getInstance().recordOutput("Odometry X", estimator.getEstimatedPosition().getX());
+                //Logger.getInstance().recordOutput("Odometry Y", estimator.getEstimatedPosition().getY());
  
-       */
+       
         frontLeftModule.setName("Front Left");
         frontRightModule.setName("Front Right");
         backLeftModule.setName("Back Left");
         backRightModule.setName("Back Right");
+    }
+
+
+
+
+    public Pose2d getPose2d(){
+        return estimator.getEstimatedPosition();
+    }
+
+    public void resetpose(Pose2d pose){
+         estimator.resetPose(getPose2d());
+    }
+    
+    public ChassisSpeeds getChassisSpeeds(){
+        return this.kinematics.toChassisSpeeds();
+    }
+
+    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds, DriveFeedforwards driveFF){
+        this.autoDrive.withSpeeds(chassisSpeeds)
+        .withWheelForceFeedforwardsX(driveFF.robotRelativeForcesXNewtons())
+        .withWheelForceFeedforwardsY(driveFF.robotRelativeForcesYNewtons());
+    }
+
+    public void configAutoBuilder(){
+        RobotConfig robotConfig = null;
+        try{
+                robotConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+        // Handle exception as needed
+                e.printStackTrace();
+        
+        } try{
+                AutoBuilder.configure(
+                        this::getPose2d, //get pose, reset pose, get speed, and chassis speed and drive controller need the proper config
+                        this::resetpose,
+                        this::getChassisSpeeds,
+                        this::setChassisSpeeds,
+                        Constants.pathPlanDriveController,
+                        robotConfig,
+                        ()->{
+                            Alliance alliance=DriverStation.getAlliance().get();
+                            if(alliance == Alliance.Red){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        },
+                        this
+                    );
+        } catch(Exception e){
+                e.printStackTrace();
+        }
+
     }
  
     public static DrivetrainSubsystem getInstance() {
