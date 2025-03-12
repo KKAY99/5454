@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.events.TriggerEvent;
+import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -49,12 +53,14 @@ import javax.swing.tree.ExpandVetoException;
  * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
+
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private NavX m_NavX = new NavX(SPI.Port.kMXP);
     // Dashboard inputs
-    
-    private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
+
+    private final SendableChooser<Command> m_autoChooser;
+
     private final SendableChooser<Boolean> m_IsDrone = new SendableChooser<>();
     // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
     private final DrivetrainSubsystem m_robotDrive = new DrivetrainSubsystem(m_NavX); 
@@ -69,6 +75,7 @@ public class RobotContainer {
     private boolean bOpenClawatEnd=true;
     private boolean bNoOpenClawatEnd=false;
     public RobotContainer() {
+        m_autoChooser = AutoBuilder.buildAutoChooser();
         // Configure the button bindings
         createAutoCommandsList();
        
@@ -94,11 +101,18 @@ public class RobotContainer {
      * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
+
+    
+
     private void configureButtonBindings(){
     }
     
     private void createAutoCommandsList(){
-
+        try{
+            SmartDashboard.putData("Auto Chooser", m_autoChooser);
+        }catch(Exception e){
+            System.out.println("creating autos Failed, Exception" + e.getMessage());
+        }
     }  
 
      public void disabledPerioidicUpdates(){
@@ -142,7 +156,8 @@ public class RobotContainer {
    */
   Command returnCommand;
   public Command getAutonomousCommand() {
-   return null;
+   Command command = m_autoChooser.getSelected();
+   return command;
   }
 
 

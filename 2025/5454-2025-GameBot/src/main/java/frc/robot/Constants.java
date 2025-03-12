@@ -195,6 +195,7 @@ public final class Constants {
 
     public static final double groundIntakeSpeed=1;
     public static final double lollipopGrabSpeed=1;
+
     public static final double processorScoreSpeed=-0.5;
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=1;
