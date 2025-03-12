@@ -150,7 +150,7 @@ public class DunkinDonutCoralCommand extends Command {
         }
       break;
       case RUNCORALTOPOS:
-        m_targetPos = m_dunkin.getTargetPos(0.9);
+        m_targetPos = m_dunkin.getTargetPos(4);
         m_dunkin.runCoralMotor(0.05);
         m_currentState = States.WAIT;
       break;

@@ -15,7 +15,9 @@ public class DunkinDonutHomeCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_dunkin.resetShouldRunPID();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -31,22 +33,8 @@ public class DunkinDonutHomeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    boolean returnValue=false;
-    
-    if(m_dunkin.getAbsoluteEncoderPos()>DunkinDonutConstants.rotateHomePos){
-      m_dunkin.run_rotatemotor(DunkinDonutConstants.homeSpeed);
-    }else{
-      m_dunkin.run_rotatemotor(-DunkinDonutConstants.homeSpeed);
-    }
+    m_dunkin.toggleLocalPid(DunkinDonutConstants.rotateHomePos);
 
-    if(Math.abs(m_dunkin.getAbsoluteEncoderPos())>DunkinDonutConstants.rotateHomePos-DunkinDonutConstants.homePosDeadband&&
-      Math.abs(m_dunkin.getAbsoluteEncoderPos())<DunkinDonutConstants.rotateHomePos+DunkinDonutConstants.homePosDeadband){
-        returnValue=true;
-    }
-    return returnValue;
-     
-    
-    
+    return true;
   }
 }

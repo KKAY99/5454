@@ -169,9 +169,8 @@ public class RobotContainer {
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
 
     //Lineup
-   /*ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve,m_dunkinDonut,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
-    JoystickButton lineupButton=new JoystickButton(m_xBoxOperator,5);
-    lineupButton.whileTrue(lineup);*/
+    ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve,m_dunkinDonut,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
+    m_xBoxDriver.leftBumper().whileTrue(lineup);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){

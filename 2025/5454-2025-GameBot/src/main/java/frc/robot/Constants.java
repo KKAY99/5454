@@ -136,7 +136,7 @@ public final class Constants {
     public static final double rightLineupXDeadband=0.05;
 
     public static final double driveTargetDistanceRight=51;
-    public static final double driveTargetDistanceLeft=0;
+    public static final double driveTargetDistanceLeft=-66;
     public static final double driveDeadBand=2;
 
     public static final double strafeP=0.15;
@@ -144,6 +144,9 @@ public final class Constants {
     public static final double strafeD=0.1;
     public static final double strafeMaxAndMin=0.5;
     public static final double strafeInputGain=0.5;
+
+    public static final double driveTimeToRun=0.2;
+    public static final double lineUpDriveSpeed=-0.2;
 
     public static final double driveP=0.15;
     public static final double driveI=0;
@@ -165,7 +168,7 @@ public final class Constants {
     public static final double posDeadband=1.2;
 
     public static final double homePosDeadband=0.001;
-    public static final double rotateHomePos=0.25;
+    public static final double rotateHomePos=0.17;
     public static final double homeSpeed=0.03;
 
     public static final double coralP=0.1;
@@ -179,7 +182,7 @@ public final class Constants {
     public static final double localPIDMaxAndMin=0.5;
     public static final double PIDInputGain=60;
 
-    public static final double outOfLimelightVisionPos=0.22;
+    public static final double outOfLimelightVisionPos=0.15;
     public static final double groundIntakePos=0.33;
     public static final double algaeStowPos=0.30;
     public static final double lollipopGrabPos=0.328;
@@ -192,7 +195,7 @@ public final class Constants {
 
     public static final double groundIntakeSpeed=1;
     public static final double lollipopGrabSpeed=1;
-    public static final double processorScoreSpeed=-1;
+    public static final double processorScoreSpeed=-0.5;
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=1;
     public static final double autoCoralTimeToRun=1;

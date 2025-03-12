@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -24,6 +25,8 @@ public class ApriltagLineupCommand extends Command {
   private ObsidianPID m_strafePID;
 
   private Supplier<Boolean> m_isRightLineup;
+
+  private double m_startTime;
 
   private enum States{
     DRIVEFORWARDS,MOVECLAW,CHECKFORTARGET,LEFTLINEUP,RIGHTLINEUP,END
@@ -54,14 +57,15 @@ public class ApriltagLineupCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_currentState = States.DRIVEFORWARDS;
+    m_currentState = States.MOVECLAW;
+    m_startTime=Timer.getFPGATimestamp();
     //System.out.println("Command started");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted){
-    m_currentState = States.DRIVEFORWARDS;
+    m_currentState = States.MOVECLAW;  
   }
 
   // Returns true when the command should end.
@@ -77,16 +81,22 @@ public class ApriltagLineupCommand extends Command {
     double drive=0;
 
     switch(m_currentState){
+      case MOVECLAW:
+      m_dunkin.resetShouldRunPID();
+      m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);
+
+      m_currentState=States.DRIVEFORWARDS;
+      break;
       case DRIVEFORWARDS:
-        if(m_leftLimelight.isAnyTargetAvailable()||m_rightLimelight.isAnyTargetAvailable()){
+        /*if(m_leftLimelight.isAnyTargetAvailable()||m_rightLimelight.isAnyTargetAvailable()){
           if(m_leftLimelight.isAnyTargetAvailable()&&!m_rightLimelight.isAnyTargetAvailable()){
             distance=Math.abs(m_leftLimelight.getDistance());
             driveFlipValue=distance/m_leftLimelight.getDistance();
-            drive=m_drivePID.calculatePercentOutput(distance,LimeLightValues.driveTargetDistanceLeft);
+            drive=(m_drivePID.calculatePercentOutput(distance,LimeLightValues.driveTargetDistanceLeft));
           }else{
             distance=Math.abs(m_rightLimelight.getDistance());
             driveFlipValue=-(distance/m_rightLimelight.getDistance());
-            drive=m_drivePID.calculatePercentOutput(distance,LimeLightValues.driveTargetDistanceRight);
+            drive=-(m_drivePID.calculatePercentOutput(distance,LimeLightValues.driveTargetDistanceRight));
           }
 
           if(m_leftLimelight.isAnyTargetAvailable()&&!m_rightLimelight.isAnyTargetAvailable()&&LimeLightValues.driveTargetDistanceLeft-LimeLightValues.driveDeadBand<distance&&
@@ -102,13 +112,14 @@ public class ApriltagLineupCommand extends Command {
 
         }else{
           m_currentState=States.END;
+        }*/
+        if(m_startTime+LimeLightValues.driveTimeToRun<Timer.getFPGATimestamp()){
+          m_swerve.drive(0,0,0);
+          m_currentState=States.CHECKFORTARGET;
+        }else{
+          m_swerve.drive(LimeLightValues.lineUpDriveSpeed,0,0);
         }
-      break;
-      case MOVECLAW:
-      m_dunkin.resetShouldRunPID();
-      m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);
 
-      m_currentState=States.CHECKFORTARGET;
       break;
       case CHECKFORTARGET:
         if(m_isRightLineup.get()){

@@ -30,8 +30,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
 
   private SparkClosedLoopController m_loopController;
 
-  
-  private PIDController m_codeBoundPID;
   private ObsidianPID m_obsidianPID;
   private RelativeEncoder m_rotateRelative;
   private RelativeEncoder m_coralRelative;
