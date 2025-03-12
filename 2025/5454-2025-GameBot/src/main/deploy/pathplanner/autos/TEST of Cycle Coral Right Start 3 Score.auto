@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Start to ID 20 Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoScoreRight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ID 20 Right To Coral Station"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": null,
+  "choreoAuto": false
+}

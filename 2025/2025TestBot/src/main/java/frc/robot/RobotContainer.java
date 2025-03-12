@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.awt.Color;
+import java.util.concurrent.PriorityBlockingQueue;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
@@ -42,6 +44,8 @@ import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.utilities.Leds;
 import frc.robot.Constants.NotificationLevel;
 import frc.robot.utilities.Elastic;
+import frc.robot.subsystems.ServoTest;
+import frc.robot.commands.testmoveservo;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -72,6 +76,7 @@ public class RobotContainer {
     private Leds m_leds = new Leds(Constants.LedConstants.LedCanID, Constants.LedConstants.LedCount);
     private EndEffectorSubsystem m_endEffector = new EndEffectorSubsystem(12,13,10);
     private ElevatorSubsystem m_Elevator = new ElevatorSubsystem(11);
+    private ServoTest m_ServoTest = new ServoTest(0);
    // private Limelight m_Limelight=new Limelight();
     public RobotContainer() {
         // Configure the button bindings
@@ -123,6 +128,8 @@ public class RobotContainer {
       EndEffectorCommand effectorCommand_4 = new EndEffectorCommand(m_endEffector,2,-.5);
       EndEffectorButton_4.whileTrue(effectorCommand_4);*/
 
+
+
       Trigger Right_Stick_Y = new Trigger(() -> Math.abs(m_xBoxDriver.getRightY())>0.1);
       EndEffectorRotateCommand endEffectorRotateCommand = new EndEffectorRotateCommand(m_endEffector, () -> m_xBoxDriver.getRightY());
       Right_Stick_Y.whileTrue(endEffectorRotateCommand);
@@ -142,12 +149,14 @@ public class RobotContainer {
 
             
       JoystickButton Button_A = new JoystickButton(m_xBoxDriver,1);
-      ElevatorCommand ElevatorCommand_4 = new ElevatorCommand(m_Elevator,() -> -0.2);
-      Button_A.whileTrue(ElevatorCommand_4);
+      testmoveservo servopos = new testmoveservo(m_ServoTest, true);
+      //ElevatorCommand ElevatorCommand_4 = new ElevatorCommand(m_Elevator,() -> -0.2);
+      Button_A.whileTrue(servopos);//ElevatorCommand_4);
 
       JoystickButton Button_B = new JoystickButton(m_xBoxDriver,2);
-      ElevatorCommand ElevatorCommand_3 = new ElevatorCommand(m_Elevator,() -> 0.2);
-      Button_B.whileTrue(ElevatorCommand_3);
+      testmoveservo servoneg = new testmoveservo(m_ServoTest, false);
+      //ElevatorCommand ElevatorCommand_3 = new ElevatorCommand(m_Elevator,() -> 0.2);
+      Button_B.whileTrue(servoneg);//ElevatorCommand_3);
 
 
     }

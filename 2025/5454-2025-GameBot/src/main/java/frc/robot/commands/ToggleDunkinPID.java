@@ -18,6 +18,11 @@ public class ToggleDunkinPID extends Command{
 
     private boolean m_resetToggle;
 
+    public ToggleDunkinPID(DunkinDonutSubsystem dunkin,double setPoint){
+        m_dunkin=dunkin;
+        m_setPoint=setPoint;
+    }
+
     public ToggleDunkinPID(DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scoreLevel){
         m_dunkin=dunkin;
         m_scoreLevel=scoreLevel;
@@ -46,16 +51,16 @@ public class ToggleDunkinPID extends Command{
         if(m_scoreLevel!=null){
             switch(m_scoreLevel.get()){
             case L1:
-            m_setPoint=DunkinDonutConstants.l1PosABS;
+            m_setPoint=DunkinDonutConstants.noGrabAlgaePos;
             break;
             case L2:
-            m_setPoint=DunkinDonutConstants.l2PosABS;
+            m_setPoint=DunkinDonutConstants.noGrabAlgaePos;
             break;
             case L3:
-            m_setPoint=DunkinDonutConstants.l3PosABS;
+            m_setPoint=DunkinDonutConstants.noGrabAlgaePos;
             break;
             case L4:
-            m_setPoint=DunkinDonutConstants.l4PosABS;
+            m_setPoint=DunkinDonutConstants.noGrabAlgaePos;
             break;
             case RETRACT:
             m_setPoint=DunkinDonutConstants.rotateHomePos;
@@ -71,7 +76,7 @@ public class ToggleDunkinPID extends Command{
         if(m_elevator.getRelativePos()<ElevatorConstants.aboveTroughPos||m_scoreLevel.get()==ElevatorScoreLevel.RETRACT){
             m_dunkin.toggleLocalPid(m_setPoint);
 
-            if(!m_dunkin.getShouldRunPID()){
+            if(!m_dunkin.getToggle()){
                 m_dunkin.stop_rotatemotor();
             }
 

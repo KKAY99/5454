@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.classes.ObsidianCANSparkMax;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import org.littletonrobotics.junction.LoggedRobot;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private static final double TRACKWIDTH = 25;
@@ -36,19 +37,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 //USE RADIANS
 //3.04 radians is half a rotation
 // π/180
-private static final double FRONT_LEFT_ANGLE_OFFSET = -2.3;//4.04;//4.63-3.04; ///-0.850
+private static final double FRONT_LEFT_ANGLE_OFFSET = 0.3-3.04;//4.04;//4.63-3.04; ///-0.850
 
 //private static final double FRONT_RIGHT_ANGLE_OFFSET = 0.9+3.04; //0.25; //-4.72+3.04;//-1.45
-private static final double FRONT_RIGHT_ANGLE_OFFSET =0.6+3.04;//0.5+3.04;1.02;// -0.73; //0.25; //-4.72+3.04;//-1.45
+private static final double FRONT_RIGHT_ANGLE_OFFSET =-1.5-3.04;//0.5+3.04;1.02;// -0.73; //0.25; //-4.72+3.04;//-1.45
 //private static final double FRONT_RIGHT_ANGLE_OFFSET=-Math.toRadians(205.4);
 //private static final double BACK_LEFT_ANGLE_OFFSET = -1.25;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = 1.75;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = 1.95;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = -0.55-3.04;//-77+3.04;//-0.78
-private static final double BACK_LEFT_ANGLE_OFFSET = -0.77-3.04;//-0.55-3.04;//-77+3.04;//-0.78
+private static final double BACK_LEFT_ANGLE_OFFSET = -0.6;//-0.55-3.04;//-77+3.04;//-0.78
 
 //private static final double BACK_RIGHT_ANGLE_OFFSET =-2.17-3.04; //-2.42-3.04
-private static final double BACK_RIGHT_ANGLE_OFFSET = -1.42-3.04;//-1.24-3.04; //-2.42-3.04
+private static final double BACK_RIGHT_ANGLE_OFFSET = 0.028;//-1.24-3.04; //-2.42-3.04
 
 
 private boolean m_autoControl = false;
@@ -272,30 +273,30 @@ public void spin (double direction,double speed)
         SmartDashboard.putNumber("Front Right Module Angle", Math.toDegrees(frontRightModule.getCurrentAngle()));
         SmartDashboard.putNumber("Back Left Module Angle", Math.toDegrees(backLeftModule.getCurrentAngle()));
         SmartDashboard.putNumber("Back Right Module Angle", Math.toDegrees(backRightModule.getCurrentAngle()));
-        //SmartDashboard.putNumber("Front Left Module Radian", Math.toDegrees(frontLeftModule);
-        //SmartDashboard.putNumber("Front Right Module Radian", Math.toDegrees(frontRightModule.getCurrentAngle()));
-        //SmartDashboard.putNumber("Back Left Module Radain", Math.toDegrees(backLeftModule.getCurrentAngle()));
-        //SmartDashboard.putNumber("Back Right Module Radain", Math.toDegrees(backRightModule.getCurrentAngle()));
+        SmartDashboard.putNumber("Front Left Module Radian", Math.toRadians(frontLeftModule.getCurrentAngle()));
+        SmartDashboard.putNumber("Front Right Module Radian", Math.toRadians(frontRightModule.getCurrentAngle()));
+        SmartDashboard.putNumber("Back Left Module Radain", Math.toRadians(backLeftModule.getCurrentAngle()));
+        SmartDashboard.putNumber("Back Right Module Radain", Math.toRadians(backRightModule.getCurrentAngle()));
 
         SmartDashboard.putNumber("Gyroscope Angle", m_gyroscope.getAngle().toDegrees());
 
-        /* 
+        
         frontLeftModule.updateState(LoggedRobot.defaultPeriodSecs);
-   frontRightModule.updateState(LoggedRobot.defaultPeriodSecs);
+        frontRightModule.updateState(LoggedRobot.defaultPeriodSecs);
         backLeftModule.updateState(LoggedRobot.defaultPeriodSecs);
-        backRightModule.updateState(LoggedRobot.defaultPeriodSecs);*/
+        backRightModule.updateState(LoggedRobot.defaultPeriodSecs);
 
-       /* SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
+        SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
         SwerveModulePosition frontRightPosition=new SwerveModulePosition(frontRightModule.getCurrentDistance(),new Rotation2d(frontRightModule.getCurrentAngle()));
         SwerveModulePosition backleftPosition=new SwerveModulePosition(backLeftModule.getCurrentDistance(),new Rotation2d(backLeftModule.getCurrentAngle()));
         SwerveModulePosition backRightPosition=new SwerveModulePosition(backRightModule.getCurrentDistance(),new Rotation2d(backRightModule.getCurrentAngle()));
-        estimator.update(getGyroscopeRotation(),  new SwerveModulePosition[] { 
-                frontLeftPosition,
-                frontRightPosition,
-                backleftPosition,
-                backRightPosition
-              });
-        */
+      //  estimator.update(getGyroscopeRotation(),  new SwerveModulePosition[] { 
+       //         frontLeftPosition,
+       //         frontRightPosition,
+       ////         backleftPosition,
+        //        backRightPosition
+         //     });
+        
               //System.out.println("Current Pose: " + estimator.getEstimatedPosition().toString());
     }
 

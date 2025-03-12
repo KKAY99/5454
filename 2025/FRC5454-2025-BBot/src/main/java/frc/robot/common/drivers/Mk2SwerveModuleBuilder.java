@@ -2,7 +2,7 @@ package frc.robot.common.drivers;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
-
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -10,10 +10,13 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
+import com.ctre.phoenix6.hardware.CANcoder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.Constants;
 import frc.robot.common.control.PidConstants;
 import frc.robot.common.control.PidController;
 import frc.robot.common.drivers.SwerveModule;
@@ -25,6 +28,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
+
 
 public class Mk2SwerveModuleBuilder {
     /**
@@ -110,17 +114,17 @@ public class Mk2SwerveModuleBuilder {
      * The default PID constants and angle reduction are used. These values have been determined to work with all Mk2
      * modules controlled by this motor.
      * <p>
-     * To override this values see {@link #angleMotor(SparkBase, PidConstants, double)}
+     * To override this values see {@link #angleMotor(SparkMax, PidConstants, double)}
      *
      * @param motor The CAN Spark MAX to use as the angle motor. The NEO's encoder is set to output the module's angle
      *              in radians.
      * @return The builder.
      */
-    public Mk2SwerveModuleBuilder angleMotor(SparkBase motor) {
+    public Mk2SwerveModuleBuilder angleMotor(SparkMax motor) {
         return angleMotor(motor, DEFAULT_CAN_SPARK_MAX_ANGLE_CONSTANTS, DEFAULT_ANGLE_REDUCTION);
     }
 
-    public Mk2SwerveModuleBuilder angleMotor(SparkBase motor, MotorType motorType) {
+    public Mk2SwerveModuleBuilder angleMotor(SparkMax motor, MotorType motorType) {
         if (motorType == MotorType.NEO) {
             return angleMotor(motor, DEFAULT_CAN_SPARK_MAX_ANGLE_CONSTANTS, DEFAULT_ANGLE_REDUCTION);
         }
@@ -132,7 +136,7 @@ public class Mk2SwerveModuleBuilder {
      * Configures the swerve module to use a CAN Spark MAX driving a NEO as it's angle motor.
      * <p>
      * This method is usually used when custom PID tuning is required. If using the standard angle reduction
-     * and a NEO, {@link #angleMotor(SparkBase)} uses already tuned constants so no tuning is required.
+     * and a NEO, {@link #angleMotor(SparkMax)} uses already tuned constants so no tuning is required.
      *
      * @param motor     The CAN Spark MAX to use as the angle motor. The NEO's encoder is set to output the module's
      *                  angle in radians.
@@ -141,16 +145,14 @@ public class Mk2SwerveModuleBuilder {
      *                  For example, an 18:1 ratio should be specified by {@code 18.0 / 1.0}.
      * @return The builder.
      */
-    public Mk2SwerveModuleBuilder angleMotor(SparkBase motor, PidConstants constants, double reduction) {
+    public Mk2SwerveModuleBuilder angleMotor(SparkMax motor, PidConstants constants, double reduction) {
         RelativeEncoder encoder = motor.getEncoder();
-        encoder.setPositionConversionFactor(2.0 * Math.PI / reduction);
-
+        encoder.setPosition(2.0 * Math.PI / reduction);
         // KK 2/20 try
        SparkClosedLoopController controller = motor.getClosedLoopController();
-       // SparkMaxPIDController controller= motor.getPIDController();
-        controller.setP(constants.p);
-        controller.setI(constants.i);
-        controller.setD(constants.i);
+       //set PID values
+       
+       
 
         targetAngleConsumer = targetAngle -> {
             double currentAngle = encoder.getPosition();
@@ -183,16 +185,16 @@ public class Mk2SwerveModuleBuilder {
         final double sensorCoefficient = (2.0 * Math.PI) / (reduction * 2048.0);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.slot0.kP = constants.p;
-        config.slot0.kI = constants.i;
-        config.slot0.kD = constants.d;
+        config.Slot0.kP = constants.p;
+        config.Slot0.kI = constants.i;
+        config.Slot0.kD = constants.d;
 
         motor.setNeutralMode(NeutralModeValue.Brake);
 
-        motor.configAllSettings(config);
+        motor.getConfigurator().apply(config);
 
         targetAngleConsumer = targetAngle -> {
-            double currentAngle = sensorCoefficient * motor.getSensorCollection().getIntegratedSensorPosition();
+            double currentAngle = sensorCoefficient * motor.getPosition().getValueAsDouble();
             // Calculate the current angle in the range [0, 2pi)
             double currentAngleMod = currentAngle % (2.0 * Math.PI);
             if (currentAngleMod < 0.0) {
@@ -207,9 +209,9 @@ public class Mk2SwerveModuleBuilder {
                 newTarget += 2.0 * Math.PI;
             }
 
-            motor.set(ControlMode.Position, newTarget / sensorCoefficient);
+            motor.set(newTarget / sensorCoefficient);
         };
-        initializeAngleCallback = angle -> motor.getSensorCollection().setIntegratedSensorPosition(angle / sensorCoefficient, 50);
+        initializeAngleCallback = angle -> motor.setPosition(angle / sensorCoefficient, 50);
 
         return this;
     }
@@ -232,14 +234,14 @@ public class Mk2SwerveModuleBuilder {
             case CIM:
                 // Spark MAXs are special and drive brushed motors in the opposite direction of every other motor
                 // controller
-                if (motor instanceof Spark || motor instanceof SparkBase) {
+                if (motor instanceof Spark || motor instanceof SparkMax) {
                     motor.setInverted(true);
                 }
 
                 return angleMotor(motor, DEFAULT_ONBOARD_CIM_ANGLE_CONSTANTS);
             case MINI_CIM:
                 // Spark MAXs are special and drive brushed motors in the opposite direction of every other motor controller
-                if (motor instanceof Spark || motor instanceof SparkBase) {
+                if (motor instanceof Spark || motor instanceof SparkMax) {
                     motor.setInverted(true);
                 }
 
@@ -281,11 +283,11 @@ public class Mk2SwerveModuleBuilder {
      *              distance and current velocity in inches and inches per second.
      * @return The builder.
      */
-    public Mk2SwerveModuleBuilder driveMotor(SparkBase motor) {
+    public Mk2SwerveModuleBuilder driveMotor(SparkMax motor) {
         return driveMotor(motor, MotorType.NEO);
     }
 
-    public Mk2SwerveModuleBuilder driveMotor(SparkBase motor, MotorType motorType) {
+    public Mk2SwerveModuleBuilder driveMotor(SparkMax motor, MotorType motorType) {
         if (motorType == MotorType.NEO) {
             return driveMotor(motor, DEFAULT_DRIVE_REDUCTION, DEFAULT_WHEEL_DIAMETER);
         }
@@ -304,10 +306,10 @@ public class Mk2SwerveModuleBuilder {
      *                      inches.
      * @return The builder.
      */
-    public Mk2SwerveModuleBuilder driveMotor(SparkBase motor, double reduction, double wheelDiameter) {
+    public Mk2SwerveModuleBuilder driveMotor(SparkMax motor, double reduction, double wheelDiameter) {
         RelativeEncoder encoder = motor.getEncoder();
-        encoder.setPositionConversionFactor(wheelDiameter * Math.PI / reduction);
-        encoder.setVelocityConversionFactor(wheelDiameter * Math.PI / reduction * (1.0 / 60.0)); // RPM to units per second
+        encoder.setPosition(wheelDiameter * Math.PI / reduction);
+        motor.set(wheelDiameter * Math.PI / reduction * (1.0 / 60.0)); // RPM to units per second
 
         currentDrawSupplier = motor::getOutputCurrent;
         distanceSupplier = encoder::getPosition;
@@ -323,13 +325,13 @@ public class Mk2SwerveModuleBuilder {
 
     public Mk2SwerveModuleBuilder driveMotor(TalonFX motor, double reduction, double wheelDiameter) {
         TalonFXConfiguration config = new TalonFXConfiguration();
-        motor.configAllSettings(config);
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor.getConfigurator().apply(config);
+        motor.setNeutralMode(NeutralModeValue.Brake);
 
-        currentDrawSupplier = motor::getSupplyCurrent;
-        distanceSupplier = () -> (Math.PI * wheelDiameter * motor.getSensorCollectio().getIntegratedSensorPosition()) / (2048.0 * reduction);
-        velocitySupplier = () -> (10.0 * Math.PI * wheelDiameter * motor.getSensorCollection().getIntegratedSensorVelocity()) / (2048.0 * reduction);
-        driveOutputConsumer = output -> motor.set(ControlMode.PercentOutput, output);
+        currentDrawSupplier = () -> motor.getSupplyCurrent().getValueAsDouble();
+        distanceSupplier = () -> (Math.PI * wheelDiameter * motor.getPosition().getValueAsDouble()) / (2048.0 * reduction);
+        velocitySupplier = () -> (10.0 * Math.PI * wheelDiameter * motor.getVelocity().getValueAsDouble()) / (2048.0 * reduction);
+        driveOutputConsumer = output -> motor.set(output);
 
         return this;
     }
@@ -343,7 +345,7 @@ public class Mk2SwerveModuleBuilder {
      */
     public Mk2SwerveModuleBuilder driveMotor(MotorController motor, MotorType motorType) {
         // Spark MAXs are special and drive brushed motors in the opposite direction of every other motor controller
-        if (motorType != MotorType.NEO && (motor instanceof Spark || motor instanceof SparkBase)) {
+        if (motorType != MotorType.NEO && (motor instanceof Spark || motor instanceof SparkMax)) {
             motor.setInverted(true);
         }
 

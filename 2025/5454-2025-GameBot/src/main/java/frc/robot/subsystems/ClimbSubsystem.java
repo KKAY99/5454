@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
@@ -15,7 +16,7 @@ import com.revrobotics.servohub.ServoHub.ResetMode;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkFlexExternalEncoder;
-
+import edu.wpi.first.wpilibj.Servo;
 
 public class ClimbSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_leaderMotor;
@@ -24,14 +25,14 @@ public class ClimbSubsystem extends SubsystemBase {
   private DutyCycleEncoder m_encoder;
 
   private ObsidianPID m_obsidianPID;
+  private Servo m_servo;
 
   private double m_setPoint;
 
-
-
-  public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO){
-    m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,80);
-    m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,80);
+  public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO, int ServoID){
+    m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,Constants.k80Amp);
+    m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,Constants.k80Amp);
+    m_servo = new Servo(ServoID);
     
     /*
     SparkMaxConfig followconfig = new SparkMaxConfig();
@@ -48,9 +49,14 @@ public class ClimbSubsystem extends SubsystemBase {
     m_obsidianPID=new ObsidianPID(ClimbConstants.climbP,ClimbConstants.climbI,ClimbConstants.climbD,
                                   ClimbConstants.climbMaxAndMin,-ClimbConstants.climbMaxAndMin);
     m_obsidianPID.setInputGain(ClimbConstants.climbInputGain);
+  }
 
+  public void engageServo(){
+      m_servo.setAngle(100);
+  }
 
-
+  public void disengageServo(){
+      m_servo.setAngle(80);
   }
 
   public double getAbsoluteEncoderPos(){
