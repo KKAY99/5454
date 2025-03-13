@@ -146,7 +146,7 @@ public class DunkinDonutCoralCommand extends Command {
         if(m_dunkin.isCoralAtBoxLimit()){
           m_dunkin.stopCoralMotor();
           m_dunkin.stopIndexer();
-          m_currentState = States.RUNCORALTOPOS;
+          m_currentState = States.END;
         }
       break;
       case RUNCORALTOPOS:

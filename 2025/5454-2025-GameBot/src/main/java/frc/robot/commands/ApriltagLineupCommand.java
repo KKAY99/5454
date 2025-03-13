@@ -45,8 +45,8 @@ public class ApriltagLineupCommand extends Command {
     m_leftLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
     m_rightLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
 
-    m_strafePID=new ObsidianPID(LimeLightValues.strafeP,LimeLightValues.strafeI,LimeLightValues.strafeD,LimeLightValues.strafeMaxAndMin,-LimeLightValues.strafeMaxAndMin);
-    m_strafePID.setInputGain(LimeLightValues.strafeInputGain);
+    //m_strafePID=new ObsidianPID(LimeLightValues.strafeP,LimeLightValues.strafeI,LimeLightValues.strafeD,LimeLightValues.strafeMaxAndMin,-LimeLightValues.strafeMaxAndMin);
+//    m_strafePID.setInputGain(LimeLightValues.strafeInputGain);
 
     m_drivePID=new ObsidianPID(LimeLightValues.driveP,LimeLightValues.driveI,LimeLightValues.driveD,LimeLightValues.driveMaxAndMin,-LimeLightValues.driveMaxAndMin);
     m_drivePID.setInputGain(LimeLightValues.driveInputGain);
@@ -151,7 +151,7 @@ public class ApriltagLineupCommand extends Command {
           m_swerve.drive(0,0,0);
           m_currentState=States.END;
         }else{
-          strafe=(m_isRightLineup.get())?strafe:-0.3;
+          strafe=(m_isRightLineup.get())?-strafe:-0.3;
           strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
           m_swerve.drive(0,strafe*strafeFlipValue,0);
         }

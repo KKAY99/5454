@@ -31,11 +31,10 @@ public class Leds {
 
 
     public Leds(int CanID, int ledCount){
-       m_CANdle = new CANdle(CanID);
+       m_CANdle = new CANdle(CanID,"5454Canivore");
        m_ledCount = ledCount;
-       m_CANdle.configLEDType(LEDStripType.GRB);
-       m_CANdle.configBrightnessScalar(0.25);
-
+       m_CANdle.configLEDType(LEDStripType.RGB);
+       m_CANdle.configBrightnessScalar(1);
     }
 
     public void setLedState(LEDStates state){
@@ -44,28 +43,23 @@ public class Leds {
         switch(m_currentState){
             case TELEOP: 
                 setColorState(ColorStates.GREEN);
-                break;
-            
+            break;
             case DISABLED:
                 setColorState(ColorStates.RED);
-                break;
-
+            break;
             case HASCORAL:
                 setColorState(ColorStates.WHITE);
-                break;
-
+            break;
             case HASALGEA:
                 setColorState(ColorStates.PURPLE);
-                break;
-
+            break;
             case LINEDUP:
-                break;
-            
+            break;
             case SCORED:
                 setAnimationState(AnimationStates.LARSON);
-
+            break;
             case ATHUMANPLAYER:
-                break;
+            break;
             
         }
 
@@ -76,19 +70,19 @@ public class Leds {
         switch (m_currentColorstate) {
             case GREEN:
                 m_CANdle.setLEDs(0,225,0,0,m_startIndex, m_ledCount);
-                break;
+            break;
             case PURPLE:
                 m_CANdle.setLEDs(128,0,128,0,m_startIndex, m_ledCount);
-                break;
+            break;
             case RED:
                 m_CANdle.setLEDs(225,0,0,0,m_startIndex, m_ledCount);
-                break;
+            break;
             case BLUE:
                 m_CANdle.setLEDs(0,0,225,0,m_startIndex, m_ledCount);
-                break;
+            break;
             case WHITE:
                 m_CANdle.setLEDs(128,128,128,128, m_startIndex, m_ledCount);
-                break;
+            break;
         }
     }
 

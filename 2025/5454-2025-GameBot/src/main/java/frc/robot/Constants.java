@@ -132,21 +132,38 @@ public final class Constants {
 
     public static final double reefAprilTagHeight=8.75;
 
-    public static final double leftLineupXDeadband=0.05;
-    public static final double rightLineupXDeadband=0.05;
+    public static final double leftLineupXDeadband=0.7;
+    public static final double rightLineupXDeadband=1;
 
     public static final double driveTargetDistanceRight=51;
     public static final double driveTargetDistanceLeft=-66;
+
+    public static final double driveFollowDistanceRight=100;
+    public static final double driveFollowDistanceLeft=-120;
     public static final double driveDeadBand=2;
 
-    public static final double strafeP=0.15;
-    public static final double strafeI=0;
-    public static final double strafeD=0.1;
-    public static final double strafeMaxAndMin=0.5;
-    public static final double strafeInputGain=0.5;
+    public static final double strafePRIGHT=0.15;
+    public static final double strafeIRIGHT=0;
+    public static final double strafeDRIGHT=0.5;
+    public static final double strafeMaxAndMinRIGHT=0.3;
+    public static final double strafeInputGainRIGHT=1;
 
-    public static final double driveTimeToRun=0.2;
-    public static final double lineUpDriveSpeed=-0.2;
+    public static final double strafePLEFT=0.09;
+    public static final double strafeILEFT=0;
+    public static final double strafeDLEFT=0.3;
+    public static final double strafeMaxAndMinLEFT=0.3;
+    public static final double strafeInputGainLEFT=1;
+
+    public static final double rotP=0.1;
+    public static final double rotI=0;
+    public static final double rotD=0.2;
+    public static final double rotMaxAndMin=0.5;
+    public static final double rotInputGain=60;
+
+    public static final double algaeDriveTimeToRun=0.8;
+    public static final double driveTimeToRun=0.4;
+    public static final double alageDriveBackSpeed=0.4;
+    public static final double lineUpDriveSpeed=-0.3;
 
     public static final double driveP=0.15;
     public static final double driveI=0;
@@ -168,7 +185,7 @@ public final class Constants {
     public static final double posDeadband=1.2;
 
     public static final double homePosDeadband=0.001;
-    public static final double rotateHomePos=0.17;
+    public static final double rotateHomePos=0.14;
     public static final double homeSpeed=0.03;
 
     public static final double coralP=0.1;
@@ -182,13 +199,13 @@ public final class Constants {
     public static final double localPIDMaxAndMin=0.5;
     public static final double PIDInputGain=60;
 
-    public static final double outOfLimelightVisionPos=0.15;
+    public static final double outOfLimelightVisionPos=0.14;
     public static final double groundIntakePos=0.33;
     public static final double algaeStowPos=0.30;
     public static final double lollipopGrabPos=0.328;
     public static final double processorScorePos=0.328;
     public static final double noGrabAlgaePos=0.22;
-    public static final double algaeGrabPos=0.36;
+    public static final double algaeGrabPos=0.37;
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
@@ -227,7 +244,7 @@ public final class Constants {
     public static final double processorScorePos=-13;
     public static final double lollipopGrabPos=-13;
     public static final double l3AlgaePos=-43;
-    public static final double l4AlgaePos=-65;
+    public static final double l4AlgaePos=-70;
     public static final double l1Pos=-13;
     public static final double l2Pos=-14; //26
     public static final double l3Pos=-43;

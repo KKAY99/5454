@@ -39,8 +39,8 @@ public class DEMOROBOTFOLLOW extends Command {
     m_leftLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
     m_rightLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
 
-    m_rotPID=new ObsidianPID(LimeLightValues.strafeP,LimeLightValues.strafeI,LimeLightValues.strafeD,LimeLightValues.strafeMaxAndMin,-LimeLightValues.strafeMaxAndMin);
-    m_rotPID.setInputGain(LimeLightValues.strafeInputGain);
+    m_rotPID=new ObsidianPID(LimeLightValues.rotP,LimeLightValues.rotI,LimeLightValues.rotD,LimeLightValues.rotMaxAndMin,-LimeLightValues.rotMaxAndMin);
+    m_rotPID.setInputGain(LimeLightValues.rotInputGain);
 
     m_drivePID=new ObsidianPID(LimeLightValues.driveP,LimeLightValues.driveI,LimeLightValues.driveD,LimeLightValues.driveMaxAndMin,-LimeLightValues.driveMaxAndMin);
     m_drivePID.setInputGain(LimeLightValues.driveInputGain);
@@ -67,8 +67,8 @@ public class DEMOROBOTFOLLOW extends Command {
   public boolean isFinished() {
     boolean returnValue=false;
     double distance=0;
-    double rawYaw=0;
-    double yaw=0;
+    double rawX=0;
+    double x=0;
     double rotFlipValue=0;
     double rot=0;
     double drive=0;
@@ -86,26 +86,28 @@ public class DEMOROBOTFOLLOW extends Command {
       break;
       case FOLLOW:
         if(m_leftLimelight.isAnyTargetAvailable()&&!m_rightLimelight.isAnyTargetAvailable()){
-          rawYaw=m_leftLimelight.getYawOfAprilTag();
-          yaw=Math.abs(m_leftLimelight.getYawOfAprilTag());
+          rawX=m_leftLimelight.getX();
+          x=Math.abs(m_leftLimelight.getX());
           distance=Math.abs(m_leftLimelight.getDistance());
-          rotFlipValue=yaw/rawYaw;
+          rotFlipValue=x/rawX;
            
-          rot=-m_rotPID.calculatePercentOutput(yaw,0);
-          drive=(m_drivePID.calculatePercentOutput(distance,LimeLightValues.driveTargetDistanceLeft));
+          rot=-m_rotPID.calculatePercentOutput(x,0);
+          drive=-(m_drivePID.calculatePercentOutput(distance,LimeLightValues.driveTargetDistanceLeft));
 
         }else if(m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()||m_rightLimelight.isAnyTargetAvailable()){
-          rawYaw=m_rightLimelight.getYawOfAprilTag();
-          yaw=Math.abs(m_rightLimelight.getYawOfAprilTag());
+          rawX=m_rightLimelight.getX();
+          x=Math.abs(m_rightLimelight.getX());
           distance=Math.abs(m_rightLimelight.getDistance());
-          rotFlipValue=yaw/rawYaw;
+          rotFlipValue=x/rawX;
 
-          rot=-m_rotPID.calculatePercentOutput(yaw,0);
+          rot=m_rotPID.calculatePercentOutput(x,0);
           drive=-(m_drivePID.calculatePercentOutput(distance,LimeLightValues.driveTargetDistanceRight));
 
         }else{
           m_currentState=States.SEARCH;
         }
+
+        m_swerve.drive(drive,0,rot*rotFlipValue);
       break;
       case SEARCH:
         if(m_leftLimelight.isAnyTargetAvailable()||m_rightLimelight.isAnyTargetAvailable()){

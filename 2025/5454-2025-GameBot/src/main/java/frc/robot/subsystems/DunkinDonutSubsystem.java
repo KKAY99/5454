@@ -171,6 +171,10 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     }
   }
 
+  public void resetAlgeaToggle(){
+    m_algaeToggle=false;
+  }
+
   public void toggleLocalPid(double setPoint){
     m_setPoint=setPoint;
     m_obsidianPID.togglePID();
@@ -208,6 +212,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     //System.out.println(isCoralAtBoxLimit());
     Logger.recordOutput("Dunkin/RotateSpeed", m_rotateSpeed);
     Logger.recordOutput("Dunkin/CoralSpeed", m_coralSpeed);
+    Logger.recordOutput("Dunkin/CoralAmp", m_coralMotor.getOutputCurrent());
     Logger.recordOutput("Dunkin/AlgeaSpeed",m_algaeSpeed);
     //Logger.recordOutput("Dunkinr/CurrentPosition",get_motor1pos());    
     SmartDashboard.putBoolean("ShouldRunPID",m_shouldRunPID);

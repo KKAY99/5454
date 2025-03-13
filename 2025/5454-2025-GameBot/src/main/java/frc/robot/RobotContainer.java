@@ -24,6 +24,7 @@ import frc.robot.subsystems.*;
 import frc.robot.utilities.AutoPlanner;
 import frc.robot.utilities.Elastic;
 import frc.robot.utilities.JacksonsCoolPanel;
+import frc.robot.utilities.Leds;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.LimelightManager;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -45,6 +46,8 @@ import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
+import frc.robot.Constants.LEDStates;
+import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LineupConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 import org.littletonrobotics.junction.Logger;
@@ -69,6 +72,7 @@ public class RobotContainer {
   //ClimbSubsystem
   private ClimbSubsystem m_climb=new ClimbSubsystem(ClimbConstants.climbCanID1,ClimbConstants.climbCanID2,ClimbConstants.encoderDIO,ClimbConstants.ServoPMW);
 
+  public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
@@ -147,7 +151,7 @@ public class RobotContainer {
     Trigger clawGroundIntakeLeftTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getLeftTriggerAxis())>ButtonBindings.joystickDeadband);
     clawGroundIntakeLeftTrigger.whileTrue(clawGroundIntake);*/
 
-    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, m_elevator, CoralConstants.coralIntakeSpeed, true, true, 0.75, 0.35);
+    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, m_elevator, CoralConstants.coralIntakeSpeed, true, true, 1, 0.65);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
 
@@ -164,13 +168,13 @@ public class RobotContainer {
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreManualButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
  
-   /* SequentialCommandGroup seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
+    AutoScoreCommand seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
-    operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
+    operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);
 
     //Lineup
-    ApriltagLineupCommand lineup=new ApriltagLineupCommand(m_swerve,m_dunkinDonut,m_leftLimelight,m_rightLimelight,()->m_isRightLineup);
-    m_xBoxDriver.leftBumper().whileTrue(lineup);
+    DEMOROBOTFOLLOW follow=new DEMOROBOTFOLLOW(m_swerve, m_dunkinDonut, m_leftLimelight, m_rightLimelight);
+    m_xBoxDriver.leftBumper().whileTrue(follow);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
@@ -200,8 +204,8 @@ public class RobotContainer {
     }
   } 
 
-  public void setDoesDoAlgae(Supplier<Boolean> leftBumper){
-    if(leftBumper.get()){
+  public void setDoesDoAlgae(Supplier<Boolean> buttonPress){
+    if(buttonPress.get()){
       m_doAlgae=m_doAlgae?false:true;
     }
   } 
@@ -258,6 +262,7 @@ public class RobotContainer {
    
   public void DisabledPeriodic(){
     resetGyroPoseDisabled();
+    m_LEDS.setLedState(LEDStates.DISABLED);
   }
   
   public void AutoPeriodic(){
@@ -293,6 +298,7 @@ public class RobotContainer {
   public void TeleopPeriodic(){
     refreshSmartDashboard();
     GetPIDValues();
+    m_LEDS.setLedState(LEDStates.TELEOP);
 
     /*if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getState().Pose.getRotation().getDegrees(),0);
@@ -316,7 +322,7 @@ public class RobotContainer {
     m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
     setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getBButtonPressed());
-    setDoesDoAlgae(()->m_xBoxOperator.getLeftBumperButtonPressed());
+    setDoesDoAlgae(()->m_xBoxOperator.getStartButtonPressed());
   }
 
   public void resetGyroPoseDisabled(){
