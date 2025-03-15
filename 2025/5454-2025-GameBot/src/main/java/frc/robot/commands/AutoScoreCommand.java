@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.LineupConstants;
@@ -22,10 +23,16 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.utilities.AutoPlanner;
+import frc.robot.utilities.Leds;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.ObsidianPID;
+import frc.robot.Constants.LedConstants;
 
 public class AutoScoreCommand extends Command{
+
+    public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
+
+
     private CommandSwerveDrivetrain m_swerve;
     private ElevatorSubsystem m_elevator;
     private DunkinDonutSubsystem m_dunkin;
@@ -183,9 +190,11 @@ public class AutoScoreCommand extends Command{
                 m_currentState=States.ELEVATOR;
             }else{
                 m_currentState=States.PRESCOREELEV;
+                m_LEDS.setLedState(LEDStates.AUTOSCORING);
             }
         break;
         case PRESCOREELEV:
+
             m_elevator.set_referance(m_elevatorIPos);
             m_dunkin.resetShouldRunPID();
             m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);

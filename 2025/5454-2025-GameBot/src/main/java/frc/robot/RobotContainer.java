@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,6 +32,7 @@ import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
+import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 
 public class RobotContainer {
@@ -39,7 +41,6 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
 
@@ -64,7 +65,7 @@ public class RobotContainer {
   //public final LimelightManager m_LimelightManager=new LimelightManager(m_OdomLimelight,m_OdomFwdLimelight);
 
   public final JacksonsCoolPanel m_JacksonsCoolPanel=new JacksonsCoolPanel(CoolPanelConstants.greenPWM,CoolPanelConstants.redPWM);
-  
+
   private final SendableChooser<Command> m_autoChooser;
 
   public ElevatorScoreLevel m_currentScoreLevel=ElevatorScoreLevel.L1;
@@ -93,6 +94,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings(){
+    
     //QOL Drive
     /*ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve);
     m_xBoxDriver.start().onTrue(resetGyroCommand);*/
@@ -242,7 +244,8 @@ public class RobotContainer {
    
   public void DisabledPeriodic(){
     resetGyroPoseDisabled();
-    m_LEDS.setAnimationState(AnimationStates.PURPLELARSON);
+    m_LEDS.setLedState(LEDStates.DISABLED);
+    m_LEDS.activateLEDS();
   }
   
   public void AutoPeriodic(){
@@ -276,9 +279,112 @@ public class RobotContainer {
   }
 
   public void TeleopPeriodic(){
+    boolean m_timerStarted = false;
+    double m_startTime = 0;
+    double m_runTime = 3;
+    double x = 0;
     refreshSmartDashboard();
-    GetPIDValues();
-    m_LEDS.setLedState(LEDStates.TELEOP);
+    GetPIDValues(); 
+    
+    if(m_isRightLineup){
+      if(m_leftLimelight.isAnyTargetAvailable()){
+        x=Math.abs(m_leftLimelight.getX());
+        if(x<LimeLightValues.leftLineupXDeadband){
+          m_LEDS.setLedState(LEDStates.LINEDUP);
+        }
+      }
+    }else{
+    }if(m_rightLimelight.isAnyTargetAvailable()){
+        x=Math.abs(m_rightLimelight.getX());
+        if(x<LimeLightValues.rightLineupXDeadband){
+          m_LEDS.setLedState(LEDStates.LINEDUP);
+        }
+      }
+
+    switch(m_LEDS.getcurrentstate()){
+      case ENABLED:
+        m_LEDS.activateLEDS();
+      break;
+      case GOLEFT:
+      if(!m_timerStarted){
+        m_timerStarted = true;
+        m_startTime = Timer.getFPGATimestamp();
+      }
+      if (m_startTime + m_runTime < Timer.getTimestamp()){
+        m_LEDS.activateLEDS();
+        
+      }else{
+          m_LEDS.setLedState(LEDStates.ENABLED);
+      }
+      break;
+      case GORIGHT:
+      if(!m_timerStarted){
+        m_timerStarted = true;
+        m_startTime = Timer.getFPGATimestamp();
+      }
+      if (m_startTime + m_runTime < Timer.getTimestamp()){
+        m_LEDS.activateLEDS();
+      }else{
+          m_LEDS.setLedState(LEDStates.ENABLED);
+      }
+      break;
+      case AUTOSCORING:
+      if(!m_timerStarted){
+        m_timerStarted = true;
+        m_startTime = Timer.getFPGATimestamp();
+      }
+      if (m_startTime + m_runTime < Timer.getTimestamp()){
+        m_LEDS.activateLEDS();
+      }else{
+          m_LEDS.setLedState(LEDStates.ENABLED);
+      }
+      break;
+      case HASCORAL:
+      if(!m_timerStarted){
+        m_timerStarted = true;
+        m_startTime = Timer.getFPGATimestamp();
+      }
+      if (m_startTime + m_runTime < Timer.getTimestamp()){
+        m_LEDS.activateLEDS();
+      }else{
+          m_LEDS.setLedState(LEDStates.ENABLED);
+
+      }
+      break;
+      case HASCORALANDDOALGEA:
+      if(!m_timerStarted){
+        m_timerStarted = true;
+        m_startTime = Timer.getFPGATimestamp();
+      }
+      if (m_startTime + m_runTime < Timer.getTimestamp()){
+        m_LEDS.activateLEDS();
+      }else{
+          m_LEDS.setLedState(LEDStates.ENABLED);
+      }
+      break;
+      case LINEDUP:
+      if(!m_timerStarted){
+        m_timerStarted = true;
+        m_startTime = Timer.getFPGATimestamp();
+      }
+      if (m_startTime + m_runTime < Timer.getTimestamp()){
+        m_LEDS.activateLEDS();
+      }else{
+          m_LEDS.setLedState(LEDStates.ENABLED);
+      }
+      break;
+      case INTAKING:
+      if(!m_timerStarted){
+        m_timerStarted = true;
+        m_startTime = Timer.getFPGATimestamp();
+      }
+      if (m_startTime + m_runTime < Timer.getTimestamp()){
+        m_LEDS.activateLEDS();
+      }else{
+          m_LEDS.setLedState(LEDStates.ENABLED);
+      }
+      break;
+    }
 
     /*if(m_OdomLimelight.isAnyTargetAvailable()){
       m_OdomLimelight.SetRobotOrientation(m_swerve.getState().Pose.getRotation().getDegrees(),0);
