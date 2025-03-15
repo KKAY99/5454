@@ -11,6 +11,8 @@ import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import frc.robot.utilities.ObsidianPID;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.revrobotics.servohub.ServoHub.ResetMode;
 import com.revrobotics.spark.SparkBase;
@@ -19,8 +21,7 @@ import com.revrobotics.spark.SparkFlexExternalEncoder;
 import edu.wpi.first.wpilibj.Servo;
 
 public class ClimbSubsystem extends SubsystemBase {
-  private ObsidianCANSparkMax m_leaderMotor;
-  private ObsidianCANSparkMax m_followerMotor;
+  private ObsidianCANSparkMax m_climbMotor;
 
   private DutyCycleEncoder m_encoder;
 
@@ -28,21 +29,11 @@ public class ClimbSubsystem extends SubsystemBase {
   private Servo m_servo;
 
   private double m_setPoint;
+  private double m_pidOutput;
 
   public ClimbSubsystem(int CanID1,int CanID2, int encoderDIO, int ServoID){
-    m_leaderMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,Constants.k80Amp);
-    //m_followerMotor = new ObsidianCANSparkMax(CanID2,MotorType.kBrushless,true,Constants.k80Amp);
+    m_climbMotor = new ObsidianCANSparkMax(CanID1,MotorType.kBrushless,true,Constants.k80Amp);
     m_servo = new Servo(ServoID);
-    
-    /*
-    SparkMaxConfig followconfig = new SparkMaxConfig();
-    followconfig
-      .follow(CanID1)
-      .inverted(true)
-      .limitSwitch.reverseLimitSwitchEnabled(false).forwardLimitSwitchEnabled(false);
-
-
-    m_followerMotor.configure(followconfig, null, PersistMode.kPersistParameters); */
 
     m_encoder=new DutyCycleEncoder(encoderDIO);
 
@@ -81,8 +72,7 @@ public class ClimbSubsystem extends SubsystemBase {
     double var=0;
 
     try{
-      var=m_leaderMotor.getDeviceId();
-      //var=m_followerMotor.getDeviceId();
+      var=m_climbMotor.getDeviceId();
       var=m_encoder.get();
     }catch(Exception e){
       returnValue=false;
@@ -96,37 +86,35 @@ public class ClimbSubsystem extends SubsystemBase {
       if(getAbsoluteEncoderPos()<ClimbConstants.climbLimitHigh){
         run(speed);
       }else{
-        System.out.println("AT LIMIT HIGH ROTATE");
+        //System.out.println("AT LIMIT HIGH ROTATE");
         stop();
       }
   }else{
        if(getAbsoluteEncoderPos()>ClimbConstants.climbLimitLow){
         run(speed);
       }else{
-        System.out.println("AT LIMIT LOW ROTATE");
+        //System.out.println("AT LIMIT LOW ROTATE");
         stop();
       }
     }
   }
 
   public void run(double speed){
-    m_leaderMotor.set(speed);
-    //m_followerMotor.set(speed);
-    
+    m_climbMotor.set(speed); 
   }
 
   public void stop(){
-    m_leaderMotor.stopMotor();
-    //m_followerMotor.stopMotor();
+    m_climbMotor.stopMotor();
   }
 
   @Override
-  public void periodic() {
+  public void periodic(){
     if(m_obsidianPID.getToggle()){
-      double pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
-      System.out.println(pidOutput);
-      m_leaderMotor.set(pidOutput);
-      //m_followerMotor.set(pidOutput);
+      m_pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
+      m_climbMotor.set(m_pidOutput);
     }
+
+    Logger.recordOutput("Climb/Setpoint",m_setPoint);
+    Logger.recordOutput("Climb/PidOutput",m_pidOutput);
   }
 }

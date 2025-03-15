@@ -28,7 +28,6 @@ public class ClimbRotateCommand extends Command{
     @Override
     public boolean isFinished(){
         m_climb.run(m_speed);
-        //m_climb.runWithLimits(m_speed);
         return false;
     }
 }

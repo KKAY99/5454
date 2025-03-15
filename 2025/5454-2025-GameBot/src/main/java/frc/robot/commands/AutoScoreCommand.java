@@ -1,6 +1,8 @@
 package frc.robot.commands;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -51,9 +53,10 @@ public class AutoScoreCommand extends Command{
     private boolean m_isManual = false;
     private boolean m_shouldRunAlgae;
     private boolean m_startedCoral;
+    private boolean m_isRunning;
     
     private enum States{
-        ISMANUALORAUTO,PRESCOREELEV,DRIVEFORWARDS,CHECKFORTARGET,LEFTLINEUP,RIGHTLINEUP,ALGAE,ALGAEGRAB,WAITFORALGAEGRAB,ALGAERETRACT,ELEVATOR,
+        ISMANUALORAUTO,PRESCOREELEV,WAITFORCLAWROTATE,DRIVEFORWARDS,CHECKFORTARGET,LEFTLINEUP,RIGHTLINEUP,ALGAE,ALGAEGRAB,WAITFORALGAEGRAB,ALGAERETRACT,ELEVATOR,
         WAITFORELEVATOR,CORAL,ALGAEDRIVEBACK,RETRACT,WAITFORRETRACT,END
     }
 
@@ -116,6 +119,7 @@ public class AutoScoreCommand extends Command{
         m_currentState=States.ISMANUALORAUTO;
         m_shouldRunAlgae=false;
         m_startedCoral=false;
+        m_isRunning=true;
 
         switch(m_scoreLevel.get()){
             case L1:
@@ -151,9 +155,6 @@ public class AutoScoreCommand extends Command{
             m_elevatorIPos= m_dashBoardPos.get();
             break;
         }
-
-        System.out.println("DOALGAE"+m_doAlgae.get());
-        System.out.println("SHOULDRUNALGAE"+m_shouldRunAlgae);
     }
 
     @Override
@@ -164,6 +165,7 @@ public class AutoScoreCommand extends Command{
         m_elevator.reset_referance();
         m_elevator.motor_stop();
         m_dunkin.resetShouldRunPID();
+        m_isRunning=false;
     }
 
     @Override
@@ -188,7 +190,13 @@ public class AutoScoreCommand extends Command{
             m_dunkin.resetShouldRunPID();
             m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);
 
-            m_currentState=States.DRIVEFORWARDS;
+            m_currentState=States.WAITFORCLAWROTATE;
+        break;
+        case WAITFORCLAWROTATE:
+            double clawABSPos=m_dunkin.getAbsoluteEncoderPos();
+            if(clawABSPos+DunkinDonutConstants.posDeadband>DunkinDonutConstants.outOfLimelightVisionPos&&clawABSPos-DunkinDonutConstants.posDeadband<DunkinDonutConstants.outOfLimelightVisionPos){
+                m_currentState=States.DRIVEFORWARDS;
+            }
         break;
         case DRIVEFORWARDS:
             if(m_startTime+LimeLightValues.driveTimeToRun<Timer.getFPGATimestamp()){
@@ -238,8 +246,6 @@ public class AutoScoreCommand extends Command{
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
                 m_currentState=States.RETRACT;
             }
-            System.out.println("CURRENT X:"+x);
-            System.out.println("Current State:"+m_currentState.toString());
         break;
         case RIGHTLINEUP:
             rawX=m_rightLimelight.getX();
@@ -263,9 +269,6 @@ public class AutoScoreCommand extends Command{
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
                 m_currentState=States.RETRACT;
             }
-
-            System.out.println("CURRENT X:"+x);
-            System.out.println("Current State:"+m_currentState.toString());
         break;
         case ELEVATOR:
             m_elevator.set_referance(m_elevatorFPos);
@@ -276,14 +279,12 @@ public class AutoScoreCommand extends Command{
                 m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
             }
 
-            System.out.println("ELEVATOR SET REF");
             m_currentState=States.WAITFORELEVATOR;
         break;
         case WAITFORELEVATOR:
             elevatorPos=m_elevator.getRelativePos();
 
             if(elevatorPos>m_elevatorFPos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorFPos+ElevatorConstants.posDeadband){
-                System.out.println("ELEVATOR IS AT POS");
 
                 m_startTime=Timer.getFPGATimestamp();
                 m_currentState=States.CORAL;
@@ -293,7 +294,6 @@ public class AutoScoreCommand extends Command{
             m_dunkin.runCoralMotor(DunkinDonutConstants.autoScoreCoralSpeed);
 
             if(DunkinDonutConstants.autoCoralTimeToRun+m_startTime<Timer.getFPGATimestamp()){
-                System.out.println("CORAL FINISHED");
 
                 m_dunkin.stopCoralMotor();
                 m_currentState=m_shouldRunAlgae?States.ALGAEGRAB:States.RETRACT;
@@ -342,7 +342,6 @@ public class AutoScoreCommand extends Command{
             }else{
                 m_elevator.set_referance(ElevatorConstants.elevatorLowLimit);
             }
-            System.out.println("ELEVATOR RETRACT");
 
             m_currentState=States.WAITFORRETRACT;
         break;
@@ -351,14 +350,12 @@ public class AutoScoreCommand extends Command{
             
             if(m_shouldRunAlgae){
                 if(elevatorPos>ElevatorConstants.elevAlgeaGrabRetractPos-ElevatorConstants.posDeadband&&ElevatorConstants.elevAlgeaGrabRetractPos<elevatorPos+ElevatorConstants.posDeadband){
-                    System.out.println("ELEVATOR IS AT POS");
         
                     m_currentState=States.END;
                 }
             }else{
                 if(elevatorPos>ElevatorConstants.elevatorLowLimit-ElevatorConstants.posDeadband&&ElevatorConstants.elevatorLowLimit<elevatorPos+ElevatorConstants.posDeadband){
-                    System.out.println("ELEVATOR IS AT POS");
-        
+
                     m_currentState=States.END;
                 }
             }
@@ -366,6 +363,26 @@ public class AutoScoreCommand extends Command{
         case END:
             returnValue=true;
         }
+
+        Logger.recordOutput("Commands/AutoScore/IsRunning",m_isRunning);
+        Logger.recordOutput("Commands/AutoScore/CurrentState",m_currentState);
+        if(m_leftLimelight!=null&&m_rightLimelight!=null){
+            Logger.recordOutput("Commands/AutoScore/LimelightLeftX",m_leftLimelight.getX());
+            Logger.recordOutput("Commands/AutoScore/LimelightRightX",m_rightLimelight.getX());
+            Logger.recordOutput("Commands/AutoScore/LimelightLeftAnyTargets",m_leftLimelight.isAnyTargetAvailable());
+            Logger.recordOutput("Commands/AutoScore/LimelightRightAnyTargets",m_rightLimelight.isAnyTargetAvailable());
+            Logger.recordOutput("Commands/AutoScore/LeftLineup",!m_isRightLineup.get());
+            Logger.recordOutput("Commands/AutoScore/RightLineup",m_isRightLineup.get());
+            System.out.println("AutoScore-LimelightLeftAnyTargets: "+m_leftLimelight.isAnyTargetAvailable());
+            System.out.println("AutoScore-LimelightRightAnyTargets: "+m_rightLimelight.isAnyTargetAvailable());
+        }
+        Logger.recordOutput("Commands/AutoScore/ElevatorPos",m_elevator.getRelativePos());
+        Logger.recordOutput("Commands/AutoScore/ClawPos",m_dunkin.get_rotatemotorpos());
+        Logger.recordOutput("Commands/AutoScore/DoAlgae",m_doAlgae.get());
+        Logger.recordOutput("Commands/AutoScore/ShouldRunAlgae",m_shouldRunAlgae);
+        Logger.recordOutput("Commands/AutoScore/ElevatorScoreLevel",m_scoreLevel.get());
+        
+        System.out.println("AutoScore-CurrentState: "+m_currentState);
 
         return returnValue;
     }

@@ -3,8 +3,8 @@
   "robotLength": 0.0,
   "holonomicMode": true,
   "pathFolders": [
-    "Cycle Coral Right Start 3 Score",
-    "Cycle Coral Left Start 3 Score"
+    "BLUE Cycle Coral Left Start 3 Score",
+    "BLUE Cycle Coral Right Start 3 Score"
   ],
   "autoFolders": [],
   "defaultMaxVel": 2.0,

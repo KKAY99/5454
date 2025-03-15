@@ -33,7 +33,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean CheckCANandColor(){
-    //System.out.println(m_canAndColor.getProximity());
     return true;
   }
 
@@ -69,14 +68,14 @@ public class ElevatorSubsystem extends SubsystemBase {
       if(getRelativePos()>ElevatorConstants.elevatorHighLimit){
         motor_run(speed);
       }else{
-        System.out.println("AT HIGH LIMIT ELEVATOR");
+        //System.out.println("AT HIGH LIMIT ELEVATOR");
         motor_stop();
       }
     }else{
       if(getRelativePos()<ElevatorConstants.elevatorLowLimit){
         motor_run(speed);
       }else{
-        System.out.println("AT LOW LIMIT ELEVATOR");
+        //System.out.println("AT LOW LIMIT ELEVATOR");
         motor_stop();
       }
     }

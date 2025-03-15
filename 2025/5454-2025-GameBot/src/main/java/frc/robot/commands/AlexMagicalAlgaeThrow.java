@@ -13,7 +13,7 @@ import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ClawPIDScoreIntake extends Command{
+public class AlexMagicalAlgaeThrow extends Command{
     private DunkinDonutSubsystem m_dunkin;
     private ElevatorSubsystem m_elevator;
 
@@ -28,12 +28,12 @@ public class ClawPIDScoreIntake extends Command{
     private boolean m_isRunning;
 
     private enum States{
-        SETELEVPOS,WAITFORELEVPOS,SETPID,WAITFORPID,RUNALGAE,END
+        SETELEVPOS,SETPID,SHOOTELEVPOS,RUNALGAE,WAITFORELEVPOS,RETRACT,END
     }
 
     private States m_currentState=States.SETELEVPOS;
 
-    public ClawPIDScoreIntake(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator,double elevDesiredPos,
+    public AlexMagicalAlgaeThrow(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator,double elevDesiredPos,
                         double setPoint,double speed,double elevResetPos,double clawResetPos){
         m_dunkin=dunkin;
         m_elevator=elevator;
@@ -55,9 +55,6 @@ public class ClawPIDScoreIntake extends Command{
     @Override
     public void end(boolean interrupted) {
         m_dunkin.stopAlgeaMotor();
-        m_dunkin.resetShouldRunPID();
-        m_dunkin.toggleLocalPid(m_clawResetPos);
-        m_elevator.set_referance(m_elevResetPos,ClosedLoopSlot.kSlot1);
         m_isRunning=false;
     }
 
@@ -69,27 +66,33 @@ public class ClawPIDScoreIntake extends Command{
         case SETELEVPOS:
             m_elevator.set_referance(m_elevDesiredPos,ClosedLoopSlot.kSlot1);
 
-            m_currentState=States.WAITFORELEVPOS;
-        break;
-        case WAITFORELEVPOS:
-            if(m_elevator.getRelativePos()>m_elevDesiredPos-ElevatorConstants.posDeadband&&
-                    m_elevator.getRelativePos()<m_elevDesiredPos+ElevatorConstants.posDeadband){
-                m_currentState=States.SETPID;
-            }
+            m_currentState=States.SETPID;
         break;
         case SETPID:
             m_dunkin.toggleLocalPid(m_setPoint);
 
-            m_currentState=States.WAITFORPID;
-        break;
-        case WAITFORPID:
-            if(m_dunkin.getAbsoluteEncoderPos()>m_setPoint-DunkinDonutConstants.posDeadband&&
-                    m_dunkin.getAbsoluteEncoderPos()<m_setPoint+DunkinDonutConstants.posDeadband){
+            m_currentState=States.SHOOTELEVPOS;
+        case SHOOTELEVPOS:
+            if(m_elevator.getRelativePos()<ElevatorConstants.aboveThrowPos){
                 m_currentState=States.RUNALGAE;
             }
         break;
         case RUNALGAE:
             m_dunkin.runAlgaeMotor(m_speed);
+
+            m_currentState=States.WAITFORELEVPOS;
+        break;
+        case WAITFORELEVPOS:
+            if(m_elevator.getRelativePos()>m_elevDesiredPos-ElevatorConstants.posDeadband&&
+                    m_elevator.getRelativePos()<m_elevDesiredPos+ElevatorConstants.posDeadband){
+                m_currentState=States.RETRACT;
+            }
+        case RETRACT:
+            m_dunkin.resetShouldRunPID();
+            m_dunkin.toggleLocalPid(m_clawResetPos);
+            m_elevator.set_referance(m_elevResetPos,ClosedLoopSlot.kSlot1);
+
+            m_currentState=States.END;
         break;
         case END:
             returnValue=true;

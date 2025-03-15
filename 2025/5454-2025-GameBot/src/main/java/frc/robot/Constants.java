@@ -193,11 +193,11 @@ public final class Constants {
     public static final double coralD=0;
     public static final double coralMaxAndMin=1;
 
-    public static final double localPIDkP=0.1;
-    public static final double localPIDkI=0;
-    public static final double localPIDkD=0;
-    public static final double localPIDMaxAndMin=0.5;
-    public static final double PIDInputGain=60;
+    public static final double clawPIDkP=0.1;
+    public static final double clawPIDkI=0;
+    public static final double clawPIDkD=0;
+    public static final double clawPIDMaxAndMin=0.5;
+    public static final double clawPIDInputGain=60;
 
     public static final double outOfLimelightVisionPos=0.14;
     public static final double groundIntakePos=0.33;
@@ -213,10 +213,11 @@ public final class Constants {
     public static final double groundIntakeSpeed=1;
     public static final double lollipopGrabSpeed=1;
 
+    public static final double algaeThrowSpeed=-1;
     public static final double processorScoreSpeed=-0.5;
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=1;
-    public static final double autoCoralTimeToRun=3;
+    public static final double autoCoralTimeToRun=1;
     public static final double autoScoreAlgaeRunTime=1;
   }
 
@@ -239,6 +240,7 @@ public final class Constants {
 
     public static final double posDeadband=1.2;
 
+    public static final double aboveThrowPos=-20;
     public static final double elevAlgeaGrabRetractPos=-20;
     public static final double groundIntakePos=-5;
     public static final double processorScorePos=-13;
@@ -257,12 +259,14 @@ public final class Constants {
     }
   }
 
-  public static final class CoralConstants{
+  public static final class IntakeConstants{
     public static final double coralShootSpeed=0.6;
-    public static final double coralIntakeSpeed=0.2;
     public static final double coralOutakeSpeed=-0.3;
-    
+    public static final double coralIntakeSpeed=0.4;
+    public static final double indexerIntakeSpeed=0.75;
+    public static final double indexerOuttakeSpeed=-0.75;
   }
+
   public static final class ClimbConstants{
     public static final int climbCanID1=26;
     public static final int climbCanID2=20;
@@ -291,7 +295,8 @@ public final class Constants {
 
   public final class LedConstants{
     public static final int LedCanID = 14;
-    public static final int LedCount = 300;
+    public static final int LedCount = 100;
+    public static final int larsonSize=1;
   }
 
   public static enum LEDStates{
@@ -303,7 +308,7 @@ public final class Constants {
   }
 
   public static enum AnimationStates{
-      FIRE, RAINBOW, LARSON, NULL
+      FIRE, RAINBOW, PURPLELARSON, NULL
   }
 
   public static final class ButtonBindings{

@@ -52,7 +52,6 @@ public class DEMOROBOTFOLLOW extends Command {
   @Override
   public void initialize() {
     m_currentState = States.MOVECLAW;
-    //System.out.println("Command started");
   }
 
   // Called once the command ends or is interrupted.

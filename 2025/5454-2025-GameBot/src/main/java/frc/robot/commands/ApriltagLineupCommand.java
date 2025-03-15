@@ -59,7 +59,6 @@ public class ApriltagLineupCommand extends Command {
   public void initialize() {
     m_currentState = States.MOVECLAW;
     m_startTime=Timer.getFPGATimestamp();
-    //System.out.println("Command started");
   }
 
   // Called once the command ends or is interrupted.
@@ -187,8 +186,6 @@ public class ApriltagLineupCommand extends Command {
       case END:
         returnValue=true;
     }
-
-    System.out.println("CURRENT PID OUTPUT"+strafe);
 
     return returnValue;
   }

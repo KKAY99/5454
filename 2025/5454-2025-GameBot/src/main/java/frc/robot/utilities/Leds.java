@@ -11,10 +11,10 @@ import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
-
 import frc.robot.Constants.AnimationStates;
 import frc.robot.Constants.ColorStates;
 import frc.robot.Constants.LEDStates;
+import frc.robot.Constants.LedConstants;
 
 
 /** Add your docs here. */
@@ -33,8 +33,8 @@ public class Leds {
     public Leds(int CanID, int ledCount){
        m_CANdle = new CANdle(CanID,"5454Canivore");
        m_ledCount = ledCount;
-       m_CANdle.configLEDType(LEDStripType.RGB);
-       m_CANdle.configBrightnessScalar(1);
+       m_CANdle.configLEDType(LEDStripType.GRB);
+       m_CANdle.configBrightnessScalar(.25);
     }
 
     public void setLedState(LEDStates state){
@@ -56,7 +56,7 @@ public class Leds {
             case LINEDUP:
             break;
             case SCORED:
-                setAnimationState(AnimationStates.LARSON);
+                setAnimationState(AnimationStates.PURPLELARSON);
             break;
             case ATHUMANPLAYER:
             break;
@@ -86,7 +86,7 @@ public class Leds {
         }
     }
 
-    private void setAnimationState(AnimationStates animation){
+    public void setAnimationState(AnimationStates animation){
         m_currentAnimationState = animation;
         switch (m_currentAnimationState) {
             case FIRE:
@@ -97,10 +97,10 @@ public class Leds {
                 m_toAnimate = new RainbowAnimation(0.25, 0.25, m_ledCount);
                 break;
 
-            case LARSON:
-                m_toAnimate = new LarsonAnimation(0, 255, 46, 0, 1, m_ledCount, BounceMode.Front, 3);
+            case PURPLELARSON:
+                m_toAnimate = new LarsonAnimation(128, 0, 128, 0, 0.35, m_ledCount, BounceMode.Front,LedConstants.larsonSize);
                 break;
-
+                
             case NULL:
                 m_toAnimate = null;
                 break;

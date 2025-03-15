@@ -45,7 +45,6 @@ public class OdomLineupCommand extends Command{
                 if(DriverStation.getAlliance().get()==Alliance.Blue){
                     m_limeLight.setCodeIDFilter(17,18,19,20,21,22);
                     int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
-                    System.out.println("CURRENT TARGET ID"+m_limeLight.getFirstVisibleFiducialID());
                     startingPose2d=m_swerve.getPose2d();
                     if(m_isRightLineup.get()){
                         m_target=LineupConstants.fiducialBlueRightPoses[currentFiducial-17]; 
@@ -57,7 +56,6 @@ public class OdomLineupCommand extends Command{
                 }else{
                     m_limeLight.setCodeIDFilter(6,7,8,9,10,11);
                     int currentFiducial=m_limeLight.getFirstVisibleFiducialID();
-                    System.out.println("CURRENT TARGET ID"+m_limeLight.getFirstVisibleFiducialID());
                     startingPose2d=FlippingUtil.flipFieldPose(m_swerve.getPose2d());
                     if(m_isRightLineup.get()){
                         m_target=LineupConstants.fiducialBlueRightPoses[currentFiducial-6]; 
@@ -67,13 +65,10 @@ public class OdomLineupCommand extends Command{
                         m_targetLineup=LineupConstants.fiducialBlueLeftLineupPoses[currentFiducial-6];
                     }
                 } 
-                System.out.println("STARTING POSE: "+startingPose2d);
-                System.out.println("TARGET POSE: "+m_target);
                 Command newCommand=m_swerve.createPathCommand(autoPlan.CreateOdomLineUpPath(startingPose2d,m_target,m_targetLineup));
                 CommandScheduler.getInstance().schedule(newCommand);
             }catch(Exception e){}
         }else{
-            System.out.println("NO TARGET");
         }
     }
 

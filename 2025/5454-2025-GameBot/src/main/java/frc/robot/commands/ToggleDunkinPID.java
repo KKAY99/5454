@@ -1,6 +1,9 @@
 package frc.robot.commands;
 
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -82,6 +85,9 @@ public class ToggleDunkinPID extends Command{
 
             returnValue=true;
         }
+
+        Logger.recordOutput("Commands/ToggleDunkinPID/Setpoint",m_setPoint);
+
         return returnValue;
     }
 }   

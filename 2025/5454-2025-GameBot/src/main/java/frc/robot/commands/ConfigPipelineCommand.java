@@ -20,7 +20,6 @@ public class ConfigPipelineCommand extends Command {
   public void execute(){
     m_limeLight.setXYZFiducialOffset(m_xyzOffset);
     m_limeLight.setLimelightIDFilter(m_targetFiducial);
-    System.out.println("Set pipeline");
   }
 
   // Called once the command ends or is interrupted.

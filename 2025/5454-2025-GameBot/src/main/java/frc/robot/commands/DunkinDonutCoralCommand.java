@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
@@ -25,12 +27,13 @@ public class DunkinDonutCoralCommand extends Command {
 
   private boolean m_uselimit;
   private boolean m_useIndexer;
+  private boolean m_isRunning;
 
   private double m_indexerHighSpeed;
   private double m_indexerLowSpeed;
   private double m_targetPos;
 
-  private enum States{RUNCORALFORTIME, LOWERELEVATOR, WAITFORELEVATOR, INDEXERLOW, INDXERHIGH, RUNCORALTOPOS, WAIT, END}
+  private enum States{RUNCORALFORTIME,LOWERELEVATOR,WAITFORELEVATOR,INDEXERLOW,INDEXERHIGH, END}
   private States m_currentState = States.INDEXERLOW;
   private States m_startState;
   
@@ -45,7 +48,7 @@ public class DunkinDonutCoralCommand extends Command {
     m_useIndexer = false;
     m_indexerHighSpeed = 0;
     m_indexerLowSpeed = 0;
-    m_startState = States.INDXERHIGH;
+    m_startState = States.INDEXERHIGH;
   }
 
   public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralScoreSpeed,double timeToRun) {
@@ -61,7 +64,7 @@ public class DunkinDonutCoralCommand extends Command {
     m_startState = States.RUNCORALFORTIME;
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed, double indexerLowSpeed){
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
     m_dunkin = dunkin;
     m_elevator = null;
     addRequirements(m_dunkin);
@@ -70,12 +73,11 @@ public class DunkinDonutCoralCommand extends Command {
     m_uselimit = useLimit;
     m_useIndexer = useIndexer;
     m_indexerHighSpeed = indexerHighSpeed;
-    m_indexerLowSpeed = indexerLowSpeed;
-    m_startState = States.INDEXERLOW;
+    m_startState = States.INDEXERHIGH;
 
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed, double indexerLowSpeed){
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
     m_dunkin = dunkin;
     m_elevator = elevator;
     addRequirements(m_dunkin);
@@ -84,7 +86,6 @@ public class DunkinDonutCoralCommand extends Command {
     m_uselimit = useLimit;
     m_useIndexer = useIndexer;
     m_indexerHighSpeed = indexerHighSpeed;
-    m_indexerLowSpeed = indexerLowSpeed;
     m_startState = States.LOWERELEVATOR;
   }
 
@@ -93,6 +94,7 @@ public class DunkinDonutCoralCommand extends Command {
   public void initialize(){
     m_startTime=Timer.getFPGATimestamp();
     m_currentState = m_startState;
+    m_isRunning=true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -104,9 +106,9 @@ public class DunkinDonutCoralCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("end");
     m_dunkin.stopCoralMotor();
     m_dunkin.stopIndexer();
+    m_isRunning=false;
   }
 
   // Returns true when the command should end.
@@ -131,17 +133,17 @@ public class DunkinDonutCoralCommand extends Command {
       break;
       case WAITFORELEVATOR:
       if(m_elevator.CheckCANandColor()){
-        m_currentState = States.INDEXERLOW;
+        m_currentState = States.INDEXERHIGH;
       }
       break;
       case INDEXERLOW:
-        m_dunkin.runCoralMotor(m_coralIntakeSpeed);
         m_dunkin.runIndexer(m_indexerLowSpeed);
         if(m_dunkin.isCoralAtIndexerLimit()&&m_coralIntakeSpeed>0){
-          m_currentState = States.INDXERHIGH;
+          m_currentState = States.INDEXERHIGH;
         }
       break;
-      case INDXERHIGH:
+      case INDEXERHIGH:
+      m_dunkin.runCoralMotor(m_coralIntakeSpeed);
         m_dunkin.runIndexer(m_indexerHighSpeed);
         if(m_dunkin.isCoralAtBoxLimit()){
           m_dunkin.stopCoralMotor();
@@ -149,20 +151,13 @@ public class DunkinDonutCoralCommand extends Command {
           m_currentState = States.END;
         }
       break;
-      case RUNCORALTOPOS:
-        m_targetPos = m_dunkin.getTargetPos(4);
-        m_dunkin.runCoralMotor(0.05);
-        m_currentState = States.WAIT;
-      break;
-      case WAIT:
-        if(m_dunkin.getCoralPos()>m_targetPos){
-          m_dunkin.stopCoralMotor();
-          m_currentState = States.END;
-        }
-        break;
       case END:
         returnValue = true;  
     }
+
+    Logger.recordOutput("Commands/CoralIntake/IsRunning",m_isRunning);
+    Logger.recordOutput("Commands/CoralIntake/CurrentState",m_currentState);
+
     return returnValue;
   }
   

@@ -2,55 +2,36 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.events.TriggerEvent;
-import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
-import frc.robot.utilities.AutoPlanner;
-import frc.robot.utilities.Elastic;
 import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Leds;
 import frc.robot.utilities.Limelight;
-import frc.robot.utilities.LimelightManager;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 import frc.robot.commands.*;
-import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.signals.InvertedValue;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import com.ctre.phoenix6.swerve.SwerveRequest;
+import frc.robot.Constants.AnimationStates;
 import frc.robot.Constants.ButtonBindings;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.CoolPanelConstants;
-import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.InputControllers;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
-import frc.robot.Constants.LineupConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
-import org.littletonrobotics.junction.Logger;
 
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -63,8 +44,9 @@ public class RobotContainer {
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
 
   //DunkinSubsystem
-  private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID1,DunkinDonutConstants.algaeCanID2,
-                                                                        DunkinDonutConstants.rotateCanID,DunkinDonutConstants.canCoderID,DunkinDonutConstants.limitSwitchDIO,DunkinDonutConstants.coralIndexerID,DunkinDonutConstants.indexerLimitSwitchDIO);
+  private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID1,DunkinDonutConstants.rotateCanID,
+                                                                        DunkinDonutConstants.canCoderID,DunkinDonutConstants.limitSwitchDIO,DunkinDonutConstants.coralIndexerID,
+                                                                        DunkinDonutConstants.indexerLimitSwitchDIO);
   
   //ElevatorSubsystem
   private ElevatorSubsystem m_elevator = new ElevatorSubsystem(ElevatorConstants.elevatorCanID,ElevatorConstants.canAndColorID);
@@ -151,11 +133,11 @@ public class RobotContainer {
     Trigger clawGroundIntakeLeftTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getLeftTriggerAxis())>ButtonBindings.joystickDeadband);
     clawGroundIntakeLeftTrigger.whileTrue(clawGroundIntake);*/
 
-    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, m_elevator, CoralConstants.coralIntakeSpeed, true, true, 1, 0.65);
+    DunkinDonutCoralCommand DunkinCoralCommandIntake = new DunkinDonutCoralCommand(m_dunkinDonut, m_elevator,IntakeConstants.coralIntakeSpeed, true, true,IntakeConstants.indexerIntakeSpeed);
     JoystickButton operatorDunkinCoralButtonIntake = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralIntakeButton);
     operatorDunkinCoralButtonIntake.onTrue(DunkinCoralCommandIntake);
 
-    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut, CoralConstants.coralOutakeSpeed,false, true,-0.25, -0.25);
+    DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut,IntakeConstants.coralOutakeSpeed,false, true,IntakeConstants.indexerOuttakeSpeed);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
     
@@ -172,9 +154,8 @@ public class RobotContainer {
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);
 
-    //Lineup
-    DEMOROBOTFOLLOW follow=new DEMOROBOTFOLLOW(m_swerve, m_dunkinDonut, m_leftLimelight, m_rightLimelight);
-    m_xBoxDriver.leftBumper().whileTrue(follow);
+    AlexMagicalAlgaeThrow test = new AlexMagicalAlgaeThrow(m_dunkinDonut,m_elevator,ElevatorConstants.l4Pos,DunkinDonutConstants.algaeStowPos,DunkinDonutConstants.algaeThrowSpeed,
+                                                          ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.rotateHomePos);
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
@@ -213,7 +194,6 @@ public class RobotContainer {
   private void refreshSmartDashboard(){  
 
     SmartDashboard.putNumber("Elevator Relative",m_elevator.getRelativePos());
-    //SmartDashboard.putNumber("Dunkin Rotate Relative",m_dunkinDonut.get_rotatemotorpos());
     SmartDashboard.putBoolean("m_ElevatorLevel1", m_currentScoreLevel==ElevatorScoreLevel.L1);
     SmartDashboard.putBoolean("m_ElevatorLevel2", m_currentScoreLevel==ElevatorScoreLevel.L2);
     SmartDashboard.putBoolean("m_ElevatorLevel3", m_currentScoreLevel==ElevatorScoreLevel.L3);
@@ -262,7 +242,7 @@ public class RobotContainer {
    
   public void DisabledPeriodic(){
     resetGyroPoseDisabled();
-    m_LEDS.setLedState(LEDStates.DISABLED);
+    m_LEDS.setAnimationState(AnimationStates.PURPLELARSON);
   }
   
   public void AutoPeriodic(){
@@ -315,7 +295,6 @@ public class RobotContainer {
   }
 
   public void AllPeriodic(){
-    
     m_Field2d.setRobotPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic

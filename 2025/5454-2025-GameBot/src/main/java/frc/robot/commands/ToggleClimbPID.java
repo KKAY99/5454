@@ -1,6 +1,9 @@
 package frc.robot.commands;
 
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -26,6 +29,9 @@ public class ToggleClimbPID extends Command{
         if(!m_climb.getPIDToggle()){
             m_climb.stop();;
         }
+
+        Logger.recordOutput("Commands/ToggleClimbPID/Setpoint",m_setPoint);
+
         return true;
     }
 }   

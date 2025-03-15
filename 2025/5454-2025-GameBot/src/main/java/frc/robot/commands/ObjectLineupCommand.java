@@ -39,7 +39,6 @@ public class ObjectLineupCommand extends Command {
   @Override
   public void initialize() {
     m_currentState = States.CHECKFORTARGET;
-    //System.out.println("Command started");
   }
 
   // Called once the command ends or is interrupted.
@@ -68,17 +67,14 @@ public class ObjectLineupCommand extends Command {
         }
       break;
       case ROTATETOWARDS:
-
         if(x<0.1){
           m_swerve.drive(0,0,0);
-          System.out.println("Stopping");
           if(m_driveTowards){
             m_currentState=States.DRIVETOWARDS;
           }else{
             m_currentState=States.END;
           }
         }else{
-          System.out.println("Rotating At: "+rotation);
           m_swerve.drive(0,0,rotation*flipValue*-1);
         }
 
@@ -89,8 +85,6 @@ public class ObjectLineupCommand extends Command {
         }else if(m_targetDistance > distance - kDeadband){
           m_swerve.drive(0.3,0,0);
         }
-
-        System.out.println("Driving towards");
 
         if (m_targetDistance < distance + kDeadband && m_targetDistance > distance - kDeadband){
           m_swerve.drive(0,0,0);

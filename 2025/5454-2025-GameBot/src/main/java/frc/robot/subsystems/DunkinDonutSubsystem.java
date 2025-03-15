@@ -24,7 +24,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private CANcoder m_CANcoder;
   private ObsidianCANSparkMax m_coralMotor;
   private ObsidianCANSparkMax m_algaeMotor1;
-  private ObsidianCANSparkMax m_algaeMotor2;
   private ObsidianCANSparkMax m_rotateMotor;
   private ObsidianCANSparkMax m_coralIndexer;
 
@@ -47,19 +46,18 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private boolean m_algaeToggle=false;
   private boolean m_shouldRunPID=false;
   
-  public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int algaeCanID2,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID, int indexerLimitSwitchID) {
+  public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID, int indexerLimitSwitchID) {
     m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, Constants.k80Amp,DunkinDonutConstants.coralP,DunkinDonutConstants.coralI,DunkinDonutConstants.coralD);
     m_algaeMotor1= new ObsidianCANSparkMax(algaeCanID1, MotorType.kBrushless, true);
-    m_algaeMotor2= new ObsidianCANSparkMax(algaeCanID2, MotorType.kBrushless, true);
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,Constants.k40Amp);
     m_coralIndexer = new ObsidianCANSparkMax(coralIndexerID, MotorType.kBrushless, true);
                     //DunkinDonutConstants.dunkinP,DunkinDonutConstants.dunkinI,DunkinDonutConstants.dunkinD,DunkinDonutConstants.dunkinMaxAndMin);
     m_CANcoder = new CANcoder(canCoderID);
     m_rotateRelative=m_rotateMotor.getEncoder();
     m_coralRelative = m_coralMotor.getEncoder();
-    m_obsidianPID=new ObsidianPID(DunkinDonutConstants.localPIDkP,DunkinDonutConstants.localPIDkI,DunkinDonutConstants.localPIDkD,
-                                  DunkinDonutConstants.localPIDMaxAndMin,-DunkinDonutConstants.localPIDMaxAndMin);
-    m_obsidianPID.setInputGain(DunkinDonutConstants.PIDInputGain);
+    m_obsidianPID=new ObsidianPID(DunkinDonutConstants.clawPIDkP,DunkinDonutConstants.clawPIDkI,DunkinDonutConstants.clawPIDkD,
+                                  DunkinDonutConstants.clawPIDMaxAndMin,-DunkinDonutConstants.clawPIDMaxAndMin);
+    m_obsidianPID.setInputGain(DunkinDonutConstants.clawPIDInputGain);
 
     m_coralLimitSwitch = new DigitalInput(limitSwitch);
     m_indexerLimitSwitch = new DigitalInput(indexerLimitSwitchID);
@@ -85,14 +83,14 @@ public class DunkinDonutSubsystem extends SubsystemBase {
       if(getAbsoluteEncoderPos()<DunkinDonutConstants.relativeHighLimitABS){
         run_rotatemotor(speed);
       }else{
-        System.out.println("AT LIMIT HIGH ROTATE");
+        //System.out.println("AT LIMIT HIGH ROTATE");
         stop_rotatemotor();
       }
     }else{
       if(getAbsoluteEncoderPos()>DunkinDonutConstants.relativeLowLimitABS){
         run_rotatemotor(speed);
       }else{
-        System.out.println("AT LIMIT LOW ROTATE");
+        //System.out.println("AT LIMIT LOW ROTATE");
         stop_rotatemotor();
       }
     }
@@ -148,7 +146,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   public void runAlgaeMotor(double speed){
     m_algaeSpeed=speed;
     m_algaeMotor1.set(speed);
-    m_algaeMotor2.set(-speed);
   }
   public void stopCoralMotor(){
     m_coralMotor.stopMotor();
@@ -157,7 +154,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
 
   public void stopAlgeaMotor(){
     m_algaeMotor1.stopMotor();
-    m_algaeMotor2.stopMotor();
     m_algaeSpeed=0;
   }
 
@@ -195,7 +191,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     try{
       var=m_CANcoder.getDeviceID();
       var=m_algaeMotor1.getDeviceId();
-      var=m_algaeMotor2.getDeviceId();
       var=m_coralMotor.getDeviceId();
       var=m_rotateMotor.getDeviceId();
     }catch(Exception e){
@@ -207,17 +202,13 @@ public class DunkinDonutSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-  // This method will be called once per scheduler run
-    //System.out.println(isCoralAtBoxLimit());
     Logger.recordOutput("Dunkin/RotateSpeed", m_rotateSpeed);
     Logger.recordOutput("Dunkin/CoralSpeed", m_coralSpeed);
     Logger.recordOutput("Dunkin/CoralAmp", m_coralMotor.getOutputCurrent());
-    Logger.recordOutput("Dunkin/AlgeaSpeed",m_algaeSpeed);
-    //Logger.recordOutput("Dunkinr/CurrentPosition",get_motor1pos());    
-    SmartDashboard.putBoolean("ShouldRunPID",m_shouldRunPID);
-    SmartDashboard.putNumber("PIDOutput",m_pidOutput);
-    SmartDashboard.putNumber("Setpoint",m_setPoint);
+    Logger.recordOutput("Dunkin/AlgeaSpeed",m_algaeSpeed);   
+    SmartDashboard.putBoolean("Dunkin/ShouldRunPID",m_shouldRunPID);
+    SmartDashboard.putNumber("Dunkin/PIDOutput",m_pidOutput);
+    SmartDashboard.putNumber("Dunkin/Setpoint",m_setPoint);
 
     if(m_obsidianPID.getToggle()){
       m_pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
