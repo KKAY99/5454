@@ -10,12 +10,12 @@ import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import frc.robot.Constants.AnimationStates;
 import frc.robot.Constants.ColorStates;
 import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
-
 
 /** Add your docs here. */
 public class Leds {
@@ -62,9 +62,8 @@ public class Leds {
             break;
             
         }
-
-
     }
+
     private void setColorState(ColorStates color){
         m_currentColorstate = color;
         switch (m_currentColorstate) {
@@ -91,27 +90,28 @@ public class Leds {
         switch (m_currentAnimationState) {
             case FIRE:
                 m_toAnimate = new FireAnimation(0.25, 0.1, m_ledCount, 0.5, 0.9);
-                break;
-        
+            break;
             case RAINBOW:
                 m_toAnimate = new RainbowAnimation(0.25, 0.25, m_ledCount);
-                break;
-
+            break;
             case PURPLELARSON:
                 m_toAnimate = new LarsonAnimation(128, 0, 128, 0, 0.35, m_ledCount, BounceMode.Front,LedConstants.larsonSize);
-                break;
-                
+            break;
+            case REDLARSON:
+                m_toAnimate = new LarsonAnimation(255, 0, 0, 0, 0.35, m_ledCount, BounceMode.Front,LedConstants.larsonSize);
+            break;
+            case REDSTROBE:
+                m_toAnimate=new StrobeAnimation(255,0,0,0,0.25,m_ledCount);
+            break;
             case NULL:
                 m_toAnimate = null;
-                break;
-
-        
-            
+            break;
+   
         }if (m_toAnimate != null){
             m_CANdle.animate(m_toAnimate);
-            }else{
-                m_CANdle.animate(m_toAnimate);
-            }
+        }else{
+            m_CANdle.animate(m_toAnimate);
+        }
     }
 
 

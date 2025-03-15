@@ -7,49 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Start to ID 20 Right"
+            "pathName": "Right Start To Center ID 11"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoScoreRight"
+            "name": "AutoScoreRightL4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ID 20 Right To Coral Station"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Coral Station To ID 19 Left"
+            "pathName": "Center ID 11 To Coral Station"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoScoreLeft"
+            "name": "ToggleIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ID 19 Left Apriltag To Coral Station"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Coral Station To ID 19 Right"
+            "pathName": "Coral Station To ID 6"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoScoreRight"
+            "name": "AutoScoreLeftL4"
           }
         }
       ]

@@ -47,6 +47,8 @@ public class AutoScoreCommand extends Command{
     private double m_elevatorAlgaePos;
     private double m_algaePos;
     private double m_startTime;
+    private double m_leftPIDOutput;
+    private double m_rightPIDOutput;
 
     private Supplier<Boolean> m_isRightLineup;
     private Supplier<Boolean> m_doAlgae;
@@ -162,8 +164,6 @@ public class AutoScoreCommand extends Command{
         m_dunkin.stopAlgeaMotor();
         m_dunkin.stopCoralMotor();
         m_dunkin.stop_rotatemotor();
-        m_elevator.reset_referance();
-        m_elevator.motor_stop();
         m_dunkin.resetShouldRunPID();
         m_isRunning=false;
     }
@@ -246,6 +246,8 @@ public class AutoScoreCommand extends Command{
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
                 m_currentState=States.RETRACT;
             }
+
+            m_leftPIDOutput=strafe;
         break;
         case RIGHTLINEUP:
             rawX=m_rightLimelight.getX();
@@ -269,6 +271,8 @@ public class AutoScoreCommand extends Command{
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
                 m_currentState=States.RETRACT;
             }
+
+            m_rightPIDOutput=strafe;
         break;
         case ELEVATOR:
             m_elevator.set_referance(m_elevatorFPos);
@@ -333,7 +337,7 @@ public class AutoScoreCommand extends Command{
                 m_swerve.drive(0,0,0);
                 m_currentState=States.RETRACT;
             }else{
-                m_swerve.drive(LimeLightValues.alageDriveBackSpeed,0,0);
+                m_swerve.drive(LimeLightValues.algaeDriveBackSpeed,0,0);
             }
         break;
         case RETRACT:
@@ -354,7 +358,7 @@ public class AutoScoreCommand extends Command{
                     m_currentState=States.END;
                 }
             }else{
-                if(elevatorPos>ElevatorConstants.elevatorLowLimit-ElevatorConstants.posDeadband&&ElevatorConstants.elevatorLowLimit<elevatorPos+ElevatorConstants.posDeadband){
+                if(elevatorPos>ElevatorConstants.elevSafeRetractPos){
 
                     m_currentState=States.END;
                 }
@@ -373,6 +377,8 @@ public class AutoScoreCommand extends Command{
             Logger.recordOutput("Commands/AutoScore/LimelightRightAnyTargets",m_rightLimelight.isAnyTargetAvailable());
             Logger.recordOutput("Commands/AutoScore/LeftLineup",!m_isRightLineup.get());
             Logger.recordOutput("Commands/AutoScore/RightLineup",m_isRightLineup.get());
+            Logger.recordOutput("Commands/AutoScore/RightPIDOutput",m_rightPIDOutput);
+            Logger.recordOutput("Commands/AutoScore/LeftPIDOutput",m_leftPIDOutput);
             System.out.println("AutoScore-LimelightLeftAnyTargets: "+m_leftLimelight.isAnyTargetAvailable());
             System.out.println("AutoScore-LimelightRightAnyTargets: "+m_rightLimelight.isAnyTargetAvailable());
         }

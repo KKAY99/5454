@@ -24,6 +24,10 @@ public final class Constants {
     public static final double MinGasPedalSpeed=0.20;
   }
 
+  public static final class AutoConstants{
+    public static final double redDoSiDoDeadBand=3;
+  }
+
   public static final class LineupConstants{
     public static final Pose2d fiducial17LeftReef=new Pose2d(3.955,3.438,new Rotation2d().fromDegrees(-120));
     public static final Pose2d fiducial17RightReef=new Pose2d(4.234,3.284,new Rotation2d().fromDegrees(-120));
@@ -148,9 +152,9 @@ public final class Constants {
     public static final double strafeMaxAndMinRIGHT=0.3;
     public static final double strafeInputGainRIGHT=1;
 
-    public static final double strafePLEFT=0.09;
+    public static final double strafePLEFT=0.15;
     public static final double strafeILEFT=0;
-    public static final double strafeDLEFT=0.3;
+    public static final double strafeDLEFT=0.5;
     public static final double strafeMaxAndMinLEFT=0.3;
     public static final double strafeInputGainLEFT=1;
 
@@ -161,8 +165,8 @@ public final class Constants {
     public static final double rotInputGain=60;
 
     public static final double algaeDriveTimeToRun=0.8;
-    public static final double driveTimeToRun=0.4;
-    public static final double alageDriveBackSpeed=0.4;
+    public static final double driveTimeToRun=0.8;
+    public static final double algaeDriveBackSpeed=0.4;
     public static final double lineUpDriveSpeed=-0.3;
 
     public static final double driveP=0.15;
@@ -182,24 +186,29 @@ public final class Constants {
     public static final int algaeCanID2 = 60; //place holder ID
     public static final int rotateCanID = 24;
 
-    public static final double posDeadband=1.2;
+    public static final double posDeadband=2;
 
     public static final double homePosDeadband=0.001;
     public static final double rotateHomePos=0.14;
     public static final double homeSpeed=0.03;
 
-    public static final double coralP=0.1;
+    public static final double coralP=0.03;
     public static final double coralI=0;
-    public static final double coralD=0;
-    public static final double coralMaxAndMin=1;
+    public static final double coralD=0.1;
+    public static final double coralMaxAndMin=0.05;
 
-    public static final double clawPIDkP=0.1;
+    public static final double clearDoorPosOut=3;
+    public static final double clearDoorPosIn=2.5;
+    public static final double clearDoorSpeedOut=0.1;
+    public static final double clearDoorSpeedIn=-0.1;
+
+    public static final double clawPIDkP=0.05;
     public static final double clawPIDkI=0;
     public static final double clawPIDkD=0;
     public static final double clawPIDMaxAndMin=0.5;
     public static final double clawPIDInputGain=60;
 
-    public static final double outOfLimelightVisionPos=0.14;
+    public static final double outOfLimelightVisionPos=0.165;
     public static final double groundIntakePos=0.33;
     public static final double algaeStowPos=0.30;
     public static final double lollipopGrabPos=0.328;
@@ -225,12 +234,12 @@ public final class Constants {
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorPK1=0.07;//0.25
+    public static final double elevatorPK1=0.10;//0.07
     public static final double elevatorIK1=0;
     public static final double elevatorDK1=0;
     public static final double elevatorMaxAndMinK1=1;
 
-    public static final double elevatorPK2=0.05;//0.25
+    public static final double elevatorPK2=0.07;//0.05
     public static final double elevatorIK2=0;
     public static final double elevatorDK2=0;
     public static final double elevatorMaxAndMinK2=0.60;
@@ -240,7 +249,8 @@ public final class Constants {
 
     public static final double posDeadband=1.2;
 
-    public static final double aboveThrowPos=-20;
+    public static final double elevSafeRetractPos=-43;
+    public static final double aboveThrowPos=-60;
     public static final double elevAlgeaGrabRetractPos=-20;
     public static final double groundIntakePos=-5;
     public static final double processorScorePos=-13;
@@ -262,7 +272,7 @@ public final class Constants {
   public static final class IntakeConstants{
     public static final double coralShootSpeed=0.6;
     public static final double coralOutakeSpeed=-0.3;
-    public static final double coralIntakeSpeed=0.4;
+    public static final double coralIntakeSpeed=0.15;
     public static final double indexerIntakeSpeed=0.75;
     public static final double indexerOuttakeSpeed=-0.75;
   }
@@ -284,8 +294,8 @@ public final class Constants {
 
     public static final double climbLimitLow=0.0; // was 0.17 
     public static final double climbLimitHigh=0.49;
-    public static final double climbForwardSpeed=0.8;
-    public static final double climbBackSpeed=-0.5;
+    public static final double climbForwardSpeed=0.4;
+    public static final double climbBackSpeed=-0.4;
   }
 
   public static final class CoolPanelConstants{
@@ -295,7 +305,7 @@ public final class Constants {
 
   public final class LedConstants{
     public static final int LedCanID = 14;
-    public static final int LedCount = 100;
+    public static final int LedCount = 115;
     public static final int larsonSize=1;
   }
 
@@ -308,7 +318,7 @@ public final class Constants {
   }
 
   public static enum AnimationStates{
-      FIRE, RAINBOW, PURPLELARSON, NULL
+      FIRE,RAINBOW,PURPLELARSON,REDSTROBE,REDLARSON,NULL
   }
 
   public static final class ButtonBindings{
