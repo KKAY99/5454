@@ -300,15 +300,15 @@ public final class Constants {
   }
 
   public static enum LEDStates{
-      TELEOP, DISABLED, HASCORAL, HASALGEA, LINEDUP, SCORED, ATHUMANPLAYER
+      ENABLED, DISABLED, INTAKING, HASCORAL, HASCORALALGEA, AUTOSCORING, GOLEFT, GORIGHT, LINEDUP
   }
 
   public static enum ColorStates{
-      GREEN, PURPLE, RED, BLUE, WHITE
+      YELLOW, WHITE, PURPLE, GREEN, RED, BLUE
   }
 
   public static enum AnimationStates{
-      FIRE, RAINBOW, PURPLELARSON, NULL
+      PURPLELARSON, GREENFLASHING, PURPLEFLASHING, NULL
   }
 
   public static final class ButtonBindings{
