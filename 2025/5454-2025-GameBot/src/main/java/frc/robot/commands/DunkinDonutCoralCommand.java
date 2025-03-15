@@ -6,17 +6,27 @@ package frc.robot.commands;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.fasterxml.jackson.core.util.ReadConstrainedTextBuffer;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.LEDStates;
 import frc.robot.subsystems.DunkinDonutSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.utilities.Leds;
+import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.RobotContainer;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DunkinDonutCoralCommand extends Command {
+  public static RobotContainer m_RobotContainer = new RobotContainer();
+  
+  public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
+
   private ElevatorSubsystem m_elevator;
   private DunkinDonutSubsystem m_dunkin;
   
@@ -38,6 +48,8 @@ public class DunkinDonutCoralCommand extends Command {
   private States m_currentState = States.INDEXERLOW;
   private States m_startState;
   
+  
+
 
   public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralIntakeSpeed) {
     m_dunkin = dunkin;
@@ -141,6 +153,7 @@ public class DunkinDonutCoralCommand extends Command {
         m_dunkin.runIndexer(m_indexerLowSpeed);
         if(m_dunkin.isCoralAtIndexerLimit()&&m_coralIntakeSpeed>0){
           m_currentState = States.INDEXERHIGH;
+          m_LEDS.setLedState(LEDStates.INTAKING);
         }
       break;
       case INDEXERHIGH:
@@ -148,6 +161,11 @@ public class DunkinDonutCoralCommand extends Command {
         m_dunkin.runIndexer(m_indexerHighSpeed);
 
         if(m_dunkin.isCoralAtBoxLimit()){
+          if(m_RobotContainer.m_doAlgae){
+            m_LEDS.setLedState(LEDStates.HASCORALANDDOALGEA);
+          }else{
+            m_LEDS.setLedState(LEDStates.HASCORAL);
+          }
           m_dunkin.stopCoralMotor();
           m_dunkin.stopIndexer();
           m_targetPos=m_dunkin.getCoralPos()+DunkinDonutConstants.clearDoorPosOut;
