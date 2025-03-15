@@ -10,6 +10,7 @@ import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import frc.robot.Constants.AnimationStates;
 import frc.robot.Constants.ColorStates;
@@ -41,24 +42,31 @@ public class Leds {
         setAnimationState(AnimationStates.NULL);
         m_currentState = state;
         switch(m_currentState){
-            case TELEOP: 
-                setColorState(ColorStates.GREEN);
+            case ENABLED:
+                setColorState(ColorStates.YELLOW);
             break;
             case DISABLED:
-                setColorState(ColorStates.RED);
-            break;
+                setAnimationState(AnimationStates.PURPLELARSON);
             case HASCORAL:
-                setColorState(ColorStates.WHITE);
-            break;
-            case HASALGEA:
                 setColorState(ColorStates.PURPLE);
             break;
+            case HASCORALALGEA:
+                setColorState(ColorStates.GREEN);
+            break;
             case LINEDUP:
+                setAnimationState(AnimationStates.GREENFLASHING);
             break;
-            case SCORED:
-                setAnimationState(AnimationStates.PURPLELARSON);
+            case GOLEFT:
+                setColorState(ColorStates.BLUE);
             break;
-            case ATHUMANPLAYER:
+            case GORIGHT:
+                setColorState(ColorStates.RED);
+            break;
+            case AUTOSCORING:
+                setAnimationState(AnimationStates.PURPLEFLASHING);
+            break;
+            case INTAKING:
+                setColorState(ColorStates.WHITE);
             break;
             
         }
@@ -83,22 +91,25 @@ public class Leds {
             case WHITE:
                 m_CANdle.setLEDs(128,128,128,128, m_startIndex, m_ledCount);
             break;
+            case YELLOW:
+                m_CANdle.setLEDs(255, 255, 0, 0, m_startIndex, m_ledCount);
+            break;
         }
     }
 
     public void setAnimationState(AnimationStates animation){
         m_currentAnimationState = animation;
         switch (m_currentAnimationState) {
-            case FIRE:
-                m_toAnimate = new FireAnimation(0.25, 0.1, m_ledCount, 0.5, 0.9);
-                break;
-        
-            case RAINBOW:
-                m_toAnimate = new RainbowAnimation(0.25, 0.25, m_ledCount);
+            case GREENFLASHING:
+                m_toAnimate = new StrobeAnimation(0,255,0,0,0.25,m_ledCount);
                 break;
 
             case PURPLELARSON:
                 m_toAnimate = new LarsonAnimation(128, 0, 128, 0, 0.35, m_ledCount, BounceMode.Front,LedConstants.larsonSize);
+                break;
+
+            case PURPLEFLASHING:
+                m_toAnimate = new StrobeAnimation(128,0,128,0,0.25,m_ledCount);
                 break;
                 
             case NULL:
