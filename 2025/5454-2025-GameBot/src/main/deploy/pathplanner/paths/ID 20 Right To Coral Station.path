@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.086,
-        "y": 5.187
+        "x": 4.724,
+        "y": 4.756
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9645852272727287,
-        "y": 7.123400568181817
+        "x": 2.6025852272727286,
+        "y": 6.692400568181817
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.027,
-        "y": 7.101
+        "x": 1.665,
+        "y": 7.45
       },
       "prevControl": {
-        "x": 2.1041875,
-        "y": 6.233713068181817
+        "x": 2.7421875,
+        "y": 6.582713068181818
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 132.9377018454789
+    "rotation": 135.0
   },
   "reversed": false,
   "folder": "BLUE Cycle Coral Right Start 3 Score",
