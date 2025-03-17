@@ -54,6 +54,7 @@ public class AutoScoreCommand extends Command{
     private double m_elevatorAlgaePos;
     private double m_algaePos;
     private double m_startTime;
+    private double m_endTime;
     private double m_leftPIDOutput;
     private double m_rightPIDOutput;
 
@@ -71,7 +72,8 @@ public class AutoScoreCommand extends Command{
 
     private States m_currentState=States.ISMANUALORAUTO;
 
-    public AutoScoreCommand(ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scorelevel,Supplier<Boolean> doAlgae){
+    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scorelevel,Supplier<Boolean> doAlgae,boolean isManualLineup){
+        m_swerve=swerve;
         m_elevator=elevator;
         m_dunkin=dunkin;
 
@@ -145,8 +147,14 @@ public class AutoScoreCommand extends Command{
             m_elevatorAlgaePos=ElevatorConstants.l3AlgaePos;
             m_elevatorIPos=ElevatorConstants.l3Pos;
             m_algaePos=DunkinDonutConstants.algaeGrabPos;
-            if(m_doAlgae.get()&&!m_isRightLineup.get()){
-                m_shouldRunAlgae=true;
+            if(m_isManual){
+                if(m_doAlgae.get()){
+                    m_shouldRunAlgae=true;
+                }
+            }else {
+                if(m_doAlgae.get()&&!m_isRightLineup.get()){
+                    m_shouldRunAlgae=true;
+                }
             }
             break;
             case L4:
@@ -155,8 +163,14 @@ public class AutoScoreCommand extends Command{
             m_elevatorIPos=ElevatorConstants.l3Pos;
             m_algaePos=DunkinDonutConstants.noGrabAlgaePos;
             m_algaePos=DunkinDonutConstants.algaeGrabPos;
-            if(m_doAlgae.get()&&!m_isRightLineup.get()){
-                m_shouldRunAlgae=true;
+            if(m_isManual){
+                if(m_doAlgae.get()){
+                    m_shouldRunAlgae=true;
+                }
+            }else {
+                if(m_doAlgae.get()&&!m_isRightLineup.get()){
+                    m_shouldRunAlgae=true;
+                }
             }
             break; 
             case TEST:
@@ -172,6 +186,7 @@ public class AutoScoreCommand extends Command{
         m_dunkin.stopCoralMotor();
         m_dunkin.stop_rotatemotor();
         m_dunkin.resetShouldRunPID();
+        m_LEDS.setLedState(LEDStates.TELEOP,false);
         m_isRunning=false;
     }
 
@@ -190,7 +205,7 @@ public class AutoScoreCommand extends Command{
                 m_currentState=States.ELEVATOR;
             }else{
                 m_currentState=States.PRESCOREELEV;
-                m_LEDS.setLedState(LEDStates.AUTOSCORING);
+                m_LEDS.setLedState(LEDStates.AUTOSCORING,true);
             }
         break;
         case PRESCOREELEV:
@@ -204,14 +219,19 @@ public class AutoScoreCommand extends Command{
         case WAITFORCLAWROTATE:
             double clawABSPos=m_dunkin.getAbsoluteEncoderPos();
             if(clawABSPos+DunkinDonutConstants.posDeadband>DunkinDonutConstants.outOfLimelightVisionPos&&clawABSPos-DunkinDonutConstants.posDeadband<DunkinDonutConstants.outOfLimelightVisionPos){
+                m_startTime=Timer.getFPGATimestamp();
                 m_currentState=States.DRIVEFORWARDS;
             }
         break;
         case DRIVEFORWARDS:
-            if(m_startTime+LimeLightValues.driveTimeToRun<Timer.getFPGATimestamp()){
+            m_endTime=m_startTime+LimeLightValues.driveTimeToRun;
+            System.out.println("Starting Time" + m_startTime + "End Time " + m_endTime );
+            if(Timer.getFPGATimestamp()>m_endTime){
                 m_swerve.drive(0,0,0);
+                System.out.println("Ending Time" + Timer.getFPGATimestamp());
                 m_currentState=States.CHECKFORTARGET;
             }else{
+                System.out.println("Driving Forward");
                 m_swerve.drive(LimeLightValues.lineUpDriveSpeed,0,0);
             }
         break;
@@ -337,7 +357,6 @@ public class AutoScoreCommand extends Command{
             m_dunkin.resetShouldRunPID();
             m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
             m_dunkin.toggleLocalPid(DunkinDonutConstants.algaeStowPos);
-
             m_startTime=Timer.getFPGATimestamp();
             m_currentState=States.ALGAEDRIVEBACK;
         break;
@@ -376,29 +395,31 @@ public class AutoScoreCommand extends Command{
         case END:
             returnValue=true;
         }
-
-        Logger.recordOutput("Commands/AutoScore/IsRunning",m_isRunning);
-        Logger.recordOutput("Commands/AutoScore/CurrentState",m_currentState);
-        if(m_leftLimelight!=null&&m_rightLimelight!=null){
-            Logger.recordOutput("Commands/AutoScore/LimelightLeftX",m_leftLimelight.getX());
-            Logger.recordOutput("Commands/AutoScore/LimelightRightX",m_rightLimelight.getX());
-            Logger.recordOutput("Commands/AutoScore/LimelightLeftAnyTargets",m_leftLimelight.isAnyTargetAvailable());
-            Logger.recordOutput("Commands/AutoScore/LimelightRightAnyTargets",m_rightLimelight.isAnyTargetAvailable());
-            Logger.recordOutput("Commands/AutoScore/LeftLineup",!m_isRightLineup.get());
-            Logger.recordOutput("Commands/AutoScore/RightLineup",m_isRightLineup.get());
-            Logger.recordOutput("Commands/AutoScore/RightPIDOutput",m_rightPIDOutput);
-            Logger.recordOutput("Commands/AutoScore/LeftPIDOutput",m_leftPIDOutput);
-            System.out.println("AutoScore-LimelightLeftAnyTargets: "+m_leftLimelight.isAnyTargetAvailable());
-            System.out.println("AutoScore-LimelightRightAnyTargets: "+m_rightLimelight.isAnyTargetAvailable());
+        try{
+            Logger.recordOutput("Commands/AutoScore/IsRunning",m_isRunning);
+            Logger.recordOutput("Commands/AutoScore/CurrentState",m_currentState);
+            if(m_leftLimelight!=null&&m_rightLimelight!=null){
+                Logger.recordOutput("Commands/AutoScore/LimelightLeftX",m_leftLimelight.getX());
+                Logger.recordOutput("Commands/AutoScore/LimelightRightX",m_rightLimelight.getX());
+                Logger.recordOutput("Commands/AutoScore/LimelightLeftAnyTargets",m_leftLimelight.isAnyTargetAvailable());
+                Logger.recordOutput("Commands/AutoScore/LimelightRightAnyTargets",m_rightLimelight.isAnyTargetAvailable());
+                Logger.recordOutput("Commands/AutoScore/LeftLineup",!m_isRightLineup.get());
+                Logger.recordOutput("Commands/AutoScore/RightLineup",m_isRightLineup.get());
+                Logger.recordOutput("Commands/AutoScore/RightPIDOutput",m_rightPIDOutput);
+                Logger.recordOutput("Commands/AutoScore/LeftPIDOutput",m_leftPIDOutput);
+                System.out.println("AutoScore-LimelightLeftAnyTargets: "+m_leftLimelight.isAnyTargetAvailable());
+                System.out.println("AutoScore-LimelightRightAnyTargets: "+m_rightLimelight.isAnyTargetAvailable());
+            }
+            Logger.recordOutput("Commands/AutoScore/ElevatorPos",m_elevator.getRelativePos());
+            Logger.recordOutput("Commands/AutoScore/ClawPos",m_dunkin.get_rotatemotorpos());
+            Logger.recordOutput("Commands/AutoScore/DoAlgae",m_doAlgae.get());
+            Logger.recordOutput("Commands/AutoScore/ShouldRunAlgae",m_shouldRunAlgae);
+            Logger.recordOutput("Commands/AutoScore/ElevatorScoreLevel",m_scoreLevel.get());
+            
+            System.out.println("AutoScore-CurrentState: "+m_currentState);
+        } catch (Exception e){
+            System.out.println("Logging Exception Error");
         }
-        Logger.recordOutput("Commands/AutoScore/ElevatorPos",m_elevator.getRelativePos());
-        Logger.recordOutput("Commands/AutoScore/ClawPos",m_dunkin.get_rotatemotorpos());
-        Logger.recordOutput("Commands/AutoScore/DoAlgae",m_doAlgae.get());
-        Logger.recordOutput("Commands/AutoScore/ShouldRunAlgae",m_shouldRunAlgae);
-        Logger.recordOutput("Commands/AutoScore/ElevatorScoreLevel",m_scoreLevel.get());
-        
-        System.out.println("AutoScore-CurrentState: "+m_currentState);
-
         return returnValue;
     }
 }

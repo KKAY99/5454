@@ -165,9 +165,9 @@ public final class Constants {
     public static final double rotInputGain=60;
 
     public static final double algaeDriveTimeToRun=0.8;
-    public static final double driveTimeToRun=0.8;
+    public static final double driveTimeToRun=0.5;
     public static final double algaeDriveBackSpeed=0.4;
-    public static final double lineUpDriveSpeed=-0.3;
+    public static final double lineUpDriveSpeed=-0.45454;
 
     public static final double driveP=0.15;
     public static final double driveI=0;
@@ -225,7 +225,7 @@ public final class Constants {
     public static final double algaeThrowSpeed=-1;
     public static final double processorScoreSpeed=-0.5;
     public static final double autoScoreAlgaeSpeed=1;
-    public static final double autoScoreCoralSpeed=1;
+    public static final double autoScoreCoralSpeed=0.40;// was 1 on 3/16
     public static final double autoCoralTimeToRun=1;
     public static final double autoScoreAlgaeRunTime=1;
   }
@@ -310,7 +310,7 @@ public final class Constants {
   }
 
   public static enum LEDStates{
-      ENABLED, DISABLED, INTAKING, HASCORAL, HASCORALALGEA, AUTOSCORING, GOLEFT, GORIGHT, LINEDUP
+      ENABLED, DISABLED, INTAKING, HASCORAL, HASCORALANDDOALGEA,TELEOP, AUTOSCORING, GOLEFT, GORIGHT, LINEDUP,DISABLEDERROR,DISABLEDSEETARGET
   }
 
   public static enum ColorStates{
@@ -326,7 +326,7 @@ public final class Constants {
     public static final int dunkinCoralIntakeButton=4;
     public static final int elevatorScoreAutoButton=5;
     public static final int elevatorScoreManualButton=6;
-
+    public static final int operatorStow = 7;
     public static final int setScoreLevelL1POV0=00;
     public static final int setScoreLevelL2POV90=90;
     public static final int setScoreLevelL3POV180=180;

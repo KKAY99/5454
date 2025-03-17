@@ -31,49 +31,62 @@ public class Leds {
 
 
     public Leds(int CanID, int ledCount){
-       m_CANdle = new CANdle(CanID,"5454Canivore");
+       m_CANdle = new CANdle(CanID,"rio");
        m_ledCount = ledCount;
        m_CANdle.configLEDType(LEDStripType.GRB);
        m_CANdle.configBrightnessScalar(.25);
     }
-
-    public void setLedState(LEDStates state){
-        setAnimationState(AnimationStates.NULL);
-        m_currentState = state;
-        switch(m_currentState){
-            case ENABLED:
-                setColorState(ColorStates.YELLOW);
-            break;
-            case DISABLED:
-                setAnimationState(AnimationStates.PURPLELARSON);
-            case HASCORAL:
-                setColorState(ColorStates.PURPLE);
-            break;
-            case HASCORALALGEA:
-                setColorState(ColorStates.GREEN);
-            break;
-            case LINEDUP:
-                setAnimationState(AnimationStates.GREENFLASHING);
-            break;
-            case GOLEFT:
-                setColorState(ColorStates.BLUE);
-            break;
-            case GORIGHT:
-                setColorState(ColorStates.RED);
-            break;
-            case AUTOSCORING:
-                setAnimationState(AnimationStates.PURPLEFLASHING);
-            break;
-            case INTAKING:
-                setColorState(ColorStates.WHITE);
-            break;
-            
+    public LEDStates getLedState(){
+        return m_currentState;
+    }
+    public void setLedState(LEDStates state, boolean AlwaysUpdate){
+        //only update LEDs if state change or AlwaysUpdate is true
+        if(m_currentState != state || AlwaysUpdate ){
+            setAnimationState(AnimationStates.NULL);       
+            m_currentState = state;
+            switch(m_currentState){
+                case TELEOP: // Same as Enabled
+                case ENABLED:
+                    setColorState(ColorStates.YELLOW);
+                break;
+                case DISABLED:
+                    setAnimationState(AnimationStates.PURPLELARSON);
+                case HASCORAL:
+                    setColorState(ColorStates.PURPLE);
+                break;
+                case HASCORALANDDOALGEA:
+                    setColorState(ColorStates.GREEN);
+                break;
+                case LINEDUP:
+                    setAnimationState(AnimationStates.GREENFLASHING);
+                break;
+                case GOLEFT:
+                    setColorState(ColorStates.BLUE);
+                break;
+                case GORIGHT:
+                    setColorState(ColorStates.RED);
+                break;
+                case AUTOSCORING:
+                    setAnimationState(AnimationStates.PURPLEFLASHING);
+                break;
+                case INTAKING:
+                    setColorState(ColorStates.WHITE);
+                break;
+                case DISABLEDERROR:
+                    setAnimationState(AnimationStates.REDLARSON);
+                break;
+                case DISABLEDSEETARGET:
+                    setAnimationState(AnimationStates.PURPLELARSON);
+                break;
+                     
+                
+            }
         }
     }
 
     private void setColorState(ColorStates color){
         m_currentColorstate = color;
-        switch (m_currentColorstate) {
+         switch (m_currentColorstate) {
             case GREEN:
                 m_CANdle.setLEDs(0,225,0,0,m_startIndex, m_ledCount);
             break;
@@ -95,9 +108,10 @@ public class Leds {
         }
     }
 
-    public void setAnimationState(AnimationStates animation){
-        m_currentAnimationState = animation;
-        switch (m_currentAnimationState) {
+    private void setAnimationState(AnimationStates animation){
+         m_currentAnimationState = animation;
+         System.out.print("LED State:" + m_currentState + " LED Animation: " + m_currentAnimationState);
+         switch (m_currentAnimationState) {
             case FIRE:
                 m_toAnimate = new FireAnimation(0.25, 0.1, m_ledCount, 0.5, 0.9);
             break;
@@ -130,6 +144,7 @@ public class Leds {
         }else{
             m_CANdle.animate(m_toAnimate);
         }
+            
     }
 
 
