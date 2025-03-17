@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.3490625,
-        "y": 5.336264204545455
+        "x": 16.383,
+        "y": 0.909
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.421704545454543,
-        "y": 5.346235795454546
+        "x": 15.914517045454545,
+        "y": 1.596576704545454
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.086,
-        "y": 5.187
+        "x": 13.631164772727272,
+        "y": 2.8633096590909086
       },
       "prevControl": {
-        "x": 5.764079545454545,
-        "y": 5.167056818181819
+        "x": 14.020056818181818,
+        "y": 2.4744176136363634
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "BLUE Cycle Coral Right Start 3 Score",
+  "folder": "RED Cycle Coral Center Start 3 Score",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -45.0
   },
   "useDefaultConstraints": true
 }

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.util.ReadConstrainedTextBuffer;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.LEDStates;
 import frc.robot.subsystems.DunkinDonutSubsystem;
@@ -22,9 +23,9 @@ import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DunkinDonutCoralCommand extends Command {
-  public static RobotContainer m_RobotContainer = new RobotContainer();
+ // public static RobotContainer m_RobotContainer = new RobotContainer();
   
-  public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
+ // public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
 
   private ElevatorSubsystem m_elevator;
   private DunkinDonutSubsystem m_dunkin;
@@ -41,17 +42,18 @@ public class DunkinDonutCoralCommand extends Command {
 
   private double m_indexerHighSpeed;
   private double m_indexerLowSpeed;
-  private double m_targetPos;
+  private double m_targetPos=0;
 
-  private enum States{RUNCORALFORTIME,LOWERELEVATOR,WAITFORELEVATOR,INDEXERLOW,INDEXERHIGH, END}
+  private enum States{RUNCORALFORTIME,LOWERELEVATOR,WAITFORELEVATOR,INDEXERLOW,INDEXERHIGH,RUNFORWARD,RUNBACKWARD,END}
   private States m_currentState = States.INDEXERLOW;
   private States m_startState;
-  
+  private Leds m_leds;
   
 
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralIntakeSpeed) {
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,Leds led, double coralIntakeSpeed) {
     m_dunkin = dunkin;
+    m_leds=led; 
     m_elevator = null;
     addRequirements(m_dunkin);
     m_coralIntakeSpeed = coralIntakeSpeed;
@@ -63,8 +65,9 @@ public class DunkinDonutCoralCommand extends Command {
     m_startState = States.INDEXERHIGH;
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralScoreSpeed,double timeToRun) {
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,Leds led, double coralScoreSpeed,double timeToRun) {
     m_dunkin = dunkin;
+    m_leds=led;
     m_elevator = null;
     addRequirements(m_dunkin);
     m_coralScoreSpeed= coralScoreSpeed;
@@ -76,8 +79,9 @@ public class DunkinDonutCoralCommand extends Command {
     m_startState = States.RUNCORALFORTIME;
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,Leds led, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
     m_dunkin = dunkin;
+    m_leds=led;
     m_elevator = null;
     addRequirements(m_dunkin);
     m_coralIntakeSpeed = coralIntakeSpeed;
@@ -89,8 +93,9 @@ public class DunkinDonutCoralCommand extends Command {
 
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,Leds led, ElevatorSubsystem elevator, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
     m_dunkin = dunkin;
+    m_leds=led;
     m_elevator = elevator;
     addRequirements(m_dunkin);
     m_coralIntakeSpeed = coralIntakeSpeed;
@@ -107,6 +112,7 @@ public class DunkinDonutCoralCommand extends Command {
     m_startTime=Timer.getFPGATimestamp();
     m_currentState = m_startState;
     m_isRunning=true;
+    m_leds.setLedState(LEDStates.INTAKING,false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -140,33 +146,62 @@ public class DunkinDonutCoralCommand extends Command {
           m_elevator.set_referance(m_elevatorFPos);
           m_currentState = States.WAITFORELEVATOR;
         }else{
-          m_currentState = States.INDEXERLOW;
+          m_currentState = States.INDEXERHIGH;
         }
       break;
       case WAITFORELEVATOR:
-      if(m_elevator.CheckCANandColor()){
-        m_currentState = States.INDEXERHIGH;
-      }
+        if(m_elevator.CheckCANandColor()){
+          m_currentState = States.INDEXERHIGH;
+        }
       break;
       case INDEXERLOW:
         m_dunkin.runIndexer(m_indexerLowSpeed);
         if(m_dunkin.isCoralAtIndexerLimit()&&m_coralIntakeSpeed>0){
           m_currentState = States.INDEXERHIGH;
-          m_LEDS.setLedState(LEDStates.INTAKING);
+          
         }
       break;
       case INDEXERHIGH:
-      m_dunkin.runCoralMotor(m_coralIntakeSpeed);
+        m_dunkin.runCoralMotor(m_coralIntakeSpeed);
         m_dunkin.runIndexer(m_indexerHighSpeed);
+
         if(m_dunkin.isCoralAtBoxLimit()){
+<<<<<<< HEAD
           if(m_RobotContainer.m_doAlgae){
-            m_LEDS.setLedState(LEDStates.HASCORALANDDOALGEA);
+           //_LEDS.setLedState(LEDStates.HASCORALANDDOALGEA);
           }else{
             m_LEDS.setLedState(LEDStates.HASCORAL);
           }
+=======
+         // if(m_RobotContainer.m_doAlgae){
+         //  m_LEDS.setLedState(LEDStates.HASCORALANDDOALGEA,false);
+         // }else{
+            m_leds.setLedState(LEDStates.HASCORAL,false);
+         // }
+>>>>>>> ba44c1fb142d76003584f7004717d4a04aedda0d
           m_dunkin.stopCoralMotor();
           m_dunkin.stopIndexer();
-          m_currentState = States.END;
+          m_targetPos=m_dunkin.getCoralPos()+DunkinDonutConstants.clearDoorPosOut;
+          m_currentState = States.RUNFORWARD;
+        }
+      break;
+      case RUNFORWARD:
+        m_dunkin.runCoralMotor(DunkinDonutConstants.clearDoorSpeedOut);
+
+        if(m_dunkin.getCoralPos()+DunkinDonutConstants.posDeadband>m_targetPos&&
+            m_dunkin.getCoralPos()-DunkinDonutConstants.posDeadband<m_targetPos){
+            m_dunkin.stopCoralMotor();
+            m_targetPos=m_dunkin.getCoralPos()-DunkinDonutConstants.clearDoorPosIn;
+            m_currentState=States.RUNBACKWARD;
+        }
+      break;
+      case RUNBACKWARD:
+        m_dunkin.runCoralMotor(DunkinDonutConstants.clearDoorSpeedIn);
+
+        if(m_dunkin.getCoralPos()+DunkinDonutConstants.posDeadband>m_targetPos&&
+            m_dunkin.getCoralPos()-DunkinDonutConstants.posDeadband<m_targetPos){
+            m_dunkin.stopCoralMotor();
+            m_currentState=States.END;
         }
       break;
       case END:
@@ -175,6 +210,8 @@ public class DunkinDonutCoralCommand extends Command {
 
     Logger.recordOutput("Commands/CoralIntake/IsRunning",m_isRunning);
     Logger.recordOutput("Commands/CoralIntake/CurrentState",m_currentState);
+    System.out.println("Coral Pos: "+m_dunkin.getCoralPos());
+    System.out.println("Target Pos: "+m_targetPos);
 
     return returnValue;
   }

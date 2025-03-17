@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.3490625,
-        "y": 5.336264204545455
+        "x": 10.041,
+        "y": 4.02
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.421704545454543,
-        "y": 5.346235795454546
+        "x": 11.041,
+        "y": 4.02
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.086,
-        "y": 5.187
+        "x": 11.74,
+        "y": 4.020014204545454
       },
       "prevControl": {
-        "x": 5.764079545454545,
-        "y": 5.167056818181819
+        "x": 10.74,
+        "y": 4.020014204545454
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "BLUE Cycle Coral Right Start 3 Score",
+  "folder": "RED Center Start 1 Coral Grab Algae",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
