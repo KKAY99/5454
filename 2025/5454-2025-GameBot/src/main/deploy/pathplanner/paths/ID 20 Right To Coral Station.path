@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.086,
-        "y": 5.187
+        "x": 5.201,
+        "y": 5.216
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9645852272727287,
-        "y": 7.123400568181817
+        "x": 2.5546100601839647,
+        "y": 6.586421205201961
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.027,
-        "y": 7.101
+        "x": 1.057,
+        "y": 7.231
       },
       "prevControl": {
-        "x": 2.1041875,
-        "y": 6.233713068181817
+        "x": 1.8655741849840848,
+        "y": 6.776415612743817
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,16 +33,16 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 132.9377018454789
+    "velocity": 0.0,
+    "rotation": 135.0
   },
   "reversed": false,
   "folder": "BLUE Cycle Coral Right Start 3 Score",

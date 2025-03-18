@@ -146,13 +146,13 @@ public final class Constants {
     public static final double driveFollowDistanceLeft=-120;
     public static final double driveDeadBand=2;
 
-    public static final double strafePRIGHT=0.15;
+    public static final double strafePRIGHT=0.25;
     public static final double strafeIRIGHT=0;
     public static final double strafeDRIGHT=0.5;
     public static final double strafeMaxAndMinRIGHT=0.3;
     public static final double strafeInputGainRIGHT=1;
 
-    public static final double strafePLEFT=0.15;
+    public static final double strafePLEFT=0.25;
     public static final double strafeILEFT=0;
     public static final double strafeDLEFT=0.5;
     public static final double strafeMaxAndMinLEFT=0.3;

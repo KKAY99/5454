@@ -23,15 +23,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ToggleIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Coral Station To ID 19 Right"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ToggleIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Coral Station To ID 19 Center"
+                }
+              }
+            ]
           }
         },
         {
@@ -47,15 +54,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ToggleIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Coral Station To ID 19 Left"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Coral Station To ID 19 Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ToggleIntake"
+                }
+              }
+            ]
           }
         },
         {

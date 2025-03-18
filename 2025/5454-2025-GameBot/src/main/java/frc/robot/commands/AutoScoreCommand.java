@@ -407,8 +407,8 @@ public class AutoScoreCommand extends Command{
                 Logger.recordOutput("Commands/AutoScore/RightLineup",m_isRightLineup.get());
                 Logger.recordOutput("Commands/AutoScore/RightPIDOutput",m_rightPIDOutput);
                 Logger.recordOutput("Commands/AutoScore/LeftPIDOutput",m_leftPIDOutput);
-                System.out.println("AutoScore-LimelightLeftAnyTargets: "+m_leftLimelight.isAnyTargetAvailable());
-                System.out.println("AutoScore-LimelightRightAnyTargets: "+m_rightLimelight.isAnyTargetAvailable());
+                //System.out.println("AutoScore-LimelightLeftAnyTargets: "+m_leftLimelight.isAnyTargetAvailable());
+                //System.out.println("AutoScore-LimelightRightAnyTargets: "+m_rightLimelight.isAnyTargetAvailable());
             }
             Logger.recordOutput("Commands/AutoScore/ElevatorPos",m_elevator.getRelativePos());
             Logger.recordOutput("Commands/AutoScore/ClawPos",m_dunkin.get_rotatemotorpos());
@@ -416,7 +416,7 @@ public class AutoScoreCommand extends Command{
             Logger.recordOutput("Commands/AutoScore/ShouldRunAlgae",m_shouldRunAlgae);
             Logger.recordOutput("Commands/AutoScore/ElevatorScoreLevel",m_scoreLevel.get());
             
-            System.out.println("AutoScore-CurrentState: "+m_currentState);
+            //System.out.println("AutoScore-CurrentState: "+m_currentState);
         } catch (Exception e){
             System.out.println("Logging Exception Error");
         }

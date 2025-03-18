@@ -109,7 +109,6 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings(){
-    System.out.println("N0");
     //QOL Drive
     /*ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve);
     m_xBoxDriver.start().onTrue(resetGyroCommand);*/
@@ -250,7 +249,7 @@ public class RobotContainer {
   }
 
   public void DisabledInit(){
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(5,5,9999999));
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(2,2,99999999));
     if(!m_hasResetGyro){
       m_hasResetGyro=true;
       m_swerve.getPigeon2().reset();
@@ -306,7 +305,6 @@ public class RobotContainer {
     double x = 0;
     
     try {
-
       //overwrite has has coral state using module level algea
       if(m_LEDS.getLedState()==LEDStates.HASCORAL && m_doAlgae){
         m_LEDS.setLedState(LEDStates.HASCORALANDDOALGEA,false);
