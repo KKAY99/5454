@@ -7,37 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Start To Center ID 11"
+            "pathName": "Left Start to ID 22 Left"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoScoreRightL4"
+            "name": "AutoScoreLeft"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Center ID 11 To Coral Station"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ToggleIntake"
+            "pathName": "ID 22 Left to Coral Station "
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Coral Station To ID 6"
+            "pathName": "Coral Station to ID 17 Right"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoScoreLeftL4"
+            "name": "AutoScoreRight"
           }
         },
         {
@@ -67,7 +61,7 @@
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": null,
   "choreoAuto": false
 }

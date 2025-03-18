@@ -36,6 +36,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private DigitalInput m_coralLimitSwitch;
   private DigitalInput m_indexerLimitSwitch;
 
+
   private double m_rotateSpeed=0;
   private double m_coralSpeed=0;
   private double m_algaeSpeed=0;
@@ -46,7 +47,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private boolean m_shouldRunPID=false;
   
   public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID, int indexerLimitSwitchID) {
-    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, Constants.k80Amp,DunkinDonutConstants.coralP,DunkinDonutConstants.coralI,DunkinDonutConstants.coralD,DunkinDonutConstants.coralMaxAndMin);
+    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, Constants.k80Amp,DunkinDonutConstants.coralP,DunkinDonutConstants.coralI,DunkinDonutConstants.coralD);
     m_algaeMotor1= new ObsidianCANSparkMax(algaeCanID1, MotorType.kBrushless, true);
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,Constants.k40Amp);
     m_coralIndexer = new ObsidianCANSparkMax(coralIndexerID, MotorType.kBrushless, true);
@@ -54,7 +55,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_CANcoder = new CANcoder(canCoderID);
     m_rotateRelative=m_rotateMotor.getEncoder();
     m_coralRelative = m_coralMotor.getEncoder();
-
     m_obsidianPID=new ObsidianPID(DunkinDonutConstants.clawPIDkP,DunkinDonutConstants.clawPIDkI,DunkinDonutConstants.clawPIDkD,
                                   DunkinDonutConstants.clawPIDMaxAndMin,-DunkinDonutConstants.clawPIDMaxAndMin);
     m_obsidianPID.setInputGain(DunkinDonutConstants.clawPIDInputGain);
@@ -63,6 +63,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_indexerLimitSwitch = new DigitalInput(indexerLimitSwitchID);
 
     m_loopController = m_coralMotor.getClosedLoopController();
+    
   }
 
   public double getAbsoluteEncoderPos(){
@@ -139,7 +140,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   }
   
   public void runCoralMotor(double speed){
-    m_loopController.setReference(0,ControlType.kVelocity);
     m_coralSpeed=speed;
     m_coralMotor.set(speed); 
   }
@@ -198,14 +198,6 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     }
 
     return returnValue;
-  }
-
-  public void setCoralReference(double setPoint){
-    m_loopController.setReference(setPoint,ControlType.kPosition);
-  }
-
-  public void resetCoralReference(){
-    m_loopController.setReference(0,ControlType.kVelocity);
   }
 
   @Override

@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Start To Center ID 21"
+            "pathName": "Right Start to ID 20 Right"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoScoreLeftL3Algae"
+            "name": "AutoScoreRight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ID 20 Right To Coral Station"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }

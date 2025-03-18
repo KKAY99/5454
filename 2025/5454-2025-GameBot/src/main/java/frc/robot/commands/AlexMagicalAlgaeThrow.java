@@ -64,7 +64,7 @@ public class AlexMagicalAlgaeThrow extends Command{
 
         switch(m_currentState){
         case SETELEVPOS:
-            m_elevator.set_referance(m_elevDesiredPos,ClosedLoopSlot.kSlot0);
+            m_elevator.set_referance(m_elevDesiredPos,ClosedLoopSlot.kSlot1);
 
             m_currentState=States.SETPID;
         break;
@@ -72,7 +72,6 @@ public class AlexMagicalAlgaeThrow extends Command{
             m_dunkin.toggleLocalPid(m_setPoint);
 
             m_currentState=States.SHOOTELEVPOS;
-        break;
         case SHOOTELEVPOS:
             if(m_elevator.getRelativePos()<ElevatorConstants.aboveThrowPos){
                 m_currentState=States.RUNALGAE;
@@ -88,7 +87,6 @@ public class AlexMagicalAlgaeThrow extends Command{
                     m_elevator.getRelativePos()<m_elevDesiredPos+ElevatorConstants.posDeadband){
                 m_currentState=States.RETRACT;
             }
-        break;
         case RETRACT:
             m_dunkin.resetShouldRunPID();
             m_dunkin.toggleLocalPid(m_clawResetPos);
