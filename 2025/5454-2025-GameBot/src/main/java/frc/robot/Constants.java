@@ -146,16 +146,16 @@ public final class Constants {
     public static final double driveFollowDistanceLeft=-120;
     public static final double driveDeadBand=2;
 
-    public static final double strafePRIGHT=0.25;
+    public static final double strafePRIGHT=0.3;
     public static final double strafeIRIGHT=0;
     public static final double strafeDRIGHT=0.5;
-    public static final double strafeMaxAndMinRIGHT=0.3;
+    public static final double strafeMaxAndMinRIGHT=0.35;
     public static final double strafeInputGainRIGHT=1;
 
-    public static final double strafePLEFT=0.25;
+    public static final double strafePLEFT=0.3;
     public static final double strafeILEFT=0;
     public static final double strafeDLEFT=0.5;
-    public static final double strafeMaxAndMinLEFT=0.3;
+    public static final double strafeMaxAndMinLEFT=0.35;
     public static final double strafeInputGainLEFT=1;
 
     public static final double rotP=0.1;
@@ -226,7 +226,7 @@ public final class Constants {
     public static final double processorScoreSpeed=-0.5;
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=0.40;// was 1 on 3/16
-    public static final double autoCoralTimeToRun=1;
+    public static final double autoCoralTimeToRun=0.3;
     public static final double autoScoreAlgaeRunTime=1;
   }
 

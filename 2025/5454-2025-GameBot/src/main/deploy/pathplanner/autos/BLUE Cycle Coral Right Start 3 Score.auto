@@ -35,7 +35,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Coral Station To ID 19 Center"
+                  "pathName": "Coral Station To ID 19 Right"
                 }
               }
             ]
@@ -60,7 +60,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Coral Station To ID 19 Center"
+                  "pathName": "Coral Station To ID 19 Left"
                 }
               },
               {

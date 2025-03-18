@@ -87,13 +87,13 @@ public class RobotContainer {
   public boolean m_hasResetGyro=false;
 
   public RobotContainer(){
-  SmartDashboard.putData("field", m_Field2d);
-    
-  configureNamedCommands();
-  m_autoChooser=AutoBuilder.buildAutoChooser();
-  createAutonomousCommandList(); 
-  configureButtonBindings();
-  resetDefaultCommand();
+    SmartDashboard.putData("field", m_Field2d);
+      
+    configureNamedCommands();
+    m_autoChooser=AutoBuilder.buildAutoChooser();
+    createAutonomousCommandList(); 
+    configureButtonBindings();
+    resetDefaultCommand();
   }
 
   public void configureNamedCommands() {
@@ -128,12 +128,12 @@ public class RobotContainer {
 
     ToggleClimbPID testPID2=new ToggleClimbPID(m_climb,ClimbConstants.climbPos2);
     m_xBoxDriver.rightBumper().onTrue(testPID2);*/
-    System.out.println("N1");
+
     //DunkinDonutCommands
    DunkinDonutRotateCommand DunkinRotateCommand=new DunkinDonutRotateCommand(m_dunkinDonut,()->m_xBoxOperator.getRightX()*0.5);
     Trigger operatorRightXJoystick=new Trigger(()->Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);
-    System.out.println("N2");
+
     ClawPIDScoreIntake clawProcessorScore=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.processorScorePos,DunkinDonutConstants.processorScorePos,DunkinDonutConstants.processorScoreSpeed,
                                                                 ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.rotateHomePos);
     Trigger processorRightTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getRightTriggerAxis())>ButtonBindings.joystickDeadband);
@@ -227,7 +227,7 @@ public class RobotContainer {
       SmartDashboard.putNumber("D",m_D);
       SmartDashboard.putNumber("Elevator pos",m_elevatorPos);
 
-    SmartDashboard.putData("Auto Chooser",m_autoChooser);
+      SmartDashboard.putData("Auto Chooser",m_autoChooser);
 
     }catch(Exception e){
       System.out.println("Create Autos Failed, Exception: " + e.getMessage());
@@ -249,7 +249,7 @@ public class RobotContainer {
   }
 
   public void DisabledInit(){
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(2,2,99999999));
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(1,1,99999999));
     if(!m_hasResetGyro){
       m_hasResetGyro=true;
       m_swerve.getPigeon2().reset();
@@ -311,17 +311,18 @@ public class RobotContainer {
       }
 
       if(m_isRightLineup){
-      if(m_leftLimelight.isAnyTargetAvailable()){
-        x=Math.abs(m_leftLimelight.getX());
-        if(x<LimeLightValues.leftLineupXDeadband){
-          m_LEDS.setLedState(LEDStates.LINEDUP,false);
+        if(m_leftLimelight.isAnyTargetAvailable()){
+          x=Math.abs(m_leftLimelight.getX());
+          if(x<LimeLightValues.leftLineupXDeadband){
+            m_LEDS.setLedState(LEDStates.LINEDUP,false);
+          }
         }
-      }
-    }else{
-    }if(m_rightLimelight.isAnyTargetAvailable()){
-        x=Math.abs(m_rightLimelight.getX());
-        if(x<LimeLightValues.rightLineupXDeadband){
-          m_LEDS.setLedState(LEDStates.LINEDUP,false);
+      }else{
+        if(m_rightLimelight.isAnyTargetAvailable()){
+          x=Math.abs(m_rightLimelight.getX());
+          if(x<LimeLightValues.rightLineupXDeadband){
+            m_LEDS.setLedState(LEDStates.LINEDUP,false);
+          }
         }
       }
 
@@ -330,83 +331,83 @@ public class RobotContainer {
         //m_LEDS.activateLEDS();
       break;
       case GOLEFT:
-      if(!m_timerStarted){
-        m_timerStarted = true;
-        m_startTime = Timer.getFPGATimestamp();
-      }
-      if (m_startTime + m_runTime < Timer.getTimestamp()){
-        //m_LEDS.activateLEDS();
-        
+        if(!m_timerStarted){
+          m_timerStarted = true;
+          m_startTime = Timer.getFPGATimestamp();
+        }
+        if (m_startTime + m_runTime < Timer.getTimestamp()){
+          //m_LEDS.activateLEDS();
+          
       }else{
           m_LEDS.setLedState(LEDStates.ENABLED,false);
       }
       break;
       case GORIGHT:
-      if(!m_timerStarted){
-        m_timerStarted = true;
-        m_startTime = Timer.getFPGATimestamp();
-      }
-      if (m_startTime + m_runTime < Timer.getTimestamp()){
-        //m_LEDS.activateLEDS();
-      }else{
-          m_LEDS.setLedState(LEDStates.ENABLED,false);
-      }
+        if(!m_timerStarted){
+          m_timerStarted = true;
+          m_startTime = Timer.getFPGATimestamp();
+        }
+        if (m_startTime + m_runTime < Timer.getTimestamp()){
+          //m_LEDS.activateLEDS();
+        }else{
+            m_LEDS.setLedState(LEDStates.ENABLED,false);
+        }
       break;
       case AUTOSCORING:
-      if(!m_timerStarted){
-        m_timerStarted = true;
-        m_startTime = Timer.getFPGATimestamp();
-      }
-      if (m_startTime + m_runTime < Timer.getTimestamp()){
-       // m_LEDS.activateLEDS();
-      }else{
-          m_LEDS.setLedState(LEDStates.ENABLED,false);
-      }
+        if(!m_timerStarted){
+          m_timerStarted = true;
+          m_startTime = Timer.getFPGATimestamp();
+        }
+        if (m_startTime + m_runTime < Timer.getTimestamp()){
+        // m_LEDS.activateLEDS();
+        }else{
+            m_LEDS.setLedState(LEDStates.ENABLED,false);
+        }
       break;
       case HASCORAL:
-      if(!m_timerStarted){
-        m_timerStarted = true;
-        m_startTime = Timer.getFPGATimestamp();
-      }
-      if (m_startTime + m_runTime < Timer.getTimestamp()){
-      //  m_LEDS.activateLEDS();
-      }else{
-      //    m_LEDS.setLedState(LEDStates.ENABLED);
+        if(!m_timerStarted){
+          m_timerStarted = true;
+          m_startTime = Timer.getFPGATimestamp();
+        }
+        if (m_startTime + m_runTime < Timer.getTimestamp()){
+        //  m_LEDS.activateLEDS();
+        }else{
+        //    m_LEDS.setLedState(LEDStates.ENABLED);
 
-      }
+        }
       break;
       case HASCORALANDDOALGEA:
-      if(!m_timerStarted){
-        m_timerStarted = true;
-        m_startTime = Timer.getFPGATimestamp();
-      }
-      if (m_startTime + m_runTime < Timer.getTimestamp()){
-     //   m_LEDS.activateLEDS();
-      }else{
-          m_LEDS.setLedState(LEDStates.ENABLED,false);
-      }
+        if(!m_timerStarted){
+          m_timerStarted = true;
+          m_startTime = Timer.getFPGATimestamp();
+        }
+        if (m_startTime + m_runTime < Timer.getTimestamp()){
+      //   m_LEDS.activateLEDS();
+        }else{
+            m_LEDS.setLedState(LEDStates.ENABLED,false);
+        }
       break;
       case LINEDUP:
-      if(!m_timerStarted){
-        m_timerStarted = true;
-        m_startTime = Timer.getFPGATimestamp();
-      }
-      if (m_startTime + m_runTime < Timer.getTimestamp()){
-       // m_LEDS.activateLEDS();
-      }else{
-          m_LEDS.setLedState(LEDStates.ENABLED,false);
-      }
+        if(!m_timerStarted){
+          m_timerStarted = true;
+          m_startTime = Timer.getFPGATimestamp();
+        }
+        if (m_startTime + m_runTime < Timer.getTimestamp()){
+        // m_LEDS.activateLEDS();
+        }else{
+            m_LEDS.setLedState(LEDStates.ENABLED,false);
+        }
       break;
       case INTAKING:
-      if(!m_timerStarted){
-        m_timerStarted = true;
-        m_startTime = Timer.getFPGATimestamp();
-      }
-      if (m_startTime + m_runTime < Timer.getTimestamp()){
-       // m_LEDS.activateLEDS();
-      }else{
-          m_LEDS.setLedState(LEDStates.ENABLED,false);
-      }
+        if(!m_timerStarted){
+          m_timerStarted = true;
+          m_startTime = Timer.getFPGATimestamp();
+        }
+        if (m_startTime + m_runTime < Timer.getTimestamp()){
+        // m_LEDS.activateLEDS();
+        }else{
+            m_LEDS.setLedState(LEDStates.ENABLED,false);
+        }
       break;
     }
 

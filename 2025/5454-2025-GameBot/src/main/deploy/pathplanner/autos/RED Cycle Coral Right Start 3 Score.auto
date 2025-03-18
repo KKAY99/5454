@@ -23,15 +23,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ToggleIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Coral Station To ID 6"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ToggleIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Coral Station To ID 6"
+                }
+              }
+            ]
           }
         },
         {
@@ -47,15 +54,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ToggleIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Coral Station To ID 6"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ToggleIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Coral Station To ID 6"
+                }
+              }
+            ]
           }
         },
         {
