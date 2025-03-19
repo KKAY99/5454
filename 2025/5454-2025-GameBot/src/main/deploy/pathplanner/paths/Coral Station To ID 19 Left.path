@@ -20,7 +20,7 @@
         "y": 5.256491477272728
       },
       "prevControl": {
-        "x": 1.9526183014396294,
+        "x": 1.9526183014396292,
         "y": 6.430329149673469
       },
       "nextControl": null,
@@ -45,7 +45,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "BLUE Cycle Coral Right Start 3 Score",
+  "folder": "BLUE Right Start",
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": 135.0

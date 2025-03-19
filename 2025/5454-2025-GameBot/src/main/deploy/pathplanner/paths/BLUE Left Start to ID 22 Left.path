@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.695,
-        "y": 0.66
+        "x": 7.431146523178808,
+        "y": 3.167839403973509
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.51,
-        "y": 2.304900568181817
+        "x": 6.080028973509934,
+        "y": 1.8966266556291396
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.234,
-        "y": 3.284
+        "x": 5.084850993377483,
+        "y": 2.906332781456953
       },
       "prevControl": {
-        "x": 3.4661874999999993,
-        "y": 2.286840909090909
+        "x": 5.636920529801325,
+        "y": 2.238038079470198
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "BLUE Cycle Coral Left Start 3 Score",
+  "folder": "BLUE Left Start",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -130.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

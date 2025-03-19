@@ -3,11 +3,12 @@
   "robotLength": 0.0,
   "holonomicMode": true,
   "pathFolders": [
-    "BLUE Center Start 1 Coral Grab Algae",
-    "BLUE Cycle Coral Left Start 3 Score",
-    "BLUE Cycle Coral Right Start 3 Score",
-    "RED Center Start 1 Coral Grab Algae",
-    "RED Cycle Coral Center Start 3 Score"
+    "BLUE Center Start",
+    "BLUE Left Start",
+    "BLUE Right Start",
+    "RED Center Start ",
+    "RED Center Start",
+    "RED Left Start"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.5,

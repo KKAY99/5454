@@ -23,6 +23,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -45,37 +51,6 @@
           "type": "named",
           "data": {
             "name": "AutoScoreRightL4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ID 19 Right To Coral Station"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Coral Station To ID 19 Left"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ToggleIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoScoreLeftL4"
           }
         }
       ]

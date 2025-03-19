@@ -1,0 +1,99 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Start To Center ID 11"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoScoreRightL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center ID 11 To Coral Station"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ToggleIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Coral Station To ID 6"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoScoreLeftL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ID 6 To Coral Station"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ToggleIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Coral Station To ID 6"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoScoreRightL4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": null,
+  "choreoAuto": false
+}
