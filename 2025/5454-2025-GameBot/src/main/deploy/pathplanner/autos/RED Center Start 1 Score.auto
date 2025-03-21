@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "AutoScoreLeftL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "AutoScoreLeftL3Algae"
           }
         }

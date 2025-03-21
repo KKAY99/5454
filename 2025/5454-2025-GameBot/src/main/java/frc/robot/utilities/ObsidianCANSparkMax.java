@@ -28,6 +28,9 @@ public class ObsidianCANSparkMax extends SparkBase{
             newConfig.signals.analogPositionPeriodMs(1000);
             newConfig.signals.analogVelocityPeriodMs(1000);
             newConfig.signals.analogVoltagePeriodMs(1000);
+            newConfig.signals.outputCurrentPeriodMs(1000);
+            newConfig.signals.externalOrAltEncoderPosition(1000);
+            newConfig.signals.externalOrAltEncoderVelocity(1000);
 
             if(breakMode){
                 newConfig.idleMode(IdleMode.kBrake);
@@ -43,6 +46,7 @@ public class ObsidianCANSparkMax extends SparkBase{
         System.out.println(e.toString());
         }
     }
+
     /**
      * <p> 5454 CANSparkMaxWrapper
      * <p> Will set all Periodic Status 3-6 to 1000 ms
@@ -60,6 +64,43 @@ public class ObsidianCANSparkMax extends SparkBase{
         newConfig.signals.analogPositionPeriodMs(1000);
         newConfig.signals.analogVelocityPeriodMs(1000);
         newConfig.signals.analogVoltagePeriodMs(1000);
+        newConfig.signals.outputCurrentPeriodMs(1000);
+        newConfig.signals.externalOrAltEncoderPosition(1000);
+        newConfig.signals.externalOrAltEncoderVelocity(1000);
+
+        if(breakMode){
+            newConfig.idleMode(IdleMode.kBrake);
+        } else{
+            newConfig.idleMode(IdleMode.kBrake);
+        }
+        Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
+        configure(newConfig,SparkBase.ResetMode.kResetSafeParameters,SparkBase.PersistMode.kNoPersistParameters);
+        Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
+    }
+
+    /**
+     * <p> 5454 CANSparkMaxWrapper
+     * <p> Will set all Periodic Status 3-6 to 1000 ms
+     * @param canID Motor ID
+     * @param curentLimit SmartCurrentLimit for the Motor
+     * @param MotorType MotorType: Brushed or Brushless
+     * @param periodicStatus1Ms
+     * @param periodicStatus2Ms
+    */
+    public ObsidianCANSparkMax(int canID,MotorType motorType,boolean breakMode,int currentLimit,int periodicStatus1Ms,
+                                int periodicStatus2Ms){  
+        super(canID,motorType,SparkModel.SparkMax);
+        SparkBaseConfig newConfig =new SparkMaxConfig();
+        newConfig.inverted(false);
+        newConfig.smartCurrentLimit(currentLimit);
+        newConfig.signals.motorTemperaturePeriodMs(1000);
+        newConfig.signals.busVoltagePeriodMs(1000);
+        newConfig.signals.analogPositionPeriodMs(1000);
+        newConfig.signals.analogVelocityPeriodMs(1000);
+        newConfig.signals.analogVoltagePeriodMs(1000);
+        newConfig.signals.outputCurrentPeriodMs(1000);
+        newConfig.signals.externalOrAltEncoderPosition(1000);
+        newConfig.signals.externalOrAltEncoderVelocity(1000);
 
         if(breakMode){
             newConfig.idleMode(IdleMode.kBrake);
@@ -93,6 +134,9 @@ public class ObsidianCANSparkMax extends SparkBase{
         newConfig.signals.analogPositionPeriodMs(1000);
         newConfig.signals.analogVelocityPeriodMs(1000);
         newConfig.signals.analogVoltagePeriodMs(1000);
+        newConfig.signals.outputCurrentPeriodMs(1000);
+        newConfig.signals.externalOrAltEncoderPosition(1000);
+        newConfig.signals.externalOrAltEncoderVelocity(1000);
         
         if(breakMode){
             newConfig.idleMode(IdleMode.kBrake);
@@ -132,7 +176,10 @@ public class ObsidianCANSparkMax extends SparkBase{
             newConfig.signals.analogPositionPeriodMs(1000);
             newConfig.signals.analogVelocityPeriodMs(1000);
             newConfig.signals.analogVoltagePeriodMs(1000);
-            
+            newConfig.signals.outputCurrentPeriodMs(1000);
+            newConfig.signals.externalOrAltEncoderPosition(1000);
+            newConfig.signals.externalOrAltEncoderVelocity(1000);
+                
             if(breakMode){
                 newConfig.idleMode(IdleMode.kBrake);
             } else{
@@ -146,7 +193,7 @@ public class ObsidianCANSparkMax extends SparkBase{
         catch (Exception e){
             System.out.println("Exception in Creating CAN ID :" +  canID);
             System.out.println(e.toString());
-            }
+        }
         }
     /**
      * <p> 5454 CANSparkMaxWrapper
@@ -183,6 +230,9 @@ public class ObsidianCANSparkMax extends SparkBase{
         newConfig.signals.analogPositionPeriodMs(1000);
         newConfig.signals.analogVelocityPeriodMs(1000);
         newConfig.signals.analogVoltagePeriodMs(1000);
+        newConfig.signals.outputCurrentPeriodMs(1000);
+        newConfig.signals.externalOrAltEncoderPosition(1000);
+        newConfig.signals.externalOrAltEncoderVelocity(1000);
 
         if(breakMode){
         newConfig.idleMode(IdleMode.kBrake);

@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Right Start To Center ID 11"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Start To Center ID 11"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FlipIndexerDown"
+                }
+              }
+            ]
           }
         },
         {
@@ -25,7 +38,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -62,7 +75,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {

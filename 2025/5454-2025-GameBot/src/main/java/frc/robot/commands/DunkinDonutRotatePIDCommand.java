@@ -18,7 +18,8 @@ public class DunkinDonutRotatePIDCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Stowing to :" + m_targetPos);
+    //System.out.println("Stowing to :" + m_targetPos);
+    m_dunkin.resetShouldRunPID();
     m_dunkin.toggleLocalPid(m_targetPos);
   }
 
@@ -31,7 +32,7 @@ public class DunkinDonutRotatePIDCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-   
+   m_dunkin.stopAlgeaMotor();
   }
 
   // Returns true when the command should end.

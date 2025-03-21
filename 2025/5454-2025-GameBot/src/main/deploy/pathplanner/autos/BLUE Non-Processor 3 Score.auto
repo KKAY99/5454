@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Right Start to ID 20 Right"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Start to ID 20 Right"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FlipIndexerDown"
+                }
+              }
+            ]
           }
         },
         {
@@ -25,7 +38,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -41,7 +54,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Coral Station To ID 19 Right"
+                  "pathName": "Coral Station To ID 19 Center"
                 }
               }
             ]
@@ -56,13 +69,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ID 19 Right To Coral Station"
+            "pathName": "ID 19 Center To Coral Station"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -72,7 +85,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Coral Station To ID 19 Left"
+                  "pathName": "Coral Station To ID 19 Center"
                 }
               },
               {

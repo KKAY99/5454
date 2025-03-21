@@ -56,7 +56,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private SwerveDrivePoseEstimator m_poseEstimator;
 
-    private double m_gasPedalMult=1;
+    private double m_gasPedalDriveMult=1;
+    private double m_gasPedalRotMult=1;
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -305,15 +306,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         //System.out.println("VELOCITY X SPEED: "+(-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult);
             
-        return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
-            .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
-            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult)
+        return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
+            .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
+            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalRotMult)
         );
     }
 
-    public void setGasPedalMult(double mult){
+    public void setGasPedalMult(double driveMult,double rotMult){
        // System.out.println("GAS PEDAL MULT: "+m_gasPedalMult);
-        m_gasPedalMult=mult;
+        m_gasPedalDriveMult=driveMult;
+        m_gasPedalRotMult=rotMult;
     }
 
     /**

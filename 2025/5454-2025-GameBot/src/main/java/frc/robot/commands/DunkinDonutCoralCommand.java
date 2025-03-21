@@ -44,39 +44,35 @@ public class DunkinDonutCoralCommand extends Command {
   private double m_indexerLowSpeed;
   private double m_targetPos=0;
 
-  private enum States{RUNCORALFORTIME,LOWERELEVATOR,WAITFORELEVATOR,INDEXERLOW,INDEXERHIGH,RUNFORWARD,RUNBACKWARD,END}
+  private enum States{RUNCORAL,RUNCORALFORTIME,LOWERELEVATOR,WAITFORELEVATOR,INDEXERLOW,INDEXERHIGH,RUNFORWARD,RUNBACKWARD,END}
   private States m_currentState = States.INDEXERLOW;
   private States m_startState;
   private Leds m_leds;
-  
 
-
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,Leds led, double coralIntakeSpeed) {
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,double coralScoreSpeed,double runForTime) {
     m_dunkin = dunkin;
-    m_leds=led; 
     m_elevator = null;
     addRequirements(m_dunkin);
-    m_coralIntakeSpeed = coralIntakeSpeed;
-    m_timeToRun=0;
+    m_coralScoreSpeed= coralScoreSpeed;
     m_uselimit = false;
     m_useIndexer = false;
     m_indexerHighSpeed = 0;
     m_indexerLowSpeed = 0;
-    m_startState = States.INDEXERHIGH;
+    m_timeToRun=runForTime;
+    m_startState = States.RUNCORALFORTIME;
   }
 
-  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,Leds led, double coralScoreSpeed,double timeToRun) {
+  public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,Leds led,double coralScoreSpeed,double indexerOuttakeSpeed) {
     m_dunkin = dunkin;
     m_leds=led;
     m_elevator = null;
     addRequirements(m_dunkin);
     m_coralScoreSpeed= coralScoreSpeed;
-    m_timeToRun=timeToRun;
     m_uselimit = false;
     m_useIndexer = false;
     m_indexerHighSpeed = 0;
-    m_indexerLowSpeed = 0;
-    m_startState = States.RUNCORALFORTIME;
+    m_indexerLowSpeed = indexerOuttakeSpeed;
+    m_startState = States.RUNCORAL;
   }
 
   public DunkinDonutCoralCommand(DunkinDonutSubsystem dunkin,Leds led, double coralIntakeSpeed,boolean useLimit, boolean useIndexer, double indexerHighSpeed){
@@ -112,7 +108,9 @@ public class DunkinDonutCoralCommand extends Command {
     m_startTime=Timer.getFPGATimestamp();
     m_currentState = m_startState;
     m_isRunning=true;
-    m_leds.setLedState(LEDStates.INTAKING,false);
+    if(m_timeToRun!=0&&m_leds!=null){
+      m_leds.setLedState(LEDStates.INTAKING,false);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -134,8 +132,13 @@ public class DunkinDonutCoralCommand extends Command {
   public boolean isFinished() {
     boolean returnValue=false;
     switch (m_currentState) {
+      case RUNCORAL:
+        m_dunkin.runCoralMotor(m_coralScoreSpeed);
+        m_dunkin.runIndexer(m_indexerLowSpeed);
+      break;
       case RUNCORALFORTIME:
         m_dunkin.runCoralMotor(m_coralScoreSpeed);
+        m_dunkin.runIndexer(m_coralScoreSpeed);
         if(m_timeToRun!=0&&m_timeToRun+m_startTime<Timer.getFPGATimestamp()){
           m_currentState = States.END;
         }
@@ -202,8 +205,8 @@ public class DunkinDonutCoralCommand extends Command {
 
     Logger.recordOutput("Commands/CoralIntake/IsRunning",m_isRunning);
     Logger.recordOutput("Commands/CoralIntake/CurrentState",m_currentState);
-    System.out.println("Coral Pos: "+m_dunkin.getCoralPos());
-    System.out.println("Target Pos: "+m_targetPos);
+    //System.out.println("Coral Pos: "+m_dunkin.getCoralPos());
+    //System.out.println("Target Pos: "+m_targetPos);
 
     return returnValue;
   }

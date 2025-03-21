@@ -46,7 +46,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private boolean m_shouldRunPID=false;
   
   public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID, int indexerLimitSwitchID) {
-    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, Constants.k80Amp,DunkinDonutConstants.coralP,DunkinDonutConstants.coralI,DunkinDonutConstants.coralD,DunkinDonutConstants.coralMaxAndMin);
+    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, Constants.k40Amp,DunkinDonutConstants.coralP,DunkinDonutConstants.coralI,DunkinDonutConstants.coralD,DunkinDonutConstants.coralMaxAndMin);
     m_algaeMotor1= new ObsidianCANSparkMax(algaeCanID1, MotorType.kBrushless, true);
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,Constants.k40Amp);
     m_coralIndexer = new ObsidianCANSparkMax(coralIndexerID, MotorType.kBrushless, true);
@@ -105,7 +105,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
 
   public boolean isCoralAtIndexerLimit(){
     if(m_indexerLimitSwitch!=null){
-      System.out.println("Indexer limit"+ m_indexerLimitSwitch.get());
+      //System.out.println("Indexer limit"+ m_indexerLimitSwitch.get());
       return m_indexerLimitSwitch.get();
     }else{
       return false;

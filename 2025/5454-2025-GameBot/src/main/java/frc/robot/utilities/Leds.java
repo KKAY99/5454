@@ -110,7 +110,7 @@ public class Leds {
 
     private void setAnimationState(AnimationStates animation){
          m_currentAnimationState = animation;
-         System.out.print("LED State:" + m_currentState + " LED Animation: " + m_currentAnimationState);
+         //System.out.print("LED State:" + m_currentState + " LED Animation: " + m_currentAnimationState);
          switch (m_currentAnimationState) {
             case FIRE:
                 m_toAnimate = new FireAnimation(0.25, 0.1, m_ledCount, 0.5, 0.9);

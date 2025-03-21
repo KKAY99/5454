@@ -73,7 +73,7 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
 
   //DataLogManager.start();
   //DriverStation.startDataLog(DataLogManager.getLog());
-  SignalLogger.setPath("/media/sda1/ctre-logs/");  
+  SignalLogger.setPath("/media/sda2/ctre-logs/");  
   SignalLogger.start();
   URCL.start();
   m_robot = new RobotContainer();

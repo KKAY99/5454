@@ -26,6 +26,7 @@ public final class Constants {
 
   public static final class AutoConstants{
     public static final double redDoSiDoDeadBand=3;
+    public static final double flipIndexerDownTime=1;
   }
 
   public static final class LineupConstants{
@@ -146,28 +147,28 @@ public final class Constants {
     public static final double driveFollowDistanceLeft=-120;
     public static final double driveDeadBand=2;
 
-    public static final double strafePRIGHT=0.3;
+    public static final double strafePRIGHT=0.2;
     public static final double strafeIRIGHT=0;
-    public static final double strafeDRIGHT=0.5;
-    public static final double strafeMaxAndMinRIGHT=0.35;
-    public static final double strafeInputGainRIGHT=1;
+    public static final double strafeDRIGHT=0.2;
+    public static final double strafeMaxAndMinRIGHT=0.70;
+    public static final double strafeInputGainRIGHT=1.5;
 
-    public static final double strafePLEFT=0.3;
+    public static final double strafePLEFT=0.2;
     public static final double strafeILEFT=0;
-    public static final double strafeDLEFT=0.5;
-    public static final double strafeMaxAndMinLEFT=0.35;
-    public static final double strafeInputGainLEFT=1;
+    public static final double strafeDLEFT=0.2;
+    public static final double strafeMaxAndMinLEFT=0.70;
+    public static final double strafeInputGainLEFT=1.5;
 
-    public static final double rotP=0.1;
+    public static final double rotP=0.07;
     public static final double rotI=0;
     public static final double rotD=0.2;
     public static final double rotMaxAndMin=0.5;
     public static final double rotInputGain=60;
 
     public static final double algaeDriveTimeToRun=0.8;
-    public static final double driveTimeToRun=0.5;
+    public static final double driveTimeToRun=0.6;
     public static final double algaeDriveBackSpeed=0.4;
-    public static final double lineUpDriveSpeed=-0.45454;
+    public static final double lineUpDriveSpeed=-0.6;
 
     public static final double driveP=0.15;
     public static final double driveI=0;
@@ -187,6 +188,7 @@ public final class Constants {
     public static final int rotateCanID = 24;
 
     public static final double posDeadband=2;
+    public static final double posClawDeadband=0.2;
 
     public static final double homePosDeadband=0.001;
     public static final double rotateHomePos=0.14;
@@ -198,7 +200,7 @@ public final class Constants {
     public static final double coralMaxAndMin=0.05;
 
     public static final double clearDoorPosOut=3;
-    public static final double clearDoorPosIn=2.5;
+    public static final double clearDoorPosIn=2.75;
     public static final double clearDoorSpeedOut=0.1;
     public static final double clearDoorSpeedIn=-0.1;
 
@@ -208,13 +210,13 @@ public final class Constants {
     public static final double clawPIDMaxAndMin=0.5;
     public static final double clawPIDInputGain=60;
 
-    public static final double outOfLimelightVisionPos=0.165;
+    public static final double outOfLimelightVisionPos=0.14;
     public static final double groundIntakePos=0.33;
     public static final double algaeStowPos=0.30;
     public static final double lollipopGrabPos=0.328;
     public static final double processorScorePos=0.328;
     public static final double noGrabAlgaePos=0.22;
-    public static final double algaeGrabPos=0.37;
+    public static final double algaeGrabPos=0.28;
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
@@ -222,10 +224,14 @@ public final class Constants {
     public static final double groundIntakeSpeed=1;
     public static final double lollipopGrabSpeed=1;
 
+    public static final double keepAlgaeSpeed=0.07;
     public static final double algaeThrowSpeed=-1;
-    public static final double processorScoreSpeed=-0.5;
+    public static final double processorScoreSpeed=-0.7;
     public static final double autoScoreAlgaeSpeed=1;
-    public static final double autoScoreCoralSpeed=0.40;// was 1 on 3/16
+    public static final double autoScoreCoralSpeed=0.20;
+    public static final double autoScoreCoralSpeedL4=0.40;
+    public static final double coralBoxIntakeSpeed=-0.1;
+    public static final double indexerOuttakeSpeed=-0.5;
     public static final double autoCoralTimeToRun=0.3;
     public static final double autoScoreAlgaeRunTime=1;
   }
@@ -253,14 +259,17 @@ public final class Constants {
     public static final double aboveThrowPos=-60;
     public static final double elevAlgeaGrabRetractPos=-20;
     public static final double groundIntakePos=-5;
-    public static final double processorScorePos=-13;
+    public static final double processorScorePos=-10;
     public static final double lollipopGrabPos=-13;
     public static final double l3AlgaePos=-43;
     public static final double l4AlgaePos=-70;
     public static final double l1Pos=-13;
-    public static final double l2Pos=-14; //26
-    public static final double l3Pos=-43;
-    public static final double l4Pos=-89;
+    //-14
+    public static final double l2Pos=-13.6; 
+    //43
+    public static final double l3Pos=-41.4;
+    //-89
+    public static final double l4Pos=-86.9;
 
     public static final double aboveTroughPos=-20;
 

@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 13.910699503311259,
-        "y": 5.107346854304635
+        "x": 13.743625827814569,
+        "y": 5.165459437086092
       },
       "prevControl": {
-        "x": 14.716065743968496,
-        "y": 5.83625590720471
+        "x": 14.548992068471806,
+        "y": 5.894368489986167
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "RED Left Start",
+  "folder": "RED Processor Side Start",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 55.0

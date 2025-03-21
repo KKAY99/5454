@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 16.483,
-        "y": 0.7692755681818187
+        "x": 16.363,
+        "y": 0.839
       },
       "prevControl": {
-        "x": 16.05117505126893,
-        "y": 1.101520301451121
+        "x": 15.93117505126893,
+        "y": 1.1712447332693023
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,7 +45,7 @@
     "rotation": -45.0
   },
   "reversed": false,
-  "folder": "RED Center Start",
+  "folder": "RED Non-Processor Side Start",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -59.99999999999999

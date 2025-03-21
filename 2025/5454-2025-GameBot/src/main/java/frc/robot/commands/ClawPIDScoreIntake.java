@@ -24,6 +24,7 @@ public class ClawPIDScoreIntake extends Command{
     private double m_speed;
     private double m_elevResetPos;
     private double m_clawResetPos;
+    private double m_endSpeed;
 
     private boolean m_isRunning;
 
@@ -43,6 +44,20 @@ public class ClawPIDScoreIntake extends Command{
         m_speed=speed;
         m_clawResetPos=clawResetPos;
         m_elevResetPos=elevResetPos;
+        m_endSpeed=0;
+    }
+
+    public ClawPIDScoreIntake(DunkinDonutSubsystem dunkin,ElevatorSubsystem elevator,double elevDesiredPos,
+    double setPoint,double speed,double elevResetPos,double clawResetPos,double endSpeed){
+        m_dunkin=dunkin;
+        m_elevator=elevator;
+
+        m_setPoint=setPoint;
+        m_elevDesiredPos=elevDesiredPos;
+        m_speed=speed;
+        m_clawResetPos=clawResetPos;
+        m_elevResetPos=elevResetPos;
+        m_endSpeed=endSpeed;
     }
 
     @Override
@@ -54,7 +69,7 @@ public class ClawPIDScoreIntake extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        m_dunkin.stopAlgeaMotor();
+        m_dunkin.runAlgaeMotor(m_endSpeed);
         m_dunkin.resetShouldRunPID();
         m_dunkin.toggleLocalPid(m_clawResetPos);
         m_elevator.set_referance(m_elevResetPos,ClosedLoopSlot.kSlot1);

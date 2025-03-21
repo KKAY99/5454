@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "RED Left Start To ID 9 Left"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RED Left Start To ID 9 Left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FlipIndexerDown"
+                }
+              }
+            ]
           }
         },
         {

@@ -19,14 +19,14 @@ public class GasPedalCommand extends Command{
 
     @Override
     public void end(boolean interrupted){
-        m_swerve.setGasPedalMult(1);
+        m_swerve.setGasPedalMult(1,1);
     }
 
     @Override
     public boolean isFinished(){
-        double gasPedalValue=MathUtil.clamp(Math.abs(m_speed.getAsDouble()-1),0.2,1);
+        double gasPedalValue=MathUtil.clamp(Math.abs(m_speed.getAsDouble()-1),0.1,0.5);
         
-        m_swerve.setGasPedalMult(gasPedalValue);
+        m_swerve.setGasPedalMult(gasPedalValue,0.8);
         return false;
     }
 }

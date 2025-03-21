@@ -29,9 +29,7 @@ import frc.robot.utilities.ObsidianPID;
 import frc.robot.Constants.LedConstants;
 
 public class AutoScoreCommand extends Command{
-
     public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
-
 
     private CommandSwerveDrivetrain m_swerve;
     private ElevatorSubsystem m_elevator;
@@ -57,6 +55,7 @@ public class AutoScoreCommand extends Command{
     private double m_endTime;
     private double m_leftPIDOutput;
     private double m_rightPIDOutput;
+    private double m_suspendDriveSpeed=-0.1;
 
     private Supplier<Boolean> m_isRightLineup;
     private Supplier<Boolean> m_doAlgae;
@@ -182,10 +181,10 @@ public class AutoScoreCommand extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        m_dunkin.stopAlgeaMotor();
         m_dunkin.stopCoralMotor();
         m_dunkin.stop_rotatemotor();
         m_dunkin.resetShouldRunPID();
+        m_swerve.drive(0,0,0);
         m_LEDS.setLedState(LEDStates.TELEOP,false);
         m_isRunning=false;
     }
@@ -202,36 +201,43 @@ public class AutoScoreCommand extends Command{
         switch(m_currentState){
         case ISMANUALORAUTO:     
             if(m_isManual){
-                m_currentState=States.ELEVATOR;
+                m_dunkin.resetShouldRunPID();
+                m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);
+                m_currentState=States.WAITFORCLAWROTATE;
             }else{
+                m_dunkin.resetShouldRunPID();
+                m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);
                 m_currentState=States.PRESCOREELEV;
                 m_LEDS.setLedState(LEDStates.AUTOSCORING,true);
             }
         break;
         case PRESCOREELEV:
-
             m_elevator.set_referance(m_elevatorIPos);
-            m_dunkin.resetShouldRunPID();
-            m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);
 
             m_currentState=States.WAITFORCLAWROTATE;
         break;
         case WAITFORCLAWROTATE:
             double clawABSPos=m_dunkin.getAbsoluteEncoderPos();
-            if(clawABSPos+DunkinDonutConstants.posDeadband>DunkinDonutConstants.outOfLimelightVisionPos&&clawABSPos-DunkinDonutConstants.posDeadband<DunkinDonutConstants.outOfLimelightVisionPos){
+            if(clawABSPos+DunkinDonutConstants.posClawDeadband>DunkinDonutConstants.outOfLimelightVisionPos&&clawABSPos-DunkinDonutConstants.posClawDeadband<DunkinDonutConstants.outOfLimelightVisionPos){
                 m_startTime=Timer.getFPGATimestamp();
                 m_currentState=States.DRIVEFORWARDS;
             }
         break;
         case DRIVEFORWARDS:
             m_endTime=m_startTime+LimeLightValues.driveTimeToRun;
-            System.out.println("Starting Time" + m_startTime + "End Time " + m_endTime );
+            //System.out.println("Starting Time" + m_startTime + "End Time " + m_endTime );
             if(Timer.getFPGATimestamp()>m_endTime){
                 m_swerve.drive(0,0,0);
-                System.out.println("Ending Time" + Timer.getFPGATimestamp());
-                m_currentState=States.CHECKFORTARGET;
+                //System.out.println("Ending Time" + Timer.getFPGATimestamp());
+                if(m_isManual){
+                    m_currentState=States.ELEVATOR;
+                    m_swerve.drive(m_suspendDriveSpeed,0,0);
+                }else{
+                    m_currentState=States.CHECKFORTARGET;
+                    m_swerve.drive(m_suspendDriveSpeed,0,0);
+                }
             }else{
-                System.out.println("Driving Forward");
+                //System.out.println("Driving Forward");
                 m_swerve.drive(LimeLightValues.lineUpDriveSpeed,0,0);
             }
         break;
@@ -265,9 +271,9 @@ public class AutoScoreCommand extends Command{
                 m_swerve.drive(0,0,0);
                 m_currentState=States.ELEVATOR;
             }else{
-                strafe=(m_isRightLineup.get())?-strafe:-0.3;
+                strafe=(m_isRightLineup.get())?-strafe:-0.6;
                 strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
-                m_swerve.drive(0,strafe*strafeFlipValue,0);
+                m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
             }
 
             if(m_rightLimelight.isAnyTargetAvailable()&&!m_isRightLineup.get()){
@@ -289,13 +295,12 @@ public class AutoScoreCommand extends Command{
                 m_swerve.drive(0,0,0);
                 m_currentState=States.ELEVATOR;
             }else{
-                strafe=(!m_isRightLineup.get())?strafe:0.3;
+                strafe=(!m_isRightLineup.get())?strafe:0.6;
                 strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
-                m_swerve.drive(0,strafe*strafeFlipValue,0);
+                m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
             }
 
             if(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup.get()){
-                m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
                 m_currentState=States.LEFTLINEUP;
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
                 m_currentState=States.RETRACT;
@@ -324,7 +329,11 @@ public class AutoScoreCommand extends Command{
             }
         break;
         case CORAL:
-            m_dunkin.runCoralMotor(DunkinDonutConstants.autoScoreCoralSpeed);
+            if(m_scoreLevel.get()==ElevatorScoreLevel.L4){
+                m_dunkin.runCoralMotor(DunkinDonutConstants.autoScoreCoralSpeedL4);
+            }else{
+                m_dunkin.runCoralMotor(DunkinDonutConstants.autoScoreCoralSpeed);
+            }
 
             if(DunkinDonutConstants.autoCoralTimeToRun+m_startTime<Timer.getFPGATimestamp()){
 
@@ -365,6 +374,7 @@ public class AutoScoreCommand extends Command{
                 m_swerve.drive(0,0,0);
                 m_currentState=States.RETRACT;
             }else{
+                m_dunkin.runAlgaeMotor(DunkinDonutConstants.keepAlgaeSpeed);
                 m_swerve.drive(LimeLightValues.algaeDriveBackSpeed,0,0);
             }
         break;
