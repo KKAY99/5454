@@ -127,6 +127,7 @@ public class AutoScoreCommand extends Command{
     @Override
     public void initialize(){
         m_currentState=States.ISMANUALORAUTO;
+        m_dunkin.runCoralMotor(0);
         m_shouldRunAlgae=false;
         m_startedCoral=false;
         m_isRunning=true;
@@ -207,20 +208,20 @@ public class AutoScoreCommand extends Command{
             }else{
                 m_dunkin.resetShouldRunPID();
                 m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);
-                m_currentState=States.PRESCOREELEV;
+                m_currentState=States.WAITFORCLAWROTATE;
                 m_LEDS.setLedState(LEDStates.AUTOSCORING,true);
             }
         break;
         case PRESCOREELEV:
             m_elevator.set_referance(m_elevatorIPos);
 
-            m_currentState=States.WAITFORCLAWROTATE;
+            m_currentState=States.DRIVEFORWARDS;
         break;
         case WAITFORCLAWROTATE:
             double clawABSPos=m_dunkin.getAbsoluteEncoderPos();
             if(clawABSPos+DunkinDonutConstants.posClawDeadband>DunkinDonutConstants.outOfLimelightVisionPos&&clawABSPos-DunkinDonutConstants.posClawDeadband<DunkinDonutConstants.outOfLimelightVisionPos){
                 m_startTime=Timer.getFPGATimestamp();
-                m_currentState=States.DRIVEFORWARDS;
+                m_currentState=States.PRESCOREELEV;
             }
         break;
         case DRIVEFORWARDS:
@@ -336,7 +337,6 @@ public class AutoScoreCommand extends Command{
             }
 
             if(DunkinDonutConstants.autoCoralTimeToRun+m_startTime<Timer.getFPGATimestamp()){
-
                 m_dunkin.stopCoralMotor();
                 m_currentState=m_shouldRunAlgae?States.ALGAEGRAB:States.RETRACT;
             }

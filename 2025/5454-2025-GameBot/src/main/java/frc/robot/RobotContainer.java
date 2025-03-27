@@ -135,7 +135,7 @@ public class RobotContainer {
     Trigger operatorRightXJoystick=new Trigger(()->Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
     operatorRightXJoystick.whileTrue(DunkinRotateCommand);
 
-    ClawPIDScoreIntake clawProcesserScore=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.processorScorePos,DunkinDonutConstants.processorScorePos,DunkinDonutConstants.processorScoreSpeed,
+    ClawPIDScoreIntake clawProcesserScore=new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.algaeStowPos,DunkinDonutConstants.processorScoreSpeed,
                                                                 ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.rotateHomePos);
     Trigger processorRightTrigger=new Trigger(()->Math.abs(m_xBoxOperator.getRightTriggerAxis())>ButtonBindings.joystickDeadband);
     processorRightTrigger.whileTrue(clawProcesserScore);
@@ -155,6 +155,9 @@ public class RobotContainer {
     DunkinDonutCoralCommand DunkinCoralCommand = new DunkinDonutCoralCommand(m_dunkinDonut,m_LEDS,DunkinDonutConstants.coralBoxIntakeSpeed,DunkinDonutConstants.indexerOuttakeSpeed);
     JoystickButton operatorDunkinCoralButton = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.dunkinCoralOutakeButton);
     operatorDunkinCoralButton.whileTrue(DunkinCoralCommand);
+
+    DunkinDonutCoralCommand driverShootCoral = new DunkinDonutCoralCommand(m_dunkinDonut,m_LEDS,IntakeConstants.coralIntakeSpeed,IntakeConstants.indexerIntakeSpeed);
+    m_xBoxDriver.y().whileTrue(driverShootCoral);
     
     Command stowCommand = new DunkinDonutRotatePIDCommand(m_dunkinDonut,DunkinDonutConstants.rotateHomePos);
     JoystickButton operatorStowCommand = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.operatorStow);

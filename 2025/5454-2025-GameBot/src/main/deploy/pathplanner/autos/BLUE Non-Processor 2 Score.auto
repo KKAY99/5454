@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Right Start to ID 20 Right"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Start to ID 20 Right"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FlipIndexerDown"
+                }
+              }
+            ]
           }
         },
         {
@@ -23,21 +36,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "ToggleIntake"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ToggleIntake"
-                }
-              },
               {
                 "type": "path",
                 "data": {

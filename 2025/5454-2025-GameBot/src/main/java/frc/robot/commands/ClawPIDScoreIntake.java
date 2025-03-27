@@ -72,7 +72,7 @@ public class ClawPIDScoreIntake extends Command{
         m_dunkin.runAlgaeMotor(m_endSpeed);
         m_dunkin.resetShouldRunPID();
         m_dunkin.toggleLocalPid(m_clawResetPos);
-        m_elevator.set_referance(m_elevResetPos,ClosedLoopSlot.kSlot1);
+        m_elevator.set_referance(m_elevResetPos,ClosedLoopSlot.kSlot0);
         m_isRunning=false;
     }
 
@@ -82,7 +82,7 @@ public class ClawPIDScoreIntake extends Command{
 
         switch(m_currentState){
         case SETELEVPOS:
-            m_elevator.set_referance(m_elevDesiredPos,ClosedLoopSlot.kSlot1);
+            m_elevator.set_referance(m_elevDesiredPos,ClosedLoopSlot.kSlot0);
 
             m_currentState=States.WAITFORELEVPOS;
         break;

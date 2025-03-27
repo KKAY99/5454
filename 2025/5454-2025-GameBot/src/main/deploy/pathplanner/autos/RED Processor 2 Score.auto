@@ -36,6 +36,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ToggleIntake"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -44,14 +50,14 @@
                 "data": {
                   "pathName": "Coral Station To ID 8 Left"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ToggleIntake"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoScoreLeftL4"
           }
         }
       ]

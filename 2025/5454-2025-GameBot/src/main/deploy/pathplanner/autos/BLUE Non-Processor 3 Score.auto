@@ -36,9 +36,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "ToggleIntake"
           }
         },
         {
@@ -46,11 +46,36 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "ToggleIntake"
+                  "pathName": "Coral Station To ID 19 Center"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoScoreLeftL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ID 19 Center To Coral Station"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ToggleIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
                 "type": "path",
                 "data": {
@@ -64,43 +89,6 @@
           "type": "named",
           "data": {
             "name": "AutoScoreRightL4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ID 19 Center To Coral Station"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Coral Station To ID 19 Center"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ToggleIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoScoreLeftL4"
           }
         }
       ]

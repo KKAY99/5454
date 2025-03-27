@@ -5,9 +5,16 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Right Start To Center ID 11"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Start To Center ID 11"
+                }
+              }
+            ]
           }
         },
         {
@@ -23,21 +30,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "ToggleIntake"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ToggleIntake"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -51,12 +52,6 @@
           "type": "named",
           "data": {
             "name": "AutoScoreLeftL4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ID 6 To Coral Station"
           }
         }
       ]

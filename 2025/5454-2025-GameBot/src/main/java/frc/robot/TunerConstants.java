@@ -80,8 +80,8 @@ public class TunerConstants {
 
     private static final int kPigeonId = 2;
 
-    public static final double kMaxSpeed=6;
-    public static final double kMaxAngularSpeed=8;
+    public static final double kMaxSpeed=5;
+    public static final double kMaxAngularSpeed=6.5;
     public static final double kWheelDiameter=4;
 
     private static final Slot0Configs steerGains = new Slot0Configs()
