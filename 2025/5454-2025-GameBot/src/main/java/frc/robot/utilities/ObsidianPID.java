@@ -32,6 +32,15 @@ public class ObsidianPID{
         m_inputGain=inputGain;
     }
 
+    public void setAllValues(double p,double i,double d,double max,double min,double inputGain){
+        m_p=p;
+        m_i=i;
+        m_d=d;
+        m_max=max;
+        m_min=min;
+        m_inputGain=inputGain;
+    }
+
     public void togglePID(){
         m_toggle=m_toggle?false:true;
         m_prevTimeStamp=Timer.getFPGATimestamp();

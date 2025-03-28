@@ -47,6 +47,12 @@ public class AutoScoreCommand extends Command{
     private Pose2d m_odomTarget;
 
     public Supplier<Double> m_dashBoardPos;
+    private Supplier<Double> m_p;
+    private Supplier<Double> m_i;
+    private Supplier<Double> m_d;
+    private Supplier<Double> m_max;
+    private Supplier<Double> m_min;
+    private Supplier<Double> m_inputGain;
     private double m_elevatorIPos;
     private double m_elevatorFPos;
     private double m_elevatorAlgaePos;
@@ -105,8 +111,38 @@ public class AutoScoreCommand extends Command{
         m_strafePIDLEFT=new ObsidianPID(LimeLightValues.strafePLEFT,LimeLightValues.strafeILEFT,LimeLightValues.strafeDLEFT,LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeMaxAndMinLEFT);
         m_strafePIDLEFT.setInputGain(LimeLightValues.strafeInputGainLEFT);
 
-        m_drivePID=new ObsidianPID(LimeLightValues.driveP,LimeLightValues.driveI,LimeLightValues.driveD,LimeLightValues.driveMaxAndMin,-LimeLightValues.driveMaxAndMin);
-        m_drivePID.setInputGain(LimeLightValues.driveInputGain);
+        addRequirements(m_swerve,m_elevator,m_dunkin);
+    }
+
+    public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scorelevel,
+                            Limelight leftLimelight,Limelight rightLimelight,Supplier<Boolean> isRightLineup,Supplier<Boolean> doAlgae,
+                            Supplier<Double> p,Supplier<Double> i,Supplier<Double> d,Supplier<Double> max,Supplier<Double> min,Supplier<Double> inputGain){
+        m_swerve=swerve;
+        m_elevator=elevator;
+        m_dunkin=dunkin;
+
+        m_leftLimelight=leftLimelight;
+        m_rightLimelight=rightLimelight;
+
+        m_scoreLevel=scorelevel;
+        m_isRightLineup=isRightLineup;
+        m_doAlgae=doAlgae;
+        m_isManual=false;
+
+        m_leftLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
+        m_rightLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
+
+        m_strafePIDRIGHT=new ObsidianPID(LimeLightValues.strafePRIGHT,LimeLightValues.strafeIRIGHT,LimeLightValues.strafeDRIGHT,LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeMaxAndMinRIGHT);
+        m_strafePIDRIGHT.setInputGain(LimeLightValues.strafeInputGainRIGHT);
+        m_strafePIDLEFT=new ObsidianPID(LimeLightValues.strafePLEFT,LimeLightValues.strafeILEFT,LimeLightValues.strafeDLEFT,LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeMaxAndMinLEFT);
+        m_strafePIDLEFT.setInputGain(LimeLightValues.strafeInputGainLEFT);
+
+        m_p=p;
+        m_i=i;
+        m_d=d;
+        m_max=max;
+        m_min=min;
+        m_inputGain=inputGain;
 
         addRequirements(m_swerve,m_elevator,m_dunkin);
     }
@@ -131,6 +167,11 @@ public class AutoScoreCommand extends Command{
         m_shouldRunAlgae=false;
         m_startedCoral=false;
         m_isRunning=true;
+        
+        if(m_p.get()!=0&&m_p.get()!=null){
+            m_strafePIDLEFT.setAllValues(m_p.get(),m_i.get(),m_d.get(),m_max.get(),m_min.get(),m_inputGain.get());
+            m_strafePIDRIGHT.setAllValues(m_p.get(),m_i.get(),m_d.get(),m_max.get(),m_min.get(),m_inputGain.get());
+        }
 
         switch(m_scoreLevel.get()){
             case L1:
@@ -270,6 +311,7 @@ public class AutoScoreCommand extends Command{
 
             if(x<LimeLightValues.leftLineupXDeadband&&m_isRightLineup.get()&&x!=0){
                 m_swerve.drive(0,0,0);
+                m_swerve.brake();
                 m_currentState=States.ELEVATOR;
             }else{
                 strafe=(m_isRightLineup.get())?-strafe:-0.6;
@@ -294,6 +336,7 @@ public class AutoScoreCommand extends Command{
 
             if(x<LimeLightValues.rightLineupXDeadband&&!m_isRightLineup.get()){
                 m_swerve.drive(0,0,0);
+                m_swerve.brake();
                 m_currentState=States.ELEVATOR;
             }else{
                 strafe=(!m_isRightLineup.get())?strafe:0.6;

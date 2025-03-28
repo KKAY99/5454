@@ -7,6 +7,7 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -283,6 +284,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         this.setControl(newRequest);
     }
+
+    public void brake(){
+        SwerveRequest.SwerveDriveBrake newRequest=new SwerveDriveBrake();
+
+        this.setControl(newRequest);
+    }
+
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
      *
