@@ -183,7 +183,7 @@ public final class Constants {
     public static final int limitSwitchDIO = 3;
     public static final int canCoderID = 59;
     public static final int coralCanID = 23;
-    public static final int coralEndCanID = 0;
+    public static final int coralEndCanID = 29;
     public static final int algaeCanID1 = 25;
     public static final int algaeCanID2 = 60; //place holder ID
     public static final int rotateCanID = 24;

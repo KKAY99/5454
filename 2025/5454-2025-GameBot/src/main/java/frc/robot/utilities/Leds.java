@@ -5,7 +5,6 @@
 package frc.robot.utilities;
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
@@ -36,7 +35,7 @@ public class Leds {
        m_CANdle.configLEDType(LEDStripType.GRB);
        m_CANdle.configBrightnessScalar(.25);
     }
-    
+
     public LEDStates getLedState(){
         return m_currentState;
     }

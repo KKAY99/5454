@@ -161,7 +161,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   }
 
   public void stopCoralShootMotor(){
-    m_coralIndexer.stopMotor();
+    m_coralMotor.stopMotor();
     m_coralEndMotor.stopMotor();
     m_coralSpeed = 0;
   }
@@ -207,6 +207,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
       var=m_algaeMotor1.getDeviceId();
       var=m_coralMotor.getDeviceId();
       var=m_rotateMotor.getDeviceId();
+      var=m_coralEndMotor.getDeviceId();
     }catch(Exception e){
       returnValue=false;
     }
