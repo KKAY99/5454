@@ -23,6 +23,7 @@ import com.revrobotics.spark.*;
 public class DunkinDonutSubsystem extends SubsystemBase {
   private CANcoder m_CANcoder;
   private ObsidianCANSparkMax m_coralMotor;
+  private ObsidianCANSparkMax m_coralEndMotor;
   private ObsidianCANSparkMax m_algaeMotor1;
   private ObsidianCANSparkMax m_rotateMotor;
   private ObsidianCANSparkMax m_coralIndexer;
@@ -45,8 +46,9 @@ public class DunkinDonutSubsystem extends SubsystemBase {
   private boolean m_algaeToggle=false;
   private boolean m_shouldRunPID=false;
   
-  public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID, int indexerLimitSwitchID) {
-    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, Constants.k40Amp,DunkinDonutConstants.coralP,DunkinDonutConstants.coralI,DunkinDonutConstants.coralD,DunkinDonutConstants.coralMaxAndMin);
+  public DunkinDonutSubsystem(int coralCanID,int algaeCanID1,int rotateCanID,int canCoderID, int limitSwitch, int coralIndexerID, int indexerLimitSwitchID, int coralEndCanID) {
+    m_coralMotor = new ObsidianCANSparkMax(coralCanID, MotorType.kBrushless, true, Constants.k40Amp);
+    m_coralEndMotor = new ObsidianCANSparkMax(coralEndCanID, MotorType.kBrushless,true, Constants.k40Amp);
     m_algaeMotor1= new ObsidianCANSparkMax(algaeCanID1, MotorType.kBrushless, true);
     m_rotateMotor = new ObsidianCANSparkMax(rotateCanID, MotorType.kBrushless, true,Constants.k40Amp);
     m_coralIndexer = new ObsidianCANSparkMax(coralIndexerID, MotorType.kBrushless, true);
@@ -138,18 +140,30 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_rotateMotor.stopMotor();
   }
   
-  public void runCoralMotor(double speed){
+  public void runCoralIntakeMotor(double speed){
     m_loopController.setReference(0,ControlType.kVelocity);
     m_coralSpeed=speed;
     m_coralMotor.set(speed); 
+  }
+
+  public void runCoralShootMotor(double speed){
+    m_coralSpeed=speed;
+    m_coralEndMotor.set(speed);
+    m_coralMotor.set(speed);
   }
   public void runAlgaeMotor(double speed){
     m_algaeSpeed=speed;
     m_algaeMotor1.set(speed);
   }
-  public void stopCoralMotor(){
+  public void stopCoralIntakeMotor(){
     m_coralMotor.stopMotor();
     m_coralSpeed=0;
+  }
+
+  public void stopCoralShootMotor(){
+    m_coralIndexer.stopMotor();
+    m_coralEndMotor.stopMotor();
+    m_coralSpeed = 0;
   }
 
   public void stopAlgeaMotor(){

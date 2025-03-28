@@ -123,7 +123,7 @@ public class DunkinDonutCoralCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_dunkin.runCoralMotor(IntakeConstants.coralStallSpeed);
+    m_dunkin.runCoralIntakeMotor(IntakeConstants.coralStallSpeed);
     m_dunkin.stopIndexer();
     m_isRunning=false;
   }
@@ -134,7 +134,7 @@ public class DunkinDonutCoralCommand extends Command {
     boolean returnValue=false;
     switch (m_currentState) {
       case RUNCORAL:
-        m_dunkin.runCoralMotor(m_coralScoreSpeed);
+        m_dunkin.runCoralIntakeMotor(m_coralScoreSpeed);
         m_dunkin.runIndexer(m_indexerLowSpeed);
       break;
       case RUNCORALFORTIME:
@@ -166,7 +166,7 @@ public class DunkinDonutCoralCommand extends Command {
         }
       break;
       case INDEXERHIGH:
-        m_dunkin.runCoralMotor(m_coralIntakeSpeed);
+        m_dunkin.runCoralIntakeMotor(m_coralIntakeSpeed);
         m_dunkin.runIndexer(m_indexerHighSpeed);
 
         if(m_dunkin.isCoralAtBoxLimit()){
@@ -175,26 +175,26 @@ public class DunkinDonutCoralCommand extends Command {
          // }else{
           m_leds.setLedState(LEDStates.HASCORAL,false);
          // }
-          m_dunkin.stopCoralMotor();
+          m_dunkin.stopCoralIntakeMotor();
           m_dunkin.stopIndexer();
           m_targetPos=m_dunkin.getCoralPos()+DunkinDonutConstants.clearDoorPosOut;
           m_currentState = States.RUNFORWARD;
         }
       break;
       case RUNFORWARD:
-        m_dunkin.runCoralMotor(DunkinDonutConstants.clearDoorSpeedOut);
+        m_dunkin.runCoralIntakeMotor(DunkinDonutConstants.clearDoorSpeedOut);
         //KK 3/21 remove deadband
         if(m_dunkin.getCoralPos()+DunkinDonutConstants.coralPosDeadband>m_targetPos){
-            m_dunkin.stopCoralMotor();
+            m_dunkin.stopCoralIntakeMotor();
             m_currentState=States.END;
         }
       break;
       case RUNBACKWARD:
-        m_dunkin.runCoralMotor(DunkinDonutConstants.clearDoorSpeedIn);
+        m_dunkin.runCoralIntakeMotor(DunkinDonutConstants.clearDoorSpeedIn);
 
         if(m_dunkin.getCoralPos()+DunkinDonutConstants.coralPosDeadband>m_targetPos&&
             m_dunkin.getCoralPos()-DunkinDonutConstants.coralPosDeadband<m_targetPos){
-            m_dunkin.stopCoralMotor();
+            m_dunkin.stopCoralIntakeMotor();
             m_currentState=States.END;
         }
       break;

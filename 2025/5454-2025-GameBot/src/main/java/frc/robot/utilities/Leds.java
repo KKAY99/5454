@@ -36,9 +36,11 @@ public class Leds {
        m_CANdle.configLEDType(LEDStripType.GRB);
        m_CANdle.configBrightnessScalar(.25);
     }
+    
     public LEDStates getLedState(){
         return m_currentState;
     }
+
     public void setLedState(LEDStates state, boolean AlwaysUpdate){
         //only update LEDs if state change or AlwaysUpdate is true
         if(m_currentState != state || AlwaysUpdate ){
@@ -78,8 +80,6 @@ public class Leds {
                 case DISABLEDSEETARGET:
                     setAnimationState(AnimationStates.PURPLELARSON);
                 break;
-                     
-                
             }
         }
     }
@@ -130,23 +130,16 @@ public class Leds {
             case GREENFLASHING:
                 m_toAnimate = new StrobeAnimation(0,255,0,0,0.25,m_ledCount);
                 break;
-
             case PURPLEFLASHING:
                 m_toAnimate = new StrobeAnimation(128,0,128,0,0.25,m_ledCount);
                 break;
-
             case NULL:
                 m_toAnimate = null;
             break;
-   
         }if (m_toAnimate != null){
             m_CANdle.animate(m_toAnimate);
         }else{
             m_CANdle.animate(m_toAnimate);
-        }
-            
+        }       
     }
-
-
-    
 }

@@ -53,7 +53,7 @@ public class RobotContainer {
   //DunkinSubsystem
   private DunkinDonutSubsystem m_dunkinDonut = new DunkinDonutSubsystem(DunkinDonutConstants.coralCanID,DunkinDonutConstants.algaeCanID1,DunkinDonutConstants.rotateCanID,
                                                                         DunkinDonutConstants.canCoderID,DunkinDonutConstants.limitSwitchDIO,DunkinDonutConstants.coralIndexerID,
-                                                                        DunkinDonutConstants.indexerLimitSwitchDIO);
+                                                                        DunkinDonutConstants.indexerLimitSwitchDIO, DunkinDonutConstants.coralEndCanID);
   
   //ElevatorSubsystem
   private ElevatorSubsystem m_elevator = new ElevatorSubsystem(ElevatorConstants.elevatorCanID,ElevatorConstants.canAndColorID);

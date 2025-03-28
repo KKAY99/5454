@@ -127,7 +127,7 @@ public class AutoScoreCommand extends Command{
     @Override
     public void initialize(){
         m_currentState=States.ISMANUALORAUTO;
-        m_dunkin.runCoralMotor(0);
+        m_dunkin.runCoralShootMotor(0);
         m_shouldRunAlgae=false;
         m_startedCoral=false;
         m_isRunning=true;
@@ -182,7 +182,7 @@ public class AutoScoreCommand extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        m_dunkin.stopCoralMotor();
+        m_dunkin.stopCoralShootMotor();
         m_dunkin.stop_rotatemotor();
         m_dunkin.resetShouldRunPID();
         m_swerve.drive(0,0,0);
@@ -331,13 +331,13 @@ public class AutoScoreCommand extends Command{
         break;
         case CORAL:
             if(m_scoreLevel.get()==ElevatorScoreLevel.L4){
-                m_dunkin.runCoralMotor(DunkinDonutConstants.autoScoreCoralSpeedL4);
+                m_dunkin.runCoralShootMotor(DunkinDonutConstants.autoScoreCoralSpeedL4);
             }else{
-                m_dunkin.runCoralMotor(DunkinDonutConstants.autoScoreCoralSpeed);
+                m_dunkin.runCoralShootMotor(DunkinDonutConstants.autoScoreCoralSpeed);
             }
 
             if(DunkinDonutConstants.autoCoralTimeToRun+m_startTime<Timer.getFPGATimestamp()){
-                m_dunkin.stopCoralMotor();
+                m_dunkin.stopCoralShootMotor();
                 m_currentState=m_shouldRunAlgae?States.ALGAEGRAB:States.RETRACT;
             }
 
