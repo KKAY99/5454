@@ -79,10 +79,6 @@ public class RobotContainer {
   public double m_P;
   public double m_I;
   public double m_D;
-  public double m_max;
-  public double m_min;
-  public double m_inputGain;
-
   public double m_elevatorPos;
 
   public boolean hasHomed=false;
@@ -176,12 +172,7 @@ public class RobotContainer {
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreManualButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
 
-    /*AutoScoreCommand seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
-    JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
-    operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
-
-    AutoScoreCommand seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae,
-    ()->m_P,()->m_I,()->m_D,()->m_max,()->m_min,()->m_inputGain);
+    AutoScoreCommand seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);
   }
@@ -234,12 +225,6 @@ public class RobotContainer {
       //SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
       SmartDashboard.putNumber("LEFT LIMELIGHT DISTANCE",m_leftLimelight.getDistance());
       SmartDashboard.putNumber("RIGHT LIMELIGHT DISTANCE",m_rightLimelight.getDistance());
-      SmartDashboard.putNumber("Proportional",m_P);
-      SmartDashboard.putNumber("Integral",m_I);
-      SmartDashboard.putNumber("Derivative",m_D);
-      SmartDashboard.putNumber("PIDMax",m_max);
-      SmartDashboard.putNumber("PIDMin",m_min);
-      SmartDashboard.putNumber("Input Gain",m_inputGain);
     }catch(Exception e){}
 
   }
@@ -259,15 +244,6 @@ public class RobotContainer {
 
   public BooleanSupplier checkCan(){
     return (()->(m_swerve.checkCANConnections()&&m_dunkinDonut.checkCANConnections()&&m_elevator.checkCANConnections()));//m_climb.checkCANConnections()));
-  }
-
-  public void getPIDValues(){
-    SmartDashboard.getNumber("Proportional",0);
-    SmartDashboard.getNumber("Integral",0);
-    SmartDashboard.getNumber("Derivative",0);
-    SmartDashboard.getNumber("PIDMax",0);
-    SmartDashboard.getNumber("PIDMin",0);
-    SmartDashboard.getNumber("Input Gain",0);
   }
 
   public void DisabledInit(){
@@ -325,6 +301,7 @@ public class RobotContainer {
     double m_startTime = 0;
     double m_runTime = 3;
     double x = 0;
+    double rawX = 0;
     
     try {
       //overwrite has has coral state using module level algea
@@ -334,14 +311,28 @@ public class RobotContainer {
 
       if(m_isRightLineup){
         if(m_leftLimelight.isAnyTargetAvailable()){
+          rawX=m_leftLimelight.getX();
           x=Math.abs(m_leftLimelight.getX());
+          if(rawX < 0){
+            m_LEDS.setLedState(LEDStates.GORIGHT, false);
+          }
+          if(rawX > 0){
+            m_LEDS.setLedState(LEDStates.GOLEFT, false);
+          }
           if(x<LimeLightValues.leftLineupXDeadband){
             m_LEDS.setLedState(LEDStates.LINEDUP,false);
           }
         }
       }else{
         if(m_rightLimelight.isAnyTargetAvailable()){
+          rawX=m_rightLimelight.getX();
           x=Math.abs(m_rightLimelight.getX());
+          if(rawX < 0){
+            m_LEDS.setLedState(LEDStates.GORIGHT, false);
+          }
+          if(rawX > 0){
+            m_LEDS.setLedState(LEDStates.GOLEFT, false);
+          }
           if(x<LimeLightValues.rightLineupXDeadband){
             m_LEDS.setLedState(LEDStates.LINEDUP,false);
           }
@@ -394,7 +385,7 @@ public class RobotContainer {
         if (m_startTime + m_runTime < Timer.getTimestamp()){
         //  m_LEDS.activateLEDS();
         }else{
-        //    m_LEDS.setLedState(LEDStates.ENABLED);
+          m_LEDS.setLedState(LEDStates.ENABLED, false);
 
         }
       break;
@@ -438,10 +429,11 @@ public class RobotContainer {
     //System.out.println("LED Update Error");
     }
   }
-
   public void TeleopPeriodic(){
     refreshSmartDashboard();
     updateLEDs();
+
+
    
     if(m_rightLimelight.isAnyTargetAvailable()){
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
@@ -463,7 +455,6 @@ public class RobotContainer {
     setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getBButtonPressed());
     setDoesDoAlgae(()->m_xBoxOperator.getStartButtonPressed());
     refreshSmartDashboard();
-    getPIDValues();
   }
 
   public void homeRobot(){
