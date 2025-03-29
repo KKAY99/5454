@@ -215,13 +215,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void configAutoBuilder(){
         RobotConfig robotConfig=null;
-
         try{
             robotConfig = RobotConfig.fromGUISettings();
         }catch(Exception e){
             System.out.println("RobotConfig Error, Error: "+e);
         }
-        
         try{
             AutoBuilder.configure(
                 this::getPose2d,

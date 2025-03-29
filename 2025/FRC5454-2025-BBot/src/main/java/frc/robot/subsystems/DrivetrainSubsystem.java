@@ -31,9 +31,11 @@ import frc.robot.common.drivers.SwerveModule;
 import frc.robot.common.math.Vector2;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-        
+
     private static final double TRACKWIDTH = 25;
     private static final double WHEELBASE = 31;
+    private double m_gasPedalDriveMult=1;
+    private double m_gasPedalRotMult=1;
 
   /*   private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(100);//(164.53+180); //30.6 last 6.5 - was 161.8
     private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(100);
@@ -175,11 +177,10 @@ private boolean m_autoControl = false;
                 robotConfig = RobotConfig.fromGUISettings();
         } catch (Exception e) {
         // Handle exception as needed
-                e.printStackTrace();
-        
+                System.out.println("RobotConfig Error, Error: "+e);
         } try{
                 AutoBuilder.configure(
-                        this::getPose2d, //get pose, reset pose, get speed, and chassis speed and drive controller need the proper config
+                        this::getPose2d, //pose and chassis speed should work now
                         this::resetpose,
                         this::getChassisSpeeds,
                         this::setChassisSpeeds,
@@ -196,7 +197,7 @@ private boolean m_autoControl = false;
                         this
                     );
         } catch(Exception e){
-                e.printStackTrace();
+                System.out.println("AutoBuilder was not configured, Error: "+e);
         }
 
     }
@@ -301,6 +302,12 @@ private boolean m_autoControl = false;
                 periodic();                
         }
 }
+
+public void setGasPedalMult(double driveMult, double rotMult){
+        m_gasPedalDriveMult = driveMult;
+        m_gasPedalRotMult = rotMult;
+}
+
 public void stop(){
         drive(new Translation2d(0,0), 0, true);
         periodic();       
@@ -380,10 +387,10 @@ public void spin (double direction,double speed)
         rotation *= 2.0 / Math.hypot(WHEELBASE, TRACKWIDTH);
         ChassisSpeeds speeds;
         if (fieldOriented) {
-            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation,
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX()*m_gasPedalDriveMult, translation.getY()*m_gasPedalDriveMult, rotation*m_gasPedalRotMult,
                     Rotation2d.fromDegrees(m_gyroscope.getAngle().toDegrees()));
         } else {
-            speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
+            speeds = new ChassisSpeeds(translation.getX()*m_gasPedalDriveMult, translation.getY()*m_gasPedalDriveMult, rotation*m_gasPedalRotMult);
         }
  
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
