@@ -32,6 +32,8 @@ public class Limelight {
     private DoubleSubscriber ta;
     //Can See a Target
     private DoubleSubscriber tv;
+    //Limelight Heartbeat
+    private DoubleSubscriber hb;
     //Calculated RobotPose Megatag1
     private DoubleArraySubscriber botpose_wpiblue;
     //Calculated RobotPose Megatag2
@@ -75,6 +77,7 @@ public class Limelight {
         ty=llTable.getDoubleTopic("ty").subscribe(0);
         ta=llTable.getDoubleTopic("ta").subscribe(0);
         tv=llTable.getDoubleTopic("tv").subscribe(0);
+        hb=llTable.getDoubleTopic("hb").subscribe(0);
         rawfiducials=llTable.getDoubleArrayTopic("rawfiducials").subscribe(new double[] {});
         priorityid=llTable.getIntegerTopic("priorityid").getEntry(0);
         fiducial_offset_set=llTable.getDoubleArrayTopic("fiducial_offset_set").getEntry(new double[]{});
@@ -211,6 +214,10 @@ public class Limelight {
     public double[] getBotPoseTargetSpace(){
         return (this.botpose_targetspace.get()!=null&&this.botpose_targetspace.get().length!=0)?
                 this.botpose_targetspace.get():new double[]{};
+    }
+
+    public double getHeartBeat(){
+        return hb.get(0);
     }
 
     /**

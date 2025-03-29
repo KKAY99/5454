@@ -5,12 +5,16 @@ import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.util.FlippingUtil;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.DunkinDonutConstants;
@@ -47,12 +51,12 @@ public class AutoScoreCommand extends Command{
     private Pose2d m_odomTarget;
 
     public Supplier<Double> m_dashBoardPos;
-    private Supplier<Double> m_p;
-    private Supplier<Double> m_i;
-    private Supplier<Double> m_d;
-    private Supplier<Double> m_max;
-    private Supplier<Double> m_min;
-    private Supplier<Double> m_inputGain;
+    private GenericEntry m_p;
+    private GenericEntry m_i;
+    private GenericEntry m_d;
+    private GenericEntry m_max;
+    private GenericEntry m_min;
+    private GenericEntry m_inputGain;
     private double m_elevatorIPos;
     private double m_elevatorFPos;
     private double m_elevatorAlgaePos;
@@ -61,7 +65,8 @@ public class AutoScoreCommand extends Command{
     private double m_endTime;
     private double m_leftPIDOutput;
     private double m_rightPIDOutput;
-    private double m_suspendDriveSpeed=-0.1;
+    private double m_suspendDriveSpeed=0;
+    private double m_startingHeartBeat;
 
     private Supplier<Boolean> m_isRightLineup;
     private Supplier<Boolean> m_doAlgae;
@@ -69,6 +74,7 @@ public class AutoScoreCommand extends Command{
     private boolean m_shouldRunAlgae;
     private boolean m_startedCoral;
     private boolean m_isRunning;
+    private boolean m_isInDeadBand;
     
     private enum States{
         ISMANUALORAUTO,PRESCOREELEV,WAITFORCLAWROTATE,DRIVEFORWARDS,CHECKFORTARGET,LEFTLINEUP,RIGHTLINEUP,ALGAE,ALGAEGRAB,WAITFORALGAEGRAB,ALGAERETRACT,ELEVATOR,
@@ -116,7 +122,7 @@ public class AutoScoreCommand extends Command{
 
     public AutoScoreCommand(CommandSwerveDrivetrain swerve,ElevatorSubsystem elevator,DunkinDonutSubsystem dunkin,Supplier<ElevatorScoreLevel> scorelevel,
                             Limelight leftLimelight,Limelight rightLimelight,Supplier<Boolean> isRightLineup,Supplier<Boolean> doAlgae,
-                            Supplier<Double> p,Supplier<Double> i,Supplier<Double> d,Supplier<Double> max,Supplier<Double> min,Supplier<Double> inputGain){
+                            GenericEntry p,GenericEntry i,GenericEntry d,GenericEntry max,GenericEntry min,GenericEntry inputGain){
         m_swerve=swerve;
         m_elevator=elevator;
         m_dunkin=dunkin;
@@ -129,6 +135,13 @@ public class AutoScoreCommand extends Command{
         m_doAlgae=doAlgae;
         m_isManual=false;
 
+        m_p=p;
+        m_i=i;
+        m_d=d;
+        m_max=max;
+        m_min=min;
+        m_inputGain=inputGain;
+
         m_leftLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
         m_rightLimelight.setTargetHeight(LimeLightValues.reefAprilTagHeight);
 
@@ -136,13 +149,6 @@ public class AutoScoreCommand extends Command{
         m_strafePIDRIGHT.setInputGain(LimeLightValues.strafeInputGainRIGHT);
         m_strafePIDLEFT=new ObsidianPID(LimeLightValues.strafePLEFT,LimeLightValues.strafeILEFT,LimeLightValues.strafeDLEFT,LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeMaxAndMinLEFT);
         m_strafePIDLEFT.setInputGain(LimeLightValues.strafeInputGainLEFT);
-
-        m_p=p;
-        m_i=i;
-        m_d=d;
-        m_max=max;
-        m_min=min;
-        m_inputGain=inputGain;
 
         addRequirements(m_swerve,m_elevator,m_dunkin);
     }
@@ -168,9 +174,9 @@ public class AutoScoreCommand extends Command{
         m_startedCoral=false;
         m_isRunning=true;
         
-        if(m_p.get()!=0&&m_p.get()!=null){
-            m_strafePIDLEFT.setAllValues(m_p.get(),m_i.get(),m_d.get(),m_max.get(),m_min.get(),m_inputGain.get());
-            m_strafePIDRIGHT.setAllValues(m_p.get(),m_i.get(),m_d.get(),m_max.get(),m_min.get(),m_inputGain.get());
+        if(m_p!=null){
+            m_strafePIDLEFT.setAllValues(m_p.getDouble(0),m_i.getDouble(0),m_d.getDouble(0),m_max.getDouble(0),m_min.getDouble(0),m_inputGain.getDouble(0));
+            m_strafePIDRIGHT.setAllValues(m_p.getDouble(0),m_i.getDouble(0),m_d.getDouble(0),m_max.getDouble(0),m_min.getDouble(0),m_inputGain.getDouble(0));
         }
 
         switch(m_scoreLevel.get()){
@@ -310,12 +316,31 @@ public class AutoScoreCommand extends Command{
             strafe=-m_strafePIDLEFT.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.leftLineupXDeadband&&m_isRightLineup.get()&&x!=0){
-                m_swerve.drive(0,0,0);
-                m_swerve.brake();
-                m_currentState=States.ELEVATOR;
+                if(!m_isInDeadBand){
+                    m_startingHeartBeat=m_leftLimelight.getHeartBeat();
+                    m_isInDeadBand=true;
+                }
+
+                if(m_startingHeartBeat+LimeLightValues.isInDeadBandHeartBeat<=m_leftLimelight.getHeartBeat()){
+                    m_swerve.drive(0,0,0);
+                    m_swerve.brake();
+
+                    if(m_startingHeartBeat+LimeLightValues.shouldEndHeartBeat<=m_leftLimelight.getHeartBeat()){
+                        m_swerve.drive(0,0,0);
+                        m_swerve.brake();
+                        m_currentState=States.END;
+                    }
+                }else{
+                    strafe=(m_isRightLineup.get())?-strafe:-0.1;
+                    strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
+                    strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeClampMin):MathUtil.clamp(strafe,LimeLightValues.strafeClampMin,LimeLightValues.strafeMaxAndMinLEFT);
+                    m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
+                }
             }else{
-                strafe=(m_isRightLineup.get())?-strafe:-0.6;
+                m_isInDeadBand=false;
+                strafe=(m_isRightLineup.get())?-strafe:-0.1;
                 strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
+                strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeClampMin):MathUtil.clamp(strafe,LimeLightValues.strafeClampMin,LimeLightValues.strafeMaxAndMinLEFT);
                 m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
             }
 
@@ -335,12 +360,31 @@ public class AutoScoreCommand extends Command{
             strafe=-m_strafePIDRIGHT.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.rightLineupXDeadband&&!m_isRightLineup.get()){
-                m_swerve.drive(0,0,0);
-                m_swerve.brake();
-                m_currentState=States.ELEVATOR;
+                if(!m_isInDeadBand){
+                    m_startingHeartBeat=m_rightLimelight.getHeartBeat();
+                    m_isInDeadBand=true;
+                }
+
+                if(m_startingHeartBeat+LimeLightValues.isInDeadBandHeartBeat<=m_leftLimelight.getHeartBeat()){
+                    m_swerve.drive(0,0,0);
+                    m_swerve.brake();
+
+                    if(m_startingHeartBeat+LimeLightValues.shouldEndHeartBeat<=m_leftLimelight.getHeartBeat()){
+                        m_swerve.drive(0,0,0);
+                        m_swerve.brake();
+                        m_currentState=States.END;
+                    }
+                }else{
+                    strafe=(!m_isRightLineup.get())?strafe:0.1;
+                    strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
+                    strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeClampMin):MathUtil.clamp(strafe,LimeLightValues.strafeClampMin,LimeLightValues.strafeMaxAndMinRIGHT);
+                    m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
+                }
             }else{
-                strafe=(!m_isRightLineup.get())?strafe:0.6;
+                m_isInDeadBand=false;
+                strafe=(!m_isRightLineup.get())?strafe:0.1;
                 strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
+                strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeClampMin):MathUtil.clamp(strafe,LimeLightValues.strafeClampMin,LimeLightValues.strafeMaxAndMinRIGHT);
                 m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
             }
 
@@ -351,6 +395,9 @@ public class AutoScoreCommand extends Command{
             }
 
             m_rightPIDOutput=strafe;
+
+            System.out.println("Current Right Limelight X: "+rawX);
+            System.out.println("Current Right PIDOUTPUT: "+m_rightPIDOutput);
         break;
         case ELEVATOR:
             m_elevator.set_referance(m_elevatorFPos);

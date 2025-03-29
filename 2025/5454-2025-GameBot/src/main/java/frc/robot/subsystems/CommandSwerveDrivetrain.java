@@ -280,7 +280,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void drive(double forward, double strafe, double rot){
         SwerveRequest.RobotCentric newRequest=new SwerveRequest.RobotCentric();
-        newRequest.withVelocityX(forward).withVelocityY(strafe).withRotationalRate(rot);
+        newRequest.withVelocityX(forward*TunerConstants.kMaxSpeed).withVelocityY(strafe*TunerConstants.kMaxSpeed)
+        .withRotationalRate(rot*TunerConstants.kMaxAngularSpeed);
 
         this.setControl(newRequest);
     }

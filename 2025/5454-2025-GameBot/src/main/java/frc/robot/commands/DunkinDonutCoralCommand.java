@@ -123,7 +123,8 @@ public class DunkinDonutCoralCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_dunkin.runCoralIntakeMotor(IntakeConstants.coralStallSpeed);
+    //m_dunkin.runCoralIntakeMotor(IntakeConstants.coralStallSpeed);
+    m_dunkin.stopCoralIntakeMotor();
     m_dunkin.stopIndexer();
     m_isRunning=false;
   }
@@ -178,7 +179,7 @@ public class DunkinDonutCoralCommand extends Command {
           m_dunkin.stopCoralIntakeMotor();
           m_dunkin.stopIndexer();
           m_targetPos=m_dunkin.getCoralPos()+DunkinDonutConstants.clearDoorPosOut;
-          m_currentState = States.RUNFORWARD;
+          m_currentState = States.END;
         }
       break;
       case RUNFORWARD:

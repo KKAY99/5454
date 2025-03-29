@@ -6,11 +6,16 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,6 +45,9 @@ import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import java.util.Map;
+import edu.wpi.first.networktables.DoubleEntry;
 
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -47,6 +55,33 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+  private ShuffleboardTab m_tab=Shuffleboard.getTab("SmartDashboard");
+  private GenericEntry m_p=m_tab.add("Proportional",0)
+                                .withWidget(BuiltInWidgets.kNumberSlider)
+                                .withProperties(Map.of("min",0,"max",1))
+                                .getEntry();
+  private GenericEntry m_i=m_tab.add("Integral",0)
+                                .withWidget(BuiltInWidgets.kNumberSlider)
+                                .withProperties(Map.of("min",0,"max",1))
+                                .getEntry();
+  private GenericEntry m_d=m_tab.add("Derivative",0)
+                                .withWidget(BuiltInWidgets.kNumberSlider)
+                                .withProperties(Map.of("min",0,"max",1))
+                                .getEntry();
+  private GenericEntry m_max=m_tab.add("PIDMax",0)
+                                  .withWidget(BuiltInWidgets.kNumberSlider)
+                                  .withProperties(Map.of("min",0,"max",1))
+                                  .getEntry();
+  private GenericEntry m_min=m_tab.add("PIDMin",0)
+                                  .withWidget(BuiltInWidgets.kNumberSlider)
+                                  .withProperties(Map.of("min",-1,"max",0))
+                                  .getEntry();
+  private GenericEntry m_inputGain=m_tab.add("PIDInputGain",0)
+                                  .withWidget(BuiltInWidgets.kNumberSlider)
+                                  .withProperties(Map.of("min",1,"max",100))
+                                  .getEntry();
+
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
 
@@ -75,13 +110,6 @@ public class RobotContainer {
   private final SendableChooser<Command> m_autoChooser;
 
   public ElevatorScoreLevel m_currentScoreLevel=ElevatorScoreLevel.L1;
-
-  public double m_P;
-  public double m_I;
-  public double m_D;
-  public double m_max;
-  public double m_min;
-  public double m_inputGain;
   
   public double m_elevatorPos;
 
@@ -176,12 +204,7 @@ public class RobotContainer {
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreManualButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
 
-    /*AutoScoreCommand seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
-    JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
-    operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);*/
-
-    AutoScoreCommand seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae,
-    ()->m_P,()->m_I,()->m_D,()->m_max,()->m_min,()->m_inputGain);
+    AutoScoreCommand seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);
   }
@@ -231,26 +254,12 @@ public class RobotContainer {
       SmartDashboard.putBoolean("Do Algea", m_doAlgae);
       SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
       SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
+      SmartDashboard.putNumber("CURRENT CODE P", m_p.getDouble(0));
       //SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
       SmartDashboard.putNumber("LEFT LIMELIGHT DISTANCE",m_leftLimelight.getDistance());
       SmartDashboard.putNumber("RIGHT LIMELIGHT DISTANCE",m_rightLimelight.getDistance());
-      SmartDashboard.putNumber("Proportional",m_P);
-      SmartDashboard.putNumber("Integral",m_I);
-      SmartDashboard.putNumber("Derivative",m_D);
-      SmartDashboard.putNumber("PIDMax",m_max);
-      SmartDashboard.putNumber("PIDMin",m_min);
-      SmartDashboard.putNumber("Input Gain",m_inputGain);
     }catch(Exception e){}
 
-  }
-
-  public void getPIDValues(){
-    SmartDashboard.getNumber("Proportional",0);
-    SmartDashboard.getNumber("Integral",0);
-    SmartDashboard.getNumber("Derivative",0);
-    SmartDashboard.getNumber("PIDMax",0);
-    SmartDashboard.getNumber("PIDMin",0);
-    SmartDashboard.getNumber("Input Gain",0);
   }
   
   private void createAutonomousCommandList(){
@@ -479,7 +488,6 @@ public class RobotContainer {
     setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getBButtonPressed());
     setDoesDoAlgae(()->m_xBoxOperator.getStartButtonPressed());
     refreshSmartDashboard();
-    getPIDValues();
   }
 
   public void homeRobot(){

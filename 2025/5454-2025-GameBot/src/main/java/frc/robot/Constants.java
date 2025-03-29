@@ -137,8 +137,8 @@ public final class Constants {
 
     public static final double reefAprilTagHeight=8.75;
 
-    public static final double leftLineupXDeadband=1;
-    public static final double rightLineupXDeadband=1;
+    public static final double leftLineupXDeadband=0.5;
+    public static final double rightLineupXDeadband=0.5;
 
     public static final double driveTargetDistanceRight=51;
     public static final double driveTargetDistanceLeft=-66;
@@ -147,28 +147,32 @@ public final class Constants {
     public static final double driveFollowDistanceLeft=-120;
     public static final double driveDeadBand=2;
 
-    public static final double strafePRIGHT=0.2;
-    public static final double strafeIRIGHT=0;
-    public static final double strafeDRIGHT=0.30;
-    public static final double strafeMaxAndMinRIGHT=0.70;
-    public static final double strafeInputGainRIGHT=1.5;
+    public static final double isInDeadBandHeartBeat=8;
+    public static final double shouldEndHeartBeat=16;
+    public static final double strafeClampMin=0.025;
 
-    public static final double strafePLEFT=0.2;
+    public static final double strafePRIGHT=0.01;
+    public static final double strafeIRIGHT=0;
+    public static final double strafeDRIGHT=0;
+    public static final double strafeMaxAndMinRIGHT=0.15;
+    public static final double strafeInputGainRIGHT=1;
+
+    public static final double strafePLEFT=0.01;
     public static final double strafeILEFT=0;
-    public static final double strafeDLEFT=0.30;
-    public static final double strafeMaxAndMinLEFT=0.70;
-    public static final double strafeInputGainLEFT=1.5;
+    public static final double strafeDLEFT=0;
+    public static final double strafeMaxAndMinLEFT=0.15;
+    public static final double strafeInputGainLEFT=1;
 
     public static final double rotP=0.07;
     public static final double rotI=0;
     public static final double rotD=0.2;
-    public static final double rotMaxAndMin=0.5;
+    public static final double rotMaxAndMin=0.2;
     public static final double rotInputGain=60;
 
     public static final double algaeDriveTimeToRun=0.3;
     public static final double driveTimeToRun=0.3;
-    public static final double algaeDriveBackSpeed=0.6;
-    public static final double lineUpDriveSpeed=-0.6;
+    public static final double algaeDriveBackSpeed=0.1;
+    public static final double lineUpDriveSpeed=-0.1;
 
     public static final double driveP=0.15;
     public static final double driveI=0;
@@ -242,7 +246,7 @@ public final class Constants {
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorPK1=0.10;//0.07
+    public static final double elevatorPK1=0.12;//0.07
     public static final double elevatorIK1=0;
     public static final double elevatorDK1=0;
     public static final double elevatorMaxAndMinK1=1;
