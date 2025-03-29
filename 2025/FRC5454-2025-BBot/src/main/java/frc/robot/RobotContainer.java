@@ -8,7 +8,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.TriggerEvent;
 import com.pathplanner.lib.util.FlippingUtil;
-
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -21,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
@@ -65,8 +65,8 @@ public class RobotContainer {
     // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
     private final DrivetrainSubsystem m_robotDrive = new DrivetrainSubsystem(m_NavX); 
     private final DriveControlMode m_DriveControlMode = new DriveControlMode();
-    private XboxController m_xBoxDriver = new XboxController(InputControllers.kXboxDrive);
-    private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
+    private CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
+    private CommandXboxController m_xBoxOperator = new CommandXboxController(InputControllers.kXboxOperator);
     private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
  
  // reversed 9/21
@@ -78,7 +78,7 @@ public class RobotContainer {
         m_autoChooser = AutoBuilder.buildAutoChooser();
         // Configure the button bindings
         createAutoCommandsList();
-       
+        configureNamedCommands();
         configureButtonBindings();
 
          m_robotDrive.setDefaultCommand(
@@ -87,11 +87,12 @@ public class RobotContainer {
                         () -> m_xBoxDriver.getLeftY(),
                         () -> m_xBoxDriver.getLeftX(),
                         () -> m_DriveControlMode.isFieldOrientated()));    
-                
-
     }
 
 
+    public void configureNamedCommands() {
+        NamedCommands.registerCommand("placeHOLDER",null);
+    }
     
     /**
      * Use this method to define your button->command mappings. Buttons can be
@@ -105,6 +106,9 @@ public class RobotContainer {
     
 
     private void configureButtonBindings(){
+        GasPedalCommand gasPedalCommand = new GasPedalCommand(m_robotDrive, ()->m_xBoxDriver.getRightTriggerAxis());
+        m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
+        
     }
     
     private void createAutoCommandsList(){
