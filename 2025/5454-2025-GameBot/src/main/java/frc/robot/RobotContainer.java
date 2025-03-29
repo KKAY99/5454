@@ -1,27 +1,19 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Leds;
@@ -32,10 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import frc.robot.commands.*;
-import frc.robot.Constants.AnimationStates;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
-import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -45,9 +35,6 @@ import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import java.util.Map;
-import edu.wpi.first.networktables.DoubleEntry;
 
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -55,32 +42,6 @@ public class RobotContainer {
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
-
-  private ShuffleboardTab m_tab=Shuffleboard.getTab("SmartDashboard");
-  private GenericEntry m_p=m_tab.add("Proportional",0)
-                                .withWidget(BuiltInWidgets.kNumberSlider)
-                                .withProperties(Map.of("min",0,"max",1))
-                                .getEntry();
-  private GenericEntry m_i=m_tab.add("Integral",0)
-                                .withWidget(BuiltInWidgets.kNumberSlider)
-                                .withProperties(Map.of("min",0,"max",1))
-                                .getEntry();
-  private GenericEntry m_d=m_tab.add("Derivative",0)
-                                .withWidget(BuiltInWidgets.kNumberSlider)
-                                .withProperties(Map.of("min",0,"max",1))
-                                .getEntry();
-  private GenericEntry m_max=m_tab.add("PIDMax",0)
-                                  .withWidget(BuiltInWidgets.kNumberSlider)
-                                  .withProperties(Map.of("min",0,"max",1))
-                                  .getEntry();
-  private GenericEntry m_min=m_tab.add("PIDMin",0)
-                                  .withWidget(BuiltInWidgets.kNumberSlider)
-                                  .withProperties(Map.of("min",-1,"max",0))
-                                  .getEntry();
-  private GenericEntry m_inputGain=m_tab.add("PIDInputGain",0)
-                                  .withWidget(BuiltInWidgets.kNumberSlider)
-                                  .withProperties(Map.of("min",1,"max",100))
-                                  .getEntry();
 
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
@@ -139,6 +100,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoScoreRightL4",new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->ElevatorScoreLevel.L4,m_leftLimelight,m_rightLimelight,()->true,()->false));
     NamedCommands.registerCommand("ToggleIntake", new DunkinDonutCoralCommand(m_dunkinDonut,m_LEDS,m_elevator,IntakeConstants.coralIntakeSpeed,true,true,IntakeConstants.indexerIntakeSpeed));
     NamedCommands.registerCommand("FlipIndexerDown",new DunkinDonutCoralCommand(m_dunkinDonut,DunkinDonutConstants.indexerOuttakeSpeed,AutoConstants.flipIndexerDownTime));
+    NamedCommands.registerCommand("ScoreProcessor",new ClawPIDScoreIntake(m_dunkinDonut,m_elevator,ElevatorConstants.elevatorLowLimit,DunkinDonutConstants.algaeStowPos,DunkinDonutConstants.processorScoreSpeed,
+                                                                                              AutoConstants.processorTimeToRun));
   }
 
   private void configureButtonBindings(){
@@ -254,7 +217,6 @@ public class RobotContainer {
       SmartDashboard.putBoolean("Do Algea", m_doAlgae);
       SmartDashboard.putNumber("Dunkin Rotate ABS",m_dunkinDonut.getAbsoluteEncoderPos());
       SmartDashboard.putString("Current Score Level",m_currentScoreLevel.toString());
-      SmartDashboard.putNumber("CURRENT CODE P", m_p.getDouble(0));
       //SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
       SmartDashboard.putNumber("LEFT LIMELIGHT DISTANCE",m_leftLimelight.getDistance());
       SmartDashboard.putNumber("RIGHT LIMELIGHT DISTANCE",m_rightLimelight.getDistance());
@@ -288,7 +250,7 @@ public class RobotContainer {
   }
    
   public void DisabledPeriodic(){
-    if(m_rightLimelight.isAnyTargetAvailable()){
+    if(m_rightLimelight.isAnyTargetAvailable()||m_leftLimelight.isAnyTargetAvailable()){
       m_LEDS.setLedState(LEDStates.DISABLEDSEETARGET,false);
     }else{
       m_LEDS.setLedState(LEDStates.DISABLEDERROR,false);
@@ -303,6 +265,16 @@ public class RobotContainer {
 
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } 
+
+    if(m_leftLimelight.isAnyTargetAvailable()){
+      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+  
+      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+
+
+      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
+    } 
     /* m_LEDS.setLedState(LEDStates.DISABLED);
     m_LEDS.activateLEDS();*/
   }
@@ -312,6 +284,16 @@ public class RobotContainer {
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
       Pose2d currentPose=m_rightLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+
+
+      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
+    } 
+
+    if(m_leftLimelight.isAnyTargetAvailable()){
+      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+  
+      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
 
 
@@ -472,6 +454,16 @@ public class RobotContainer {
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
       Pose2d currentPose=m_rightLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+
+
+      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
+    } 
+
+    if(m_leftLimelight.isAnyTargetAvailable()){
+      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+  
+      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
 
 

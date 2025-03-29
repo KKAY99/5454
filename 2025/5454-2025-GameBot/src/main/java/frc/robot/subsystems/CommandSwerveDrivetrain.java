@@ -7,6 +7,7 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.PointWheelsAt;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
@@ -280,6 +281,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveRequest.RobotCentric newRequest=new SwerveRequest.RobotCentric();
         newRequest.withVelocityX(forward*TunerConstants.kMaxSpeed).withVelocityY(strafe*TunerConstants.kMaxSpeed)
         .withRotationalRate(rot*TunerConstants.kMaxAngularSpeed);
+        this.setControl(newRequest);
+    }
+
+    public void pointWheels(double direction){
+        SwerveRequest.PointWheelsAt newRequest=new PointWheelsAt().withModuleDirection(new Rotation2d().fromDegrees(direction));
 
         this.setControl(newRequest);
     }

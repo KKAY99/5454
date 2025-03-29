@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.util.FlippingUtil;
+import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -75,6 +76,8 @@ public class AutoScoreCommand extends Command{
     private boolean m_startedCoral;
     private boolean m_isRunning;
     private boolean m_isInDeadBand;
+    private boolean m_hasDrivenTwice=false;
+    private boolean m_hasSetDriveTimer=false;
     
     private enum States{
         ISMANUALORAUTO,PRESCOREELEV,WAITFORCLAWROTATE,DRIVEFORWARDS,CHECKFORTARGET,LEFTLINEUP,RIGHTLINEUP,ALGAE,ALGAEGRAB,WAITFORALGAEGRAB,ALGAERETRACT,ELEVATOR,
@@ -173,6 +176,8 @@ public class AutoScoreCommand extends Command{
         m_shouldRunAlgae=false;
         m_startedCoral=false;
         m_isRunning=true;
+        m_hasDrivenTwice=false;
+        m_hasSetDriveTimer=false;
         
         if(m_p!=null){
             m_strafePIDLEFT.setAllValues(m_p.getDouble(0),m_i.getDouble(0),m_d.getDouble(0),m_max.getDouble(0),m_min.getDouble(0),m_inputGain.getDouble(0));
@@ -256,7 +261,6 @@ public class AutoScoreCommand extends Command{
                 m_dunkin.resetShouldRunPID();
                 m_dunkin.toggleLocalPid(DunkinDonutConstants.outOfLimelightVisionPos);
                 m_currentState=States.WAITFORCLAWROTATE;
-                m_LEDS.setLedState(LEDStates.AUTOSCORING,true);
             }
         break;
         case PRESCOREELEV:
@@ -275,6 +279,7 @@ public class AutoScoreCommand extends Command{
             m_endTime=m_startTime+LimeLightValues.driveTimeToRun;
             //System.out.println("Starting Time" + m_startTime + "End Time " + m_endTime );
             if(Timer.getFPGATimestamp()>m_endTime){
+                m_swerve.brake();
                 m_swerve.drive(0,0,0);
                 //System.out.println("Ending Time" + Timer.getFPGATimestamp());
                 if(m_isManual){
@@ -285,7 +290,7 @@ public class AutoScoreCommand extends Command{
                     m_swerve.drive(m_suspendDriveSpeed,0,0);
                 }
             }else{
-                //System.out.println("Driving Forward");
+
                 m_swerve.drive(LimeLightValues.lineUpDriveSpeed,0,0);
             }
         break;
@@ -316,35 +321,59 @@ public class AutoScoreCommand extends Command{
             strafe=-m_strafePIDLEFT.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.leftLineupXDeadband&&m_isRightLineup.get()&&x!=0){
-                if(!m_isInDeadBand){
+                if(!m_hasSetDriveTimer){
+                    m_hasSetDriveTimer=true;
+                    m_startTime=Timer.getFPGATimestamp();
+                    m_endTime=m_startTime+LimeLightValues.driveTimeToRun;
+                }
+
+                if(!m_isInDeadBand&&m_hasDrivenTwice){
                     m_startingHeartBeat=m_leftLimelight.getHeartBeat();
                     m_isInDeadBand=true;
                 }
 
-                if(m_startingHeartBeat+LimeLightValues.isInDeadBandHeartBeat<=m_leftLimelight.getHeartBeat()){
+                if(m_startingHeartBeat+LimeLightValues.isInDeadBandHeartBeat<=m_leftLimelight.getHeartBeat()&&m_hasDrivenTwice){
                     m_swerve.drive(0,0,0);
-                    m_swerve.brake();
 
-                    if(m_startingHeartBeat+LimeLightValues.shouldEndHeartBeat<=m_leftLimelight.getHeartBeat()){
+                    if(m_startingHeartBeat+LimeLightValues.shouldEndHeartBeat<=m_leftLimelight.getHeartBeat()&&m_hasDrivenTwice){
                         m_swerve.drive(0,0,0);
                         m_swerve.brake();
-                        m_currentState=States.END;
+                        m_currentState=States.ELEVATOR;
                     }
-                }else{
-                    strafe=(m_isRightLineup.get())?-strafe:-0.1;
+                }else if(m_hasDrivenTwice){
+                    strafe=(m_isRightLineup.get())?-strafe:-LimeLightValues.strafeMaxAndMinLEFT;
                     strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
-                    strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeClampMin):MathUtil.clamp(strafe,LimeLightValues.strafeClampMin,LimeLightValues.strafeMaxAndMinLEFT);
-                    m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
+                    strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeClampMinLEFT):
+                                    MathUtil.clamp(strafe,LimeLightValues.strafeClampMinLEFT,LimeLightValues.strafeMaxAndMinLEFT);
+                    m_swerve.drive(0,strafe*strafeFlipValue,0);
+
+                }else if(Timer.getFPGATimestamp()>m_endTime){
+                    m_swerve.drive(0,0,0);
+                    m_swerve.brake();
+                    m_hasDrivenTwice=true;
+                }else if(!m_hasDrivenTwice){
+                    m_swerve.drive(LimeLightValues.correctDriveSpeed,0,0);
                 }
             }else{
-                m_isInDeadBand=false;
-                strafe=(m_isRightLineup.get())?-strafe:-0.1;
-                strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
-                strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeClampMin):MathUtil.clamp(strafe,LimeLightValues.strafeClampMin,LimeLightValues.strafeMaxAndMinLEFT);
-                m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
+                if(!m_hasSetDriveTimer||m_hasDrivenTwice){
+                    m_isInDeadBand=false;
+                    strafe=(m_isRightLineup.get())?-strafe:-LimeLightValues.strafeMaxAndMinLEFT;
+                    strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
+                    strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeClampMinLEFT):
+                                    MathUtil.clamp(strafe,LimeLightValues.strafeClampMinLEFT,LimeLightValues.strafeMaxAndMinLEFT);
+                    m_swerve.drive(0,strafe*strafeFlipValue,0);
+
+                }if(Timer.getFPGATimestamp()>m_endTime&&!m_hasDrivenTwice){
+                    m_swerve.drive(0,0,0);
+                    m_swerve.brake();
+                    m_hasDrivenTwice=true;
+                }else if(!m_hasDrivenTwice){
+                    m_swerve.drive(LimeLightValues.correctDriveSpeed,0,0);
+                }
             }
 
             if(m_rightLimelight.isAnyTargetAvailable()&&!m_isRightLineup.get()){
+                m_hasSetDriveTimer=false;
                 m_currentState=States.RIGHTLINEUP;
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
                 m_currentState=States.RETRACT;
@@ -360,47 +389,69 @@ public class AutoScoreCommand extends Command{
             strafe=-m_strafePIDRIGHT.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.rightLineupXDeadband&&!m_isRightLineup.get()){
-                if(!m_isInDeadBand){
+                if(!m_hasSetDriveTimer){
+                    m_hasSetDriveTimer=true;
+                    m_startTime=Timer.getFPGATimestamp();
+                    m_endTime=m_startTime+LimeLightValues.driveTimeToRun;
+                }
+
+                if(!m_isInDeadBand&&m_hasDrivenTwice){
                     m_startingHeartBeat=m_rightLimelight.getHeartBeat();
                     m_isInDeadBand=true;
                 }
 
-                if(m_startingHeartBeat+LimeLightValues.isInDeadBandHeartBeat<=m_leftLimelight.getHeartBeat()){
+                if(m_startingHeartBeat+LimeLightValues.isInDeadBandHeartBeat<=m_rightLimelight.getHeartBeat()&&m_hasDrivenTwice){
                     m_swerve.drive(0,0,0);
-                    m_swerve.brake();
 
-                    if(m_startingHeartBeat+LimeLightValues.shouldEndHeartBeat<=m_leftLimelight.getHeartBeat()){
+                    if(m_startingHeartBeat+LimeLightValues.shouldEndHeartBeat<=m_rightLimelight.getHeartBeat()&&m_hasDrivenTwice){
                         m_swerve.drive(0,0,0);
                         m_swerve.brake();
-                        m_currentState=States.END;
+                        m_currentState=States.ELEVATOR;
                     }
-                }else{
-                    strafe=(!m_isRightLineup.get())?strafe:0.1;
+                }else if(m_hasDrivenTwice){
+                    strafe=(!m_isRightLineup.get())?strafe:LimeLightValues.strafeMaxAndMinRIGHT;
                     strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
-                    strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeClampMin):MathUtil.clamp(strafe,LimeLightValues.strafeClampMin,LimeLightValues.strafeMaxAndMinRIGHT);
-                    m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
+                    strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeClampMinRIGHT)
+                                    :MathUtil.clamp(strafe,LimeLightValues.strafeClampMinRIGHT,LimeLightValues.strafeMaxAndMinRIGHT);
+                    m_swerve.drive(0,strafe*strafeFlipValue,0);
+
+                }else if(Timer.getFPGATimestamp()>m_endTime){
+                    m_swerve.drive(0,0,0);
+                    m_swerve.brake();
+                    m_hasDrivenTwice=true;
+                }else if(!m_hasDrivenTwice){
+                    m_swerve.drive(LimeLightValues.correctDriveSpeed,0,0);
                 }
             }else{
-                m_isInDeadBand=false;
-                strafe=(!m_isRightLineup.get())?strafe:0.1;
-                strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
-                strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeClampMin):MathUtil.clamp(strafe,LimeLightValues.strafeClampMin,LimeLightValues.strafeMaxAndMinRIGHT);
-                m_swerve.drive(m_suspendDriveSpeed,strafe*strafeFlipValue,0);
+                if(!m_hasSetDriveTimer||m_hasDrivenTwice){
+                    m_isInDeadBand=false;
+                    strafe=(!m_isRightLineup.get())?strafe:LimeLightValues.strafeMaxAndMinRIGHT;
+                    strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
+                    strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeClampMinRIGHT)
+                                    :MathUtil.clamp(strafe,LimeLightValues.strafeClampMinRIGHT,LimeLightValues.strafeMaxAndMinRIGHT);
+                    m_swerve.drive(0,strafe*strafeFlipValue,0);
+
+                }else if(Timer.getFPGATimestamp()>m_endTime&&!m_hasDrivenTwice){
+                    m_swerve.drive(0,0,0);
+                    m_swerve.brake();
+                    m_hasDrivenTwice=true;
+                }else if(!m_hasDrivenTwice){
+                    m_swerve.drive(LimeLightValues.correctDriveSpeed,0,0);
+                }
             }
 
             if(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup.get()){
+                m_hasSetDriveTimer=false;
                 m_currentState=States.LEFTLINEUP;
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
                 m_currentState=States.RETRACT;
             }
 
             m_rightPIDOutput=strafe;
-
-            System.out.println("Current Right Limelight X: "+rawX);
-            System.out.println("Current Right PIDOUTPUT: "+m_rightPIDOutput);
         break;
         case ELEVATOR:
-            m_elevator.set_referance(m_elevatorFPos);
+            m_LEDS.setLedState(LEDStates.AUTOSCORING,true);
+            m_elevator.set_referance(m_elevatorFPos,ClosedLoopSlot.kSlot0);
             if(m_shouldRunAlgae){
                 m_dunkin.resetShouldRunPID();
                 m_dunkin.toggleLocalPid(m_algaePos);
@@ -470,9 +521,9 @@ public class AutoScoreCommand extends Command{
         break;
         case RETRACT:
             if(m_shouldRunAlgae){
-                m_elevator.set_referance(ElevatorConstants.elevAlgeaGrabRetractPos);
+                m_elevator.set_referance(ElevatorConstants.elevAlgeaGrabRetractPos,ClosedLoopSlot.kSlot1);
             }else{
-                m_elevator.set_referance(ElevatorConstants.elevatorLowLimit);
+                m_elevator.set_referance(ElevatorConstants.elevatorLowLimit,ClosedLoopSlot.kSlot1);
             }
 
             m_currentState=States.WAITFORRETRACT;
@@ -515,6 +566,8 @@ public class AutoScoreCommand extends Command{
             Logger.recordOutput("Commands/AutoScore/DoAlgae",m_doAlgae.get());
             Logger.recordOutput("Commands/AutoScore/ShouldRunAlgae",m_shouldRunAlgae);
             Logger.recordOutput("Commands/AutoScore/ElevatorScoreLevel",m_scoreLevel.get());
+            Logger.recordOutput("Commands/AutoScore/SwerveYSpeed",m_swerve.getChassisSpeeds().vyMetersPerSecond);
+            Logger.recordOutput("Commands/AutoScore/SwerveXSpeed",m_swerve.getChassisSpeeds().vxMetersPerSecond);
             
             //System.out.println("AutoScore-CurrentState: "+m_currentState);
         } catch (Exception e){

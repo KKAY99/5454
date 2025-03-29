@@ -27,6 +27,7 @@ public final class Constants {
   public static final class AutoConstants{
     public static final double redDoSiDoDeadBand=3;
     public static final double flipIndexerDownTime=1.5;
+    public static final double processorTimeToRun=1;
   }
 
   public static final class LineupConstants{
@@ -137,8 +138,8 @@ public final class Constants {
 
     public static final double reefAprilTagHeight=8.75;
 
-    public static final double leftLineupXDeadband=0.5;
-    public static final double rightLineupXDeadband=0.5;
+    public static final double leftLineupXDeadband=0.6;
+    public static final double rightLineupXDeadband=0.6;
 
     public static final double driveTargetDistanceRight=51;
     public static final double driveTargetDistanceLeft=-66;
@@ -147,20 +148,21 @@ public final class Constants {
     public static final double driveFollowDistanceLeft=-120;
     public static final double driveDeadBand=2;
 
-    public static final double isInDeadBandHeartBeat=8;
-    public static final double shouldEndHeartBeat=16;
-    public static final double strafeClampMin=0.025;
+    public static final double isInDeadBandHeartBeat=4;
+    public static final double shouldEndHeartBeat=10;
+    public static final double strafeClampMinLEFT=0.025;
+    public static final double strafeClampMinRIGHT=0.0265;
 
-    public static final double strafePRIGHT=0.01;
+    public static final double strafePRIGHT=0.007;
     public static final double strafeIRIGHT=0;
-    public static final double strafeDRIGHT=0;
-    public static final double strafeMaxAndMinRIGHT=0.15;
+    public static final double strafeDRIGHT=0.020;
+    public static final double strafeMaxAndMinRIGHT=0.35;
     public static final double strafeInputGainRIGHT=1;
 
-    public static final double strafePLEFT=0.01;
+    public static final double strafePLEFT=0.007;
     public static final double strafeILEFT=0;
-    public static final double strafeDLEFT=0;
-    public static final double strafeMaxAndMinLEFT=0.15;
+    public static final double strafeDLEFT=0.02;
+    public static final double strafeMaxAndMinLEFT=0.30;
     public static final double strafeInputGainLEFT=1;
 
     public static final double rotP=0.07;
@@ -172,7 +174,8 @@ public final class Constants {
     public static final double algaeDriveTimeToRun=0.3;
     public static final double driveTimeToRun=0.3;
     public static final double algaeDriveBackSpeed=0.1;
-    public static final double lineUpDriveSpeed=-0.1;
+    public static final double lineUpDriveSpeed=-0.15;
+    public static final double correctDriveSpeed=-0.1;
 
     public static final double driveP=0.15;
     public static final double driveI=0;
@@ -210,10 +213,10 @@ public final class Constants {
     public static final double clearDoorSpeedOut=0.07;
     public static final double clearDoorSpeedIn=-0.07;
 
-    public static final double clawPIDkP=0.05;
+    public static final double clawPIDkP=0.1;
     public static final double clawPIDkI=0;
     public static final double clawPIDkD=0;
-    public static final double clawPIDMaxAndMin=0.5;
+    public static final double clawPIDMaxAndMin=1;
     public static final double clawPIDInputGain=60;
 
     public static final double outOfLimelightVisionPos=0.15;
@@ -246,15 +249,15 @@ public final class Constants {
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorPK1=0.12;//0.07
+    public static final double elevatorPK1=0.2;//0.07
     public static final double elevatorIK1=0;
-    public static final double elevatorDK1=0;
+    public static final double elevatorDK1=0.03;
     public static final double elevatorMaxAndMinK1=1;
 
-    public static final double elevatorPK2=0.03;//0.05
+    public static final double elevatorPK2=0.15;//0.05
     public static final double elevatorIK2=0;
-    public static final double elevatorDK2=0.02;
-    public static final double elevatorMaxAndMinK2=0.30;
+    public static final double elevatorDK2=0.08;
+    public static final double elevatorMaxAndMinK2=0.70;
 
     public static final double elevatorHighLimit=-99.5;
     public static final double elevatorLowLimit=-0.2;
