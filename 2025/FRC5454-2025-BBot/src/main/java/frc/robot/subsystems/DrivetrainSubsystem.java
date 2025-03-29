@@ -45,19 +45,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
 //USE RADIANS
 //3.04 radians is half a rotation
 // π/180
-private static final double FRONT_LEFT_ANGLE_OFFSET = 0.3-3.04;//4.04;//4.63-3.04; ///-0.850
+private static final double FRONT_LEFT_ANGLE_OFFSET = Math.toRadians(255);//0.084//4.04;//4.63-3.04; ///-0.850
+public SwerveDrivePoseEstimator estimator; 
+
 
 //private static final double FRONT_RIGHT_ANGLE_OFFSET = 0.9+3.04; //0.25; //-4.72+3.04;//-1.45
-private static final double FRONT_RIGHT_ANGLE_OFFSET =-1.5-3.04;//0.5+3.04;1.02;// -0.73; //0.25; //-4.72+3.04;//-1.45
+private static final double FRONT_RIGHT_ANGLE_OFFSET = Math.toRadians(282.5)+3.04;//0.5+3.04;1.02;// -0.73; //0.25; //-4.72+3.04;//-1.45
 //private static final double FRONT_RIGHT_ANGLE_OFFSET=-Math.toRadians(205.4);
 //private static final double BACK_LEFT_ANGLE_OFFSET = -1.25;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = 1.75;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = 1.95;//-77+3.04;//-0.78
 //private static final double BACK_LEFT_ANGLE_OFFSET = -0.55-3.04;//-77+3.04;//-0.78
-private static final double BACK_LEFT_ANGLE_OFFSET = -0.6;//-0.55-3.04;//-77+3.04;//-0.78
+private static final double BACK_LEFT_ANGLE_OFFSET = Math.toRadians(223.2)+1.571;//-0.55-3.04;//-77+3.04;//-0.78
 
 //private static final double BACK_RIGHT_ANGLE_OFFSET =-2.17-3.04; //-2.42-3.04
-private static final double BACK_RIGHT_ANGLE_OFFSET = 0.028;//-1.24-3.04; //-2.42-3.04
+private static final double BACK_RIGHT_ANGLE_OFFSET = Math.toRadians(358.5);//-1.24-3.04; //-2.42-3.04
 private SwerveRequest.ApplyRobotSpeeds autoDrive = new SwerveRequest.ApplyRobotSpeeds();
 
 
@@ -107,17 +109,7 @@ private boolean m_autoControl = false;
     );
 
     /////////////////////////////////////////////////////////////////////////////
-        SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
-        SwerveModulePosition frontRightPosition=new SwerveModulePosition(frontRightModule.getCurrentDistance(),new Rotation2d(frontRightModule.getCurrentAngle()));
-        SwerveModulePosition backleftPosition=new SwerveModulePosition(backLeftModule.getCurrentDistance(),new Rotation2d(backLeftModule.getCurrentAngle()));
-        SwerveModulePosition backRightPosition=new SwerveModulePosition(backRightModule.getCurrentDistance(),new Rotation2d(backRightModule.getCurrentAngle()));
-        SwerveDrivePoseEstimator estimator = new SwerveDrivePoseEstimator(kinematics,getGyroscopeRotation(),
-                new SwerveModulePosition[] { 
-                        frontLeftPosition,
-                        frontRightPosition,
-                        backleftPosition,
-                        backRightPosition
-                      },new Pose2d());
+
 
    
 
@@ -125,20 +117,19 @@ private boolean m_autoControl = false;
     public DrivetrainSubsystem(NavX navX) {
         m_gyroscope = navX;
         m_gyroscope.calibrate();
-        m_gyroscope.setInverted(true); // You might not need to invert the gyro
+        m_gyroscope.setInverted(false); // You might not need to invert the gyro
 
-        /*  WORKING COMMETED OUT BC IT IS USED ELSE WHERE
         SwerveModulePosition frontLeftPosition=new SwerveModulePosition(frontLeftModule.getCurrentDistance(),new Rotation2d(frontLeftModule.getCurrentAngle()));
         SwerveModulePosition frontRightPosition=new SwerveModulePosition(frontRightModule.getCurrentDistance(),new Rotation2d(frontRightModule.getCurrentAngle()));
         SwerveModulePosition backleftPosition=new SwerveModulePosition(backLeftModule.getCurrentDistance(),new Rotation2d(backLeftModule.getCurrentAngle()));
         SwerveModulePosition backRightPosition=new SwerveModulePosition(backRightModule.getCurrentDistance(),new Rotation2d(backRightModule.getCurrentAngle()));
-        SwerveDrivePoseEstimator estimator = new SwerveDrivePoseEstimator(kinematics,getGyroscopeRotation(),
+        estimator = new SwerveDrivePoseEstimator(kinematics,getGyroscopeRotation(),
                 new SwerveModulePosition[] { 
                         frontLeftPosition,
                         frontRightPosition,
                         backleftPosition,
                         backRightPosition
-                      },new Pose2d());    */   
+                      },new Pose2d()); 
 
                 //Logger.getInstance().recordOutput("Odometry X", estimator.getEstimatedPosition().getX());
                 //Logger.getInstance().recordOutput("Odometry Y", estimator.getEstimatedPosition().getY());
@@ -235,14 +226,14 @@ private boolean m_autoControl = false;
 
     public double legacyGetDistancefromWheel(){
         return 0;//TODO:GetDistance
-      }
-      public void stopAutoDrive(){
-        //TODO:Make Stop
+    }
+    public void stopAutoDrive(){
+        drive(new Translation2d(0,0),0,isFieldCentric());
         m_autoControl=false;
-      }
+    }
     
-    private void automove(double direction, double rotation,double speed, double distance, boolean stopAtEnd,boolean fieldCentric)
-{       double startDistance;
+    private void automove(double direction, double rotation,double speed, double distance, boolean stopAtEnd,boolean fieldCentric){       
+        double startDistance;
         double forward=0;
         double strafe=0;
         Translation2d targetTranslation;
@@ -355,10 +346,10 @@ public void spin (double direction,double speed)
         SmartDashboard.putNumber("Front Right Module Angle", Math.toDegrees(frontRightModule.getCurrentAngle()));
         SmartDashboard.putNumber("Back Left Module Angle", Math.toDegrees(backLeftModule.getCurrentAngle()));
         SmartDashboard.putNumber("Back Right Module Angle", Math.toDegrees(backRightModule.getCurrentAngle()));
-        SmartDashboard.putNumber("Front Left Module Radian", Math.toRadians(frontLeftModule.getCurrentAngle()));
-        SmartDashboard.putNumber("Front Right Module Radian", Math.toRadians(frontRightModule.getCurrentAngle()));
-        SmartDashboard.putNumber("Back Left Module Radain", Math.toRadians(backLeftModule.getCurrentAngle()));
-        SmartDashboard.putNumber("Back Right Module Radain", Math.toRadians(backRightModule.getCurrentAngle()));
+        SmartDashboard.putNumber("Front Left Module Radian", frontLeftModule.getCurrentAngle());
+        SmartDashboard.putNumber("Front Right Module Radian", frontRightModule.getCurrentAngle());
+        SmartDashboard.putNumber("Back Left Module Radain", backLeftModule.getCurrentAngle());
+        SmartDashboard.putNumber("Back Right Module Radain", backRightModule.getCurrentAngle());
 
         SmartDashboard.putNumber("Gyroscope Angle", m_gyroscope.getAngle().toDegrees());
 
@@ -387,10 +378,10 @@ public void spin (double direction,double speed)
         rotation *= 2.0 / Math.hypot(WHEELBASE, TRACKWIDTH);
         ChassisSpeeds speeds;
         if (fieldOriented) {
-            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX()*m_gasPedalDriveMult, translation.getY()*m_gasPedalDriveMult, rotation*m_gasPedalRotMult,
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation,
                     Rotation2d.fromDegrees(m_gyroscope.getAngle().toDegrees()));
         } else {
-            speeds = new ChassisSpeeds(translation.getX()*m_gasPedalDriveMult, translation.getY()*m_gasPedalDriveMult, rotation*m_gasPedalRotMult);
+            speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
         }
  
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
@@ -416,7 +407,7 @@ public boolean isNotInAutoControl(){
     }
     public double getbackRightAngleDegrees(){
         return backRightModule.getCurrentAngle();
-        }
+    }
    
 
     public double getFrontLeftAngle(){
@@ -430,19 +421,19 @@ public boolean isNotInAutoControl(){
     }
     public double getbackRightAngle(){
         return backRightModule.getCurrentAngle();
-        }
-        private Rotation2d getGyroscopeRotation() {
-                return Rotation2d.fromDegrees(m_gyroscope.getYaw());
-            }
- 
-        public void resetGyroscope() {
-        
+    }
+
+    private Rotation2d getGyroscopeRotation() {
+        return Rotation2d.fromDegrees(m_gyroscope.getYaw());
+    }
+    public void resetGyroscope() { 
         m_gyroscope.setAdjustmentAngle(m_gyroscope.getUnadjustedAngle());
     }
 
     public boolean isFieldCentric(){
         return true;
     }
+    
     public void resetDriveMode(){
         m_autoControl = false;
         stop();

@@ -55,11 +55,12 @@ import javax.swing.tree.ExpandVetoException;
  */
 
 public class RobotContainer {
+    
     // The robot's subsystems and commands are defined here...
     private NavX m_NavX = new NavX(SPI.Port.kMXP);
     // Dashboard inputs
 
-    private final SendableChooser<Command> m_autoChooser;
+    //private final SendableChooser<Command> m_autoChooser;
 
     private final SendableChooser<Boolean> m_IsDrone = new SendableChooser<>();
     // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
@@ -74,9 +75,9 @@ public class RobotContainer {
     private boolean bClawOpen=true;
     private boolean bOpenClawatEnd=true;
     private boolean bNoOpenClawatEnd=false;
+    
     public RobotContainer() {
-        m_autoChooser = AutoBuilder.buildAutoChooser();
-        // Configure the button bindings
+        //m_autoChooser = AutoBuilder.buildAutoChooser();
         createAutoCommandsList();
         configureNamedCommands();
         configureButtonBindings();
@@ -93,17 +94,6 @@ public class RobotContainer {
     public void configureNamedCommands() {
         NamedCommands.registerCommand("placeHOLDER",null);
     }
-    
-    /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-     * it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-
-    
 
     private void configureButtonBindings(){
         GasPedalCommand gasPedalCommand = new GasPedalCommand(m_robotDrive, ()->m_xBoxDriver.getRightTriggerAxis());
@@ -112,55 +102,39 @@ public class RobotContainer {
     }
     
     private void createAutoCommandsList(){
+        /* 
         try{
             SmartDashboard.putData("Auto Chooser", m_autoChooser);
         }catch(Exception e){
             System.out.println("creating autos Failed, Exception" + e.getMessage());
-        }
+        }*/
     }  
 
      public void disabledPerioidicUpdates(){
-
-       
-
     }
 
     public void setDriveMode(){
     }
 
-
     public void resetDriveModes(){
-       //m_RobotDrive.resetDriveMode();
+       m_robotDrive.resetDriveMode();
     }
    
-    
-  
-        public void AutoMode(){
-            
-        }  
-        public void TeleopMode(){
-        }
+    public void AutoMode(){
+    }  
 
+    public void TeleopMode(){
+    }
 
-
-
-
-
-    
     public void DisableMode(){
     }
+
     public void EnableMode(){
+    }
 
-}
-
-   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   Command returnCommand;
   public Command getAutonomousCommand() {
-   Command command = m_autoChooser.getSelected();
+   Command command = null;//m_autoChooser.getSelected();
    return command;
   }
 
