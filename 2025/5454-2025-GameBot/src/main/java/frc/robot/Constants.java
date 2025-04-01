@@ -185,9 +185,9 @@ public final class Constants {
   }
 
   public static final class GroundIntakeConstants{
-    public static final int rotateMotorID=49;
-    public static final int intakeMotorID=48;
-    public static final int rotateEncoderPort=3;
+    public static final int rotateMotorID=20;
+    public static final int intakeMotorID=26;
+    public static final int rotateEncoderPort=2;
     public static final double rotateUpSpeed=0.5;
     public static final double rotateDownSpeed=-0.5;
     public static final double intakeInSpeed=0.5;

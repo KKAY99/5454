@@ -28,6 +28,9 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     return m_encoder.get();
   }
 
+  public void movetoPosition(double position){
+    //DO MAGIC
+  }
 
   public boolean checkCANConnections(){
     boolean returnValue=true;
