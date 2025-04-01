@@ -184,6 +184,15 @@ public final class Constants {
     public static final double driveInputGain=0.5;
   }
 
+  public static final class GroundIntakeConstants{
+    public static final int rotateMotorID=49;
+    public static final int intakeMotorID=48;
+    public static final int rotateEncoderPort=3;
+    public static final double rotateUpSpeed=0.5;
+    public static final double rotateDownSpeed=-0.5;
+    public static final double intakeInSpeed=0.5;
+   public static final double intakeOutSpeed=-0.5;
+  }
   public static final class DunkinDonutConstants{
     public static final int indexerLimitSwitchDIO = 4;
     public static final int coralIndexerID = 27;
@@ -351,6 +360,12 @@ public final class Constants {
     public static final int setScoreLevelL3POV180=180;
     public static final int setScoreLevelL4POV270=270;
     
+    public static final int groundIntakeIn=0;
+    public static final int groundIntakeOut=1;
+    public static final int groundIntakeRotateUp=2;
+    public static final int groundIntakeRotateDown=3;
+
+
     public static final double joystickDeadband = 0.1;
   }
 

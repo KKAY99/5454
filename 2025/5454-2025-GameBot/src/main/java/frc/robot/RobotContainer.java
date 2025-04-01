@@ -29,6 +29,7 @@ import frc.robot.Constants.ButtonBindings;
 import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.GroundIntakeConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LEDStates;
@@ -57,6 +58,7 @@ public class RobotContainer {
   //ClimbSubsystem
   //private ClimbSubsystem m_climb=new ClimbSubsystem(ClimbConstants.climbCanID1,ClimbConstants.climbCanID2,ClimbConstants.encoderDIO,ClimbConstants.ServoPMW);
 
+  private GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem(GroundIntakeConstants.rotateMotorID,GroundIntakeConstants.intakeMotorID,GroundIntakeConstants.rotateEncoderPort);
   public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
@@ -115,7 +117,6 @@ public class RobotContainer {
     //Climb
    // ClimbRotateCommand rotateFwdCommand=new ClimbRotateCommand(m_climb,ClimbConstants.climbForwardSpeed); //0.5 was to strong and bent the shaft...so we decided to up the power XD
    // m_xBoxDriver.a().whileTrue(rotateFwdCommand);
-
    // ClimbRotateCommand rotateBwdCommand=new ClimbRotateCommand(m_climb,ClimbConstants.climbBackSpeed);
    // m_xBoxDriver.b().whileTrue(rotateBwdCommand);
     
@@ -125,6 +126,20 @@ public class RobotContainer {
     ToggleClimbPID testPID2=new ToggleClimbPID(m_climb,ClimbConstants.climbPos2);
     m_xBoxDriver.rightBumper().onTrue(testPID2);*/
 
+    //Replaced Climb Controls with Ground Intake Controls
+
+    GroundIntakeIntakeCommand intakeInCommand = new GroundIntakeIntakeCommand(m_groundIntake,GroundIntakeConstants.intakeInSpeed);
+    m_xBoxDriver.leftBumper().whileTrue(intakeInCommand);
+  
+    GroundIntakeIntakeCommand intakeOutCommand = new GroundIntakeIntakeCommand(m_groundIntake,GroundIntakeConstants.intakeOutSpeed);
+    m_xBoxDriver.rightBumper().whileTrue(intakeOutCommand);
+
+    GroundIntakeRotateCommand rotateUpCommand = new GroundIntakeRotateCommand(m_groundIntake,GroundIntakeConstants.rotateUpSpeed);
+    m_xBoxDriver.a().whileTrue(rotateUpCommand);
+    
+
+    GroundIntakeRotateCommand rotateDownCommand = new GroundIntakeRotateCommand(m_groundIntake,GroundIntakeConstants.rotateDownSpeed);
+    m_xBoxDriver.b().whileTrue(rotateDownCommand);
     //DunkinDonutCommands
     DunkinDonutRotateCommand DunkinRotateCommand=new DunkinDonutRotateCommand(m_dunkinDonut,()->m_xBoxOperator.getRightX()*0.5);
     Trigger operatorRightXJoystick=new Trigger(()->Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
