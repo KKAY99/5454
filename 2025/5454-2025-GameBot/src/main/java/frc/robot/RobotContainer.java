@@ -128,18 +128,17 @@ public class RobotContainer {
 
     //Replaced Climb Controls with Ground Intake Controls
 
-    GroundIntakeIntakeCommand intakeInCommand = new GroundIntakeIntakeCommand(m_groundIntake,GroundIntakeConstants.intakeInSpeed);
-    m_xBoxDriver.leftBumper().whileTrue(intakeInCommand);
+    GroundIntakeAutomatedCommand intakeCommand = new GroundIntakeAutomatedCommand(m_groundIntake,GroundIntakeConstants.intakePos,GroundIntakeConstants.intakeInSpeed,GroundIntakeConstants.stowPos,GroundIntakeConstants.holdSpeed);
+    m_xBoxDriver.leftBumper().whileTrue(intakeCommand);
   
-    GroundIntakeIntakeCommand intakeOutCommand = new GroundIntakeIntakeCommand(m_groundIntake,GroundIntakeConstants.intakeOutSpeed);
-    m_xBoxDriver.rightBumper().whileTrue(intakeOutCommand);
+    GroundIntakeAutomatedCommand scoreCommand = new GroundIntakeAutomatedCommand(m_groundIntake,GroundIntakeConstants.scorePos,GroundIntakeConstants.intakeOutSpeed,GroundIntakeConstants.stowPos,0);
+    m_xBoxDriver.rightBumper().whileTrue(scoreCommand);
 
-    GroundIntakeRotateCommand rotateUpCommand = new GroundIntakeRotateCommand(m_groundIntake,GroundIntakeConstants.rotateUpSpeed);
+   /*GroundIntakeRotateCommand rotateUpCommand = new GroundIntakeRotateCommand(m_groundIntake,GroundIntakeConstants.rotateUpSpeed);
     m_xBoxDriver.a().whileTrue(rotateUpCommand);
-    
 
     GroundIntakeRotateCommand rotateDownCommand = new GroundIntakeRotateCommand(m_groundIntake,GroundIntakeConstants.rotateDownSpeed);
-    m_xBoxDriver.b().whileTrue(rotateDownCommand);
+    m_xBoxDriver.b().whileTrue(rotateDownCommand);*/
     //DunkinDonutCommands
     DunkinDonutRotateCommand DunkinRotateCommand=new DunkinDonutRotateCommand(m_dunkinDonut,()->m_xBoxOperator.getRightX()*0.5);
     Trigger operatorRightXJoystick=new Trigger(()->Math.abs(m_xBoxOperator.getRightX())>Constants.ButtonBindings.joystickDeadband);
@@ -235,6 +234,7 @@ public class RobotContainer {
       //SmartDashboard.putNumber("Climb ABS Pos",m_climb.getAbsoluteEncoderPos());
       SmartDashboard.putNumber("LEFT LIMELIGHT DISTANCE",m_leftLimelight.getDistance());
       SmartDashboard.putNumber("RIGHT LIMELIGHT DISTANCE",m_rightLimelight.getDistance());
+      SmartDashboard.putNumber("GROUND INTAKE ABS POS",m_groundIntake.getAbsoluteEncoderPos());
     }catch(Exception e){}
 
   }
@@ -490,7 +490,7 @@ public class RobotContainer {
     m_Field2d.setRobotPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
-    //m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
+    m_JacksonsCoolPanel.isAllCanAvailable(checkCan());
     setScoreLevelPOV(()->m_xBoxOperator.getPOV());
     setLineupSide(()->m_xBoxOperator.getXButtonPressed(),()->m_xBoxOperator.getBButtonPressed());
     setDoesDoAlgae(()->m_xBoxOperator.getStartButtonPressed());

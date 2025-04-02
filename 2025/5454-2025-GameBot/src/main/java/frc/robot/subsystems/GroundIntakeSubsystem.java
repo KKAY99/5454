@@ -5,7 +5,13 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.GroundIntakeConstants;
+import frc.robot.commands.GroundIntakeAutomatedCommand;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import frc.robot.utilities.ObsidianPID;
+
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -13,13 +19,22 @@ public class GroundIntakeSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_rotateMotor;
   private ObsidianCANSparkMax m_intakeMotor;
   private DutyCycleEncoder m_encoder;
+  private ObsidianPID m_obsidianPID;
+
   private double m_rotateSpeed=0;
   private double m_intakeSpeed=0;
+
+  private double m_setPoint=0;
+  private double m_pidOutput=0;
  
   public GroundIntakeSubsystem(int canRotateID,int canIntakeID, int encoderDIO){
     m_rotateMotor = new ObsidianCANSparkMax(canRotateID,MotorType.kBrushless,true,Constants.k40Amp);
     m_intakeMotor = new ObsidianCANSparkMax(canIntakeID,MotorType.kBrushless,true,Constants.k40Amp);
    
+    m_obsidianPID=new ObsidianPID(GroundIntakeConstants.rotateP,GroundIntakeConstants.rotateI,
+    GroundIntakeConstants.rotateD,GroundIntakeConstants.rotateMaxAndMin,-GroundIntakeConstants.rotateMaxAndMin);
+    m_obsidianPID.setInputGain(GroundIntakeConstants.rotateInputGain);
+
     m_encoder=new DutyCycleEncoder(encoderDIO);
   }
 
@@ -28,8 +43,17 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     return m_encoder.get();
   }
 
-  public void movetoPosition(double position){
-    //DO MAGIC
+  public void togglePID(double setPoint){
+    m_obsidianPID.togglePID();
+    m_setPoint=setPoint;
+  }
+
+  public void resetPID(){
+    m_obsidianPID.resetToggle();
+  }
+
+  public boolean getPIDToggle(){
+    return m_obsidianPID.getToggle();
   }
 
   public boolean checkCANConnections(){
@@ -90,5 +114,10 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     Logger.recordOutput("GroundIntake/IntakeSpped",m_intakeSpeed);
     Logger.recordOutput("GroundIntake/RotateSpeed",m_rotateSpeed);
     Logger.recordOutput("GroundIntake/RotateEncoder",m_encoder.get());
+
+    if(m_obsidianPID.getToggle()){
+      m_pidOutput=m_obsidianPID.calculatePercentOutput(getAbsoluteEncoderPos(),m_setPoint);
+      m_rotateMotor.set(m_pidOutput);
+    }
   }
 }

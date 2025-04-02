@@ -188,11 +188,26 @@ public final class Constants {
     public static final int rotateMotorID=20;
     public static final int intakeMotorID=26;
     public static final int rotateEncoderPort=2;
+
     public static final double rotateUpSpeed=0.5;
     public static final double rotateDownSpeed=-0.5;
-    public static final double intakeInSpeed=0.5;
-   public static final double intakeOutSpeed=-0.5;
+    public static final double intakeInSpeed=-0.4;
+    public static final double intakeOutSpeed=0.2;
+    public static final double holdSpeed=-0.05;
+
+    public static final double rotateP=0.1;
+    public static final double rotateI=0;
+    public static final double rotateD=0;
+    public static final double rotateMaxAndMin=1;
+    public static final double rotateInputGain=60;
+
+    public static final double posDeadband=0.002;
+
+    public static final double intakePos=0.304;
+    public static final double scorePos=0.487;
+    public static final double stowPos=0.688;
   }
+  
   public static final class DunkinDonutConstants{
     public static final int indexerLimitSwitchDIO = 4;
     public static final int coralIndexerID = 27;
