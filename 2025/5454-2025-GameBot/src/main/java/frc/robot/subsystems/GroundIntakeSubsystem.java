@@ -31,8 +31,8 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     m_rotateMotor = new ObsidianCANSparkMax(canRotateID,MotorType.kBrushless,true,Constants.k40Amp);
     m_intakeMotor = new ObsidianCANSparkMax(canIntakeID,MotorType.kBrushless,true,Constants.k40Amp);
    
-    m_obsidianPID=new ObsidianPID(GroundIntakeConstants.rotateP,GroundIntakeConstants.rotateI,
-    GroundIntakeConstants.rotateD,GroundIntakeConstants.rotateMaxAndMin,-GroundIntakeConstants.rotateMaxAndMin);
+    m_obsidianPID=new ObsidianPID(GroundIntakeConstants.rotatePK0,GroundIntakeConstants.rotateIK0,
+    GroundIntakeConstants.rotateDK0,GroundIntakeConstants.rotateMaxAndMinK0,-GroundIntakeConstants.rotateMaxAndMinK0);
     m_obsidianPID.setInputGain(GroundIntakeConstants.rotateInputGain);
 
     m_encoder=new DutyCycleEncoder(encoderDIO);
@@ -43,7 +43,20 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     return m_encoder.get();
   }
 
-  public void togglePID(double setPoint){
+  public void togglePID(double setPoint,int slot){
+    switch(slot){
+      case 0:
+        m_obsidianPID.setAllValues(GroundIntakeConstants.rotatePK0,GroundIntakeConstants.rotateIK0,GroundIntakeConstants.rotateDK0,
+                                  GroundIntakeConstants.rotateMaxAndMinK0,-GroundIntakeConstants.rotateMaxAndMinK0,GroundIntakeConstants.rotateInputGain);
+      break;
+      case 1:
+      m_obsidianPID.setAllValues(GroundIntakeConstants.rotatePK1,GroundIntakeConstants.rotateIK1,GroundIntakeConstants.rotateDK1,
+                                  GroundIntakeConstants.rotateMaxAndMinK1,-GroundIntakeConstants.rotateMaxAndMinK1,GroundIntakeConstants.rotateInputGain);
+      break;
+      default:
+
+    }
+
     m_obsidianPID.togglePID();
     m_setPoint=setPoint;
   }

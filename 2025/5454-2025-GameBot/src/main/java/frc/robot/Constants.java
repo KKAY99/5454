@@ -138,8 +138,8 @@ public final class Constants {
 
     public static final double reefAprilTagHeight=8.75;
 
-    public static final double leftLineupXDeadband=0.6;
-    public static final double rightLineupXDeadband=0.6;
+    public static final double leftLineupXDeadband=0.8;
+    public static final double rightLineupXDeadband=0.8;
 
     public static final double driveTargetDistanceRight=51;
     public static final double driveTargetDistanceLeft=-66;
@@ -148,21 +148,21 @@ public final class Constants {
     public static final double driveFollowDistanceLeft=-120;
     public static final double driveDeadBand=2;
 
-    public static final double isInDeadBandHeartBeat=4;
-    public static final double shouldEndHeartBeat=10;
-    public static final double strafeClampMinLEFT=0.025;
-    public static final double strafeClampMinRIGHT=0.0265;
+    public static final double isInDeadBandHeartBeat=2;
+    public static final double shouldEndHeartBeat=6;
+    public static final double strafeClampMinLEFT=0.0285;
+    public static final double strafeClampMinRIGHT=0.0285;
 
     public static final double strafePRIGHT=0.007;
     public static final double strafeIRIGHT=0;
-    public static final double strafeDRIGHT=0.020;
+    public static final double strafeDRIGHT=0.02;
     public static final double strafeMaxAndMinRIGHT=0.35;
     public static final double strafeInputGainRIGHT=1;
 
     public static final double strafePLEFT=0.007;
     public static final double strafeILEFT=0;
     public static final double strafeDLEFT=0.02;
-    public static final double strafeMaxAndMinLEFT=0.30;
+    public static final double strafeMaxAndMinLEFT=0.20;
     public static final double strafeInputGainLEFT=1;
 
     public static final double rotP=0.07;
@@ -191,20 +191,25 @@ public final class Constants {
 
     public static final double rotateUpSpeed=0.5;
     public static final double rotateDownSpeed=-0.5;
-    public static final double intakeInSpeed=-0.4;
-    public static final double intakeOutSpeed=0.2;
-    public static final double holdSpeed=-0.05;
+    public static final double intakeInSpeed=-0.6;
+    public static final double intakeOutSpeed=0.8;
+    public static final double holdSpeed=-0.1;
 
-    public static final double rotateP=0.1;
-    public static final double rotateI=0;
-    public static final double rotateD=0;
-    public static final double rotateMaxAndMin=1;
+    public static final double rotatePK0=0.1;
+    public static final double rotateIK0=0;
+    public static final double rotateDK0=0.05;
+    public static final double rotateMaxAndMinK0=0.9;
+
+    public static final double rotatePK1=0.05;
+    public static final double rotateIK1=0;
+    public static final double rotateDK1=0.1;
+    public static final double rotateMaxAndMinK1=0.7;
     public static final double rotateInputGain=60;
 
     public static final double posDeadband=0.002;
 
     public static final double intakePos=0.304;
-    public static final double scorePos=0.487;
+    public static final double scorePos=0.499;
     public static final double stowPos=0.688;
   }
   
@@ -262,10 +267,10 @@ public final class Constants {
     public static final double processorScoreSpeed=-0.7;
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=0.20;
-    public static final double autoScoreCoralSpeedL4=0.40;
+    public static final double autoScoreCoralSpeedL4=0.20;
     public static final double coralBoxIntakeSpeed=-0.1;
     public static final double indexerOuttakeSpeed=-0.6;
-    public static final double autoCoralTimeToRun=0.3;
+    public static final double autoCoralTimeToRun=0.5;
     public static final double autoScoreAlgaeRunTime=1;
   }
 
@@ -286,7 +291,7 @@ public final class Constants {
     public static final double elevatorHighLimit=-99.5;
     public static final double elevatorLowLimit=-0.2;
 
-    public static final double posDeadband=1.2;
+    public static final double posDeadband=0.2;
 
     public static final double elevSafeRetractPos=-43;
     public static final double aboveThrowPos=-60;
@@ -302,7 +307,7 @@ public final class Constants {
     //43
     public static final double l3Pos=-41.4;
     //-89
-    public static final double l4Pos=-86.9;
+    public static final double l4Pos=-86.5;
 
     public static final double aboveTroughPos=-20;
 
@@ -313,7 +318,7 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final double coralShootSpeed=0.6;
-    public static final double coralOutakeSpeed=-0.3;
+    public static final double coralOutakeSpeed=-0.2;
     public static final double coralIntakeSpeed=0.15;
     public static final double indexerIntakeSpeed=0.75;
     public static final double indexerOuttakeSpeed=-0.75;

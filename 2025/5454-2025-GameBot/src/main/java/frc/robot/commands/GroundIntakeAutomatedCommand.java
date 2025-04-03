@@ -45,7 +45,7 @@ public class GroundIntakeAutomatedCommand extends Command {
   public void end(boolean interrupted) {
     m_groundIntake.runIntake(m_endSpeed);
     m_groundIntake.resetPID();
-    m_groundIntake.togglePID(m_endPosition);
+    m_groundIntake.togglePID(m_endPosition,1);
   }
 
   // Returns true when the command should end.
@@ -56,7 +56,7 @@ public class GroundIntakeAutomatedCommand extends Command {
     switch(m_currentState){
       case SETPOS:
         m_groundIntake.resetPID();
-        m_groundIntake.togglePID(m_position);
+        m_groundIntake.togglePID(m_position,0);
 
         m_currentState=States.WAITFORPOS;
       break;
