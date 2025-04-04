@@ -138,8 +138,8 @@ public final class Constants {
 
     public static final double reefAprilTagHeight=8.75;
 
-    public static final double leftLineupXDeadband=0.8;
-    public static final double rightLineupXDeadband=0.8;
+    public static final double leftLineupXDeadband=1;
+    public static final double rightLineupXDeadband=1;
 
     public static final double driveTargetDistanceRight=51;
     public static final double driveTargetDistanceLeft=-66;
@@ -150,8 +150,8 @@ public final class Constants {
 
     public static final double isInDeadBandHeartBeat=2;
     public static final double shouldEndHeartBeat=6;
-    public static final double strafeClampMinLEFT=0.0285;
-    public static final double strafeClampMinRIGHT=0.0285;
+    public static final double strafeClampMinLEFT=0.029;
+    public static final double strafeClampMinRIGHT=0.029;
 
     public static final double strafePRIGHT=0.007;
     public static final double strafeIRIGHT=0;
@@ -191,7 +191,7 @@ public final class Constants {
 
     public static final double rotateUpSpeed=0.5;
     public static final double rotateDownSpeed=-0.5;
-    public static final double intakeInSpeed=-0.6;
+    public static final double intakeInSpeed=-0.8;
     public static final double intakeOutSpeed=0.8;
     public static final double holdSpeed=-0.1;
 
@@ -209,7 +209,7 @@ public final class Constants {
     public static final double posDeadband=0.002;
 
     public static final double intakePos=0.304;
-    public static final double scorePos=0.499;
+    public static final double scorePos=0.502;
     public static final double stowPos=0.688;
   }
   
@@ -255,6 +255,7 @@ public final class Constants {
     public static final double processorScorePos=0.328;
     public static final double noGrabAlgaePos=0.22;
     public static final double algaeGrabPos=0.28;
+    public static final double algaeGrabPosL4=0.28;
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
@@ -307,7 +308,7 @@ public final class Constants {
     //43
     public static final double l3Pos=-41.4;
     //-89
-    public static final double l4Pos=-86.5;
+    public static final double l4Pos=-87.5;
 
     public static final double aboveTroughPos=-20;
 
