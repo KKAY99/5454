@@ -321,11 +321,11 @@ public class AutoScoreCommand extends Command{
             strafe=-m_strafePIDLEFT.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.leftLineupXDeadband&&m_isRightLineup.get()&&x!=0){
-                System.out.println("IN LEFT LIMELIGHT DEADBAND IS CURRENT LINEUP RIGHT: "+m_isRightLineup.get());
+                //System.out.println("IN LEFT LIMELIGHT DEADBAND IS CURRENT LINEUP RIGHT: "+m_isRightLineup.get());
                 if(!m_hasSetDriveTimer){
                     m_hasSetDriveTimer=true;
                     m_startTime=Timer.getFPGATimestamp();
-                    m_endTime=m_startTime+LimeLightValues.driveTimeToRun;
+                    m_endTime=m_startTime+LimeLightValues.driveTimeToRunLeft;
                 }
 
                 if(!m_isInDeadBand&&m_hasDrivenTwice){
@@ -346,14 +346,14 @@ public class AutoScoreCommand extends Command{
                     strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
                     strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeClampMinLEFT):
                                     MathUtil.clamp(strafe,LimeLightValues.strafeClampMinLEFT,LimeLightValues.strafeMaxAndMinLEFT);
-                    System.out.println("In DEADBAND LEFT LINEUP STRAFING AT "+strafe+" SPEED");
+                    //System.out.println("In DEADBAND LEFT LINEUP STRAFING AT "+strafe+" SPEED");
                     m_swerve.drive(0,strafe*strafeFlipValue,0);
 
-                }else if(Timer.getFPGATimestamp()>m_endTime){
+                }else if(Timer.getFPGATimestamp()>m_endTime&&!m_hasDrivenTwice&&m_hasSetDriveTimer){
                     m_swerve.drive(0,0,0);
                     m_swerve.brake();
                     m_hasDrivenTwice=true;
-                }else if(!m_hasDrivenTwice){
+                }else if(!m_hasDrivenTwice&&m_hasSetDriveTimer){
                     m_swerve.drive(LimeLightValues.correctDriveSpeed,0,0);
                 }
             }else{
@@ -363,24 +363,25 @@ public class AutoScoreCommand extends Command{
                     strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
                     strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFT,-LimeLightValues.strafeClampMinLEFT):
                                     MathUtil.clamp(strafe,LimeLightValues.strafeClampMinLEFT,LimeLightValues.strafeMaxAndMinLEFT);
-                    System.out.println("LEFT LINEUP STRAFING AT "+strafe+" SPEED");
+                    //System.out.println("LEFT LINEUP STRAFING AT "+strafe+" SPEED");
                     m_swerve.drive(0,strafe*strafeFlipValue,0);
 
-                }if(Timer.getFPGATimestamp()>m_endTime&&!m_hasDrivenTwice){
+                }if(Timer.getFPGATimestamp()>m_endTime&&!m_hasDrivenTwice&&m_hasSetDriveTimer){
                     m_swerve.drive(0,0,0);
                     m_swerve.brake();
                     m_hasDrivenTwice=true;
-                }else if(!m_hasDrivenTwice){
+                }else if(!m_hasDrivenTwice&&m_hasSetDriveTimer){
                     m_swerve.drive(LimeLightValues.correctDriveSpeed,0,0);
                 }
             }
 
             if(m_rightLimelight.isAnyTargetAvailable()&&!m_isRightLineup.get()){
-                System.out.println("SWAPPING TO RIGHT LINEUP: " + !m_isRightLineup.get());
+                //System.out.println("SWAPPING TO RIGHT LINEUP: " + !m_isRightLineup.get());
                 m_hasSetDriveTimer=false;
+                m_hasDrivenTwice=false;
                 m_currentState=States.RIGHTLINEUP;
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
-                System.out.println("NO TARGETS ENDING COMMAND");
+                //System.out.println("NO TARGETS ENDING COMMAND");
                 m_currentState=States.RETRACT;
             }
 
@@ -394,11 +395,11 @@ public class AutoScoreCommand extends Command{
             strafe=-m_strafePIDRIGHT.calculatePercentOutput(x,0);
 
             if(x<LimeLightValues.rightLineupXDeadband&&!m_isRightLineup.get()&&x!=0){
-                System.out.println("IN RIGHT LIMELIGHT DEADBAND IS CURRENT LINEUP LEFT: "+!m_isRightLineup.get());
+                //System.out.println("IN RIGHT LIMELIGHT DEADBAND IS CURRENT LINEUP LEFT: "+!m_isRightLineup.get());
                 if(!m_hasSetDriveTimer){
                     m_hasSetDriveTimer=true;
                     m_startTime=Timer.getFPGATimestamp();
-                    m_endTime=m_startTime+LimeLightValues.driveTimeToRun;
+                    m_endTime=m_startTime+LimeLightValues.driveTimeToRunRight;
                 }
 
                 if(!m_isInDeadBand&&m_hasDrivenTwice){
@@ -419,14 +420,14 @@ public class AutoScoreCommand extends Command{
                     strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
                     strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeClampMinRIGHT)
                                     :MathUtil.clamp(strafe,LimeLightValues.strafeClampMinRIGHT,LimeLightValues.strafeMaxAndMinRIGHT);
-                    System.out.println("IN DEADBAND RIGHT LINEUP STRAFING AT "+strafe+" SPEED");
+                    //System.out.println("IN DEADBAND RIGHT LINEUP STRAFING AT "+strafe+" SPEED");
                     m_swerve.drive(0,strafe*strafeFlipValue,0);
 
-                }else if(Timer.getFPGATimestamp()>m_endTime){
+                }else if(Timer.getFPGATimestamp()>m_endTime&&!m_hasDrivenTwice&&m_hasSetDriveTimer){
                     m_swerve.drive(0,0,0);
                     m_swerve.brake();
                     m_hasDrivenTwice=true;
-                }else if(!m_hasDrivenTwice){
+                }else if(!m_hasDrivenTwice&&m_hasSetDriveTimer){
                     m_swerve.drive(LimeLightValues.correctDriveSpeed,0,0);
                 }
             }else{
@@ -436,24 +437,25 @@ public class AutoScoreCommand extends Command{
                     strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
                     strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHT,-LimeLightValues.strafeClampMinRIGHT)
                                     :MathUtil.clamp(strafe,LimeLightValues.strafeClampMinRIGHT,LimeLightValues.strafeMaxAndMinRIGHT);
-                    System.out.println("RIGHT LINEUP STRAFING AT "+strafe+" SPEED");
+                    //System.out.println("RIGHT LINEUP STRAFING AT "+strafe+" SPEED");
                     m_swerve.drive(0,strafe*strafeFlipValue,0);
 
-                }else if(Timer.getFPGATimestamp()>m_endTime&&!m_hasDrivenTwice){
+                }else if(Timer.getFPGATimestamp()>m_endTime&&!m_hasDrivenTwice&&m_hasSetDriveTimer){
                     m_swerve.drive(0,0,0);
                     m_swerve.brake();
                     m_hasDrivenTwice=true;
-                }else if(!m_hasDrivenTwice){
+                }else if(!m_hasDrivenTwice&&m_hasSetDriveTimer){
                     m_swerve.drive(LimeLightValues.correctDriveSpeed,0,0);
                 }
             }
 
             if(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup.get()){
-                System.out.println("SWAPPING TO LEFT LINEUP: " + m_isRightLineup.get());
+                //System.out.println("SWAPPING TO LEFT LINEUP: " + m_isRightLineup.get());
                 m_hasSetDriveTimer=false;
+                m_hasDrivenTwice=false;
                 m_currentState=States.LEFTLINEUP;
             }else if(!m_rightLimelight.isAnyTargetAvailable()&&!m_leftLimelight.isAnyTargetAvailable()){
-                System.out.println("NO TARGETS ENDING COMMAND");
+                //System.out.println("NO TARGETS ENDING COMMAND");
                 m_currentState=States.RETRACT;
             }
 
@@ -467,6 +469,7 @@ public class AutoScoreCommand extends Command{
                 m_dunkin.toggleLocalPid(m_algaePos);
                 m_dunkin.resetAlgeaToggle();
                 m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
+                m_startTime=Timer.getFPGATimestamp();
             }
 
             m_currentState=States.WAITFORELEVATOR;
@@ -474,8 +477,14 @@ public class AutoScoreCommand extends Command{
         case WAITFORELEVATOR:
             elevatorPos=m_elevator.getRelativePos();
 
-            if(elevatorPos>m_elevatorFPos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorFPos+ElevatorConstants.posDeadband){
+            if(Timer.getFPGATimestamp()>m_startTime+DunkinDonutConstants.algaeRotateDownTime){
+                if(m_scoreLevel.get()==ElevatorScoreLevel.L4&&m_shouldRunAlgae){
+                    m_dunkin.resetShouldRunPID();
+                    m_dunkin.toggleLocalPid(DunkinDonutConstants.algaeMoveForScoringL4);
+                }
+            }
 
+            if(elevatorPos>m_elevatorFPos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorFPos+ElevatorConstants.posDeadband){
                 m_startTime=Timer.getFPGATimestamp();
                 m_currentState=States.CORAL;
             }

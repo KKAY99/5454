@@ -156,7 +156,7 @@ public final class Constants {
     public static final double strafePRIGHT=0.007;
     public static final double strafeIRIGHT=0;
     public static final double strafeDRIGHT=0.02;
-    public static final double strafeMaxAndMinRIGHT=0.35;
+    public static final double strafeMaxAndMinRIGHT=0.1;
     public static final double strafeInputGainRIGHT=1;
 
     public static final double strafePLEFT=0.007;
@@ -173,6 +173,8 @@ public final class Constants {
 
     public static final double algaeDriveTimeToRun=0.3;
     public static final double driveTimeToRun=0.3;
+    public static final double driveTimeToRunLeft=0.3;
+    public static final double driveTimeToRunRight=0.3;
     public static final double algaeDriveBackSpeed=0.1;
     public static final double lineUpDriveSpeed=-0.15;
     public static final double correctDriveSpeed=-0.1;
@@ -226,8 +228,7 @@ public final class Constants {
 
     public static final double posDeadband=2;
     public static final double coralPosDeadband=0.01;
-    public static final double posClawDeadband=0.02;
-
+    public static final double posClawDeadband=0.05;
     public static final double homePosDeadband=0.02;
     public static final double rotateHomePos=0.15;
     public static final double homeSpeed=0.03;
@@ -256,6 +257,7 @@ public final class Constants {
     public static final double noGrabAlgaePos=0.22;
     public static final double algaeGrabPos=0.28;
     public static final double algaeGrabPosL4=0.28;
+    public static final double algaeMoveForScoringL4=0.384;
 
     public static final double relativeHighLimitABS=0.48;
     public static final double relativeLowLimitABS=0.10; //no limit 
@@ -273,13 +275,14 @@ public final class Constants {
     public static final double indexerOuttakeSpeed=-0.6;
     public static final double autoCoralTimeToRun=0.5;
     public static final double autoScoreAlgaeRunTime=1;
+    public static final double algaeRotateDownTime=0.3;
   }
 
   public static final class ElevatorConstants{
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorPK1=0.2;//0.07
+    public static final double elevatorPK1=0.22;//0.07
     public static final double elevatorIK1=0;
     public static final double elevatorDK1=0.03;
     public static final double elevatorMaxAndMinK1=1;
