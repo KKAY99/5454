@@ -179,6 +179,31 @@ public final class Constants {
     public static final double lineUpDriveSpeed=-0.15;
     public static final double correctDriveSpeed=-0.1;
 
+    public static final double isInDeadBandHeartBeatNEW=2;
+    public static final double shouldEndHeartBeatNEW=4;
+    public static final double strafeClampMinLEFTNEW=0.029;
+    public static final double strafeClampMinRIGHTNEW=0.029;
+
+    public static final double strafePRIGHTNEW=0.0003;
+    public static final double strafeIRIGHTNEW=0.0000000001;
+    public static final double strafeDRIGHTNEW=6;
+    public static final double strafeMaxAndMinRIGHTNEW=0.2;
+    public static final double strafeInputGainRIGHTNEW=30;
+
+    public static final double strafePLEFTNEW=0.00002;
+    public static final double strafeILEFTNEW=0.0000000001;
+    public static final double strafeDLEFTNEW=6;
+    public static final double strafeMaxAndMinLEFTNEW=0.2;
+    public static final double strafeInputGainLEFTNEW=30;
+
+    public static final double algaeDriveTimeToRunNEW=0.3;
+    public static final double driveTimeToRunNEW=0.3;
+    public static final double driveTimeToRunLeftNEW=0.3;
+    public static final double driveTimeToRunRightNEW=0.3;
+    public static final double algaeDriveBackSpeedNEW=0.1;
+    public static final double lineUpDriveSpeedNEW=-0.15;
+    public static final double correctDriveSpeedNEW=-0.1;
+
     public static final double driveP=0.15;
     public static final double driveI=0;
     public static final double driveD=0.1;
@@ -287,10 +312,15 @@ public final class Constants {
     public static final double elevatorDK1=0.03;
     public static final double elevatorMaxAndMinK1=1;
 
-    public static final double elevatorPK2=0.15;//0.05
+    public static final double elevatorPK2=0.2;//0.05
     public static final double elevatorIK2=0;
     public static final double elevatorDK2=0.08;
     public static final double elevatorMaxAndMinK2=0.70;
+
+    public static final double elevatorPK3=0.05;//0.05
+    public static final double elevatorIK3=0;
+    public static final double elevatorDK3=0;
+    public static final double elevatorMaxAndMinK3=0.3;
 
     public static final double elevatorHighLimit=-99.5;
     public static final double elevatorLowLimit=-0.2;

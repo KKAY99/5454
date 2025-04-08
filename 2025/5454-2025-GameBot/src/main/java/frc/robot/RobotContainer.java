@@ -181,7 +181,7 @@ public class RobotContainer {
     JoystickButton operatorSeqScoreManualButton=new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreManualButton);
     operatorSeqScoreManualButton.onTrue(seqScoreCommandManual);
 
-    AutoScoreCommand seqScoreCommandAuto = new AutoScoreCommand(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
+    AutoScoreCommandNEW seqScoreCommandAuto = new AutoScoreCommandNEW(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);
   }
@@ -463,7 +463,23 @@ public class RobotContainer {
     refreshSmartDashboard();
     updateLEDs();
 
-
+    if(m_rightLimelight.isAnyTargetAvailable()&&!m_isRightLineup){
+      if(m_rightLimelight.getX()<LimeLightValues.leftLineupXDeadband&&m_rightLimelight.getX()>-LimeLightValues.leftLineupXDeadband){
+        m_LEDS.setLedState(LEDStates.GORIGHT,false);
+      }else if(m_rightLimelight.getX()>LimeLightValues.leftLineupXDeadband){
+        m_LEDS.setLedState(LEDStates.GOLEFT,false);
+      }else if(m_rightLimelight.getX()<-LimeLightValues.leftLineupXDeadband){
+        m_LEDS.setLedState(LEDStates.LINEDUP,false);
+      }
+    }else if(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup){
+      if(m_leftLimelight.getX()<LimeLightValues.rightLineupXDeadband&&m_leftLimelight.getX()>-LimeLightValues.rightLineupXDeadband){
+        m_LEDS.setLedState(LEDStates.GOLEFT,false);
+      }else if(m_leftLimelight.getX()>LimeLightValues.rightLineupXDeadband){
+        m_LEDS.setLedState(LEDStates.GORIGHT,false);
+      }else if(m_leftLimelight.getX()<-LimeLightValues.rightLineupXDeadband){
+        m_LEDS.setLedState(LEDStates.LINEDUP,false);
+      }
+    }
    
     if(m_rightLimelight.isAnyTargetAvailable()){
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);

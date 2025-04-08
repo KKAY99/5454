@@ -25,7 +25,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public ElevatorSubsystem(int CanID_1,int canColorID) {
     m_motor1 = new ObsidianCANSparkMax(CanID_1, MotorType.kBrushless,true,Constants.k40Amp,
               ElevatorConstants.elevatorPK1,ElevatorConstants.elevatorIK1,ElevatorConstants.elevatorDK1,ElevatorConstants.elevatorMaxAndMinK1,
-              ElevatorConstants.elevatorPK2,ElevatorConstants.elevatorIK2,ElevatorConstants.elevatorDK2,ElevatorConstants.elevatorMaxAndMinK2);
+              ElevatorConstants.elevatorPK2,ElevatorConstants.elevatorIK2,ElevatorConstants.elevatorDK2,ElevatorConstants.elevatorMaxAndMinK2,
+              ElevatorConstants.elevatorPK3,ElevatorConstants.elevatorIK3,ElevatorConstants.elevatorDK3,ElevatorConstants.elevatorMaxAndMinK3);
     //m_canAndColor=new ObsidianCanandcolor(canColorID);
     m_loopController=m_motor1.getClosedLoopController();
 
