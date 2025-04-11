@@ -292,7 +292,7 @@ public class AutoScoreCommandNEW extends Command{
                 }else if(m_rightLimelight.isAnyTargetAvailable()){
                     m_currentState=States.RIGHTLINEUP;
                 }else{
-                    m_currentState=States.END;
+                    m_currentState=States.RETRACT;
                 }
             }else{
                 if(m_rightLimelight.isAnyTargetAvailable()){
@@ -300,7 +300,7 @@ public class AutoScoreCommandNEW extends Command{
                 }else if(m_leftLimelight.isAnyTargetAvailable()){
                     m_currentState=States.LEFTLINEUP;
                 }else{
-                    m_currentState=States.END;
+                    m_currentState=States.RETRACT;
                 }
             }
         break;
@@ -333,7 +333,7 @@ public class AutoScoreCommandNEW extends Command{
                         m_currentState=States.ELEVATOR;
                     }
                 }else if(m_hasDrivenTwice){
-                    strafe=(m_isRightLineup.get())?-strafe:-LimeLightValues.strafeMaxAndMinLEFTNEW;
+                    strafe=(m_isRightLineup.get())?-strafe:-LimeLightValues.strafePassOff;
                     strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
                     strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFTNEW,-LimeLightValues.strafeClampMinLEFTNEW):
                                     MathUtil.clamp(strafe,LimeLightValues.strafeClampMinLEFTNEW,LimeLightValues.strafeMaxAndMinLEFTNEW);
@@ -350,7 +350,7 @@ public class AutoScoreCommandNEW extends Command{
             }else{
                 if(!m_hasSetDriveTimer||m_hasDrivenTwice){
                     m_isInDeadBand=false;
-                    strafe=(m_isRightLineup.get())?-strafe:-LimeLightValues.strafeMaxAndMinLEFTNEW;
+                    strafe=(m_isRightLineup.get())?-strafe:-LimeLightValues.strafePassOff;
                     strafeFlipValue=(m_isRightLineup.get())?strafeFlipValue:1;
                     strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinLEFTNEW,-LimeLightValues.strafeClampMinLEFTNEW):
                                     MathUtil.clamp(strafe,LimeLightValues.strafeClampMinLEFTNEW,LimeLightValues.strafeMaxAndMinLEFTNEW);
@@ -407,7 +407,7 @@ public class AutoScoreCommandNEW extends Command{
                         m_currentState=States.ELEVATOR;
                     }
                 }else if(m_hasDrivenTwice){
-                    strafe=(!m_isRightLineup.get())?strafe:LimeLightValues.strafeMaxAndMinRIGHTNEW;
+                    strafe=(!m_isRightLineup.get())?strafe:LimeLightValues.strafePassOff;
                     strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
                     strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHTNEW,-LimeLightValues.strafeClampMinRIGHTNEW)
                                     :MathUtil.clamp(strafe,LimeLightValues.strafeClampMinRIGHTNEW,LimeLightValues.strafeMaxAndMinRIGHTNEW);
@@ -424,7 +424,7 @@ public class AutoScoreCommandNEW extends Command{
             }else{
                 if(!m_hasSetDriveTimer||m_hasDrivenTwice){
                     m_isInDeadBand=false;
-                    strafe=(!m_isRightLineup.get())?strafe:LimeLightValues.strafeMaxAndMinRIGHTNEW;
+                    strafe=(!m_isRightLineup.get())?strafe:LimeLightValues.strafePassOff;
                     strafeFlipValue=(!m_isRightLineup.get())?strafeFlipValue:1;
                     strafe=(strafe<0)?MathUtil.clamp(strafe,-LimeLightValues.strafeMaxAndMinRIGHTNEW,-LimeLightValues.strafeClampMinRIGHTNEW)
                                     :MathUtil.clamp(strafe,LimeLightValues.strafeClampMinRIGHTNEW,LimeLightValues.strafeMaxAndMinRIGHTNEW);
