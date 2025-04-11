@@ -301,7 +301,7 @@ public class AutoScoreCommand extends Command{
                 }else if(m_rightLimelight.isAnyTargetAvailable()){
                     m_currentState=States.RIGHTLINEUP;
                 }else{
-                    m_currentState=States.END;
+                    m_currentState=States.RETRACT;
                 }
             }else{
                 if(m_rightLimelight.isAnyTargetAvailable()){
@@ -309,7 +309,7 @@ public class AutoScoreCommand extends Command{
                 }else if(m_leftLimelight.isAnyTargetAvailable()){
                     m_currentState=States.LEFTLINEUP;
                 }else{
-                    m_currentState=States.END;
+                    m_currentState=States.RETRACT;
                 }
             }
         break;

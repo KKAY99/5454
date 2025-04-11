@@ -181,20 +181,21 @@ public final class Constants {
 
     public static final double isInDeadBandHeartBeatNEW=2;
     public static final double shouldEndHeartBeatNEW=4;
-    public static final double strafeClampMinLEFTNEW=0.029;
-    public static final double strafeClampMinRIGHTNEW=0.029;
+    public static final double strafeClampMinLEFTNEW=0.03;
+    public static final double strafeClampMinRIGHTNEW=0.03;
+    public static final double strafePassOff=0.15;
 
-    public static final double strafePRIGHTNEW=0.0003;
+    public static final double strafePRIGHTNEW=0.012;
     public static final double strafeIRIGHTNEW=0.0000000001;
-    public static final double strafeDRIGHTNEW=6;
-    public static final double strafeMaxAndMinRIGHTNEW=0.2;
-    public static final double strafeInputGainRIGHTNEW=30;
+    public static final double strafeDRIGHTNEW=9;
+    public static final double strafeMaxAndMinRIGHTNEW=0.45;
+    public static final double strafeInputGainRIGHTNEW=0.5;
 
-    public static final double strafePLEFTNEW=0.00002;
+    public static final double strafePLEFTNEW=0.01;
     public static final double strafeILEFTNEW=0.0000000001;
-    public static final double strafeDLEFTNEW=6;
-    public static final double strafeMaxAndMinLEFTNEW=0.2;
-    public static final double strafeInputGainLEFTNEW=30;
+    public static final double strafeDLEFTNEW=11;
+    public static final double strafeMaxAndMinLEFTNEW=0.45;
+    public static final double strafeInputGainLEFTNEW=0.5;
 
     public static final double algaeDriveTimeToRunNEW=0.3;
     public static final double driveTimeToRunNEW=0.3;
@@ -307,15 +308,15 @@ public final class Constants {
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorPK1=0.22;//0.07
+    public static final double elevatorPK1=0.23;//0.07
     public static final double elevatorIK1=0;
-    public static final double elevatorDK1=0.03;
+    public static final double elevatorDK1=0.04;
     public static final double elevatorMaxAndMinK1=1;
 
-    public static final double elevatorPK2=0.2;//0.05
+    public static final double elevatorPK2=0.1;//0.05
     public static final double elevatorIK2=0;
-    public static final double elevatorDK2=0.08;
-    public static final double elevatorMaxAndMinK2=0.70;
+    public static final double elevatorDK2=0.2;
+    public static final double elevatorMaxAndMinK2=0.50;
 
     public static final double elevatorPK3=0.05;//0.05
     public static final double elevatorIK3=0;

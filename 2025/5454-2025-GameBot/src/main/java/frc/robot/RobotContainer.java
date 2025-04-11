@@ -465,19 +465,19 @@ public class RobotContainer {
 
     if(m_rightLimelight.isAnyTargetAvailable()&&!m_isRightLineup){
       if(m_rightLimelight.getX()<LimeLightValues.leftLineupXDeadband&&m_rightLimelight.getX()>-LimeLightValues.leftLineupXDeadband){
-        m_LEDS.setLedState(LEDStates.GORIGHT,false);
+        m_LEDS.setLedState(LEDStates.LINEDUP,false);
       }else if(m_rightLimelight.getX()>LimeLightValues.leftLineupXDeadband){
         m_LEDS.setLedState(LEDStates.GOLEFT,false);
       }else if(m_rightLimelight.getX()<-LimeLightValues.leftLineupXDeadband){
-        m_LEDS.setLedState(LEDStates.LINEDUP,false);
+        m_LEDS.setLedState(LEDStates.GORIGHT,false);
       }
     }else if(m_leftLimelight.isAnyTargetAvailable()&&m_isRightLineup){
       if(m_leftLimelight.getX()<LimeLightValues.rightLineupXDeadband&&m_leftLimelight.getX()>-LimeLightValues.rightLineupXDeadband){
-        m_LEDS.setLedState(LEDStates.GOLEFT,false);
+        m_LEDS.setLedState(LEDStates.LINEDUP,false);
       }else if(m_leftLimelight.getX()>LimeLightValues.rightLineupXDeadband){
         m_LEDS.setLedState(LEDStates.GORIGHT,false);
       }else if(m_leftLimelight.getX()<-LimeLightValues.rightLineupXDeadband){
-        m_LEDS.setLedState(LEDStates.LINEDUP,false);
+        m_LEDS.setLedState(LEDStates.GOLEFT,false);
       }
     }
    
