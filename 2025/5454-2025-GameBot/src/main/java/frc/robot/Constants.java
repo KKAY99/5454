@@ -219,8 +219,8 @@ public final class Constants {
 
     public static final double rotateUpSpeed=0.5;
     public static final double rotateDownSpeed=-0.5;
-    public static final double intakeInSpeed=-0.8;
-    public static final double intakeOutSpeed=0.8;
+    public static final double intakeInSpeed=-0.8; // 0.8
+    public static final double intakeOutSpeed=0.7; // 0.8
     public static final double holdSpeed=-0.1;
 
     public static final double rotatePK0=0.1;
@@ -296,7 +296,7 @@ public final class Constants {
     public static final double processorScoreSpeed=-0.7;
     public static final double autoScoreAlgaeSpeed=1;
     public static final double autoScoreCoralSpeed=0.20;
-    public static final double autoScoreCoralSpeedL4=0.20;
+    public static final double autoScoreCoralSpeedL4=0.30; // 0.20
     public static final double coralBoxIntakeSpeed=-0.1;
     public static final double indexerOuttakeSpeed=-0.6;
     public static final double autoCoralTimeToRun=0.5;
@@ -313,10 +313,10 @@ public final class Constants {
     public static final double elevatorDK1=0.04;
     public static final double elevatorMaxAndMinK1=1;
 
-    public static final double elevatorPK2=0.1;//0.05
+    public static final double elevatorPK2=0.2; //0.05
     public static final double elevatorIK2=0;
     public static final double elevatorDK2=0.2;
-    public static final double elevatorMaxAndMinK2=0.50;
+    public static final double elevatorMaxAndMinK2=0.70;
 
     public static final double elevatorPK3=0.05;//0.05
     public static final double elevatorIK3=0;
@@ -338,7 +338,7 @@ public final class Constants {
     public static final double l4AlgaePos=-70;
     public static final double l1Pos=-13;
     //-14
-    public static final double l2Pos=-13.6; 
+    public static final double l2Pos=-13.3; // -13.6 
     //43
     public static final double l3Pos=-41.4;
     //-89
