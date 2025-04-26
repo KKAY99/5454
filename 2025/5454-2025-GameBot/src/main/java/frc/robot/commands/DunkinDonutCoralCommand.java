@@ -125,6 +125,7 @@ public class DunkinDonutCoralCommand extends Command {
   public void end(boolean interrupted) {
     //m_dunkin.runCoralIntakeMotor(IntakeConstants.coralStallSpeed);
     m_dunkin.stopCoralIntakeMotor();
+    m_dunkin.stopCoralShootMotor();
     m_dunkin.stopIndexer();
     m_isRunning=false;
   }
@@ -136,6 +137,7 @@ public class DunkinDonutCoralCommand extends Command {
     switch (m_currentState) {
       case RUNCORAL:
         m_dunkin.runCoralIntakeMotor(m_coralScoreSpeed);
+        m_dunkin.runCoralShootMotor(m_coralScoreSpeed);
         m_dunkin.runIndexer(m_indexerLowSpeed);
       break;
       case RUNCORALFORTIME:

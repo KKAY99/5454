@@ -380,6 +380,7 @@ public void spin (double direction,double speed)
         if (fieldOriented) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation,
                     Rotation2d.fromDegrees(m_gyroscope.getAngle().toDegrees()));
+                System.out.println(speeds);
         } else {
             speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
         }
@@ -389,7 +390,7 @@ public void spin (double direction,double speed)
         frontRightModule.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
         backLeftModule.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());
         backRightModule.setTargetVelocity(states[3].speedMetersPerSecond, states[3].angle.getRadians());
-       // System.out.println("Gyro " + m_gyroscope.getAngle().toDegrees() + " " + frontLeftModule.getCurrentAngle() + " " + fieldOriented);
+        //System.out.println("Gyro " + m_gyroscope.getAngle().toDegrees() + " " + frontLeftModule.getCurrentAngle() + " " + fieldOriented);
 
 }
 public boolean isNotInAutoControl(){

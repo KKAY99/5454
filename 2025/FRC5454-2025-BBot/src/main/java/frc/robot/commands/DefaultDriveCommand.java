@@ -53,7 +53,7 @@ public class DefaultDriveCommand extends Command {
     rotation = Utilities.deadband(rotation,Constants.swerveDrive.driveDeadband);
     // Square the rotation stick
     rotation = Math.copySign(Math.pow(rotation, 2.0), rotation);
-    //System.out.println(forward + " -- " + strafe + " -- " + rotation);
+    System.out.println(forward + " -- " + strafe + " -- " + rotation);
   //  if(m_drive.isNotInAutoControl()){
       if(m_fieldMode.getAsBoolean()){
         m_drive.drive(new Translation2d(forward, strafe), rotation, true);
