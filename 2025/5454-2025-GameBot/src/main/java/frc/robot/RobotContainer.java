@@ -1,5 +1,4 @@
 package frc.robot;
-
 import com.ctre.phoenix6.Utils;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -71,11 +70,12 @@ public class RobotContainer {
   public final JacksonsCoolPanel m_JacksonsCoolPanel=new JacksonsCoolPanel(CoolPanelConstants.greenPWM,CoolPanelConstants.redPWM);
 
   private final SendableChooser<Command> m_autoChooser;
+  /* 
   private final SendableChooser<Double> m_eleavatorLevel1;
   private final SendableChooser<Double> m_eleavatorLevel2;
   private final SendableChooser<Double> m_eleavatorLevel3;
   private final SendableChooser<Double> m_eleavatorLevel4;
-
+*/
 
   public ElevatorScoreLevel m_currentScoreLevel=ElevatorScoreLevel.L1;
   
