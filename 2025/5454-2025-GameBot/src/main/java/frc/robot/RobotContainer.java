@@ -71,6 +71,11 @@ public class RobotContainer {
   public final JacksonsCoolPanel m_JacksonsCoolPanel=new JacksonsCoolPanel(CoolPanelConstants.greenPWM,CoolPanelConstants.redPWM);
 
   private final SendableChooser<Command> m_autoChooser;
+  private final SendableChooser<Double> m_eleavatorLevel1;
+  private final SendableChooser<Double> m_eleavatorLevel2;
+  private final SendableChooser<Double> m_eleavatorLevel3;
+  private final SendableChooser<Double> m_eleavatorLevel4;
+
 
   public ElevatorScoreLevel m_currentScoreLevel=ElevatorScoreLevel.L1;
   
@@ -187,6 +192,7 @@ public class RobotContainer {
   }
 
   public void setScoreLevelPOV(Supplier<Integer> pov){
+    
     switch(pov.get()){
       case 90:
       m_currentScoreLevel=ElevatorScoreLevel.L1;
