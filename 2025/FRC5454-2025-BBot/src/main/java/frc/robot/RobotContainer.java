@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
-import frc.robot.Constants.ButtonBindings;
 import frc.robot.Constants.InputControllers;
 
 
@@ -58,11 +57,9 @@ public class RobotContainer {
   }
 
   public void AutonMode(){
-    homeRobot();
   }
 
   public void TeleopMode(){
-    homeRobot();
     
   }
   

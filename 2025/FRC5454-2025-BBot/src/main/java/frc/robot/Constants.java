@@ -18,3 +18,16 @@ public final class Constants {
         public static final int kCustomController = 2;
     }
 
+    public static final class DriveConstants{
+        // Joystick axis deadband for the swerve drive
+        public static final double swerveDeadband = 0.1;
+        //Rotate Joystick axis deadband - bigger deadband to avoid rotational drift
+        public static final double swerveRotateDeadband = 0.12; //0.17
+        public static final double MinGasPedalSpeed=0.20;
+      }
+
+    public static final PPHolonomicDriveController pathPlanDriveController = new PPHolonomicDriveController(
+        new PIDConstants(5.0, 0, 0), // Translation constants 
+        new PIDConstants(25.0, 0, 1) // Rotation constants
+      );
+}
