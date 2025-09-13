@@ -166,19 +166,19 @@ public final class Constants {
        
     public static class RobotMap {
         public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 41; // CAN 12 
-        public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 0;//1;; // Analog3
+        public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 51;//1;; // Analog3
         public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 31; // CAN 1
     
         public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 42; // CAN 13
-        public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER =1;//2; // Analog 0 
+        public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER =52;//2; // Analog 0 
         public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 32; // CAN 32
     
         public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 43; // CAN 21 
-        public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER =2; // Analog 1 
+        public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER =53; // Analog 1 
         public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 33; // CAN 22
     
         public static final int DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 44; // CAN 10
-        public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 3; // Analog 2
+        public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 54; // Analog 2
         public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 34; // CAN 36
     }
     
