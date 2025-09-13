@@ -103,7 +103,7 @@ public class RobotContainer {
         m_xBoxDriver.button(2).whileTrue(runIntakeCommand);
 
         IntakeRotateCommand runRotateCommand = new IntakeRotateCommand(m_Intake, 0.1);
-        m_xBoxDriver.button(2).whileTrue(runRotateCommand);
+        m_xBoxDriver.button(3).whileTrue(runRotateCommand);
 
 
 
