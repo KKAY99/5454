@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.CANifier.PinValues;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.TriggerEvent;
@@ -57,40 +58,33 @@ import javax.swing.tree.ExpandVetoException;
 public class RobotContainer {
     
     // The robot's subsystems and commands are defined here...
-    private NavX m_NavX = new NavX(SPI.Port.kMXP);
+    private ClimbSubsystem m_Climb = new ClimbSubsystem(61);
+    private IntakeSubsystem m_Intake =  new IntakeSubsystem(60, 62);
     
     //public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
 
     // Dashboard inputs
-
+    private final int translationAxis = XboxController.Axis.kLeftY.value;
+    private final int strafeAxis = XboxController.Axis.kLeftX.value;
+    private final int rotationAxis = XboxController.Axis.kRightX.value;
+  
+    private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
+    private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
     //private final SendableChooser<Command> m_autoChooser;
+    public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
 
     private final SendableChooser<Boolean> m_IsDrone = new SendableChooser<>();
     // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
-    private final DrivetrainSubsystem m_robotDrive = new DrivetrainSubsystem(m_NavX); 
-    private final DriveControlMode m_DriveControlMode = new DriveControlMode();
-    private CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
-    private CommandXboxController m_xBoxOperator = new CommandXboxController(InputControllers.kXboxOperator);
-    private Joystick m_CustomController = new Joystick(InputControllers.kCustomController);
  
  // reversed 9/21
-    private boolean bClawClose=false;
-    private boolean bClawOpen=true;
-    private boolean bOpenClawatEnd=true;
-    private boolean bNoOpenClawatEnd=false;
+
     
     public RobotContainer() {
         //m_autoChooser = AutoBuilder.buildAutoChooser();
         createAutoCommandsList();
         configureNamedCommands();
         configureButtonBindings();
-
-         m_robotDrive.setDefaultCommand(
-                  new DefaultDriveCommand(m_robotDrive,
-                        () -> m_xBoxDriver.getRightX(),
-                        () -> m_xBoxDriver.getLeftY(),
-                        () -> m_xBoxDriver.getLeftX(),
-                        () -> m_DriveControlMode.isFieldOrientated()));    
+        resetDefaultCommand();
     }
 
 
@@ -99,8 +93,20 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings(){
-        GasPedalCommand gasPedalCommand = new GasPedalCommand(m_robotDrive, ()->m_xBoxDriver.getRightTriggerAxis());
+        GasPedalCommand gasPedalCommand = new GasPedalCommand(m_swerve, ()->m_xBoxDriver.getRightTriggerAxis());
         m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
+
+        ClimbCommand runclimbCommand = new ClimbCommand(m_Climb, 0.1);
+        m_xBoxDriver.button(1).whileTrue(runclimbCommand);
+
+        IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake, 0.1);
+        m_xBoxDriver.button(2).whileTrue(runIntakeCommand);
+
+        IntakeRotateCommand runRotateCommand = new IntakeRotateCommand(m_Intake, 0.1);
+        m_xBoxDriver.button(2).whileTrue(runRotateCommand);
+
+
+
         
     }
     
@@ -119,9 +125,6 @@ public class RobotContainer {
     public void setDriveMode(){
     }
 
-    public void resetDriveModes(){
-       m_robotDrive.resetDriveMode();
-    }
    
     public void AutoMode(){
 
@@ -135,6 +138,11 @@ public class RobotContainer {
 
     public void EnableMode(){
     }
+
+
+    private void resetDefaultCommand(){
+        m_swerve.setDefaultCommand(m_swerve.applyRequestDrive(m_xBoxDriver,translationAxis,strafeAxis,rotationAxis));
+      }
 
   Command returnCommand;
   public Command getAutonomousCommand() {
