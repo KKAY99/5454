@@ -124,6 +124,7 @@ public class RobotContainer {
     }
    
     public void AutoMode(){
+
     }  
 
     public void TeleopMode(){
