@@ -41,11 +41,19 @@ public class RobotContainer {
 
 
   private void configureButtonBindings(){
-  
-    GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
+    GasPedalCommand gasPedalCommand = new GasPedalCommand(m_swerve, ()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-  }
+    ClimbCommand runclimbCommand = new ClimbCommand(m_Climb, 0.1);
+    m_xBoxDriver.button(1).whileTrue(runclimbCommand);
+
+    IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake, 0.1);
+    m_xBoxDriver.button(2).whileTrue(runIntakeCommand);
+
+    IntakeRotateCommand runRotateCommand = new IntakeRotateCommand(m_Intake, 0.1);
+    m_xBoxDriver.button(2).whileTrue(runRotateCommand);
+
+}
 
 
   public void AutonMode(){
