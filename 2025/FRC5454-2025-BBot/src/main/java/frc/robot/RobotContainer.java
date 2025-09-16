@@ -36,6 +36,7 @@ public class RobotContainer {
   public RobotContainer(){
       
     configureButtonBindings();
+    resetDefaultCommand();
   }
 
 
@@ -79,6 +80,10 @@ public class RobotContainer {
 
   public void DisabledPeriodic(){
     
+  }
+
+  private void resetDefaultCommand(){
+    m_swerve.setDefaultCommand(m_swerve.applyRequestDrive(m_xBoxDriver,translationAxis,strafeAxis,rotationAxis));
   }
 
   }
