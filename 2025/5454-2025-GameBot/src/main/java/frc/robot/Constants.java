@@ -223,16 +223,16 @@ public final class Constants {
     public static final double intakeOutSpeed=0.7; // 0.8
     public static final double holdSpeed=-0.1;
 
-    public static final double rotatePK0=0.1;
-    public static final double rotateIK0=0;
-    public static final double rotateDK0=0.05;
-    public static final double rotateMaxAndMinK0=0.9;
+    public static final double rotatePK0=0.14;
+    public static final double rotateIK0=0.000001;
+    public static final double rotateDK0=0.1;
+    public static final double rotateMaxAndMinK0=0.7;
 
-    public static final double rotatePK1=0.05;
-    public static final double rotateIK1=0;
-    public static final double rotateDK1=0.1;
-    public static final double rotateMaxAndMinK1=0.7;
-    public static final double rotateInputGain=60;
+    public static final double rotatePK1=0.06;
+    public static final double rotateIK1=0.000001;
+    public static final double rotateDK1=0.2; // 0.0
+    public static final double rotateMaxAndMinK1=0.7; // 0.7
+    public static final double rotateInputGain=20;
 
     public static final double posDeadband=0.002;
 

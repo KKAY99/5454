@@ -22,6 +22,37 @@ public class RobotContainer {
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
 
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
+public class RobotContainer {
+    
+    // The robot's subsystems and commands are defined here...
+    private ClimbSubsystem m_Climb = new ClimbSubsystem(61);
+    private IntakeSubsystem m_Intake =  new IntakeSubsystem(60, 62);
+    
+    //public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
+
+    // Dashboard inputs
+    private final int translationAxis = XboxController.Axis.kLeftY.value;
+    private final int strafeAxis = XboxController.Axis.kLeftX.value;
+    private final int rotationAxis = XboxController.Axis.kRightX.value;
+  
+    private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
+    private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
+    //private final SendableChooser<Command> m_autoChooser;
+    public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
+
+    private final SendableChooser<Boolean> m_IsDrone = new SendableChooser<>();
+    // private final SpindexerSubsystem m_SpindexerSubsystem = new SpindexerSubsystem(Constants.Spindexer.motorPort);
+ 
+ // reversed 9/21
+
+    
+    public RobotContainer() {
+        //m_autoChooser = AutoBuilder.buildAutoChooser();
+        createAutoCommandsList();
+        configureNamedCommands();
+        configureButtonBindings();
+        resetDefaultCommand();
+    }
 
   public boolean m_hasResetGyro=false;
 
@@ -32,7 +63,7 @@ public class RobotContainer {
     resetDefaultCommand();
   }
 
-  
+
 
   private void configureButtonBindings(){
   
@@ -41,20 +72,6 @@ public class RobotContainer {
 
   }
 
-  public void DisabledInit(){
-    if(!m_hasResetGyro){
-      m_hasResetGyro=true;
-      m_swerve.getPigeon2().reset();
-    }
-  }
-   
-  public void DisabledPeriodic(){
-   
-  }
-  
-  public void AutoPeriodic(){
-    
-  }
 
   public void AutonMode(){
   }
@@ -71,8 +88,6 @@ public class RobotContainer {
     m_Field2d.setRobotPose(m_swerve.getPose2d());
   }
 
-  private void resetDefaultCommand(){
-    m_swerve.setDefaultCommand(m_swerve.applyRequestDrive(m_xBoxDriver,translationAxis,strafeAxis,rotationAxis));
   }
 }
 

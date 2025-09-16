@@ -296,8 +296,8 @@ public class RobotContainer {
 
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } 
-    /* m_LEDS.setLedState(LEDStates.DISABLED);
-    m_LEDS.activateLEDS();*/
+    m_LEDS.setLedState(LEDStates.DISABLED,false);
+    //m_LEDS.activateLEDS();
   }
   
   public void AutoPeriodic(){

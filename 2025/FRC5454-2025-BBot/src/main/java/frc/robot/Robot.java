@@ -92,6 +92,23 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   public void robotPeriodic() {
     m_robot.AllPeriodic();
     CommandScheduler.getInstance().run();
+    //KK - Update dashboard
+    m_robotContainer.TeleopMode();
+  }
+
+  /** This function is called once each time the robot enters Disabled mode. */
+  @Override
+  public void disabledInit() {
+    m_robotContainer.DisableMode();
+  }
+
+  @Override
+  public void disabledPeriodic() {
+
+    m_robotContainer.disabledPerioidicUpdates();  //update leds
+
+    //m_robotContainer.refreshSmartDashboard();
+    
   }
 
   /**
@@ -124,12 +141,20 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit(){
-   // if(m_autonomousCommand != null) {
-   //   m_autonomousCommand.cancel();
-   // }
-    CommandScheduler.getInstance().cancelAll(); // Cancels all commands - will resetdefault command in TelepMode
-    m_robot.TeleopMode();
+
+  public void teleopInit() {
+    // This makes sure that the autonomous stops running when
+    // teleop starts running. If you want the autonomous to
+    // continue until interrupted by another command, remove
+    // this line or comment it out.
+
+
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
+
+    m_robotContainer.TeleopMode();
+    m_robotContainer.EnableMode();
   }
 
   /** This function is called periodically during operator control. */
