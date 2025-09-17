@@ -48,11 +48,11 @@ public class RobotContainer {
     ClimbCommand runclimbCommand = new ClimbCommand(m_Climb, 0.1);
     m_xBoxDriver.button(1).whileTrue(runclimbCommand);
 
-    IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake, 0.1);
+    IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake, 0.3);
     m_xBoxDriver.button(2).whileTrue(runIntakeCommand);
 
-    IntakeRotateCommand runRotateCommand = new IntakeRotateCommand(m_Intake, 0.1);
-    m_xBoxDriver.button(2).whileTrue(runRotateCommand);
+    IntakeRotateCommand runRotateCommand = new IntakeRotateCommand(m_Intake, 0.3);
+    m_xBoxDriver.button(3).whileTrue(runRotateCommand);
 
 }
 
