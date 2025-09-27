@@ -121,7 +121,9 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     m_intakeMotor.stopMotor();
     m_intakeSpeed=0;
   }
-
+  public double getPos(){
+    return m_encoder.get();
+  }
   @Override
   public void periodic(){
     Logger.recordOutput("GroundIntake/IntakeSpped",m_intakeSpeed);

@@ -106,8 +106,11 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
    */
   @Override
   public void autonomousInit() {
-    m_robot.AutonMode();    
-  } 
+  // schedule the autonomous command (example)
+  m_autonomousCommand=m_robot.getAutoRoutine();
+  if (m_autonomousCommand != null) {
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);   
+  }  } 
 
   /** This function is called periodically during autonomous. */
   @Override

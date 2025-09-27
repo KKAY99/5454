@@ -236,9 +236,9 @@ public final class Constants {
 
     public static final double posDeadband=0.002;
 
-    public static final double intakePos=0.304;
-    public static final double scorePos=0.502;
-    public static final double stowPos=0.688;
+    public static final double intakePos=0.635;//0.304;
+    public static final double scorePos=0.816;//0.502;
+    public static final double stowPos=0.98;//0.688;
   }
   
   public static final class DunkinDonutConstants{

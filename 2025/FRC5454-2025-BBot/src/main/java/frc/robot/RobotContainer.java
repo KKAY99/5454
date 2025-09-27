@@ -5,14 +5,14 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
-import frc.robot.Constants.InputControllers;
-
+import frc.robot.Constants.*;
 
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -32,32 +32,46 @@ public class RobotContainer {
 
   public boolean m_hasResetGyro=false;
 
-  
+  private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+
+
   public RobotContainer(){
-      
+    m_autoChooser.setDefaultOption("Do Nothing", new AutoDoNothingCommand());
+    
     configureButtonBindings();
     resetDefaultCommand();
   }
 
-
+  public Command getAutoRoutine(){
+    return m_autoChooser.getSelected();
+  }
 
   private void configureButtonBindings(){
     GasPedalCommand gasPedalCommand = new GasPedalCommand(m_swerve, ()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    ClimbCommand runclimbCommand = new ClimbCommand(m_Climb, 0.1);
-    m_xBoxDriver.button(1).whileTrue(runclimbCommand);
+    ClimbCommand runclimbCommand = new ClimbCommand(m_Climb, Constants.climbSpeed);
+    m_xBoxDriver.button(ButtonConstants.ClimbUp).whileTrue(runclimbCommand);
 
-    IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake, 0.3);
-    m_xBoxDriver.button(2).whileTrue(runIntakeCommand);
+    IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake,Constants.intakeInSpeed);
+    m_xBoxDriver.button(ButtonConstants.DriverIntakeIn).whileTrue(runIntakeCommand);
 
-    IntakeRotateCommand runRotateCommand = new IntakeRotateCommand(m_Intake, 0.3);
-    m_xBoxDriver.button(3).whileTrue(runRotateCommand);
+    
+    IntakeCommand runIntakeOutCommand = new IntakeCommand(m_Intake,Constants.intakeOutSpeed);
+    m_xBoxDriver.button(ButtonConstants.DriverOutake).whileTrue(runIntakeOutCommand);
+
+    IntakeRotateCommand runRotateCommand = new IntakeRotateCommand(m_Intake, Constants.rotateUpSpeed);
+    m_xBoxDriver.button(ButtonConstants.RotateUp).whileTrue(runRotateCommand);
+    
+    IntakeRotateCommand runRotateDownCommand = new IntakeRotateCommand(m_Intake, Constants.rotateDownSpeed);
+    m_xBoxDriver.button(Constants.ButtonConstants.RotateDown).whileTrue(runRotateDownCommand);
 
 }
 
 
+
   public void AutonMode(){
+    
   }
 
   public void TeleopMode(){

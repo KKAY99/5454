@@ -52,7 +52,7 @@ public class GroundIntakeAutomatedCommand extends Command {
   @Override
   public boolean isFinished() {
     boolean returnValue=false;
-
+    System.out.println(m_currentState);
     switch(m_currentState){
       case SETPOS:
         m_groundIntake.resetPID();

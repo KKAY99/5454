@@ -466,6 +466,7 @@ public class RobotContainer {
     }
   }
   public void TeleopPeriodic(){
+    System.out.println(m_groundIntake.getAbsoluteEncoderPos() );
     refreshSmartDashboard();
     updateLEDs();
 
@@ -473,7 +474,7 @@ public class RobotContainer {
       if(m_rightLimelight.getX()<LimeLightValues.leftLineupXDeadband&&m_rightLimelight.getX()>-LimeLightValues.leftLineupXDeadband){
         m_LEDS.setLedState(LEDStates.LINEDUP,false);
       }else if(m_rightLimelight.getX()>LimeLightValues.leftLineupXDeadband){
-        m_LEDS.setLedState(LEDStates.GOLEFT,false);
+        m_LEDS.setLedState(LEDStates.GOLEFT,false);;
       }else if(m_rightLimelight.getX()<-LimeLightValues.leftLineupXDeadband){
         m_LEDS.setLedState(LEDStates.GORIGHT,false);
       }
