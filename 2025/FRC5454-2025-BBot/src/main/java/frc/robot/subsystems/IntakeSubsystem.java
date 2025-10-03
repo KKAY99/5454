@@ -36,5 +36,10 @@ public class IntakeSubsystem extends SubsystemBase {
     m_rotateMotor.stopMotor();
   }
 
+  public double getRotatePosition(){
+    //if returning negative short term hack is to make put a negative in fromt of this
+    //return -m_rotateMotor.getEncoder().getPosition();
+    return m_rotateMotor.getEncoder().getPosition();
+  }
 
 }

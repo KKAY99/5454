@@ -12,12 +12,23 @@ public final class Constants {
     public static final double climbSpeed=0.1;
     public static final double rotateUpSpeed=0.3;
     public static final double rotateDownSpeed=-0.3;
+
+    public static final class AutomationConstants{
+        public static final double autoRotateSpeed=0.1;
+        public static final double autoIntakeSpeed=0.3;
+        public static final double autoOuttakeSpeed=-0.3;
+        public static final double autoIntakeTargetPos=0.2;
+        public static final double autoOutakeTargetPos=0.2;
+        public static final double autoDeadband=0.5;
+    }
     public static final class ButtonConstants{
         public static final int ClimbUp=1;
         public static final int DriverIntakeIn=2;
         public static final int DriverOutake=3;
         public static final int RotateUp=4;
         public static final int RotateDown=5;
+        public static final int AutoIntake=6;
+        public static final int AutoOutake=7;
     }
 
     public static final class InputControllers {

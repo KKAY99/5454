@@ -66,6 +66,11 @@ public class RobotContainer {
     IntakeRotateCommand runRotateDownCommand = new IntakeRotateCommand(m_Intake, Constants.rotateDownSpeed);
     m_xBoxDriver.button(Constants.ButtonConstants.RotateDown).whileTrue(runRotateDownCommand);
 
+    zAutoIntakeCommand autoIntake = new zAutoIntakeCommand(m_Intake,AutomationConstants.autoIntakeTargetPos,AutomationConstants.autoIntakeSpeed);
+    m_xBoxDriver.button(ButtonConstants.AutoIntake).whileTrue(autoIntake);
+
+    zAutoIntakeCommand autoOutake = new zAutoIntakeCommand(m_Intake,AutomationConstants.autoOutakeTargetPos,AutomationConstants.autoOuttakeSpeed);
+    m_xBoxDriver.button(ButtonConstants.AutoOutake).whileTrue(autoOutake);
 }
 
 
@@ -79,7 +84,7 @@ public class RobotContainer {
   }
   
   public void TeleopPeriodic(){
-    
+    System.out.println("Rotate Position" + m_Intake.getRotatePosition());
   }
 
   public void AllPeriodic(){
