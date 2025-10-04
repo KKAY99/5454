@@ -25,8 +25,8 @@ public class AutoPlanner {
     //Default Constraint Values
     private double m_velocityMPS=0.7;
     private double m_maxAccelMPS=0.7;
-    private double m_angularVelocityMPS=6;
-    private double m_angularMaxAccelMPS=6;
+    private double m_angularVelocityMPS=2; //at 6, changing this does not fix the auto. tried 3 and 1 as values
+    private double m_angularMaxAccelMPS=2;
     
     public AutoPlanner(){
       pathConstraints=new PathConstraints(m_velocityMPS,m_maxAccelMPS,m_angularVelocityMPS,m_angularMaxAccelMPS);

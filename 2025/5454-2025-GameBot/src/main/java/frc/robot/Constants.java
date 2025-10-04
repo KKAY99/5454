@@ -20,7 +20,7 @@ public final class Constants {
     // Joystick axis deadband for the swerve drive
     public static final double swerveDeadband = 0.1;
     //Rotate Joystick axis deadband - bigger deadband to avoid rotational drift
-    public static final double swerveRotateDeadband = 0.12; //0.17
+    public static final double swerveRotateDeadband = 0.17; //0.17
     public static final double MinGasPedalSpeed=0.20;
   }
 
