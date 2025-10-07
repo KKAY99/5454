@@ -34,7 +34,12 @@ public class zAutoIntakeCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    /*if(m_intake.getRotatePosition()<=(m_targetpos-AutomationConstants.autoDeadband) 
+        && m_intake.getRotatePosition()>=(m_targetpos+AutomationConstants.autoDeadband)){
+          m_intake.runIntake(m_speed);
+    }*/
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -50,8 +55,8 @@ public class zAutoIntakeCommand extends Command {
 
     switch(m_state){
       case MOVE:
-        if(m_intake.getRotatePosition()>=(m_targetpos-AutomationConstants.autoDeadband) 
-        && m_intake.getRotatePosition()<=(m_targetpos+AutomationConstants.autoDeadband)){
+        if(m_intake.getRotatePosition()<=(m_targetpos-AutomationConstants.autoDeadband) 
+        && m_intake.getRotatePosition()>=(m_targetpos+AutomationConstants.autoDeadband)){
           m_state=States.SPIN;
         }else{
           if(m_intake.getRotatePosition()>=(m_targetpos-AutomationConstants.autoDeadband)){
