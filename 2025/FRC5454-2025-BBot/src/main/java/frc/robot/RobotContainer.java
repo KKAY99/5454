@@ -1,5 +1,7 @@
 package frc.robot;
 import com.ctre.phoenix6.Utils;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -36,8 +38,10 @@ public class RobotContainer {
 
 
   public RobotContainer(){
-    m_autoChooser.setDefaultOption("Do Nothing", new AutoDoNothingCommand());
     
+    NamedCommands.registerCommand("PlaceL1", m_Intake.score());
+    m_autoChooser.setDefaultOption("center L1", new PathPlannerAuto("Trough", true).withName("Trough"));
+    m_autoChooser.addOption("left 3 coral", new PathPlannerAuto("left 3 coral", true).withName("left 3 coral"));
     configureButtonBindings();
     resetDefaultCommand();
   }
