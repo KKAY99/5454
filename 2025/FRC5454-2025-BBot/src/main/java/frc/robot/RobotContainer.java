@@ -41,7 +41,8 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("PlaceL1", m_Intake.score());
     m_autoChooser.setDefaultOption("center L1", new PathPlannerAuto("Trough", true).withName("Trough"));
-    m_autoChooser.addOption("left 3 coral", new PathPlannerAuto("left 3 coral", true).withName("left 3 coral"));
+    m_autoChooser.addOption("processer 2.5 coral", new PathPlannerAuto("processer 2.5 coral", true).withName("processer 2.5 coral"));
+    m_autoChooser.addOption("2.5 coral push", new PathPlannerAuto("2.5 coral push", true).withName("2.5 coral push"));
     configureButtonBindings();
     resetDefaultCommand();
   }

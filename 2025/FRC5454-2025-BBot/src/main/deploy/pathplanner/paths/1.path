@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3905737704918033,
-        "y": 0.6624487704918033
+        "x": 7.132684426229508,
+        "y": 6.128842213114754
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3256147540983605,
-        "y": 1.2618340163934432
+        "x": 7.516767670350681,
+        "y": 5.985949600994133
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.08780737704918,
-        "y": 2.8801741803278684
+        "x": 7.3484631147540975,
+        "y": 6.128842213114754
       },
       "prevControl": {
-        "x": 3.5603483606557385,
-        "y": 2.3647028688524587
+        "x": 7.583933941850995,
+        "y": 6.212827268846731
+      },
+      "nextControl": {
+        "x": 6.474614155268894,
+        "y": 5.81716770774813
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.166700819672132,
+        "y": 5.073924180327869
+      },
+      "prevControl": {
+        "x": 5.416215121420851,
+        "y": 5.089500226772607
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.24882633654691
+    "rotation": 61.38954033403455
   },
   "reversed": false,
-  "folder": "processer side 3 coral",
+  "folder": "2 coral push",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 53.49855887949366
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
