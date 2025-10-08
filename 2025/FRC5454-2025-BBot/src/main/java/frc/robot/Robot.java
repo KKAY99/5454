@@ -11,11 +11,16 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import org.littletonrobotics.urcl.URCL;
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.epilogue.*;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.net.WebServer;
 //import edu.wpi.first.epilogue.logging.FileLogger;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+
+import java.security.AllPermission;
+import java.util.Optional;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -122,6 +127,12 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit(){
+    if(DriverStation.getAlliance().isPresent()) {
+      Optional<Alliance> alliance = DriverStation.getAlliance();
+      if(alliance.get() == Alliance.Red) {
+        m_robot.m_swerve.resetRotation(new Rotation2d(Math.PI));
+      }
+    }
    // if(m_autonomousCommand != null) {
    //   m_autonomousCommand.cancel();
    // }
