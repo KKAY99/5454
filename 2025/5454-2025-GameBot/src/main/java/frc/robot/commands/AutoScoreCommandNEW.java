@@ -475,8 +475,13 @@ public class AutoScoreCommandNEW extends Command{
                     m_dunkin.toggleLocalPid(DunkinDonutConstants.algaeMoveForScoringL4);
                 }
             }
-
-            if(elevatorPos>m_elevatorFPos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorFPos+ElevatorConstants.posDeadband){
+            double elevatorDeadBand=0;
+            if (m_scoreLevel.get()==ElevatorScoreLevel.L2){
+                elevatorDeadBand=ElevatorConstants.posL2Deadband;
+            } else {
+                elevatorDeadBand=ElevatorConstants.posDeadband;
+            }
+            if(elevatorPos>m_elevatorFPos-elevatorDeadBand&&elevatorPos<m_elevatorFPos+elevatorDeadBand){
                 m_startTime=Timer.getFPGATimestamp();
                 m_currentState=States.CORAL;
             }
@@ -541,27 +546,27 @@ public class AutoScoreCommandNEW extends Command{
             returnValue=true;
         }
         try{
-            Logger.recordOutput("Commands/AutoScore/IsRunning",m_isRunning);
-            Logger.recordOutput("Commands/AutoScore/CurrentState",m_currentState);
+            Logger.recordOutput("Commands/AutoScoreNew/IsRunning",m_isRunning);
+            Logger.recordOutput("Commands/AutoScoreNew/CurrentState",m_currentState);
             if(m_leftLimelight!=null&&m_rightLimelight!=null){
-                Logger.recordOutput("Commands/AutoScore/LimelightLeftX",m_leftLimelight.getX());
-                Logger.recordOutput("Commands/AutoScore/LimelightRightX",m_rightLimelight.getX());
-                Logger.recordOutput("Commands/AutoScore/LimelightLeftAnyTargets",m_leftLimelight.isAnyTargetAvailable());
-                Logger.recordOutput("Commands/AutoScore/LimelightRightAnyTargets",m_rightLimelight.isAnyTargetAvailable());
-                Logger.recordOutput("Commands/AutoScore/LeftLineup",!m_isRightLineup.get());
-                Logger.recordOutput("Commands/AutoScore/RightLineup",m_isRightLineup.get());
-                Logger.recordOutput("Commands/AutoScore/RightPIDOutput",m_rightPIDOutput);
-                Logger.recordOutput("Commands/AutoScore/LeftPIDOutput",m_leftPIDOutput);
+                Logger.recordOutput("Commands/AutoScoreNew/LimelightLeftX",m_leftLimelight.getX());
+                Logger.recordOutput("Commands/AutoScoreNew/LimelightRightX",m_rightLimelight.getX());
+                Logger.recordOutput("Commands/AutoScoreNew/LimelightLeftAnyTargets",m_leftLimelight.isAnyTargetAvailable());
+                Logger.recordOutput("Commands/AutoScoreNew/LimelightRightAnyTargets",m_rightLimelight.isAnyTargetAvailable());
+                Logger.recordOutput("Commands/AutoScoreNew/LeftLineup",!m_isRightLineup.get());
+                Logger.recordOutput("Commands/AutoScoreNew/RightLineup",m_isRightLineup.get());
+                Logger.recordOutput("Commands/AutoScoreNew/RightPIDOutput",m_rightPIDOutput);
+                Logger.recordOutput("Commands/AutoScoreNew/LeftPIDOutput",m_leftPIDOutput);
                 //System.out.println("AutoScore-LimelightLeftAnyTargets: "+m_leftLimelight.isAnyTargetAvailable());
                 //System.out.println("AutoScore-LimelightRightAnyTargets: "+m_rightLimelight.isAnyTargetAvailable());
             }
-            Logger.recordOutput("Commands/AutoScore/ElevatorPos",m_elevator.getRelativePos());
-            Logger.recordOutput("Commands/AutoScore/ClawPos",m_dunkin.get_rotatemotorpos());
-            Logger.recordOutput("Commands/AutoScore/DoAlgae",m_doAlgae.get());
-            Logger.recordOutput("Commands/AutoScore/ShouldRunAlgae",m_shouldRunAlgae);
-            Logger.recordOutput("Commands/AutoScore/ElevatorScoreLevel",m_scoreLevel.get());
-            Logger.recordOutput("Commands/AutoScore/SwerveYSpeed",m_swerve.getChassisSpeeds().vyMetersPerSecond);
-            Logger.recordOutput("Commands/AutoScore/SwerveXSpeed",m_swerve.getChassisSpeeds().vxMetersPerSecond);
+            Logger.recordOutput("Commands/AutoScoreNew/ElevatorPos",m_elevator.getRelativePos());
+            Logger.recordOutput("Commands/AutoScoreNew/ClawPos",m_dunkin.get_rotatemotorpos());
+            Logger.recordOutput("Commands/AutoScoreNew/DoAlgae",m_doAlgae.get());
+            Logger.recordOutput("Commands/AutoScoreNew/ShouldRunAlgae",m_shouldRunAlgae);
+            Logger.recordOutput("Commands/AutoScoreNew/ElevatorScoreLevel",m_scoreLevel.get());
+            Logger.recordOutput("Commands/AutoScoreNew/SwerveYSpeed",m_swerve.getChassisSpeeds().vyMetersPerSecond);
+            Logger.recordOutput("Commands/AutoScoreNew/SwerveXSpeed",m_swerve.getChassisSpeeds().vxMetersPerSecond);
             
             //System.out.println("AutoScore-CurrentState: "+m_currentState);
         } catch (Exception e){

@@ -298,7 +298,7 @@ public final class Constants {
     public static final double autoScoreCoralSpeed=0.20;
     public static final double autoScoreCoralSpeedL4=0.30; // 0.20
     public static final double coralBoxIntakeSpeed=-0.1;
-    public static final double indexerOuttakeSpeed=-0.6;
+    public static final double indexerOuttakeSpeed=-0.3;//0.6;
     public static final double autoCoralTimeToRun=0.5;
     public static final double autoScoreAlgaeRunTime=1;
     public static final double algaeRotateDownTime=0.3;
@@ -327,6 +327,8 @@ public final class Constants {
     public static final double elevatorLowLimit=-0.2;
 
     public static final double posDeadband=0.2;
+    public static final double posL2Deadband=0.4;
+    public static final double posL3Deadband=0.3;
 
     public static final double elevSafeRetractPos=-43;
     public static final double aboveThrowPos=-60;

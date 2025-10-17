@@ -483,8 +483,17 @@ public class AutoScoreCommand extends Command{
                     m_dunkin.toggleLocalPid(DunkinDonutConstants.algaeMoveForScoringL4);
                 }
             }
+            double elevatorDeadBand=0;
+           
+            if (m_scoreLevel.get()==ElevatorScoreLevel.L2){
+                elevatorDeadBand=ElevatorConstants.posL2Deadband;
+            } else if(m_scoreLevel.get()==ElevatorScoreLevel.L3){
+                elevatorDeadBand=ElevatorConstants.posL3Deadband;
+            } else {
+                elevatorDeadBand=ElevatorConstants.posDeadband;
+            }
 
-            if(elevatorPos>m_elevatorFPos-ElevatorConstants.posDeadband&&elevatorPos<m_elevatorFPos+ElevatorConstants.posDeadband){
+            if(elevatorPos>m_elevatorFPos-elevatorDeadBand&&elevatorPos<m_elevatorFPos+elevatorDeadBand){
                 m_startTime=Timer.getFPGATimestamp();
                 m_currentState=States.CORAL;
             }
