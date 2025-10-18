@@ -338,7 +338,7 @@ public final class Constants {
     public static final double lollipopGrabPos=-13;
     public static final double l3AlgaePos=-43;
     public static final double l4AlgaePos=-70;
-    public static final double l1Pos=-13;
+    public static final double l1Pos=-0.2;
     //-14
     public static final double l2Pos=-13.3; // -13.6 
     //43
