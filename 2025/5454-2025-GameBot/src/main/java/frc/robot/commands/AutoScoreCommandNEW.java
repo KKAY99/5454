@@ -259,6 +259,12 @@ public class AutoScoreCommandNEW extends Command{
         break;
         case WAITFORCLAWROTATESETELEV:
             m_elevator.set_referance(m_elevatorIPos,ClosedLoopSlot.kSlot1);
+            if(m_shouldRunAlgae){
+                m_dunkin.setPIDSLOW();
+                m_dunkin.resetShouldRunPID();
+                m_dunkin.toggleLocalPid(m_algaePos);
+                m_dunkin.algeaToggle(DunkinDonutConstants.autoScoreAlgaeSpeed);
+            }
             double clawABSPos=m_dunkin.getAbsoluteEncoderPos();
 
             if(clawABSPos+DunkinDonutConstants.posClawDeadband>DunkinDonutConstants.outOfLimelightVisionPos&&clawABSPos-DunkinDonutConstants.posClawDeadband<DunkinDonutConstants.outOfLimelightVisionPos){
@@ -457,6 +463,7 @@ public class AutoScoreCommandNEW extends Command{
             m_elevator.set_referance(m_elevatorFPos,ClosedLoopSlot.kSlot0);
 
             if(m_shouldRunAlgae){
+                m_dunkin.setPIDHIGH();
                 m_dunkin.resetShouldRunPID();
                 m_dunkin.toggleLocalPid(m_algaePos);
                 m_dunkin.resetAlgeaToggle();
