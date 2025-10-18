@@ -60,7 +60,7 @@ public class DunkinDonutSubsystem extends SubsystemBase {
     m_obsidianPID=new ObsidianPID(DunkinDonutConstants.clawPIDkP,DunkinDonutConstants.clawPIDkI,DunkinDonutConstants.clawPIDkD,
                                   DunkinDonutConstants.clawPIDMaxAndMin,-DunkinDonutConstants.clawPIDMaxAndMin);
     m_obsidianPID.setInputGain(DunkinDonutConstants.clawPIDInputGain);
-
+  
     m_coralLimitSwitch = new DigitalInput(limitSwitch);
     m_indexerLimitSwitch = new DigitalInput(indexerLimitSwitchID);
 
@@ -179,6 +179,16 @@ public class DunkinDonutSubsystem extends SubsystemBase {
       stopAlgeaMotor();
       m_algaeToggle=false;
     }
+  }
+
+  public void setPIDSLOW(){
+    m_obsidianPID.setAllValues(DunkinDonutConstants.clawPIDkPSlow,DunkinDonutConstants.clawPIDkISlow,DunkinDonutConstants.clawPIDkDSlow,
+                              DunkinDonutConstants.clawPIDMaxAndMin,-DunkinDonutConstants.clawPIDMaxAndMin,DunkinDonutConstants.clawPIDInputGain);
+  }
+
+  public void setPIDHIGH(){
+    m_obsidianPID.setAllValues(DunkinDonutConstants.clawPIDkP,DunkinDonutConstants.clawPIDkI,DunkinDonutConstants.clawPIDkD,
+                              DunkinDonutConstants.clawPIDMaxAndMin,-DunkinDonutConstants.clawPIDMaxAndMin,DunkinDonutConstants.clawPIDInputGain);
   }
 
   public void resetAlgeaToggle(){

@@ -275,6 +275,10 @@ public final class Constants {
     public static final double clawPIDMaxAndMin=1;
     public static final double clawPIDInputGain=60;
 
+    public static final double clawPIDkPSlow=0.01;
+    public static final double clawPIDkISlow=0;
+    public static final double clawPIDkDSlow=0;
+
     public static final double outOfLimelightVisionPos=0.15;
     public static final double groundIntakePos=0.33;
     public static final double algaeStowPos=0.30;

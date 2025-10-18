@@ -20,7 +20,7 @@
         "y": 5.187
       },
       "prevControl": {
-        "x": 2.1042901815363533,
+        "x": 2.104290181536353,
         "y": 6.67954449111282
       },
       "nextControl": null,
@@ -33,9 +33,9 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
@@ -45,7 +45,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "BLUE Non-Processor Side Start",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": 135.0
