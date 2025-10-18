@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.Constants.*;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -24,7 +25,7 @@ public class RobotContainer {
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();    
     // The robot's subsystems and commands are defined here...
     private ClimbSubsystem m_Climb = new ClimbSubsystem(61);
-    private IntakeSubsystem m_Intake =  new IntakeSubsystem(60, 62);
+    private IntakeSubsystem m_Intake =  new IntakeSubsystem(60, 62, 1);
     
     // Dashboard inputs
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -58,6 +59,12 @@ public class RobotContainer {
     ClimbCommand runclimbCommand = new ClimbCommand(m_Climb, Constants.climbSpeed);
     m_xBoxDriver.button(ButtonConstants.ClimbUp).whileTrue(runclimbCommand);
 
+    ClimbCommand runclimbCommandPOVUp = new ClimbCommand(m_Climb, Constants.climbSpeed);
+    m_xBoxDriver.pov(ButtonConstants.POVClimbUp).whileTrue(runclimbCommandPOVUp);
+
+    ClimbCommand runclimbCommandPOVDown = new ClimbCommand(m_Climb, Constants.climbDownSpeed);
+    m_xBoxDriver.pov(ButtonConstants.POVClimbDown).whileTrue(runclimbCommandPOVDown);
+
     IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake,Constants.intakeInSpeed);
     m_xBoxDriver.button(ButtonConstants.DriverIntakeIn).whileTrue(runIntakeCommand);
 
@@ -89,7 +96,7 @@ public class RobotContainer {
   }
   
   public void TeleopPeriodic(){
-    System.out.println("Rotate Position" + m_Intake.getRotatePosition());
+    System.out.println("Rotate Position" + m_Intake.getRotatePosition() + "ABS Position" + m_Intake.getRotatePositionABS());
   }
 
   public void AllPeriodic(){

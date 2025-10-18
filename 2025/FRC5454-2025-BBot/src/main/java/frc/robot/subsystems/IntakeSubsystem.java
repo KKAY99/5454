@@ -4,20 +4,27 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.classes.ObsidianCANSparkMax;
+import frc.robot.Constants;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class IntakeSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_intakeMotor;
   private ObsidianCANSparkMax m_rotateMotor;
+  private DutyCycleEncoder m_encoder;
+  //private SparkAbsoluteEncoder m_encoder;
 
-  public IntakeSubsystem(int CanId1, int CanId2) {
+  public IntakeSubsystem(int CanId1, int CanId2, int encoder) {
     m_intakeMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, false);
-    m_rotateMotor = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true);
+    m_rotateMotor = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true, Constants.k5Amp);
+    m_encoder = new DutyCycleEncoder(encoder);
+    
 
 
   }
@@ -47,6 +54,9 @@ public class IntakeSubsystem extends SubsystemBase {
     //return -m_rotateMotor.getEncoder().getPosition();
     return -
 m_rotateMotor.getEncoder().getPosition();
+  }
+  public double getRotatePositionABS(){
+    return (m_encoder.get());
   }
 
 }

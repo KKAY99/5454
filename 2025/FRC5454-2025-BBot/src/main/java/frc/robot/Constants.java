@@ -6,10 +6,14 @@ public final class Constants {
     public static final int p = 0;
     public static final int i = 0;
     public static final int d = 0;
-    public static final int k30Amp = 20;
+    public static final int k30Amp = 30;
+    public static final int k10Amp = 10;
+    public static final int k5Amp = 5;
+    public static final int k2Amp = 2;
     public static final double intakeInSpeed=-0.3;
     public static final double intakeOutSpeed=1;
-    public static final double climbSpeed=0.6;
+    public static final double climbSpeed=-0.6;
+    public static final double climbDownSpeed=0.6;
     public static final double rotateUpSpeed=0.3;
     public static final double rotateDownSpeed=-0.6;
 
@@ -17,6 +21,7 @@ public final class Constants {
         public static final double autoRotateSpeed=0.3;
         public static final double autoIntakeSpeed=.6;
         public static final double autoOuttakeSpeed=-1;
+        public static final double autoScoreSpeed=-1;
         public static final double autoIntakeTargetPos=40;
         public static final double autoOutakeTargetPos=-0;
         public static final double autoDeadband=1;
@@ -29,6 +34,8 @@ public final class Constants {
         public static final int RotateDown=1;
         public static final int AutoIntake=5;
         public static final int AutoOutake=6;
+        public static final int POVClimbUp=0;
+        public static final int POVClimbDown=180;
     }
 
     public static final class InputControllers {
