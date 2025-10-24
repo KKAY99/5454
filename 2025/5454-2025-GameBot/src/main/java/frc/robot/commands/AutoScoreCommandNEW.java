@@ -234,6 +234,9 @@ public class AutoScoreCommandNEW extends Command{
 
     @Override
     public void end(boolean interrupted) {
+        if (interrupted) {
+            System.out.println("Auto Command Interrupted");
+        }
         m_dunkin.stopCoralShootMotor();
         m_dunkin.stop_rotatemotor();
         m_dunkin.resetShouldRunPID();

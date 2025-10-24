@@ -412,6 +412,7 @@ public final class Constants {
 
   public static final class ButtonBindings{
     public static final int dunkinCoralOutakeButton=1; 
+    public static final int manualScore=7;
     public static final int dunkinCoralIntakeButton=4;
     public static final int elevatorScoreAutoButton=5;
     public static final int elevatorScoreManualButton=6;

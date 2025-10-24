@@ -173,9 +173,9 @@ public class RobotContainer {
     DunkinDonutCoralCommand driverShootCoral = new DunkinDonutCoralCommand(m_dunkinDonut,m_LEDS,IntakeConstants.coralIntakeSpeed,IntakeConstants.indexerIntakeSpeed);
     m_xBoxDriver.y().whileTrue(driverShootCoral);
     
-    Command stowCommand = new DunkinDonutRotatePIDCommand(m_dunkinDonut,DunkinDonutConstants.rotateHomePos);
-    JoystickButton operatorStowCommand = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.operatorStow);
-    operatorStowCommand.onTrue(stowCommand);
+   // Command stowCommand = new DunkinDonutRotatePIDCommand(m_dunkinDonut,DunkinDonutConstants.rotateHomePos);
+   // JoystickButton operatorStowCommand = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.operatorStow);
+   // operatorStowCommand.onTrue(stowCommand);
 
     //ElevatorCommands
     ElevatorCommand ElevatorCommand = new ElevatorCommand(m_elevator, () -> m_xBoxOperator.getLeftY()*0.5);
@@ -189,6 +189,10 @@ public class RobotContainer {
     AutoScoreCommandNEW seqScoreCommandAuto = new AutoScoreCommandNEW(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
     JoystickButton operatorSeqScoreAuto = new JoystickButton(m_xBoxOperator,Constants.ButtonBindings.elevatorScoreAutoButton);
     operatorSeqScoreAuto.onTrue(seqScoreCommandAuto);
+
+    CoralShootCommand shootCoral = new CoralShootCommand(m_dunkinDonut, DunkinDonutConstants.autoScoreCoralSpeed);
+    JoystickButton operatorShootCoral = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.manualScore);
+    operatorShootCoral.whileTrue(shootCoral);
 
     //AutoScoreCommandNEW seqScoreCommandAutoD = new AutoScoreCommandNEW(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
     //JoystickButton operatorSeqScoreAutoD = new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.elevatorScoreAutoButton);
