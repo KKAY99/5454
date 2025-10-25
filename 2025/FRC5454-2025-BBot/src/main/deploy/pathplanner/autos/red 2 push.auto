@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "rp1"
+            "pathName": "rr1"
           }
         },
         {
@@ -19,25 +19,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "rp2"
+            "pathName": "rr2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "rp3"
+            "pathName": "rr3"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "PlaceL1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "rr4"
           }
         }
       ]
