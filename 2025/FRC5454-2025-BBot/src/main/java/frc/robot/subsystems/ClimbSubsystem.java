@@ -21,10 +21,12 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
   public void run(double speed){
+    System.out.println("Climb Speed:"+ speed);
     m_climbMotor.set(speed); 
   }
 
   public void stop(){
+    System.out.println("Stopping Climb");
     m_climbMotor.stopMotor();
   }
 }

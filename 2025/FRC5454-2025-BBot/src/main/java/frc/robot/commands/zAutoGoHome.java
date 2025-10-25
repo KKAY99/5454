@@ -11,21 +11,19 @@ import frc.robot.Constants.AutomationConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class zAutoScoreCommand extends Command {
+public class zAutoGoHome extends Command {
   private IntakeSubsystem m_intake;
   private double m_starttime;
   private double m_duration;
   private double m_speed;
   private double m_targetpos;
   private enum States{
-    MOVEHOME,OUTPUT,WAIT,MOVEARM,WAITAGAIN,MOVEUP,END
+    MOVEHOME, END
   };
   private States m_state;
-  public zAutoScoreCommand(IntakeSubsystem intake, double movetoposition,  double speed, double duration) {
+  public zAutoGoHome(IntakeSubsystem intake,  double speed) {
     m_intake = intake;
     m_speed = speed;
-    m_duration = duration;
-    m_targetpos = movetoposition;
 
    
     m_state=States.MOVEHOME;
@@ -52,8 +50,6 @@ public class zAutoScoreCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.stopIntake();
-    m_intake.stopRotate();
   }
 
   private boolean moveArm(double targetpos){
@@ -83,45 +79,11 @@ public class zAutoScoreCommand extends Command {
       case MOVEHOME:        
         if(moveArm(Constants.AutomationConstants.autoHomePosition)){
           m_intake.stopRotate();
-          m_state=States.OUTPUT;
-        }
-        break;
-      case OUTPUT:
-      m_intake.runIntake(-m_speed);
-      m_starttime = Timer.getFPGATimestamp();
-      m_state = States.WAIT;
-      
-
-        endCommand=false;
-        break;
-
-      case WAIT:
-      if (Timer.getFPGATimestamp() - m_starttime >= 0.075454){
-        m_state = States.MOVEARM;}
-        endCommand=false;
-        break;
-
-      case MOVEARM:
-        m_intake.stopIntake();
-        if(moveArm(m_targetpos)){
-          m_intake.stopRotate();
-          m_starttime = Timer.getFPGATimestamp();
-          m_state = States.WAITAGAIN;
-        }
-        endCommand=false;
-        break; 
-      
-      case WAITAGAIN:
-        if (Timer.getFPGATimestamp() - m_starttime >= 0.5){
-          m_state = States.MOVEUP;}
-          endCommand=false;
-          break;
-      case MOVEUP:
-        if(moveArm(Constants.AutomationConstants.autoHomePosition)){
           m_intake.stopIntake();
           m_state=States.END;
         }
         break;
+     
       default: // will handle END case 
          endCommand=true;
     }

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -40,14 +41,22 @@ public class RobotContainer {
 
   public RobotContainer(){
     
-    NamedCommands.registerCommand("PlaceL1", m_Intake.score());
+    NamedCommands.registerCommand("PlaceL1", new zAutoScoreCommand(m_Intake,AutomationConstants.autoTargetPos,Constants.AutomationConstants.autoScoreSpeed,AutomationConstants.autoScoreDuration)); // m_Intake.score());
     m_autoChooser.setDefaultOption("center L1", new PathPlannerAuto("Trough", true).withName("Trough"));
     m_autoChooser.addOption("processer 2.5 coral", new PathPlannerAuto("processer 2.5 coral", true).withName("processer 2.5 coral"));
     m_autoChooser.addOption("2.5 coral push", new PathPlannerAuto("2.5 coral push", true).withName("2.5 coral push"));
+    createAutonomousCommandList();
     configureButtonBindings();
     resetDefaultCommand();
   }
+ private void createAutonomousCommandList(){
+    try{
+      SmartDashboard.putData("Auto Chooser",m_autoChooser);
 
+    }catch(Exception e){
+      System.out.println("Create Autos Failed, Exception: " + e.getMessage());
+    }
+  }
   public Command getAutoRoutine(){
     return m_autoChooser.getSelected();
   }
@@ -56,8 +65,8 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand = new GasPedalCommand(m_swerve, ()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    ClimbCommand runclimbCommand = new ClimbCommand(m_Climb, Constants.climbSpeed);
-    m_xBoxDriver.button(ButtonConstants.ClimbUp).whileTrue(runclimbCommand);
+    zAutoIntakeCommand runnewintake = new zAutoIntakeCommand(m_Intake,Constants.AutomationConstants.autoIntakeSpeed);
+    m_xBoxDriver.button(ButtonConstants.IntakeNew).onTrue(runnewintake);
 
     ClimbCommand runclimbCommandPOVUp = new ClimbCommand(m_Climb, Constants.climbSpeed);
     m_xBoxDriver.pov(ButtonConstants.POVClimbUp).whileTrue(runclimbCommandPOVUp);
@@ -65,8 +74,8 @@ public class RobotContainer {
     ClimbCommand runclimbCommandPOVDown = new ClimbCommand(m_Climb, Constants.climbDownSpeed);
     m_xBoxDriver.pov(ButtonConstants.POVClimbDown).whileTrue(runclimbCommandPOVDown);
 
-    IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake,Constants.intakeInSpeed);
-    m_xBoxDriver.button(ButtonConstants.DriverIntakeIn).whileTrue(runIntakeCommand);
+    //IntakeCommand runIntakeCommand = new IntakeCommand(m_Intake,Constants.intakeInSpeed);
+    //m_xBoxDriver.button(ButtonConstants.DriverIntakeIn).whileTrue(runIntakeCommand);
 
     
     IntakeCommand runIntakeOutCommand = new IntakeCommand(m_Intake,Constants.intakeOutSpeed);
@@ -75,15 +84,18 @@ public class RobotContainer {
     IntakeRotateCommand runRotateCommand = new IntakeRotateCommand(m_Intake, Constants.rotateUpSpeed);
     m_xBoxDriver.button(ButtonConstants.RotateUp).whileTrue(runRotateCommand);
     
-    IntakeRotateCommand runRotateDownCommand = new IntakeRotateCommand(m_Intake, Constants.rotateDownSpeed);
-    m_xBoxDriver.button(Constants.ButtonConstants.RotateDown).whileTrue(runRotateDownCommand);
+    zAutoGoHome rungohome = new zAutoGoHome (m_Intake, Constants.rotateDownSpeed);
+    m_xBoxDriver.button(Constants.ButtonConstants.GoHome).onTrue(rungohome);
 
-    zAutoIntakeCommand autoIntake = new zAutoIntakeCommand(m_Intake,AutomationConstants.autoIntakeTargetPos,AutomationConstants.autoIntakeSpeed);
+    zAutoIntakeCommandFake autoIntake = new zAutoIntakeCommandFake(m_Intake,AutomationConstants.autoIntakeTargetPos,AutomationConstants.autoIntakeSpeed);
     m_xBoxDriver.button(ButtonConstants.AutoIntake).whileTrue(autoIntake);
 
-    zAutoIntakeCommand autoOutake = new zAutoIntakeCommand(m_Intake,AutomationConstants.autoOutakeTargetPos,AutomationConstants.autoOuttakeSpeed);
+    zAutoIntakeCommandFake autoOutake = new zAutoIntakeCommandFake(m_Intake,AutomationConstants.autoOutakeTargetPos,AutomationConstants.autoOuttakeSpeed);
     m_xBoxDriver.button(ButtonConstants.AutoOutake).whileTrue(autoOutake);
-}
+
+    zAutoScoreCommand autoScore = new zAutoScoreCommand(m_Intake,AutomationConstants.autoTargetPos,Constants.AutomationConstants.autoScoreSpeed,AutomationConstants.autoScoreDuration);
+    m_xBoxDriver.button(ButtonConstants.Score).onTrue(autoScore);
+  }
 
 
 
@@ -96,7 +108,7 @@ public class RobotContainer {
   }
   
   public void TeleopPeriodic(){
-    System.out.println("Rotate Position" + m_Intake.getRotatePosition() + "ABS Position" + m_Intake.getRotatePositionABS());
+    System.out.println("Rotate Position" + m_Intake.getRotatePosition() + " ABS Position" + m_Intake.getRotatePositionABS());
   }
 
   public void AllPeriodic(){
