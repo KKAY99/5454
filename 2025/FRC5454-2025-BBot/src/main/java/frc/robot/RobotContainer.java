@@ -41,9 +41,11 @@ public class RobotContainer {
   public RobotContainer(){
     
     NamedCommands.registerCommand("PlaceL1", m_Intake.score());
-    m_autoChooser.setDefaultOption("center L1", new PathPlannerAuto("Trough", true).withName("Trough"));
-    m_autoChooser.addOption("processer 2.5 coral", new PathPlannerAuto("processer 2.5 coral", true).withName("processer 2.5 coral"));
-    m_autoChooser.addOption("2.5 coral push", new PathPlannerAuto("2.5 coral push", true).withName("2.5 coral push"));
+    m_autoChooser.setDefaultOption("blue center L1", new PathPlannerAuto("blue Trough", true).withName("blue Trough"));
+    m_autoChooser.addOption("blue 2.5 coral push", new PathPlannerAuto("blue processer 2.5 coral", true).withName("blue processer 2.5 coral"));
+    m_autoChooser.addOption("red 2 coral push", new PathPlannerAuto("red 2 coral push"));
+    m_autoChooser.addOption("blue processer 2.5 coral", new PathPlannerAuto("blue 2.5 coral push"));
+     m_autoChooser.addOption("red center l1", new PathPlannerAuto("red center"));
     configureButtonBindings();
     resetDefaultCommand();
   }

@@ -3,8 +3,9 @@
   "robotLength": 0.8382,
   "holonomicMode": true,
   "pathFolders": [
-    "processer side 3 coral",
-    "2 coral push"
+    "blue 2 coral push",
+    "red 2 coral push",
+    "blue processer side 3 coral"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
