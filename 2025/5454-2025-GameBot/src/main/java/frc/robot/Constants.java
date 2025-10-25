@@ -359,7 +359,7 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final double coralShootSpeed=0.6;
-    public static final double coralOutakeSpeed=-0.2;
+    public static final double coralOutakeSpeed=-0.15;
     public static final double coralIntakeSpeed=0.15;
     public static final double indexerIntakeSpeed=0.75;
     public static final double indexerOuttakeSpeed=-0.75;
