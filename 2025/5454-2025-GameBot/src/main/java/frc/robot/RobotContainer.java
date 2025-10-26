@@ -35,7 +35,7 @@ import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
   
@@ -194,6 +194,9 @@ public class RobotContainer {
     JoystickButton operatorShootCoral = new JoystickButton(m_xBoxOperator, Constants.ButtonBindings.manualScore);
     operatorShootCoral.whileTrue(shootCoral);
 
+   // Command setPIDHigh= m_dunkinDonut.setPIDHighCommand();
+    //JoystickButton operatorPID = new JoystickButton(m_xBoxOperator, 8);
+    //operatorPID.onTrue(setPIDHigh);
     //AutoScoreCommandNEW seqScoreCommandAutoD = new AutoScoreCommandNEW(m_swerve,m_elevator,m_dunkinDonut,()->m_currentScoreLevel,m_leftLimelight,m_rightLimelight,()->m_isRightLineup,()->m_doAlgae);
     //JoystickButton operatorSeqScoreAutoD = new JoystickButton(m_xBoxDriver,Constants.ButtonBindings.elevatorScoreAutoButton);
     //operatorSeqScoreAutoD.onTrue(seqScoreCommandAutoD);
@@ -279,7 +282,7 @@ public class RobotContainer {
   }
    
   public void DisabledPeriodic(){
-    if(m_rightLimelight.isAnyTargetAvailable()||m_leftLimelight.isAnyTargetAvailable()){
+    /*if(m_rightLimelight.isAnyTargetAvailable()||m_leftLimelight.isAnyTargetAvailable()){
       m_LEDS.setLedState(LEDStates.DISABLEDSEETARGET,false);
     }else{
       m_LEDS.setLedState(LEDStates.DISABLEDERROR,false);
@@ -303,13 +306,13 @@ public class RobotContainer {
 
 
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
+    } */
     m_LEDS.setLedState(LEDStates.DISABLED,false);
     //m_LEDS.activateLEDS();
   }
   
   public void AutoPeriodic(){
-    if(m_rightLimelight.isAnyTargetAvailable()){
+    /*if(m_rightLimelight.isAnyTargetAvailable()){
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
       Pose2d currentPose=m_rightLimelight.GetPoseViaMegatag2();
@@ -327,7 +330,7 @@ public class RobotContainer {
 
 
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
+    } */
   }
 
   public void AutonMode(){
