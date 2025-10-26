@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
@@ -186,6 +187,9 @@ public class DunkinDonutSubsystem extends SubsystemBase {
                               DunkinDonutConstants.clawPIDMaxAndMin,-DunkinDonutConstants.clawPIDMaxAndMin,DunkinDonutConstants.clawPIDInputGain);
   }
 
+  public Command setPIDHighCommand(){
+    return new InstantCommand(() -> setPIDHIGH());
+  }
   public void setPIDHIGH(){
     m_obsidianPID.setAllValues(DunkinDonutConstants.clawPIDkP,DunkinDonutConstants.clawPIDkI,DunkinDonutConstants.clawPIDkD,
                               DunkinDonutConstants.clawPIDMaxAndMin,-DunkinDonutConstants.clawPIDMaxAndMin,DunkinDonutConstants.clawPIDInputGain);
