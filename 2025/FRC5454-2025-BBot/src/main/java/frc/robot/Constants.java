@@ -7,31 +7,36 @@ public final class Constants {
     public static final int i = 0;
     public static final int d = 0;
     public static final int k30Amp = 30;
+    public static final int k20Amp = 20;
     public static final int k10Amp = 10;
     public static final int k5Amp = 5;
     public static final int k2Amp = 2;
     public static final double intakeInSpeed=-0.3;
     public static final double intakeOutSpeed=1;
-    public static final double climbSpeed=-0.6;
-    public static final double climbDownSpeed=0.6;
+    public static final double climbSpeed=-1;
+    public static final double climbDownSpeed=1;
     public static final double rotateUpSpeed=0.3;
     public static final double rotateDownSpeed=-0.6;
 
     public static final class AutomationConstants{
-        public static final double autoRotateSpeed=0.3;
+        public static final double autoRotateSpeed=0.6;
         public static final double autoIntakeSpeed=.6;
         public static final double autoOuttakeSpeed=-1;
-        public static final double autoScoreSpeed=-1;
+        public static final double autoScoreSpeed=-0.7;
         public static final double autoIntakeTargetPos=40;
         public static final double autoOutakeTargetPos=-0;
         public static final double autoDeadband=1;
+        public static final double autoABSDeadband=0.01;
+        public static final double autoTargetPos=0.4545;
+        public static final double autoHomePosition=0.555;
+        public static final double autoScoreDuration=.5;
     }
     public static final class ButtonConstants{
-        public static final int ClimbUp=4;
-        public static final int DriverIntakeIn=3;
+        public static final int IntakeNew=4;
+        public static final int Score=3;
         public static final int DriverOutake=2;
         public static final int RotateUp=8;
-        public static final int RotateDown=1;
+        public static final int GoHome=1;
         public static final int AutoIntake=5;
         public static final int AutoOutake=6;
         public static final int POVClimbUp=0;

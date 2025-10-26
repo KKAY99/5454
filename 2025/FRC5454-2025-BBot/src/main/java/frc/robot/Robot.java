@@ -127,12 +127,12 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit(){
-    if(DriverStation.getAlliance().isPresent()) {
-      Optional<Alliance> alliance = DriverStation.getAlliance();
-      if(alliance.get() == Alliance.Red) {
-        m_robot.m_swerve.resetRotation(new Rotation2d(Math.PI));
-      }
-    }
+    //if(DriverStation.getAlliance().isPresent()) {
+    //  Optional<Alliance> alliance = DriverStation.getAlliance();
+     // if(alliance.get() == Alliance.Red) {
+     //   m_robot.m_swerve.resetRotation(new Rotation2d(Math.PI));
+     // }
+    //}
    // if(m_autonomousCommand != null) {
    //   m_autonomousCommand.cancel();
    // }

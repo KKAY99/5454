@@ -4,29 +4,24 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Constants.AutomationConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class zAutoIntakeCommand extends Command {
+public class zAutoIntakeCommandFake extends Command {
   private IntakeSubsystem m_intake;
-  private double m_starttime;
-  private double m_duration;
   private double m_speed;
   private double m_targetpos;
   private enum States{
-    MOVEHOME,INPUT,WAIT,MOVEARM,MOVEUP,END
+    MOVE,SPIN,END
   };
   private States m_state;
-  public zAutoIntakeCommand(IntakeSubsystem intake,  double speed) {
+  public zAutoIntakeCommandFake(IntakeSubsystem intake, double movetoposition, double speed) {
     m_intake = intake;
     m_speed = speed;
-
-   
-    m_state=States.MOVEHOME;
+    m_targetpos=movetoposition;
+    m_state=States.MOVE;
     addRequirements(intake);
     
   }
@@ -35,7 +30,6 @@ public class zAutoIntakeCommand extends Command {
   @Override
   public void initialize() {
     m_intake.runIntake(m_speed);
-    m_state = States.MOVEHOME;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,24 +44,8 @@ public class zAutoIntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  }
-
-  private boolean moveArm(double targetpos){
-    boolean returnValue=false;
-    System.out.println("Current Position:" + m_intake.getRotatePositionABS() + " Target Pos:" +targetpos);
-    if(m_intake.getRotatePositionABS()<=(targetpos+AutomationConstants.autoABSDeadband) 
-    && m_intake.getRotatePositionABS()>=(targetpos-AutomationConstants.autoABSDeadband)){
-      returnValue=true;
-      
-    }else{
-      if(m_intake.getRotatePositionABS()>=(targetpos-AutomationConstants.autoABSDeadband)){
-        m_intake.Rotate(-AutomationConstants.autoRotateSpeed);
-      } else{
-        m_intake.Rotate(AutomationConstants.autoRotateSpeed);
-      }
-    }
-    return returnValue;
-
+    m_intake.stopIntake();
+    m_intake.stopRotate();
   }
 
   // Returns true when the command should end.
@@ -76,20 +54,24 @@ public class zAutoIntakeCommand extends Command {
    boolean endCommand=false;
 
     switch(m_state){
-      case MOVEHOME:        
-        if(moveArm(.535)){
-          m_intake.stopRotate();
-          m_state=States.INPUT;
+      case MOVE:
+        if(m_intake.getRotatePosition()<=(m_targetpos-AutomationConstants.autoDeadband) 
+        && m_intake.getRotatePosition()>=(m_targetpos+AutomationConstants.autoDeadband)){
+          m_state=States.SPIN;
+        }else{
+          if(m_intake.getRotatePosition()>=(m_targetpos-AutomationConstants.autoDeadband)){
+            m_intake.Rotate(AutomationConstants.autoRotateSpeed);
+          } else{
+            m_intake.Rotate(-AutomationConstants.autoRotateSpeed);
+          }
         }
-        break;
-      case INPUT:
-      m_intake.runIntake(m_speed);
-      m_starttime = Timer.getFPGATimestamp();
-      m_state = States.END;
-      
+
         endCommand=false;
         break;
-
+      case SPIN:
+        m_intake.runIntake(m_speed);
+        endCommand=false;
+        break; 
       default: // will handle END case 
          endCommand=true;
     }

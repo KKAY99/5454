@@ -21,8 +21,8 @@ public class IntakeSubsystem extends SubsystemBase {
   //private SparkAbsoluteEncoder m_encoder;
 
   public IntakeSubsystem(int CanId1, int CanId2, int encoder) {
-    m_intakeMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, false);
-    m_rotateMotor = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true, Constants.k5Amp);
+    m_intakeMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true);
+    m_rotateMotor = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true, Constants.k20Amp);
     m_encoder = new DutyCycleEncoder(encoder);
     
 
