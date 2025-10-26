@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import org.littletonrobotics.urcl.URCL;
 import com.ctre.phoenix6.SignalLogger;
+
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.epilogue.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.net.WebServer;
@@ -81,6 +83,7 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   //SignalLogger.setPath("/media/sda2/ctre-logs/");  
   //SignalLogger.start();
   //URCL.start(); 
+  CameraServer.startAutomaticCapture();
   m_robot = new RobotContainer();
 
  
@@ -127,15 +130,15 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit(){
-    //if(DriverStation.getAlliance().isPresent()) {
-    //  Optional<Alliance> alliance = DriverStation.getAlliance();
-     // if(alliance.get() == Alliance.Red) {
-     //   m_robot.m_swerve.resetRotation(new Rotation2d(Math.PI));
-     // }
-    //}
-   // if(m_autonomousCommand != null) {
-   //   m_autonomousCommand.cancel();
-   // }
+    if(DriverStation.getAlliance().isPresent()) {
+      Optional<Alliance> alliance = DriverStation.getAlliance();
+      if(alliance.get() == Alliance.Red) {
+        m_robot.m_swerve.resetRotation(new Rotation2d(Math.PI));
+      }
+    }
+    if(m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
     CommandScheduler.getInstance().cancelAll(); // Cancels all commands - will resetdefault command in TelepMode
     m_robot.TeleopMode();
   }

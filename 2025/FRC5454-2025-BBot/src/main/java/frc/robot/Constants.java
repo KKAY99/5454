@@ -19,10 +19,10 @@ public final class Constants {
     public static final double rotateDownSpeed=-0.6;
 
     public static final class AutomationConstants{
-        public static final double autoRotateSpeed=0.6;
+        public static final double autoRotateSpeed=0.8;
         public static final double autoIntakeSpeed=.6;
         public static final double autoOuttakeSpeed=-1;
-        public static final double autoScoreSpeed=-0.7;
+        public static final double autoScoreSpeed=-0.9;
         public static final double autoIntakeTargetPos=40;
         public static final double autoOutakeTargetPos=-0;
         public static final double autoDeadband=1;
