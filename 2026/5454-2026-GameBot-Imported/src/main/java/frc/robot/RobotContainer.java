@@ -20,8 +20,13 @@ import frc.robot.utilities.Limelight;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
+
+import org.ejml.dense.row.mult.MatrixMatrixMult_MT_ZDRM;
+
 import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
@@ -36,6 +41,7 @@ import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ElevatorConstants.ElevatorScoreLevel;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
   
@@ -57,7 +63,12 @@ public class RobotContainer {
  
   public boolean hasHomed=false;
   public boolean m_hasResetGyro=false;
-
+  private String m_activeHub="Undefined";
+  private String m_startHub="";
+  private double m_activeHubTime=99999;
+  private String m_hubMatch="Undefined";
+  private String m_activeHubPhase="Undefined";
+  
   public RobotContainer(){
     SmartDashboard.putData("field", m_Field2d);
       
@@ -82,9 +93,127 @@ public class RobotContainer {
 
  
   }
+  private void updateisHubMatched(int Shift){
+   Optional<Alliance> ally = DriverStation.getAlliance();
+   String currentAlliance="";
+   if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+            currentAlliance="Red";
+        }
+        if (ally.get() == Alliance.Blue) {
+            currentAlliance="Blue";
+        }
+  }
+
+  if((m_startHub=="B") && (Shift==2 || Shift==4)){
+    //Blue Hub is Active
+    m_activeHub="Blue";
+    if(currentAlliance=="Blue"){
+        m_hubMatch="True";
+    }else {
+        m_hubMatch="False";
+    }
+  } else {
+    //RED Hub is Active
+    m_activeHub="Red";
+    if(currentAlliance=="Red"){
+        m_hubMatch="True";
+    }else {
+        m_hubMatch="False";
+    }
+  }
+  
+  }
+  private void updateHubTime(){
+  double secondsRemaining= DriverStation.getMatchTime();
+  final int kTransitionEnd=130;
+  final int kShift1End=105;
+  final int kShift2End=80;
+  final int kShift3End=55;
+  final int kShift4End=30;
+  final int kEndGame=0;
+  if(DriverStation.isTeleop()){
+    if(secondsRemaining>kTransitionEnd){
+      m_activeHubPhase="Transition Shift";
+      m_activeHubTime=secondsRemaining-kTransitionEnd;
+      m_activeHub="Both";
+      m_hubMatch="True";
+    }else if(secondsRemaining>kShift1End) {
+      m_activeHubPhase="Shift 1";
+      m_activeHubTime=secondsRemaining-kShift1End;
+      updateisHubMatched(1);
+    }else if(secondsRemaining>kShift2End){
+      m_activeHubPhase="Shift 2";
+      m_activeHubTime=secondsRemaining-kShift2End;
+      updateisHubMatched(2);
+    }else if(secondsRemaining>kShift3End){
+      m_activeHubPhase="Shift 3";
+      m_activeHubTime=secondsRemaining-kShift3End;
+      updateisHubMatched(3);
+    }else if(secondsRemaining>kShift4End){
+      m_activeHubPhase="Shift 4";
+      m_activeHubTime=secondsRemaining-kShift4End;
+      updateisHubMatched(4);
+    }else { //default to end game if in endgame
+      m_activeHubPhase="End Game";
+      m_activeHubTime=secondsRemaining;
+      m_activeHub="Both";
+      m_hubMatch="True";
+    }
+    
+  }else {
+    updateUndefinedHub();
+  }
+  
+
+  }
+  private void updateUndefinedHub(){
+    m_activeHub="Undefined";
+    m_hubMatch="Undefined";
+    m_activeHubTime=99999;
+
+  }
+  private void updateHubStatus(){
+    if((m_activeHub=="")|| (m_activeHub=="Unknown")){
+          String gameData;
+          gameData = DriverStation.getGameSpecificMessage();
+          if(gameData.length() > 0) 
+          {
+            m_startHub=Character.toString(gameData.charAt(0));
+            switch (m_startHub)
+          {
+            case "B" :
+              //Blue case code
+              m_startHub="B";
+              break;
+            case "R" :
+              //Red case code
+              m_startHub="R";
+              break;
+            default :
+              
+              updateUndefinedHub();
+              break;
+          }
+            updateHubTime();
+        
+      } else {
+          updateUndefinedHub();
+  
      
+     }
+    }else {
+      updateHubTime();;
+    }
+  }
   private void refreshSmartDashboard(){  
     try{
+      updateHubStatus();
+      SmartDashboard.putString("Our Hub Active",m_hubMatch);      
+      SmartDashboard.putString("ActiveHub",m_activeHub);
+      SmartDashboard.putString("Active Phase",m_activeHubPhase);
+      SmartDashboard.putNumber("Active Phase Time",m_activeHubTime);
+      
       SmartDashboard.putNumber("LEFT LIMELIGHT DISTANCE",m_leftLimelight.getDistance());
       SmartDashboard.putNumber("RIGHT LIMELIGHT DISTANCE",m_rightLimelight.getDistance());
     }catch(Exception e){}
