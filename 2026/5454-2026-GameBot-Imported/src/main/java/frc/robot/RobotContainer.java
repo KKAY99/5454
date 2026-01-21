@@ -93,11 +93,11 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command intake = Commands.startEnd(    ()->m_intake.runIntake(0.5,.5),
+    Command intake = Commands.startEnd(    ()->m_intake.runIntake(-0.6,.5),
                                            ()->m_intake.stopIntake(),
                                            m_intake);
     m_xBoxDriver.a().whileTrue(intake);
-    Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(.8,.5),
+    Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(.9,-1),
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
     m_xBoxDriver.b().whileTrue(shoot);                                   
