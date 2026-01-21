@@ -2,14 +2,7 @@
   "robotWidth": 0.0,
   "robotLength": 0.0,
   "holonomicMode": true,
-  "pathFolders": [
-    "BLUE Center Start",
-    "BLUE Processor Side Start",
-    "BLUE Non-Processor Side Start",
-    "RED Center Start ",
-    "RED Processor Side Start",
-    "RED Non-Processor Side Start"
-  ],
+  "pathFolders": [],
   "autoFolders": [],
   "defaultMaxVel": 2.25,
   "defaultMaxAccel": 2.25,
