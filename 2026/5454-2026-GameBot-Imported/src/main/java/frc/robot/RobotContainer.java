@@ -31,7 +31,6 @@ import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
 import frc.robot.Constants.CoolPanelConstants;
-import frc.robot.Constants.DunkinDonutConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.GroundIntakeConstants;
 import frc.robot.Constants.InputControllers;
@@ -53,6 +52,8 @@ public class RobotContainer {
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
   public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
+  public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID,Constants.IntakeConstants.LowMotorCanID);
+  
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -91,6 +92,8 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
+//    m_xBoxDriver.a().onTrue(Commands.runOnce(m_intake.runIntake(1,1)))
+ //                   .onFalse(Commands.runOnce(m_intake.stopIntake()));
  
   }
   private void updateisHubMatched(int Shift){

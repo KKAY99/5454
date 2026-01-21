@@ -25,9 +25,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants{
-    public static final double redDoSiDoDeadBand=3;
-    public static final double flipIndexerDownTime=1.5;
-    public static final double processorTimeToRun=1;
+   
   }
 
   public static final class LineupConstants{
@@ -358,12 +356,8 @@ public final class Constants {
   }
 
   public static final class IntakeConstants{
-    public static final double coralShootSpeed=0.6;
-    public static final double coralOutakeSpeed=-0.15;
-    public static final double coralIntakeSpeed=0.15;
-    public static final double indexerIntakeSpeed=0.75;
-    public static final double indexerOuttakeSpeed=-0.75;
-    public static final double coralStallSpeed=-0.035;
+    public static final int IntakeMotorCanID=14;
+    public static final int LowMotorCanID=15;
   }
 
   public static final class ClimbConstants{
