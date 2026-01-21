@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Leds;
@@ -53,7 +54,7 @@ public class RobotContainer {
   public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID,Constants.IntakeConstants.LowMotorCanID);
-  
+  public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,Constants.ShooterConstants.KickerCanID);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -92,8 +93,14 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-//    m_xBoxDriver.a().onTrue(Commands.runOnce(m_intake.runIntake(1,1)))
- //                   .onFalse(Commands.runOnce(m_intake.stopIntake()));
+    Command intake = Commands.startEnd(    ()->m_intake.runIntake(0.5,.5),
+                                           ()->m_intake.stopIntake(),
+                                           m_intake);
+    m_xBoxDriver.a().whileTrue(intake);
+    Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(.8,.5),
+                                           ()->m_shooter.stopShooter(),
+                                           m_shooter);
+    m_xBoxDriver.b().whileTrue(shoot);                                   
  
   }
   private void updateisHubMatched(int Shift){

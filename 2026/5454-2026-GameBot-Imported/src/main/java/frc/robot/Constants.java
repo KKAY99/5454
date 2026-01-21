@@ -310,24 +310,6 @@ public final class Constants {
     public static final int elevatorCanID=21;
     public static final int canAndColorID=0;
 
-    public static final double elevatorPK1=0.23;//0.07
-    public static final double elevatorIK1=0;
-    public static final double elevatorDK1=0.04;
-    public static final double elevatorMaxAndMinK1=1;
-
-    public static final double elevatorPK2=0.2; //0.05
-    public static final double elevatorIK2=0;
-    public static final double elevatorDK2=0.2;
-    public static final double elevatorMaxAndMinK2=0.70;
-
-    public static final double elevatorPK3=0.05;//0.05
-    public static final double elevatorIK3=0;
-    public static final double elevatorDK3=0;
-    public static final double elevatorMaxAndMinK3=0.3;
-
-    public static final double elevatorHighLimit=-99.5;
-    public static final double elevatorLowLimit=-0.2;
-
     public static final double posDeadband=0.2;
     public static final double posL2Deadband=0.4;
     public static final double posL3Deadband=0.3;
@@ -356,8 +338,12 @@ public final class Constants {
   }
 
   public static final class IntakeConstants{
-    public static final int IntakeMotorCanID=14;
-    public static final int LowMotorCanID=15;
+    public static final int IntakeMotorCanID=62;
+    public static final int LowMotorCanID=60;
+  }
+  public static final class ShooterConstants {
+    public static final int ShooterCanID=14;
+    public static final int KickerCanID=61;
   }
 
   public static final class ClimbConstants{

@@ -17,17 +17,21 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class ShooterSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_shooterMotor;
+  private ObsidianCANSparkMax m_kickerMotor;
 
-  public ShooterSubsystem(int CanId1) {
-    m_shooterMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true);
+  public ShooterSubsystem(int shooterCANID,int kickerCANID) {
+    m_shooterMotor = new ObsidianCANSparkMax(shooterCANID, MotorType.kBrushless, true);
+    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless, true);
   }
 
-  public void runIntake(double speed,double lowspeed) {
+  public void runShooter(double speed,double kickerSpeed) {
     m_shooterMotor.set(speed);
+    m_kickerMotor.set(kickerSpeed);
   }
 
-  public void stopIntake(){
+  public void stopShooter(){
     m_shooterMotor.stopMotor();
+    m_kickerMotor.stopMotor();
   }
 
 }
