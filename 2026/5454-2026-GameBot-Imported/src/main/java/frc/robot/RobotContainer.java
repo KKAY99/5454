@@ -2,8 +2,12 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -51,7 +55,7 @@ public class RobotContainer {
 
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
-  public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
+  //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID,Constants.IntakeConstants.LowMotorCanID);
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,Constants.ShooterConstants.KickerCanID);
@@ -93,15 +97,26 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command intake = Commands.startEnd(    ()->m_intake.runIntake(-0.6,.5),
+    Command intake = Commands.startEnd(    ()->m_intake.runIntake(0.6,.3),
                                            ()->m_intake.stopIntake(),
                                            m_intake);
     m_xBoxDriver.a().whileTrue(intake);
-    Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(.9,-1),
+    Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(1,-1),
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
-    m_xBoxDriver.b().whileTrue(shoot);                                   
- 
+    m_xBoxDriver.b().whileTrue(shoot);
+    Command shoot2 = Commands.startEnd(     ()->m_shooter.runShooter(.75,-1),
+                                           ()->m_shooter.stopShooter(),
+                                           m_shooter);
+    m_xBoxDriver.x().whileTrue(shoot2);
+    Command shoot3 = Commands.startEnd(     ()->m_shooter.runShooter(0.5,-1),
+                                           ()->m_shooter.stopShooter(),
+                                           m_shooter);
+    m_xBoxDriver.y().whileTrue(shoot3);                                   
+    Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
+    m_xBoxDriver.rightBumper().onTrue(resetPose);
+    Command trypath = makeAutoCommandPPTest();
+    m_xBoxDriver.leftBumper().onTrue(trypath);
   }
   private void updateisHubMatched(int Shift){
    Optional<Alliance> ally = DriverStation.getAlliance();
@@ -142,8 +157,13 @@ public class RobotContainer {
   final int kShift3End=55;
   final int kShift4End=30;
   final int kEndGame=0;
-  if(DriverStation.isTeleop()){
-    if(secondsRemaining>kTransitionEnd){
+  if(DriverStation.isTeleop())
+  { if(secondsRemaining<=0){ // not in FMS or Match Mode
+      m_activeHubPhase="Not in Match";
+      m_activeHubTime=99999;
+      m_activeHub="Both";
+      m_hubMatch="True";
+    }else if(secondsRemaining>kTransitionEnd){
       m_activeHubPhase="Transition Shift";
       m_activeHubTime=secondsRemaining-kTransitionEnd;
       m_activeHub="Both";
@@ -279,7 +299,7 @@ public class RobotContainer {
 
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } */
-    m_LEDS.setLedState(LEDStates.DISABLED,false);
+    //m_LEDS.setLedState(LEDStates.DISABLED,false);
     //m_LEDS.activateLEDS();
   }
   
@@ -305,13 +325,37 @@ public class RobotContainer {
     } */
   }
 
+  public void makefalsestartPose(){
+    
+  Pose2d startPose = new Pose2d(6,7, Rotation2d.fromDegrees(0));
+  m_swerve.addVisionMeasurement(startPose,Utils.getCurrentTimeSeconds());
+  }
+  public Command makeAutoCommandPPTest(){
+
+    // Since we are using a holonomic drivetrain, the rotation component of this pose
+// represents the goal holonomic rotation
+Pose2d targetPose = new Pose2d(9, 7, Rotation2d.fromDegrees(180));
+
+// Create the constraints to use while pathfinding
+PathConstraints constraints = new PathConstraints(
+        3.0, 4.0,
+        Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+// Since AutoBuilder is configured, we can use it to build pathfinding commands
+Command pathfindingCommand = AutoBuilder.pathfindToPose(
+        targetPose,
+        constraints,
+        0.0 // Goal end velocity in meters/sec
+);
+return pathfindingCommand;
+}
   public void AutonMode(){
     homeRobot();
   }
 
   public void TeleopMode(){
     homeRobot();
-    m_LEDS.setLedState(LEDStates.TELEOP,false);
+    //m_LEDS.setLedState(LEDStates.TELEOP,false);
     
   }
   
