@@ -17,7 +17,6 @@ public final class Constants {
   public static final int k15Amp=15;
   public static final int k40Amp=40;
   public static final int k80Amp=80;
-  public static final int brakeButton=3;
   public static final int pdhCAN=1;
   
   public static final class DriveConstants{
@@ -192,8 +191,7 @@ public final class Constants {
   }
 
   public static final class ButtonBindings{
-    public static final int dunkinCoralOutakeButton=1; 
-   
+    public static final int button=1;
 
     public static final double joystickDeadband = 0.1;
   }

@@ -52,7 +52,8 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
-  private XboxController m_xBoxOperator = new XboxController(InputControllers.kXboxOperator);
+  private CommandXboxController m_xBoxOperator = new CommandXboxController(InputControllers.kXboxOperator);
+  private CommandXboxController m_CustomController = new CommandXboxController(InputControllers.kCustomController);
   //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID,Constants.IntakeConstants.LowMotorCanID);
@@ -91,30 +92,47 @@ public class RobotContainer {
     //QOL Drive
     /*ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve);
     m_xBoxDriver.start().onTrue(resetGyroCommand);*/
-
+    //using CommandXBox for clarity 
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
     Command intake = Commands.startEnd(    ()->m_intake.runIntake(0.6,.3),
                                            ()->m_intake.stopIntake(),
                                            m_intake);
-    m_xBoxDriver.a().whileTrue(intake);
+    m_CustomController.a().whileTrue(intake);
     Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(1,-1),
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
-    m_xBoxDriver.b().whileTrue(shoot);
+    m_CustomController.b().whileTrue(shoot);
     Command shoot2 = Commands.startEnd(     ()->m_shooter.runShooter(.75,-1),
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
-    m_xBoxDriver.x().whileTrue(shoot2);
+    m_CustomController.x().whileTrue(shoot2);
     Command shoot3 = Commands.startEnd(     ()->m_shooter.runShooter(0.5,-1),
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
-    m_xBoxDriver.y().whileTrue(shoot3);                                   
+    m_CustomController.y().whileTrue(shoot3);                                   
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
-    m_xBoxDriver.rightBumper().onTrue(resetPose);
+    m_CustomController.rightBumper().onTrue(resetPose);
     Command trypath = makeAutoCommandPPTest();
-    m_xBoxDriver.leftBumper().onTrue(trypath);
+    m_CustomController.leftBumper().onTrue(trypath);
+    
+    Command doNothing = Commands.none();
+    m_xBoxDriver.a().whileTrue(doNothing);
+    m_xBoxDriver.b().whileTrue(doNothing);
+    m_xBoxDriver.x().whileTrue(doNothing);
+    m_xBoxDriver.y().whileTrue(doNothing);
+    m_xBoxDriver.rightBumper().whileTrue(doNothing);
+    m_xBoxDriver.leftBumper().whileTrue(doNothing);
+    
+    m_xBoxOperator.a().whileTrue(doNothing);
+    m_xBoxOperator.b().whileTrue(doNothing);
+    m_xBoxOperator.x().whileTrue(doNothing);
+    m_xBoxOperator.y().whileTrue(doNothing);
+    m_xBoxOperator.rightBumper().whileTrue(doNothing);
+    m_xBoxOperator.leftBumper().whileTrue(doNothing);
+    
+
   }
   private void updateisHubMatched(int Shift){
    Optional<Alliance> ally = DriverStation.getAlliance();
