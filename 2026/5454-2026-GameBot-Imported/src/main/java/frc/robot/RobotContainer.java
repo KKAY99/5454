@@ -44,6 +44,8 @@ import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.subsystems.shooter.ShotCalculator;
+import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
   
@@ -57,7 +59,9 @@ public class RobotContainer {
   //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID,Constants.IntakeConstants.LowMotorCanID);
-  public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,Constants.ShooterConstants.KickerCanID);
+  public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,
+                                                                 Constants.ShooterConstants.KickerCanID,
+                                                                 Constants.ShooterConstants.IdleSpeed);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -73,6 +77,7 @@ public class RobotContainer {
   private double m_activeHubTime=99999;
   private String m_hubMatch="Undefined";
   private String m_activeHubPhase="Undefined";
+  private ShotCalculator m_ShotCalculator = new ShotCalculator();
   
   public RobotContainer(){
     SmartDashboard.putData("field", m_Field2d);
@@ -371,6 +376,7 @@ return pathfindingCommand;
 
   public void TeleopMode(){
     homeRobot();
+    
     //m_LEDS.setLedState(LEDStates.TELEOP,false);
     
   }
@@ -392,7 +398,10 @@ return pathfindingCommand;
   public void TeleopPeriodic(){
     refreshSmartDashboard();
     updateLEDs();
-   
+    m_ShotCalculator.clearShootingParameters();
+    ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters();
+    System.out.println("Turret Angle: " + shootingInfo.turretAngle());
+    System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
     if(m_rightLimelight.isAnyTargetAvailable()){
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   

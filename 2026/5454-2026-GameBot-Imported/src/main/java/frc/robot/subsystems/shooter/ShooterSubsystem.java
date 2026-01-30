@@ -18,12 +18,19 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 public class ShooterSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_shooterMotor;
   private ObsidianCANSparkMax m_kickerMotor;
+  private double m_idleSpeed;
 
-  public ShooterSubsystem(int shooterCANID,int kickerCANID) {
+  public ShooterSubsystem(int shooterCANID,int kickerCANID, double idleSpeed) {
     m_shooterMotor = new ObsidianCANSparkMax(shooterCANID, MotorType.kBrushless, true);
     m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless, true);
+    m_idleSpeed=idleSpeed;
   }
 
+  public void setShooterIdleSpin(){
+    //use power setting to avoid PID loops for idle
+    m_shooterMotor.set(m_idleSpeed);
+
+  }
   public void runShooter(double speed,double kickerSpeed) {
     m_shooterMotor.set(speed);
     m_kickerMotor.set(kickerSpeed);

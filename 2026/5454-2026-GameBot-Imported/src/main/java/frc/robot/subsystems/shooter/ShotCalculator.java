@@ -101,7 +101,7 @@ public class ShotCalculator {
     Pose2d turretPosition =
         RobotState.getInstance().getEstimatedPose().transformBy(Constants.ShooterConstants.robotToTurret.toTransform2d());
     double turretToTargetDistance = target.getDistance(turretPosition.getTranslation());
-
+    
     // Calculate field relative turret velocity
     ChassisSpeeds robotVelocity = RobotState.getInstance().getFieldVelocity();
     double robotAngle = RobotState.getInstance().getRotation().getRadians();

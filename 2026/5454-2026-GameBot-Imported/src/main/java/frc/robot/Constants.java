@@ -140,6 +140,7 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int ShooterCanID=14;
     public static final int KickerCanID=61;
+    public static final double IdleSpeed=0.5;
     //6328 Transforms for Turret
     public static Transform3d robotToTurret = new Transform3d(-0.19685, 0.0, 0.44, Rotation3d.kZero);
     public static Transform3d turretToCamera =
