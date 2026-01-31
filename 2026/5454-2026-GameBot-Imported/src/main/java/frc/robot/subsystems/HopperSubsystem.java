@@ -28,5 +28,4 @@ public class HopperSubsystem extends SubsystemBase {
   public void stopAgitate(){
     m_hopperMotor.stopMotor();
   }
-
 }

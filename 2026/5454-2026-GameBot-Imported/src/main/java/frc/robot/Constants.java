@@ -135,7 +135,7 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int IntakeMotorCanID=62;
-    public static final int LowMotorCanID=60;
+    public static final int LowMotorCanID=61;
   }
   public static final class ShooterConstants {
     public static final int ShooterCanID=14;
@@ -147,6 +147,9 @@ public final class Constants {
       new Transform3d(
           -0.1314196, 0.0, 0.2770674, new Rotation3d(0.0, Units.degreesToRadians(-22.5), 0.0));
 
+  }
+  public static final class HopperConstants{
+    public static final int HopperMotorCanID=60;
   }
 
   public static final class ClimbConstants{

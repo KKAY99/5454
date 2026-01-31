@@ -62,6 +62,7 @@ public class RobotContainer {
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,
                                                                  Constants.ShooterConstants.KickerCanID,
                                                                  Constants.ShooterConstants.IdleSpeed);
+  public final HopperSubsystem m_hopperMotor = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -100,6 +101,11 @@ public class RobotContainer {
     //using CommandXBox for clarity 
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
+
+    Command agitate = Commands.startEnd(    ()->m_hopperMotor.agitate(1),
+                                           ()->m_hopperMotor.stopAgitate(),
+                                           m_hopperMotor);
+    m_CustomController.leftBumper().whileTrue(agitate);
 
     Command intake = Commands.startEnd(    ()->m_intake.runIntake(0.6,.3),
                                            ()->m_intake.stopIntake(),
