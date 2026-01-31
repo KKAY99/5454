@@ -47,6 +47,7 @@ public final class Constants {
     public static final int kXboxDrive=0;
     public static final int kXboxOperator=1;
     public static final int kCustomController=2;
+    public static final int kFunnyController=3;
     public static final double kRumbleoff=0;
     public static final double kRumbleLight=0.25;
     public static final double kRumbleMedium=0.5;
@@ -136,6 +137,11 @@ public final class Constants {
   public static final class IntakeConstants{
     public static final int IntakeMotorCanID=62;
     public static final int LowMotorCanID=59;
+  }
+  public static final class NewShooterConstants {
+    public static final int shooter1CANID=29;
+    public static final int shooter2CANID=28;
+    public static final int kickerCANID=27;
   }
   public static final class ShooterConstants {
     public static final int ShooterCanID=14;

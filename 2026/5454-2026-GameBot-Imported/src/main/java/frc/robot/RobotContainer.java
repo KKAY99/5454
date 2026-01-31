@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.shooter.NewShooterSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Leds;
@@ -56,9 +57,12 @@ public class RobotContainer {
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private CommandXboxController m_xBoxOperator = new CommandXboxController(InputControllers.kXboxOperator);
   private CommandXboxController m_CustomController = new CommandXboxController(InputControllers.kCustomController);
+  private CommandXboxController m_FunnyController = new CommandXboxController(InputControllers.kFunnyController);
   //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID,Constants.IntakeConstants.LowMotorCanID);
+  public final NewShooterSubsystem m_newShooter = new NewShooterSubsystem(Constants.NewShooterConstants.shooter1CANID, Constants.NewShooterConstants.shooter2CANID, Constants.NewShooterConstants.kickerCANID);
+
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,
                                                                  Constants.ShooterConstants.KickerCanID,
                                                                  Constants.ShooterConstants.IdleSpeed);
@@ -142,6 +146,19 @@ public class RobotContainer {
     m_xBoxOperator.y().whileTrue(doNothing);
     m_xBoxOperator.rightBumper().whileTrue(doNothing);
     m_xBoxOperator.leftBumper().whileTrue(doNothing);
+
+    Command newShoot = Commands.startEnd(    ()->m_newShooter.runNewShooter(1),
+                                           ()->m_newShooter.stopNewShooter(),
+                                           m_newShooter);
+    m_FunnyController.a().whileTrue(newShoot);
+    Command newHood = Commands.startEnd(    ()->m_newShooter.moveHood(-0.1),
+                                           ()->m_newShooter.stopHood(),
+                                           m_newShooter);
+    m_FunnyController.b().whileTrue(newHood);
+    Command newHoodDown = Commands.startEnd(    ()->m_newShooter.moveHood(0.1),
+                                           ()->m_newShooter.stopHood(),
+                                           m_newShooter);
+    m_FunnyController.x().whileTrue(newHoodDown);
     
 
   }
