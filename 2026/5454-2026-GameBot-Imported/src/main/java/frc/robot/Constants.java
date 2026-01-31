@@ -135,7 +135,7 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int IntakeMotorCanID=62;
-    public static final int LowMotorCanID=61;
+    public static final int LowMotorCanID=59;
   }
   public static final class ShooterConstants {
     public static final int ShooterCanID=14;

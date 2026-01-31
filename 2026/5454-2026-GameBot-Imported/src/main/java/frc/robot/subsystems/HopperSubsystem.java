@@ -22,6 +22,7 @@ public class HopperSubsystem extends SubsystemBase {
    }
 
   public void agitate(double speed) {
+    System.out.println("Running Agitate at " + speed);
     m_hopperMotor.set(speed);
   }
 

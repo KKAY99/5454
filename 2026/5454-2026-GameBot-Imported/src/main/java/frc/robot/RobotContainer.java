@@ -62,7 +62,7 @@ public class RobotContainer {
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,
                                                                  Constants.ShooterConstants.KickerCanID,
                                                                  Constants.ShooterConstants.IdleSpeed);
-  public final HopperSubsystem m_hopperMotor = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID);
+  public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -102,15 +102,15 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command agitate = Commands.startEnd(    ()->m_hopperMotor.agitate(1),
-                                           ()->m_hopperMotor.stopAgitate(),
-                                           m_hopperMotor);
-    m_CustomController.leftBumper().whileTrue(agitate);
+    Command agitate = Commands.startEnd(    ()->m_hopper.agitate(-1),
+                                           ()->m_hopper.stopAgitate(),
+                                           m_hopper);
+    m_CustomController.a().whileTrue(agitate);
 
     Command intake = Commands.startEnd(    ()->m_intake.runIntake(0.6,.3),
                                            ()->m_intake.stopIntake(),
                                            m_intake);
-    m_CustomController.a().whileTrue(intake);
+    m_CustomController.y().whileTrue(intake);
     Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(1,-1),
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
@@ -119,10 +119,10 @@ public class RobotContainer {
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
     m_CustomController.x().whileTrue(shoot2);
-    Command shoot3 = Commands.startEnd(     ()->m_shooter.runShooter(0.5,-1),
-                                           ()->m_shooter.stopShooter(),
-                                           m_shooter);
-    m_CustomController.y().whileTrue(shoot3);                                   
+  //  Command shoot3 = Commands.startEnd(     ()->m_shooter.runShooter(0.5,-1),
+  //                                         ()->m_shooter.stopShooter(),
+  //                                         m_shooter);
+//    m_CustomController.y().whileTrue(shoot3);                                   
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
     m_CustomController.rightBumper().onTrue(resetPose);
     Command trypath = makeAutoCommandPPTest();
@@ -449,7 +449,8 @@ return pathfindingCommand;
   }
  
   private void resetDefaultCommand(){
-    m_swerve.setDefaultCommand(m_swerve.applyRequestDrive(m_xBoxDriver,translationAxis,strafeAxis,rotationAxis));
+    //disabled drive
+    //m_swerve.setDefaultCommand(m_swerve.applyRequestDrive(m_xBoxDriver,translationAxis,strafeAxis,rotationAxis));
   }
 }
 
