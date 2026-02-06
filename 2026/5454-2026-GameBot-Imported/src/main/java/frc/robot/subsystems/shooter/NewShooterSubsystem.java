@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +29,17 @@ public class NewShooterSubsystem extends SubsystemBase {
     m_1shooterMotor.set(speed);
     m_2shooterMotor.set(-speed);
   }
+
+public void runShooterVelocity(double targetSpeed){
+// 
+   m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(0)
+                  .withVelocity(targetSpeed)
+                  .withFeedForward(0.1));
+    m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(0)
+                  .withVelocity(-targetSpeed)
+                  .withFeedForward(0.1));
+   }
+
 
   public void stopNewShooter(){
     m_1shooterMotor.stopMotor();

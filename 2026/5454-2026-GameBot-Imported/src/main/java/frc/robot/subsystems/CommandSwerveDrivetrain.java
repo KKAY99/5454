@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -412,5 +414,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+    }
+    public void playMusic(String fileName){
+        Orchestra robotOrch = new Orchestra();
+        robotOrch.loadMusic(fileName);
+        robotOrch.addInstrument(this.getModule(0).getDriveMotor());
+        robotOrch.addInstrument(this.getModule(1).getDriveMotor());
+        robotOrch.addInstrument(this.getModule(2).getDriveMotor());
+        robotOrch.addInstrument(this.getModule(3).getDriveMotor());
+        robotOrch.play();
     }
 }

@@ -31,6 +31,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor.set(m_idleSpeed);
 
   }
+  
   public void runShooter(double speed,double kickerSpeed) {
     m_shooterMotor.set(speed);
     m_kickerMotor.set(kickerSpeed);

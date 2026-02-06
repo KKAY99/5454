@@ -92,6 +92,7 @@ public class RobotContainer {
     createAutonomousCommandList(); 
     configureButtonBindings();
     resetDefaultCommand();
+    //m_swerve.playMusic("Indiana.chrp");
   }
 
   public void configureNamedCommands() {
@@ -159,6 +160,10 @@ public class RobotContainer {
                                            ()->m_newShooter.stopHood(),
                                            m_newShooter);
     m_FunnyController.x().whileTrue(newHoodDown);
+    Command newVelocityShot = Commands.startEnd(    ()->m_newShooter.runShooterVelocity(5000),
+                                           ()->m_newShooter.stopNewShooter(),
+                                           m_newShooter);
+    m_FunnyController.x().whileTrue(newVelocityShot);
     
 
   }
@@ -378,7 +383,7 @@ public class RobotContainer {
 
     // Since we are using a holonomic drivetrain, the rotation component of this pose
 // represents the goal holonomic rotation
-Pose2d targetPose = new Pose2d(9, 7, Rotation2d.fromDegrees(180));
+Pose2d targetPose = new Pose2d(12, 1, Rotation2d.fromDegrees(0));
 
 // Create the constraints to use while pathfinding
 PathConstraints constraints = new PathConstraints(
@@ -467,7 +472,7 @@ return pathfindingCommand;
  
   private void resetDefaultCommand(){
     //disabled drive
-    //m_swerve.setDefaultCommand(m_swerve.applyRequestDrive(m_xBoxDriver,translationAxis,strafeAxis,rotationAxis));
+    m_swerve.setDefaultCommand(m_swerve.applyRequestDrive(m_xBoxDriver,translationAxis,strafeAxis,rotationAxis));
   }
 }
 
