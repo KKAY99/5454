@@ -45,6 +45,7 @@ import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
@@ -138,7 +139,7 @@ public class RobotContainer {
 //    m_CustomController.y().whileTrue(shoot3);                                   
     m_CustomController.rightBumper().onTrue(Left2Neutral());
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
-    m_CustomController.leftBumper().onTrue(resetPose);
+    m_CustomController.leftBumper().onTrue(new WaitCommand(4));
     
     Command doNothing = Commands.none();
     m_xBoxDriver.a().whileTrue(doNothing);
