@@ -2,6 +2,7 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.util.Units;
@@ -74,6 +75,13 @@ public class RobotContainer {
 
  
   private final SendableChooser<Command> m_autoChooser;
+
+  public Command Left2Neutral() {
+    // This method loads the auto when it is called, however, it is recommended
+    // to first load your paths/autos when code starts, then return the
+    // pre-loaded auto/path
+    return new PathPlannerAuto("Left2Neutral");
+  }
  
   public boolean hasHomed=false;
   public boolean m_hasResetGyro=false;
@@ -128,10 +136,9 @@ public class RobotContainer {
   //                                         ()->m_shooter.stopShooter(),
   //                                         m_shooter);
 //    m_CustomController.y().whileTrue(shoot3);                                   
+    m_CustomController.rightBumper().onTrue(Left2Neutral());
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
-    m_CustomController.rightBumper().onTrue(resetPose);
-    Command trypath = makeAutoCommandPPTest();
-    m_CustomController.leftBumper().onTrue(trypath);
+    m_CustomController.leftBumper().onTrue(resetPose);
     
     Command doNothing = Commands.none();
     m_xBoxDriver.a().whileTrue(doNothing);

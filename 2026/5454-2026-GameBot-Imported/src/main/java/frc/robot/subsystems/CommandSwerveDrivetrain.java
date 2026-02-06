@@ -14,7 +14,9 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.PointWheelsAt;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import frc.robot.Constants;
@@ -222,34 +224,40 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void configAutoBuilder(){
-        RobotConfig robotConfig=null;
-        try{
-            robotConfig = RobotConfig.fromGUISettings();
-        }catch(Exception e){
-            System.out.println("RobotConfig Error, Error: "+e);
-        }
-        try{
-            AutoBuilder.configure(
-                this::getPose2d,
-                this::resetPose,
-                this::getChassisSpeeds,
-                this::setChassisSpeeds,
-                Constants.pathPlanDriveController,
-                robotConfig,
-                ()->false,/*{
-                    Alliance alliance=DriverStation.getAlliance().get();
-                    if(alliance==Alliance.Red){
-                        return true;
-                    }else{
-                        return false;
-                    }
-                },*/
-                this
-            );
-        }catch(Exception e){
-            System.out.println("AutoBuilder was not configured, Error: "+e);
-        }
+         // Load the RobotConfig from the GUI settings. You should probably
+    // store this in your Constants file
+    RobotConfig config;
+    try{
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      config = new RobotConfig(0,0,null);
+      e.printStackTrace();
     }
+
+    // Configure AutoBuilder last
+        AutoBuilder.configure(
+            this::getPose2d, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getChassisSpeeds,
+            this::setChassisSpeeds,
+            Constants.pathPlanDriveController,
+            config,
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
+  }
+
 
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds,DriveFeedforwards driveFF){
         this.setControl(autoDrive.withSpeeds(chassisSpeeds)
