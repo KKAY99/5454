@@ -8,9 +8,11 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import frc.robot.Constants;
 
 public class HopperSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_hopperMotor;
@@ -28,5 +30,17 @@ public class HopperSubsystem extends SubsystemBase {
 
   public void stopAgitate(){
     m_hopperMotor.stopMotor();
+  }
+  public Command agitateCommand(){
+    return Commands.startEnd(    ()->agitate(Constants.HopperConstants.agitateSpeed),
+                                           ()->stopAgitate(),
+                                           this);
+
+  }
+  public Command agitateonCommand(){
+    return Commands.runOnce(    ()->agitate(Constants.HopperConstants.agitateSpeed),this);
+  }
+  public Command agitateoffCommand(){
+    return Commands.runOnce(    ()->stopAgitate(),this);
   }
 }
