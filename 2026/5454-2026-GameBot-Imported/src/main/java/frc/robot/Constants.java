@@ -137,6 +137,8 @@ public final class Constants {
   public static final class IntakeConstants{
     public static final int IntakeMotorCanID=62;
     public static final int LowMotorCanID=59;
+    public static final double lowSpeed=0.3;
+    public static final double highSpeed=0.6;
   }
   public static final class NewShooterConstants {
     public static final int shooter1CANID=29;
@@ -156,6 +158,7 @@ public final class Constants {
   }
   public static final class HopperConstants{
     public static final int HopperMotorCanID=60;
+    public static final double agitateSpeed=-1;
   }
 
   public static final class ClimbConstants{

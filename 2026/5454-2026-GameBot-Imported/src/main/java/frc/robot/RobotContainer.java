@@ -116,34 +116,41 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command agitate = Commands.startEnd(    ()->m_hopper.agitate(-1),
+    Command agitate = Commands.startEnd(    ()->m_hopper.agitate(Constants.HopperConstants.agitateSpeed),
                                            ()->m_hopper.stopAgitate(),
                                            m_hopper);
     m_CustomController.a().whileTrue(agitate);
 
-    Command intake = Commands.startEnd(    ()->m_intake.runIntake(0.6,.3),
+    Command intake = Commands.startEnd(    ()->m_intake.runIntake(IntakeConstants.highSpeed,IntakeConstants.lowSpeed),
                                            ()->m_intake.stopIntake(),
                                            m_intake);
     m_CustomController.y().whileTrue(intake);
+  
+    Command intakeOn = Commands.startEnd(()->m_intake.runIntake(
+                                        IntakeConstants.highSpeed,IntakeConstants.lowSpeed),
+                                        ()->m_intake.stopIntake(),
+                                        m_intake);
+    m_CustomController.x().toggleOnTrue(intakeOn);
+   
     Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(1,-1),
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
     m_CustomController.b().whileTrue(shoot);
-    Command shoot2 = Commands.startEnd(     ()->m_shooter.runShooter(.75,-1),
-                                           ()->m_shooter.stopShooter(),
-                                           m_shooter);
-    m_CustomController.x().whileTrue(shoot2);
+    //Command shoot2 = Commands.startEnd(     ()->m_shooter.runShooter(.75,-1),
+    //                                       ()->m_shooter.stopShooter(),
+    //                                       m_shooter);
+   // m_CustomController.x().whileTrue(shoot2);
   //  Command shoot3 = Commands.startEnd(     ()->m_shooter.runShooter(0.5,-1),
   //                                         ()->m_shooter.stopShooter(),
   //                                         m_shooter);
 //    m_CustomController.y().whileTrue(shoot3);              
 
-    Command doNothing = Commands.none();
     m_CustomController.rightBumper().onTrue(Left2Neutral());
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
     m_CustomController.leftBumper().onTrue(new WaitCommand(4));
-    
+  
     Command doNothing = Commands.none();
+   
     m_xBoxDriver.a().whileTrue(doNothing);
     m_xBoxDriver.b().whileTrue(doNothing);
     m_xBoxDriver.x().whileTrue(doNothing);
@@ -158,6 +165,7 @@ public class RobotContainer {
     m_xBoxOperator.rightBumper().whileTrue(doNothing);
     m_xBoxOperator.leftBumper().whileTrue(doNothing);
 
+    m_FunnyController.rightBumper().whileTrue(agitate);
     Command newShoot = Commands.startEnd(    ()->m_newShooter.runNewShooter(1),
                                            ()->m_newShooter.stopNewShooter(),
                                            m_newShooter);
