@@ -45,6 +45,7 @@ import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
@@ -140,8 +141,9 @@ public class RobotContainer {
     Command doNothing = Commands.none();
     m_CustomController.rightBumper().onTrue(Left2Neutral());
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
-    m_CustomController.leftBumper().onTrue(doNothing);
-  
+    m_CustomController.leftBumper().onTrue(new WaitCommand(4));
+    
+    Command doNothing = Commands.none();
     m_xBoxDriver.a().whileTrue(doNothing);
     m_xBoxDriver.b().whileTrue(doNothing);
     m_xBoxDriver.x().whileTrue(doNothing);
@@ -435,9 +437,10 @@ return pathfindingCommand;
     refreshSmartDashboard();
     updateLEDs();
     m_ShotCalculator.clearShootingParameters();
-    ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters();
+    ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
     System.out.println("Turret Angle: " + shootingInfo.turretAngle());
     System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
+    
     if(m_rightLimelight.isAnyTargetAvailable()){
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
