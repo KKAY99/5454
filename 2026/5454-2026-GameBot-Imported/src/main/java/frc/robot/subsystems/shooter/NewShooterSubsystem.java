@@ -6,6 +6,7 @@ package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -15,22 +16,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.NewShooterConstants;
+import frc.robot.utilities.ObsidianCANSparkMax;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class NewShooterSubsystem extends SubsystemBase {
     private TalonFX m_1shooterMotor;
     private TalonFX m_2shooterMotor;
-    private TalonFX m_kickerMotor;
-
-  public NewShooterSubsystem(int shooter1CANID, int shooter2CANID, int kickerCANID) {
+    private TalonFX m_hoodMotor;
+    //private TalonFX m_kickerMotor;
+    private ObsidianCANSparkMax m_kickerMotor;
+  public NewShooterSubsystem(int shooter1CANID, int shooter2CANID, int kickerCANID,int hoodCANID) {
     m_1shooterMotor = new TalonFX(shooter1CANID);
     m_2shooterMotor = new TalonFX(shooter2CANID);
-    m_kickerMotor = new TalonFX(kickerCANID);
+    m_hoodMotor = new TalonFX(hoodCANID);
+    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,true);
+  
   }
 
-  public void runNewShooter(double speed) {
+  public void runNewShooter(double speed,double kickerSpeed) {
     m_1shooterMotor.set(speed);
     m_2shooterMotor.set(-speed);
+    m_kickerMotor.set(kickerSpeed);
   }
 
 public void runShooterVelocity(double targetSpeed){
@@ -47,14 +53,15 @@ public void runShooterVelocity(double targetSpeed){
   public void stopNewShooter(){
     m_1shooterMotor.stopMotor();
     m_2shooterMotor.stopMotor();
+    m_kickerMotor.stopMotor();
   }
 
   public void moveHood(double speed){
-    m_kickerMotor.set(speed);
+    m_hoodMotor.set(speed);
   }
 
   public void stopHood(){
-    m_kickerMotor.stopMotor();
+    m_hoodMotor.stopMotor();
   }
 
   public Command HoodUp(){

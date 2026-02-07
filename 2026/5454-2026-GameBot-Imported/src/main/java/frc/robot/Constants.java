@@ -143,13 +143,14 @@ public final class Constants {
   public static final class NewShooterConstants {
     public static final int shooter1CANID=29;
     public static final int shooter2CANID=28;
-    public static final int kickerCANID=27;
     public static final double highSpeed=1;
     public static final double lowSpeed=1;
+    public static final int kickerCANID=61;
+    public static final int hoodCANID=27;
   }
   public static final class ShooterConstants {
     public static final int ShooterCanID=14;
-    public static final int KickerCanID=61;
+    public static final int KickerCanID=63; //was 61
     public static final double shooterSpeedFull=1;
     public static final double shooterRPM=5000;
     public static final double kickerSpeed=-1;
@@ -168,8 +169,12 @@ public final class Constants {
     public static final double agitateSpeed=-1;
   }
   public static final class HoodConstants{
-    public static final double hoodUpSpeed=-0.1;
-    public static final double hoodDownSpeed=0.1;
+    public static final double hoodUpSpeed=-0.06;
+    public static final double hoodDownSpeed=0.06;
+  }
+  public static final class TurretConstants {
+    public static final int turretCanID=6;
+    public static final double turretSpeed=0.035;
   }
   public static final class ClimbConstants{
     public static final int climbCanID1=26;

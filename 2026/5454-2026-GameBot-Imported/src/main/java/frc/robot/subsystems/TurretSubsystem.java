@@ -22,16 +22,20 @@ import java.util.function.Supplier;
 import edu.wpi.first.units.measure.Angle;
 import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public class TurretSubsystem extends SubsystemBase {
-  private ObsidianCANSparkMax m_turretMotor;
+  private TalonFX m_turretMotor;
   private CANcoder m_encoder1;
   private CANcoder m_encoder2;
   private EasyCRT m_EasyCRT;
   //private SparkAbsoluteEncoder m_encoder;
 
+    public TurretSubsystem(int CanId1) {
+    m_turretMotor = new TalonFX(CanId1);
+    }
   public TurretSubsystem(int CanId1, int encoder1, int encoder2) {
-    m_turretMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true);
+    m_turretMotor = new TalonFX(CanId1);
     m_encoder1 = new CANcoder(encoder1);
     m_encoder2 = new CANcoder(encoder2);
 
@@ -57,8 +61,9 @@ public class TurretSubsystem extends SubsystemBase {
   private Supplier<Angle> getAngle(CANcoder encoder){
     return () -> encoder.getPosition().getValue();
   }
-
-  public void moveTurret(double speed) {
+  public void moveTurret(double speed) 
+  {
+    System.out.println("Turret Move:" + speed);
     m_turretMotor.set(speed);
   }
 
