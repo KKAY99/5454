@@ -75,7 +75,7 @@ public void runShooterVelocity(double targetSpeed){
                                            this);
   }
   public Command shootCommand(){
-    return Commands.startEnd(    ()->runNewShooter(1),
+    return Commands.startEnd(    ()->runNewShooter(1,),
                                            ()->stopNewShooter(),
                                            this);
   }
