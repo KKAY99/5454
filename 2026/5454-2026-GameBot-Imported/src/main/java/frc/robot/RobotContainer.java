@@ -46,9 +46,12 @@ import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.TurretConstants;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
 public class RobotContainer {
@@ -65,12 +68,16 @@ public class RobotContainer {
   //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID,Constants.IntakeConstants.LowMotorCanID);
-  public final NewShooterSubsystem m_newShooter = new NewShooterSubsystem(Constants.NewShooterConstants.shooter1CANID, Constants.NewShooterConstants.shooter2CANID, Constants.NewShooterConstants.kickerCANID);
+  public final NewShooterSubsystem m_newShooter = new NewShooterSubsystem(Constants.NewShooterConstants.shooter1CANID,
+                                                        Constants.NewShooterConstants.shooter2CANID,
+                                                         Constants.NewShooterConstants.kickerCANID,
+                                                         Constants.NewShooterConstants.hoodCANID);
 
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,
                                                                  Constants.ShooterConstants.KickerCanID,
                                                                  Constants.ShooterConstants.IdleSpeed);
   public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID);
+  public final TurretSubsystem m_TurretSubsystem = new TurretSubsystem(Constants.TurretConstants.turretCanID);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -168,7 +175,7 @@ public class RobotContainer {
     m_xBoxOperator.leftBumper().whileTrue(doNothing);
 
     m_FunnyController.rightBumper().whileTrue(agitate);
-    Command newShoot = Commands.startEnd(    ()->m_newShooter.runNewShooter(ShooterConstants.shooterSpeedFull),
+    Command newShoot = Commands.startEnd(    ()->m_newShooter.runNewShooter(ShooterConstants.shooterSpeedFull,ShooterConstants.kickerSpeed),
                                            ()->m_newShooter.stopNewShooter(),
                                            m_newShooter);
     m_FunnyController.a().whileTrue(newShoot);
@@ -180,13 +187,19 @@ public class RobotContainer {
                                            ()->m_newShooter.stopHood(),
                                            m_newShooter);
     m_FunnyController.x().whileTrue(newHoodDown);
-    Command newVelocityShot = Commands.startEnd(  ())->m_newShooter.runShooterVelocity(ShooterConstants.shooterRPM),
+    Command newVelocityShot = Commands.startEnd(  ()->m_newShooter.runShooterVelocity(ShooterConstants.shooterRPM),
                                            ()->m_newShooter.stopNewShooter(),
                                            m_newShooter);
-    m_FunnyController.x().whileTrue(newVelocityShot);
-    
-
+    m_FunnyController.leftBumper().whileTrue(newVelocityShot);
+    m_FunnyController.povRight().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(TurretConstants.turretSpeed),
+                                                              ()->m_TurretSubsystem.stopTurret(),
+                                                              m_TurretSubsystem));
+    m_FunnyController.povLeft().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(-TurretConstants.turretSpeed),
+                                                              ()->m_TurretSubsystem.stopTurret(),
+                                                              m_TurretSubsystem));
+  
   }
+
   private void updateisHubMatched(int Shift){
    Optional<Alliance> ally = DriverStation.getAlliance();
    String currentAlliance="";
@@ -448,8 +461,8 @@ return pathfindingCommand;
     updateLEDs();
     m_ShotCalculator.clearShootingParameters();
     ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
-    System.out.println("Turret Angle: " + shootingInfo.turretAngle());
-    System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
+    //System.out.println("Turret Angle: " + shootingInfo.turretAngle());
+    //System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
     
     if(m_rightLimelight.isAnyTargetAvailable()){
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
