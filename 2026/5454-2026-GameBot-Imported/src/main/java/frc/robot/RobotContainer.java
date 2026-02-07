@@ -435,9 +435,10 @@ return pathfindingCommand;
     refreshSmartDashboard();
     updateLEDs();
     m_ShotCalculator.clearShootingParameters();
-    ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters();
+    ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
     System.out.println("Turret Angle: " + shootingInfo.turretAngle());
     System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
+    
     if(m_rightLimelight.isAnyTargetAvailable()){
       m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
