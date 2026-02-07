@@ -136,7 +136,9 @@ public class RobotContainer {
   //  Command shoot3 = Commands.startEnd(     ()->m_shooter.runShooter(0.5,-1),
   //                                         ()->m_shooter.stopShooter(),
   //                                         m_shooter);
-//    m_CustomController.y().whileTrue(shoot3);                                   
+//    m_CustomController.y().whileTrue(shoot3);              
+
+    Command doNothing = Commands.none();
     m_CustomController.rightBumper().onTrue(Left2Neutral());
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
     m_CustomController.leftBumper().onTrue(new WaitCommand(4));
