@@ -39,11 +39,13 @@ import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
 import frc.robot.Constants.CoolPanelConstants;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LEDStates;
 import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
+import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -132,7 +134,7 @@ public class RobotContainer {
                                         m_intake);
     m_CustomController.x().toggleOnTrue(intakeOn);
    
-    Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(1,-1),
+    Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(ShooterConstants.shooterSpeedFull, ShooterConstants.kickerSpeed),
                                            ()->m_shooter.stopShooter(),
                                            m_shooter);
     m_CustomController.b().whileTrue(shoot);
@@ -166,19 +168,19 @@ public class RobotContainer {
     m_xBoxOperator.leftBumper().whileTrue(doNothing);
 
     m_FunnyController.rightBumper().whileTrue(agitate);
-    Command newShoot = Commands.startEnd(    ()->m_newShooter.runNewShooter(1),
+    Command newShoot = Commands.startEnd(    ()->m_newShooter.runNewShooter(ShooterConstants.shooterSpeedFull),
                                            ()->m_newShooter.stopNewShooter(),
                                            m_newShooter);
     m_FunnyController.a().whileTrue(newShoot);
-    Command newHood = Commands.startEnd(    ()->m_newShooter.moveHood(-0.1),
+    Command newHood = Commands.startEnd(    ()->m_newShooter.moveHood(HoodConstants.hoodUpSpeed),
                                            ()->m_newShooter.stopHood(),
                                            m_newShooter);
     m_FunnyController.b().whileTrue(newHood);
-    Command newHoodDown = Commands.startEnd(    ()->m_newShooter.moveHood(0.1),
+    Command newHoodDown = Commands.startEnd(    ()->m_newShooter.moveHood(HoodConstants.hoodDownSpeed),
                                            ()->m_newShooter.stopHood(),
                                            m_newShooter);
     m_FunnyController.x().whileTrue(newHoodDown);
-    Command newVelocityShot = Commands.startEnd(    ()->m_newShooter.runShooterVelocity(5000),
+    Command newVelocityShot = Commands.startEnd(  ())->m_newShooter.runShooterVelocity(ShooterConstants.shooterRPM),
                                            ()->m_newShooter.stopNewShooter(),
                                            m_newShooter);
     m_FunnyController.x().whileTrue(newVelocityShot);
