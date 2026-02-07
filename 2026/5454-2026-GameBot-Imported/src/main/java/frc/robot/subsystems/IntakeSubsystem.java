@@ -8,11 +8,13 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
 
 import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -36,5 +38,15 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor.stopMotor();
     m_lowMotor.stopMotor();
   }
-
+  public Command intakeCommand(){
+      return Commands.startEnd(    ()->runIntake(IntakeConstants.highSpeed,IntakeConstants.lowSpeed),
+                                          ()->stopIntake(),
+                                          this);
+  }
+  public Command intakeonCommand(){
+    return Commands.runOnce(    ()->runIntake(IntakeConstants.highSpeed,IntakeConstants.lowSpeed),this);
+  }
+  public Command intakeoffCommand(){
+    return Commands.runOnce(    ()->stopIntake(),this);
+  }
 }

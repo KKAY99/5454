@@ -9,10 +9,13 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.NewShooterConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
@@ -59,6 +62,28 @@ public void runShooterVelocity(double targetSpeed){
 
   public void stopHood(){
     m_hoodMotor.stopMotor();
+  }
+
+  public Command HoodUp(){
+    return Commands.startEnd(    ()->moveHood(0.1),
+                                           ()->stopHood(),
+                                           this);
+  }
+  public Command HoodDown(){
+    return Commands.startEnd(    ()->moveHood(-0.1),
+                                           ()->stopHood(),
+                                           this);
+  }
+  public Command shootCommand(){
+    return Commands.startEnd(    ()->runNewShooter(1),
+                                           ()->stopNewShooter(),
+                                           this);
+  }
+  public Command shootonCommand(){
+    return Commands.runOnce(    ()->runNewShooter(NewShooterConstants.highSpeed),this);
+  }
+  public Command shootoffCommand(){
+    return Commands.runOnce(    ()->stopNewShooter(),this);
   }
 
 }

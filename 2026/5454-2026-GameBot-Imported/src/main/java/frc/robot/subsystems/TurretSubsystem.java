@@ -8,11 +8,13 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import yams.units.EasyCRT;
 import yams.units.EasyCRTConfig;
@@ -68,6 +70,12 @@ public class TurretSubsystem extends SubsystemBase {
   public void stopTurret(){
     m_turretMotor.stopMotor();
   }
-
-  
+/* 
+  public Command intakeonCommand(){
+    return Commands.runOnce(    ()->runIntake(IntakeConstants.highSpeed,IntakeConstants.lowSpeed),this);
+  }
+  public Command intakeoffCommand(){
+    return Commands.runOnce(    ()->stopIntake(),this);
+  }
+*/
 }

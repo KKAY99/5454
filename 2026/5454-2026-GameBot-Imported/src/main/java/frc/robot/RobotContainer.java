@@ -86,11 +86,18 @@ public class RobotContainer {
  
   private final SendableChooser<Command> m_autoChooser;
 
+
   public Command Left2Neutral() {
     // This method loads the auto when it is called, however, it is recommended
     // to first load your paths/autos when code starts, then return the
     // pre-loaded auto/path
     return new PathPlannerAuto("Left2Neutral");
+  }
+  public Command Right2Left() {
+    // This method loads the auto when it is called, however, it is recommended
+    // to first load your paths/autos when code starts, then return the
+    // pre-loaded auto/path
+    return new PathPlannerAuto("Right2Left");
   }
  
   public boolean hasHomed=false;
@@ -104,7 +111,6 @@ public class RobotContainer {
   
   public RobotContainer(){
     SmartDashboard.putData("field", m_Field2d);
-      
     configureNamedCommands();
     m_autoChooser=AutoBuilder.buildAutoChooser();
     createAutonomousCommandList(); 
@@ -113,8 +119,17 @@ public class RobotContainer {
     //m_swerve.playMusic("Indiana.chrp");
   }
 
-  public void configureNamedCommands() {
 
+    //Named Commands
+  public void configureNamedCommands() {
+    NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
+    NamedCommands.registerCommand("agitateoff", m_hopper.agitateoffCommand());
+    NamedCommands.registerCommand("intakeon", m_intake.intakeonCommand());
+    NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
+    NamedCommands.registerCommand("OLDshootoff", m_shooter.OldShootonCommand());
+    NamedCommands.registerCommand("OLDshooton", m_shooter.OldShootoffCommand());
+    NamedCommands.registerCommand("NEWshooton ", m_newShooter.shootonCommand());
+    NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
   }
 
   private void configureButtonBindings(){
@@ -125,25 +140,13 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command agitate = Commands.startEnd(    ()->m_hopper.agitate(Constants.HopperConstants.agitateSpeed),
-                                           ()->m_hopper.stopAgitate(),
-                                           m_hopper);
+    Command agitate = m_hopper.agitateCommand();
     m_CustomController.a().whileTrue(agitate);
 
-    Command intake = Commands.startEnd(    ()->m_intake.runIntake(IntakeConstants.highSpeed,IntakeConstants.lowSpeed),
-                                           ()->m_intake.stopIntake(),
-                                           m_intake);
+    Command intake = m_intake.intakeCommand();
     m_CustomController.y().whileTrue(intake);
-  
-    Command intakeOn = Commands.startEnd(()->m_intake.runIntake(
-                                        IntakeConstants.highSpeed,IntakeConstants.lowSpeed),
-                                        ()->m_intake.stopIntake(),
-                                        m_intake);
-    m_CustomController.x().toggleOnTrue(intakeOn);
-   
-    Command shoot = Commands.startEnd(     ()->m_shooter.runShooter(ShooterConstants.shooterSpeedFull, ShooterConstants.kickerSpeed),
-                                           ()->m_shooter.stopShooter(),
-                                           m_shooter);
+    m_CustomController.x().toggleOnTrue(intake);
+    Command shoot = m_shooter.OldShootCommand();
     m_CustomController.b().whileTrue(shoot);
     //Command shoot2 = Commands.startEnd(     ()->m_shooter.runShooter(.75,-1),
     //                                       ()->m_shooter.stopShooter(),
@@ -156,7 +159,7 @@ public class RobotContainer {
 
     m_CustomController.rightBumper().onTrue(Left2Neutral());
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
-    m_CustomController.leftBumper().onTrue(new WaitCommand(4));
+    m_CustomController.leftBumper().onTrue(Right2Left());
   
     Command doNothing = Commands.none();
    
@@ -175,17 +178,11 @@ public class RobotContainer {
     m_xBoxOperator.leftBumper().whileTrue(doNothing);
 
     m_FunnyController.rightBumper().whileTrue(agitate);
-    Command newShoot = Commands.startEnd(    ()->m_newShooter.runNewShooter(ShooterConstants.shooterSpeedFull,ShooterConstants.kickerSpeed),
-                                           ()->m_newShooter.stopNewShooter(),
-                                           m_newShooter);
+    Command newShoot = m_newShooter.shootCommand();
     m_FunnyController.a().whileTrue(newShoot);
-    Command newHood = Commands.startEnd(    ()->m_newShooter.moveHood(HoodConstants.hoodUpSpeed),
-                                           ()->m_newShooter.stopHood(),
-                                           m_newShooter);
-    m_FunnyController.b().whileTrue(newHood);
-    Command newHoodDown = Commands.startEnd(    ()->m_newShooter.moveHood(HoodConstants.hoodDownSpeed),
-                                           ()->m_newShooter.stopHood(),
-                                           m_newShooter);
+    Command newHoodUp = m_newShooter.HoodUp();
+    m_FunnyController.b().whileTrue(newHoodUp);
+    Command newHoodDown = m_newShooter.HoodDown();
     m_FunnyController.x().whileTrue(newHoodDown);
     Command newVelocityShot = Commands.startEnd(  ()->m_newShooter.runShooterVelocity(ShooterConstants.shooterRPM),
                                            ()->m_newShooter.stopNewShooter(),

@@ -8,11 +8,13 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
 
 import frc.robot.Constants;
+
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -41,5 +43,19 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterMotor.stopMotor();
     m_kickerMotor.stopMotor();
   }
+
+  public Command OldShootCommand(){
+    return Commands.startEnd(     ()->runShooter(Constants.ShooterConstants.ShootSpeed, Constants.ShooterConstants.KickerSpeed),
+                                  ()->stopShooter(),
+                                  this);
+  }
+  public Command OldShootonCommand(){
+    return Commands.runOnce(    ()->runShooter(Constants.ShooterConstants.ShootSpeed, Constants.ShooterConstants.KickerSpeed),this);
+  }
+  public Command OldShootoffCommand(){
+    return Commands.runOnce(    ()->stopShooter(),this);
+  }
+
+
 
 }
