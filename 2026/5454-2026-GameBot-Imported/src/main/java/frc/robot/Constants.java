@@ -150,6 +150,9 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int ShooterCanID=14;
     public static final int KickerCanID=61;
+    public static final double shooterSpeedFull=1;
+    public static final double shooterRPM=5000;
+    public static final double kickerSpeed=-1;
     public static final double IdleSpeed=0.5;
     public static final double ShootSpeed=1;
     public static final double KickerSpeed=-1;
@@ -164,7 +167,10 @@ public final class Constants {
     public static final int HopperMotorCanID=60;
     public static final double agitateSpeed=-1;
   }
-
+  public static final class HoodConstants{
+    public static final double hoodUpSpeed=-0.1;
+    public static final double hoodDownSpeed=0.1;
+  }
   public static final class ClimbConstants{
     public static final int climbCanID1=26;
     public static final int climbCanID2=20;
