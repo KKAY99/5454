@@ -15,6 +15,7 @@ import frc.robot.utilities.ObsidianCANSparkMax;
 import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import yams.units.EasyCRT;
 import yams.units.EasyCRTConfig;
@@ -34,10 +35,11 @@ public class TurretSubsystem extends SubsystemBase {
     public TurretSubsystem(int CanId1) {
     m_turretMotor = new TalonFX(CanId1);
     }
-  public TurretSubsystem(int CanId1, int encoder1, int encoder2) {
+  public TurretSubsystem(int CanId1, int encoder1ID, int encoder2ID) {
     m_turretMotor = new TalonFX(CanId1);
-    m_encoder1 = new CANcoder(encoder1);
-    m_encoder2 = new CANcoder(encoder2);
+    m_encoder1 = new CANcoder(encoder1ID);
+    m_encoder2 = new CANcoder(encoder2ID);
+    
 
     EasyCRTConfig easyCRTConfigCRTConfig=
          new EasyCRTConfig(getAngle(m_encoder1), getAngle(m_encoder2))
@@ -61,8 +63,12 @@ public class TurretSubsystem extends SubsystemBase {
   private Supplier<Angle> getAngle(CANcoder encoder){
     return () -> encoder.getPosition().getValue();
   }
+  
+
   public void moveTurret(double speed) 
   {
+      System.out.println("Encoder 1 pos:" );
+      System.out.println("Encoder 2 pos:" );
     System.out.println("Turret Move:" + speed);
     m_turretMotor.set(speed);
   }
@@ -70,12 +76,16 @@ public class TurretSubsystem extends SubsystemBase {
   public void stopTurret(){
     m_turretMotor.stopMotor();
   }
-/* 
-  public Command intakeonCommand(){
-    return Commands.runOnce(    ()->runIntake(IntakeConstants.highSpeed,IntakeConstants.lowSpeed),this);
+  public Command turretManualCommand(){
+      return Commands.startEnd(    ()->moveTurret(TurretConstants.turretSpeed),
+                                          ()->stopTurret(),
+                                          this);
   }
-  public Command intakeoffCommand(){
-    return Commands.runOnce(    ()->stopIntake(),this);
+
+  public Command turretMoveManualCommand(){
+    return Commands.runOnce(    ()->moveTurret(TurretConstants.turretSpeed),this);
   }
-*/
+  public Command turretStopManualCommand(){
+    return Commands.runOnce(    ()->stopTurret(),this);
+  }
 }

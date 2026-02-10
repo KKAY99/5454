@@ -47,11 +47,9 @@ import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
 public class RobotContainer {
@@ -67,7 +65,7 @@ public class RobotContainer {
   private CommandXboxController m_FunnyController = new CommandXboxController(InputControllers.kFunnyController);
   //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID,Constants.IntakeConstants.LowMotorCanID);
+  public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID);
   public final NewShooterSubsystem m_newShooter = new NewShooterSubsystem(Constants.NewShooterConstants.shooter1CANID,
                                                         Constants.NewShooterConstants.shooter2CANID,
                                                          Constants.NewShooterConstants.kickerCANID,
@@ -77,7 +75,7 @@ public class RobotContainer {
                                                                  Constants.ShooterConstants.KickerCanID,
                                                                  Constants.ShooterConstants.IdleSpeed);
   public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID);
-  public final TurretSubsystem m_TurretSubsystem = new TurretSubsystem(Constants.TurretConstants.turretCanID);
+  public final TurretSubsystem m_TurretSubsystem = new TurretSubsystem(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID, Constants.TurretConstants.encoder1CANID);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -130,6 +128,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("OLDshooton", m_shooter.OldShootoffCommand());
     NamedCommands.registerCommand("NEWshooton ", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
+    NamedCommands.registerCommand("turretManualMove", m_TurretSubsystem.turretMoveManualCommand());
+    NamedCommands.registerCommand("turretManualStop", m_TurretSubsystem.turretStopManualCommand());
   }
 
   private void configureButtonBindings(){
@@ -140,14 +140,23 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command agitate = m_hopper.agitateCommand();
-    m_CustomController.a().whileTrue(agitate);
 
+    Command shoot = m_shooter.OldShootCommand();
+    Command agitate = m_hopper.agitateCommand();
     Command intake = m_intake.intakeCommand();
+    Command doNothing = Commands.none();
+
+    Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
+    
+    m_CustomController.a().whileTrue(agitate);
     m_CustomController.y().whileTrue(intake);
     m_CustomController.x().toggleOnTrue(intake);
-    Command shoot = m_shooter.OldShootCommand();
     m_CustomController.b().whileTrue(shoot);
+    m_CustomController.rightBumper().onTrue(Left2Neutral());
+    m_CustomController.leftBumper().onTrue(Right2Left());
+
+
+
     //Command shoot2 = Commands.startEnd(     ()->m_shooter.runShooter(.75,-1),
     //                                       ()->m_shooter.stopShooter(),
     //                                       m_shooter);
@@ -157,11 +166,7 @@ public class RobotContainer {
   //                                         m_shooter);
 //    m_CustomController.y().whileTrue(shoot3);              
 
-    m_CustomController.rightBumper().onTrue(Left2Neutral());
-    Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
-    m_CustomController.leftBumper().onTrue(Right2Left());
-  
-    Command doNothing = Commands.none();
+
    
     m_xBoxDriver.a().whileTrue(doNothing);
     m_xBoxDriver.b().whileTrue(doNothing);
@@ -170,6 +175,8 @@ public class RobotContainer {
     m_xBoxDriver.rightBumper().whileTrue(doNothing);
     m_xBoxDriver.leftBumper().whileTrue(doNothing);
     
+
+
     m_xBoxOperator.a().whileTrue(doNothing);
     m_xBoxOperator.b().whileTrue(doNothing);
     m_xBoxOperator.x().whileTrue(doNothing);
@@ -177,16 +184,23 @@ public class RobotContainer {
     m_xBoxOperator.rightBumper().whileTrue(doNothing);
     m_xBoxOperator.leftBumper().whileTrue(doNothing);
 
-    m_FunnyController.rightBumper().whileTrue(agitate);
+
+
+
     Command newShoot = m_newShooter.shootCommand();
-    m_FunnyController.a().whileTrue(newShoot);
     Command newHoodUp = m_newShooter.HoodUp();
-    m_FunnyController.b().whileTrue(newHoodUp);
     Command newHoodDown = m_newShooter.HoodDown();
-    m_FunnyController.x().whileTrue(newHoodDown);
     Command newVelocityShot = Commands.startEnd(  ()->m_newShooter.runShooterVelocity(ShooterConstants.shooterRPM),
                                            ()->m_newShooter.stopNewShooter(),
                                            m_newShooter);
+    Command turretMove = m_TurretSubsystem.turretManualCommand();
+
+    m_FunnyController.leftBumper().whileTrue(intake);
+    m_FunnyController.rightBumper().whileTrue(agitate);
+    m_FunnyController.y().whileTrue(turretMove);
+    m_FunnyController.a().whileTrue(newShoot);
+    m_FunnyController.b().whileTrue(newHoodUp);
+    m_FunnyController.x().whileTrue(newHoodDown);
     m_FunnyController.leftBumper().whileTrue(newVelocityShot);
     m_FunnyController.povRight().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(TurretConstants.turretSpeed),
                                                               ()->m_TurretSubsystem.stopTurret(),

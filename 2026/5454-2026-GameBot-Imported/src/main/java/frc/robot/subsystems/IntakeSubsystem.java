@@ -23,28 +23,24 @@ public class IntakeSubsystem extends SubsystemBase {
   private DutyCycleEncoder m_encoder;
   //private SparkAbsoluteEncoder m_encoder;
 
-  public IntakeSubsystem(int CanId1, int CanId2) {
+  public IntakeSubsystem(int CanId1) {
     m_intakeMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true,80);
-   
-    m_lowMotor = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true);
   }
 
-  public void runIntake(double speed,double lowspeed) {
+  public void runIntake(double speed) {
     m_intakeMotor.set(speed);
-    m_lowMotor.set(lowspeed);
   }
 
   public void stopIntake(){
     m_intakeMotor.stopMotor();
-    m_lowMotor.stopMotor();
   }
   public Command intakeCommand(){
-      return Commands.startEnd(    ()->runIntake(IntakeConstants.highSpeed,IntakeConstants.lowSpeed),
+      return Commands.startEnd(    ()->runIntake(IntakeConstants.highSpeed),
                                           ()->stopIntake(),
                                           this);
   }
   public Command intakeonCommand(){
-    return Commands.runOnce(    ()->runIntake(IntakeConstants.highSpeed,IntakeConstants.lowSpeed),this);
+    return Commands.runOnce(    ()->runIntake(IntakeConstants.highSpeed),this);
   }
   public Command intakeoffCommand(){
     return Commands.runOnce(    ()->stopIntake(),this);
