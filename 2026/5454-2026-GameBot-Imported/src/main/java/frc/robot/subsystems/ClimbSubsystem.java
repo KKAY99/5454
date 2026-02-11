@@ -8,8 +8,11 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClimbConstants;
+import frc.robot.Constants.TurretConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 
 public class ClimbSubsystem extends SubsystemBase {
@@ -27,6 +30,14 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public void stopClimbe(){
     m_climbMotor.stopMotor();
+  }
+
+  public Command climbUpCommand() {
+    return Commands.runOnce(    ()->climb(ClimbConstants.climbForwardSpeed),this);
+  }
+
+  public Command climbDownCommand() {
+    return Commands.runOnce(    ()->climb(ClimbConstants.climbBackSpeed),this);
   }
 
 }
