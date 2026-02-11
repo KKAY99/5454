@@ -188,6 +188,22 @@ public final class Constants {
     public static final double climbMaxAndMin=1;
     public static final double climbInputGain=100;
 
+    public static final class AutoAlign{
+      public static final double climbYpos=00;
+      public static final double climbXpos=00;
+      public static final double alignRotation=00;
+
+      public static final double yTolerance=05;
+      public static final double ySetpoint=00;
+      public static final double xTolerance=05;
+      public static final double xSetpoint=00;
+      public static final double rotTolerance=03;
+      public static final double rotSetpoint=00;
+
+      public static final double waitTime=5;
+      public static final double validationTime=4;
+    }
+
     public static final double climbPos1=0.28;
     public static final double climbPos2=0.49;
 
