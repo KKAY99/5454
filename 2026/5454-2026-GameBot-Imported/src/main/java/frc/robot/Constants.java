@@ -139,6 +139,8 @@ public final class Constants {
     public static final int LowMotorCanID=59;
     public static final double lowSpeed=-0.5;
     public static final double highSpeed=-0.9;
+    public static final double outtakeSpeed=0.9;
+  
   }
   public static final class NewShooterConstants {
     public static final int shooter1CANID=29;
@@ -174,7 +176,7 @@ public final class Constants {
   }
   public static final class TurretConstants {
     public static final int turretCanID=6;
-    public static final double turretSpeed=0.035;
+    public static final double turretSpeed=0.07;
     public static final int encoder1CANID=12;
     public static final int encoder2CANID=11;
   }

@@ -75,7 +75,7 @@ public class RobotContainer {
                                                                  Constants.ShooterConstants.KickerCanID,
                                                                  Constants.ShooterConstants.IdleSpeed);
   public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID);
-  public final TurretSubsystem m_TurretSubsystem = new TurretSubsystem(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID, Constants.TurretConstants.encoder1CANID);
+  public final TurretSubsystem m_TurretSubsystem = new TurretSubsystem(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID, Constants.TurretConstants.encoder2CANID);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -140,10 +140,20 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
+     Command agitate = m_hopper.agitateCommand();
+     m_xBoxDriver.x().whileTrue(agitate);     
+     m_xBoxOperator.x().whileTrue(agitate);
 
+     Command intake = m_intake.intakeCommand();
+     m_xBoxDriver.y().toggleOnTrue(intake);
+     m_xBoxOperator.y().toggleOnTrue(intake);
+
+     Command outtake = m_intake.outtakeCommand();
+     m_xBoxDriver.a().whileTrue(outtake);
+     m_xBoxOperator.a().whileTrue(outtake);
+
+     
     Command shoot = m_shooter.OldShootCommand();
-    Command agitate = m_hopper.agitateCommand();
-    Command intake = m_intake.intakeCommand();
     Command doNothing = Commands.none();
 
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
@@ -331,7 +341,7 @@ public class RobotContainer {
   }
   private void refreshSmartDashboard(){  
     try{
-      updateHubStatus();
+            updateHubStatus();
       SmartDashboard.putString("Our Hub Active",m_hubMatch);      
       SmartDashboard.putString("ActiveHub",m_activeHub);
       SmartDashboard.putString("Active Phase",m_activeHubPhase);
@@ -470,8 +480,8 @@ return pathfindingCommand;
   public void TeleopPeriodic(){
     refreshSmartDashboard();
     updateLEDs();
-    m_ShotCalculator.clearShootingParameters();
-    ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
+    //m_ShotCalculator.clearShootingParameters();
+    //ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
     //System.out.println("Turret Angle: " + shootingInfo.turretAngle());
     //System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
     

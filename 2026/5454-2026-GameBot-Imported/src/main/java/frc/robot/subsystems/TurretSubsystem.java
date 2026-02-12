@@ -1,12 +1,14 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,6 +19,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import yams.mechanisms.*;
 import yams.units.EasyCRT;
 import yams.units.EasyCRTConfig;
 import java.util.function.Supplier;
@@ -30,6 +34,11 @@ public class TurretSubsystem extends SubsystemBase {
   private CANcoder m_encoder1;
   private CANcoder m_encoder2;
   private EasyCRT m_EasyCRT;
+  private final int kTurretTeeth=100;
+  private final int kEncoder1Teeth=41;
+  private final int kEncoder2Teeth=42;
+
+
   //private SparkAbsoluteEncoder m_encoder;
 
     public TurretSubsystem(int CanId1) {
@@ -38,38 +47,47 @@ public class TurretSubsystem extends SubsystemBase {
   public TurretSubsystem(int CanId1, int encoder1ID, int encoder2ID) {
     m_turretMotor = new TalonFX(CanId1);
     m_encoder1 = new CANcoder(encoder1ID);
+    
     m_encoder2 = new CANcoder(encoder2ID);
     
 
     EasyCRTConfig easyCRTConfigCRTConfig=
-         new EasyCRTConfig(getAngle(m_encoder1), getAngle(m_encoder2))
-        .withCommonDriveGear(
-            /* commonRatio (mech:drive) */ 12.0,
-            /* driveGearTeeth */ 50,
-            /* encoder1Pinion */ 19,
-            /* encoder2Pinion */ 23)
-        .withAbsoluteEncoderOffsets(Rotations.of(0.0), Rotations.of(0.0)) // set after mechanical zero
-        .withMechanismRange(Rotations.of(-1.0), Rotations.of(2.0)) // -360 deg to +720 deg
-        .withMatchTolerance(Rotations.of(0.06)) // ~1.08 deg at encoder2 for the example ratio
-        .withAbsoluteEncoderInversions(false, false)
-        .withCrtGearRecommendationConstraints(
-            /* coverageMargin */ 1.2,
-            /* minTeeth */ 15,
-            /* maxTeeth */ 45,
-            /* maxIterations */ 30);
+         new EasyCRTConfig(
+         () -> Rotations.of(m_encoder1.getAbsolutePosition().getValueAsDouble()),
+         () -> Rotations.of(m_encoder2.getAbsolutePosition().getValueAsDouble()))         
+.withAbsoluteEncoder1Gearing(
+                41, 42)
+            .withAbsoluteEncoder2Gearing(
+                41,
+                42,
+                100)
+            .withMechanismRange(
+                Rotations.of(1 / 360),
+                Rotations.of(360 / 360))
+            .withMatchTolerance(Rotations.of(0.05));
     m_EasyCRT = new EasyCRT(easyCRTConfigCRTConfig);
   }
 
+ /*  private void setEncoderConfig(CANcoder canCoder{
+    CANcoderConfiguration m_config = new CANcoderConfiguration();
+    m_config.MagnetSensor.
+  })*/
+
   private Supplier<Angle> getAngle(CANcoder encoder){
-    return () -> encoder.getPosition().getValue();
+    return () -> encoder.getAbsolutePosition().getValue();
   }
   
 
   public void moveTurret(double speed) 
   {
-      System.out.println("Encoder 1 pos:" );
-      System.out.println("Encoder 2 pos:" );
-    System.out.println("Turret Move:" + speed);
+      System.out.println("Encoder 1 pos:" + m_encoder1.getAbsolutePosition());
+      System.out.println("Encoder 2 pos:" + m_encoder2.getAbsolutePosition());
+      m_EasyCRT
+        .getAngleOptional()
+        .ifPresent(angle -> SmartDashboard.putNumber("Turret Angle", angle.in(Degrees)));
+   
+  
+      System.out.println("Turret Move:" + speed);
     m_turretMotor.set(speed);
   }
 
