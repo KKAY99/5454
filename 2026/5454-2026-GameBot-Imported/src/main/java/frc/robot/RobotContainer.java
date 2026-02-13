@@ -38,6 +38,7 @@ import org.ejml.dense.row.mult.MatrixMatrixMult_MT_ZDRM;
 import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.CoolPanelConstants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.InputControllers;
@@ -76,6 +77,7 @@ public class RobotContainer {
                                                                  Constants.ShooterConstants.IdleSpeed);
   public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID);
   public final TurretSubsystem m_TurretSubsystem = new TurretSubsystem(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID, Constants.TurretConstants.encoder2CANID);
+  public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
@@ -130,6 +132,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
     NamedCommands.registerCommand("turretManualMove", m_TurretSubsystem.turretMoveManualCommand());
     NamedCommands.registerCommand("turretManualStop", m_TurretSubsystem.turretStopManualCommand());
+    NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
+    NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
   }
 
   private void configureButtonBindings(){
@@ -152,8 +156,11 @@ public class RobotContainer {
      m_xBoxDriver.a().whileTrue(outtake);
      m_xBoxOperator.a().whileTrue(outtake);
 
+
      
     Command shoot = m_shooter.OldShootCommand();
+    Command climbUp = m_climb.climbUpCommand();
+    Command climbDown = m_climb.climbDownCommand();
     Command doNothing = Commands.none();
 
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
