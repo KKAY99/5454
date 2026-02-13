@@ -1,0 +1,179 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "closeHop2Center"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "NEWshooton"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateon"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateoff"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "NEWshootoff"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "center2Depot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeon"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depotGrab"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeoff"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depot2Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "NEWshooton"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateon"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "NEWshootoff"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateoff"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "center2LeftTrench"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeon"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StartNZShootSpot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeoff"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

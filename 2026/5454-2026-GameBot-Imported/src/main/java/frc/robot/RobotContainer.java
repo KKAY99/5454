@@ -134,7 +134,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
     NamedCommands.registerCommand("OLDshootoff", m_shooter.OldShootonCommand());
     NamedCommands.registerCommand("OLDshooton", m_shooter.OldShootoffCommand());
-    NamedCommands.registerCommand("NEWshooton ", m_newShooter.shootonCommand());
+    NamedCommands.registerCommand("NEWshooton", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
     NamedCommands.registerCommand("turretManualMove", m_TurretSubsystem.turretMoveManualCommand());
     NamedCommands.registerCommand("turretManualStop", m_TurretSubsystem.turretStopManualCommand());
