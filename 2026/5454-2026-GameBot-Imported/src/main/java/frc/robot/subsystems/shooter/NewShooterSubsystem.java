@@ -36,6 +36,7 @@ public class NewShooterSubsystem extends SubsystemBase {
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
+    System.out.println("Shooter Spin:" + speed);
     m_1shooterMotor.set(speed);
     m_2shooterMotor.set(-speed);
     m_kickerMotor.set(kickerSpeed);
@@ -50,9 +51,10 @@ public void runShooterVelocity(double targetSpeed){
                   .withVelocity(-targetSpeed)
                   .withFeedForward(0.1));
    }
-
+  
 
   public void stopNewShooter(){
+    System.out.println("stopping shooter");
     m_1shooterMotor.stopMotor();
     m_2shooterMotor.stopMotor();
     m_kickerMotor.stopMotor();

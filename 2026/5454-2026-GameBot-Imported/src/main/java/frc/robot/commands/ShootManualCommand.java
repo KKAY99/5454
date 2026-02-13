@@ -17,7 +17,7 @@ public class ShootManualCommand extends Command {
   } 
   private shooterStates m_state;
   private double stateStartTime;
-  private final double kSpinUpTime=5;
+  private final double kSpinUpTime=1;
   public ShootManualCommand(NewShooterSubsystem shooter,HopperSubsystem hopper) {
     m_hopper=hopper;
     m_shooter=shooter;

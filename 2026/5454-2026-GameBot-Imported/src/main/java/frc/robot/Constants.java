@@ -184,6 +184,15 @@ public final class Constants {
     public static final double turretSpeed=0.07;
     public static final int encoder1CANID=12;
     public static final int encoder2CANID=11;
+    public static final double REDUCTION = 13.2;
+    public static final double MIN_ROT_DEG = -360.0;
+    public static final double MAX_ROT_DEG = 360.0;
+    public static final double CRT_MATCH_TOLERANCE = 0.01;
+    
+    public static final int GEAR_0_TOOTH_COUNT = 100;
+    public static final int GEAR_1_TOOTH_COUNT = 42;
+    public static final int GEAR_2_TOOTH_COUNT = 41;
+
   }
   public static final class ClimbConstants{
     public static final int climbCanID1=26;

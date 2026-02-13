@@ -51,21 +51,22 @@ public class TurretSubsystem extends SubsystemBase {
     m_encoder2 = new CANcoder(encoder2ID);
     
 
-    EasyCRTConfig easyCRTConfigCRTConfig=
-         new EasyCRTConfig(
-         () -> Rotations.of(m_encoder1.getAbsolutePosition().getValueAsDouble()),
-         () -> Rotations.of(m_encoder2.getAbsolutePosition().getValueAsDouble()))         
-.withAbsoluteEncoder1Gearing(
-                41, 42)
+     EasyCRTConfig easyCRTConfig =
+        new EasyCRTConfig(
+                () -> Rotations.of(m_encoder1.getAbsolutePosition().getValueAsDouble()),
+                () -> Rotations.of(m_encoder2.getAbsolutePosition().getValueAsDouble()))
+            .withAbsoluteEncoder1Gearing(
+                TurretConstants.GEAR_0_TOOTH_COUNT, TurretConstants.GEAR_1_TOOTH_COUNT)
             .withAbsoluteEncoder2Gearing(
-                41,
-                42,
-                100)
+                TurretConstants.GEAR_0_TOOTH_COUNT,
+                TurretConstants.GEAR_1_TOOTH_COUNT,
+                TurretConstants.GEAR_2_TOOTH_COUNT)
             .withMechanismRange(
-                Rotations.of(1 / 360),
-                Rotations.of(360 / 360))
-            .withMatchTolerance(Rotations.of(0.05));
-    m_EasyCRT = new EasyCRT(easyCRTConfigCRTConfig);
+                Rotations.of(TurretConstants.MIN_ROT_DEG / 360),
+                Rotations.of(TurretConstants.MAX_ROT_DEG / 360))
+            .withMatchTolerance(Rotations.of(TurretConstants.CRT_MATCH_TOLERANCE));
+
+    m_EasyCRT = new EasyCRT(easyCRTConfig);
   }
 
  /*  private void setEncoderConfig(CANcoder canCoder{
@@ -82,11 +83,11 @@ public class TurretSubsystem extends SubsystemBase {
   {
       System.out.println("Encoder 1 pos:" + m_encoder1.getAbsolutePosition());
       System.out.println("Encoder 2 pos:" + m_encoder2.getAbsolutePosition());
+      System.out.println("Last Status:" + m_EasyCRT.getLastStatus());
       m_EasyCRT
         .getAngleOptional()
         .ifPresent(angle -> SmartDashboard.putNumber("Turret Angle", angle.in(Degrees)));
-   
-  
+
       System.out.println("Turret Move:" + speed);
     m_turretMotor.set(speed);
   }
