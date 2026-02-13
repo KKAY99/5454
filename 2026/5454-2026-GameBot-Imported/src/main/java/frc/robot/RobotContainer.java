@@ -99,6 +99,28 @@ public class RobotContainer {
     // pre-loaded auto/path
     return new PathPlannerAuto("Right2Left");
   }
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+  public Command ShootDepotShootNZ() {
+    // This method loads the auto when it is called, however, it is recommended
+    // to first load your paths/autos when code starts, then return the
+    // pre-loaded auto/path
+    return new PathPlannerAuto("ShootDepotShootNZ");
+  }
+=======
+=======
+>>>>>>> Stashed changes
+  public Command Right2Left() {
+    // This method loads the auto when it is called, however, it is recommended
+    // to first load your paths/autos when code starts, then return the
+    // pre-loaded auto/path
+    return new PathPlannerAuto("Right2Left");
+  }
+
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
  
   public boolean hasHomed=false;
   public boolean m_hasResetGyro=false;
@@ -128,7 +150,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
     NamedCommands.registerCommand("OLDshootoff", m_shooter.OldShootonCommand());
     NamedCommands.registerCommand("OLDshooton", m_shooter.OldShootoffCommand());
-    NamedCommands.registerCommand("NEWshooton ", m_newShooter.shootonCommand());
+    NamedCommands.registerCommand("NEWshooton", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
     NamedCommands.registerCommand("turretManualMove", m_TurretSubsystem.turretMoveManualCommand());
     NamedCommands.registerCommand("turretManualStop", m_TurretSubsystem.turretStopManualCommand());
@@ -169,7 +191,7 @@ public class RobotContainer {
     m_CustomController.y().whileTrue(intake);
     m_CustomController.x().toggleOnTrue(intake);
     m_CustomController.b().whileTrue(shoot);
-    m_CustomController.rightBumper().onTrue(Left2Neutral());
+    m_CustomController.rightBumper().onTrue(ShootDepotShootNZ());
     m_CustomController.leftBumper().onTrue(Right2Left());
 
 

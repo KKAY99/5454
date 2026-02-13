@@ -168,7 +168,7 @@ public final class Constants {
   }
   public static final class HopperConstants{
     public static final int HopperMotorCanID=60;
-    public static final double agitateSpeed=-1;
+    public static final double agitateSpeed=-0.75;
   }
   public static final class HoodConstants{
     public static final double hoodUpSpeed=-0.06;
