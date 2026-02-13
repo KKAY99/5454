@@ -42,7 +42,7 @@ public class ShootManualCommand extends Command {
   public void end(boolean interrupted) {
   System.out.println("Stopping Shooter");
  
-    m_shooter.stopShooter();
+    m_shooter.stopNewShooter();
     m_hopper.stopAgitate();
   }
 
@@ -54,7 +54,7 @@ public class ShootManualCommand extends Command {
     switch(m_state){
     case SPINUP:
         stateStartTime=Timer.getFPGATimestamp();
-        m_shooter.runShooter(Constants.ShooterConstants.ShootSpeed,
+        m_shooter.runNewShooter(Constants.ShooterConstants.ShootSpeed,
                             Constants.ShooterConstants.kickerSpeed);
         m_state=shooterStates.WAIT;
     break;
