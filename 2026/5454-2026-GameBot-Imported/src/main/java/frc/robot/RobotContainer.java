@@ -71,7 +71,6 @@ public class RobotContainer {
                                                         Constants.NewShooterConstants.shooter2CANID,
                                                          Constants.NewShooterConstants.kickerCANID,
                                                          Constants.NewShooterConstants.hoodCANID);
-
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,
                                                                  Constants.ShooterConstants.KickerCanID,
                                                                  Constants.ShooterConstants.IdleSpeed);
@@ -156,11 +155,27 @@ public class RobotContainer {
      m_xBoxDriver.a().whileTrue(outtake);
      m_xBoxOperator.a().whileTrue(outtake);
 
-
-     
-    Command shoot = m_shooter.OldShootCommand();
     Command climbUp = m_climb.climbUpCommand();
     Command climbDown = m_climb.climbDownCommand();
+    m_xBoxDriver.povDown().whileTrue(climbDown);
+    m_xBoxDriver.povUp().whileTrue(climbUp);
+    m_xBoxOperator.povDown().whileTrue(climbDown);
+    m_xBoxOperator.povUp().whileTrue(climbUp);
+
+    Command shoot = new ShootManualCommand(m_newShooter,m_hopper);
+    m_xBoxDriver.leftTrigger().whileTrue(shoot);
+    m_xBoxOperator.leftTrigger().whileTrue(shoot);
+
+    Command passLeft = new PassCommand(Constants.PassConstants.PassTargets.LEFT);
+    m_xBoxDriver.leftBumper().whileTrue(passLeft);
+    m_xBoxOperator.leftBumper().whileTrue(passLeft);
+    
+    Command passRight = new PassCommand(Constants.PassConstants.PassTargets.RIGHT);
+    m_xBoxDriver.rightBumper().whileTrue(passRight);
+    m_xBoxOperator.rightBumper().whileTrue(passRight);
+    
+    
+
     Command doNothing = Commands.none();
 
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
