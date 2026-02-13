@@ -35,11 +35,13 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   
   public void runShooter(double speed,double kickerSpeed) {
+    System.out.println("Shooter Speed Set " + speed);
     m_shooterMotor.set(speed);
     m_kickerMotor.set(kickerSpeed);
   }
 
   public void stopShooter(){
+    System.out.println("Shooter Stopped");
     m_shooterMotor.stopMotor();
     m_kickerMotor.stopMotor();
   }

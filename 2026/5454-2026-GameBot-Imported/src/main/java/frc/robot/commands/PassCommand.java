@@ -1,11 +1,14 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.PassConstants.PassTargets;
 
 /** An example command that uses an example subsystem. */
 public class PassCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
 
-  public PassCommand() {
+  private PassTargets m_PassTargets;
+  public PassCommand(PassTargets target) {
+    m_PassTargets=target;
     
   }
 
@@ -15,7 +18,22 @@ public class PassCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    switch(m_PassTargets){
+      case LEFT:
+       //Set Target to LEFT
+        break;
+      case RIGHT:
+      //Set Target to Right 
+        break; 
+      case MIDDLE:
+        break;
+      default:
+       //default to left
+       break;
+
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override

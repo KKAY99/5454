@@ -150,6 +150,11 @@ public final class Constants {
     public static final int kickerCANID=61;
     public static final int hoodCANID=27;
   }
+  public static final class PassConstants{    
+      public static enum PassTargets{
+          FARLEFT,LEFT,MIDDLE,RIGHT,FARRIGHT
+      }
+  }
   public static final class ShooterConstants {
     public static final int ShooterCanID=14;
     public static final int KickerCanID=63; //was 61
