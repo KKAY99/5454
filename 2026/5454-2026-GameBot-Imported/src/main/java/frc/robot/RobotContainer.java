@@ -99,6 +99,12 @@ public class RobotContainer {
     // pre-loaded auto/path
     return new PathPlannerAuto("Right2Left");
   }
+  public Command ShootDepotShootNZ() {
+    // This method loads the auto when it is called, however, it is recommended
+    // to first load your paths/autos when code starts, then return the
+    // pre-loaded auto/path
+    return new PathPlannerAuto("ShootDepotShootNZ");
+  }
  
   public boolean hasHomed=false;
   public boolean m_hasResetGyro=false;
@@ -158,7 +164,7 @@ public class RobotContainer {
     m_CustomController.y().whileTrue(intake);
     m_CustomController.x().toggleOnTrue(intake);
     m_CustomController.b().whileTrue(shoot);
-    m_CustomController.rightBumper().onTrue(Left2Neutral());
+    m_CustomController.rightBumper().onTrue(ShootDepotShootNZ());
     m_CustomController.leftBumper().onTrue(Right2Left());
 
 
