@@ -161,7 +161,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "StartNZShootSpot"
+            "pathName": "startNZShootSpot"
           }
         },
         {
