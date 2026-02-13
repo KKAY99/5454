@@ -99,12 +99,22 @@ public class RobotContainer {
     // pre-loaded auto/path
     return new PathPlannerAuto("Right2Left");
   }
+<<<<<<< Updated upstream
   public Command ShootDepotShootNZ() {
     // This method loads the auto when it is called, however, it is recommended
     // to first load your paths/autos when code starts, then return the
     // pre-loaded auto/path
     return new PathPlannerAuto("ShootDepotShootNZ");
   }
+=======
+  public Command Right2Left() {
+    // This method loads the auto when it is called, however, it is recommended
+    // to first load your paths/autos when code starts, then return the
+    // pre-loaded auto/path
+    return new PathPlannerAuto("Right2Left");
+  }
+
+>>>>>>> Stashed changes
  
   public boolean hasHomed=false;
   public boolean m_hasResetGyro=false;
