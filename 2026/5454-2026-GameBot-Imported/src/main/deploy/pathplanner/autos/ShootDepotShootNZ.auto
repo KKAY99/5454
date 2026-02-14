@@ -73,12 +73,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "depotGrab"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "intakeoff"
@@ -87,7 +81,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "depot2Shoot"
+            "pathName": "Depot2Shoot2"
           }
         },
         {
