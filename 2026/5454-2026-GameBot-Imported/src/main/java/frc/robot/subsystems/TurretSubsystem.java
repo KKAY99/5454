@@ -28,15 +28,19 @@ import edu.wpi.first.units.measure.Angle;
 import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class TurretSubsystem extends SubsystemBase {
   private TalonFX m_turretMotor;
   private CANcoder m_encoder1;
   private CANcoder m_encoder2;
   private EasyCRT m_EasyCRT;
-  private final int kTurretTeeth=100;
-  private final int kEncoder1Teeth=41;
-  private final int kEncoder2Teeth=42;
+  private static final double GEAR_0_TOOTH_COUNT = 80.0;
+  private static final double GEAR_1_TOOTH_COUNT = 41.0;
+  private static final double GEAR_2_TOOTH_COUNT = 40.0;
+
+    private static final double SLOPE = (GEAR_2_TOOTH_COUNT * GEAR_1_TOOTH_COUNT)
+            / ((GEAR_1_TOOTH_COUNT - GEAR_2_TOOTH_COUNT) * GEAR_0_TOOTH_COUNT);
 
 
   //private SparkAbsoluteEncoder m_encoder;
@@ -48,9 +52,9 @@ public class TurretSubsystem extends SubsystemBase {
     m_turretMotor = new TalonFX(CanId1);
     m_encoder1 = new CANcoder(encoder1ID);
     
-    m_encoder2 = new CANcoder(encoder2ID);
-    
 
+    m_encoder2 = new CANcoder(encoder2ID);
+ 
      EasyCRTConfig easyCRTConfig =
         new EasyCRTConfig(
                 () -> Rotations.of(m_encoder1.getAbsolutePosition().getValueAsDouble()),
@@ -64,7 +68,19 @@ public class TurretSubsystem extends SubsystemBase {
             .withMechanismRange(
                 Rotations.of(TurretConstants.MIN_ROT_DEG / 360),
                 Rotations.of(TurretConstants.MAX_ROT_DEG / 360))
+            .withAbsoluteEncoder1Inverted(false)
+            .withAbsoluteEncoder2Inverted(false)
             .withMatchTolerance(Rotations.of(TurretConstants.CRT_MATCH_TOLERANCE));
+
+    CANcoderConfiguration encoder1Config = new CANcoderConfiguration();
+    encoder1Config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(1.0);
+    encoder1Config.MagnetSensor.withMagnetOffset(-0.455);
+    m_encoder1.getConfigurator().apply(encoder1Config);
+
+    CANcoderConfiguration encoder2Config = new CANcoderConfiguration();
+    encoder2Config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(1.0);
+    encoder2Config.MagnetSensor.withMagnetOffset(-0.325);
+    m_encoder2.getConfigurator().apply(encoder2Config); 
 
     m_EasyCRT = new EasyCRT(easyCRTConfig);
   }
@@ -78,12 +94,36 @@ public class TurretSubsystem extends SubsystemBase {
     return () -> encoder.getAbsolutePosition().getValue();
   }
   
+  public void showEncoderPositions(){
+        SmartDashboard.putNumber("Encoder 1",m_encoder1.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("Encoder 2",m_encoder2.getAbsolutePosition().getValueAsDouble());
+        m_EasyCRT
+        .getAngleOptional()
+        .ifPresent(angle -> SmartDashboard.putNumber("Turret Angle", angle.in(Degrees)));
+   }
+ public static double calculateTurretAngleFromCANCoderDegrees(double e1, double e2) {
+        double difference = e2 - e1;
+        if (difference > 250) {
+            difference -= 360;
+        }
+        if (difference < -250) {
+            difference += 360;
+        }
+        difference *= SLOPE;
 
+        double e1Rotations = (difference * GEAR_0_TOOTH_COUNT / GEAR_1_TOOTH_COUNT) / 360.0;
+        double e1RotationsFloored = Math.floor(e1Rotations);
+        double turretAngle = (e1RotationsFloored * 360.0 + e1) * (GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT);
+        if (turretAngle - difference < -100) {
+            turretAngle += GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT * 360.0;
+        } else if (turretAngle - difference > 100) {
+            turretAngle -= GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT * 360.0;
+        }
+        return turretAngle;
+    }
   public void moveTurret(double speed) 
   {
-      System.out.println("Encoder 1 pos:" + m_encoder1.getAbsolutePosition());
-      System.out.println("Encoder 2 pos:" + m_encoder2.getAbsolutePosition());
-      System.out.println("Last Status:" + m_EasyCRT.getLastStatus());
+      showEncoderPositions();
       m_EasyCRT
         .getAngleOptional()
         .ifPresent(angle -> SmartDashboard.putNumber("Turret Angle", angle.in(Degrees)));

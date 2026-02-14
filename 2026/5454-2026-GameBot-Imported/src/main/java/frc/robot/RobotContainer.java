@@ -368,6 +368,7 @@ public class RobotContainer {
     }
   }
   private void refreshSmartDashboard(){  
+    //m_TurretSubsystem.showEncoderPositions();
     try{
             updateHubStatus();
       SmartDashboard.putString("Our Hub Active",m_hubMatch);      
