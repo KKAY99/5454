@@ -30,59 +30,71 @@ import static edu.wpi.first.units.Units.Rotations;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-public class TurretSubsystem extends SubsystemBase {
+public class TurretSubsystemCRT extends SubsystemBase {
   private TalonFX m_turretMotor;
   private CANcoder m_encoder1;
   private CANcoder m_encoder2;
   private EasyCRT m_EasyCRT;
-  private static final double GEAR_0_TOOTH_COUNT = 80.0;
-  private static final double GEAR_1_TOOTH_COUNT = 41.0;
-  private static final double GEAR_2_TOOTH_COUNT = 40.0;
+  private EasyCRTConfig m_CRTConfig;
+  private static final int GEAR_0_TOOTH_COUNT = 80;
+  private static final int GEAR_1_TOOTH_COUNT = 10;
+  private static final int GEAR_2_TOOTH_COUNT = 41;
+  private static final int GEAR_3_TOOTH_COUNT = 40;
 
     private static final double SLOPE = (GEAR_2_TOOTH_COUNT * GEAR_1_TOOTH_COUNT)
             / ((GEAR_1_TOOTH_COUNT - GEAR_2_TOOTH_COUNT) * GEAR_0_TOOTH_COUNT);
 
-
+ //11 is on 10tgear
   //private SparkAbsoluteEncoder m_encoder;
 
-    public TurretSubsystem(int CanId1) {
+    public TurretSubsystemCRT(int CanId1) {
     m_turretMotor = new TalonFX(CanId1);
     }
-  public TurretSubsystem(int CanId1, int encoder1ID, int encoder2ID) {
+  public TurretSubsystemCRT(int CanId1, int encoder1ID, int encoder2ID) {
     m_turretMotor = new TalonFX(CanId1);
     m_encoder1 = new CANcoder(encoder1ID);
     
 
     m_encoder2 = new CANcoder(encoder2ID);
  
-     EasyCRTConfig easyCRTConfig =
+ m_CRTConfig =
         new EasyCRTConfig(
                 () -> Rotations.of(m_encoder1.getAbsolutePosition().getValueAsDouble()),
                 () -> Rotations.of(m_encoder2.getAbsolutePosition().getValueAsDouble()))
-            .withAbsoluteEncoder1Gearing(
-                TurretConstants.GEAR_0_TOOTH_COUNT, TurretConstants.GEAR_1_TOOTH_COUNT)
-            .withAbsoluteEncoder2Gearing(
-                TurretConstants.GEAR_0_TOOTH_COUNT,
-                TurretConstants.GEAR_1_TOOTH_COUNT,
-                TurretConstants.GEAR_2_TOOTH_COUNT)
-            .withMechanismRange(
+            /* .withAbsoluteEncoder1Gearing(
+                GEAR_0_TOOTH_COUNT,
+                GEAR_1_TOOTH_COUNT)
+               .withAbsoluteEncoder2Gearing
+              ( GEAR_0_TOOTH_COUNT,
+                GEAR_1_TOOTH_COUNT,
+                GEAR_2_TOOTH_COUNT,
+                GEAR_3_TOOTH_COUNT)
+              */
+                .withEncoderRatios(8,8.2) 
+                //.withEncoderRatios(8,7.8); 
+                .withAbsoluteEncoderOffsets(Rotations.of(0.455),Rotations.of(-0.375))
+                .withMechanismRange(
                 Rotations.of(TurretConstants.MIN_ROT_DEG / 360),
                 Rotations.of(TurretConstants.MAX_ROT_DEG / 360))
-            .withAbsoluteEncoder1Inverted(false)
-            .withAbsoluteEncoder2Inverted(false)
-            .withMatchTolerance(Rotations.of(TurretConstants.CRT_MATCH_TOLERANCE));
-
+          
+            .withMatchTolerance(Rotations.of(0.1)
+        );   
     CANcoderConfiguration encoder1Config = new CANcoderConfiguration();
     encoder1Config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(1.0);
-    encoder1Config.MagnetSensor.withMagnetOffset(-0.455);
+    //encoder1Config.MagnetSensor.withMagnetOffset(-0.455);
+    encoder1Config.MagnetSensor.SensorDirection=SensorDirectionValue.CounterClockwise_Positive;
     m_encoder1.getConfigurator().apply(encoder1Config);
 
     CANcoderConfiguration encoder2Config = new CANcoderConfiguration();
     encoder2Config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(1.0);
-    encoder2Config.MagnetSensor.withMagnetOffset(-0.325);
+    //encoder2Config.MagnetSensor.withMagnetOffset(-0.325);
+    
+    encoder2Config.MagnetSensor.SensorDirection=SensorDirectionValue.Clockwise_Positive;
     m_encoder2.getConfigurator().apply(encoder2Config); 
 
-    m_EasyCRT = new EasyCRT(easyCRTConfig);
+    m_EasyCRT = new EasyCRT(m_CRTConfig);
+    SmartDashboard.putNumber("UniqueCoverage",m_CRTConfig.getUniqueCoverage().orElse(Degrees.of(0.0)).in(Degrees));
+    SmartDashboard.putBoolean("SatisfiesRange",m_CRTConfig.coverageSatisfiesRange());
   }
 
  /*  private void setEncoderConfig(CANcoder canCoder{
@@ -97,31 +109,19 @@ public class TurretSubsystem extends SubsystemBase {
   public void showEncoderPositions(){
         SmartDashboard.putNumber("Encoder 1",m_encoder1.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber("Encoder 2",m_encoder2.getAbsolutePosition().getValueAsDouble());
+       SmartDashboard.putNumber("EasyCRT Enc 1", m_CRTConfig.getAbsoluteEncoder1Angle().in(Degrees));
+    SmartDashboard.putNumber(
+        "EasyCRT Enc 1 Ratio", m_CRTConfig.getEncoder1RotationsPerMechanismRotation());
+    SmartDashboard.putNumber("EasyCRT Enc 2", m_CRTConfig.getAbsoluteEncoder2Angle().in(Degrees));
+    SmartDashboard.putNumber(
+        "EasyCRT Enc 2 Ratio", m_CRTConfig.getEncoder2RotationsPerMechanismRotation());
+        SmartDashboard.putString("Last Status",m_EasyCRT.getLastStatus().toString());
         m_EasyCRT
         .getAngleOptional()
         .ifPresent(angle -> SmartDashboard.putNumber("Turret Angle", angle.in(Degrees)));
    }
- public static double calculateTurretAngleFromCANCoderDegrees(double e1, double e2) {
-        double difference = e2 - e1;
-        if (difference > 250) {
-            difference -= 360;
-        }
-        if (difference < -250) {
-            difference += 360;
-        }
-        difference *= SLOPE;
 
-        double e1Rotations = (difference * GEAR_0_TOOTH_COUNT / GEAR_1_TOOTH_COUNT) / 360.0;
-        double e1RotationsFloored = Math.floor(e1Rotations);
-        double turretAngle = (e1RotationsFloored * 360.0 + e1) * (GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT);
-        if (turretAngle - difference < -100) {
-            turretAngle += GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT * 360.0;
-        } else if (turretAngle - difference > 100) {
-            turretAngle -= GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT * 360.0;
-        }
-        return turretAngle;
-    }
-  public void moveTurret(double speed) 
+   public void moveTurret(double speed) 
   {
       showEncoderPositions();
       m_EasyCRT
