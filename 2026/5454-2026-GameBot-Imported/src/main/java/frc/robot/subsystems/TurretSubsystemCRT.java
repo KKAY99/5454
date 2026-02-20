@@ -18,6 +18,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
+import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import yams.mechanisms.*;
@@ -36,6 +38,8 @@ public class TurretSubsystemCRT extends SubsystemBase {
   private CANcoder m_encoder2;
   private EasyCRT m_EasyCRT;
   private EasyCRTConfig m_CRTConfig;
+  private AnalogPotentiometer m_POTS;
+  private static final double kGearReduction=7.8;
   private static final int GEAR_0_TOOTH_COUNT = 80;
   private static final int GEAR_1_TOOTH_COUNT = 10;
   private static final int GEAR_2_TOOTH_COUNT = 41;
@@ -51,6 +55,7 @@ public class TurretSubsystemCRT extends SubsystemBase {
     m_turretMotor = new TalonFX(CanId1);
     }
   public TurretSubsystemCRT(int CanId1, int encoder1ID, int encoder2ID) {
+    m_POTS = new AnalogPotentiometer(0,3600,0); //BAD CODE
     m_turretMotor = new TalonFX(CanId1);
     m_encoder1 = new CANcoder(encoder1ID);
     
@@ -70,13 +75,17 @@ public class TurretSubsystemCRT extends SubsystemBase {
                 GEAR_2_TOOTH_COUNT,
                 GEAR_3_TOOTH_COUNT)
               */
-                .withEncoderRatios(8,8.2) 
-                //.withEncoderRatios(8,7.8); 
-                .withAbsoluteEncoderOffsets(Rotations.of(0.455),Rotations.of(-0.375))
-                .withMechanismRange(
+              .withCommonDriveGear(
+                /* commonRatio (mech:drive) */ 30.0,
+                /* driveGearTeeth */ 10,
+                /* encoder1Pinion */ 41,
+                /* encoder2Pinion */ 40)
+                //.withEncoderRatios(8,8.2) 
+                //.withEncoderRatios(8,7.8) 
+              .withAbsoluteEncoderOffsets(Rotations.of(0.455),Rotations.of(-0.375))
+              .withMechanismRange(
                 Rotations.of(TurretConstants.MIN_ROT_DEG / 360),
                 Rotations.of(TurretConstants.MAX_ROT_DEG / 360))
-          
             .withMatchTolerance(Rotations.of(0.1)
         );   
     CANcoderConfiguration encoder1Config = new CANcoderConfiguration();
@@ -146,5 +155,10 @@ public class TurretSubsystemCRT extends SubsystemBase {
   }
   public Command turretStopManualCommand(){
     return Commands.runOnce(    ()->stopTurret(),this);
+  }
+  public void periodic(){
+    SmartDashboard.putNumber("POTS",m_POTS.get());
+    SmartDashboard.putNumber("POTS Angle",m_POTS.get()/kGearReduction);
+    //SmartDashboard.putNumber("POTS",m_POTS.;
   }
 }
