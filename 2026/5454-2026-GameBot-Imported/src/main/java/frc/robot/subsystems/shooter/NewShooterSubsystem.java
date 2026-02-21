@@ -19,7 +19,9 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.NewShooterConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class NewShooterSubsystem extends SubsystemBase {
     private TalonFX m_1shooterMotor;
@@ -32,7 +34,6 @@ public class NewShooterSubsystem extends SubsystemBase {
     m_2shooterMotor = new TalonFX(shooter2CANID);
     m_hoodMotor = new TalonFX(hoodCANID);
     m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,true);
-  
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
@@ -91,5 +92,4 @@ public void runShooterVelocity(double targetSpeed){
   public Command shootoffCommand(){
     return Commands.runOnce(    ()->stopNewShooter(),this);
   }
-
 }

@@ -7,20 +7,25 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 
 public class HopperSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_hopperMotor;
+  private DigitalInput m_BREAK;
  
   //private SparkAbsoluteEncoder m_encoder;
 
-  public HopperSubsystem(int CanId1) {
+  public HopperSubsystem(int CanId1, int fuelSensorDIO) {
     m_hopperMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true);
+    m_BREAK = new DigitalInput(fuelSensorDIO);
    }
 
   public void agitate(double speed) {
@@ -42,6 +47,16 @@ public class HopperSubsystem extends SubsystemBase {
   }
   public Command agitateoffCommand(){
     return Commands.runOnce(    ()->stopAgitate(),this);
+  }
+
+  public boolean getFuelBreak() {
+    return !m_BREAK.get();
+  }
+  
+  @Override
+  public void periodic() {
+    SmartDashboard.putBoolean("Kicker Sensor", !m_BREAK.get());
+    // This method will be called once per scheduler run
   }
   
 }

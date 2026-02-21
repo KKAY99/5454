@@ -68,13 +68,14 @@ public class RobotContainer {
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID);
   public final NewShooterSubsystem m_newShooter = new NewShooterSubsystem(Constants.NewShooterConstants.shooter1CANID,
-                                                        Constants.NewShooterConstants.shooter2CANID,
+                                                         Constants.NewShooterConstants.shooter2CANID,
                                                          Constants.NewShooterConstants.kickerCANID,
                                                          Constants.NewShooterConstants.hoodCANID);
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,
                                                                  Constants.ShooterConstants.KickerCanID,
                                                                  Constants.ShooterConstants.IdleSpeed);
-  public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID);
+  public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID,
+                                                         Constants.NewShooterConstants.fuelSensorDIO);
   public final TurretSubsystemOverlap m_TurretSubsystem = new TurretSubsystemOverlap(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID, Constants.TurretConstants.encoder2CANID);
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
@@ -85,7 +86,7 @@ public class RobotContainer {
  
   private final SendableChooser<Command> m_autoChooser;
 
-
+ //AutoSetup
   public Command Left2Neutral() {
     // This method loads the auto when it is called, however, it is recommended
     // to first load your paths/autos when code starts, then return the
@@ -93,18 +94,14 @@ public class RobotContainer {
     return new PathPlannerAuto("Left2Neutral");
   }
   public Command Right2Left() {
-    // This method loads the auto when it is called, however, it is recommended
-    // to first load your paths/autos when code starts, then return the
-    // pre-loaded auto/path
     return new PathPlannerAuto("Right2Left");
   }
   public Command ShootDepotShootNZ() {
-    // This method loads the auto when it is called, however, it is recommended
-    // to first load your paths/autos when code starts, then return the
-    // pre-loaded auto/path
     return new PathPlannerAuto("ShootDepotShootNZ");
   }
   
+
+  //
   public boolean hasHomed=false;
   public boolean m_hasResetGyro=false;
   private String m_activeHub="Undefined";
@@ -114,6 +111,8 @@ public class RobotContainer {
   private String m_activeHubPhase="Undefined";
   private ShotCalculator m_ShotCalculator = new ShotCalculator();
   
+
+  //
   public RobotContainer(){
     SmartDashboard.putData("field", m_Field2d);
     configureNamedCommands();
@@ -142,6 +141,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings(){
+    //Internal Robot Triggers
+    Trigger feulDetector = new Trigger(() -> m_hopper.getFuelBreak());
+
     //QOL Drive
     /*ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve);
     m_xBoxDriver.start().onTrue(resetGyroCommand);*/

@@ -149,6 +149,7 @@ public final class Constants {
     public static final double lowSpeed=1;
     public static final int kickerCANID=61;
     public static final int hoodCANID=27;
+    public static final int fuelSensorDIO=1;
   }
   public static final class PassConstants{    
       public static enum PassTargets{
