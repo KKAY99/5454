@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.NewShooterConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -80,14 +80,14 @@ public void runShooterVelocity(double targetSpeed){
                                            this);
   }
   public Command shootCommand(){
-    return Commands.startEnd(    ()->runNewShooter(ShooterConstants.shooterSpeedFull,
-                                    ShooterConstants.kickerSpeed),
+    return Commands.startEnd(    ()->runNewShooter(ShooterConstants.shootSpeed,
+                                    ShooterConstants.KickerSpeed),
                                            ()->stopNewShooter(),
                                            this);
   }
   public Command shootonCommand(){
-    return Commands.runOnce(    ()->runNewShooter(ShooterConstants.shooterSpeedFull,
-                                    ShooterConstants.kickerSpeed),this);
+    return Commands.runOnce(    ()->runNewShooter(ShooterConstants.shootSpeed,
+                                    ShooterConstants.KickerSpeed),this);
   }
   public Command shootoffCommand(){
     return Commands.runOnce(    ()->stopNewShooter(),this);

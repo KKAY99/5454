@@ -47,12 +47,12 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command OldShootCommand(){
-    return Commands.startEnd(     ()->runShooter(Constants.ShooterConstants.ShootSpeed, Constants.ShooterConstants.KickerSpeed),
+    return Commands.startEnd(     ()->runShooter(Constants.ShooterConstants.shootSpeed, Constants.ShooterConstants.KickerSpeed),
                                   ()->stopShooter(),
                                   this);
   }
   public Command OldShootonCommand(){
-    return Commands.runOnce(    ()->runShooter(Constants.ShooterConstants.ShootSpeed, Constants.ShooterConstants.KickerSpeed),this);
+    return Commands.runOnce(    ()->runShooter(Constants.ShooterConstants.shootSpeed, Constants.ShooterConstants.KickerSpeed),this);
   }
   public Command OldShootoffCommand(){
     return Commands.runOnce(    ()->stopShooter(),this);

@@ -49,13 +49,14 @@ public class HopperSubsystem extends SubsystemBase {
     return Commands.runOnce(    ()->stopAgitate(),this);
   }
 
-  public boolean getFuelBreak() {
-    return !m_BREAK.get();
+  //checking if there's NO fuel aka if there was no !, it would return true when there is not any fuel in hopper
+  public boolean getNoFuel() {
+    return m_BREAK.get();
   }
   
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Kicker Sensor", !m_BREAK.get());
+    SmartDashboard.putBoolean("Kicker Sensor", m_BREAK.get());
     // This method will be called once per scheduler run
   }
   

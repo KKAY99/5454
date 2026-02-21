@@ -13,7 +13,7 @@ public class ShootManualCommand extends Command {
   private NewShooterSubsystem m_shooter;
   private HopperSubsystem m_hopper;
   private enum shooterStates{
-    SPINUP,WAIT,SHOOT
+    SPINUP,WAIT,SHOOT,END
   } 
   private shooterStates m_state;
   private double stateStartTime;
@@ -49,26 +49,38 @@ public class ShootManualCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+
+    boolean returnValue=false;
+
+    
   
   System.out.println("Shooting - State:" + m_state);
     switch(m_state){
     case SPINUP:
         stateStartTime=Timer.getFPGATimestamp();
-        m_shooter.runNewShooter(Constants.ShooterConstants.ShootSpeed,
-                            Constants.ShooterConstants.kickerSpeed);
+        m_shooter.runNewShooter(Constants.ShooterConstants.shootSpeed,
+                            Constants.ShooterConstants.KickerSpeed);
         m_state=shooterStates.WAIT;
     break;
     case WAIT:
-       double currentTime = Timer.getFPGATimestamp();
-       if(currentTime>=stateStartTime+kSpinUpTime){
+        double currentTime = Timer.getFPGATimestamp();
+        if(currentTime>=stateStartTime+kSpinUpTime){
           m_state=shooterStates.SHOOT;
-       }
+        }
       break;
     case SHOOT:
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
+        if(m_hopper.getNoFuel()) {
+          m_state=shooterStates.END;
+        }
+    break;
+    case END:
+        returnValue=true;
     break;
   }
-       return false;
+    return returnValue;
+
+      
   }
 }
 

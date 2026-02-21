@@ -67,15 +67,12 @@ public class RobotContainer {
   //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID);
-  public final NewShooterSubsystem m_newShooter = new NewShooterSubsystem(Constants.NewShooterConstants.shooter1CANID,
-                                                         Constants.NewShooterConstants.shooter2CANID,
-                                                         Constants.NewShooterConstants.kickerCANID,
-                                                         Constants.NewShooterConstants.hoodCANID);
-  public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.ShooterConstants.ShooterCanID,
-                                                                 Constants.ShooterConstants.KickerCanID,
-                                                                 Constants.ShooterConstants.IdleSpeed);
+  public final NewShooterSubsystem m_newShooter = new NewShooterSubsystem(Constants.ShooterConstants.shooter1CANID,
+                                                         Constants.ShooterConstants.shooter2CANID,
+                                                         Constants.ShooterConstants.kickerCANID,
+                                                         Constants.ShooterConstants.hoodCANID);
   public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID,
-                                                         Constants.NewShooterConstants.fuelSensorDIO);
+                                                         Constants.ShooterConstants.fuelSensorDIO);
   public final TurretSubsystemOverlap m_TurretSubsystem = new TurretSubsystemOverlap(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID, Constants.TurretConstants.encoder2CANID);
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
@@ -130,8 +127,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("agitateoff", m_hopper.agitateoffCommand());
     NamedCommands.registerCommand("intakeon", m_intake.intakeonCommand());
     NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
-    NamedCommands.registerCommand("OLDshootoff", m_shooter.OldShootonCommand());
-    NamedCommands.registerCommand("OLDshooton", m_shooter.OldShootoffCommand());
     NamedCommands.registerCommand("NEWshooton", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
     NamedCommands.registerCommand("turretManualMove", m_TurretSubsystem.turretMoveManualCommand());
@@ -142,7 +137,7 @@ public class RobotContainer {
 
   private void configureButtonBindings(){
     //Internal Robot Triggers
-    Trigger feulDetector = new Trigger(() -> m_hopper.getFuelBreak());
+    Trigger feulDetector = new Trigger(() -> m_hopper.getNoFuel());
 
     //QOL Drive
     /*ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve);
