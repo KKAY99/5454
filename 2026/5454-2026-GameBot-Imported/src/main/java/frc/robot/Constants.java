@@ -176,6 +176,7 @@ public final class Constants {
   public static final class TurretConstants {
     public static final int turretCanID=6;
     public static final double turretSpeed=0.1;
+    public static final int TurretPOT=0;
     public static final int encoder1CANID=11;
     public static final int encoder2CANID=12;
     public static final double REDUCTION = 13.2;
