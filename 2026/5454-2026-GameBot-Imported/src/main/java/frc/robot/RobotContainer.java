@@ -73,7 +73,8 @@ public class RobotContainer {
                                                          Constants.ShooterConstants.hoodCANID);
   public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID,
                                                          Constants.ShooterConstants.fuelSensorDIO);
-  public final TurretSubsystemOverlap m_TurretSubsystem = new TurretSubsystemOverlap(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID, Constants.TurretConstants.encoder2CANID);
+  public final TurretSubsystemPots m_TurretSubsystem = new TurretSubsystemPots(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID,
+                                                   Constants.TurretConstants.encoder2CANID,Constants.TurretConstants.TurretPOT);
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
