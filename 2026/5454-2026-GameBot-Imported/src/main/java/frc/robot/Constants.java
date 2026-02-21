@@ -142,35 +142,28 @@ public final class Constants {
     public static final double outtakeSpeed=0.9;
   
   }
-  public static final class NewShooterConstants {
-    public static final int shooter1CANID=29;
-    public static final int shooter2CANID=28;
-    public static final double highSpeed=1;
-    public static final double lowSpeed=1;
-    public static final int kickerCANID=61;
-    public static final int hoodCANID=27;
-    public static final int fuelSensorDIO=1;
-  }
+
   public static final class PassConstants{    
       public static enum PassTargets{
           FARLEFT,LEFT,MIDDLE,RIGHT,FARRIGHT
       }
   }
   public static final class ShooterConstants {
-    public static final int ShooterCanID=14;
-    public static final int KickerCanID=61; //was 63
-    public static final double shooterSpeedFull=1;
+    public static final int shooter1CANID=29;
+    public static final int shooter2CANID=28;
+    public static final int hoodCANID=27;
+    public static final int kickerCANID=61;
+    public static final int fuelSensorDIO=1;
+    //speeds
     public static final double shooterRPM=5000;
-    public static final double kickerSpeed=-1;
     public static final double IdleSpeed=0.5;
-    public static final double ShootSpeed=1;
-    public static final double KickerSpeed=-1;
+    public static final double KickerSpeed=1;
+    public static final double shootSpeed=1;
     //6328 Transforms for Turret
     public static Transform3d robotToTurret = new Transform3d(-0.19685, 0.0, 0.44, Rotation3d.kZero);
     public static Transform3d turretToCamera =
       new Transform3d(
           -0.1314196, 0.0, 0.2770674, new Rotation3d(0.0, Units.degreesToRadians(-22.5), 0.0));
-
   }
   public static final class HopperConstants{
     public static final int HopperMotorCanID=60;
