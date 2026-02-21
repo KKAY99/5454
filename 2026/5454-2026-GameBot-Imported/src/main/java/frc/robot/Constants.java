@@ -173,7 +173,7 @@ public final class Constants {
   }
   public static final class HopperConstants{
     public static final int HopperMotorCanID=60;
-    public static final double agitateSpeed=-0.75;
+    public static final double agitateSpeed=-1;
   }
   public static final class HoodConstants{
     public static final double hoodUpSpeed=-0.06;
@@ -181,7 +181,7 @@ public final class Constants {
   }
   public static final class TurretConstants {
     public static final int turretCanID=6;
-    public static final double turretSpeed=0.07;
+    public static final double turretSpeed=0.1;
     public static final int encoder1CANID=11;
     public static final int encoder2CANID=12;
     public static final double REDUCTION = 13.2;

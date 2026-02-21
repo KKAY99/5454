@@ -55,7 +55,7 @@ public class TurretSubsystemCRT extends SubsystemBase {
     m_turretMotor = new TalonFX(CanId1);
     }
   public TurretSubsystemCRT(int CanId1, int encoder1ID, int encoder2ID) {
-    m_POTS = new AnalogPotentiometer(0,3600,0); //BAD CODE
+    m_POTS = new AnalogPotentiometer(0,1,0); //BAD CODE
     m_turretMotor = new TalonFX(CanId1);
     m_encoder1 = new CANcoder(encoder1ID);
     
@@ -157,6 +157,7 @@ public class TurretSubsystemCRT extends SubsystemBase {
     return Commands.runOnce(    ()->stopTurret(),this);
   }
   public void periodic(){
+    SmartDashboard.putNumber("Motor Rotations",m_turretMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("POTS",m_POTS.get());
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()/kGearReduction);
     //SmartDashboard.putNumber("POTS",m_POTS.;
