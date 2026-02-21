@@ -157,7 +157,7 @@ public final class Constants {
   }
   public static final class ShooterConstants {
     public static final int ShooterCanID=14;
-    public static final int KickerCanID=63; //was 61
+    public static final int KickerCanID=61; //was 63
     public static final double shooterSpeedFull=1;
     public static final double shooterRPM=5000;
     public static final double kickerSpeed=-1;
