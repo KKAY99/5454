@@ -41,117 +41,64 @@ public class TurretSubsystemOverlap extends SubsystemBase {
   private static final double GEAR_2_TOOTH_COUNT = 41.0;
   private static final double GEAR_3_TOOTH_COUNT = 40.0;
 
-    private static final double SLOPE = (GEAR_2_TOOTH_COUNT * GEAR_1_TOOTH_COUNT)
-            / ((GEAR_1_TOOTH_COUNT - GEAR_2_TOOTH_COUNT) * GEAR_0_TOOTH_COUNT);
+public static double calculateTurretAngleFromCANCoderDegrees(double e1, double e2) {
 
+    final double minDeg = TurretConstants.MIN_ROT_DEG;
+    final double maxDeg = TurretConstants.MAX_ROT_DEG;
+    final double stepDeg = TurretConstants.ABSOLUTE_SOLVE_STEP_DEG;
 
-  //private SparkAbsoluteEncoder m_encoder;
+    java.util.function.DoubleUnaryOperator wrap0to360 = (deg) -> {
+        deg %= 360.0;
+        if (deg < 0) deg += 360.0;
+        return deg;
+    };
 
-    public TurretSubsystemOverlap(int CanId1) {
-    m_turretMotor = new TalonFX(CanId1);
-    }
-  public TurretSubsystemOverlap(int CanId1, int encoder1ID, int encoder2ID) {
-    m_turretMotor = new TalonFX(CanId1);
-    m_encoder1 = new CANcoder(encoder1ID);
-    
+    java.util.function.BiFunction<Double, Double, Double> signedErrDeg = (aDeg, bDeg) -> {
+        double d = wrap0to360.applyAsDouble(aDeg - bDeg);
+        if (d > 180.0) d -= 360.0;
+        return d;
+    };
 
-    m_encoder2 = new CANcoder(encoder2ID);
- 
+    java.util.function.Function<Double, Double> enc1Phase = (rawDeg) -> {
+        double x = rawDeg - TurretConstants.ENC1_FORWARD_OFFSET_DEG;
+        if (TurretConstants.ENC1_INVERT) x = -x;
+        return wrap0to360.applyAsDouble(x);
+    };
 
-    CANcoderConfiguration encoder1Config = new CANcoderConfiguration();
-    encoder1Config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(1.0);
-    encoder1Config.MagnetSensor.withMagnetOffset(-0.3271484375);
-    encoder1Config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    java.util.function.Function<Double, Double> enc2Phase = (rawDeg) -> {
+        double x = rawDeg - TurretConstants.ENC2_FORWARD_OFFSET_DEG;
+        if (TurretConstants.ENC2_INVERT) x = -x;
+        return wrap0to360.applyAsDouble(x);
+    };
 
-    m_encoder1.getConfigurator().apply(encoder1Config);
+    final double enc1 = enc1Phase.apply(e1);
+    final double enc2 = enc2Phase.apply(e2);
 
-    CANcoderConfiguration encoder2Config = new CANcoderConfiguration();
-    encoder2Config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(1.0);
-    encoder2Config.MagnetSensor.withMagnetOffset(-0.380615234);
-    encoder2Config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    double bestTheta = 0.0;
+    double bestCost = Double.POSITIVE_INFINITY;
 
-    m_encoder2.getConfigurator().apply(encoder2Config); 
+    for (double theta = minDeg; theta <= maxDeg; theta += stepDeg) {
 
-  }
- 
-  public static double convertToClosestBoundedTurretAngleDegrees(
-            double targetAngleDegrees, Rotation2d current, double forwardLimitDegrees, double reverseLimitDegrees) {
-        double currentTotalRadians = (current.getRotations() * 2 * Math.PI);
-        double closestOffset = Units.degreesToRadians(targetAngleDegrees) - current.getRadians();
-        if (closestOffset > Math.PI) {
+        double pred1 = wrap0to360.applyAsDouble(theta * TurretConstants.ENC1_RATIO);
+        double pred2 = wrap0to360.applyAsDouble(theta * TurretConstants.ENC2_RATIO);
 
-            closestOffset -= 2 * Math.PI;
+        double d1 = signedErrDeg.apply(enc1, pred1);
+        double d2 = signedErrDeg.apply(enc2, pred2);
 
-        } else if (closestOffset < -Math.PI) {
-            closestOffset += 2 * Math.PI;
+        double cost = (d1 * d1) * 1.5 + (d2 * d2);
+
+        if (cost < bestCost) {
+            bestCost = cost;
+            bestTheta = theta;
         }
-
-        double finalOffset = currentTotalRadians + closestOffset;
-        if ((currentTotalRadians + closestOffset) % (2 * Math.PI)
-                == (currentTotalRadians - closestOffset)
-                        % (2 * Math.PI)) { // If the offset can go either way, go closer to zero
-            if (finalOffset > 0) {
-                finalOffset = currentTotalRadians - Math.abs(closestOffset);
-            } else {
-                finalOffset = currentTotalRadians + Math.abs(closestOffset);
-            }
-        }
-        if (finalOffset > Units.degreesToRadians(forwardLimitDegrees)) { // if past upper rotation limit
-            finalOffset -= (2 * Math.PI);
-        } else if (finalOffset < Units.degreesToRadians(reverseLimitDegrees)) { // if below lower rotation limit
-            finalOffset += (2 * Math.PI);
-        }
-
-        return Units.radiansToDegrees(finalOffset);
     }
 
-    public static double calculateTurretAngleFromCANCoderDegrees(double e1, double e2) {
-        double difference = e2 - e1;
-        if (difference > 250) {
-            difference -= 360;
-        }
-        if (difference < -250) {
-            difference += 360;
-        }
+     System.out.println("Turret/SolveEnc1PhaseDeg", enc1);
+   System.out.println("Turret/SolveEnc2PhaseDeg", enc2);
+       System.out.println("Turret/SolveBestCost", bestCost);
 
-        difference *= SLOPE;
-        
-        double e1Rotations = (difference * GEAR_0_TOOTH_COUNT / GEAR_1_TOOTH_COUNT) / 360.0;
-        double e1RotationsFloored = Math.floor(e1Rotations);
-        double turretAngle = (e1RotationsFloored * 360.0 + e1) * (GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT);
-     
-        SmartDashboard.putNumber("difference",difference);
-        SmartDashboard.putNumber("e1Rotations",e1Rotations);
-        SmartDashboard.putNumber("E1RotationsFloored",e1RotationsFloored);
-        if (turretAngle - difference < -100) {
-            turretAngle += GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT * 360.0;
-        } else if (turretAngle - difference > 100) {
-            turretAngle -= GEAR_1_TOOTH_COUNT / GEAR_0_TOOTH_COUNT * 360.0;
-        }
-        return turretAngle;
-    }
- 
-  private Supplier<Angle> getAngle(CANcoder encoder){
-    return () -> encoder.getAbsolutePosition().getValue();
-  }
-  
-  public void showEncoderPositions(){
-        SmartDashboard.putNumber("Turret Motor" , m_turretMotor.getPosition().getValueAsDouble());        
-        SmartDashboard.putNumber("Encoder 1",m_encoder1.getAbsolutePosition().getValueAsDouble());
-       
-        SmartDashboard.putNumber("Encoder 1 ABS",m_encoder1.getAbsolutePosition().getValueAsDouble());
-        SmartDashboard.putNumber("Encoder 1 REL",m_encoder1.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Encoder 2",m_encoder2.getAbsolutePosition().getValueAsDouble());
-        double e1Degrees = m_encoder1.getAbsolutePosition().getValueAsDouble()*360;
-        double e2Degrees = m_encoder2.getAbsolutePosition().getValueAsDouble()*360;
-        SmartDashboard.putNumber("Encoder 1 ANG",e1Degrees);
-        SmartDashboard.putNumber("Encoder 2 ANG",e2Degrees);
-        double angle=calculateTurretAngleFromCANCoderDegrees(e1Degrees,e2Degrees);   
-        SmartDashboard.putNumber("Turret Angle:",angle);
-      }
-  public void moveTurret(double speed) 
-  {
-      showEncoderPositions();
+    return bestTheta;
+}
       
       System.out.println("Turret Move:" + speed);
     m_turretMotor.set(speed);
