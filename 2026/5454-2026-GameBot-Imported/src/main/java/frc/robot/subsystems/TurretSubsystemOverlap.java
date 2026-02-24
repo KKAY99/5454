@@ -104,7 +104,7 @@ public class TurretSubsystemOverlap extends SubsystemBase {
     SmartDashboard.putNumber("Encoder 2 ANG", e2Degrees);
 
     double angle = calculateTurretAngleFromCANCoderDegrees(e1Degrees, e2Degrees);
-    SmartDashboard.putNumber("Turret Angle", angle);
+    SmartDashboard.putNumber("OverLap Turret Angle", angle);
   }
 
   public void moveTurret(double speed) {
