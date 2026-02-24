@@ -89,9 +89,9 @@ public class TurretSubsystemOverlap extends SubsystemBase {
       }
     }
 
-    System.out.println("Turret/SolveEnc1PhaseDeg: " + enc1);
-    System.out.println("Turret/SolveEnc2PhaseDeg: " + enc2);
-    System.out.println("Turret/SolveBestCost: " + bestCost);
+    //System.out.println("Turret/SolveEnc1PhaseDeg: " + enc1);
+    //System.out.println("Turret/SolveEnc2PhaseDeg: " + enc2);
+    //System.out.println("Turret/SolveBestCost: " + bestCost);
 
     return bestTheta;
   }
@@ -108,6 +108,23 @@ public class TurretSubsystemOverlap extends SubsystemBase {
   }
 
   public void moveTurret(double speed) {
+    // before we blindly send the motor a command, check the current
+    // turret angle against the configured hard limits.  if we're at or
+    // beyond one of the limits, only allow motion that moves the turret
+    // back towards the centre.
+    double e1Degrees = m_encoder1.getAbsolutePosition().getValueAsDouble() * 360.0;
+    double e2Degrees = m_encoder2.getAbsolutePosition().getValueAsDouble() * 360.0;
+    double currentAngle = calculateTurretAngleFromCANCoderDegrees(e1Degrees, e2Degrees);
+    boolean atMin = currentAngle <= TurretConstants.MIN_ROT_DEG;
+    boolean atMax = currentAngle >= TurretConstants.MAX_ROT_DEG;
+
+    if ((speed < 0 && atMin) || (speed > 0 && atMax)) {
+      // don't drive further into the limit
+      m_turretMotor.stopMotor();
+      System.out.println("Turret Move blocked at limit: " + speed + " angle=" + currentAngle);
+      return;
+    }
+
     System.out.println("Turret Move: " + speed);
     m_turretMotor.set(speed);
   }

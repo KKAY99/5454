@@ -4,11 +4,12 @@
   "holonomicMode": true,
   "pathFolders": [
     "BLUE Center Start",
-    "BLUE Processor Side Start",
     "BLUE Non-Processor Side Start",
+    "BLUE Processor Side Start",
+    "New Folder",
     "RED Center Start ",
-    "RED Processor Side Start",
-    "RED Non-Processor Side Start"
+    "RED Non-Processor Side Start",
+    "RED Processor Side Start"
   ],
   "autoFolders": [],
   "defaultMaxVel": 2.25,
