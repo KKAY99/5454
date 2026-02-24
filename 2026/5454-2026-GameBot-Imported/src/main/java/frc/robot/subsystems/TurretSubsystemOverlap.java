@@ -108,7 +108,6 @@ public class TurretSubsystemOverlap extends SubsystemBase {
   }
 
   public void moveTurret(double speed) {
-    showEncoderPositions();
     System.out.println("Turret Move: " + speed);
     m_turretMotor.set(speed);
   }
@@ -131,5 +130,11 @@ public class TurretSubsystemOverlap extends SubsystemBase {
 
   public Command turretStopManualCommand() {
     return Commands.runOnce(this::stopTurret, this);
+  }
+
+  @Override
+  public void periodic() {
+    // called once per scheduler run (about every 20ms)
+    showEncoderPositions();
   }
 }
