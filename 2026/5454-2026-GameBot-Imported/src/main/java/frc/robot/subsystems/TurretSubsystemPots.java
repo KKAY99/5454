@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import lombok.var;
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
@@ -41,9 +43,9 @@ public class TurretSubsystemPots extends SubsystemBase {
   private CANcoder m_encoder1;
   private CANcoder m_encoder2;
   private AnalogPotentiometer m_POTS;
-  private final double kPotsLowLimit=0.30;
-  private final double kPotsHighLimit=0.70;
-  private final double kGearReduction=10;  
+  private final double kPotsLowLimit=0.20;
+  private final double kPotsHighLimit=0.80;
+  private final double kGearReduction=8;  //80t to 10tooth
   public TurretSubsystemPots(int CanId1, int encoder1ID, int encoder2ID,int potsPort) {
     m_POTS = new AnalogPotentiometer(potsPort,1,0); 
     m_turretMotor = new TalonFX(CanId1);
@@ -99,7 +101,7 @@ public class TurretSubsystemPots extends SubsystemBase {
   }
   public boolean atLimit(double speed){
     boolean returnValue=false;
-    System.out.println("Limit Check:" + speed + " -- " + m_POTS.get());
+    //System.out.println("Limit Check:" + speed + " -- " + m_POTS.get());
     if(speed<0 && m_POTS.get()<kPotsLowLimit){// Moving Left towards zero on POTS
         returnValue=true;
     }else if (speed>0 && m_POTS.get()>kPotsHighLimit){ //moving right towards One on POTS
@@ -116,14 +118,40 @@ public class TurretSubsystemPots extends SubsystemBase {
                                           ()->stopTurret(),
                                           this);
   }
+  public Command moveMotor(double target motorRotation){
+    m_turretMotor.setControl(null) 
+  }
+  public Command setMotortoZero(){
+   return Commands.runOnce(() ->m_turretMotor.setPosition(0));
+  }
 
-  
+private configureMotionMagic(){}
+  // in init function
+TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
+
+// set slot 0 gains
+Slot0Configs slot0Configs = talonFXConfigs.Slot0;
+slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
+slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
+slot0Configs.kP = 4.8; // A position error of 2.5 rotations results in 12 V output
+slot0Configs.kI = 0; // no output for integrated error
+slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
+
+// set Motion Magic settings
+var motionMagicConfigs = talonFXConfigs.MotionMagic;
+motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
+motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
+motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
+
+m_talonFX.getConfigurator().apply(talonFXConfigs);
   public void periodic(){
     SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));
     SmartDashboard.putBoolean("At Low Limit Limit",atLimit(-1));
     SmartDashboard.putNumber("Motor Rotations",m_turretMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("POTS",m_POTS.get());
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/kGearReduction);
+    SmartDashboard.putNumber("POTS Offset Angle",(m_POTS.get()*3600/kGearReduction)-225);
     //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
     //SmartDashboard.putNumber("POTS",m_POTS.;
   }

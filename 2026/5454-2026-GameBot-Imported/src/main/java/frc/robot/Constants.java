@@ -193,8 +193,8 @@ public final class Constants {
         public static final double ENC1_RATIO = 8.0;
         public static final double ENC2_RATIO = 320.0 / 41.0;
         public static final double ABSOLUTE_SOLVE_STEP_DEG = 0.25;
-        public static double ENC1_FORWARD_OFFSET_DEG = 0.0;
-        public static double ENC2_FORWARD_OFFSET_DEG = 0.0;
+        public static double ENC1_FORWARD_OFFSET_DEG = 62.0;
+        public static double ENC2_FORWARD_OFFSET_DEG = 175.0;
         public static final boolean ENC1_INVERT = false;
         public static final boolean ENC2_INVERT = false;
 

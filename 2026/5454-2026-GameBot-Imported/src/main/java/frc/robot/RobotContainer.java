@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.TurretSubsystemOverlap;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 // import frc.robot.subsystems.shooter.ShooterSubsystem; // unused
 import frc.robot.utilities.JacksonsCoolPanel;
@@ -77,7 +76,8 @@ public class RobotContainer {
   // use the overlap implementation so CANcoder values are read and pushed
   // to Shuffleboard; the old 'Pots' class only used the potentiometer and
   // ignored the encoders.
-  public final TurretSubsystemOverlap m_TurretSubsystem = new TurretSubsystemOverlap();
+  public final TurretSubsystemPots m_TurretSubsystem = new TurretSubsystemPots(Constants.TurretConstants.turretCanID,TurretConstants.encoder1CANID,
+                                                    TurretConstants.encoder2CANID,TurretConstants.TurretPOT);
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
@@ -241,13 +241,9 @@ public class RobotContainer {
     m_FunnyController.b().whileTrue(newHoodUp);
     m_FunnyController.x().whileTrue(newHoodDown);
     m_FunnyController.leftBumper().whileTrue(newVelocityShot);
-    m_FunnyController.povRight().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(TurretConstants.turretSpeed),
-                                                              ()->m_TurretSubsystem.stopTurret(),
-                                                              m_TurretSubsystem));
-    m_FunnyController.povLeft().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(-TurretConstants.turretSpeed),
-                                                              ()->m_TurretSubsystem.stopTurret(),
-                                                              m_TurretSubsystem));
-  
+    m_FunnyController.povRight().whileTrue(new MoveTurretCommand(m_TurretSubsystem,TurretConstants.turretSpeed));
+    m_FunnyController.povLeft().whileTrue(new MoveTurretCommand(m_TurretSubsystem,-TurretConstants.turretSpeed));
+    m_FunnyController.povUp().whileTrue(m_TurretSubsystem.setMotortoZero());
   }
 
   private void updateisHubMatched(int Shift){

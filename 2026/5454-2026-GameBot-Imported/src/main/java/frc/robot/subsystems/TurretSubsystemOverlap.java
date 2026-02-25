@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,15 +18,17 @@ public class TurretSubsystemOverlap extends SubsystemBase {
   private final TalonFX m_turretMotor;
   private final CANcoder m_encoder1;
   private final CANcoder m_encoder2;
+  private AnalogPotentiometer m_POTS;
 
-  public TurretSubsystemOverlap(int motorCanId, int encoder1Id, int encoder2Id) {
+  public TurretSubsystemOverlap(int motorCanId, int encoder1Id, int encoder2Id,int POTSPort) {
     m_turretMotor = new TalonFX(motorCanId);
     m_encoder1 = new CANcoder(encoder1Id);
     m_encoder2 = new CANcoder(encoder2Id);
-
+    m_POTS = new AnalogPotentiometer(POTSPort,1,0); 
+    
     // Keep your existing direction setup (edit if needed)
     CANcoderConfiguration encoder1Config = new CANcoderConfiguration();
-    encoder1Config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    encoder1Config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
     m_encoder1.getConfigurator().apply(encoder1Config);
 
     CANcoderConfiguration encoder2Config = new CANcoderConfiguration();
@@ -34,7 +37,7 @@ public class TurretSubsystemOverlap extends SubsystemBase {
   }
 
   public TurretSubsystemOverlap() {
-    this(TurretConstants.turretCanID, TurretConstants.encoder1CANID, TurretConstants.encoder2CANID);
+    this(TurretConstants.turretCanID, TurretConstants.encoder1CANID, TurretConstants.encoder2CANID,TurretConstants.TurretPOT);
   }
 
   public static double calculateTurretAngleFromCANCoderDegrees(double e1, double e2) {
@@ -99,7 +102,9 @@ public class TurretSubsystemOverlap extends SubsystemBase {
   public void showEncoderPositions() {
     double e1Degrees = m_encoder1.getAbsolutePosition().getValueAsDouble() * 360.0;
     double e2Degrees = m_encoder2.getAbsolutePosition().getValueAsDouble() * 360.0;
-
+    SmartDashboard.putNumber("Encoder 1 Raw", m_encoder1.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber("Encoder 2 Raw", m_encoder2.getAbsolutePosition().getValueAsDouble());
+ 
     SmartDashboard.putNumber("Encoder 1 ANG", e1Degrees);
     SmartDashboard.putNumber("Encoder 2 ANG", e2Degrees);
 
@@ -153,5 +158,8 @@ public class TurretSubsystemOverlap extends SubsystemBase {
   public void periodic() {
     // called once per scheduler run (about every 20ms)
     showEncoderPositions();
+   SmartDashboard.putNumber("POTS",m_POTS.get());
+    SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/10);
+ 
   }
 }
