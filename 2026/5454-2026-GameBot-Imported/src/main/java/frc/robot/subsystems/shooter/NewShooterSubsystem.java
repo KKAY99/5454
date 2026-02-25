@@ -17,7 +17,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;

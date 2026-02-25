@@ -186,7 +186,7 @@ public class RobotContainer {
     m_CustomController.a().whileTrue(agitate);
     m_CustomController.y().whileTrue(intake);
     m_CustomController.x().toggleOnTrue(intake);
-    m_CustomController.b().whileTrue(shoot);
+    m_CustomController.leftTrigger().whileTrue(shoot);
     m_CustomController.rightBumper().onTrue(ShootDepotShootNZ());
     m_CustomController.leftBumper().onTrue(Right2Left());
 
@@ -236,7 +236,7 @@ public class RobotContainer {
     m_FunnyController.a().whileTrue(newShoot);
     m_FunnyController.b().whileTrue(newHoodUp);
     m_FunnyController.x().whileTrue(newHoodDown);
-    m_FunnyController.leftBumper().whileTrue(newVelocityShot);
+    m_FunnyController.povUp().whileTrue(newVelocityShot);
     m_FunnyController.povRight().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(TurretConstants.turretSpeed),
                                                               ()->m_TurretSubsystem.stopTurret(),
                                                               m_TurretSubsystem));
