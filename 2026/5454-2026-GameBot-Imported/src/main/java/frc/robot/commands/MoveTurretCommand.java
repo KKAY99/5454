@@ -16,12 +16,14 @@ public class MoveTurretCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+     m_turret.moveTurret(m_speed);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_turret.moveTurret(m_speed);
+   
   }
 
   // Called once the command ends or is interrupted.
@@ -33,7 +35,12 @@ public class MoveTurretCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_turret.atLimit(m_speed);
+    boolean returnValue=false;
+    if(m_turret.atLimit(m_speed)){
+      m_turret.stopTurret();
+      returnValue=true;
+    }
+    return returnValue;
   }
 }
 

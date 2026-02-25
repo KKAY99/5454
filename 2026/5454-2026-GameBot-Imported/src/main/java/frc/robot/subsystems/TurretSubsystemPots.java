@@ -41,8 +41,8 @@ public class TurretSubsystemPots extends SubsystemBase {
   private CANcoder m_encoder1;
   private CANcoder m_encoder2;
   private AnalogPotentiometer m_POTS;
-  private final double kPotsLowLimit=0.20;
-  private final double kPotsHighLimit=0.80;
+  private final double kPotsLowLimit=0.30;
+  private final double kPotsHighLimit=0.70;
   private final double kGearReduction=10;  
   public TurretSubsystemPots(int CanId1, int encoder1ID, int encoder2ID,int potsPort) {
     m_POTS = new AnalogPotentiometer(potsPort,1,0); 
@@ -117,13 +117,10 @@ public class TurretSubsystemPots extends SubsystemBase {
                                           this);
   }
 
-  public Command turretMoveManualCommand(){
-    return Commands.runOnce(    ()->moveTurret(TurretConstants.turretSpeed),this);
-  }
-  public Command turretStopManualCommand(){
-    return Commands.runOnce(    ()->stopTurret(),this);
-  }
+  
   public void periodic(){
+    SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));
+    SmartDashboard.putBoolean("At Low Limit Limit",atLimit(-1));
     SmartDashboard.putNumber("Motor Rotations",m_turretMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("POTS",m_POTS.get());
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/kGearReduction);
