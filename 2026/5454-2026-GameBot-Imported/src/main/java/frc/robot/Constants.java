@@ -188,6 +188,16 @@ public final class Constants {
     public static final int GEAR_1_TOOTH_COUNT = 40;
     public static final int GEAR_2_TOOTH_COUNT = 41;
 
+            // Added absolute turret system constants
+        public static final double MOTOR_TO_TURRET_RATIO = 45.7143;
+        public static final double ENC1_RATIO = 8.0;
+        public static final double ENC2_RATIO = 320.0 / 41.0;
+        public static final double ABSOLUTE_SOLVE_STEP_DEG = 0.25;
+        public static double ENC1_FORWARD_OFFSET_DEG = 0.0;
+        public static double ENC2_FORWARD_OFFSET_DEG = 0.0;
+        public static final boolean ENC1_INVERT = false;
+        public static final boolean ENC2_INVERT = false;
+
   }
   public static final class ClimbConstants{
     public static final int climbCanID1=26;

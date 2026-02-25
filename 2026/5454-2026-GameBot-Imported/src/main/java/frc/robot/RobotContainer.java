@@ -20,8 +20,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.TurretSubsystemOverlap;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
+// import frc.robot.subsystems.shooter.ShooterSubsystem; // unused
 import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Leds;
 import frc.robot.utilities.Limelight;
@@ -73,8 +74,10 @@ public class RobotContainer {
                                                          Constants.ShooterConstants.hoodCANID);
   public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID,
                                                          Constants.ShooterConstants.fuelSensorDIO);
-  public final TurretSubsystemPots m_TurretSubsystem = new TurretSubsystemPots(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID,
-                                                   Constants.TurretConstants.encoder2CANID,Constants.TurretConstants.TurretPOT);
+  // use the overlap implementation so CANcoder values are read and pushed
+  // to Shuffleboard; the old 'Pots' class only used the potentiometer and
+  // ignored the encoders.
+  public final TurretSubsystemOverlap m_TurretSubsystem = new TurretSubsystemOverlap();
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
