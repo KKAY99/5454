@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
+// import frc.robot.subsystems.shooter.ShooterSubsystem; // unused
 import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Leds;
 import frc.robot.utilities.Limelight;
@@ -73,7 +73,11 @@ public class RobotContainer {
                                                          Constants.ShooterConstants.hoodCANID);
   public final HopperSubsystem m_hopper = new HopperSubsystem(Constants.HopperConstants.HopperMotorCanID,
                                                          Constants.ShooterConstants.fuelSensorDIO);
-  public final TurretSubsystemOverlap m_TurretSubsystem = new TurretSubsystemOverlap(Constants.TurretConstants.turretCanID, Constants.TurretConstants.encoder1CANID, Constants.TurretConstants.encoder2CANID);
+  // use the overlap implementation so CANcoder values are read and pushed
+  // to Shuffleboard; the old 'Pots' class only used the potentiometer and
+  // ignored the encoders.
+  public final TurretSubsystemPots m_TurretSubsystem = new TurretSubsystemPots(Constants.TurretConstants.turretCanID,TurretConstants.encoder1CANID,
+                                                    TurretConstants.encoder2CANID,TurretConstants.TurretPOT);
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
@@ -129,8 +133,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
     NamedCommands.registerCommand("NEWshooton", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
-    NamedCommands.registerCommand("turretManualMove", m_TurretSubsystem.turretMoveManualCommand());
-    NamedCommands.registerCommand("turretManualStop", m_TurretSubsystem.turretStopManualCommand());
+    NamedCommands.registerCommand("turretManualMove", new WaitCommand(2) );
+    NamedCommands.registerCommand("turretManualStop", new WaitCommand(2));
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
   }
@@ -239,17 +243,10 @@ public class RobotContainer {
     m_FunnyController.a().whileTrue(foldOut);
     m_FunnyController.b().whileTrue(foldIn);
     m_FunnyController.x().whileTrue(newHoodDown);
-
-    m_FunnyController.leftTrigger().whileTrue(shoot);
-
-    m_FunnyController.povUp().whileTrue(newVelocityShot);
-    m_FunnyController.povRight().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(TurretConstants.turretSpeed),
-                                                              ()->m_TurretSubsystem.stopTurret(),
-                                                              m_TurretSubsystem));
-    m_FunnyController.povLeft().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(-TurretConstants.turretSpeed),
-                                                              ()->m_TurretSubsystem.stopTurret(),
-                                                              m_TurretSubsystem));
-  
+    m_FunnyController.leftBumper().whileTrue(newVelocityShot);
+    m_FunnyController.povRight().whileTrue(new MoveTurretCommand(m_TurretSubsystem,TurretConstants.turretSpeed));
+    m_FunnyController.povLeft().whileTrue(new MoveTurretCommand(m_TurretSubsystem,-TurretConstants.turretSpeed));
+    m_FunnyController.povUp().whileTrue(m_TurretSubsystem.setMotortoZero());
   }
 
   private void updateisHubMatched(int Shift){
