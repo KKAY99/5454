@@ -16,6 +16,7 @@ public final class Constants {
   public static final int k26Amp=26;
   public static final int k15Amp=15;
   public static final int k40Amp=40;
+  public static final int k70Amp=70;
   public static final int k80Amp=80;
   public static final int pdhCAN=1;
   
@@ -136,11 +137,12 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int IntakeMotorCanID=24;
-    public static final int LowMotorCanID=59;
+    public static final int FoldMotorCanID=59;
     public static final double lowSpeed=-0.5;
     public static final double highSpeed=-0.9;
     public static final double outtakeSpeed=0.9;
-  
+    public static final double foldSpeed=0.2;
+    public static final double ampStop=10;
   }
 
   public static final class PassConstants{    
@@ -157,7 +159,7 @@ public final class Constants {
     //speeds
     public static final double shooterRPM=5000;
     public static final double IdleSpeed=0.5;
-    public static final double KickerSpeed=1;
+    public static final double KickerSpeed=-1; //pos 1 for B-bot
     public static final double shootSpeed=1;
     //6328 Transforms for Turret
     public static Transform3d robotToTurret = new Transform3d(-0.19685, 0.0, 0.44, Rotation3d.kZero);

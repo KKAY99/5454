@@ -24,7 +24,7 @@ public class HopperSubsystem extends SubsystemBase {
   //private SparkAbsoluteEncoder m_encoder;
 
   public HopperSubsystem(int CanId1, int fuelSensorDIO) {
-    m_hopperMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true);
+    m_hopperMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true, Constants.k70Amp);
     m_BREAK = new DigitalInput(fuelSensorDIO);
    }
 
