@@ -66,7 +66,7 @@ public class RobotContainer {
   private CommandXboxController m_FunnyController = new CommandXboxController(InputControllers.kFunnyController);
   //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
-  public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID);
+  public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID, Constants.IntakeConstants.FoldMotorCanID);
   public final NewShooterSubsystem m_newShooter = new NewShooterSubsystem(Constants.ShooterConstants.shooter1CANID,
                                                          Constants.ShooterConstants.shooter2CANID,
                                                          Constants.ShooterConstants.kickerCANID,
@@ -230,12 +230,18 @@ public class RobotContainer {
                                            m_newShooter);
     Command turretMove = m_TurretSubsystem.turretManualCommand();
 
+    Command foldOut = new IntakeRotateCommand(m_intake, Constants.IntakeConstants.foldSpeed);
+    Command foldIn = new IntakeIntakeCommand(m_intake, Constants.IntakeConstants.foldSpeed);
+
     m_FunnyController.leftBumper().whileTrue(intake);
     m_FunnyController.rightBumper().whileTrue(agitate);
-    m_FunnyController.y().whileTrue(turretMove);
-    m_FunnyController.a().whileTrue(newShoot);
-    m_FunnyController.b().whileTrue(newHoodUp);
+    m_FunnyController.y().whileTrue(newHoodUp);
+    m_FunnyController.a().whileTrue(foldOut);
+    m_FunnyController.b().whileTrue(foldIn);
     m_FunnyController.x().whileTrue(newHoodDown);
+
+    m_FunnyController.leftTrigger().whileTrue(shoot);
+
     m_FunnyController.povUp().whileTrue(newVelocityShot);
     m_FunnyController.povRight().whileTrue(Commands.startEnd( ()->m_TurretSubsystem.moveTurret(TurretConstants.turretSpeed),
                                                               ()->m_TurretSubsystem.stopTurret(),

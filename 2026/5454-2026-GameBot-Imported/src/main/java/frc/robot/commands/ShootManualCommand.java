@@ -50,7 +50,7 @@ public class ShootManualCommand extends Command {
   @Override
   public boolean isFinished() {
 
-    boolean returnValue=false;
+  boolean returnValue=false;
 
     
   
