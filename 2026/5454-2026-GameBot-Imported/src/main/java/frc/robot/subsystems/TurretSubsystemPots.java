@@ -37,6 +37,7 @@ import static edu.wpi.first.units.Units.Rotations;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.configs.Slot0Configs;
 
 public class TurretSubsystemPots extends SubsystemBase {
   private TalonFX m_turretMotor;
@@ -125,11 +126,10 @@ public class TurretSubsystemPots extends SubsystemBase {
    return Commands.runOnce(() ->m_turretMotor.setPosition(0));
   }
 
-private configureMotionMagic(){}
+private void configureMotionMagic(){}
   // in init function
 TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
-
-// set slot 0 gains
+/*// set slot 0 gains
 Slot0Configs slot0Configs = talonFXConfigs.Slot0;
 slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
 slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
@@ -153,6 +153,7 @@ m_talonFX.getConfigurator().apply(talonFXConfigs);
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/kGearReduction);
     SmartDashboard.putNumber("POTS Offset Angle",(m_POTS.get()*3600/kGearReduction)-225);
     //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
-    //SmartDashboard.putNumber("POTS",m_POTS.;
+    //SmartDashboard.putNumber("POTS",m_POTS.; */
+
   }
 }
