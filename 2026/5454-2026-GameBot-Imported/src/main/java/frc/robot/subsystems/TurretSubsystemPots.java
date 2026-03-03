@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
-import lombok.var;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants;
@@ -47,6 +46,7 @@ public class TurretSubsystemPots extends SubsystemBase {
   private final double kPotsLowLimit=0.20;
   private final double kPotsHighLimit=0.80;
   private final double kGearReduction=8;  //80t to 10tooth
+  private final double kMotorRotationsToAngle=0.127;
   public TurretSubsystemPots(int CanId1, int encoder1ID, int encoder2ID,int potsPort) {
     m_POTS = new AnalogPotentiometer(potsPort,1,0); 
     m_turretMotor = new TalonFX(CanId1);
@@ -119,14 +119,14 @@ public class TurretSubsystemPots extends SubsystemBase {
                                           ()->stopTurret(),
                                           this);
   }
-  public Command moveMotor(double target motorRotation){
-    m_turretMotor.setControl(null) 
-  }
+  /* public Command moveMotor(double targetmotorRotation){
+   m_turretMotor.setControl(null) 
+  } */
   public Command setMotortoZero(){
    return Commands.runOnce(() ->m_turretMotor.setPosition(0));
   }
 
-private void configureMotionMagic(){}
+private void configureMotionMagic(){
   // in init function
 TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
 /*// set slot 0 gains
@@ -144,7 +144,13 @@ motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 
 motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
 motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
-m_talonFX.getConfigurator().apply(talonFXConfigs);
+m_talonFX.getConfigurator().apply(talonFXConfigs);*/
+} 
+private double getMotorAngle(){
+ return 34.0;
+}
+
+
   public void periodic(){
     SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));
     SmartDashboard.putBoolean("At Low Limit Limit",atLimit(-1));
@@ -153,7 +159,7 @@ m_talonFX.getConfigurator().apply(talonFXConfigs);
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/kGearReduction);
     SmartDashboard.putNumber("POTS Offset Angle",(m_POTS.get()*3600/kGearReduction)-225);
     //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
-    //SmartDashboard.putNumber("POTS",m_POTS.; */
+    //SmartDashboard.putNumber("POTS",m_POTS.; 
 
   }
 }
