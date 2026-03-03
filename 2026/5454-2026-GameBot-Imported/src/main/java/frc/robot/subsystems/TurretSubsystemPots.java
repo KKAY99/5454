@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
@@ -38,6 +41,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.configs.Slot0Configs;
 
+
 public class TurretSubsystemPots extends SubsystemBase {
   private TalonFX m_turretMotor;
   private CANcoder m_encoder1;
@@ -45,14 +49,22 @@ public class TurretSubsystemPots extends SubsystemBase {
   private AnalogPotentiometer m_POTS;
   private final double kPotsLowLimit=0.20;
   private final double kPotsHighLimit=0.80;
+  private double kLowerLimit=-20;
+  private double kUpperLimit=19;
   private final double kGearReduction=8;  //80t to 10tooth
   private final double kMotorRotationsToAngle=0.127;
+  private final double kDegreesPerRotation=7.86;
+  private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
   public TurretSubsystemPots(int CanId1, int encoder1ID, int encoder2ID,int potsPort) {
+    SmartDashboard.putNumber("Target Angle",0);
     m_POTS = new AnalogPotentiometer(potsPort,1,0); 
     m_turretMotor = new TalonFX(CanId1);
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
     motorConfig.MotorOutput.NeutralMode=NeutralModeValue.Brake;
     m_turretMotor.getConfigurator().apply(motorConfig);
+    configureMotionMagic();
+     
+
     m_encoder1 = new CANcoder(encoder1ID);
     
 
@@ -119,9 +131,14 @@ public class TurretSubsystemPots extends SubsystemBase {
                                           ()->stopTurret(),
                                           this);
   }
-  /* public Command moveMotor(double targetmotorRotation){
-   m_turretMotor.setControl(null) 
-  } */
+  private void moveMotor(double targetmotorPosition){
+    if((targetmotorPosition>kLowerLimit) && (targetmotorPosition<kUpperLimit)){ 
+         m_turretMotor.setControl(mmRequest.withPosition(targetmotorPosition)); 
+ 
+    } else {
+      System.out.println("Move Target out of Range");
+    }
+      } 
   public Command setMotortoZero(){
    return Commands.runOnce(() ->m_turretMotor.setPosition(0));
   }
@@ -129,7 +146,7 @@ public class TurretSubsystemPots extends SubsystemBase {
 private void configureMotionMagic(){
   // in init function
 TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
-/*// set slot 0 gains
+// set slot 0 gains
 Slot0Configs slot0Configs = talonFXConfigs.Slot0;
 slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
 slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
@@ -139,17 +156,33 @@ slot0Configs.kI = 0; // no output for integrated error
 slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
 
 // set Motion Magic settings
-var motionMagicConfigs = talonFXConfigs.MotionMagic;
-motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
-motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
+MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
+motionMagicConfigs.MotionMagicCruiseVelocity = 20;//80; // Target cruise velocity of 80 rps
+motionMagicConfigs.MotionMagicAcceleration = 40;////160; // Target acceleration of 160 rps/s (0.5 seconds)
 motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
-m_talonFX.getConfigurator().apply(talonFXConfigs);*/
+m_turretMotor.getConfigurator().apply(talonFXConfigs);
 } 
-private double getMotorAngle(){
- return 34.0;
+private double getTurretAngleFromMotor(){
+  double motorPos=m_turretMotor.getPosition().getValueAsDouble();
+  double returnValue=0;
+  if(motorPos>=0){
+     returnValue=motorPos*kDegreesPerRotation;
+  } else {
+     returnValue= 360-(Math.abs(motorPos)*kDegreesPerRotation);
+  }
+  return returnValue;
 }
 
+private double getTargetMotorPosition(double targetangle){
+  double returnValue=0;
+  if(targetangle<180){
+      returnValue=targetangle*kMotorRotationsToAngle;
+  }else { // going negative
+      returnValue=(360-targetangle)*-1*kMotorRotationsToAngle; // flip the sign and go that degrees to the other direction
+  }
+ return returnValue;
+}
 
   public void periodic(){
     SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));
@@ -158,6 +191,14 @@ private double getMotorAngle(){
     SmartDashboard.putNumber("POTS",m_POTS.get());
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/kGearReduction);
     SmartDashboard.putNumber("POTS Offset Angle",(m_POTS.get()*3600/kGearReduction)-225);
+    SmartDashboard.putNumber("Motor Rotation Angle",getTurretAngleFromMotor());
+    double angle=SmartDashboard.getNumber("Target Angle",0);
+    
+    double targetPos=getTargetMotorPosition(angle);
+    if(!(angle==0))
+    {
+      moveMotor(targetPos);
+    }SmartDashboard.putNumber("Target Pos",targetPos);
     //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
     //SmartDashboard.putNumber("POTS",m_POTS.; 
 
