@@ -135,6 +135,9 @@ public final class Constants {
     public static final double driveInputGain=0.5;
   }
 
+  public static final class HubConstants{
+ //   public Pose2d redHub= new Pose2D(12.5051566,3.6657534,0); 
+    }
   public static final class IntakeConstants{
     public static final int IntakeMotorCanID=24;
     public static final int FoldMotorCanID=59;

@@ -41,7 +41,6 @@ public class IntakeIntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("current spike... Stopping Fold");
     m_intake.stopFold();
   }
 
@@ -51,13 +50,13 @@ public class IntakeIntakeCommand extends Command {
     
   boolean returnValue=false;
 
-    
-  
+      
   System.out.println("Shooting - State:" + m_state);
     switch(m_state){
     case ROTATE:
         m_intake.outFold(Constants.IntakeConstants.foldSpeed);
         if(m_intake.getFoldState()>Constants.IntakeConstants.ampStop) {
+            System.out.println("current spike... Stopping Fold");
             m_state=foldingStates.END;
         }
     break;
