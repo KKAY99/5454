@@ -4,6 +4,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.VecBuilder;
@@ -29,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -86,6 +89,8 @@ public class RobotContainer {
 
  
   private final SendableChooser<Command> m_autoChooser;
+  private final SendableChooser<String> m_pathChooser = new SendableChooser<>();
+
 
  //AutoSetup
   public Command Left2Neutral() {
@@ -121,6 +126,11 @@ public class RobotContainer {
     createAutonomousCommandList(); 
     configureButtonBindings();
     resetDefaultCommand();
+
+    m_pathChooser.setDefaultOption("Left2Neutral", "Left2Neutral");
+    m_pathChooser.addOption("Right2Left", "Right2Left");
+    m_pathChooser.addOption("ShootDepotShootNZ", "ShootDepotShootNZ");
+    SmartDashboard.putData("Path Chooser", m_pathChooser);
     //m_swerve.playMusic("Indiana.chrp");
   }
 
@@ -549,9 +559,40 @@ return pathfindingCommand;
   }
 
   public Command getAutonomousCommand(){
-    Command command=m_autoChooser.getSelected();
-    return command;
+    String selectedPath = m_pathChooser.getSelected();
+    if (selectedPath == null || selectedPath.isEmpty()) {
+      // fallback to existing chooser
+      return m_autoChooser.getSelected();
+    }
 
+    try {
+      // Load the path group to obtain the initial pose of the first trajectory.
+      // Use suitable constraints here (these only affect loading; path-following will be handled by the PathPlannerAuto command).
+    PathConstraints goToConstraints = new PathConstraints(3.0, 4.0,
+      Units.degreesToRadians(540), Units.degreesToRadians(720));
+      List<PathPlannerPath> group = PathPlannerAuto.getPathGroupFromAutoFile(selectedPath);
+
+      if (group == null || group.isEmpty()) {
+        return m_autoChooser.getSelected(); // Falling back to the initial chooser
+      }
+      
+      Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
+
+      Command goToStart = AutoBuilder.pathfindToPose(
+        startPose,
+        goToConstraints,
+        0.0
+      );
+
+      Command followAuto = new PathPlannerAuto(selectedPath);
+
+      // go to start pos then call auto
+      return Commands.sequence(goToStart, followAuto);
+    } catch (Exception e) {
+      // if anything goes wrong (it probably will), fall back to whatever the original chooser provides
+      System.out.println("Failed to build go-to-start sequence: " + e.getMessage());
+      return m_autoChooser.getSelected();
+    }
   }
  
   private void resetDefaultCommand(){
