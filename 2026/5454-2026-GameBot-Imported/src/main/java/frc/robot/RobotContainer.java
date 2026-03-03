@@ -239,11 +239,11 @@ public class RobotContainer {
 
     m_FunnyController.leftBumper().whileTrue(intake);
     m_FunnyController.rightBumper().whileTrue(agitate);
+    m_FunnyController.leftTrigger().whileTrue(shoot);
     m_FunnyController.y().whileTrue(newHoodUp);
     m_FunnyController.a().whileTrue(foldOut);
     m_FunnyController.b().whileTrue(foldIn);
     m_FunnyController.x().whileTrue(newHoodDown);
-    m_FunnyController.leftBumper().whileTrue(newVelocityShot);
     m_FunnyController.povRight().whileTrue(new MoveTurretCommand(m_TurretSubsystem,TurretConstants.turretSpeed));
     m_FunnyController.povLeft().whileTrue(new MoveTurretCommand(m_TurretSubsystem,-TurretConstants.turretSpeed));
     m_FunnyController.povUp().whileTrue(m_TurretSubsystem.setMotortoZero());

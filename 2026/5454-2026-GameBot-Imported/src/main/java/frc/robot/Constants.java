@@ -136,8 +136,8 @@ public final class Constants {
   }
 
   public static final class IntakeConstants{
-    public static final int IntakeMotorCanID=24;
-    public static final int FoldMotorCanID=59;
+    public static final int IntakeMotorCanID=59;
+    public static final int FoldMotorCanID=24;
     public static final double lowSpeed=-0.5;
     public static final double highSpeed=-0.9;
     public static final double outtakeSpeed=0.9;
