@@ -51,6 +51,7 @@ import frc.robot.Constants.LedConstants;
 import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.Constants.TurretStates;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -257,6 +258,7 @@ public class RobotContainer {
     m_FunnyController.povRight().whileTrue(new MoveTurretCommand(m_TurretSubsystem,TurretConstants.turretSpeed));
     m_FunnyController.povLeft().whileTrue(new MoveTurretCommand(m_TurretSubsystem,-TurretConstants.turretSpeed));
     m_FunnyController.povUp().whileTrue(m_TurretSubsystem.setMotortoZero());
+    m_FunnyController.povDown().onTrue(new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK));
   }
 
   private void updateisHubMatched(int Shift){

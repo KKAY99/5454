@@ -183,6 +183,9 @@ private double getTargetMotorPosition(double targetangle){
   }
  return returnValue;
 }
+public double getCurrentAngle(){
+  return getTurretAngleFromMotor();
+}
 
   public void periodic(){
     SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));
