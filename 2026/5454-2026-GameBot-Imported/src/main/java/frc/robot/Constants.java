@@ -135,8 +135,10 @@ public final class Constants {
     public static final double driveInputGain=0.5;
   }
 
-  public static final class HubConstants{
- //   public Pose2d redHub= new Pose2D(12.5051566,3.6657534,0); 
+  public static final class LocationConstants{
+     public static final Pose2d redHub= new Pose2d(12.5051566,3.6657534,Rotation2d.fromDegrees(0));
+     public static final Pose2d blueHub= new Pose2d(5.21534,3.6657534,Rotation2d.fromDegrees(0));
+     
     }
   public static final class IntakeConstants{
     public static final int IntakeMotorCanID=59;
@@ -178,12 +180,16 @@ public final class Constants {
     public static final double hoodUpSpeed=-0.06;
     public static final double hoodDownSpeed=0.06;
   }
+  public enum TurretStates {MANUAL,TRACK,FIXEDLEFT,FIXEDRIGHT};
   public static final class TurretConstants {
     public static final int turretCanID=6;
     public static final double turretSpeed=0.1;
     public static final int TurretPOT=0;
     public static final int encoder1CANID=11;
     public static final int encoder2CANID=12;
+
+    public static final double trackerDeadBand =1.0;
+
     public static final double REDUCTION = 13.2;
     public static final double MIN_ROT_DEG = -360.0;
     public static final double MAX_ROT_DEG = 360.0;
