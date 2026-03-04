@@ -144,7 +144,7 @@ public final class Constants {
     public static final double lowSpeed=-0.5;
     public static final double highSpeed=-0.9;
     public static final double outtakeSpeed=0.9;
-    public static final double foldSpeed=0.2;
+    public static final double foldSpeed=-0.2;
     public static final double ampStop=10;
   }
 
