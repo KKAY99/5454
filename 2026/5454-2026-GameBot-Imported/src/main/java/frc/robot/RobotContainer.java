@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 // import frc.robot.subsystems.shooter.ShooterSubsystem; // unused
-import frc.robot.utilities.JacksonsCoolPanel;
 import frc.robot.utilities.Leds;
 import frc.robot.utilities.Limelight;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;

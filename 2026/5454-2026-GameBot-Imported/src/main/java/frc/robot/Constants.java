@@ -190,6 +190,12 @@ public final class Constants {
 
     public static final double trackerDeadBand =1.0;
 
+    public static final double kTurretOffsetX=0;
+    public static final double kTurretOffsetY=0;
+    public static final double kMinShootingDistance=0;
+    public static final double kMaxShootingDistance=100;
+    public static final double kMinAngleDegrees=0;
+    public static final double kMaxAngleDegrees=300;
     public static final double REDUCTION = 13.2;
     public static final double MIN_ROT_DEG = -360.0;
     public static final double MAX_ROT_DEG = 360.0;

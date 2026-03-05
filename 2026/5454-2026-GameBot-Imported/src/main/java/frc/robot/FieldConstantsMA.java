@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
  * <p>NOTE: All constants are defined relative to the field coordinate system, and from the
  * perspective of the blue alliance station
  */
-public class FieldConstants {
+public class FieldConstantsMA {
   public static final FieldType fieldType = FieldType.WELDED;
 
   // AprilTag related constants

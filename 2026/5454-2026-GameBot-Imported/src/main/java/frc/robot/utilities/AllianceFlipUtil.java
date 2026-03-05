@@ -10,15 +10,15 @@ package frc.robot.utilities;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
-import frc.robot.FieldConstants;
+import frc.robot.FieldConstantsMA;
 
 public class AllianceFlipUtil {
   public static double applyX(double x) {
-    return shouldFlip() ? FieldConstants.fieldLength - x : x;
+    return shouldFlip() ? FieldConstantsMA.fieldLength - x : x;
   }
 
   public static double applyY(double y) {
-    return shouldFlip() ? FieldConstants.fieldWidth - y : y;
+    return shouldFlip() ? FieldConstantsMA.fieldWidth - y : y;
   }
 
   public static Translation2d apply(Translation2d translation) {

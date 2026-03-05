@@ -60,7 +60,7 @@ public class TurretTrackCommand extends Command {
   private void trackHub(){
     Pose2d currentPose = m_drive.getPose2d();
     Pose2d aimAtPose = getHubPose();
-    double bearing = m_PoseCalc.getBearingAngle( aimAtPose,currentPose);
+    double bearing = m_PoseCalc.getBearingAngle( currentPose,aimAtPose);
     double currentAngle=m_turret.getCurrentAngle();
     double bearingVariance = Math.abs(bearing-currentAngle);
     if(bearingVariance>TurretConstants.trackerDeadBand){

@@ -5,7 +5,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class CompleteIntakeCommand extends Command {
