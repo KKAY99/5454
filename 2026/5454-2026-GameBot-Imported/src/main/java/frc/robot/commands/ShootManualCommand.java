@@ -70,9 +70,9 @@ public class ShootManualCommand extends Command {
       break;
     case SHOOT:
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
-        if(m_hopper.getNoFuel()) {
-          m_state=shooterStates.END;
-        }
+       // if(m_hopper.getNoFuel()) {
+      //    m_state=shooterStates.END;
+      //  }
     break;
     case END:
         returnValue=true;
