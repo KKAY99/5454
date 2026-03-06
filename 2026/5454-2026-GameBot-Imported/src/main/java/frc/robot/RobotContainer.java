@@ -107,7 +107,7 @@ public class RobotContainer {
   }
   public Command getAutonomousCommand(){
     SmartDashboard.putString("Asher's Cool Message:", "It is running");
-
+    //Magic Comment
     if (m_autoChooser == null) {
       // fallback to existing chooser
       SmartDashboard.putString("Asher's Cool Message:", "It aint running");
