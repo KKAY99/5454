@@ -105,7 +105,7 @@ public class RobotContainer {
   public Command ShootDepotShootNZ() {
     return new PathPlannerAuto("ShootDepotShootNZ");
   }
-  public Command getAutonomousCommand(){
+public Command getAutonomousCommand(){
     SmartDashboard.putString("Asher's Cool Message:", "It is running");
     //Magic Comment
     if (m_autoChooser == null) {
@@ -115,11 +115,25 @@ public class RobotContainer {
     }
 
     try {
+      // Prefer the pre-built Command selected in the auto chooser
+      Command selectedAuto = m_autoChooser.getSelected();
+      if (selectedAuto != null) {
+        SmartDashboard.putString("Asher's Cool Message:", "Returning selected Command from auto chooser");
+        return selectedAuto;
+      }
+
+      // If no Command is selected in the auto chooser, optionally try the path chooser
+      String selectedPath = m_pathChooser.getSelected();
+      if (selectedPath == null || selectedPath.isEmpty()) {
+        SmartDashboard.putString("Asher's Cool Message:", "No auto selected");
+        return Commands.none();
+      }
+
       // Load the path group to obtain the initial pose of the first trajectory.
       // Use suitable constraints here (these only affect loading; path-following will be handled by the PathPlannerAuto command).
-    PathConstraints goToConstraints = new PathConstraints(3.0, 4.0,
-      Units.degreesToRadians(540), Units.degreesToRadians(720));
-      List<PathPlannerPath> group = PathPlannerAuto.getPathGroupFromAutoFile(m_autoChooser.toString());
+      PathConstraints goToConstraints = new PathConstraints(3.0, 4.0,
+        Units.degreesToRadians(540), Units.degreesToRadians(720));
+      List<PathPlannerPath> group = PathPlannerAuto.getPathGroupFromAutoFile(selectedPath);
 
       if (group == null || group.isEmpty()) {
         SmartDashboard.putString("Asher's Cool Message:", "It aint running 2");
@@ -133,7 +147,7 @@ public class RobotContainer {
         0.0
       );
 
-      Command followAuto = new PathPlannerAuto(m_autoChooser.getSelected());
+      Command followAuto = new PathPlannerAuto(selectedPath);
 
       // go to start pos then call auto
       SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
@@ -144,7 +158,6 @@ public class RobotContainer {
       return (Commands.none());
     }
   }
-  
 
   //
   public boolean hasHomed=false;
