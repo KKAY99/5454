@@ -131,7 +131,7 @@ public class RobotContainer {
     m_pathChooser.addOption("Right2Left", "Right2Left");
     m_pathChooser.addOption("ShootDepotShootNZ", "ShootDepotShootNZ");
     SmartDashboard.putData("Path Chooser", m_pathChooser);
-    //m_swerve.playMusic("Indiana.chrp");
+    m_TurretSubsystem.playMusic("IndianaJones.chrp");
   }
 
 
@@ -561,6 +561,7 @@ return pathfindingCommand;
 
   public Command getAutonomousCommand(){
     String selectedPath = m_pathChooser.getSelected();
+    
     if (selectedPath == null || selectedPath.isEmpty()) {
       // fallback to existing chooser
       return m_autoChooser.getSelected();
