@@ -105,6 +105,46 @@ public class RobotContainer {
   public Command ShootDepotShootNZ() {
     return new PathPlannerAuto("ShootDepotShootNZ");
   }
+  public Command getAutonomousCommand(){
+    SmartDashboard.putString("Asher's Cool Message:", "It is running");
+
+    if (m_autoChooser == null) {
+      // fallback to existing chooser
+      SmartDashboard.putString("Asher's Cool Message:", "It aint running");
+      return (Commands.none());
+    }
+
+    try {
+      // Load the path group to obtain the initial pose of the first trajectory.
+      // Use suitable constraints here (these only affect loading; path-following will be handled by the PathPlannerAuto command).
+    PathConstraints goToConstraints = new PathConstraints(3.0, 4.0,
+      Units.degreesToRadians(540), Units.degreesToRadians(720));
+      List<PathPlannerPath> group = PathPlannerAuto.getPathGroupFromAutoFile(m_autoChooser.toString());
+
+      if (group == null || group.isEmpty()) {
+        SmartDashboard.putString("Asher's Cool Message:", "It aint running");
+        return m_autoChooser.getSelected(); // Falling back to the initial chooser
+      }
+      
+      Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
+
+      Command goToStart = AutoBuilder.pathfindToPose(
+        startPose,
+        goToConstraints,
+        0.0
+      );
+
+      Command followAuto = new PathPlannerAuto(m_autoChooser.getSelected());
+
+      // go to start pos then call auto
+      SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
+      return Commands.sequence(goToStart, followAuto);
+    } catch (Exception e) {
+      // if anything goes wrong (it probably will), fall back to whatever the original chooser provides
+      SmartDashboard.putString("Asher's Cool Message:",e.getMessage());
+      return m_autoChooser.getSelected();
+    }
+  }
   
 
   //
@@ -196,17 +236,18 @@ public class RobotContainer {
     m_xBoxOperator.rightBumper().whileTrue(passRight);
     
     
-
+    //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
     Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
     
-    m_CustomController.a().whileTrue(agitate);
-    m_CustomController.y().whileTrue(intake);
-    m_CustomController.x().toggleOnTrue(intake);
-    m_CustomController.leftTrigger().whileTrue(shoot);
-    m_CustomController.rightBumper().onTrue(ShootDepotShootNZ());
-    m_CustomController.leftBumper().onTrue(Right2Left());
+    m_CustomController.a().whileTrue(resetPose);
+    m_CustomController.b().whileTrue(doNothing);
+    m_CustomController.y().whileTrue(doNothing);
+    m_CustomController.x().toggleOnTrue(doNothing);
+    m_CustomController.leftTrigger().whileTrue(doNothing);
+    m_CustomController.rightBumper().onTrue(getAutonomousCommand());
+    m_CustomController.leftBumper().onTrue(doNothing);
 
 
 
@@ -556,43 +597,6 @@ return pathfindingCommand;
   public void homeRobot(){
     if(!hasHomed){
       hasHomed = true;
-    }
-  }
-
-  public Command getAutonomousCommand(){
-    String selectedPath = m_pathChooser.getSelected();
-    if (selectedPath == null || selectedPath.isEmpty()) {
-      // fallback to existing chooser
-      return m_autoChooser.getSelected();
-    }
-
-    try {
-      // Load the path group to obtain the initial pose of the first trajectory.
-      // Use suitable constraints here (these only affect loading; path-following will be handled by the PathPlannerAuto command).
-    PathConstraints goToConstraints = new PathConstraints(3.0, 4.0,
-      Units.degreesToRadians(540), Units.degreesToRadians(720));
-      List<PathPlannerPath> group = PathPlannerAuto.getPathGroupFromAutoFile(selectedPath);
-
-      if (group == null || group.isEmpty()) {
-        return m_autoChooser.getSelected(); // Falling back to the initial chooser
-      }
-      
-      Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
-
-      Command goToStart = AutoBuilder.pathfindToPose(
-        startPose,
-        goToConstraints,
-        0.0
-      );
-
-      Command followAuto = new PathPlannerAuto(selectedPath);
-
-      // go to start pos then call auto
-      return Commands.sequence(goToStart, followAuto);
-    } catch (Exception e) {
-      // if anything goes wrong (it probably will), fall back to whatever the original chooser provides
-      System.out.println("Failed to build go-to-start sequence: " + e.getMessage());
-      return m_autoChooser.getSelected();
     }
   }
  
