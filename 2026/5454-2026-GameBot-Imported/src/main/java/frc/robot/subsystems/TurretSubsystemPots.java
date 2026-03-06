@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -44,6 +45,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 
 public class TurretSubsystemPots extends SubsystemBase {
   private TalonFX m_turretMotor;
+  private Orchestra m_robotOrch = new Orchestra();
+      
   private CANcoder m_encoder1;
   private CANcoder m_encoder2;
   private AnalogPotentiometer m_POTS;
@@ -183,6 +186,14 @@ private double getTargetMotorPosition(double targetangle){
   }
  return returnValue;
 }
+public double getCurrentAngle(){
+  return getTurretAngleFromMotor();
+}
+public void playMusic(String fileName){
+        m_robotOrch.loadMusic(fileName);
+        m_robotOrch.addInstrument(m_turretMotor);
+        m_robotOrch.play();
+    }
 
   public void periodic(){
     SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));

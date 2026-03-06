@@ -21,7 +21,7 @@ import lombok.experimental.ExtensionMethod;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.utilities.GeomUtil;
-import frc.robot.FieldConstants;
+import frc.robot.FieldConstantsMA;
 import frc.robot.utilities.AllianceFlipUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -98,7 +98,7 @@ public class ShotCalculator {
 
     // Calculate distance from turret to target
     Translation2d target =
-        AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+        AllianceFlipUtil.apply(FieldConstantsMA.Hub.topCenterPoint.toTranslation2d());
     Pose2d turretPosition =
         swerve.getPose2d().transformBy(Constants.ShooterConstants.robotToTurret.toTransform2d());
         //RobotState.getInstance().getEstimatedPose().transformBy(Constants.ShooterConstants.robotToTurret.toTransform2d());
