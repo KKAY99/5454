@@ -122,12 +122,11 @@ public class RobotContainer {
       List<PathPlannerPath> group = PathPlannerAuto.getPathGroupFromAutoFile(m_autoChooser.toString());
 
       if (group == null || group.isEmpty()) {
-        SmartDashboard.putString("Asher's Cool Message:", "It aint running");
-        return m_autoChooser.getSelected(); // Falling back to the initial chooser
+        SmartDashboard.putString("Asher's Cool Message:", "It aint running 2");
+        return (Commands.none()); // Falling back to the initial chooser
       }
       
       Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
-
       Command goToStart = AutoBuilder.pathfindToPose(
         startPose,
         goToConstraints,
@@ -142,7 +141,7 @@ public class RobotContainer {
     } catch (Exception e) {
       // if anything goes wrong (it probably will), fall back to whatever the original chooser provides
       SmartDashboard.putString("Asher's Cool Message:",e.getMessage());
-      return m_autoChooser.getSelected();
+      return (Commands.none());
     }
   }
   
@@ -246,7 +245,7 @@ public class RobotContainer {
     m_CustomController.y().whileTrue(doNothing);
     m_CustomController.x().toggleOnTrue(doNothing);
     m_CustomController.leftTrigger().whileTrue(doNothing);
-    m_CustomController.rightBumper().onTrue(getAutonomousCommand());
+    m_CustomController.rightBumper().onTrue(Commands.runOnce(()->getAutonomousCommand()));
     m_CustomController.leftBumper().onTrue(doNothing);
 
 
