@@ -107,7 +107,7 @@ public class RobotContainer {
   public Command ShootDepotShootNZ() {
     return new PathPlannerAuto("ShootDepotShootNZ");
   }
-private void getAutonomousCommand(){
+  private void getAutonomousCommand(){
     SmartDashboard.putString("Asher's Cool Message:", "It is running");
     //Magic Comment
     if (m_autoChooser == null) {
@@ -120,7 +120,7 @@ private void getAutonomousCommand(){
         Command selectedAuto = m_autoChooser.getSelected();
         if (selectedAuto != null) {
           SmartDashboard.putString("Asher's Cool Message:", "Returning selected Command from auto chooser");
-  //        Command autoCommand =  ( new PathPlannerAuto(selectedAuto));
+        //Command autoCommand =  ( new PathPlannerAuto(selectedAuto));
       
         }
 
@@ -188,12 +188,16 @@ private void getAutonomousCommand(){
 
     //Named Commands
   public void configureNamedCommands() {
+    //NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
+    NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
+    NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
     NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
     NamedCommands.registerCommand("agitateoff", m_hopper.agitateoffCommand());
     NamedCommands.registerCommand("intakeon", m_intake.intakeonCommand());
     NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
     NamedCommands.registerCommand("NEWshooton", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
+    NamedCommands.registerCommand("shootManual", new ShootManualCommand(m_newShooter,m_hopper));
     NamedCommands.registerCommand("turretManualMove", new WaitCommand(2) );
     NamedCommands.registerCommand("turretManualStop", new WaitCommand(2));
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());

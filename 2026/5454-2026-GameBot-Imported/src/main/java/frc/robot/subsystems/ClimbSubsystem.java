@@ -24,20 +24,20 @@ public class ClimbSubsystem extends SubsystemBase {
     m_climbMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true);
    }
 
-  public void climb(double speed) {
+  public void climbGo(double speed) {
     m_climbMotor.set(speed);
   }
 
-  public void stopClimbe(){
+  public void stopClimb(){
     m_climbMotor.stopMotor();
   }
 
   public Command climbUpCommand() {
-    return Commands.runOnce(    ()->climb(ClimbConstants.climbForwardSpeed),this);
+    return Commands.runOnce(    ()->climbGo(ClimbConstants.climbForwardSpeed),this);
   }
 
   public Command climbDownCommand() {
-    return Commands.runOnce(    ()->climb(ClimbConstants.climbBackSpeed),this);
+    return Commands.runOnce(    ()->climbGo(ClimbConstants.climbBackSpeed),this);
   }
 
 }
