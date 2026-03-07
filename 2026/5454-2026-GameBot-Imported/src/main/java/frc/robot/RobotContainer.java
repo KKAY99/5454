@@ -214,13 +214,17 @@ private void getAutonomousCommand(){
     Command foldOut = new IntakeRotateCommand(m_intake, Constants.IntakeConstants.foldSpeed);
     Command foldIn = new IntakeIntakeCommand(m_intake, Constants.IntakeConstants.foldSpeed);
 
+    m_xBoxDriver.a().whileTrue(foldOut);
+    m_xBoxDriver.b().whileTrue(foldIn);
+
      Command agitate = m_hopper.agitateCommand();
      m_xBoxDriver.x().whileTrue(agitate);     
      m_xBoxOperator.x().whileTrue(agitate);
 
      Command intake = m_intake.intakeCommand();
-     //Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper,m_newShooter);
-     //m_xBoxDriver.y().toggleOnTrue(CompleteIntake);
+     Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper,m_newShooter);
+     m_xBoxDriver.y().whileTrue(CompleteIntake);
+     m_xBoxDriver.rightBumper().toggleOnTrue(intake);
      m_xBoxOperator.y().toggleOnTrue(intake);
 
      Command outtake = m_intake.outtakeCommand();
