@@ -197,7 +197,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
     NamedCommands.registerCommand("NEWshooton", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
-    NamedCommands.registerCommand("shootManual", new ShootManualCommand(m_newShooter,m_hopper));
+    NamedCommands.registerCommand("shootManual", new ShootManualCommand(m_newShooter,m_hopper, m_intake,Constants.ShooterConstants.kAgitateTimeLimit,false));
     NamedCommands.registerCommand("turretManualMove", new WaitCommand(2) );
     NamedCommands.registerCommand("turretManualStop", new WaitCommand(2));
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
