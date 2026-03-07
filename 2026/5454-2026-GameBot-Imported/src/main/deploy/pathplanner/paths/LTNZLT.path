@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.86,
-        "y": 7.427196095829636
+        "x": 4.0,
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.860000000000003,
-        "y": 7.427196095829636
+        "x": 5.0000000000000036,
+        "y": 7.5
       },
       "isLocked": false,
       "linkedName": null
@@ -80,19 +80,32 @@
     },
     {
       "anchor": {
-        "x": 3.0,
+        "x": 4.0,
         "y": 7.5
       },
       "prevControl": {
-        "x": 3.864484375,
-        "y": 7.49245443947129
+        "x": 5.3640368251173705,
+        "y": 7.545500981147301
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6220722386587769,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 2.571504237288134,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 4.440027120315582,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [
     {
@@ -100,7 +113,7 @@
         "x": 7.6,
         "y": 3.5
       },
-      "rotationOffset": 180.0,
+      "rotationOffset": 0.0,
       "minWaypointRelativePos": 2.043388580607476,
       "maxWaypointRelativePos": 2.5459075642523366,
       "name": "Point Towards Zone"

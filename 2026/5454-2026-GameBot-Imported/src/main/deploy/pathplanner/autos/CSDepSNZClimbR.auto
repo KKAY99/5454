@@ -17,13 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "NEWshooton"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "agitateon"
+                  "name": "shootManual"
                 }
               }
             ]
@@ -61,27 +55,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "center2Depot"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "intakeon"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "intakeoff"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Depot2Shoot2"
+            "pathName": "DepotSweep"
           }
         },
         {
@@ -91,13 +73,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "NEWshooton"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "agitateon"
+                  "name": "shootManual"
                 }
               }
             ]
@@ -143,25 +119,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "center2LeftTrench"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeon"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "StartNZShootSpot"
+            "pathName": "LTNZLT"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "intakeoff"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LT2ClimbR"
           }
         }
       ]

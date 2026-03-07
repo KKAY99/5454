@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeon"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LTNZLT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootManual"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LTlitnzLT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootManual"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LTscrapeLT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootManual"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeoff"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
