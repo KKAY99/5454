@@ -110,10 +110,11 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
     m_robot.AutonMode();
 
     // schedule the autonomous command (example)
-    m_autonomousCommand=m_robot.getAutonomousCommand();
+    /*m_autonomousCommand=m_robot.getAutonomousCommand();
     if (m_autonomousCommand != null) {
         CommandScheduler.getInstance().schedule(m_autonomousCommand);   
     }
+    */
   } 
 
   /** This function is called periodically during autonomous. */

@@ -6,6 +6,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.VecBuilder;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.shooter.FieldConstants;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 // import frc.robot.subsystems.shooter.ShooterSubsystem; // unused
 import frc.robot.utilities.Leds;
@@ -105,60 +107,55 @@ public class RobotContainer {
   public Command ShootDepotShootNZ() {
     return new PathPlannerAuto("ShootDepotShootNZ");
   }
-public Command getAutonomousCommand(){
+private void getAutonomousCommand(){
     SmartDashboard.putString("Asher's Cool Message:", "It is running");
     //Magic Comment
     if (m_autoChooser == null) {
-      // fallback to existing chooser
-      SmartDashboard.putString("Asher's Cool Message:", "It aint running");
-      return (Commands.none());
+      SmartDashboard.putString("Asher's Cool Message:", "No Auto Selected");
+     // Don't Run anything
     }
-
-    try {
-      // Prefer the pre-built Command selected in the auto chooser
-      Command selectedAuto = m_autoChooser.getSelected();
-      if (selectedAuto != null) {
-        SmartDashboard.putString("Asher's Cool Message:", "Returning selected Command from auto chooser");
-        return selectedAuto;
-      }
-
-      // If no Command is selected in the auto chooser, optionally try the path chooser
-      String selectedPath = m_pathChooser.getSelected();
-      if (selectedPath == null || selectedPath.isEmpty()) {
-        SmartDashboard.putString("Asher's Cool Message:", "No auto selected");
-        return Commands.none();
-      }
-
-      // Load the path group to obtain the initial pose of the first trajectory.
-      // Use suitable constraints here (these only affect loading; path-following will be handled by the PathPlannerAuto command).
-      PathConstraints goToConstraints = new PathConstraints(3.0, 4.0,
-        Units.degreesToRadians(540), Units.degreesToRadians(720));
-      List<PathPlannerPath> group = PathPlannerAuto.getPathGroupFromAutoFile(selectedPath);
-
-      if (group == null || group.isEmpty()) {
-        SmartDashboard.putString("Asher's Cool Message:", "It aint running 2");
-        return (Commands.none()); // Falling back to the initial chooser
-      }
+    else {
+      try {
+        // Prefer the pre-built Command selected in the auto chooser
+        Command selectedAuto = m_autoChooser.getSelected();
+        if (selectedAuto != null) {
+          SmartDashboard.putString("Asher's Cool Message:", "Returning selected Command from auto chooser");
+  //        Command autoCommand =  ( new PathPlannerAuto(selectedAuto));
       
-      Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
-      Command goToStart = AutoBuilder.pathfindToPose(
-        startPose,
-        goToConstraints,
-        0.0
-      );
+        }
 
-      Command followAuto = new PathPlannerAuto(selectedPath);
+        // Load the path group to obtain the initial pose of the first trajectory.
+        // Use suitable constraints here (these only affect loading; path-following will be handled by the PathPlannerAuto command).
+        PathConstraints goToConstraints = new PathConstraints(3.0, 4.0,
+          Units.degreesToRadians(540), Units.degreesToRadians(720));
+        List<PathPlannerPath> group = PathPlannerAuto.getPathGroupFromAutoFile(selectedAuto.getName());
 
-      // go to start pos then call auto
-      SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
-      return Commands.sequence(goToStart, followAuto);
-    } catch (Exception e) {
-      // if anything goes wrong (it probably will), fall back to whatever the original chooser provides
-      SmartDashboard.putString("Asher's Cool Message:",e.getMessage());
-      return (Commands.none());
+        if (group == null || group.isEmpty()) {
+          SmartDashboard.putString("Asher's Cool Message:", "It aint running 2");
+          //Do Nothing
+        }else {
+        
+          Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
+          startPose=FieldConstants.flipIfRed(startPose);
+          Command goToStart = AutoBuilder.pathfindToPose(
+            startPose,
+            goToConstraints,
+            0.0
+          );
+
+          Command followAuto = new PathPlannerAuto(selectedAuto);
+
+          // go to start pos then call auto
+          SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
+          //add auto to scheduler
+          CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
+          }
+      } catch (Exception e) {
+        // if anything goes wrong (it probably will), fall back to whatever the original chooser provides
+        SmartDashboard.putString("Asher's Cool Message:",e.getMessage());
+      }
     }
   }
-
   //
   public boolean hasHomed=false;
   public boolean m_hasResetGyro=false;
@@ -173,6 +170,8 @@ public Command getAutonomousCommand(){
   //
   public RobotContainer(){
     SmartDashboard.putData("field", m_Field2d);
+    SmartDashboard.putString("Asher's Cool Message:", "Restarted");
+   
     configureNamedCommands();
     m_autoChooser=AutoBuilder.buildAutoChooser();
     createAutonomousCommandList(); 
@@ -470,6 +469,7 @@ public Command getAutonomousCommand(){
   }
    
   public void DisabledPeriodic(){
+    makefalsestartPose();
     /*if(m_rightLimelight.isAnyTargetAvailable()||m_leftLimelight.isAnyTargetAvailable()){
       m_LEDS.setLedState(LEDStates.DISABLEDSEETARGET,false);
     }else{
@@ -525,7 +525,8 @@ public Command getAutonomousCommand(){
     
   Pose2d startPose = new Pose2d(6,7, Rotation2d.fromDegrees(0));
   m_swerve.addVisionMeasurement(startPose,Utils.getCurrentTimeSeconds());
-  }
+
+}
   public Command makeAutoCommandPPTest(){
 
     // Since we are using a holonomic drivetrain, the rotation component of this pose
@@ -571,6 +572,7 @@ return pathfindingCommand;
     }
   }
   public void TeleopPeriodic(){
+    
     refreshSmartDashboard();
     updateLEDs();
     //m_ShotCalculator.clearShootingParameters();
