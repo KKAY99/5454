@@ -17,13 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "NEWshooton"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "agitateon"
+                  "name": "shootManual"
                 }
               }
             ]
@@ -64,12 +58,6 @@
           "type": "named",
           "data": {
             "name": "intakeon"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeoff"
           }
         },
         {
@@ -85,13 +73,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "NEWshooton"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "agitateon"
+                  "name": "shootManual"
                 }
               }
             ]
@@ -135,21 +117,21 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "intakeon"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "StartNZTrenchSpot"
+            "pathName": "LTNZLT"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "intakeoff"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LT2ClimbR"
           }
         }
       ]

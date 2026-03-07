@@ -20,11 +20,11 @@ public class ClimbAutoAlign extends Command {
   private CommandSwerveDrivetrain drivebase;
   private double tagID = 31;
 
-  public ClimbAutoAlign(boolean isRightScore, CommandSwerveDrivetrain drivebase) {
+  public ClimbAutoAlign(boolean isAlignRight, CommandSwerveDrivetrain drivebase) {
     xController = new PIDController(Constants.ClimbConstants.AutoAlign.climbYpos, 0.0, 0);  // Vertical movement
     yController = new PIDController(Constants.ClimbConstants.AutoAlign.climbXpos, 0.0, 0);  // Horitontal movement
     rotController = new PIDController(Constants.ClimbConstants.AutoAlign.alignRotation, 0, 0);  // Rotation
-    this.isRightScore = isRightScore;
+    this.isRightScore = isAlignRight;
     this.drivebase = drivebase;
     addRequirements(drivebase);
   }
