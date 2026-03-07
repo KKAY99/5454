@@ -26,6 +26,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -186,8 +187,15 @@ private double getTargetMotorPosition(double targetangle){
   }
  return returnValue;
 }
+public boolean isOnTargetAngle(double angle){
+  return true;
+}
+
 public double getCurrentAngle(){
   return getTurretAngleFromMotor();
+}
+public void turretTrack(TargetType target){
+
 }
 public void playMusic(String fileName){
         m_robotOrch.loadMusic(fileName);
