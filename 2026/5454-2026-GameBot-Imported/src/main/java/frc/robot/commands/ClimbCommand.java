@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ClimbCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
 
-  public Climbx Command() {
+  public ClimbCommand() {
     
   }
 
