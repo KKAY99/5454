@@ -5,27 +5,50 @@ import frc.robot.Constants;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-
+import frc.robot.subsystems.IntakeSubsystem;
 /** An example command that uses an example subsystem. */
 public class ShootManualCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
 
   private NewShooterSubsystem m_shooter;
   private HopperSubsystem m_hopper;
+  private IntakeSubsystem m_intake;
+  private boolean m_emptyHopper=false;
+  private double m_timeLimit=0;
   private enum shooterStates{
-    SPINUP,WAIT,SHOOT,END
+    SPINUP,WAIT,SHOOT,NOFUEL,EMPTYHOPPER,NOFUEL2NDCHECK,END
   } 
   private shooterStates m_state;
   private double stateStartTime;
+  private double startShootTime;
   private final double kSpinUpTime=1;
-  public ShootManualCommand(NewShooterSubsystem shooter,HopperSubsystem hopper) {
+  public ShootManualCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,double timeLimit,boolean emptyHopper) {
     m_hopper=hopper;
     m_shooter=shooter;
+    m_intake=intake;
+    m_emptyHopper=emptyHopper;
     m_state=shooterStates.SPINUP;
     addRequirements(m_hopper);
     addRequirements(m_shooter);
+    addRequirements(m_intake);
   }
 
+  private boolean checkNoFuelorFuelTimeLimit(){
+    boolean returnValue=false;
+    double currentTime;
+        if(m_hopper.getNoFuel()) {
+          System.out.println("No Fuel Detected...");
+          returnValue=true;
+        }
+        //check time limit if the value is greater than zero
+        //acts a failsafe if FuelSensor is not working
+        currentTime = Timer.getFPGATimestamp();
+        if(m_timeLimit>0 && (currentTime>=startShootTime+m_timeLimit)){
+          System.out.println("Shoot Time Limit Reached... Ending Shoot Command");
+          returnValue=true;
+        }
+        return returnValue;
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -44,12 +67,13 @@ public class ShootManualCommand extends Command {
  
     m_shooter.stopNewShooter();
     m_hopper.stopAgitate();
+    m_intake.intakeoffCommand();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
+  double currentTime;
   boolean returnValue=false;
 
     
@@ -63,17 +87,38 @@ public class ShootManualCommand extends Command {
         m_state=shooterStates.WAIT;
     break;
     case WAIT:
-        double currentTime = Timer.getFPGATimestamp();
+        currentTime = Timer.getFPGATimestamp();
         if(currentTime>=stateStartTime+kSpinUpTime){
+          startShootTime=Timer.getFPGATimestamp();
           m_state=shooterStates.SHOOT;
         }
       break;
     case SHOOT:
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
-       // if(m_hopper.getNoFuel()) {
-      //    m_state=shooterStates.END;
-      //  }
+        m_intake.intakeonCommand();
+        if(checkNoFuelorFuelTimeLimit()){
+          m_state=shooterStates.NOFUEL;
+        }         
     break;
+    case NOFUEL:
+        if(m_emptyHopper){
+          m_state=shooterStates.EMPTYHOPPER;          
+         } else{
+          m_state=shooterStates.END;          
+         }
+      break; 
+    case EMPTYHOPPER:
+        if(m_intake.intakeCurrentLimitCheck()){
+          m_state=shooterStates.NOFUEL2NDCHECK;
+        }else {
+          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);  
+          }
+      break;
+    case NOFUEL2NDCHECK:
+        if(checkNoFuelorFuelTimeLimit()){
+          m_state=shooterStates.END;
+        }
+       break;
     case END:
         returnValue=true;
     break;

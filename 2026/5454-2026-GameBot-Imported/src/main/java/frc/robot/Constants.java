@@ -147,6 +147,7 @@ public final class Constants {
     public static final double highSpeed=-1.0;
     public static final double outtakeSpeed=0.9;
     public static final double foldSpeed=-0.2;
+    public static final double foldSpeedAutoMode=0.15;
     public static final double ampStop=10;
   }
 
@@ -166,6 +167,8 @@ public final class Constants {
     public static final double IdleSpeed=0.5;
     public static final double KickerSpeed=-1; //pos 1 for B-bot
     public static final double shootSpeed=1;
+    public static final double kAgitateTimeLimit=5; //how long to agitate on empty
+
     //6328 Transforms for Turret
     public static Transform3d robotToTurret = new Transform3d(-0.19685, 0.0, 0.44, Rotation3d.kZero);
     public static Transform3d turretToCamera =

@@ -72,7 +72,10 @@ public class IntakeSubsystem extends SubsystemBase {
     return Commands.runOnce(    ()->stopIntake(),this);
   }
 
-  public double getFoldState() {
+  public boolean intakeCurrentLimitCheck(){
+    return getFoldState()>Constants.IntakeConstants.ampStop;
+  }
+  private double getFoldState() {
     return m_fold.getOutputCurrent();
   }
 

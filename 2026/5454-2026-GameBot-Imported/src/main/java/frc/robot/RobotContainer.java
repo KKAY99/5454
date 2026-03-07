@@ -234,7 +234,7 @@ private void getAutonomousCommand(){
     m_xBoxOperator.povDown().whileTrue(climbDown);
     m_xBoxOperator.povUp().whileTrue(climbUp);
 
-    Command shoot = new ShootManualCommand(m_newShooter,m_hopper);
+    Command shoot = new ShootManualCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true);
     m_xBoxDriver.leftTrigger().whileTrue(shoot);
     m_xBoxOperator.leftTrigger().whileTrue(shoot);
 

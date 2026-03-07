@@ -4,12 +4,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.shooter.NewShooterSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeIntakeCommand extends Command {
@@ -55,7 +52,7 @@ public class IntakeIntakeCommand extends Command {
     switch(m_state){
     case ROTATE:
         m_intake.outFold(-Constants.IntakeConstants.foldSpeed);
-        if(m_intake.getFoldState()>Constants.IntakeConstants.ampStop) {
+        if(m_intake.intakeCurrentLimitCheck()) {
             System.out.println("current spike... Stopping Fold");
             m_state=foldingStates.END;
         }

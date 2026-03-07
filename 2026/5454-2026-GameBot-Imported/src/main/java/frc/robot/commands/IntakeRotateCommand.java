@@ -57,7 +57,7 @@ public class IntakeRotateCommand extends Command {
     switch(m_state){
     case ROTATE:
         m_intake.outFold(Constants.IntakeConstants.foldSpeed);
-        if(m_intake.getFoldState()>Constants.IntakeConstants.ampStop) {
+        if(m_intake.intakeCurrentLimitCheck()) {
             m_state=foldingStates.END;
         }
     break;
