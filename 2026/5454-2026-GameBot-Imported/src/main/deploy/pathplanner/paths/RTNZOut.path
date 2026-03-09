@@ -3,89 +3,89 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
-        "y": 7.5
+        "x": 4.2,
+        "y": 0.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.0,
-        "y": 7.5
+        "x": 5.2,
+        "y": 0.5
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.569011150234742,
-        "y": 7.3
+        "x": 6.616135746772301,
+        "y": 0.6597208773474177
       },
       "prevControl": {
-        "x": 6.343414912535392,
-        "y": 7.407732713397086
+        "x": 6.367964616291499,
+        "y": 0.6295366099903831
       },
       "nextControl": {
-        "x": 6.794607387934091,
-        "y": 7.192267286602914
+        "x": 8.801438389451299,
+        "y": 0.9255123056044592
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.7353047058392015,
-        "y": 3.995032552083333
+        "x": 8.09183524977993,
+        "y": 3.5350450227406096
       },
       "prevControl": {
-        "x": 8.875502815067488,
-        "y": 5.142066140331573
+        "x": 8.537046762009162,
+        "y": 3.2750766644008324
       },
       "nextControl": {
-        "x": 7.559057101491302,
-        "y": 3.8177283446836596
+        "x": 7.1510722931338035,
+        "y": 4.08437628374413
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.9117999468163145,
-        "y": 4.171588954298709
+        "x": 6.221246102919601,
+        "y": 2.9801247524207737
       },
       "prevControl": {
-        "x": 6.017977769210746,
-        "y": 3.945256742646068
+        "x": 6.436637909939953,
+        "y": 3.4871701508269144
       },
       "nextControl": {
-        "x": 5.292023043207159,
-        "y": 5.492726214055164
+        "x": 5.912805164319248,
+        "y": 2.2540360457012896
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.9117999468163145,
-        "y": 7.3
+        "x": 5.851285853139672,
+        "y": 0.6597208773474177
       },
       "prevControl": {
-        "x": 6.503993682144953,
-        "y": 6.849407964715375
+        "x": 7.075399519512911,
+        "y": 0.7329811289612667
       },
       "nextControl": {
-        "x": 5.712844367242175,
-        "y": 7.451382553011631
+        "x": 2.943145005084601,
+        "y": 0.4856756590726744
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 7.5
+        "x": 0.476,
+        "y": 0.8723042748679575
       },
       "prevControl": {
-        "x": 4.2499873259402,
-        "y": 7.497482686100554
+        "x": 0.797870644439554,
+        "y": 1.1265840944102103
       },
       "nextControl": null,
       "isLocked": false,
@@ -94,20 +94,28 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.48871414602346774,
+      "waypointRelativePos": 0.45854591836734687,
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 1.3822319100391132,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 1.3216677295918366,
+      "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 2.427000040796343,
+      "waypointRelativePos": 2.227924372874149,
+      "rotationDegrees": -167.0
+    },
+    {
+      "waypointRelativePos": 3.474868463010204,
+      "rotationDegrees": -100.0
+    },
+    {
+      "waypointRelativePos": 3.9464086415816335,
       "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 3.0202808828329006,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 4.182112298044221,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -119,11 +127,11 @@
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,

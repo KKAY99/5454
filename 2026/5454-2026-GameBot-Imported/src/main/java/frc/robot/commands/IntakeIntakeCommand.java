@@ -18,9 +18,8 @@ public class IntakeIntakeCommand extends Command {
   private foldingStates m_state;
   private IntakeSubsystem m_intake;
   private double m_speed;
-  public IntakeIntakeCommand(IntakeSubsystem intake, double speed) {
+  public IntakeIntakeCommand(IntakeSubsystem intake) {
     m_intake = intake;
-    m_speed = -speed;
     m_state=foldingStates.ROTATE;
     addRequirements(intake);
   }

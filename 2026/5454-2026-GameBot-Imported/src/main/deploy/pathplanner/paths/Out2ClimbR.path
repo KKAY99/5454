@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
-        "y": 7.5
+        "x": 0.476,
+        "y": 0.872
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9022189517312205,
-        "y": 7.966003566974765
+        "x": 0.5968531305017606,
+        "y": 1.2032620855340372
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.263695165786385,
-        "y": 3.674167125146713
+        "x": 1.454424286605047,
+        "y": 2.6375868361208914
       },
       "prevControl": {
-        "x": 3.321520725876231,
-        "y": 3.9173876107154566
-      },
-      "nextControl": {
-        "x": 3.1530810317634974,
-        "y": 3.208912256088614
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.4667683575410797,
-        "y": 2.709118113629694
-      },
-      "prevControl": {
-        "x": 2.385054650821597,
-        "y": 2.5976595969043412
+        "x": 0.65467324127054,
+        "y": 2.2441447054724177
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "climbAlignR",
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -65,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

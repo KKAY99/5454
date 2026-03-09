@@ -5,9 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "closeHop2Center"
+            "name": "shootManual"
           }
         },
         {
@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "NEWshooton"
+                  "name": "intakeon"
                 }
               },
               {
@@ -27,49 +27,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "agitateoff"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "NEWshootoff"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeon"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeoff"
           }
         },
         {
@@ -85,7 +42,32 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "NEWshooton"
+                  "name": "agitateoff"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeoff"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootManual"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeon"
                 }
               },
               {
@@ -98,58 +80,28 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "NEWshootoff"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "agitateoff"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeon"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "LTNZLT"
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "intakeoff"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateoff"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeoff"
+                }
+              }
+            ]
           }
         },
         {

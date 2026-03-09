@@ -191,6 +191,8 @@ public class RobotContainer {
     //NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
     NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
     NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
+    NamedCommands.registerCommand("expandIntake", new IntakeRotateCommand(m_intake));
+    NamedCommands.registerCommand("shrinkIntake", new IntakeIntakeCommand(m_intake));
     NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
     NamedCommands.registerCommand("agitateoff", m_hopper.agitateoffCommand());
     NamedCommands.registerCommand("intakeon", m_intake.intakeonCommand());
@@ -215,8 +217,8 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command foldOut = new IntakeRotateCommand(m_intake, Constants.IntakeConstants.foldSpeed);
-    Command foldIn = new IntakeIntakeCommand(m_intake, Constants.IntakeConstants.foldSpeed);
+    Command foldOut = new IntakeRotateCommand(m_intake);
+    Command foldIn = new IntakeIntakeCommand(m_intake);
 
     m_xBoxDriver.a().whileTrue(foldOut);
     m_xBoxDriver.b().whileTrue(foldIn);
@@ -531,7 +533,7 @@ public class RobotContainer {
 
   public void makefalsestartPose(){
     
-  Pose2d startPose = new Pose2d(6,7, Rotation2d.fromDegrees(0));
+  Pose2d startPose = new Pose2d(4,7.5, Rotation2d.fromDegrees(2));
   m_swerve.addVisionMeasurement(startPose,Utils.getCurrentTimeSeconds());
 
 }

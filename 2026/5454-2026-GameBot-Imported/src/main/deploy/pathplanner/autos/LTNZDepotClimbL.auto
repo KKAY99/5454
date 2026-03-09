@@ -5,69 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "shootManual"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "agitateon"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeon"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DepotSweep"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "agitateoff"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeoff"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shootManual"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -99,13 +36,113 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "agitateoff"
+                  "name": "intakeoff"
                 }
               },
               {
                 "type": "named",
                 "data": {
+                  "name": "agitateoff"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootManual"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeon"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateon"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LTlitnzLTflip"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
                   "name": "intakeoff"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateoff"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootManual"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeon"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateon"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotVacuum"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeoff"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "agitateoff"
                 }
               }
             ]
@@ -120,7 +157,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LT2ClimbR"
+            "pathName": "depotClimbR"
           }
         }
       ]
