@@ -5,9 +5,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeon"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "closeHop2Center"
+            "pathName": "RTNZOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeoff"
           }
         },
         {

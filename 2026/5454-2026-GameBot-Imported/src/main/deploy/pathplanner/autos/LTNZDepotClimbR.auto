@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeon"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LTlitnzLTflip"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootManual"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeon"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DepotVacuum"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeoff"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootManual"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "climbAlignR"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
