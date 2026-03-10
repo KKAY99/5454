@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "closeHop2Center"
+            "name": "expandIntake"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "shootManual"
+            "pathName": "DepotShooting"
           }
         }
       ]

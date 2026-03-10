@@ -2,8 +2,13 @@
   "robotWidth": 0.6985,
   "robotLength": 0.6985,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "No Velocity"
+  ],
+  "autoFolders": [
+    "Stop To Shoot",
+    "Runners"
+  ],
   "defaultMaxVel": 5.21208,
   "defaultMaxAccel": 2.25,
   "defaultMaxAngVel": 720.0,

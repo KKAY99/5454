@@ -15,13 +15,16 @@ import frc.robot.subsystems.shooter.NewShooterSubsystem;
 public class IntakeRotateCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
+
   private enum foldingStates{
     ROTATE, END
   }
   private foldingStates m_state;
   private IntakeSubsystem m_intake;
+  private boolean m_reversed;
   private double m_speed;
   public IntakeRotateCommand(IntakeSubsystem intake) {
+    m_reversed = intake.m_reversed;
     m_intake = intake;
     m_state=foldingStates.ROTATE;
     addRequirements(intake);
@@ -55,7 +58,8 @@ public class IntakeRotateCommand extends Command {
   System.out.println("Shooting - State:" + m_state);
     switch(m_state){
     case ROTATE:
-        m_intake.outFold(Constants.IntakeConstants.foldSpeed);
+        double direction = m_reversed ? -1.0 : 1.0;
+        m_intake.outFold(Constants.IntakeConstants.foldSpeed * direction);
         if(m_intake.intakeCurrentLimitCheck()) {
             m_state=foldingStates.END;
         }

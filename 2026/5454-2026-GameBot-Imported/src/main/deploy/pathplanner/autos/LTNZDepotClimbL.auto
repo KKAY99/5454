@@ -155,15 +155,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shrinkIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "depotClimbR"
+            "pathName": "depotClimbL"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Stop To Shoot",
   "choreoAuto": false
 }

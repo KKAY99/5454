@@ -7,13 +7,13 @@
         {
           "type": "named",
           "data": {
-            "name": "intakeon"
+            "name": "expandIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LTNZLT"
+            "pathName": "RTNZRT"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LTlitnzLT"
+            "pathName": "RTNZRT"
           }
         },
         {
@@ -37,25 +37,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LTscrapeLT"
+            "pathName": "RTscrapeRT"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shootManual"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeoff"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Stop To Shoot",
   "choreoAuto": false
 }
