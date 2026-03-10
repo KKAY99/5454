@@ -162,7 +162,7 @@ public class RobotContainer {
   private String m_activeHub="Undefined";
   private String m_startHub="";
   private double m_activeHubTime=99999;
-  private String m_hubMatch="Undefined";
+  private boolean m_hubMatch=false;
   private String m_activeHubPhase="Undefined";
   private ShotCalculator m_ShotCalculator = new ShotCalculator();
   
@@ -338,17 +338,17 @@ public class RobotContainer {
     //Blue Hub is Active
     m_activeHub="Blue";
     if(currentAlliance=="Blue"){
-        m_hubMatch="True";
+        m_hubMatch=true;
     }else {
-        m_hubMatch="False";
+        m_hubMatch=false;
     }
   } else {
     //RED Hub is Active
     m_activeHub="Red";
     if(currentAlliance=="Red"){
-        m_hubMatch="True";
+        m_hubMatch=true;
     }else {
-        m_hubMatch="False";
+        m_hubMatch=false;
     }
   }
   
@@ -366,12 +366,12 @@ public class RobotContainer {
       m_activeHubPhase="Not in Match";
       m_activeHubTime=99999;
       m_activeHub="Both";
-      m_hubMatch="True";
+      m_hubMatch=true;
     }else if(secondsRemaining>kTransitionEnd){
       m_activeHubPhase="Transition Shift";
       m_activeHubTime=secondsRemaining-kTransitionEnd;
       m_activeHub="Both";
-      m_hubMatch="True";
+      m_hubMatch=true;
     }else if(secondsRemaining>kShift1End) {
       m_activeHubPhase="Shift 1";
       m_activeHubTime=secondsRemaining-kShift1End;
@@ -392,7 +392,7 @@ public class RobotContainer {
       m_activeHubPhase="End Game";
       m_activeHubTime=secondsRemaining;
       m_activeHub="Both";
-      m_hubMatch="True";
+      m_hubMatch=true;
     }
     
   }else {
@@ -403,7 +403,7 @@ public class RobotContainer {
   }
   private void updateUndefinedHub(){
     m_activeHub="Undefined";
-    m_hubMatch="Undefined";
+    m_hubMatch=false;
     m_activeHubTime=99999;
 
   }
@@ -444,7 +444,7 @@ public class RobotContainer {
     //m_TurretSubsystem.showEncoderPositions();
     try{
             updateHubStatus();
-      SmartDashboard.putString("Our Hub Active",m_hubMatch);      
+      SmartDashboard.putBoolean("Our Hub Active",m_hubMatch);      
       SmartDashboard.putString("ActiveHub",m_activeHub);
       SmartDashboard.putString("Active Phase",m_activeHubPhase);
       SmartDashboard.putNumber("Active Phase Time",m_activeHubTime);
