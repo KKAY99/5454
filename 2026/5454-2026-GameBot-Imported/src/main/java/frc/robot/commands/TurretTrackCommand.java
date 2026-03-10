@@ -12,6 +12,9 @@ import frc.robot.Constants.TurretStates;
 import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.subsystems.shooter.TurretUtil;
+import frc.robot.subsystems.shooter.TurretUtil.ShotSolution;
+import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 /** An example command that uses an example subsystem. */
 public class TurretTrackCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
@@ -61,6 +64,8 @@ public class TurretTrackCommand extends Command {
     Pose2d currentPose = m_drive.getPose2d();
     Pose2d aimAtPose = getHubPose();
     double bearing = m_PoseCalc.getBearingAngle( currentPose,aimAtPose);
+    ShotSolution solution = TurretUtil.computeShotSolution(currentPose, TargetType.HUB);
+    System.out.println("Solution " + solution.turretAngleDegrees);
     double currentAngle=m_turret.getCurrentAngle();
     double bearingVariance = Math.abs(bearing-currentAngle);
     if(bearingVariance>TurretConstants.trackerDeadBand){
