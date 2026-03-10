@@ -5,27 +5,45 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "closeHop2Center"
+            "pathName": "RTNZRT"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "NEWshooton"
+            "name": "popcorn"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CLeave"
+            "pathName": "RTscrapeRTVel"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "popcorn"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RTOut"
           }
         }
       ]

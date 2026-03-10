@@ -5,21 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "closeHop2Center"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "shootManual"
+            "name": "expandIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C2ClimbR"
+            "pathName": "RTNZOut"
           }
         }
       ]

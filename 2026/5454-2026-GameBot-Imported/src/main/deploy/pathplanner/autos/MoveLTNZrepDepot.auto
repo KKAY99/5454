@@ -7,55 +7,43 @@
         {
           "type": "named",
           "data": {
-            "name": "intakeon"
+            "name": "expandIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LTlitnzLTflip"
+            "pathName": "LTNZLT"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootManual"
+            "name": "popcorn"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "intakeon"
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "DepotVacuum"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeoff"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootManual"
+            "pathName": "LTlitnzLTflipVel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "depotClimbR"
+            "pathName": "DepotVacuumPop"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Stop To Shoot",
+  "folder": null,
   "choreoAuto": false
 }

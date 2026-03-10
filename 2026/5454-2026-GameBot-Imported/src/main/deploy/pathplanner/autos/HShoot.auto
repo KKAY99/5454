@@ -15,17 +15,11 @@
           "data": {
             "name": "shootManual"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C2ClimbL"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Stop To Shoot",
   "choreoAuto": false
 }

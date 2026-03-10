@@ -107,7 +107,7 @@ public class RobotContainer {
   public Command ShootDepotShootNZ() {
     return new PathPlannerAuto("ShootDepotShootNZ");
   }
-  private void getAutonomousCommand(){
+  private void InitialAutonPathfind(){
     SmartDashboard.putString("Asher's Cool Message:", "It is running");
     //Magic Comment
     if (m_autoChooser == null) {
@@ -204,6 +204,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("turretManualStop", new WaitCommand(2));
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
+    NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
+    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null));
   }
 
   private void configureButtonBindings(){
@@ -217,32 +219,32 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command foldOut = new IntakeRotateCommand(m_intake);
+    Command agitate = m_hopper.agitateCommand();
+    m_xBoxDriver.x().whileTrue(agitate);     
+    m_xBoxOperator.x().whileTrue(agitate);
+
+    Command intake = m_intake.intakeCommand();
+    Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper,m_newShooter);
+    m_xBoxDriver.y().whileTrue(CompleteIntake);
+    m_xBoxDriver.rightBumper().toggleOnTrue(intake);
+    m_xBoxOperator.y().toggleOnTrue(intake);
+
     Command foldIn = new IntakeIntakeCommand(m_intake);
 
-    m_xBoxDriver.a().whileTrue(foldOut);
-    m_xBoxDriver.b().whileTrue(foldIn);
+    Command foldOut = new IntakeRotateCommand(m_intake);
+    m_xBoxDriver.a().onTrue(Commands.sequence(new InstantCommand(m_intake::toggleReversed), foldOut));
 
-     Command agitate = m_hopper.agitateCommand();
-     m_xBoxDriver.x().whileTrue(agitate);     
-     m_xBoxOperator.x().whileTrue(agitate);
-
-     Command intake = m_intake.intakeCommand();
-     Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper,m_newShooter);
-     m_xBoxDriver.y().whileTrue(CompleteIntake);
-     m_xBoxDriver.rightBumper().toggleOnTrue(intake);
-     m_xBoxOperator.y().toggleOnTrue(intake);
-
-     Command outtake = m_intake.outtakeCommand();
-     m_xBoxDriver.leftBumper().whileTrue(outtake);
-     m_xBoxOperator.a().whileTrue(outtake);
+    Command outtake = m_intake.outtakeCommand();
+    m_xBoxDriver.leftBumper().whileTrue(outtake);
+    m_xBoxOperator.a().whileTrue(outtake);
 
     Command climbUp = m_climb.climbUpCommand();
+    m_xBoxDriver.povUp().whileTrue(climbUp);
+    m_xBoxOperator.povUp().whileTrue(climbUp);
+
     Command climbDown = m_climb.climbDownCommand();
     m_xBoxDriver.povDown().whileTrue(climbDown);
-    m_xBoxDriver.povUp().whileTrue(climbUp);
     m_xBoxOperator.povDown().whileTrue(climbDown);
-    m_xBoxOperator.povUp().whileTrue(climbUp);
 
     Command shoot = new ShootManualCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true);
     m_xBoxDriver.leftTrigger().whileTrue(shoot);
@@ -267,7 +269,7 @@ public class RobotContainer {
     m_CustomController.y().whileTrue(doNothing);
     m_CustomController.x().toggleOnTrue(doNothing);
     m_CustomController.leftTrigger().whileTrue(doNothing);
-    m_CustomController.rightBumper().onTrue(Commands.runOnce(()->getAutonomousCommand()));
+    m_CustomController.rightBumper().onTrue(Commands.runOnce(()->InitialAutonPathfind()));
     m_CustomController.leftBumper().onTrue(doNothing);
 
 
@@ -558,6 +560,7 @@ return pathfindingCommand;
 }
   public void AutonMode(){
     homeRobot();
+    InitialAutonPathfind();
   }
 
   public void TeleopMode(){

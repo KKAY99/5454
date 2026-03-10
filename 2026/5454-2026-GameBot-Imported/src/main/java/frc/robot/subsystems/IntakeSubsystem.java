@@ -24,6 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private TalonFX m_intakeMotor;
   private ObsidianCANSparkMax m_fold;
   private DutyCycleEncoder m_encoder;
+  public boolean m_reversed = false;
   //private SparkAbsoluteEncoder m_encoder;
 
   public IntakeSubsystem(int CanId1, int CanId2) {
@@ -37,6 +38,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void inFold(double speed) {
     m_fold.set(-speed);
+  }
+
+  public void toggleReversed() {
+    m_reversed = !m_reversed;
   }
 
   public void stopFold() {
@@ -75,13 +80,14 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean intakeCurrentLimitCheck(){
     return getFoldState()>Constants.IntakeConstants.ampStop;
   }
+
   private double getFoldState() {
     return m_fold.getOutputCurrent();
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Kicker Sensor", m_fold.getOutputCurrent());
+    SmartDashboard.putNumber("Intake Fold Current", m_fold.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 }
