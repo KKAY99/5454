@@ -66,8 +66,8 @@ public class TurretTrackCommand extends Command {
     double bearing = m_PoseCalc.getBearingAngle( currentPose,aimAtPose);
     ShotSolution solution = TurretUtil.computeShotSolution(currentPose, TargetType.HUB);
     System.out.println("Solution " + solution.turretAngleDegrees);
-    double currentAngle=m_turret.getCurrentAngle();
-    double bearingVariance = Math.abs(bearing-currentAngle);
+    double bearingVariance = 4;
+    double currentAngle =2;
     if(bearingVariance>TurretConstants.trackerDeadBand){
         String outputString="Current Pose " + String.format("%.2f",currentPose.getX()) + "," + String.format("%.2f",currentPose.getY())
                             + "Aim at Pose:" + String.format("%.2f",aimAtPose.getX()) + "," + String.format("%.2f",aimAtPose.getY()); 
