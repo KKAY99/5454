@@ -13,37 +13,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RTNZRT"
+            "pathName": "LTNZLT"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootManual"
+            "name": "popcorn"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RTNZRT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootManual"
+            "pathName": "LTlitnzLTflipVel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RTscrapeRT"
+            "pathName": "DepotVacuumPop"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "shootManual"
+            "pathName": "depotClimbL"
           }
         }
       ]
