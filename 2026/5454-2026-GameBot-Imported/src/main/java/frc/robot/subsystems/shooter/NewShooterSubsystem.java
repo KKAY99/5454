@@ -4,41 +4,12 @@
 
 package frc.robot.subsystems.shooter;
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
-import com.ctre.phoenix6.hardware.TalonFX;
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-import static edu.wpi.first.units.Units.*;
-
-import java.util.function.Supplier;
-
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
->>>>>>> Stashed changes
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-<<<<<<< Updated upstream
-=======
-import com.ctre.phoenix6.signals.SensorDirectionValue;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,17 +22,6 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import edu.wpi.first.networktables.NetworkTableInstance.NetworkMode;
-<<<<<<< Updated upstream
-=======
-import edu.wpi.first.units.measure.Angle;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -79,17 +39,6 @@ public class NewShooterSubsystem extends SubsystemBase {
     m_2shooterMotor = new TalonFX(shooter2CANID);
     configureShootermotor(m_2shooterMotor);
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,true);
->>>>>>> Stashed changes
     m_hoodMotor = new TalonFX(hoodCANID);
     m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,true);
   }
@@ -115,32 +64,7 @@ m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
                   .withFeedForward(0.1));
    */
   }
-<<<<<<< Updated upstream
   
-=======
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
-
-  private Supplier<Angle> getAngle(CANcoder encoder){
-    return () -> encoder.getAbsolutePosition().getValue();
-  }
-
-  public void showHoodPosition(){
-      SmartDashboard.putNumber("HoodEncoder",m_hoodEncoder.getPosition().getValueAsDouble());
-  }
->>>>>>> Stashed changes
-
-  private Supplier<Angle> getAngle(CANcoder encoder){
-    return () -> encoder.getAbsolutePosition().getValue();
-  }
-
-  public void showHoodPosition(){
-      SmartDashboard.putNumber("HoodEncoder",m_hoodEncoder.getPosition().getValueAsDouble());
-  }
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
   public void stopNewShooter(boolean idleMode){
     System.out.println("stopping shooter");
@@ -164,36 +88,6 @@ m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
       config.MotorOutput.PeakReverseDutyCycle = 0.0;
       
     configurator.apply(config);
-<<<<<<< Updated upstream
-=======
-  }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-  private void hoodDown(){
-    double motorPos=m_hoodEncoder.getPosition().getValueAsDouble();
-    m_hoodMotor.setPosition(Constants.HoodConstants.hoodDownPos);
-  }
-
-  private void hoodUp(){
-    m_hoodMotor.setPosition(Constants.HoodConstants.hoodUpPos);
-  }
-
->>>>>>> Stashed changes
-=======
-
-  private void hoodDown(){
-    double motorPos=m_hoodEncoder.getPosition().getValueAsDouble();
-    m_hoodMotor.setPosition(Constants.HoodConstants.hoodDownPos);
-  }
-
-  private void hoodUp(){
-    m_hoodMotor.setPosition(Constants.HoodConstants.hoodUpPos);
-  }
-
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
   } 
   public void moveHood(double speed){
