@@ -205,7 +205,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
     NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
-    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null));
+    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem,m_swerve, null));
   }
 
   private void configureButtonBindings(){
@@ -237,7 +237,7 @@ public class RobotContainer {
     Command outtake = m_intake.outtakeCommand();
     m_xBoxDriver.leftBumper().whileTrue(outtake);
     m_xBoxOperator.a().whileTrue(outtake);
-
+    
     Command climbUp = m_climb.climbUpCommand();
     m_xBoxDriver.povUp().whileTrue(climbUp);
     m_xBoxOperator.povUp().whileTrue(climbUp);
@@ -308,7 +308,7 @@ public class RobotContainer {
     Command newHoodUp = m_newShooter.HoodUp();
     Command newHoodDown = m_newShooter.HoodDown();
     Command newVelocityShot = Commands.startEnd(  ()->m_newShooter.runShooterVelocity(ShooterConstants.shooterRPM),
-                                           ()->m_newShooter.stopNewShooter(),
+                                           ()->m_newShooter.stopNewShooter(true),
                                            m_newShooter);
     Command turretMove = m_TurretSubsystem.turretManualCommand();
 

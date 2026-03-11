@@ -47,7 +47,7 @@ public class CompleteIntakeCommand extends Command {
  
     m_intake.stopIntake();
     m_hopper.stopAgitate();
-    m_shooter.stopNewShooter();
+    m_shooter.stopNewShooter(true);
   }
 
   // Returns true when the command should end.

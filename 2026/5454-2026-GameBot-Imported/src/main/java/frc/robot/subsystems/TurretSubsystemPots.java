@@ -203,6 +203,11 @@ public void playMusic(String fileName){
         m_robotOrch.play();
     }
 
+ public void homeTurret(){
+  //set position of encoder to offset for POTS
+  double POTSCalcPosition=0 ; //do calculation
+  m_turretMotor.setPosition(POTSCalcPosition,1);
+ }   
   @Override
   public void periodic(){
     SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));

@@ -6,7 +6,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.TurretSubsystemPots;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 /** An example command that uses an example subsystem. */
 public class StopPopcornCommand extends Command {
@@ -44,7 +43,7 @@ public class StopPopcornCommand extends Command {
   public void end(boolean interrupted) {
   System.out.println("Stopping Shooter");
  
-    m_shooter.stopNewShooter();
+    m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
     m_intake.intakeoffCommand();
     m_turret.stopTurret();

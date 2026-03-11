@@ -4,8 +4,12 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,6 +21,7 @@ import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import edu.wpi.first.networktables.NetworkTableInstance.NetworkMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,7 +34,11 @@ public class NewShooterSubsystem extends SubsystemBase {
     private ObsidianCANSparkMax m_kickerMotor;
   public NewShooterSubsystem(int shooter1CANID, int shooter2CANID, int kickerCANID,int hoodCANID) {
     m_1shooterMotor = new TalonFX(shooter1CANID);
+    configureShootermotor(m_1shooterMotor);
+    m_1shooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_2shooterMotor = new TalonFX(shooter2CANID);
+    configureShootermotor(m_2shooterMotor);
+    m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_hoodMotor = new TalonFX(hoodCANID);
     m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,true);
   }
@@ -42,23 +51,45 @@ public class NewShooterSubsystem extends SubsystemBase {
   }
 
 public void runShooterVelocity(double targetSpeed){
-// 
-   m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(0)
+// Torque-current bang-bang
+m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
+//m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
+
+
+/*    m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(0)
                   .withVelocity(targetSpeed)
                   .withFeedForward(0.1));
     m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(0)
                   .withVelocity(-targetSpeed)
                   .withFeedForward(0.1));
-   }
+   */
+  }
   
 
-  public void stopNewShooter(){
+  public void stopNewShooter(boolean idleMode){
     System.out.println("stopping shooter");
-    m_1shooterMotor.stopMotor();
-    m_2shooterMotor.stopMotor();
+    if(idleMode){
+      m_1shooterMotor.set(ShooterConstants.IdleSpeed);
+      //m_2shooterMotor.set(-ShooterConstants.idleSpeed);
+    }else {
+      m_1shooterMotor.stopMotor();
+      m_2shooterMotor.stopMotor();
+    }
     m_kickerMotor.stopMotor();
   }
 
+  private void configureShootermotor(TalonFX motor){
+    TalonFXConfigurator configurator = motor.getConfigurator();
+    TalonFXConfiguration config = new TalonFXConfiguration();
+      config.Slot0.kP = 999999.0;
+      config.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
+      config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
+      config.MotorOutput.PeakForwardDutyCycle = 1.0;
+      config.MotorOutput.PeakReverseDutyCycle = 0.0;
+      
+    configurator.apply(config);
+
+  } 
   public void moveHood(double speed){
     m_hoodMotor.set(speed);
   }
@@ -80,7 +111,7 @@ public void runShooterVelocity(double targetSpeed){
   public Command shootCommand(){
     return Commands.startEnd(    ()->runNewShooter(ShooterConstants.shootSpeed,
                                     ShooterConstants.KickerSpeed),
-                                           ()->stopNewShooter(),
+                                           ()->stopNewShooter(true),
                                            this);
   }
   public Command shootonCommand(){
@@ -88,6 +119,6 @@ public void runShooterVelocity(double targetSpeed){
                                     ShooterConstants.KickerSpeed),this);
   }
   public Command shootoffCommand(){
-    return Commands.runOnce(    ()->stopNewShooter(),this);
+    return Commands.runOnce(    ()->stopNewShooter(true),this);
   }
 }
