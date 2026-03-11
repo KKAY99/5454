@@ -5,11 +5,8 @@
 package frc.robot.subsystems.shooter;
 
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 =======
 <<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
@@ -40,9 +37,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 =======
 >>>>>>> Stashed changes
 =======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -66,9 +60,6 @@ import edu.wpi.first.units.measure.Angle;
 =======
 >>>>>>> Stashed changes
 =======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -89,11 +80,8 @@ public class NewShooterSubsystem extends SubsystemBase {
     configureShootermotor(m_2shooterMotor);
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 =======
 <<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
 <<<<<<< Updated upstream
 >>>>>>> Stashed changes
 =======
@@ -128,36 +116,12 @@ m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
    */
   }
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   
 =======
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 =======
 =======
-=======
-<<<<<<< Updated upstream
-=======
-=======
-
-  private Supplier<Angle> getAngle(CANcoder encoder){
-    return () -> encoder.getAbsolutePosition().getValue();
-  }
-
-  public void showHoodPosition(){
-      SmartDashboard.putNumber("HoodEncoder",m_hoodEncoder.getPosition().getValueAsDouble());
-  }
->>>>>>> Stashed changes
-
-  private Supplier<Angle> getAngle(CANcoder encoder){
-    return () -> encoder.getAbsolutePosition().getValue();
-  }
-
-  public void showHoodPosition(){
-      SmartDashboard.putNumber("HoodEncoder",m_hoodEncoder.getPosition().getValueAsDouble());
-  }
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
   private Supplier<Angle> getAngle(CANcoder encoder){
     return () -> encoder.getAbsolutePosition().getValue();
@@ -205,33 +169,6 @@ m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
   }
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-
-  private void hoodDown(){
-    double motorPos=m_hoodEncoder.getPosition().getValueAsDouble();
-    m_hoodMotor.setPosition(Constants.HoodConstants.hoodDownPos);
-  }
-
-  private void hoodUp(){
-    m_hoodMotor.setPosition(Constants.HoodConstants.hoodUpPos);
-  }
-
->>>>>>> Stashed changes
-=======
-
-  private void hoodDown(){
-    double motorPos=m_hoodEncoder.getPosition().getValueAsDouble();
-    m_hoodMotor.setPosition(Constants.HoodConstants.hoodDownPos);
-  }
-
-  private void hoodUp(){
-    m_hoodMotor.setPosition(Constants.HoodConstants.hoodUpPos);
-  }
-
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
   private void hoodDown(){
     double motorPos=m_hoodEncoder.getPosition().getValueAsDouble();
