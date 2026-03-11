@@ -1,0 +1,120 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.279476232394366,
+        "y": 5.054250339275235
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.365158785162279,
+        "y": 5.289108807615583
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.48688233568075123,
+        "y": 5.198358320495893
+      },
+      "prevControl": {
+        "x": 0.5377802983756301,
+        "y": 5.8242476783508215
+      },
+      "nextControl": {
+        "x": 0.4666189715062999,
+        "y": 4.949180881564649
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.48688233568075123,
+        "y": 2.6247602607834506
+      },
+      "prevControl": {
+        "x": 0.488169014084507,
+        "y": 3.0882057383362667
+      },
+      "nextControl": {
+        "x": 0.48539628701697374,
+        "y": 2.089504107699094
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.1469483568075116,
+        "y": 1.2456822641578629
+      },
+      "prevControl": {
+        "x": 0.6409762783014024,
+        "y": 1.2364827718213878
+      },
+      "nextControl": {
+        "x": 2.2792253521126757,
+        "y": 1.2662691186179575
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.641032863849765,
+        "y": 2.769109494204812
+      },
+      "prevControl": {
+        "x": 1.5999331170234263,
+        "y": 2.522511013246776
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.550887542517005,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "completeIntake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "popcorn",
+      "waypointRelativePos": 2.797488948919448,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "No Velocity",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

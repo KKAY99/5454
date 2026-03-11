@@ -219,44 +219,49 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command agitate = m_hopper.agitateCommand();
-    m_xBoxDriver.x().whileTrue(agitate);     
-    m_xBoxOperator.x().whileTrue(agitate);
-
-    Command intake = m_intake.intakeCommand();
     Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper,m_newShooter);
-    m_xBoxDriver.y().whileTrue(CompleteIntake);
-    m_xBoxDriver.rightBumper().toggleOnTrue(intake);
-    m_xBoxOperator.y().toggleOnTrue(intake);
+    m_xBoxDriver.leftBumper().toggleOnTrue(CompleteIntake);
 
     Command foldIn = new IntakeIntakeCommand(m_intake);
 
     Command foldOut = new IntakeRotateCommand(m_intake);
-    m_xBoxDriver.a().onTrue(Commands.sequence(new InstantCommand(m_intake::toggleReversed), foldOut));
+    m_xBoxDriver.y().onTrue(Commands.sequence(new InstantCommand(m_intake::toggleReversed), foldOut));
 
     Command outtake = m_intake.outtakeCommand();
-    m_xBoxDriver.leftBumper().whileTrue(outtake);
+    m_xBoxDriver.rightBumper().whileTrue(outtake);
     m_xBoxOperator.a().whileTrue(outtake);
 
     Command climbUp = m_climb.climbUpCommand();
-    m_xBoxDriver.povUp().whileTrue(climbUp);
+    m_xBoxDriver.b().whileTrue(climbUp);
     m_xBoxOperator.povUp().whileTrue(climbUp);
 
     Command climbDown = m_climb.climbDownCommand();
-    m_xBoxDriver.povDown().whileTrue(climbDown);
+    m_xBoxDriver.a().whileTrue(climbDown);
     m_xBoxOperator.povDown().whileTrue(climbDown);
 
-    Command shoot = new ShootManualCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    m_xBoxDriver.leftTrigger().whileTrue(shoot);
-    m_xBoxOperator.leftTrigger().whileTrue(shoot);
+    Command shootManual = new ShootManualCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true);
+    m_xBoxDriver.start().whileTrue(shootManual);
+    m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 
-    Command passLeft = new PassCommand(Constants.PassConstants.PassTargets.LEFT);
+    Command shootPopcorn = new ShootPopcornCommand(m_newShooter,m_hopper,m_intake,m_TurretSubsystem,null);
+    m_xBoxDriver.leftTrigger().whileTrue(shootPopcorn);
+
+    Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
+    m_xBoxDriver.x().whileTrue(shootKernelCommand);
+
+    Command passLeft = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
     m_xBoxDriver.povLeft().whileTrue(passLeft);
     m_xBoxOperator.leftBumper().whileTrue(passLeft);
     
-    Command passRight = new PassCommand(Constants.PassConstants.PassTargets.RIGHT);
+    Command passRight = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
     m_xBoxDriver.povRight().whileTrue(passRight);
     m_xBoxOperator.rightBumper().whileTrue(passRight);
+
+    Command intake = m_intake.intakeCommand();
+    m_xBoxOperator.y().toggleOnTrue(intake);
+
+    Command agitate = m_hopper.agitateCommand();
+    m_xBoxOperator.x().whileTrue(agitate);
     
     
     //Testing and Debugging Commands on Custom Controller
@@ -314,7 +319,7 @@ public class RobotContainer {
 
     m_FunnyController.leftBumper().whileTrue(intake);
     m_FunnyController.rightBumper().whileTrue(agitate);
-    m_FunnyController.leftTrigger().whileTrue(shoot);
+    m_FunnyController.leftTrigger().whileTrue(shootManual);
     m_FunnyController.y().whileTrue(newHoodUp);
     m_FunnyController.a().whileTrue(foldOut);
     m_FunnyController.b().whileTrue(foldIn);
