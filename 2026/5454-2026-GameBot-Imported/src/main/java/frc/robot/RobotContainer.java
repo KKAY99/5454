@@ -243,7 +243,7 @@ public class RobotContainer {
     m_xBoxDriver.start().whileTrue(shootManual);
     m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 
-    Command shootPopcorn = new ShootPopcornCommand(m_newShooter,m_hopper,m_intake,m_TurretSubsystem,null);
+    Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, null);
     m_xBoxDriver.leftTrigger().whileTrue(shootPopcorn);
 
     Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);

@@ -72,7 +72,7 @@ public class PassCommand extends Command {
   public void end(boolean interrupted) {
   System.out.println("Stopping Shooter");
  
-    m_shooter.stopNewShooter();
+    m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
     m_intake.intakeoffCommand();
   }

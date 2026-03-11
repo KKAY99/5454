@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TurretSubsystemPots;
@@ -72,7 +71,7 @@ public class ShootKernelCommand extends Command {
   public void end(boolean interrupted) {
   System.out.println("Stopping Shooter");
  
-    m_shooter.stopNewShooter();
+    m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
     m_intake.intakeoffCommand();
   }
