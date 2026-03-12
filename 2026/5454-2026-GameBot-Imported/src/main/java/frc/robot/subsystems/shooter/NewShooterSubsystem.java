@@ -53,7 +53,7 @@ public class NewShooterSubsystem extends SubsystemBase {
 public void runShooterVelocity(double targetSpeed){
 // Torque-current bang-bang
 m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
-//m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
+m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
 
 
 /*    m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(0)
@@ -70,7 +70,7 @@ m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
     System.out.println("stopping shooter");
     if(idleMode){
       m_1shooterMotor.set(ShooterConstants.IdleSpeed);
-      //m_2shooterMotor.set(-ShooterConstants.idleSpeed);
+      m_2shooterMotor.set(-ShooterConstants.IdleSpeed);
     }else {
       m_1shooterMotor.stopMotor();
       m_2shooterMotor.stopMotor();

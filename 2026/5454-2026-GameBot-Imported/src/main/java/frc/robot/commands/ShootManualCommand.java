@@ -95,10 +95,10 @@ public class ShootManualCommand extends Command {
     case SHOOT:
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.intakeonCommand();
-        if(checkNoFuelorFuelTimeLimit()){
-          m_state=shooterStates.NOFUEL;
-        }         
-    break;
+       // if(checkNoFuelorFuelTimeLimit()){
+       //   m_state=shooterStates.NOFUEL;
+       // }         
+       break;
     case NOFUEL:
         if(m_emptyHopper){
           m_state=shooterStates.EMPTYHOPPER;          

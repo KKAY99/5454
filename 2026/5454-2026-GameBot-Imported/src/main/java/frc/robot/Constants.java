@@ -164,9 +164,9 @@ public final class Constants {
     public static final int fuelSensorDIO=1;
     //speeds
     public static final double shooterRPM=5000;
-    public static final double IdleSpeed=0.5;
+    public static final double IdleSpeed=0.8;
     public static final double KickerSpeed=-1; //pos 1 for B-bot
-    public static final double shootSpeed=1;
+    public static final double shootSpeed=1.0;
     public static final double kAgitateTimeLimit=5; //how long to agitate on empty
 
     //6328 Transforms for Turret
@@ -177,7 +177,7 @@ public final class Constants {
   }
   public static final class HopperConstants{
     public static final int HopperMotorCanID=60;
-    public static final double agitateSpeed=-1;
+    public static final double agitateSpeed=1;
   }
   public static final class HoodConstants{
     public static final double hoodUpSpeed=-0.06;

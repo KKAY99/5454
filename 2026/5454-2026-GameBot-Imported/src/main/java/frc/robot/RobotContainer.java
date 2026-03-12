@@ -226,7 +226,7 @@ public class RobotContainer {
 
     Command foldOut = new IntakeRotateCommand(m_intake);
     m_xBoxDriver.y().onTrue(Commands.sequence(new InstantCommand(m_intake::toggleReversed), foldOut));
-
+    
     Command outtake = m_intake.outtakeCommand();
     m_xBoxDriver.rightBumper().whileTrue(outtake);
     m_xBoxOperator.a().whileTrue(outtake);
