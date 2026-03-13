@@ -14,7 +14,7 @@ public class CompleteIntakeCommand extends Command {
   private HopperSubsystem m_hopper;
   private NewShooterSubsystem m_shooter;
   private enum intakeStates{
-    SPINUP,WAIT,GO,END
+    INTAKE,END
   } 
   private intakeStates m_state;
   private double stateStartTime;
@@ -22,17 +22,15 @@ public class CompleteIntakeCommand extends Command {
   public CompleteIntakeCommand(IntakeSubsystem intake,HopperSubsystem hopper,NewShooterSubsystem shooter) {
     m_hopper=hopper;
     m_intake=intake;
-    m_shooter= shooter;
-    m_state=intakeStates.SPINUP;
+    m_state=intakeStates.INTAKE;
     addRequirements(m_hopper);
     addRequirements(m_intake);
-    addRequirements(m_shooter);
-  }
+    }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_state=intakeStates.SPINUP;
+    m_state=intakeStates.INTAKE;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,7 +45,6 @@ public class CompleteIntakeCommand extends Command {
  
     m_intake.stopIntake();
     m_hopper.stopAgitate();
-    m_shooter.stopNewShooter(true);
   }
 
   // Returns true when the command should end.
@@ -58,27 +55,12 @@ public class CompleteIntakeCommand extends Command {
 
     
   
-  System.out.println("Shooting - State:" + m_state);
     switch(m_state){
-    case SPINUP:
-        stateStartTime=Timer.getFPGATimestamp();
+    case INTAKE:
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
-        m_shooter.runNewShooter(Constants.ShooterConstants.shootSpeed,
-                            Constants.ShooterConstants.KickerSpeed);
-        m_state=intakeStates.WAIT;
+        m_intake.runIntake(Constants.IntakeConstants.highSpeed);     
     break;
-    case WAIT:
-        double currentTime = Timer.getFPGATimestamp();
-        if(currentTime>=stateStartTime+kSpinUpTime){
-          m_state=intakeStates.GO;
-        }
-      break;
-    case GO:
-        m_intake.runIntake(Constants.IntakeConstants.highSpeed);
-        m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
-        m_shooter.runNewShooter(Constants.ShooterConstants.shootSpeed,
-                            Constants.ShooterConstants.KickerSpeed);
-    break;
+    
     case END:
         returnValue=true;
     break;

@@ -104,7 +104,8 @@ public class ShootPopcornCommand extends Command {
         m_shooter.runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
         break;
     case SHOOTING:
-        ShotSolution solution = 
+
+    /*     ShotSolution solution = 
         TurretUtil.computeShotSolution(m_swerve.getPose2d(), m_target);
         if(solution.isValid){}
           if(m_turret.isOnTargetAngle(solution.turretAngleDegrees)){
@@ -113,7 +114,7 @@ public class ShootPopcornCommand extends Command {
             
           } else {
             m_turret.turretTrack(m_target);
-          }
+          }*/
         break;
     case END:
         CommandScheduler.getInstance().schedule(Commands.runOnce(()->m_shooter.hoodBack()));

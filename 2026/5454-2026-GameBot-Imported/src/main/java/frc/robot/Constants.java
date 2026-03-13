@@ -148,7 +148,7 @@ public final class Constants {
     public static final double outtakeSpeed=0.9;
     public static final double foldSpeed=-0.2;
     public static final double foldSpeedAutoMode=-0.15;
-    public static final double ampStop=10;
+    public static final double ampStop=20;
   }
 
   public static final class PassConstants{    
@@ -161,7 +161,7 @@ public final class Constants {
     public static final int shooter2CANID=28;
     public static final int hoodCANID=27;
     public static final int kickerCANID=61;
-    public static final int fuelSensorDIO=1;
+    public static final int fuelSensorDIO=9;
     //speeds
     public static final double shooterRPM=5000;
     public static final double IdleSpeed=0.8;

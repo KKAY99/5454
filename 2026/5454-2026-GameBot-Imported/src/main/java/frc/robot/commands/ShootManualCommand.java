@@ -68,7 +68,7 @@ public class ShootManualCommand extends Command {
  
     m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
-    m_intake.intakeoffCommand();
+    m_intake.stopIntake();;
   }
 
   // Returns true when the command should end.
@@ -96,10 +96,10 @@ public class ShootManualCommand extends Command {
       break;
     case SHOOT:
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
-        m_intake.intakeonCommand();
-       // if(checkNoFuelorFuelTimeLimit()){
-       //   m_state=shooterStates.NOFUEL;
-       // }         
+        m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+        if(checkNoFuelorFuelTimeLimit()){
+          m_state=shooterStates.NOFUEL;
+        }         
        break;
     case NOFUEL:
         if(m_emptyHopper){
@@ -109,7 +109,7 @@ public class ShootManualCommand extends Command {
          }
       break; 
     case EMPTYHOPPER:
-        if(m_intake.intakeCurrentLimitCheck()){
+        if(m_intake.intakeCurrentLimitCheck() && false){
           m_state=shooterStates.NOFUEL2NDCHECK;
         }else {
           m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);  
