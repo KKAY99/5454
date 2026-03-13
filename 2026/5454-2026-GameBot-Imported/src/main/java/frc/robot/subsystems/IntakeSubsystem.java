@@ -29,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem(int CanId1, int CanId2) {
     m_intakeMotor = new TalonFX(CanId1);
-    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, false,40);
+    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, false,30);
   }
 
   public void outFold(double speed) {

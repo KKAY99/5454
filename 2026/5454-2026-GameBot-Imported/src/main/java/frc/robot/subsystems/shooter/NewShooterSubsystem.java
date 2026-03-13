@@ -4,13 +4,20 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
+import static edu.wpi.first.units.Units.Rotations;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -22,6 +29,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import edu.wpi.first.networktables.NetworkTableInstance.NetworkMode;
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +38,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     private TalonFX m_1shooterMotor;
     private TalonFX m_2shooterMotor;
     private TalonFX m_hoodMotor;
+    private CANcoder m_hoodCoder = new CANcoder(Constants.HoodConstants.hoodCoderCANID);
     //private TalonFX m_kickerMotor;
     private ObsidianCANSparkMax m_kickerMotor;
   public NewShooterSubsystem(int shooter1CANID, int shooter2CANID, int kickerCANID,int hoodCANID) {
@@ -41,6 +50,24 @@ public class NewShooterSubsystem extends SubsystemBase {
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_hoodMotor = new TalonFX(hoodCANID);
     m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,true);
+
+
+        /* Configure CANcoder to zero the magnet appropriately */
+    CANcoderConfiguration hoodCoder_cfg = new CANcoderConfiguration();
+    hoodCoder_cfg.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0; // unsigned [0,1) range, so 1.0 is the same as 0.0, which means the discontinuity is at the wrap-around point
+    hoodCoder_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    hoodCoder_cfg.MagnetSensor.withMagnetOffset(Rotations.of(Constants.HoodConstants.hoodOffset));
+    m_hoodCoder.getConfigurator().apply(hoodCoder_cfg);
+    TalonFXConfiguration hoodMotor_cfg = new TalonFXConfiguration();
+    hoodMotor_cfg.Feedback.FeedbackRemoteSensorID = m_hoodCoder.getDeviceID();
+    hoodMotor_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    hoodMotor_cfg.Feedback.SensorToMechanismRatio = 1.0;
+    hoodMotor_cfg.Feedback.RotorToSensorRatio = 12.8;
+    m_hoodMotor.getConfigurator().apply(hoodMotor_cfg);
+  }
+
+  public void hoodBack(){
+    m_hoodMotor.setPosition(0);
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {

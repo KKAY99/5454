@@ -1,6 +1,8 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
@@ -134,6 +136,7 @@ public class ShootKernelCommand extends Command {
         }
        break;
     case END:
+        CommandScheduler.getInstance().schedule(Commands.runOnce(()->m_shooter.hoodBack()));
         returnValue=true;
     break;
   }
