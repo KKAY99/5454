@@ -67,7 +67,7 @@ public class TurretSubsystemPots extends SubsystemBase {
     motorConfig.MotorOutput.NeutralMode=NeutralModeValue.Brake;
     m_turretMotor.getConfigurator().apply(motorConfig);
     configureMotionMagic();
-     
+    m_turretMotor.setPosition(0);
 
     m_encoder1 = new CANcoder(encoder1ID);
     

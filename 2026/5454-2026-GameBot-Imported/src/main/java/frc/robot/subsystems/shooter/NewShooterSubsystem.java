@@ -5,6 +5,7 @@
 package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -39,6 +40,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     private TalonFX m_2shooterMotor;
     private TalonFX m_hoodMotor;
     private CANcoder m_hoodCoder = new CANcoder(Constants.HoodConstants.hoodCoderCANID);
+  
     //private TalonFX m_kickerMotor;
     private ObsidianCANSparkMax m_kickerMotor;
   public NewShooterSubsystem(int shooter1CANID, int shooter2CANID, int kickerCANID,int hoodCANID) {
@@ -49,9 +51,6 @@ public class NewShooterSubsystem extends SubsystemBase {
     configureShootermotor(m_2shooterMotor);
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_hoodMotor = new TalonFX(hoodCANID);
-    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,true);
-
-
         /* Configure CANcoder to zero the magnet appropriately */
     CANcoderConfiguration hoodCoder_cfg = new CANcoderConfiguration();
     hoodCoder_cfg.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0; // unsigned [0,1) range, so 1.0 is the same as 0.0, which means the discontinuity is at the wrap-around point
@@ -68,6 +67,7 @@ public class NewShooterSubsystem extends SubsystemBase {
 
   public void hoodBack(){
     m_hoodMotor.setPosition(0);
+    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,false,Constants.k70Amp);
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
@@ -108,6 +108,7 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
   private void configureShootermotor(TalonFX motor){
     TalonFXConfigurator configurator = motor.getConfigurator();
     TalonFXConfiguration config = new TalonFXConfiguration();
+    //apply bang Bang Controller
       config.Slot0.kP = 999999.0;
       config.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
       config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
@@ -115,7 +116,12 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
       config.MotorOutput.PeakReverseDutyCycle = 0.0;
       
     configurator.apply(config);
-
+    //Apply current limits
+    CurrentLimitsConfigs currentLimits =  new CurrentLimitsConfigs();
+    currentLimits.StatorCurrentLimit=80;
+    currentLimits.SupplyCurrentLimit=60;
+    configurator.apply(currentLimits);
+    
   } 
   public void moveHood(double speed){
     m_hoodMotor.set(speed);
