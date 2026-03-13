@@ -51,6 +51,8 @@ public class NewShooterSubsystem extends SubsystemBase {
     configureShootermotor(m_2shooterMotor);
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_hoodMotor = new TalonFX(hoodCANID);
+    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,false,Constants.k70Amp);
+    
         /* Configure CANcoder to zero the magnet appropriately */
     CANcoderConfiguration hoodCoder_cfg = new CANcoderConfiguration();
     hoodCoder_cfg.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0; // unsigned [0,1) range, so 1.0 is the same as 0.0, which means the discontinuity is at the wrap-around point
@@ -67,7 +69,6 @@ public class NewShooterSubsystem extends SubsystemBase {
 
   public void hoodBack(){
     m_hoodMotor.setPosition(0);
-    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,false,Constants.k70Amp);
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
