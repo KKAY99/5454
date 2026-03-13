@@ -180,6 +180,8 @@ public final class Constants {
     public static final double agitateSpeed=1;
   }
   public static final class HoodConstants{
+    public static final int hoodCoderCANID=51;
+    public static final double hoodOffset=-0.8740222222;
     public static final double hoodUpSpeed=-0.06;
     public static final double hoodDownSpeed=0.06;
   }

@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.TurretSubsystemPots;
@@ -52,6 +54,7 @@ public class StopPopcornCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+  CommandScheduler.getInstance().schedule(Commands.runOnce(()->m_shooter.hoodBack()));
   return true;       
   }
 }
