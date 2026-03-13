@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -58,6 +59,8 @@ public class TurretSubsystemPots extends SubsystemBase {
   private final double kGearReduction=8;  //80t to 10tooth
   private final double kMotorRotationsToAngle=0.127;
   private final double kDegreesPerRotation=7.86;
+  private DutyCycleOut m_TurretDutyCycleOut = new DutyCycleOut(0.0);
+
   private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
   public TurretSubsystemPots(int CanId1, int encoder1ID, int encoder2ID,int potsPort) {
     SmartDashboard.putNumber("Target Angle",0);
@@ -65,6 +68,7 @@ public class TurretSubsystemPots extends SubsystemBase {
     m_turretMotor = new TalonFX(CanId1);
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
     motorConfig.MotorOutput.NeutralMode=NeutralModeValue.Brake;
+   
     m_turretMotor.getConfigurator().apply(motorConfig);
     configureMotionMagic();
     m_turretMotor.setPosition(0);
@@ -110,8 +114,9 @@ public class TurretSubsystemPots extends SubsystemBase {
         System.out.println("Turret Stopped / At Limit");
    
       } else {
-          m_turretMotor.set(speed);
-          System.out.println("Turret Move:" + speed);
+            double targetmotorPosition=m_turretMotor.getPosition().getValueAsDouble() + (speed*10);
+            m_turretMotor.setControl(mmRequest.withPosition(targetmotorPosition)); 
+           System.out.println("Turret Move:" + speed);
    
       }
 
