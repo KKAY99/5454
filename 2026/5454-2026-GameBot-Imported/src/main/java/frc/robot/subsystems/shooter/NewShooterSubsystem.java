@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -40,7 +41,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     configureShootermotor(m_2shooterMotor);
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_hoodMotor = new TalonFX(hoodCANID);
-    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,true);
+    m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,false,Constants.k70Amp);
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
@@ -81,6 +82,7 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
   private void configureShootermotor(TalonFX motor){
     TalonFXConfigurator configurator = motor.getConfigurator();
     TalonFXConfiguration config = new TalonFXConfiguration();
+    //apply bang Bang Controller
       config.Slot0.kP = 999999.0;
       config.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
       config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
@@ -88,7 +90,12 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
       config.MotorOutput.PeakReverseDutyCycle = 0.0;
       
     configurator.apply(config);
-
+    //Apply current limits
+    CurrentLimitsConfigs currentLimits =  new CurrentLimitsConfigs();
+    currentLimits.StatorCurrentLimit=80;
+    currentLimits.SupplyCurrentLimit=60;
+    configurator.apply(currentLimits);
+    
   } 
   public void moveHood(double speed){
     m_hoodMotor.set(speed);
