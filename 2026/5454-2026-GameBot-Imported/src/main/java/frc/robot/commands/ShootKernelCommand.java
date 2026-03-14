@@ -124,7 +124,7 @@ public class ShootKernelCommand extends Command {
          }
       break; 
     case EMPTYHOPPER:
-        if(m_intake.intakeCurrentLimitCheck()){
+        if(m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
           m_state=shooterStates.NOFUEL2NDCHECK;
         }else {
           m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);  

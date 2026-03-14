@@ -147,8 +147,15 @@ public final class Constants {
     public static final double highSpeed=-1.0;
     public static final double outtakeSpeed=0.9;
     public static final double foldSpeed=-0.2;
+    public static final double foldHomeSpeed=-0.15;
     public static final double foldSpeedAutoMode=-0.15;
-    public static final double ampStop=20;
+    public static final double ampInStop=10;
+    public static final double ampOutStop=20;
+    
+    public static final double intakeinPos=0.05;
+    public static final double intakeRollStop=9;
+    public static final double intakeEndStop=14.2; 
+
   }
 
   public static final class PassConstants{    
@@ -164,9 +171,9 @@ public final class Constants {
     public static final int fuelSensorDIO=9;
     //speeds
     public static final double shooterRPM=5000;
-    public static final double IdleSpeed=0.8;
+    public static final double IdleSpeed=0.7;
     public static final double KickerSpeed=-1; //pos 1 for B-bot
-    public static final double shootSpeed=1.0;
+    public static final double shootSpeed=0.8;
     public static final double kAgitateTimeLimit=5; //how long to agitate on empty
 
     //6328 Transforms for Turret

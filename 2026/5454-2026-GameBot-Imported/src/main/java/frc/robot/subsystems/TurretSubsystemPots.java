@@ -114,8 +114,7 @@ public class TurretSubsystemPots extends SubsystemBase {
         System.out.println("Turret Stopped / At Limit");
    
       } else {
-            double targetmotorPosition=m_turretMotor.getPosition().getValueAsDouble() + (speed*10);
-            m_turretMotor.setControl(mmRequest.withPosition(targetmotorPosition)); 
+            m_turretMotor.setControl(m_TurretDutyCycleOut.withOutput(speed)); 
            System.out.println("Turret Move:" + speed);
    
       }

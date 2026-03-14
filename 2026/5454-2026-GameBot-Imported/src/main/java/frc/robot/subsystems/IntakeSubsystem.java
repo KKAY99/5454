@@ -18,18 +18,19 @@ import frc.robot.utilities.ObsidianCANSparkMax;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem extends SubsystemBase {
   private TalonFX m_intakeMotor;
   private ObsidianCANSparkMax m_fold;
-  private DutyCycleEncoder m_encoder;
-  public boolean m_reversed = false;
+  private boolean m_IntakeOutMode = false; //starts in in Mode and gets reversed on first call
+  private boolean m_homed=false;
   //private SparkAbsoluteEncoder m_encoder;
 
   public IntakeSubsystem(int CanId1, int CanId2) {
     m_intakeMotor = new TalonFX(CanId1);
-    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, false,30);
+    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true,30);
   }
 
   public void outFold(double speed) {
@@ -40,8 +41,28 @@ public class IntakeSubsystem extends SubsystemBase {
     m_fold.set(-speed);
   }
 
-  public void toggleReversed() {
-    m_reversed = !m_reversed;
+  public void homeIntake(){
+    //pull intake until we hit current limit and then reset position
+    while(!intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
+     m_fold.set(-Constants.IntakeConstants.foldHomeSpeed);
+    }
+    m_fold.stopMotor(); // stop intake
+    double startTime = Timer.getFPGATimestamp();
+    double endTime=startTime+0.1;
+    while(Timer.getFPGATimestamp()<endTime){
+
+      //Do Nothing - basically just pausing
+    }
+    
+    m_fold.getEncoder().setPosition(0.0); // reset encoder to zero at home in
+    System.out.println("Intake has homed");
+    
+    m_homed=true;
+  }
+
+  public void toggleIntakeMode() {
+    m_IntakeOutMode=!m_IntakeOutMode;
+
   }
 
   public void stopFold() {
@@ -77,17 +98,49 @@ public class IntakeSubsystem extends SubsystemBase {
     return Commands.runOnce(    ()->stopIntake(),this);
   }
 
-  public boolean intakeCurrentLimitCheck(){
-    return getFoldState()>Constants.IntakeConstants.ampStop;
+  public boolean intakeCurrentLimitCheck(double ampCheck){
+    return m_fold.getOutputCurrent()>ampCheck;
   }
 
   private double getFoldState() {
     return m_fold.getOutputCurrent();
   }
 
+  public boolean hasHomed(){
+    return m_homed;
+  }
+  public boolean isIntakeOutMode(){
+    return m_IntakeOutMode;
+  }
+  public boolean isinNoFlyZone(){
+    boolean returnValue=false;
+    //NO FLY ZONE IS DISABLED DUE TO MECH FIXES
+    /*double currentPos=Math.abs(m_fold.getEncoder().getPosition());
+    if(currentPos<Constants.IntakeConstants.intakeRollStop){
+      returnValue=true;
+    }*/
+    return returnValue;
+  }
+
+  public boolean isAtInLimit(){
+    boolean returnValue=false;
+    if(Math.abs(m_fold.getEncoder().getPosition())<Constants.IntakeConstants.intakeinPos){
+        returnValue=true;
+    }
+    return returnValue;
+  }
+   
+  public boolean isAtOutLimit(){
+    boolean returnValue=false;
+    if(Math.abs(m_fold.getEncoder().getPosition())>Constants.IntakeConstants.intakeEndStop){
+        returnValue=true;
+    }
+    return returnValue;
+  }
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake Fold Current", m_fold.getOutputCurrent());
+    SmartDashboard.putNumber("Intake Position", m_fold.getEncoder().getPosition());
     // This method will be called once per scheduler run
   }
 }

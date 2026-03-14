@@ -51,7 +51,7 @@ public class IntakeIntakeCommand extends Command {
     switch(m_state){
     case ROTATE:
         m_intake.outFold(-Constants.IntakeConstants.foldSpeed);
-        if(m_intake.intakeCurrentLimitCheck()) {
+        if(m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)) {
             System.out.println("current spike... Stopping Fold");
             m_state=foldingStates.END;
         }

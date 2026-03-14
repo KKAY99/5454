@@ -109,9 +109,14 @@ public class ShootManualCommand extends Command {
          }
       break; 
     case EMPTYHOPPER:
-        if(m_intake.intakeCurrentLimitCheck() && false){
+        if(m_intake.isAtInLimit() | 
+                 m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
           m_state=shooterStates.NOFUEL2NDCHECK;
+          m_intake.stopFold();
         }else {
+           if(m_intake.isinNoFlyZone()){
+              m_intake.stopIntake();
+          }
           m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);  
           }
       break;
@@ -121,7 +126,7 @@ public class ShootManualCommand extends Command {
         }
        break;
     case END:
-        CommandScheduler.getInstance().schedule(Commands.runOnce(()->m_shooter.hoodBack()));
+        m_shooter.hoodBack();
         returnValue=true;
     break;
   }

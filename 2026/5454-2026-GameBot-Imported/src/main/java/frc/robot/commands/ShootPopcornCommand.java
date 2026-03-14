@@ -85,8 +85,9 @@ public class ShootPopcornCommand extends Command {
     break;
     case SPINUP:
         stateStartTime=Timer.getFPGATimestamp();
+        //run shooter no kicker
         m_shooter.runNewShooter(Constants.ShooterConstants.shootSpeed,
-                            Constants.ShooterConstants.KickerSpeed);
+                            0);
         m_state=shooterStates.WAIT;
     break;
     case WAIT:
@@ -97,6 +98,9 @@ public class ShootPopcornCommand extends Command {
         }
       break;
     case SHOOT:
+        m_shooter.runNewShooter(Constants.ShooterConstants.shootSpeed,
+                            Constants.ShooterConstants.KickerSpeed);
+   
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.intakeonCommand();
          // Statys in SHootPopcornMode until interrupted             

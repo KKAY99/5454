@@ -191,7 +191,7 @@ public class RobotContainer {
     //NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
     NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
     NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
-    NamedCommands.registerCommand("expandIntake", new IntakeRotateCommand(m_intake));
+    NamedCommands.registerCommand("expandIntake", new IntakeFoldCommand(m_intake));
     NamedCommands.registerCommand("shrinkIntake", new IntakeIntakeCommand(m_intake));
     NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
     NamedCommands.registerCommand("agitateoff", m_hopper.agitateoffCommand());
@@ -224,8 +224,8 @@ public class RobotContainer {
 
     Command foldIn = new IntakeIntakeCommand(m_intake);
 
-    Command foldOut = new IntakeRotateCommand(m_intake);
-    m_xBoxDriver.y().onTrue(Commands.sequence(new InstantCommand(m_intake::toggleReversed), foldOut));
+    Command foldOut = new IntakeFoldCommand(m_intake);
+    m_xBoxDriver.y().onTrue(Commands.sequence(new InstantCommand(m_intake::toggleIntakeMode), foldOut));
     
     Command outtake = m_intake.outtakeCommand();
     m_xBoxDriver.rightBumper().whileTrue(outtake);
@@ -628,6 +628,7 @@ return pathfindingCommand;
 
   public void homeRobot(){
     if(!hasHomed){
+      m_intake.homeIntake();
       hasHomed = true;
     }
   }
