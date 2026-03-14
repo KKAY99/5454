@@ -230,8 +230,8 @@ public final class Constants {
         public static double ENC2_FORWARD_OFFSET_DEG = 175.0;
         public static final boolean ENC1_INVERT = false;
         public static final boolean ENC2_INVERT = false;
-
   }
+
   public static final class ClimbConstants{
     public static final int climbCanID1=43;
     public static final int climbUpSwitchDIO=8;
