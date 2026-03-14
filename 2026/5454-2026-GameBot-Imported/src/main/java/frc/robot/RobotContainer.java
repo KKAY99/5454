@@ -252,12 +252,12 @@ public class RobotContainer {
     m_xBoxOperator.a().whileTrue(outtake);
     
     Command climbUp = m_climb.climbUpCommand();
-    //m_xBoxDriver.b().onTrue(Commands.runOnce(()->rightClimb()));
+    //m_xBoxDriver.b().onTrue(climbUp);
     m_xBoxDriver.b().onTrue(Commands.runOnce(()->rightClimb()));
     m_xBoxOperator.povUp().whileTrue(climbUp);
 
     Command climbDown = m_climb.climbDownCommand();
-    //m_xBoxDriver.a().onTrue(Commands.runOnce(()->leftClimb()));
+    //m_xBoxDriver.a().onTrue(climbDown);
     m_xBoxDriver.a().onTrue(Commands.runOnce(()->leftClimb()));
     m_xBoxOperator.povDown().whileTrue(climbDown);
 
