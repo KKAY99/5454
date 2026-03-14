@@ -229,8 +229,7 @@ public final class Constants {
 
   }
   public static final class ClimbConstants{
-    public static final int climbCanID1=26;
-    public static final int climbCanID2=20;
+    public static final int climbCanID1=43;
     public static final int climbUpSwitchDIO=8;
     public static final int climbDownSwitchDIO=7;
     public static final int climbCanID4=22;
