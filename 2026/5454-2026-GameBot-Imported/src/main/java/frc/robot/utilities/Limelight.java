@@ -67,7 +67,7 @@ public class Limelight {
 
     private double m_limeLightHeight;
     private double m_mountingAngle;
-    private double m_targetHeight=0;
+    private double m_targetHeight=44.375;
     
     private String m_limeLightName;
 

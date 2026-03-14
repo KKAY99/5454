@@ -59,8 +59,12 @@ public final class Constants {
     public static final double leftLimelightHeight=0;
     public static final double leftLimelightAngle=0;
     public static final double rightLimelightHeight=0;
-    public static final double rightLimelightAngle=0;
-
+    public static final double rightLimelightAngle=0; 
+    
+    public static final double turretLimelightHeight  =17.75;
+    public static final double turretLimelightAngle=24;
+    public static final String turretLimelightName="limelight-three";
+    
     public static final String leftLimelightName="limelight-left";
     public static final String rightLimelightName="limelight-right";
 
@@ -171,11 +175,11 @@ public final class Constants {
     public static final int fuelSensorDIO=9;
     //speeds
     public static final double shooterRPM=5000;
-    public static final double IdleSpeed=0.7;
+    public static final double IdleSpeed=50;// 0.7;
     public static final double KickerSpeed=-1; //pos 1 for B-bot
-    public static final double shootSpeed=0.8;
+    public static final double shootSpeed=80; //0.8;
     public static final double kAgitateTimeLimit=5; //how long to agitate on empty
-
+    public static final double shooterVelocityDeadband=0.1;
     //6328 Transforms for Turret
     public static Transform3d robotToTurret = new Transform3d(-0.19685, 0.0, 0.44, Rotation3d.kZero);
     public static Transform3d turretToCamera =
@@ -229,8 +233,7 @@ public final class Constants {
 
   }
   public static final class ClimbConstants{
-    public static final int climbCanID1=26;
-    public static final int climbCanID2=20;
+    public static final int climbCanID1=43;
     public static final int encoderDIO=2;
     public static final double climbP=0.2;
     public static final double climbI=0;//DONT USE

@@ -49,8 +49,8 @@ public class TurretSubsystemPots extends SubsystemBase {
   private TalonFX m_turretMotor;
   private Orchestra m_robotOrch = new Orchestra();
       
-  private CANcoder m_encoder1;
-  private CANcoder m_encoder2;
+ // private CANcoder m_encoder1;
+ // private CANcoder m_encoder2;
   private AnalogPotentiometer m_POTS;
   private final double kPotsLowLimit=0.20;
   private final double kPotsHighLimit=0.80;
@@ -62,18 +62,17 @@ public class TurretSubsystemPots extends SubsystemBase {
   private DutyCycleOut m_TurretDutyCycleOut = new DutyCycleOut(0.0);
 
   private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
-  public TurretSubsystemPots(int CanId1, int encoder1ID, int encoder2ID,int potsPort) {
+  public TurretSubsystemPots(int CanId1, int potsPort) {
     SmartDashboard.putNumber("Target Angle",0);
     m_POTS = new AnalogPotentiometer(potsPort,1,0); 
-    m_turretMotor = new TalonFX(CanId1);
+    m_turretMotor = new TalonFX(CanId1,"5454Canivore");
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
     motorConfig.MotorOutput.NeutralMode=NeutralModeValue.Brake;
    
     m_turretMotor.getConfigurator().apply(motorConfig);
-    configureMotionMagic();
-    m_turretMotor.setPosition(0);
-
-    m_encoder1 = new CANcoder(encoder1ID);
+    //configureMotionMagic();
+   
+   /* m_encoder1 = new CANcoder(encoder1ID);
     
 
     m_encoder2 = new CANcoder(encoder2ID);
@@ -90,7 +89,8 @@ public class TurretSubsystemPots extends SubsystemBase {
     
     encoder2Config.MagnetSensor.SensorDirection=SensorDirectionValue.Clockwise_Positive;
     m_encoder2.getConfigurator().apply(encoder2Config); 
-  }
+  */
+    }
 
  /*  private void setEncoderConfig(CANcoder canCoder{
     CANcoderConfiguration m_config = new CANcoderConfiguration();
@@ -102,8 +102,8 @@ public class TurretSubsystemPots extends SubsystemBase {
   }
   
   public void showEncoderPositions(){
-        SmartDashboard.putNumber("Encoder 1",m_encoder1.getAbsolutePosition().getValueAsDouble());
-        SmartDashboard.putNumber("Encoder 2",m_encoder2.getAbsolutePosition().getValueAsDouble());
+       // SmartDashboard.putNumber("Encoder 1",m_encoder1.getAbsolutePosition().getValueAsDouble());
+       // SmartDashboard.putNumber("Encoder 2",m_encoder2.getAbsolutePosition().getValueAsDouble());
     }
 
    public void moveTurret(double speed) 
@@ -114,7 +114,9 @@ public class TurretSubsystemPots extends SubsystemBase {
         System.out.println("Turret Stopped / At Limit");
    
       } else {
-            m_turretMotor.setControl(m_TurretDutyCycleOut.withOutput(speed)); 
+          //hard coded for testing
+           m_turretMotor.set(0.5);
+           //m_turretMotor.setControl(m_TurretDutyCycleOut.withOutput(speed)); 
            System.out.println("Turret Move:" + speed);
    
       }
@@ -132,13 +134,10 @@ public class TurretSubsystemPots extends SubsystemBase {
   }
   
   public void stopTurret(){
-    m_turretMotor.stopMotor();
+    System.out.println("Stopping Turret");
+     m_turretMotor.stopMotor();
   }
-  public Command turretManualCommand(){
-      return Commands.startEnd(    ()->moveTurret(TurretConstants.turretSpeed),
-                                          ()->stopTurret(),
-                                          this);
-  }
+ 
   private void moveMotor(double targetmotorPosition){
     if((targetmotorPosition>kLowerLimit) && (targetmotorPosition<kUpperLimit)){ 
          m_turretMotor.setControl(mmRequest.withPosition(targetmotorPosition)); 
@@ -147,9 +146,6 @@ public class TurretSubsystemPots extends SubsystemBase {
       System.out.println("Move Target out of Range");
     }
       } 
-  public Command setMotortoZero(){
-   return Commands.runOnce(() ->m_turretMotor.setPosition(0));
-  }
 
 private void configureMotionMagic(){
   // in init function
@@ -202,15 +198,15 @@ public void turretTrack(TargetType target){
 
 }
 public void playMusic(String fileName){
-        m_robotOrch.loadMusic(fileName);
-        m_robotOrch.addInstrument(m_turretMotor);
-        m_robotOrch.play();
+//        m_robotOrch.loadMusic(fileName);
+//        m_robotOrch.addInstrument(m_turretMotor);
+//       m_robotOrch.play();
     }
 
  public void homeTurret(){
   //set position of encoder to offset for POTS
   double POTSCalcPosition=0 ; //do calculation
-  m_turretMotor.setPosition(POTSCalcPosition,1);
+ // m_turretMotor.setPosition(POTSCalcPosition,1);
  }   
   @Override
   public void periodic(){
@@ -224,10 +220,11 @@ public void playMusic(String fileName){
     double angle=SmartDashboard.getNumber("Target Angle",0);
     
     double targetPos=getTargetMotorPosition(angle);
-    if(!(angle==0))
+    /*if(!(angle==0))
     {
       moveMotor(targetPos);
-    }SmartDashboard.putNumber("Target Pos",targetPos);
+    }*/
+    SmartDashboard.putNumber("Target Pos",targetPos);
     //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
     //SmartDashboard.putNumber("POTS",m_POTS.; 
 

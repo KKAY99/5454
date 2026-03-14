@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import static edu.wpi.first.units.Units.Rotations;
@@ -67,19 +68,32 @@ public class NewShooterSubsystem extends SubsystemBase {
     m_hoodMotor.getConfigurator().apply(hoodMotor_cfg);
   }
 
+  public double getHoodPos(){
+     return m_hoodMotor.getPosition().getValueAsDouble();
+  }
   public void hoodBack(){
     m_hoodMotor.setPosition(0);
+  }
+  public void hoodMove(double hoodSpeed){
+    m_hoodMotor.set(hoodSpeed);
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
     System.out.println("Shooter Spin:" + speed);
-    m_1shooterMotor.set(speed);
-    m_2shooterMotor.set(-speed);
+    runShooterVelocity(speed);
     m_kickerMotor.set(kickerSpeed);
   }
 
+public boolean atTargetSpeed(double targetSpeed){
+  double currentSpeed=m_1shooterMotor.getVelocity().getValueAsDouble();
+  double speedDiff = Math.abs(currentSpeed-targetSpeed);
+
+  return (speedDiff<Constants.ShooterConstants.shooterVelocityDeadband);
+}
 public void runShooterVelocity(double targetSpeed){
 // Torque-current bang-bang
+//m_1shooterMotor.setControl(new MotionMagicVelocityVoltage(targetSpeed));
+//m_1shooterMotor.setControl(new MotionMagicVelocityVoltage(-targetSpeed));
 m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
 m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
 
@@ -97,8 +111,7 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
   public void stopNewShooter(boolean idleMode){
     System.out.println("stopping shooter");
     if(idleMode){
-      m_1shooterMotor.set(ShooterConstants.IdleSpeed);
-      m_2shooterMotor.set(-ShooterConstants.IdleSpeed);
+      runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
     }else {
       m_1shooterMotor.stopMotor();
       m_2shooterMotor.stopMotor();
@@ -106,6 +119,23 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
     m_kickerMotor.stopMotor();
   }
 
+  
+  private void PIDconfigureShootermotor(TalonFX motor){
+    TalonFXConfigurator configurator = motor.getConfigurator();
+    TalonFXConfiguration config = new TalonFXConfiguration();
+    //apply bang Bang Controller
+      config.Slot0.kP = 0.1;
+      config.Slot0.kV = 0.1;//0.12; // Velocity feedforward
+  
+      
+    configurator.apply(config);
+    //Apply current limits
+    CurrentLimitsConfigs currentLimits =  new CurrentLimitsConfigs();
+    currentLimits.StatorCurrentLimit=80;
+    currentLimits.SupplyCurrentLimit=60;
+    configurator.apply(currentLimits);
+    
+  } 
   private void configureShootermotor(TalonFX motor){
     TalonFXConfigurator configurator = motor.getConfigurator();
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -154,5 +184,9 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
   }
   public Command shootoffCommand(){
     return Commands.runOnce(    ()->stopNewShooter(true),this);
+  }
+    @Override
+  public void periodic(){
+    SmartDashboard.putNumber("Shooter Velocity", m_1shooterMotor.getVelocity().getValueAsDouble());
   }
 }

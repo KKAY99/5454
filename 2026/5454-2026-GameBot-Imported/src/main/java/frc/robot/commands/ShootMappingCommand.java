@@ -1,5 +1,6 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -9,7 +10,7 @@ import frc.robot.subsystems.shooter.NewShooterSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.Limelight;
 /** An example command that uses an example subsystem. */
-public class ShootManualCommand extends Command {
+public class ShootMappingCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
 
   private NewShooterSubsystem m_shooter;
@@ -19,19 +20,26 @@ public class ShootManualCommand extends Command {
   private boolean m_emptyHopper=false;
   private double m_timeLimit=0;
   private enum shooterStates{
-    SPINUP,WAIT,SHOOT,NOFUEL,EMPTYHOPPER,NOFUEL2NDCHECK,END
+    SPINUP,WAIT,SHOOT,END
   } 
   private shooterStates m_state;
+  private double m_speed=0;
+  private double m_idleSpeed=0;
+  private double m_hoodPos=0;
   private double stateStartTime;
   private double startShootTime;
   private final double kSpinUpTime=1;
-  public ShootManualCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,Limelight limelight, double timeLimit,boolean emptyHopper) {
+  public ShootMappingCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,Limelight limelight, double timeLimit,boolean emptyHopper) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
     m_limelight=limelight;
     m_emptyHopper=emptyHopper;
     m_state=shooterStates.SPINUP;
+    SmartDashboard.putNumber("Idle Speed",20);
+    SmartDashboard.putNumber("Target Speed",40);
+    SmartDashboard.putNumber("Hood Pos",0);
+     
     addRequirements(m_hopper);
     addRequirements(m_shooter);
     addRequirements(m_intake);
@@ -57,6 +65,7 @@ public class ShootManualCommand extends Command {
   @Override
   public void initialize() {
     m_state=shooterStates.SPINUP;
+    getValues();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -86,48 +95,31 @@ public class ShootManualCommand extends Command {
     switch(m_state){
     case SPINUP:
         stateStartTime=Timer.getFPGATimestamp();
-        m_shooter.runNewShooter(Constants.ShooterConstants.shootSpeed,
+        m_shooter.runNewShooter(m_speed,
                             Constants.ShooterConstants.KickerSpeed);
-        m_state=shooterStates.WAIT;
+       
+        double hoodDiff=Math.abs(m_shooter.getHoodPos()-m_hoodPos);
+        System.out.print("Hood Diff" +hoodDiff);
+        if(hoodDiff>0.02){
+            if(m_shooter.getHoodPos()>m_hoodPos){
+                m_shooter.moveHood(-0.1);
+            }else {
+              m_shooter.moveHood(0.1);
+            } 
+            }else{
+              m_shooter.moveHood(0);
+              m_state=shooterStates.WAIT;
+            }
     break;
     case WAIT:
-        currentTime = Timer.getFPGATimestamp();
-        if(currentTime>=stateStartTime+kSpinUpTime){
-          startShootTime=Timer.getFPGATimestamp();
-          m_state=shooterStates.SHOOT;
+        if(m_shooter.atTargetSpeed(m_speed)){
+            m_state=shooterStates.SHOOT;
         }
       break;
     case SHOOT:
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
-        if(checkNoFuelorFuelTimeLimit()){
-          m_state=shooterStates.NOFUEL;
-        }         
-       break;
-    case NOFUEL:
-        if(m_emptyHopper){
-          m_state=shooterStates.EMPTYHOPPER;          
-         } else{
-          m_state=shooterStates.END;          
-         }
-      break; 
-    case EMPTYHOPPER:
-        if(m_intake.isAtInLimit() | 
-                 m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
-          m_state=shooterStates.NOFUEL2NDCHECK;
-          m_intake.stopFold();
-        }else {
-           if(m_intake.isinNoFlyZone()){
-              m_intake.stopIntake();
-          }
-          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);  
-          }
-      break;
-    case NOFUEL2NDCHECK:
-        if(checkNoFuelorFuelTimeLimit()){
-          m_state=shooterStates.END;
-        }
-       break;
+        break;
     case END:
         m_shooter.hoodBack();
         returnValue=true;
@@ -137,5 +129,16 @@ public class ShootManualCommand extends Command {
 
       
   }
+  
+    private void getValues() {
+      double idleSpeed= SmartDashboard.getNumber("Idle Speed",20);
+      double targetSpeed=SmartDashboard.getNumber("Target Speed",40);
+      double hoodPos = SmartDashboard.getNumber("Hood Pos",0);
+      m_idleSpeed=idleSpeed;
+      m_speed=targetSpeed;
+      m_hoodPos=hoodPos;
+
+  }
+
 }
 

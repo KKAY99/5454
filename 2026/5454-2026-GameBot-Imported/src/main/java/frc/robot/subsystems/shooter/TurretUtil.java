@@ -146,7 +146,7 @@ public class TurretUtil {
 
     /** Trajectory / hood angle (degrees) from the appropriate lookup table. */
     public static double getTrajectoryAngle(double distanceMeters, TargetType target) {
-        return getTableParams(distanceMeters, target).trajectoryAngle;
+        return getTableParams(distanceMeters, target).hoodPosition;
     }
 
     /** Estimated time-of-flight (seconds) from the appropriate lookup table. */
@@ -177,7 +177,7 @@ public class TurretUtil {
         return new ShotSolution(
                 dist,
                 turretAngle,
-                params.trajectoryAngle,
+                params.hoodPosition,
                 params.shooterSpeed,
                 params.timeOfFlight,
                 valid);
@@ -255,7 +255,7 @@ public class TurretUtil {
         return new ShotSolution(
                 finalDist,
                 turretAngle,
-                params.trajectoryAngle,
+                params.hoodPosition,
                 params.shooterSpeed,
                 params.timeOfFlight,
                 valid);

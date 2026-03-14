@@ -15,12 +15,12 @@ public class HubLookUpTable {
     /** Data structure to hold shooting parameters */
     public static class ShootingParameters {
         public final double shooterSpeed;     // RPS (Revolutions Per Second)
-        public final double trajectoryAngle;  // Degrees
+        public final double hoodPosition;  // Degrees
         public final double timeOfFlight;     // Seconds
         
-        public ShootingParameters(double shooterSpeed, double trajectoryAngle, double timeOfFlight) {
+        public ShootingParameters(double shooterSpeed, double hoodPosition, double timeOfFlight) {
             this.shooterSpeed = shooterSpeed;
-            this.trajectoryAngle = trajectoryAngle;
+            this.hoodPosition = hoodPosition;
             this.timeOfFlight = timeOfFlight;
         }
     }
@@ -50,8 +50,8 @@ public class HubLookUpTable {
     }
     
     /** Add an entry to the lookup table */
-    public void addEntry(double distance, double shooterSpeed, double trajectoryAngle, double timeOfFlight) {
-        lookupTable.put(distance, new ShootingParameters(shooterSpeed, trajectoryAngle, timeOfFlight));
+    public void addEntry(double distance, double shooterSpeed, double hoodPosition, double timeOfFlight) {
+        lookupTable.put(distance, new ShootingParameters(shooterSpeed, hoodPosition, timeOfFlight));
     }
     
     /** 
@@ -84,12 +84,12 @@ public class HubLookUpTable {
         double ratio = (distance - lowerKey) / (upperKey - lowerKey);
         
         double interpolatedSpeed = lerp(lower.shooterSpeed, upper.shooterSpeed, ratio);
-        double interpolatedAngle = lerp(lower.trajectoryAngle, upper.trajectoryAngle, ratio);
+        double interpolatedAngle = lerp(lower.hoodPosition, upper.hoodPosition, ratio);
         double interpolatedTime = lerp(lower.timeOfFlight, upper.timeOfFlight, ratio);
         
         return new ShootingParameters(interpolatedSpeed, interpolatedAngle, interpolatedTime);
     }
-    
+
     /** Linear interpolation helper */
     private double lerp(double start, double end, double ratio) {
         return start + (end - start) * ratio;
@@ -102,7 +102,7 @@ public class HubLookUpTable {
     
     /** Get trajectory angle for a given distance */
     public double getTrajectoryAngle(double distance) {
-        return getParameters(distance).trajectoryAngle;
+        return getParameters(distance).hoodPosition;
     }
     
     /** Get time of flight for a given distance */
