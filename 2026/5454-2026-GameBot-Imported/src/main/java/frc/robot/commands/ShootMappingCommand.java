@@ -114,7 +114,7 @@ public class ShootMappingCommand extends Command {
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
         break;
     case END:
-        m_shooter.hoodBack();
+        m_shooter.hoodHome();
         returnValue=true;
     break;
   }

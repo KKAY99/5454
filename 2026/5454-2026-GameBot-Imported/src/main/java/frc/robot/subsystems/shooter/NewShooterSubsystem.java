@@ -156,6 +156,15 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   public void hoodMoveToZero(){
     hoodMoveToPosition(0,Constants.HoodConstants.hoodDownSpeed);
   }
+  public void hoodMovetoPosition(double hoodTarget){
+    //m_hoodMotor.setPosition(hoodTarget);
+    System.out.println("Move Hood to " + hoodTarget);
+    m_hoodMotor.setControl(mmRequest.withPosition(hoodTarget)); 
+  }
+
+  public void hoodMove(double hoodSpeed){
+    m_hoodMotor.set(hoodSpeed);
+  }
 
   public void runNewShooter(double speed,double kickerSpeed) {
     System.out.println("Shooter Spin:" + speed);
@@ -216,7 +225,7 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
     currentLimits.SupplyCurrentLimit=60;
     configurator.apply(currentLimits);
     
-  } 
+  }
   private void configureShootermotor(TalonFX motor){
     TalonFXConfigurator configurator = motor.getConfigurator();
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -234,7 +243,7 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
     currentLimits.SupplyCurrentLimit=60;
     configurator.apply(currentLimits);
     
-  } 
+  }
   public void moveHood(double speed){
    // m_hoodMotor.set(speed);
   }
@@ -251,6 +260,10 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
   public Command HoodDown(){
     return Commands.startEnd(    ()->moveHood(HoodConstants.hoodDownSpeed),
                                            ()->stopHood(),
+                                           this);
+  }
+  public Command hoodHome(){
+    return Commands.runOnce(    ()->hoodMoveToZero(),
                                            this);
   }
   public Command shootCommand(){

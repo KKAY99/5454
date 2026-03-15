@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
@@ -121,7 +122,7 @@ public class ShootPopcornCommand extends Command {
           }*/
         break;
     case END:
-        CommandScheduler.getInstance().schedule(Commands.runOnce(()->m_shooter.hoodBack()));
+        m_shooter.hoodHome();
         returnValue=true;
     break;
   }

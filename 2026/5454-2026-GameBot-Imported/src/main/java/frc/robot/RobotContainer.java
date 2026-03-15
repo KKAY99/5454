@@ -655,6 +655,7 @@ return pathfindingCommand;
   public void homeRobot(){
     if(!hasHomed){
       m_intake.homeIntake();
+      m_newShooter.hoodHome();
       m_climb.retractClimb();
       hasHomed = true;
     }

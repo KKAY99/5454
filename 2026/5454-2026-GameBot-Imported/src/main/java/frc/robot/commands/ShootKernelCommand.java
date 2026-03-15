@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
@@ -136,7 +137,7 @@ public class ShootKernelCommand extends Command {
         }
        break;
     case END:
-        CommandScheduler.getInstance().schedule(Commands.runOnce(()->m_shooter.hoodBack()));
+        m_shooter.hoodHome();
         returnValue=true;
     break;
   }
