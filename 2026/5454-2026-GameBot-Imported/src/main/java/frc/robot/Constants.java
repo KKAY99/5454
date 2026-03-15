@@ -195,6 +195,7 @@ public final class Constants {
     public static final double hoodOffset=-0.8740222222;
     public static final double hoodUpSpeed=-0.06;
     public static final double hoodDownSpeed=0.06;
+    public static final double hoodHomePosition=0;
   }
   public enum TurretStates {MANUAL,TRACK,FIXEDLEFT,FIXEDRIGHT};
   public static final class TurretConstants {
