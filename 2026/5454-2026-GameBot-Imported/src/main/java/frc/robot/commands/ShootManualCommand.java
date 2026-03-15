@@ -82,7 +82,7 @@ public class ShootManualCommand extends Command {
 
     
   
-  System.out.println("Shooting - State:" + m_state);
+  System.out.println("Shooting Manual - State:" + m_state);
     switch(m_state){
     case SPINUP:
         stateStartTime=Timer.getFPGATimestamp();

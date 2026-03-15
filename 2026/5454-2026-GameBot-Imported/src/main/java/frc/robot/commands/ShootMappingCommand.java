@@ -87,29 +87,30 @@ public class ShootMappingCommand extends Command {
   @Override
   public boolean isFinished() {
   double currentTime;
-  boolean returnValue=false;
-
-    
+  boolean returnValue=false;  
   
-  System.out.println("Shooting - State:" + m_state);
+  System.out.println("Shot Mapping - State:" + m_state  + " " + Timer.getFPGATimestamp());
     switch(m_state){
     case SPINUP:
+        m_state=shooterStates.WAIT;
         stateStartTime=Timer.getFPGATimestamp();
         m_shooter.runNewShooter(m_speed,
                             Constants.ShooterConstants.KickerSpeed);
        
-        double hoodDiff=Math.abs(m_shooter.getHoodPos()-m_hoodPos);
+        m_shooter.hoodMovetoPosition(m_hoodPos);
+        /*double hoodDiff=Math.abs(m_shooter.getHoodPos()-m_hoodPos);
+        
         System.out.print("Hood Diff" +hoodDiff);
-        if(hoodDiff>0.02){
+        if(hoodDiff>0.002){
             if(m_shooter.getHoodPos()>m_hoodPos){
-                m_shooter.moveHood(-0.1);
+                m_shooter.moveHood(-0.05);
             }else {
-              m_shooter.moveHood(0.1);
+              m_shooter.moveHood(0.05);
             } 
             }else{
               m_shooter.moveHood(0);
               m_state=shooterStates.WAIT;
-            }
+            }*/
     break;
     case WAIT:
         if(m_shooter.atTargetSpeed(m_speed)){

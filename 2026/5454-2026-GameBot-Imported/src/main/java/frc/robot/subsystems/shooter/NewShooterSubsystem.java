@@ -6,6 +6,8 @@ package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -41,7 +43,9 @@ public class NewShooterSubsystem extends SubsystemBase {
     private TalonFX m_2shooterMotor;
     private TalonFX m_hoodMotor;
     private CANcoder m_hoodCoder = new CANcoder(Constants.HoodConstants.hoodCoderCANID);
-  
+ 
+    private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
+ 
     //private TalonFX m_kickerMotor;
     private ObsidianCANSparkMax m_kickerMotor;
   public NewShooterSubsystem(int shooter1CANID, int shooter2CANID, int kickerCANID,int hoodCANID) {
@@ -52,6 +56,8 @@ public class NewShooterSubsystem extends SubsystemBase {
     configureShootermotor(m_2shooterMotor);
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_hoodMotor = new TalonFX(hoodCANID);
+    m_hoodMotor.setNeutralMode(NeutralModeValue.Brake);
+    configureMotionMagic(); //on Hood Motor
     m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,false,Constants.k70Amp);
     
         /* Configure CANcoder to zero the magnet appropriately */
@@ -68,11 +74,38 @@ public class NewShooterSubsystem extends SubsystemBase {
     m_hoodMotor.getConfigurator().apply(hoodMotor_cfg);
   }
 
+private void configureMotionMagic(){
+  // in init function
+TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
+// set slot 0 gains
+Slot0Configs slot0Configs = talonFXConfigs.Slot0;
+slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
+slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
+slot0Configs.kP = 4.8; 
+slot0Configs.kI = 0; // no output for integrated error
+slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
+
+// set Motion Magic settings
+MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
+motionMagicConfigs.MotionMagicCruiseVelocity = 40;//80; // Target cruise velocity of 80 rps
+motionMagicConfigs.MotionMagicAcceleration = 80;////160; // Target acceleration of 160 rps/s (0.5 seconds)
+motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
+
+m_hoodMotor.getConfigurator().apply(talonFXConfigs);
+}
+
   public double getHoodPos(){
      return m_hoodMotor.getPosition().getValueAsDouble();
   }
   public void hoodBack(){
-    m_hoodMotor.setPosition(0);
+//    m_hoodMotor.setPosition(0);
+  }
+  public void hoodMovetoPosition(double hoodTarget){
+    //m_hoodMotor.setPosition(hoodTarget);
+    System.out.println("Move Hood to " + hoodTarget);
+    m_hoodMotor.setControl(mmRequest.withPosition(hoodTarget)); 
+ 
   }
   public void hoodMove(double hoodSpeed){
     m_hoodMotor.set(hoodSpeed);

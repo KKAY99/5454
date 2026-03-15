@@ -175,7 +175,7 @@ public final class Constants {
     public static final int fuelSensorDIO=9;
     //speeds
     public static final double shooterRPM=5000;
-    public static final double IdleSpeed=50;// 0.7;
+    public static final double IdleSpeed=56;// 0.7;
     public static final double KickerSpeed=-1; //pos 1 for B-bot
     public static final double shootSpeed=80; //0.8;
     public static final double kAgitateTimeLimit=5; //how long to agitate on empty
