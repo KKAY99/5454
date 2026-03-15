@@ -175,7 +175,7 @@ public final class Constants {
     public static final int fuelSensorDIO=9;
     //speeds
     public static final double shooterRPM=5000;
-    public static final double IdleSpeed=56;// 0.7;
+    public static final double IdleSpeed=52;// 0.7;
     public static final double KickerSpeed=-1; //pos 1 for B-bot
     public static final double shootSpeed=80; //0.8;
     public static final double kAgitateTimeLimit=5; //how long to agitate on empty
@@ -195,6 +195,7 @@ public final class Constants {
     public static final double hoodOffset=-0.8740222222;
     public static final double hoodUpSpeed=-0.06;
     public static final double hoodDownSpeed=0.06;
+    public static final double hoodDeadband=0.05;
   }
   public enum TurretStates {MANUAL,TRACK,FIXEDLEFT,FIXEDRIGHT};
   public static final class TurretConstants {
@@ -264,8 +265,8 @@ public final class Constants {
 
     public static final double climbLimitLow=0.0; // was 0.17 
     public static final double climbLimitHigh=0.49;
-    public static final double climbForwardSpeed=0.4;
-    public static final double climbBackSpeed=-0.25;
+    public static final double climbForwardSpeed=-0.4;
+    public static final double climbBackSpeed=0.50;
   }
 
   public static final class CoolPanelConstants{

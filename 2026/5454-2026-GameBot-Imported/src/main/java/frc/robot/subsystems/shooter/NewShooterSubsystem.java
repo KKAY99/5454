@@ -20,6 +20,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import static edu.wpi.first.units.Units.Rotations;
 
@@ -42,13 +44,15 @@ public class NewShooterSubsystem extends SubsystemBase {
     private TalonFX m_1shooterMotor;
     private TalonFX m_2shooterMotor;
     private TalonFX m_hoodMotor;
-    private CANcoder m_hoodCoder = new CANcoder(Constants.HoodConstants.hoodCoderCANID);
+    private CANcoder m_hoodCoder;
  
-    private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
- 
+//    private PositionVoltage m_request= new PositionVoltage(0).withSlot(0);
+   private MotionMagicDutyCycle mmRequest = new MotionMagicDutyCycle(0);
+
     //private TalonFX m_kickerMotor;
     private ObsidianCANSparkMax m_kickerMotor;
   public NewShooterSubsystem(int shooter1CANID, int shooter2CANID, int kickerCANID,int hoodCANID) {
+    m_hoodCoder = new CANcoder(Constants.HoodConstants.hoodCoderCANID);
     m_1shooterMotor = new TalonFX(shooter1CANID);
     configureShootermotor(m_1shooterMotor);
     m_1shooterMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -56,24 +60,41 @@ public class NewShooterSubsystem extends SubsystemBase {
     configureShootermotor(m_2shooterMotor);
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_hoodMotor = new TalonFX(hoodCANID);
-    m_hoodMotor.setNeutralMode(NeutralModeValue.Brake);
-    configureMotionMagic(); //on Hood Motor
+    
     m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,false,Constants.k70Amp);
     
         /* Configure CANcoder to zero the magnet appropriately */
     CANcoderConfiguration hoodCoder_cfg = new CANcoderConfiguration();
     hoodCoder_cfg.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0; // unsigned [0,1) range, so 1.0 is the same as 0.0, which means the discontinuity is at the wrap-around point
     hoodCoder_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    hoodCoder_cfg.MagnetSensor.withMagnetOffset(Rotations.of(Constants.HoodConstants.hoodOffset));
+   // hoodCoder_cfg.MagnetSensor.withMagnetOffset(Rotations.of(Constants.HoodConstants.hoodOffset));
     m_hoodCoder.getConfigurator().apply(hoodCoder_cfg);
-    TalonFXConfiguration hoodMotor_cfg = new TalonFXConfiguration();
-    hoodMotor_cfg.Feedback.FeedbackRemoteSensorID = m_hoodCoder.getDeviceID();
-    hoodMotor_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    hoodMotor_cfg.Feedback.SensorToMechanismRatio = 1.333;
-    hoodMotor_cfg.Feedback.RotorToSensorRatio = 12.8;
-    m_hoodMotor.getConfigurator().apply(hoodMotor_cfg);
+    
+    //TalonFXConfiguration hoodMotor_cfg = new TalonFXConfiguration();
+    //hoodMotor_cfg.Feedback.FeedbackRemoteSensorID = m_hoodCoder.getDeviceID();
+    //m_hoodMotor.getConfigurator().apply(hoodMotor_cfg);
+    
+    m_hoodMotor.setNeutralMode(NeutralModeValue.Brake);
+   
+    //configureMotionMagic(); //on Hood Motor
+    //configureHoodMotor();
+    
   }
+private void configureHoodMotor(){
+     TalonFXConfiguration config = new TalonFXConfiguration();
 
+        config.Slot0.kP = 0.1;
+        config.Slot0.kI = 0.0;
+        config.Slot0.kD = 1;
+        config.Slot0.kS = 0.25; // Friction feedforward
+        config.Slot0.kV = 0.12;
+        config.Slot0.kA = 0.0;
+
+        // 4. Set Neutral Mode (Brake is usually best for hoods)
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        m_hoodMotor.getConfigurator().apply(config);
+}
 private void configureMotionMagic(){
   // in init function
 TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
@@ -82,33 +103,58 @@ Slot0Configs slot0Configs = talonFXConfigs.Slot0;
 slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
 slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
 slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-slot0Configs.kP = 4.8; 
+slot0Configs.kP = 1.0;//4.8; 
 slot0Configs.kI = 0; // no output for integrated error
 slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
 
 // set Motion Magic settings
 MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
-motionMagicConfigs.MotionMagicCruiseVelocity = 40;//80; // Target cruise velocity of 80 rps
-motionMagicConfigs.MotionMagicAcceleration = 80;////160; // Target acceleration of 160 rps/s (0.5 seconds)
-motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
+motionMagicConfigs.MotionMagicCruiseVelocity = 4;//80; // Target cruise velocity of 80 rps
+motionMagicConfigs.MotionMagicAcceleration = 8;////160; // Target acceleration of 160 rps/s (0.5 seconds)
+motionMagicConfigs.MotionMagicJerk = 16; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
 m_hoodMotor.getConfigurator().apply(talonFXConfigs);
 }
 
-  public double getHoodPos(){
-     return m_hoodMotor.getPosition().getValueAsDouble();
-  }
   public void hoodBack(){
 //    m_hoodMotor.setPosition(0);
   }
-  public void hoodMovetoPosition(double hoodTarget){
-    //m_hoodMotor.setPosition(hoodTarget);
-    System.out.println("Move Hood to " + hoodTarget);
-    m_hoodMotor.setControl(mmRequest.withPosition(hoodTarget)); 
- 
+  public double getHoodPos(){
+    double currentPos=m_hoodCoder.getAbsolutePosition().getValueAsDouble();
+    if(currentPos<0.95){
+      return currentPos;
+    }else {
+      //went slightly below zero
+      return 0.0;
+    }
   }
-  public void hoodMove(double hoodSpeed){
-    m_hoodMotor.set(hoodSpeed);
+  public boolean checkHoodPos(double hoodTarget, double hoodSpeed,double deadband){
+    double hoodDiff=Math.abs(getHoodPos()-hoodTarget);
+    return (hoodDiff<=deadband);
+  }
+  public void poormanHoldHoodPos(double hoodTarget, double hoodSpeed,double deadband){
+    double currentPos =  getHoodPos();
+    double hoodDiff=Math.abs(currentPos-hoodTarget);    
+        if(hoodDiff>deadband){
+            if(currentPos>hoodTarget){
+                m_hoodMotor.set(-hoodSpeed);
+            }else {
+                m_hoodMotor.set(hoodSpeed);
+            }            
+          }else{
+            m_hoodMotor.stopMotor();
+          }
+  }
+
+  public void hoodMoveToPosition(double hoodTarget, double hoodSpeed){
+    double deadband = Constants.HoodConstants.hoodDeadband;
+    while (!checkHoodPos(hoodTarget,hoodSpeed,deadband)){
+      poormanHoldHoodPos(hoodTarget,hoodSpeed,deadband);
+    }
+  }
+  
+  public void hoodMoveToZero(){
+    hoodMoveToPosition(0,Constants.HoodConstants.hoodDownSpeed);
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
@@ -150,6 +196,8 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
       m_2shooterMotor.stopMotor();
     }
     m_kickerMotor.stopMotor();
+    hoodMoveToZero();
+
   }
 
   
@@ -174,10 +222,10 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
     TalonFXConfiguration config = new TalonFXConfiguration();
     //apply bang Bang Controller
       config.Slot0.kP = 999999.0;
-      config.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
-      config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
+      config.TorqueCurrent.PeakForwardTorqueCurrent = 800.0;
+      config.TorqueCurrent.PeakReverseTorqueCurrent = -800.0;
       config.MotorOutput.PeakForwardDutyCycle = 1.0;
-      config.MotorOutput.PeakReverseDutyCycle = 0.0;
+      config.MotorOutput.PeakReverseDutyCycle = -1.0;
       
     configurator.apply(config);
     //Apply current limits
@@ -188,7 +236,7 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
     
   } 
   public void moveHood(double speed){
-    m_hoodMotor.set(speed);
+   // m_hoodMotor.set(speed);
   }
 
   public void stopHood(){
@@ -218,8 +266,11 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
   public Command shootoffCommand(){
     return Commands.runOnce(    ()->stopNewShooter(true),this);
   }
+  
     @Override
   public void periodic(){
     SmartDashboard.putNumber("Shooter Velocity", m_1shooterMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Hood CanCoder Value",m_hoodCoder.getAbsolutePosition().getValueAsDouble());  
+  
   }
 }

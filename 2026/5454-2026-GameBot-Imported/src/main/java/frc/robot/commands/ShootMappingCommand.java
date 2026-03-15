@@ -38,8 +38,7 @@ public class ShootMappingCommand extends Command {
     m_state=shooterStates.SPINUP;
     SmartDashboard.putNumber("Idle Speed",20);
     SmartDashboard.putNumber("Target Speed",40);
-    SmartDashboard.putNumber("Hood Pos",0);
-     
+    SmartDashboard.putNumber("Hood Target Position",0);
     addRequirements(m_hopper);
     addRequirements(m_shooter);
     addRequirements(m_intake);
@@ -77,12 +76,13 @@ public class ShootMappingCommand extends Command {
   @Override
   public void end(boolean interrupted) {
   System.out.println("Stopping Shooter");
- 
+    //disabled idle mode for hood testing
     m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
-    m_intake.stopIntake();;
+    m_intake.stopIntake();
+    m_shooter.stopHood();
+    
   }
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
@@ -92,32 +92,24 @@ public class ShootMappingCommand extends Command {
   System.out.println("Shot Mapping - State:" + m_state  + " " + Timer.getFPGATimestamp());
     switch(m_state){
     case SPINUP:
-        m_state=shooterStates.WAIT;
-        stateStartTime=Timer.getFPGATimestamp();
-        m_shooter.runNewShooter(m_speed,
+        m_shooter.poormanHoldHoodPos(m_hoodPos, .06, 0.04); 
+        if(m_shooter.checkHoodPos(m_hoodPos, .06, 0.04)){
+         stateStartTime=Timer.getFPGATimestamp();
+          m_shooter.runNewShooter(m_speed,
                             Constants.ShooterConstants.KickerSpeed);
-       
-        m_shooter.hoodMovetoPosition(m_hoodPos);
-        /*double hoodDiff=Math.abs(m_shooter.getHoodPos()-m_hoodPos);
+          m_state=shooterStates.WAIT;
+        }
         
-        System.out.print("Hood Diff" +hoodDiff);
-        if(hoodDiff>0.002){
-            if(m_shooter.getHoodPos()>m_hoodPos){
-                m_shooter.moveHood(-0.05);
-            }else {
-              m_shooter.moveHood(0.05);
-            } 
-            }else{
-              m_shooter.moveHood(0);
-              m_state=shooterStates.WAIT;
-            }*/
+        
     break;
     case WAIT:
+        m_shooter.poormanHoldHoodPos(m_hoodPos, .06, 0.04); 
         if(m_shooter.atTargetSpeed(m_speed)){
             m_state=shooterStates.SHOOT;
         }
       break;
     case SHOOT:
+        m_shooter.poormanHoldHoodPos(m_hoodPos, .06, 0.04); 
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
         break;
@@ -134,7 +126,7 @@ public class ShootMappingCommand extends Command {
     private void getValues() {
       double idleSpeed= SmartDashboard.getNumber("Idle Speed",20);
       double targetSpeed=SmartDashboard.getNumber("Target Speed",40);
-      double hoodPos = SmartDashboard.getNumber("Hood Pos",0);
+      double hoodPos = SmartDashboard.getNumber("Hood Target Position",0);
       m_idleSpeed=idleSpeed;
       m_speed=targetSpeed;
       m_hoodPos=hoodPos;
