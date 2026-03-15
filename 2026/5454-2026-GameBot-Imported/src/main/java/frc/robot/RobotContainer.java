@@ -96,7 +96,22 @@ public class RobotContainer {
   private final SendableChooser<String> m_pathChooser = new SendableChooser<>();
 
 
- //AutoSetup
+ // Climb Align
+  public void rightClimb() {
+    Command extend = m_climb.climbUpCommand();
+    Command retract = m_climb.climbDownCommand();
+    Command align = new ClimbAutoAlign(true, m_swerve);
+    CommandScheduler.getInstance().schedule(Commands.sequence(extend, align, retract));
+  }
+
+  public void leftClimb() {
+    Command extend = m_climb.climbUpCommand();
+    Command retract = m_climb.climbDownCommand();
+    Command align = new ClimbAutoAlign(false, m_swerve);
+    CommandScheduler.getInstance().schedule(Commands.sequence(extend, align, retract));
+  }
+
+  // Auto Setup
   public Command Left2Neutral() {
     // This method loads the auto when it is called, however, it is recommended
     // to first load your paths/autos when code starts, then return the
@@ -237,11 +252,13 @@ public class RobotContainer {
     m_xBoxOperator.a().whileTrue(outtake);
     
     Command climbUp = m_climb.climbUpCommand();
-    m_xBoxDriver.b().whileTrue(climbUp);
+    //m_xBoxDriver.b().onTrue(climbUp);
+    m_xBoxDriver.b().onTrue(Commands.runOnce(()->rightClimb()));
     m_xBoxOperator.povUp().whileTrue(climbUp);
 
     Command climbDown = m_climb.climbDownCommand();
-    m_xBoxDriver.a().whileTrue(climbDown);
+    //m_xBoxDriver.a().onTrue(climbDown);
+    m_xBoxDriver.a().onTrue(Commands.runOnce(()->leftClimb()));
     m_xBoxOperator.povDown().whileTrue(climbDown);
 
     Command shootManual = new ShootMappingCommand(m_newShooter,m_hopper,m_intake,
@@ -637,6 +654,7 @@ return pathfindingCommand;
   public void homeRobot(){
     if(!hasHomed){
       m_intake.homeIntake();
+      m_climb.retractClimb();
       hasHomed = true;
     }
   }

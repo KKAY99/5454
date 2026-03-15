@@ -69,7 +69,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     TalonFXConfiguration hoodMotor_cfg = new TalonFXConfiguration();
     hoodMotor_cfg.Feedback.FeedbackRemoteSensorID = m_hoodCoder.getDeviceID();
     hoodMotor_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    hoodMotor_cfg.Feedback.SensorToMechanismRatio = 1.0;
+    hoodMotor_cfg.Feedback.SensorToMechanismRatio = 1.333;
     hoodMotor_cfg.Feedback.RotorToSensorRatio = 12.8;
     m_hoodMotor.getConfigurator().apply(hoodMotor_cfg);
   }
