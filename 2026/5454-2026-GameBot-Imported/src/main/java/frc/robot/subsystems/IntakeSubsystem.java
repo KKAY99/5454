@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class IntakeSubsystem extends SubsystemBase {
   private TalonFX m_intakeMotor;
   private ObsidianCANSparkMax m_fold;
+  private DigitalInput m_intakeSwitch;
   private boolean m_IntakeOutMode = false; //starts in in Mode and gets reversed on first call
   private boolean m_homed=false;
   //private SparkAbsoluteEncoder m_encoder;
@@ -31,6 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem(int CanId1, int CanId2) {
     m_intakeMotor = new TalonFX(CanId1);
     m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true,30);
+    m_intakeSwitch = new DigitalInput(IntakeConstants.intakeSwitchDIO);
   }
 
   public void outFold(double speed) {
@@ -41,17 +44,20 @@ public class IntakeSubsystem extends SubsystemBase {
     m_fold.set(-speed);
   }
 
+  public boolean isIntakeSwitched() {
+    return m_intakeSwitch.get();
+  }
+
   public void homeIntake(){
-    //pull intake until we hit current limit and then reset position
-    while(!intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
+    //pull intake until we hit limit switch and then reset position
+    while(!isIntakeSwitched()){
      m_fold.set(-Constants.IntakeConstants.foldHomeSpeed);
     }
     m_fold.stopMotor(); // stop intake
+    //Do Nothing - basically just pausing
     double startTime = Timer.getFPGATimestamp();
     double endTime=startTime+0.1;
     while(Timer.getFPGATimestamp()<endTime){
-
-      //Do Nothing - basically just pausing
     }
     
     m_fold.getEncoder().setPosition(0.0); // reset encoder to zero at home in

@@ -166,7 +166,7 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
     currentLimits.SupplyCurrentLimit=60;
     configurator.apply(currentLimits);
     
-  } 
+  }
   private void configureShootermotor(TalonFX motor){
     TalonFXConfigurator configurator = motor.getConfigurator();
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -184,7 +184,7 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
     currentLimits.SupplyCurrentLimit=60;
     configurator.apply(currentLimits);
     
-  } 
+  }
   public void moveHood(double speed){
     m_hoodMotor.set(speed);
   }
