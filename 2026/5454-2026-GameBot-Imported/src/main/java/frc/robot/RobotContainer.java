@@ -189,8 +189,7 @@ public class RobotContainer {
     //filter turret limelight on center targets
     m_turretLimelight.setLimelightIDFilter(10,25);
     SmartDashboard.putData("field", m_Field2d);
-    SmartDashboard.putString("Asher's Cool Message:", "Restarted");
-   
+    
     configureNamedCommands();
     m_autoChooser=AutoBuilder.buildAutoChooser();
     createAutonomousCommandList(); 
@@ -252,13 +251,13 @@ public class RobotContainer {
     m_xBoxOperator.a().whileTrue(outtake);
     
     Command climbUp = m_climb.climbUpCommand();
-    //m_xBoxDriver.b().onTrue(climbUp);
-    m_xBoxDriver.b().onTrue(Commands.runOnce(()->rightClimb()));
+    m_xBoxDriver.b().onTrue(climbUp);
+    //m_xBoxDriver.b().onTrue(Commands.runOnce(()->rightClimb()));
     m_xBoxOperator.povUp().whileTrue(climbUp);
 
     Command climbDown = m_climb.climbDownCommand();
-    //m_xBoxDriver.a().onTrue(climbDown);
-    m_xBoxDriver.a().onTrue(Commands.runOnce(()->leftClimb()));
+    m_xBoxDriver.a().onTrue(climbDown);
+    //m_xBoxDriver.a().onTrue(Commands.runOnce(()->leftClimb()));
     m_xBoxOperator.povDown().whileTrue(climbDown);
 
     Command shootManual = new ShootMappingCommand(m_newShooter,m_hopper,m_intake,
@@ -481,7 +480,8 @@ public class RobotContainer {
       SmartDashboard.putNumber("Active Phase Time",m_activeHubTime);
       SmartDashboard.putNumber("LimeLight Distance" , m_turretLimelight.getDistance());   
       SmartDashboard.putNumber("Hood Position is ", m_newShooter.getHoodPos());
- 
+    SmartDashboard.putBoolean("Is Climb Up ???",m_climb.isClimbUpLimit());
+      SmartDashboard.putBoolean("Is Climb Down ???",m_climb.isClimbDownLimit());
     }
       catch(Exception e){}
 

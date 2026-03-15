@@ -27,7 +27,7 @@ public class ClimbSubsystem extends SubsystemBase {
   //private SparkAbsoluteEncoder m_encoder;
 
   public ClimbSubsystem(int CanId1) {
-    m_climbMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true);
+    m_climbMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true,Constants.k70Amp);
     m_climbUpSwitch = new DigitalInput(ClimbConstants.climbUpSwitchDIO);
     m_climbDownSwitch = new DigitalInput(ClimbConstants.climbDownSwitchDIO);
   }
@@ -50,12 +50,18 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public void extendClimb() {
     m_climbMotor.set(ClimbConstants.climbForwardSpeed);
+    while (!isClimbUpLimit()){
+      //just chill out and wait for robbot
+    }
     if (isClimbUpLimit()) {
       m_climbMotor.stopMotor();
     }
   }
   public void retractClimb() {
     m_climbMotor.set(ClimbConstants.climbBackSpeed);
+    while (!isClimbDownLimit()){
+      //just chill out and wait for robbot
+    }
     if (isClimbDownLimit()) {
       m_climbMotor.stopMotor();
     }
