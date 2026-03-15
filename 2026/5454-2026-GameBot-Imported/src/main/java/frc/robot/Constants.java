@@ -147,6 +147,7 @@ public final class Constants {
   public static final class IntakeConstants{
     public static final int IntakeMotorCanID=59;
     public static final int FoldMotorCanID=24;
+    public static final int intakeSwitchDIO=6;
     public static final double lowSpeed=-0.5;
     public static final double highSpeed=-1.0;
     public static final double outtakeSpeed=0.9;
@@ -195,6 +196,7 @@ public final class Constants {
     public static final double hoodOffset=-0.8740222222;
     public static final double hoodUpSpeed=-0.06;
     public static final double hoodDownSpeed=0.06;
+    public static final double hoodHomePosition=0;
   }
   public enum TurretStates {MANUAL,TRACK,FIXEDLEFT,FIXEDRIGHT};
   public static final class TurretConstants {

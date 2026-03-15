@@ -54,7 +54,7 @@ public class StopPopcornCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  CommandScheduler.getInstance().schedule(Commands.runOnce(()->m_shooter.hoodBack()));
+  m_shooter.hoodHome();
   return true;       
   }
 }
