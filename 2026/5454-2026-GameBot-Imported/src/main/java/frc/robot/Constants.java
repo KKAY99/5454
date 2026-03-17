@@ -180,7 +180,8 @@ public final class Constants {
     public static final double KickerSpeed=-1; //pos 1 for B-bot
     public static final double shootSpeed=80; //0.8;
     public static final double kAgitateTimeLimit=5; //how long to agitate on empty
-    public static final double shooterVelocityDeadband=0.1;
+    public static final double shooterVelocityLowDeadband=0.1;
+    public static final double shooterVelocityHighDeadband=1;
     //6328 Transforms for Turret
     public static Transform3d robotToTurret = new Transform3d(-0.19685, 0.0, 0.44, Rotation3d.kZero);
     public static Transform3d turretToCamera =
@@ -193,7 +194,7 @@ public final class Constants {
   }
   public static final class HoodConstants{
     public static final int hoodCoderCANID=51;
-    public static final double hoodOffset=-0.8740222222;
+    public static final double hoodOffset=-0.487037109375;//-0.488037109375;
     public static final double hoodSpeed=0.06;
     public static final double hoodUpSpeed=-0.06;
     public static final double hoodDownSpeed=0.06;
@@ -204,6 +205,9 @@ public final class Constants {
     public static final int turretCanID=6;
     public static final double turretSpeed=0.1; 
     public static final int TurretPOT=0;
+    public static final int TurretPOTZero=0;
+    public static final double TurretLeftLimitPOTS=0.1;
+    public static final double TurretRightLimitPOTS=0.9;
     public static final int encoder1CANID=11;
     public static final int encoder2CANID=12;
 

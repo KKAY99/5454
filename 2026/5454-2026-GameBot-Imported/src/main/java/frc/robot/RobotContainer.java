@@ -54,6 +54,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.TurretStates;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.shooter.ShotCalculator;
@@ -250,7 +251,8 @@ public class RobotContainer {
     m_xBoxDriver.rightBumper().whileTrue(outtake);
     m_xBoxOperator.a().whileTrue(outtake);
     
-    Command climbUp = m_climb.climbUpCommand();
+    
+    SequentialCommandGroup climbUp = new SequentialCommandGroup(m_newShooter.shutdownCommand(),m_climb.climbUpCommand());
     m_xBoxDriver.b().onTrue(climbUp);
     //m_xBoxDriver.b().onTrue(Commands.runOnce(()->rightClimb()));
     m_xBoxOperator.povUp().whileTrue(climbUp);
@@ -260,10 +262,10 @@ public class RobotContainer {
     //m_xBoxDriver.a().onTrue(Commands.runOnce(()->leftClimb()));
     m_xBoxOperator.povDown().whileTrue(climbDown);
 
-    //Command shootManual = new ShootMappingCommand(m_newShooter,m_hopper,m_intake,
-    //                            m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    Command shootManual = new ShotLookupCommand(m_newShooter,m_hopper,m_intake,
+    Command shootManual = new ShootMappingCommand(m_newShooter,m_hopper,m_intake,
                                 m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
+    //Command shootManual = new ShotLookupCommand(m_newShooter,m_hopper,m_intake,
+    //                            m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
     m_xBoxDriver.start().whileTrue(shootManual);
     m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 
@@ -351,7 +353,8 @@ public class RobotContainer {
     m_FunnyController.povLeft().whileTrue(new MoveTurretCommand(m_TurretSubsystem,TurretConstants.turretSpeed));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      m_FunnyController.povLeft().whileTrue(new MoveTurretCommand(m_TurretSubsystem,TurretConstants.turretSpeed));
     
     //m_FunnyController.povUp().whileTrue(m_TurretSubsystem.setMotortoZero());
-    m_FunnyController.povDown().onTrue(new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK));
+    m_FunnyController.povDown().onTrue(new TurretTrackCommand(m_TurretSubsystem, m_swerve,
+                    TurretStates.TRACK,m_turretLimelight));
   }
 
   private void updateisHubMatched(int Shift){

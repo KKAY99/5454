@@ -67,7 +67,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     CANcoderConfiguration hoodCoder_cfg = new CANcoderConfiguration();
     hoodCoder_cfg.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0; // unsigned [0,1) range, so 1.0 is the same as 0.0, which means the discontinuity is at the wrap-around point
     hoodCoder_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-   // hoodCoder_cfg.MagnetSensor.withMagnetOffset(Rotations.of(Constants.HoodConstants.hoodOffset));
+    hoodCoder_cfg.MagnetSensor.withMagnetOffset(Rotations.of(Constants.HoodConstants.hoodOffset));
     m_hoodCoder.getConfigurator().apply(hoodCoder_cfg);
     
     //TalonFXConfiguration hoodMotor_cfg = new TalonFXConfiguration();
@@ -116,9 +116,6 @@ motionMagicConfigs.MotionMagicJerk = 16; // Target jerk of 1600 rps/s/s (0.1 sec
 m_hoodMotor.getConfigurator().apply(talonFXConfigs);
 }
 
-  public void hoodBack(){
-//    m_hoodMotor.setPosition(0);
-  }
   public double getHoodPos(){
     double currentPos=m_hoodCoder.getAbsolutePosition().getValueAsDouble();
     if(currentPos<0.95){
@@ -154,13 +151,15 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   }
   
   public void hoodMoveToZero(){
-    hoodMoveToPosition(0,Constants.HoodConstants.hoodDownSpeed);
+    double hoodTarget=0;
+    double hoodSpeed=Constants.HoodConstants.hoodSpeed;
+    double deadband = Constants.HoodConstants.hoodDeadband;
+    while (!checkHoodPos(hoodTarget,hoodSpeed,deadband)){
+      poormanHoldHoodPos(hoodTarget,hoodSpeed,deadband);
+    }
+    stopHood();
   }
-  public void hoodMovetoPosition(double hoodTarget){
-    //m_hoodMotor.setPosition(hoodTarget);
-    System.out.println("Move Hood to " + hoodTarget);
-    m_hoodMotor.setControl(mmRequest.withPosition(hoodTarget)); 
-  }
+ 
 
   public void hoodMove(double hoodSpeed){
     m_hoodMotor.set(hoodSpeed);
@@ -175,8 +174,13 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
 public boolean atTargetSpeed(double targetSpeed){
   double currentSpeed=m_1shooterMotor.getVelocity().getValueAsDouble();
   double speedDiff = Math.abs(currentSpeed-targetSpeed);
-
-  return (speedDiff<Constants.ShooterConstants.shooterVelocityDeadband);
+  if(currentSpeed>targetSpeed){
+    //allow greater deadband for going over shot
+     return (speedDiff<Constants.ShooterConstants.shooterVelocityHighDeadband);
+  } else {
+       return (speedDiff<Constants.ShooterConstants.shooterVelocityLowDeadband);
+  }
+ 
 }
 public void runShooterVelocity(double targetSpeed){
 // Torque-current bang-bang
@@ -199,7 +203,10 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
   public void stopNewShooter(boolean idleMode){
     System.out.println("stopping shooter");
     if(idleMode){
-      runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
+      //runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
+      //kill motors always to save power 
+      m_1shooterMotor.stopMotor();
+      m_2shooterMotor.stopMotor();
     }else {
       m_1shooterMotor.stopMotor();
       m_2shooterMotor.stopMotor();
@@ -279,11 +286,14 @@ m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
   public Command shootoffCommand(){
     return Commands.runOnce(    ()->stopNewShooter(true),this);
   }
-  
+public Command shutdownCommand(){
+    return Commands.runOnce(    ()->stopNewShooter(false),this);
+  }
     @Override
   public void periodic(){
     SmartDashboard.putNumber("Shooter Velocity", m_1shooterMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Hood CanCoder Value",m_hoodCoder.getAbsolutePosition().getValueAsDouble());  
+    SmartDashboard.putNumber("Hood 'Pos'",getHoodPos());  
   
   }
 }

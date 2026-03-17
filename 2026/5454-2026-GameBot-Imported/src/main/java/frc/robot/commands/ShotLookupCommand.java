@@ -21,6 +21,8 @@ public class ShotLookupCommand extends Command {
   private Limelight m_limelight;
   private HubLookUpTable m_HubLookUpTable = new HubLookUpTable();
   private boolean m_emptyHopper=false;
+  private double m_lastHoodPos=0;
+  private double m_lastDistance=24; // default distance to use so will take up close shot if limelight is blocked/broken/hosed 
   private double m_timeLimit=0;
   private enum shooterStates{
     SPINUP,WAIT,SHOOT,NOFUEL,EMPTYHOPPER,NOFUEL2NDCHECK,END
@@ -77,6 +79,7 @@ public class ShotLookupCommand extends Command {
   public void end(boolean interrupted) {
   System.out.println("Stopping Shooter");
     m_shooter.hoodMoveToZero();
+  
     m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
     m_intake.stopIntake();;
@@ -92,11 +95,24 @@ public class ShotLookupCommand extends Command {
   double targetspeed=0;
   double hoodPos=0;  
   double distance=m_limelight.getDistance();
+  //if distance is zero than use last disance 
+  if(distance==0){
+       distance=m_lastDistance;
+  }else {
+        m_lastDistance=distance;
+  }
+  //limelight is unable to see the camera 
   ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
 
   targetspeed=shotParams.shooterSpeed;
   hoodPos=shotParams.hoodPosition;
-
+  if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
+    hoodPos=m_lastHoodPos;
+  }else {
+    //update last position we moved to only if we are moving the hood Pos
+    m_lastHoodPos=hoodPos;
+  }
+  
   System.out.println("Shooting Lookup :" + distance + " Speed:" + targetspeed  + " - State:" + m_state);
     switch(m_state){
     case SPINUP:

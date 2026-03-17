@@ -48,9 +48,10 @@ public class HubLookUpTable {
         addEntry(117,  62, 0.11, 1.00);  // Close shot - nearly straight up
         addEntry(129,  65, 0.11, 1.00);  // Close shot - nearly straight up
         addEntry(146,  65.5, 0.11, 1.00);  // Close shot - nearly straight up
-        addEntry(178,  65.6, 0.11, 1.00);  // Close shot - nearly straight up
-        addEntry(204,  67, 0.11, 1.00);  // Close shot - nearly straight up
-        addEntry(223,  68, 0.11, 1.00);  // Close shot - nearly straight up
+        addEntry(166,  68, 0.14, 1.00);  // Close shot - nearly straight up
+        addEntry(178,  69, 0.20, 1.00);  // Close shot - nearly straight up
+        addEntry(204,  74, 0.24, 1.00);  // Close shot - nearly straight up
+        addEntry(223,  75, 0.24, 1.00);  // Close shot - nearly straight up
         // Max distance 
     }
     

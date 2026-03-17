@@ -49,6 +49,7 @@ public class ClimbSubsystem extends SubsystemBase {
   }
 
   public void extendClimb() {
+    
     m_climbMotor.set(ClimbConstants.climbForwardSpeed);
     while (!isClimbUpLimit()){
       //just chill out and wait for robbot

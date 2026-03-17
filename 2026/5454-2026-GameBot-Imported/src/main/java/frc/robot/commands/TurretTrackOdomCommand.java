@@ -15,21 +15,19 @@ import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.TurretUtil.ShotSolution;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
-import frc.robot.utilities.Limelight;
 /** An example command that uses an example subsystem. */
-public class TurretTrackCommand extends Command {
+public class TurretTrackOdomCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
 
   private TurretSubsystemPots m_turret;
   private CommandSwerveDrivetrain m_drive;
-  private Limelight m_limelight;
+  
   private TurretStates m_turretState;
   private PoseCalculator m_PoseCalc = new PoseCalculator();
-  public TurretTrackCommand(TurretSubsystemPots turret,CommandSwerveDrivetrain drive,TurretStates state,Limelight limelight) {
+  public TurretTrackOdomCommand(TurretSubsystemPots turret,CommandSwerveDrivetrain drive,TurretStates state) {
     m_turret=turret;    
     m_drive=drive;
     m_turretState=state;
-    m_limelight=limelight;
     addRequirements(m_turret);
     
   }
@@ -51,10 +49,21 @@ public class TurretTrackCommand extends Command {
     m_turret.stopTurret();
   }
 
-  private void trackHubpose(){
+  private Pose2d getHubPose(){
+    //default to Blue Hub for target
+    Pose2d hubTarget=Constants.LocationConstants.blueHub;
+    Optional<Alliance> ally = DriverStation.getAlliance();
+   if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+            hubTarget=Constants.LocationConstants.redHub;
+        }
+      }
+    return hubTarget;
+  }
+  private void trackHub(){
     Pose2d currentPose = m_drive.getPose2d();
-    Pose2d aimAtPose = m_drive.getPose2d();
-        double bearing = m_PoseCalc.getBearingAngle( currentPose,aimAtPose);
+    Pose2d aimAtPose = getHubPose();
+    double bearing = m_PoseCalc.getBearingAngle( currentPose,aimAtPose);
     ShotSolution solution = TurretUtil.computeShotSolution(currentPose, TargetType.HUB);
     System.out.println("Solution " + solution.turretAngleDegrees);
     double currentAngle = m_turret.getCurrentAngle();
@@ -68,11 +77,7 @@ public class TurretTrackCommand extends Command {
     }
 
   }
-  private void trackHub(){
-    if(!m_limelight.isFilteredTargetAvailable()){
-        
-    } 
-  }
+  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
@@ -82,7 +87,6 @@ public class TurretTrackCommand extends Command {
         m_turret.stopTurret();
         returnValue=true;
         break;
-        
       case TRACK:
         trackHub();
         break;
