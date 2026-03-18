@@ -513,41 +513,37 @@ public class RobotContainer {
   }
 
   public void DisabledInit(){
-    // Tighten std devs while disabled so vision can correct pose at the start of the match.
-    // If you want to ignore vision while disabled, swap the values back to (1,1,99999999).
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999));
+    // During disabled we trust vision MORE (robot is stationary) so corrections
+    // lock in the starting pose before auto. Rotation is still ignored (9999)
+    // because MegaTag2 yaw is unreliable without a known heading.
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.3, 0.3, 9999));
     if(!m_hasResetGyro){
       m_hasResetGyro=true;
       m_swerve.getPigeon2().reset();
     }
   }
   public void updateOdomfromLimeLight(){
-   /*     if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+    // Must set robot orientation before calling MegaTag2 — uses gyro to resolve ambiguity
+    double yawDegrees = m_swerve.getPigeon2().getRotation2d().getDegrees();
 
-      System.out.println("update vision back " + currentPose.getX() + "/" + currentPose.getY());
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-      */
+    if(m_backLimelight.isAnyTargetAvailable()){
+      m_backLimelight.SetRobotOrientation(yawDegrees, 0);
+      Pose2d currentPose = m_backLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp = Utils.getCurrentTimeSeconds();
+      m_swerve.addVisionMeasurement(currentPose, currentTimeStamp);
+    }
 
-  }
-  public void DisabledPeriodic(){
-   updateOdomfromLimeLight();
-/* 
     if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+      m_leftLimelight.SetRobotOrientation(yawDegrees, 0);
+      Pose2d currentPose = m_leftLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp = Utils.getCurrentTimeSeconds();
+      m_swerve.addVisionMeasurement(currentPose, currentTimeStamp);
+    }
+  }
 
-       System.out.println("update vision left "+ currentPose.getX() + "/" + currentPose.getY());
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    }*/ 
-    //m_LEDS.setLedState(LEDStates.DISABLED,false);
-    //m_LEDS.activateLEDS();
+  public void DisabledPeriodic(){
+    // Vision runs during disabled so the pose is correct before auto starts
+    updateOdomfromLimeLight();
   }
   
   public void AutoPeriodic(){
