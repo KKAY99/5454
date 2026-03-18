@@ -336,7 +336,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             
         return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
             .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
-            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalRotMult)
+            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxAngularSpeed)*m_gasPedalRotMult)
         );
     }
 
