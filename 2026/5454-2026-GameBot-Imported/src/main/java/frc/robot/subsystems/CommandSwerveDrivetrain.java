@@ -275,6 +275,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return getState().Pose;
     }
 
+    /**
+     * Resets both CTRE's internal pose estimator and RobotState so they stay in sync.
+     * PathPlanner calls this at the start of every auto via AutoBuilder.configure().
+     */
+    @Override
+    public void resetPose(Pose2d pose) {
+        super.resetPose(pose);
+        RobotState.getInstance().resetPose(pose);
+    }
+
     public Command createPathCommand(PathPlannerPath path){
         return AutoBuilder.followPath(path);
     }
