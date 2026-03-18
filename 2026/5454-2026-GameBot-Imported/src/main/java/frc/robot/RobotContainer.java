@@ -262,10 +262,10 @@ public class RobotContainer {
     //m_xBoxDriver.a().onTrue(Commands.runOnce(()->leftClimb()));
     m_xBoxOperator.povDown().whileTrue(climbDown);
 
-    Command shootManual = new ShootMappingCommand(m_newShooter,m_hopper,m_intake,
-                                m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    //Command shootManual = new ShotLookupCommand(m_newShooter,m_hopper,m_intake,
+    //Command shootManual = new ShootMappingCommand(m_newShooter,m_hopper,m_intake,
     //                            m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
+    Command shootManual = new ShotLookupCommand(m_newShooter,m_hopper,m_intake,
+                                m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
     m_xBoxDriver.start().whileTrue(shootManual);
     m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 
@@ -659,7 +659,7 @@ return pathfindingCommand;
 
   public void homeRobot(){
     if(!hasHomed){
-      m_intake.homeIntake();
+      m_intake.homeIntake(Constants.IntakeConstants.homeTimeOut);
       m_newShooter.hoodHome();
       m_climb.retractClimb();
       hasHomed = true;

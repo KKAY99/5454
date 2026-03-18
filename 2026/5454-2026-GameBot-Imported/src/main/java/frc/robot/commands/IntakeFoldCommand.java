@@ -74,11 +74,11 @@ public class IntakeFoldCommand extends Command {
             
             m_state=foldingStates.END;
           }
-          if(m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)) {
+       /*    if(m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)) {
             System.out.println("Intake Fold Stoppping Due to Current Limit Check");
             m_intake.stopFold();
             m_state=foldingStates.END;
-        }
+        }*/
         }else { //Outake Mode
           //auto restart intake when it is past the no fly zone
           if(!m_intake.isinNoFlyZone()){

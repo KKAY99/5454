@@ -12,6 +12,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -170,7 +171,9 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
     runShooterVelocity(speed);
     m_kickerMotor.set(kickerSpeed);
   }
-
+public void runKicker(double kickerSpeed){
+  m_kickerMotor.set(kickerSpeed);
+}
 public boolean atTargetSpeed(double targetSpeed){
   double currentSpeed=m_1shooterMotor.getVelocity().getValueAsDouble();
   double speedDiff = Math.abs(currentSpeed-targetSpeed);
@@ -186,8 +189,9 @@ public void runShooterVelocity(double targetSpeed){
 // Torque-current bang-bang
 //m_1shooterMotor.setControl(new MotionMagicVelocityVoltage(targetSpeed));
 //m_1shooterMotor.setControl(new MotionMagicVelocityVoltage(-targetSpeed));
-m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(targetSpeed));
-m_2shooterMotor.setControl(new VelocityTorqueCurrentFOC(-targetSpeed));
+//replaced FOC 
+m_1shooterMotor.setControl(new VelocityVoltage(targetSpeed));
+m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
 
 
 /*    m_1shooterMotor.setControl(new VelocityTorqueCurrentFOC(0)

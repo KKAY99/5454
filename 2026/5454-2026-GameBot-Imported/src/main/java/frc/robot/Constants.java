@@ -156,7 +156,7 @@ public final class Constants {
     public static final double foldSpeedAutoMode=-0.15;
     public static final double ampInStop=10;
     public static final double ampOutStop=20;
-    
+    public static final int homeTimeOut=5;
     public static final double intakeinPos=0.05;
     public static final double intakeRollStop=9;
     public static final double intakeEndStop=14.2; 
@@ -178,7 +178,7 @@ public final class Constants {
     public static final double shooterRPM=5000;
     public static final double IdleSpeed=52;// 0.7;
     public static final double KickerSpeed=-1; //pos 1 for B-bot
-    public static final double shootSpeed=80; //0.8;
+    public static final double shootSpeed=100; //0.8;
     public static final double kAgitateTimeLimit=5; //how long to agitate on empty
     public static final double shooterVelocityLowDeadband=0.1;
     public static final double shooterVelocityHighDeadband=1;
@@ -194,7 +194,7 @@ public final class Constants {
   }
   public static final class HoodConstants{
     public static final int hoodCoderCANID=51;
-    public static final double hoodOffset=-0.487037109375;//-0.488037109375;
+    public static final double hoodOffset=-0.080000;//-0.488037109375;
     public static final double hoodSpeed=0.06;
     public static final double hoodUpSpeed=-0.06;
     public static final double hoodDownSpeed=0.06;
@@ -204,7 +204,7 @@ public final class Constants {
   public static final class TurretConstants {
     public static final int turretCanID=6;
     public static final double turretSpeed=0.1; 
-    public static final int TurretPOT=0;
+    public static final int TurretPOT=2;
     public static final int TurretPOTZero=0;
     public static final double TurretLeftLimitPOTS=0.1;
     public static final double TurretRightLimitPOTS=0.9;

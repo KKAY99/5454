@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -32,7 +33,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem(int CanId1, int CanId2) {
     m_intakeMotor = new TalonFX(CanId1);
-    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true,30);
+    m_intakeMotor.setNeutralMode(NeutralModeValue.Coast);
+    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, false,30);
     m_intakeSwitch = new DigitalInput(IntakeConstants.intakeSwitchDIO);
   }
 
@@ -48,15 +50,17 @@ public class IntakeSubsystem extends SubsystemBase {
     return m_intakeSwitch.get();
   }
 
-  public void homeIntake(){
+  public void homeIntake(double maxHomeTime){
     //pull intake until we hit limit switch and then reset position
-    while(!isIntakeSwitched()){
+     double startTime = Timer.getFPGATimestamp();
+     double endTime = startTime + maxHomeTime;
+    while(!isIntakeSwitched() && Timer.getFPGATimestamp()<endTime){
      m_fold.set(-Constants.IntakeConstants.foldHomeSpeed);
     }
     m_fold.stopMotor(); // stop intake
     //Do Nothing - basically just pausing
-    double startTime = Timer.getFPGATimestamp();
-    double endTime=startTime+0.1;
+    startTime = Timer.getFPGATimestamp();
+    endTime=startTime+0.1;
     while(Timer.getFPGATimestamp()<endTime){
     }
     

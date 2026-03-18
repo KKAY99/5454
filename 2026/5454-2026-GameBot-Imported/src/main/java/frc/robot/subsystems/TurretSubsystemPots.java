@@ -115,7 +115,7 @@ public class TurretSubsystemPots extends SubsystemBase {
    
       } else {
           //hard coded for testing
-           m_turretMotor.set(0.5);
+           m_turretMotor.set(0.2);
            //m_turretMotor.setControl(m_TurretDutyCycleOut.withOutput(speed)); 
            System.out.println("Turret Move:" + speed);
    

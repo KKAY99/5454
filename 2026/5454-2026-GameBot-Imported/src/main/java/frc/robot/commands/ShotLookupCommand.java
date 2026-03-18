@@ -119,8 +119,9 @@ public class ShotLookupCommand extends Command {
          m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
         if(m_shooter.checkHoodPos(hoodPos, khoodSpeed,khoodDeadband)){
          stateStartTime=Timer.getFPGATimestamp();
-          m_shooter.runNewShooter(targetspeed,
-                            Constants.ShooterConstants.KickerSpeed);
+          
+         m_shooter.runNewShooter(targetspeed,
+                            0);
           m_state=shooterStates.WAIT;
         }
     break;
@@ -131,9 +132,15 @@ public class ShotLookupCommand extends Command {
         } 
         break;
     case SHOOT:
+        m_shooter.runKicker(Constants.ShooterConstants.KickerSpeed);
+
+        m_shooter.runNewShooter(targetspeed,
+                            Constants.ShooterConstants.KickerSpeed);
+       
         m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+       
         if(checkNoFuelorFuelTimeLimit()){
           m_state=shooterStates.NOFUEL;
         }         
