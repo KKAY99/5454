@@ -207,9 +207,8 @@ public class RobotContainer {
 
     //Named Commands
   public void configureNamedCommands() {
-    //NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
-    NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
-    NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
+    //NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
+    //NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
     NamedCommands.registerCommand("expandIntake", new IntakeFoldCommand(m_intake));
     NamedCommands.registerCommand("shrinkIntake", new IntakeIntakeCommand(m_intake));
     NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
@@ -226,6 +225,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
     NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
     NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem,m_swerve, null));
+    NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
   }
 
   private void configureButtonBindings(){

@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootManual"
+            "name": "shotLookUp"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootManual"
+            "name": "shotLookUp"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootManual"
+            "name": "shotLookUp"
           }
         }
       ]

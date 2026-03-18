@@ -94,12 +94,6 @@
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
-    },
-    {
-      "name": "popcorn",
-      "waypointRelativePos": 2.797488948919448,
-      "endWaypointRelativePos": null,
-      "command": null
     }
   ],
   "globalConstraints": {

@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "popcorn"
+            "name": "shotLookUp"
           }
         },
         {
@@ -37,13 +37,25 @@
         {
           "type": "named",
           "data": {
-            "name": "popcorn"
+            "name": "shotLookUp"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "RTOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUp"
           }
         },
         {
@@ -59,15 +71,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "shotLookUp"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "climbAlignL"
+            "waitTime": 1.0
           }
         }
       ]

@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "popcorn"
+            "name": "shotLookUp"
           }
         },
         {
@@ -35,15 +35,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shotLookUp"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "DepotVacuumPop"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "depotClimbL"
+            "name": "shotLookUp"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         }
       ]

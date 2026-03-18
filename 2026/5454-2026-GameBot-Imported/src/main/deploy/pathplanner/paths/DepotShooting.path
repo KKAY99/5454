@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "popcorn",
+      "name": "completeIntake",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
