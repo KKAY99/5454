@@ -27,15 +27,16 @@ public final class Constants {
     public static final double swerveRotateDeadband = 0.17; //0.17
     public static final double MinGasPedalSpeed=0.20;
     //Support for 6328 DriveConstants Class
-    public static final double trackWidthX = 20.75;
-    public static final double  trackWidthY= 20.75;
-  
+    // Robot is 27.5 in x 27.5 in, so modules are ±13.75 in from center on both axes
+    public static final double trackWidthX = edu.wpi.first.math.util.Units.inchesToMeters(27.5);
+    public static final double trackWidthY = edu.wpi.first.math.util.Units.inchesToMeters(27.5);
+
     public static final Translation2d[] moduleTranslations = {
-    new Translation2d(trackWidthX / 2, trackWidthY / 2),
-    new Translation2d(trackWidthX / 2, -trackWidthY / 2),
-    new Translation2d(-trackWidthX / 2, trackWidthY / 2),
-    new Translation2d(-trackWidthX / 2, -trackWidthY / 2)
-  };
+      new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(13.75),  edu.wpi.first.math.util.Units.inchesToMeters(13.75)),   // Front Left
+      new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(13.75),  edu.wpi.first.math.util.Units.inchesToMeters(-13.75)),  // Front Right
+      new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(-13.75), edu.wpi.first.math.util.Units.inchesToMeters(13.75)),   // Back Left
+      new Translation2d(edu.wpi.first.math.util.Units.inchesToMeters(-13.75), edu.wpi.first.math.util.Units.inchesToMeters(-13.75))   // Back Right
+    };
 
   }
 

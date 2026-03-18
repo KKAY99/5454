@@ -14,9 +14,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.PointWheelsAt;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import frc.robot.Constants;
@@ -24,7 +22,6 @@ import frc.robot.RobotState;
 import frc.robot.RobotState.OdometryObservation;
 import frc.robot.TunerConstants;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -64,8 +61,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
     private SwerveRequest.ApplyRobotSpeeds autoDrive = new SwerveRequest.ApplyRobotSpeeds();
-
-    private SwerveDrivePoseEstimator m_poseEstimator;
 
     private double m_gasPedalDriveMult=1;
     private double m_gasPedalRotMult=1;
@@ -151,7 +146,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
 
-        buildPoseEstimator();
         configAutoBuilder();
     }
 
@@ -178,7 +172,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
 
-        buildPoseEstimator();
         configAutoBuilder();
     }
 
@@ -213,27 +206,36 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
 
-        buildPoseEstimator();
         configAutoBuilder();
     }
 
-    public void buildPoseEstimator(){
-        m_poseEstimator=new SwerveDrivePoseEstimator(getKinematics(),
-                        new Rotation2d(this.getPigeon2().getYaw().getValue()),
-                        this.getState().ModulePositions,getPose2d());
-    }
-
     public void configAutoBuilder(){
-         // Load the RobotConfig from the GUI settings. You should probably
-    // store this in your Constants file
-    RobotConfig config;
-    try{
-      config = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      // Handle exception as needed
-      config = new RobotConfig(0,0,null);
-      e.printStackTrace();
-    }
+        // Load the RobotConfig from the GUI settings (deploy/pathplanner/settings.json).
+        // If the file is missing the fallback below is used - update its values to match your robot.
+        RobotConfig config;
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("WARNING: RobotConfig.fromGUISettings() failed - using hardcoded fallback. Deploy PathPlanner settings!");
+            // Fallback values inlined from TunerConstants (all private there, so copied here):
+            //   kDriveGearRatio = 5.9028, kWheelRadius = 2 in (0.0508 m), kSlipCurrent = 60 A
+            //   kMaxSpeed = 6 m/s, robot mass ~55 kg, MOI ~6 kg*m^2
+            config = new RobotConfig(
+                55.0,   // robot mass (kg)
+                6.0,    // robot MOI (kg*m^2)
+                new com.pathplanner.lib.config.ModuleConfig(
+                    0.0508,   // wheel radius (m) — 2 inches, matches TunerConstants kWheelRadius
+                    6.0,      // max speed (m/s) — matches TunerConstants.kMaxSpeed
+                    1.2,      // wheel coefficient of friction
+                    edu.wpi.first.math.system.plant.DCMotor.getKrakenX60(1)
+                        .withReduction(5.902777777777778), // kDriveGearRatio from TunerConstants
+                    60.0,     // drive current limit (A) — matches TunerConstants kSlipCurrent
+                    1         // motors per module
+                ),
+                Constants.DriveConstants.moduleTranslations
+            );
+        }
 
     // Configure AutoBuilder last
         AutoBuilder.configure(
@@ -271,6 +273,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Pose2d getPose2d(){
         return getState().Pose;
+    }
+
+    /**
+     * Resets both CTRE's internal pose estimator and RobotState so they stay in sync.
+     * PathPlanner calls this at the start of every auto via AutoBuilder.configure().
+     */
+    @Override
+    public void resetPose(Pose2d pose) {
+        super.resetPose(pose);
+        RobotState.getInstance().resetPose(pose);
     }
 
     public Command createPathCommand(PathPlannerPath path){
@@ -336,7 +348,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             
         return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
             .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
-            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalRotMult)
+            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxAngularSpeed)*m_gasPedalRotMult)
         );
     }
 
@@ -389,25 +401,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        m_poseEstimator.update(new Rotation2d(this.getPigeon2().getYaw().getValue()),
-                                this.getState().ModulePositions);
-
-    
-
-    // Update odometry
+        // Update RobotState odometry - negate yaw because Pigeon2 is CW-positive, WPILib expects CCW-positive
     RobotState.getInstance()
         .addOdometryObservation(
             new OdometryObservation(
                 Timer.getTimestamp(),
                 this.getState().ModulePositions,
                 Optional.ofNullable(this.getPigeon2().isConnected() ?
-                                Rotation2d.fromDegrees(this.getPigeon2().getYaw().getValueAsDouble()): null)));
+                                Rotation2d.fromDegrees(-this.getPigeon2().getYaw().getValueAsDouble()): null)));
+
     RobotState.getInstance().setRobotVelocity(getChassisSpeeds());
 
         //Add telemtry
         Logger.recordOutput("SwerveDriveTrain/Yaw", this.getPigeon2().getYaw().getValue());
-        Logger.recordOutput("SwerveDriveTrain/PoseEstimate",m_poseEstimator.getEstimatedPosition());
-        Logger.recordOutput("SwerveDriveTrain/ModulePositions",this.getState().ModulePositions);                            }
+        Logger.recordOutput("SwerveDriveTrain/PoseEstimate", this.getPose2d()); // CTRE built-in pose
+        Logger.recordOutput("SwerveDriveTrain/ModulePositions",this.getState().ModulePositions);
+    }
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();

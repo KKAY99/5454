@@ -4,9 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.VecBuilder;
@@ -160,13 +158,13 @@ public class RobotContainer {
             0.0
           );
 
-          Command followAuto = new PathPlannerAuto("DepotShooting");
+          Command followAuto = m_autoChooser.getSelected(); // Fix #7: was hardcoded to "DepotShooting"
 
           // go to start pos then call auto
           SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
           //add auto to scheduler
           Pose2d currentPose = m_swerve.getPose2d();
-          if(currentPose.getX()!=0 | currentPose.getY()!=0) {
+          if(currentPose.getX()!=0 || currentPose.getY()!=0) { // Fix #8: was | (bitwise), should be || (logical)
             //disable pathing
             //            CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
             CommandScheduler.getInstance().schedule(Commands.sequence(followAuto));
@@ -515,67 +513,48 @@ public class RobotContainer {
   }
 
   public void DisabledInit(){
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(1,1,99999999));
+    // During disabled we trust vision MORE (robot is stationary) so corrections
+    // lock in the starting pose before auto. Rotation is still ignored (9999)
+    // because MegaTag2 yaw is unreliable without a known heading.
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.3, 0.3, 9999));
     if(!m_hasResetGyro){
       m_hasResetGyro=true;
       m_swerve.getPigeon2().reset();
     }
   }
   public void updateOdomfromLimeLight(){
-   /*     if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+    // Must set robot orientation before calling MegaTag2 — uses gyro to resolve ambiguity
+    double yawDegrees = m_swerve.getPigeon2().getRotation2d().getDegrees();
 
-      System.out.println("update vision back " + currentPose.getX() + "/" + currentPose.getY());
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-      */
+    if(m_backLimelight.isAnyTargetAvailable()){
+      m_backLimelight.SetRobotOrientation(yawDegrees, 0);
+      Pose2d currentPose = m_backLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp = Utils.getCurrentTimeSeconds();
+      m_swerve.addVisionMeasurement(currentPose, currentTimeStamp);
+    }
 
-  }
-  public void DisabledPeriodic(){
-   updateOdomfromLimeLight();
-/* 
     if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+      m_leftLimelight.SetRobotOrientation(yawDegrees, 0);
+      Pose2d currentPose = m_leftLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp = Utils.getCurrentTimeSeconds();
+      m_swerve.addVisionMeasurement(currentPose, currentTimeStamp);
+    }
+  }
 
-       System.out.println("update vision left "+ currentPose.getX() + "/" + currentPose.getY());
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    }*/ 
-    //m_LEDS.setLedState(LEDStates.DISABLED,false);
-    //m_LEDS.activateLEDS();
+  public void DisabledPeriodic(){
+    // Vision runs during disabled so the pose is correct before auto starts
+    updateOdomfromLimeLight();
   }
   
   public void AutoPeriodic(){
-    /*if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-
-    if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } */
+    updateOdomfromLimeLight(); // polls both back and left limelights
   }
 
   public void makefalsestartPose(){
     
   Pose2d startPose = new Pose2d(4,7.5, Rotation2d.fromDegrees(2));
-  m_swerve.addVisionMeasurement(startPose,Utils.getCurrentTimeSeconds());
+  m_swerve.resetPose(startPose);
+  RobotState.getInstance().resetPose(startPose);
 
 }
   public Command makeAutoCommandPPTest(){
@@ -598,11 +577,15 @@ Command pathfindingCommand = AutoBuilder.pathfindToPose(
 return pathfindingCommand;
 }
   public void AutonMode(){
+    // Fix #9: restore vision trust to normal operating values on enable
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999));
     homeRobot();
     InitialAutonPathfind();
   }
 
   public void TeleopMode(){
+    // Fix #9: restore vision trust to normal operating values on enable
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999));
     homeRobot();
     
     //m_LEDS.setLedState(LEDStates.TELEOP,false);
@@ -624,34 +607,9 @@ return pathfindingCommand;
     }
   }
   public void TeleopPeriodic(){
-    updateOdomfromLimeLight();
-
-    refreshSmartDashboard();
+    updateOdomfromLimeLight(); // polls both back and left limelights
     updateLEDs();
-    //m_ShotCalculator.clearShootingParameters();
-    //ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
-    //System.out.println("Turret Angle: " + shootingInfo.turretAngle());
-    //System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
-    
-    if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-
-    if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
+    // Note: refreshSmartDashboard() is NOT called here - AllPeriodic() already calls it every loop
   }
 
   public void AllPeriodic(){
