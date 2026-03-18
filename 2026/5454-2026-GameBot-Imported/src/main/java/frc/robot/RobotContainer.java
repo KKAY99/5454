@@ -4,9 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.VecBuilder;
@@ -160,13 +158,13 @@ public class RobotContainer {
             0.0
           );
 
-          Command followAuto = new PathPlannerAuto("DepotShooting");
+          Command followAuto = m_autoChooser.getSelected(); // Fix #7: was hardcoded to "DepotShooting"
 
           // go to start pos then call auto
           SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
           //add auto to scheduler
           Pose2d currentPose = m_swerve.getPose2d();
-          if(currentPose.getX()!=0 | currentPose.getY()!=0) {
+          if(currentPose.getX()!=0 || currentPose.getY()!=0) { // Fix #8: was | (bitwise), should be || (logical)
             //disable pathing
             //            CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
             CommandScheduler.getInstance().schedule(Commands.sequence(followAuto));
@@ -515,7 +513,9 @@ public class RobotContainer {
   }
 
   public void DisabledInit(){
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(1,1,99999999));
+    // Tighten std devs while disabled so vision can correct pose at the start of the match.
+    // If you want to ignore vision while disabled, swap the values back to (1,1,99999999).
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999));
     if(!m_hasResetGyro){
       m_hasResetGyro=true;
       m_swerve.getPigeon2().reset();
@@ -551,25 +551,19 @@ public class RobotContainer {
   }
   
   public void AutoPeriodic(){
-    /*if(m_backLimelight.isAnyTargetAvailable()){
+    if(m_backLimelight.isAnyTargetAvailable()){
       m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
       Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
+    }
 
     if(m_leftLimelight.isAnyTargetAvailable()){
       m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
       Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } */
+    }
   }
 
   public void makefalsestartPose(){
@@ -599,11 +593,15 @@ Command pathfindingCommand = AutoBuilder.pathfindToPose(
 return pathfindingCommand;
 }
   public void AutonMode(){
+    // Fix #9: restore vision trust to normal operating values on enable
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999));
     homeRobot();
     InitialAutonPathfind();
   }
 
   public void TeleopMode(){
+    // Fix #9: restore vision trust to normal operating values on enable
+    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999));
     homeRobot();
     
     //m_LEDS.setLedState(LEDStates.TELEOP,false);
