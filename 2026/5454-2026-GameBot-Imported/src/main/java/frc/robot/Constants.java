@@ -27,8 +27,9 @@ public final class Constants {
     public static final double swerveRotateDeadband = 0.17; //0.17
     public static final double MinGasPedalSpeed=0.20;
     //Support for 6328 DriveConstants Class
-    public static final double trackWidthX = 20.75;
-    public static final double  trackWidthY= 20.75;
+    // Track width in METERS (converted from 20.75 inches)
+    public static final double trackWidthX = edu.wpi.first.math.util.Units.inchesToMeters(20.75);
+    public static final double trackWidthY = edu.wpi.first.math.util.Units.inchesToMeters(20.75);
   
     public static final Translation2d[] moduleTranslations = {
     new Translation2d(trackWidthX / 2, trackWidthY / 2),
