@@ -203,11 +203,11 @@ public final class Constants {
   public enum TurretStates {MANUAL,TRACK,FIXEDLEFT,FIXEDRIGHT};
   public static final class TurretConstants {
     public static final int turretCanID=6;
-    public static final double turretSpeed=0.1; 
+    public static final double turretSpeed=0.11; 
     public static final int TurretPOT=2;
     public static final int TurretPOTZero=0;
-    public static final double TurretLeftLimitPOTS=0.1;
-    public static final double TurretRightLimitPOTS=0.9;
+    public static final double TurretLeftLimitPOTS=0.3; 
+    public static final double TurretRightLimitPOTS=0.7;
     public static final int encoder1CANID=11;
     public static final int encoder2CANID=12;
 

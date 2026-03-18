@@ -52,8 +52,8 @@ public class TurretSubsystemPots extends SubsystemBase {
  // private CANcoder m_encoder1;
  // private CANcoder m_encoder2;
   private AnalogPotentiometer m_POTS;
-  private final double kPotsLowLimit=0.20;
-  private final double kPotsHighLimit=0.80;
+  private final double kPotsLowLimit=Constants.TurretConstants.TurretLeftLimitPOTS;
+  private final double kPotsHighLimit=Constants.TurretConstants.TurretRightLimitPOTS;
   private double kLowerLimit=-20;
   private double kUpperLimit=19;
   private final double kGearReduction=8;  //80t to 10tooth
@@ -115,7 +115,7 @@ public class TurretSubsystemPots extends SubsystemBase {
    
       } else {
           //hard coded for testing
-           m_turretMotor.set(0.2);
+           m_turretMotor.set(speed);
            //m_turretMotor.setControl(m_TurretDutyCycleOut.withOutput(speed)); 
            System.out.println("Turret Move:" + speed);
    
