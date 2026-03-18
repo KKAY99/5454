@@ -389,8 +389,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        m_poseEstimator.update(new Rotation2d(this.getPigeon2().getYaw().getValue()),
-                                this.getState().ModulePositions);
+        // Use Pigeon2 rotation directly to preserve units.
+        m_poseEstimator.update(this.getPigeon2().getRotation2d(), this.getState().ModulePositions);
 
     
 
@@ -402,6 +402,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 this.getState().ModulePositions,
                 Optional.ofNullable(this.getPigeon2().isConnected() ?
                                 Rotation2d.fromDegrees(this.getPigeon2().getYaw().getValueAsDouble()): null)));
+
     RobotState.getInstance().setRobotVelocity(getChassisSpeeds());
 
         //Add telemtry

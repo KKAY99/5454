@@ -575,7 +575,8 @@ public class RobotContainer {
   public void makefalsestartPose(){
     
   Pose2d startPose = new Pose2d(4,7.5, Rotation2d.fromDegrees(2));
-  m_swerve.addVisionMeasurement(startPose,Utils.getCurrentTimeSeconds());
+  m_swerve.resetPose(startPose);
+  RobotState.getInstance().resetPose(startPose);
 
 }
   public Command makeAutoCommandPPTest(){
