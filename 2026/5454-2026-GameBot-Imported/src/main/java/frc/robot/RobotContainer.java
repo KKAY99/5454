@@ -547,19 +547,7 @@ public class RobotContainer {
   }
   
   public void AutoPeriodic(){
-    if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    }
-
-    if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    }
+    updateOdomfromLimeLight(); // polls both back and left limelights
   }
 
   public void makefalsestartPose(){
@@ -619,34 +607,9 @@ return pathfindingCommand;
     }
   }
   public void TeleopPeriodic(){
-    updateOdomfromLimeLight();
-
-    refreshSmartDashboard();
+    updateOdomfromLimeLight(); // polls both back and left limelights
     updateLEDs();
-    //m_ShotCalculator.clearShootingParameters();
-    //ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
-    //System.out.println("Turret Angle: " + shootingInfo.turretAngle());
-    //System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
-    
-    if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-
-    if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
+    // Note: refreshSmartDashboard() is NOT called here - AllPeriodic() already calls it every loop
   }
 
   public void AllPeriodic(){

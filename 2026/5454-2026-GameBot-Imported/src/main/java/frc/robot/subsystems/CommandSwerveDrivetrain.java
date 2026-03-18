@@ -14,9 +14,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.PointWheelsAt;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import frc.robot.Constants;
@@ -393,11 +391,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        // Use Pigeon2's getRotation2d() which handles CCW-positive convention automatically
-
-    
-
-    // Update odometry - negate yaw because Pigeon2 is CW-positive, WPILib expects CCW-positive
+        // Update RobotState odometry - negate yaw because Pigeon2 is CW-positive, WPILib expects CCW-positive
     RobotState.getInstance()
         .addOdometryObservation(
             new OdometryObservation(
