@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "popcorn"
+            "name": "shotLookUp"
           }
         },
         {
@@ -37,13 +37,19 @@
         {
           "type": "named",
           "data": {
-            "name": "popcorn"
+            "name": "shotLookUp"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "RTOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUp"
           }
         }
       ]

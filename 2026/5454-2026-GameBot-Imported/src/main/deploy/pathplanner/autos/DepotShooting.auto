@@ -15,6 +15,12 @@
           "data": {
             "pathName": "DepotShooting"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUp"
+          }
         }
       ]
     }

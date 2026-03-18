@@ -17,9 +17,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Out2ClimbR"
+            "name": "shotLookUp"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
           }
         }
       ]

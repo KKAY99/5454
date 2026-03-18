@@ -36,7 +36,7 @@
         "y": 5.175921865830398
       },
       "prevControl": {
-        "x": 0.7033701656625772,
+        "x": 0.7033701656625773,
         "y": 5.234247604571954
       },
       "nextControl": {
@@ -78,7 +78,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "popcorn",
+      "name": "completeIntake",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
