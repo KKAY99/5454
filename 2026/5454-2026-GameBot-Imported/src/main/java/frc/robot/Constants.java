@@ -58,15 +58,15 @@ public final class Constants {
   public static final class LimeLightValues {
     public static final double leftLimelightHeight=0;
     public static final double leftLimelightAngle=0;
-    public static final double rightLimelightHeight=0;
-    public static final double rightLimelightAngle=0; 
+    public static final double backLimelightHeight=0;
+    public static final double backLimelightAngle=0; 
     
     public static final double turretLimelightHeight  =17.75;
     public static final double turretLimelightAngle=24;
     public static final String turretLimelightName="limelight-three";
     
-    public static final String leftLimelightName="limelight-left";
-    public static final String rightLimelightName="limelight-right";
+    public static final String leftLimelightName="limelight-two";
+    public static final String backLimelightName="limelight-one";
 
     public static final int centerApriltagPipeline=0;
     public static final int leftApriltagPipeline=1;
@@ -314,7 +314,7 @@ public final class Constants {
   }
 
   public static final PPHolonomicDriveController pathPlanDriveController = new PPHolonomicDriveController(
-    new PIDConstants(5.0, 0, 0), // Translation constants 
+    new PIDConstants(3.0, 0, 0.25), // Translation constants 
     new PIDConstants(25.0, 0, 1) // Rotation constants
   );
 

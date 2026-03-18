@@ -54,6 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //pull intake until we hit limit switch and then reset position
      double startTime = Timer.getFPGATimestamp();
      double endTime = startTime + maxHomeTime;
+    System.out.println("Intake is starting homing");
     while(!isIntakeSwitched() && Timer.getFPGATimestamp()<endTime){
      m_fold.set(-Constants.IntakeConstants.foldHomeSpeed);
     }
@@ -66,7 +67,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
     m_fold.getEncoder().setPosition(0.0); // reset encoder to zero at home in
     System.out.println("Intake has homed");
-    
+    m_IntakeOutMode=true;
     m_homed=true;
   }
 

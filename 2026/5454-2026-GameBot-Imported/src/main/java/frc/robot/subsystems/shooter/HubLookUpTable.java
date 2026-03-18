@@ -38,20 +38,20 @@ public class HubLookUpTable {
         // Distance (m), Shooter Speed (RPS), Trajectory Angle (°), Time of Flight (s)
         // KrakenX60 shooting 226g ball - optimized for constant RPS ~75
         // Trajectory angles: 90° = straight up, 45° = maximum distance
-        addEntry(77.46,  58, 0.00, 1.00);  // Close shot - nearly straight up
-        addEntry(70.29,  56, 0.00, 1.00);  // Close shot - nearly straight up
-        addEntry(64,  55, 0.00, 1.00);  // Close shot - nearly straight up
-        addEntry(57,  54, 0.00, 1.00);  // Close shot - nearly straight up
-        addEntry(24,  50, 0.00, 1.00);  // Close shot - nearly straight up
-        addEntry(89,  62, 0.00, 1.00);  // Close shot - nearly straight up
-        addEntry(97,  63, 0.11, 1.00);  // Close shot - nearly straight up
-        addEntry(117,  62, 0.11, 1.00);  // Close shot - nearly straight up
-        addEntry(129,  65, 0.11, 1.00);  // Close shot - nearly straight up
-        addEntry(146,  65.5, 0.11, 1.00);  // Close shot - nearly straight up
-        addEntry(166,  68, 0.14, 1.00);  // Close shot - nearly straight up
-        addEntry(178,  69, 0.20, 1.00);  // Close shot - nearly straight up
-        addEntry(204,  74, 0.24, 1.00);  // Close shot - nearly straight up
-        addEntry(223,  75, 0.24, 1.00);  // Close shot - nearly straight up
+        addEntry(77.46,  63, 0.00, 1.00);  // Close shot - nearly straight up
+        addEntry(70.29,  61, 0.00, 1.00);  // Close shot - nearly straight up
+        addEntry(64,  60, 0.00, 1.00);  // Close shot - nearly straight up
+        addEntry(57,  59, 0.00, 1.00);  // Close shot - nearly straight up
+        addEntry(24,  55, 0.00, 1.00);  // Close shot - nearly straight up
+        addEntry(89,  67, 0.00, 1.00);  // Close shot - nearly straight up
+        addEntry(97,  68, 0.11, 1.00);  // Close shot - nearly straight up
+        addEntry(117,  67, 0.11, 1.00);  // Close shot - nearly straight up
+        addEntry(129,  70, 0.11, 1.00);  // Close shot - nearly straight up
+        addEntry(146,  70.5, 0.11, 1.00);  // Close shot - nearly straight up
+        addEntry(166,  73, 0.14, 1.00);  // Close shot - nearly straight up
+        addEntry(178,  73, 0.20, 1.00);  // Close shot - nearly straight up
+        addEntry(204,  78, 0.24, 1.00);  // Close shot - nearly straight up
+        addEntry(223,  79, 0.24, 1.00);  // Close shot - nearly straight up
         // Max distance 
     }
     

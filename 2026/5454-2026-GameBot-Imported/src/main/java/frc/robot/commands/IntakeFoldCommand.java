@@ -53,7 +53,7 @@ public class IntakeFoldCommand extends Command {
 
     
   
-  System.out.println("Shooting - State:" + m_state);
+  System.out.println("Folding - State:" + m_state + " OutMode" + m_intake.isIntakeOutMode());
     switch(m_state){
     case ROTATE:
         double foldSpeed=Constants.IntakeConstants.foldSpeed;

@@ -89,8 +89,8 @@ public class RobotContainer {
                                                 0,Constants.LimeLightValues.turretLimelightName);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
-  public final Limelight m_rightLimelight=new Limelight(Constants.LimeLightValues.rightLimelightHeight,Constants.LimeLightValues.rightLimelightAngle,
-                                                0,Constants.LimeLightValues.rightLimelightName);
+  public final Limelight m_backLimelight=new Limelight(Constants.LimeLightValues.backLimelightHeight,Constants.LimeLightValues.backLimelightAngle,
+                                                0,Constants.LimeLightValues.backLimelightName);
 
  
   private final SendableChooser<Command> m_autoChooser;
@@ -126,7 +126,6 @@ public class RobotContainer {
     return new PathPlannerAuto("ShootDepotShootNZ");
   }
   private void InitialAutonPathfind(){
-    SmartDashboard.putString("Asher's Cool Message:", "It is running");
     //Magic Comment
     if (m_autoChooser == null) {
       SmartDashboard.putString("Asher's Cool Message:", "No Auto Selected");
@@ -161,13 +160,21 @@ public class RobotContainer {
             0.0
           );
 
-          Command followAuto = new PathPlannerAuto(selectedAuto);
+          Command followAuto = new PathPlannerAuto("DepotShooting");
 
           // go to start pos then call auto
           SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
           //add auto to scheduler
-          CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
+          Pose2d currentPose = m_swerve.getPose2d();
+          if(currentPose.getX()!=0 | currentPose.getY()!=0) {
+            //disable pathing
+            //            CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
+            CommandScheduler.getInstance().schedule(Commands.sequence(followAuto));
+          
+          } else { //no starting pose
+            CommandScheduler.getInstance().schedule(Commands.sequence(followAuto));
           }
+        }
       } catch (Exception e) {
         // if anything goes wrong (it probably will), fall back to whatever the original chooser provides
         SmartDashboard.putString("Asher's Cool Message:",e.getMessage());
@@ -514,43 +521,40 @@ public class RobotContainer {
       m_swerve.getPigeon2().reset();
     }
   }
-   
-  public void DisabledPeriodic(){
-    makefalsestartPose();
-    /*if(m_rightLimelight.isAnyTargetAvailable()||m_leftLimelight.isAnyTargetAvailable()){
-      m_LEDS.setLedState(LEDStates.DISABLEDSEETARGET,false);
-    }else{
-      m_LEDS.setLedState(LEDStates.DISABLEDERROR,false);
-    }
-
-    if(m_rightLimelight.isAnyTargetAvailable()){
-      m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+  public void updateOdomfromLimeLight(){
+   /*     if(m_backLimelight.isAnyTargetAvailable()){
+      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
-      Pose2d currentPose=m_rightLimelight.GetPoseViaMegatag2();
+      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
 
-
+      System.out.println("update vision back " + currentPose.getX() + "/" + currentPose.getY());
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } 
+      */
 
+  }
+  public void DisabledPeriodic(){
+   updateOdomfromLimeLight();
+/* 
     if(m_leftLimelight.isAnyTargetAvailable()){
       m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
       Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
 
-
+       System.out.println("update vision left "+ currentPose.getX() + "/" + currentPose.getY());
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } */
+    }*/ 
     //m_LEDS.setLedState(LEDStates.DISABLED,false);
     //m_LEDS.activateLEDS();
   }
   
   public void AutoPeriodic(){
-    /*if(m_rightLimelight.isAnyTargetAvailable()){
-      m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+    /*if(m_backLimelight.isAnyTargetAvailable()){
+      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
-      Pose2d currentPose=m_rightLimelight.GetPoseViaMegatag2();
+      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
 
 
@@ -620,7 +624,8 @@ return pathfindingCommand;
     }
   }
   public void TeleopPeriodic(){
-    
+    updateOdomfromLimeLight();
+
     refreshSmartDashboard();
     updateLEDs();
     //m_ShotCalculator.clearShootingParameters();
@@ -628,10 +633,10 @@ return pathfindingCommand;
     //System.out.println("Turret Angle: " + shootingInfo.turretAngle());
     //System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
     
-    if(m_rightLimelight.isAnyTargetAvailable()){
-      m_rightLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+    if(m_backLimelight.isAnyTargetAvailable()){
+      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
-      Pose2d currentPose=m_rightLimelight.GetPoseViaMegatag2();
+      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
 
 

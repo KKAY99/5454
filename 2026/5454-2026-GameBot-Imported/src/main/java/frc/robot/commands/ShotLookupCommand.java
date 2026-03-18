@@ -33,7 +33,8 @@ public class ShotLookupCommand extends Command {
   private final double kSpinUpTime=1;
   private final double khoodSpeed=Constants.HoodConstants.hoodSpeed;
   private final double khoodDeadband = Constants.HoodConstants.hoodDeadband;
-  
+  private double fuelcheckStartTime;
+  private final double kfuelcheckWait=2;
   
   public ShotLookupCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,Limelight limelight, double timeLimit,boolean emptyHopper) {
     m_hopper=hopper;
@@ -146,6 +147,7 @@ public class ShotLookupCommand extends Command {
         }         
        break;
     case NOFUEL:
+        fuelcheckStartTime=Timer.getFPGATimestamp();
         if(m_emptyHopper){
           m_state=shooterStates.EMPTYHOPPER;          
          } else{
@@ -165,8 +167,11 @@ public class ShotLookupCommand extends Command {
           }
       break;
     case NOFUEL2NDCHECK:
-        if(checkNoFuelorFuelTimeLimit()){
-          m_state=shooterStates.END;
+        currentTime=Timer.getFPGATimestamp();
+        if(currentTime>fuelcheckStartTime+kfuelcheckWait){
+          if(checkNoFuelorFuelTimeLimit() ){
+            m_state=shooterStates.END;
+          }
         }
        break;
     case END:
