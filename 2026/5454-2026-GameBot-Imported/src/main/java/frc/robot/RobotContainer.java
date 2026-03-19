@@ -58,6 +58,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.shooter.ShotCalculator;
+import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -231,7 +232,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
     NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
-    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem,m_swerve, null));
+    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, m_turretLimelight, TargetType.HUB));
     NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
   }
 
@@ -276,7 +277,7 @@ public class RobotContainer {
     m_xBoxDriver.start().whileTrue(shootManual);
     m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 
-    Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, null);
+    Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, m_turretLimelight, TargetType.HUB);
     m_xBoxDriver.leftTrigger().whileTrue(shootPopcorn);
 
     Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);

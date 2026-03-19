@@ -203,6 +203,45 @@ public class Limelight {
                 this.targetpose_robotspace.get()[4]:0.0;
     }
 
+    /**
+     Get the horizontal offset (tx) to an AprilTag in degrees.
+     Useful for turret tracking.
+     Return Horizontal offset in degrees (positive = right, negative = left)
+     */
+    public double getAprilTagHorizontalOffset(){
+        return this.getX();
+    }
+
+    /**
+     Get the vertical offset (ty) to an AprilTag in degrees.
+     Useful for calculating distance to target.
+     Return Vertical offset in degrees
+     */
+    public double getAprilTagVerticalOffset(){
+        return this.getY();
+    }
+
+    /**
+     Get the bearing angle from the turret to the hub using AprilTag vision data.
+     This calculates the angle the turret needs to rotate to aim at the detected AprilTag.
+     Return Bearing angle in degrees relative to robot heading (0 = forward, positive = CCW)
+     */
+    public double getHubBearingAngle(){
+        // If we have an AprilTag target available, use its horizontal offset
+        if(this.isAnyTargetAvailable()){
+            return this.getAprilTagHorizontalOffset();
+        }
+        return 0.0;
+    }
+
+    /**
+     Check if the hub AprilTag is visible and can be used for tracking.
+     Return true if a valid AprilTag target is visible
+     */
+    public boolean isHubVisible(){
+        return this.isAnyTargetAvailable();
+    }
+
     public void resetXYZFiducialOffset(){
         this.fiducial_offset_set.set(new double[]{0,0,0});
     }
