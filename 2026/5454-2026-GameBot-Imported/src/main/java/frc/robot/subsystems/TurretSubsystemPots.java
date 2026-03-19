@@ -195,9 +195,61 @@ public boolean isOnTargetAngle(double angle){
 public double getCurrentAngle(){
   return getTurretAngleFromMotor();
 }
-public void turretTrack(TargetType target){
 
+/**
+ Track and aim the turret
+ This method continuously adjusts the turret to reduce the angle error.
+ targetBearingDegrees The target bearing angle in degrees relative to robot heading
+                            (0 = robot forward, positive = counter-clockwise)
+ */
+public void trackTurret(double targetBearingDegrees){
+  double currentAngle = getCurrentAngle();
+  double angleError = targetBearingDegrees - currentAngle;
+  
+  // Normalize angle error to [-180, 180) range
+  angleError = normalizeAngle(angleError);
+  
+  // Dead band check - stop if error is small enough
+  if(Math.abs(angleError) < TurretConstants.trackerDeadBand){
+    stopTurret();
+    return;
+  }
+  
+  // Calculate proportional speed based on angle error
+  // Clamp the speed to [-1, 1] range for motor control
+  double trackingSpeed = angleError / 180.0; // Scale to roughly + or - 1.0 for 180 degree error
+  trackingSpeed = Math.max(-1.0, Math.min(1.0, trackingSpeed)); // Clamp to [-1, 1]
+  
+  // Move the turret in the calculated direction
+  moveTurret(trackingSpeed);
+  
+  // Debug output will put in elastic when I get access to the robot these will be helpful for testing tomorrow
+  SmartDashboard.putNumber("Turret Target Bearing", targetBearingDegrees);
+  SmartDashboard.putNumber("Turret Current Angle", currentAngle);
+  SmartDashboard.putNumber("Turret Angle Error", angleError);
+  SmartDashboard.putNumber("Turret Track Speed", trackingSpeed);
 }
+
+/**
+Normalize an angle to the range [-180, 180) degrees.
+The parameter "angle" is the angle in degrees
+Return the normalized angle in degrees
+ */
+private double normalizeAngle(double angle){
+  while(angle >= 180){
+    angle -= 360;
+  }
+  while(angle < -180){
+    angle += 360;
+  }
+  return angle;
+}
+
+public void turretTrack(TargetType target){
+  // This method is called by other systems that know the target type
+  // For now, I am keeping it and hoping that it does not conflict
+}
+
 public void playMusic(String fileName){
 //        m_robotOrch.loadMusic(fileName);
 //        m_robotOrch.addInstrument(m_turretMotor);

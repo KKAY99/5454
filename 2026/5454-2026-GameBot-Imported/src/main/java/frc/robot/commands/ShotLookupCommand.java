@@ -117,7 +117,7 @@ public class ShotLookupCommand extends Command {
   System.out.println("Shooting Lookup :" + distance + " Speed:" + targetspeed  + " - State:" + m_state);
     switch(m_state){
     case SPINUP:
-         m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
+        m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
         if(m_shooter.checkHoodPos(hoodPos, khoodSpeed,khoodDeadband)){
          stateStartTime=Timer.getFPGATimestamp();
           
