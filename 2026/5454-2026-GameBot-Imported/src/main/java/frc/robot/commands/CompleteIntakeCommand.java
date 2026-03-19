@@ -12,14 +12,13 @@ public class CompleteIntakeCommand extends Command {
 
   private IntakeSubsystem m_intake;
   private HopperSubsystem m_hopper;
-  private NewShooterSubsystem m_shooter;
   private enum intakeStates{
     INTAKE,END
   } 
   private intakeStates m_state;
   private double stateStartTime;
   private final double kSpinUpTime=1;
-  public CompleteIntakeCommand(IntakeSubsystem intake,HopperSubsystem hopper,NewShooterSubsystem shooter) {
+  public CompleteIntakeCommand(IntakeSubsystem intake,HopperSubsystem hopper) {
     m_hopper=hopper;
     m_intake=intake;
     m_state=intakeStates.INTAKE;
