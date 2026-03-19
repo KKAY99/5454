@@ -258,7 +258,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
   }
 
-
+  /**
+     * Resets both CTRE's internal pose estimator and RobotState so they stay in sync.
+     * PathPlanner calls this at the start of every auto via AutoBuilder.configure().
+     */
+    @Override
+    public void resetPose(Pose2d pose) {
+        super.resetPose(pose);
+        RobotState.getInstance().resetPose(pose);
+    }
+    
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds,DriveFeedforwards driveFF){
         this.setControl(autoDrive.withSpeeds(chassisSpeeds)
         .withWheelForceFeedforwardsX(driveFF.robotRelativeForcesXNewtons())
@@ -336,7 +345,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             
         return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
             .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
-            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalRotMult)
+            .withRotationalRate((-driveController.getRawAxis(rotationAxis)*TunerConstants.kMaxAngularSpeed)*m_gasPedalRotMult)
         );
     }
 
@@ -389,9 +398,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        m_poseEstimator.update(new Rotation2d(this.getPigeon2().getYaw().getValue()),
-                                this.getState().ModulePositions);
-
+     /*   m_poseEstimator.update(new Rotation2d(this.getPigeon2().getYaw().getValue()),
+                                this.getState().ModulePositions);  */
+         m_poseEstimator.update(this.getPigeon2().getRotation2d(), this.getState().ModulePositions);
     
 
     // Update odometry

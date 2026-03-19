@@ -61,10 +61,12 @@ public class IntakeSubsystem extends SubsystemBase {
     m_fold.stopMotor(); // stop intake
     m_fold.getEncoder().setPosition(0.0); // reset encoder to zero at home in
     System.out.println("Intake has homed");
-    m_IntakeOutMode=true;
+    SetIntakeOutMode();
     m_homed=true;
   }
-
+  public void SetIntakeOutMode(){
+      m_IntakeOutMode=true;
+  }
   public void toggleIntakeMode() {
     m_IntakeOutMode=!m_IntakeOutMode;
 

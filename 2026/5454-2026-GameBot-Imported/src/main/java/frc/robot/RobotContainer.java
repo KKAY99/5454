@@ -68,8 +68,8 @@ public class RobotContainer {
 
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private CommandXboxController m_xBoxOperator = new CommandXboxController(InputControllers.kXboxOperator);
-  private CommandXboxController m_CustomController = new CommandXboxController(InputControllers.kCustomController);
-  private CommandXboxController m_FunnyController = new CommandXboxController(InputControllers.kFunnyController);
+  //private CommandXboxController m_CustomController = new CommandXboxController(InputControllers.kCustomController);
+  //private CommandXboxController m_FunnyController = new CommandXboxController(InputControllers.kFunnyController);
   //public final Leds m_LEDS=new Leds(LedConstants.LedCanID,LedConstants.LedCount);
   public final CommandSwerveDrivetrain m_swerve = TunerConstants.createDrivetrain();
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.IntakeConstants.IntakeMotorCanID, Constants.IntakeConstants.FoldMotorCanID);
@@ -216,7 +216,7 @@ public class RobotContainer {
   public void configureNamedCommands() {
     //NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
     //NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
-    NamedCommands.registerCommand("expandIntake", Commands.sequence(new InstantCommand(m_intake::toggleIntakeMode), new IntakeFoldCommand(m_intake))); //this should fix the intake not folding during autos
+    NamedCommands.registerCommand("expandIntake", Commands.sequence(new InstantCommand(m_intake::SetIntakeOutMode), new IntakeFoldCommand(m_intake))); //this should fix the intake not folding during autos
     NamedCommands.registerCommand("shrinkIntake", new IntakeIntakeCommand(m_intake));
     NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
     NamedCommands.registerCommand("agitateoff", m_hopper.agitateoffCommand());
@@ -300,26 +300,15 @@ public class RobotContainer {
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
-    Command resetPose = Commands.run(()->makefalsestartPose(),m_swerve);
     
-    m_CustomController.a().whileTrue(resetPose);
-    m_CustomController.b().whileTrue(doNothing);
-    m_CustomController.y().whileTrue(doNothing);
-    m_CustomController.x().toggleOnTrue(doNothing);
-    m_CustomController.leftTrigger().whileTrue(doNothing);
-    m_CustomController.rightBumper().onTrue(Commands.runOnce(()->InitialAutonPathfind()));
-    m_CustomController.leftBumper().onTrue(doNothing);
+    //m_CustomController.b().whileTrue(doNothing);
+    //m_CustomController.y().whileTrue(doNothing);
+    //m_CustomController.x().toggleOnTrue(doNothing);
+    //m_CustomController.leftTrigger().whileTrue(doNothing);
+    //m_CustomController.rightBumper().onTrue(Commands.runOnce(()->InitialAutonPathfind()));
+    //m_CustomController.leftBumper().onTrue(doNothing);
 
 
-
-    //Command shoot2 = Commands.startEnd(     ()->m_shooter.runShooter(.75,-1),
-    //                                       ()->m_shooter.stopShooter(),
-    //                                       m_shooter);
-   // m_CustomController.x().whileTrue(shoot2);
-  //  Command shoot3 = Commands.startEnd(     ()->m_shooter.runShooter(0.5,-1),
-  //                                         ()->m_shooter.stopShooter(),
-  //                                         m_shooter);
-//    m_CustomController.y().whileTrue(shoot3);              
 
 
    /* 
@@ -342,7 +331,7 @@ public class RobotContainer {
 
 
 
-    Command newShoot = m_newShooter.shootCommand();
+    /*Command newShoot = m_newShooter.shootCommand();
     Command newHoodUp = m_newShooter.HoodUp();
     Command newHoodDown = m_newShooter.HoodDown();
     Command newVelocityShot = Commands.startEnd(  ()->m_newShooter.runShooterVelocity(ShooterConstants.shooterRPM),
@@ -361,7 +350,8 @@ public class RobotContainer {
     //m_FunnyController.povUp().whileTrue(m_TurretSubsystem.setMotortoZero());
     //m_FunnyController.povDown().onTrue(new TurretTrackCommand(m_TurretSubsystem, m_swerve,
     //                TurretStates.TRACK,m_turretLimelight));
-  }
+    */
+    }
 
   private void updateisHubMatched(int Shift){
    Optional<Alliance> ally = DriverStation.getAlliance();
