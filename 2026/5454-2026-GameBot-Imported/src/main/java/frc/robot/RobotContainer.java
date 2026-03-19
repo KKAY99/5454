@@ -216,7 +216,7 @@ public class RobotContainer {
   public void configureNamedCommands() {
     //NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
     //NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
-    NamedCommands.registerCommand("expandIntake", new IntakeFoldCommand(m_intake));
+    NamedCommands.registerCommand("expandIntake", Commands.sequence(new InstantCommand(m_intake::toggleIntakeMode), new IntakeFoldCommand(m_intake))); //this should fix the intake not folding during autos
     NamedCommands.registerCommand("shrinkIntake", new IntakeIntakeCommand(m_intake));
     NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
     NamedCommands.registerCommand("agitateoff", m_hopper.agitateoffCommand());
@@ -230,7 +230,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("turretManualStop", new WaitCommand(2));
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
-    NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper, m_newShooter));
+    NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper));
     NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem,m_swerve, null));
     NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
   }
@@ -246,7 +246,7 @@ public class RobotContainer {
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
-    Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper,m_newShooter);
+    Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper);
     m_xBoxDriver.leftBumper().toggleOnTrue(CompleteIntake);
 
     Command foldIn = new IntakeIntakeCommand(m_intake);

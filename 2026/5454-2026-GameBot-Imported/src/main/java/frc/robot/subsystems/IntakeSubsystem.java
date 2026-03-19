@@ -59,12 +59,6 @@ public class IntakeSubsystem extends SubsystemBase {
      m_fold.set(-Constants.IntakeConstants.foldHomeSpeed);
     }
     m_fold.stopMotor(); // stop intake
-    //Do Nothing - basically just pausing
-    startTime = Timer.getFPGATimestamp();
-    endTime=startTime+0.1;
-    while(Timer.getFPGATimestamp()<endTime){
-    }
-    
     m_fold.getEncoder().setPosition(0.0); // reset encoder to zero at home in
     System.out.println("Intake has homed");
     m_IntakeOutMode=true;

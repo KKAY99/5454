@@ -21,7 +21,6 @@ public class IntakeFoldCommand extends Command {
   }
   private foldingStates m_state;
   private IntakeSubsystem m_intake;
-  private double m_speed;
   public IntakeFoldCommand(IntakeSubsystem intake) {
     m_intake = intake;
     m_state=foldingStates.ROTATE;
@@ -53,7 +52,7 @@ public class IntakeFoldCommand extends Command {
 
     
   
-  System.out.println("Folding - State:" + m_state + " OutMode" + m_intake.isIntakeOutMode());
+  System.out.println("Folding - State: " + m_state + " OutMode: " + m_intake.isIntakeOutMode());
     switch(m_state){
     case ROTATE:
         double foldSpeed=Constants.IntakeConstants.foldSpeed;
@@ -62,38 +61,37 @@ public class IntakeFoldCommand extends Command {
         } 
         //extend/retract intake
         m_intake.outFold(foldSpeed);
+
+
         //check limits
-    
-        if(!m_intake.isIntakeOutMode()) { //intake 
-          //stop intake roller once we are inside limit
+          //stop intake when it is in the no fly zone BUT run when not in no fly zone
           if(m_intake.isinNoFlyZone()){
               m_intake.stopIntake();
+          }else{
+              m_intake.runIntake(Constants.IntakeConstants.highSpeed);
           }
-          if(m_intake.isAtInLimit()){
+
+          //stop fold when it hits limits or current limit
+          if(m_intake.isAtInLimit() || !m_intake.isIntakeOutMode()){
             System.out.println("Intake Fold Stoppping Due to In Check");
             
             m_state=foldingStates.END;
           }
-       /*    if(m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)) {
-            System.out.println("Intake Fold Stoppping Due to Current Limit Check");
-            m_intake.stopFold();
-            m_state=foldingStates.END;
-        }*/
-        }else { //Outake Mode
-          //auto restart intake when it is past the no fly zone
-          if(!m_intake.isinNoFlyZone()){
-              m_intake.runIntake(Constants.IntakeConstants.highSpeed);
-          }
-          if(m_intake.isAtOutLimit()){
+          if(m_intake.isAtOutLimit() || m_intake.isIntakeOutMode()){
            System.out.println("Intake Fold Stoppping Due to Out Check");
             m_intake.stopFold();
             m_state=foldingStates.END;
           }
-       if(m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampOutStop)) {
+            /*if(m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)) {
+                System.out.println("Intake Fold Stoppping Due to Current Limit Check");
+                m_intake.stopFold();
+                m_state=foldingStates.END;
+              }*/
+          if(m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampOutStop)) {
             System.out.println("Intake Fold Stoppping Due to Current Limit Check");
             m_intake.stopFold();
             m_state=foldingStates.END;
-        } }
+          }
         
     break;
     case END:
