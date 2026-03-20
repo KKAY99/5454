@@ -86,7 +86,7 @@ public class RobotContainer {
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_turretLimelight=new Limelight(Constants.LimeLightValues.turretLimelightHeight,
                                             Constants.LimeLightValues.turretLimelightAngle,
-                                                0,Constants.LimeLightValues.turretLimelightName);
+                                                0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_backLimelight=new Limelight(Constants.LimeLightValues.backLimelightHeight,Constants.LimeLightValues.backLimelightAngle,
@@ -197,7 +197,7 @@ public class RobotContainer {
     //filter turret limelight on center targets
     m_turretLimelight.setLimelightIDFilter(10,25);
     SmartDashboard.putData("field", m_Field2d);
-    
+    SmartDashboard.putNumber("Speed Adjuster:", 1);
     configureNamedCommands();
     m_autoChooser=AutoBuilder.buildAutoChooser();
     createAutonomousCommandList(); 
@@ -259,7 +259,7 @@ public class RobotContainer {
     m_xBoxOperator.a().whileTrue(outtake);
     
     
-    SequentialCommandGroup climbUp = new SequentialCommandGroup(m_newShooter.shutdownCommand(),m_climb.climbUpCommand());
+    Command climbUp = m_climb.climbUpCommand();
     m_xBoxDriver.b().onTrue(climbUp);
     //m_xBoxDriver.b().onTrue(Commands.runOnce(()->rightClimb()));
     m_xBoxOperator.povUp().whileTrue(climbUp);
@@ -479,7 +479,7 @@ public class RobotContainer {
       SmartDashboard.putString("ActiveHub",m_activeHub);
       SmartDashboard.putString("Active Phase",m_activeHubPhase);
       SmartDashboard.putNumber("Active Phase Time",m_activeHubTime);
-      SmartDashboard.putNumber("LimeLight Distance" , m_turretLimelight.getDistance());   
+      SmartDashboard.putNumber("LimeLight Distance" , m_turretLimelight.getDistanceInverted());   
       SmartDashboard.putNumber("Hood Position is ", m_newShooter.getHoodPos());
       
     SmartDashboard.putBoolean("Is Climb Up ???",m_climb.isClimbUpLimit());
@@ -633,7 +633,7 @@ return pathfindingCommand;
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } 
 
-    if(m_leftLimelight.isAnyTargetAvailable()){
+    /*if(m_leftLimelight.isAnyTargetAvailable()){
       m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
       Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
@@ -641,7 +641,7 @@ return pathfindingCommand;
 
 
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
+    } */
   }
 
   public void AllPeriodic(){

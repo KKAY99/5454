@@ -35,7 +35,8 @@ public class ShotLookupCommand extends Command {
   private final double khoodDeadband = Constants.HoodConstants.hoodDeadband;
   private double fuelcheckStartTime;
   private final double kfuelcheckWait=2;
-  
+  private int m_flipCount=0;
+  private double m_flipSpeed=-1;
   public ShotLookupCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,Limelight limelight, double timeLimit,boolean emptyHopper) {
     m_hopper=hopper;
     m_shooter=shooter;
@@ -95,7 +96,7 @@ public class ShotLookupCommand extends Command {
   //Lookup Shot Values
   double targetspeed=0;
   double hoodPos=0;  
-  double distance=m_limelight.getDistance();
+  double distance=m_limelight.getDistanceInverted();
   //if distance is zero than use last disance 
   if(distance==0){
        distance=m_lastDistance;
@@ -149,22 +150,30 @@ public class ShotLookupCommand extends Command {
     case NOFUEL:
         fuelcheckStartTime=Timer.getFPGATimestamp();
         if(m_emptyHopper){
-          m_state=shooterStates.EMPTYHOPPER;          
+          m_flipCount=-5; // below zero so first intake pull in is 15 loops
+          m_flipSpeed=-1;
+          m_state=shooterStates.EMPTYHOPPER;    
+          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);      
          } else{
           m_state=shooterStates.END;          
          }
       break; 
     case EMPTYHOPPER:
-        if(m_intake.isAtInLimit() | 
-                 m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
+        System.out.println("Flip Count"+ m_flipCount);
+        m_flipCount=m_flipCount+1;
+        if (m_flipCount==8){
+          //make it twice as fast
+          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode * 2 *  m_flipSpeed);
+          m_flipCount = 0;
+          m_flipSpeed=m_flipSpeed*-1; // FLIP SIGN TO REVERSE
+        }
+        /*if(m_intake.isAtInLimit() || m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
           m_state=shooterStates.NOFUEL2NDCHECK;
           m_intake.stopFold();
-        }else {
-           if(m_intake.isinNoFlyZone()){
-              m_intake.stopIntake();
-          }
-          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);  
-          }
+        }*/
+        if(m_intake.isinNoFlyZone()){
+          m_intake.stopIntake();
+        }
       break;
     case NOFUEL2NDCHECK:
         currentTime=Timer.getFPGATimestamp();

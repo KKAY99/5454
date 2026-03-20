@@ -72,12 +72,12 @@ public class IntakeFoldCommand extends Command {
           }
 
           //stop fold when it hits limits or current limit
-          if(m_intake.isAtInLimit() || !m_intake.isIntakeOutMode()){
+          if(m_intake.isAtInLimit() && !m_intake.isIntakeOutMode()){
             System.out.println("Intake Fold Stoppping Due to In Check");
             
             m_state=foldingStates.END;
           }
-          if(m_intake.isAtOutLimit() || m_intake.isIntakeOutMode()){
+          if(m_intake.isAtOutLimit() && m_intake.isIntakeOutMode()){
            System.out.println("Intake Fold Stoppping Due to Out Check");
             m_intake.stopFold();
             m_state=foldingStates.END;

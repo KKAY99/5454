@@ -71,7 +71,7 @@ public class ObsidianCANSparkMax extends SparkBase{
         if(breakMode){
             newConfig.idleMode(IdleMode.kBrake);
         } else{
-            newConfig.idleMode(IdleMode.kBrake);
+            newConfig.idleMode(IdleMode.kCoast);
         }
         Timer.delay(0.5);   // delay due to rev bug on CAN bus when burning Flash 
         configure(newConfig,SparkBase.ResetMode.kResetSafeParameters,SparkBase.PersistMode.kNoPersistParameters);

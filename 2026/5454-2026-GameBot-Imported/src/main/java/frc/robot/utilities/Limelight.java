@@ -103,6 +103,13 @@ public class Limelight {
         this.m_targetHeight=height;
     }
 
+     public double getDistanceInverted() {
+        double measuredAngle=-getY(); 
+
+        return (measuredAngle!=0)?(this.m_targetHeight-this.m_limeLightHeight)/Math.tan(Math.toRadians(this.m_mountingAngle+measuredAngle)):
+                0;
+    }
+
     public double getDistance() {
         double measuredAngle=getY(); 
 

@@ -271,7 +271,7 @@ public final class Constants {
     public static final double climbLimitLow=0.0; // was 0.17 
     public static final double climbLimitHigh=0.49;
     public static final double climbForwardSpeed=-0.4;
-    public static final double climbBackSpeed=0.50;
+    public static final double climbBackSpeed=0.70;
   }
 
   public static final class CoolPanelConstants{

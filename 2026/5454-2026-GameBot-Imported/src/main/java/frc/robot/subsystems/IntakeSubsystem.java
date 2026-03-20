@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem(int CanId1, int CanId2) {
     m_intakeMotor = new TalonFX(CanId1);
     m_intakeMotor.setNeutralMode(NeutralModeValue.Coast);
-    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, false,30);
+    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, false,60);
     m_intakeSwitch = new DigitalInput(IntakeConstants.intakeSwitchDIO);
   }
 
@@ -61,9 +61,13 @@ public class IntakeSubsystem extends SubsystemBase {
     m_fold.stopMotor(); // stop intake
     m_fold.getEncoder().setPosition(0.0); // reset encoder to zero at home in
     System.out.println("Intake has homed");
-    SetIntakeOutMode();
+    SetIntakeInMode();
     m_homed=true;
   }
+  public void SetIntakeInMode(){
+      m_IntakeOutMode=false;
+  }
+  
   public void SetIntakeOutMode(){
       m_IntakeOutMode=true;
   }
@@ -85,6 +89,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor.stopMotor();
   }
 
+ 
   public Command outtakeCommand(){
       return Commands.startEnd(    ()->runIntake(IntakeConstants.outtakeSpeed),
                                           ()->stopIntake(),
@@ -122,10 +127,10 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean isinNoFlyZone(){
     boolean returnValue=false;
     //NO FLY ZONE IS DISABLED DUE TO MECH FIXES
-    /*double currentPos=Math.abs(m_fold.getEncoder().getPosition());
+    double currentPos=Math.abs(m_fold.getEncoder().getPosition());
     if(currentPos<Constants.IntakeConstants.intakeRollStop){
       returnValue=true;
-    }*/
+    }
     return returnValue;
   }
 
@@ -144,6 +149,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     return returnValue;
   }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake Fold Current", m_fold.getOutputCurrent());
