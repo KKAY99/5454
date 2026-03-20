@@ -640,9 +640,9 @@ return pathfindingCommand;
 
   public void homeRobot(){
     if(!hasHomed){
-      m_intake.homeIntake(Constants.IntakeConstants.homeTimeOut);
+      m_intake.homeIntake(Constants.homeTimeOut);
       m_newShooter.hoodHome();
-      m_climb.retractClimb();
+      m_climb.homeClimb(Constants.homeTimeOut);
       hasHomed = true;
     }
   }
