@@ -198,6 +198,16 @@ public double getCurrentAngle(){
 public void turretTrack(TargetType target){
 
 }
+
+/*
+ Holds the turret at a specific angle using MotionMagic PID control.
+ This is used during shooting to keep the turret locked in place.
+ @param targetAngleDegrees The angle to hold in degrees (0-360)
+ */
+public void holdTurretAtAngle(double targetAngleDegrees) {
+  double targetMotorPosition = getTargetMotorPosition(targetAngleDegrees);
+  moveMotor(targetMotorPosition);
+}
 public void playMusic(String fileName){
 //        m_robotOrch.loadMusic(fileName);
 //        m_robotOrch.addInstrument(m_turretMotor);

@@ -232,7 +232,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
     NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper));
     NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem,m_swerve, null));
-    NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
+    NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
   }
 
   private void configureButtonBindings(){
@@ -271,8 +271,8 @@ public class RobotContainer {
 
     //Command shootManual = new ShootMappingCommand(m_newShooter,m_hopper,m_intake,
     //                            m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    Command shootManual = new ShotLookupCommand(m_newShooter,m_hopper,m_intake,
-                                m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
+    Command shootManual = new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem,
+                                m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true);
     m_xBoxDriver.start().whileTrue(shootManual);
     m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.TurretSubsystemPots;
 import frc.robot.subsystems.shooter.HubLookUpTable;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 import frc.robot.subsystems.shooter.HubLookUpTable.ShootingParameters;
@@ -18,12 +19,14 @@ public class ShotLookupCommand extends Command {
   private NewShooterSubsystem m_shooter;
   private HopperSubsystem m_hopper;
   private IntakeSubsystem m_intake;
+  private TurretSubsystemPots m_turret;
   private Limelight m_limelight;
   private HubLookUpTable m_HubLookUpTable = new HubLookUpTable();
   private boolean m_emptyHopper=false;
   private double m_lastHoodPos=0;
   private double m_lastDistance=24; // default distance to use so will take up close shot if limelight is blocked/broken/hosed 
   private double m_timeLimit=0;
+  private double m_heldTurretAngle=0; // Angle to hold the turret at during shooting
   private enum shooterStates{
     SPINUP,WAIT,SHOOT,NOFUEL,EMPTYHOPPER,NOFUEL2NDCHECK,END
   } 
@@ -37,10 +40,12 @@ public class ShotLookupCommand extends Command {
   private final double kfuelcheckWait=2;
   private int m_flipCount=0;
   private double m_flipSpeed=-1;
-  public ShotLookupCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,Limelight limelight, double timeLimit,boolean emptyHopper) {
+  public ShotLookupCommand(NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
+                          TurretSubsystemPots turret, Limelight limelight, double timeLimit, boolean emptyHopper) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
+    m_turret=turret;
     m_limelight=limelight;
     m_emptyHopper=emptyHopper;
     m_state=shooterStates.SPINUP;
@@ -130,6 +135,8 @@ public class ShotLookupCommand extends Command {
     case WAIT:
        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
         if(m_shooter.atTargetSpeed(targetspeed)){
+            // Capture the turret angle right before we start shooting
+            m_heldTurretAngle = m_turret.getCurrentAngle();
             m_state=shooterStates.SHOOT;
         } 
         break;
@@ -139,7 +146,9 @@ public class ShotLookupCommand extends Command {
         m_shooter.runNewShooter(targetspeed,
                             Constants.ShooterConstants.KickerSpeed);
        
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
+        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        // Hold the turret at the captured angle to prevent drift during shooting
+        m_turret.holdTurretAtAngle(m_heldTurretAngle);
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
        
