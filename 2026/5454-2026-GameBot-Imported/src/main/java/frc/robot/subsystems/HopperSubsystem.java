@@ -40,14 +40,22 @@ public class HopperSubsystem extends SubsystemBase {
     return Commands.startEnd(    ()->agitate(Constants.HopperConstants.agitateSpeed),
                                            ()->stopAgitate(),
                                            this);
-
   }
+
+  public Command inverseAgitateCommand(){
+    return Commands.startEnd(    ()->agitate(-Constants.HopperConstants.agitateSpeed),
+                                           ()->stopAgitate(),
+                                           this);
+  }
+
   public Command agitateonCommand(){
     return Commands.runOnce(    ()->agitate(Constants.HopperConstants.agitateSpeed),this);
   }
+
   public Command agitateoffCommand(){
     return Commands.runOnce(    ()->stopAgitate(),this);
   }
+
 
   //checking if there's NO fuel aka if there was no !, it would return true when there is not any fuel in hopper
   public boolean getNoFuel() {

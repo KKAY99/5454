@@ -24,6 +24,7 @@ public class ClimbSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_climbMotor;
   private DigitalInput m_climbUpSwitch;
   private DigitalInput m_climbDownSwitch;
+  private boolean m_homed=false;
  
   //private SparkAbsoluteEncoder m_encoder;
 
@@ -39,6 +40,19 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public boolean isClimbDownLimit() {
     return m_climbDownSwitch.get();
+  }
+
+  public void homeClimb(double maxHomeTime){
+    //pull climb down until we hit limit switch and then reset position
+    double startTime = Timer.getFPGATimestamp();
+    double endTime = startTime + maxHomeTime;
+    System.out.println("Climb is starting homing");
+    while(!isClimbDownLimit() && Timer.getFPGATimestamp()<endTime){
+     m_climbMotor.set(ClimbConstants.climbBackSpeed);
+    }
+    m_climbMotor.stopMotor();
+    System.out.println("Climb has homed");
+    m_homed=true;
   }
 
   public void climbGo(double speed) {
