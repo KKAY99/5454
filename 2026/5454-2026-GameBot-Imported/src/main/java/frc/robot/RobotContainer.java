@@ -57,6 +57,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
 public class RobotContainer {
@@ -224,7 +225,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
     NamedCommands.registerCommand("NEWshooton", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
-    NamedCommands.registerCommand("shootManual", new ShootManualCommand(m_newShooter,m_hopper, m_intake,
+    NamedCommands.registerCommand("shootManual", new ShootMappingCommand(m_newShooter,m_hopper, m_intake,
           m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,false));
     NamedCommands.registerCommand("turretManualMove", new WaitCommand(2) );
     NamedCommands.registerCommand("turretManualStop", new WaitCommand(2));
@@ -277,7 +278,9 @@ public class RobotContainer {
     m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 
     Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, null);
-    m_xBoxDriver.leftTrigger().whileTrue(shootPopcorn);
+    
+    Command fixedshot = new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance1);
+    m_xBoxDriver.leftTrigger().whileTrue(fixedshot);
 
     /*Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
     m_xBoxDriver.x().whileTrue(shootKernelCommand);*/
@@ -298,8 +301,12 @@ public class RobotContainer {
     
     Command intakeFoldIn = m_intake.foldCommand(0.8);
     m_xBoxOperator.povLeft().whileTrue(intakeFoldIn);
+    Command intakeFoldSlow = m_intake.foldCommand(0.2);
+    m_xBoxOperator.povDown().whileTrue(intakeFoldSlow);
     Command intakeFoldOut = m_intake.foldCommand(-0.8);
     m_xBoxOperator.povRight().whileTrue(intakeFoldOut);
+    Command intakeFoldOutSlow = m_intake.foldCommand(-0.2);
+    m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
@@ -465,6 +472,12 @@ public class RobotContainer {
     //m_TurretSubsystem.showEncoderPositions();
     try{
             updateHubStatus();
+      double lldistance = m_turretLimelight.getDistanceInverted();
+      if(lldistance>73 && lldistance<116){
+        m_xBoxDriver.setRumble(RumbleType.kBothRumble, 0.5);
+      }else {
+        m_xBoxDriver.setRumble(RumbleType.kBothRumble,0);
+      }
       SmartDashboard.putBoolean("Our Hub Active",m_hubMatch);      
       SmartDashboard.putString("ActiveHub",m_activeHub);
       SmartDashboard.putString("Active Phase",m_activeHubPhase);

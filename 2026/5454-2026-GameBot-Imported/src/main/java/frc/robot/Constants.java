@@ -176,6 +176,10 @@ public final class Constants {
     public static final int hoodCANID=27;
     public static final int kickerCANID=61;
     public static final int fuelSensorDIO=9;
+    //fixed shots distances
+    public static final double fixedShotDistance1=73;
+    public static final double fixedShotDistance2=97;
+    public static final double fixedShotDistance3=133;
     //speeds
     public static final double shooterRPM=5000;
     public static final double IdleSpeed=52;// 0.7;
@@ -272,8 +276,8 @@ public final class Constants {
 
     public static final double climbLimitLow=0.0; // was 0.17 
     public static final double climbLimitHigh=0.49;
-    public static final double climbForwardSpeed=-0.4;
-    public static final double climbBackSpeed=0.70;
+    public static final double climbForwardSpeed=-0.8;
+    public static final double climbBackSpeed=1.0;
   }
 
   public static final class CoolPanelConstants{
