@@ -160,7 +160,7 @@ public class RobotContainer {
             0.0
           );
 
-          Command followAuto = new PathPlannerAuto("DepotShooting");
+          Command followAuto = new PathPlannerAuto(selectedAuto.getName());
 
           // go to start pos then call auto
           SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
