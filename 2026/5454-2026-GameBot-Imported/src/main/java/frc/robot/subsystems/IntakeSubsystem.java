@@ -33,8 +33,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem(int CanId1, int CanId2) {
     m_intakeMotor = new TalonFX(CanId1);
-    m_intakeMotor.setNeutralMode(NeutralModeValue.Coast);
-    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, false,60);
+    m_intakeMotor.setNeutralMode(NeutralModeValue.Brake
+    );
+    m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true,80);
     m_intakeSwitch = new DigitalInput(IntakeConstants.intakeSwitchDIO);
   }
 
@@ -89,6 +90,11 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor.stopMotor();
   }
 
+  public Command foldCommand(double speed){
+      return Commands.startEnd(    ()->runFoldManual(speed),
+                                          ()->stopFold(),
+                                          this);
+  }
  
   public Command outtakeCommand(){
       return Commands.startEnd(    ()->runIntake(IntakeConstants.outtakeSpeed),
@@ -133,6 +139,14 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     return returnValue;
   }
+  private void runFoldManual(double Speed){
+    m_fold.set(Speed);
+    if((Speed<0) && !isinNoFlyZone()){
+      m_intakeMotor.set(IntakeConstants.highSpeed);   
+    } else if((Speed>0) && isinNoFlyZone()){
+      m_intakeMotor.stopMotor();   
+    }
+  }
 
   public boolean isAtInLimit(){
     boolean returnValue=false;
@@ -154,6 +168,8 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Intake Fold Current", m_fold.getOutputCurrent());
     SmartDashboard.putNumber("Intake Position", m_fold.getEncoder().getPosition());
+    SmartDashboard.putBoolean("Intake Switch",m_intakeSwitch.get());
+    // System.out.println("Amp " + m_fold.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 }

@@ -296,7 +296,10 @@ public class RobotContainer {
     Command outitate = m_hopper.inverseAgitateCommand();
     m_xBoxOperator.leftBumper().whileTrue(outitate);
     
-    
+    Command intakeFoldIn = m_intake.foldCommand(0.8);
+    m_xBoxOperator.povLeft().whileTrue(intakeFoldIn);
+    Command intakeFoldOut = m_intake.foldCommand(-0.8);
+    m_xBoxOperator.povRight().whileTrue(intakeFoldOut);
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 

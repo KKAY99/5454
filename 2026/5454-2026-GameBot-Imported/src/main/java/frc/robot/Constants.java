@@ -21,7 +21,7 @@ public final class Constants {
   public static final int pdhCAN=1;
 
   //home time out
-  public static final int homeTimeOut=5;
+  public static final int homeTimeOut=3;
   
   public static final class DriveConstants{
     // Joystick axis deadband for the swerve drive
@@ -154,11 +154,11 @@ public final class Constants {
     public static final double lowSpeed=-0.5;
     public static final double highSpeed=-1.0;
     public static final double outtakeSpeed=0.9;
-    public static final double foldSpeed=-0.2;
+    public static final double foldSpeed=-0.5;//-0.2;
     public static final double foldHomeSpeed=-0.15;
     public static final double foldSpeedAutoMode=-0.15;
-    public static final double ampInStop=10;
-    public static final double ampOutStop=20;
+    public static final double ampInStop=30;//10;
+    public static final double ampOutStop=80;//20;
     public static final double intakeinPos=0.05;
     public static final double intakeRollStop=9;
     public static final double intakeEndStop=14.2; 

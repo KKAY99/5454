@@ -26,7 +26,7 @@ public class ShotLookupCommand extends Command {
   private double m_lastHoodPos=0;
   private double m_lastDistance=24; // default distance to use so will take up close shot if limelight is blocked/broken/hosed 
   private double m_timeLimit=0;
-  private double m_heldTurretAngle=0; // Angle to hold the turret at during shooting
+  //private double m_heldTurretAngle=0; // Angle to hold the turret at during shooting
   private enum shooterStates{
     SPINUP,WAIT,SHOOT,NOFUEL,EMPTYHOPPER,NOFUEL2NDCHECK,END
   } 
@@ -86,7 +86,8 @@ public class ShotLookupCommand extends Command {
   public void end(boolean interrupted) {
   System.out.println("Stopping Shooter");
     m_shooter.hoodMoveToZero();
-  
+    m_intake.stopFold();
+    m_intake.SetIntakeOutMode();
     m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
     m_intake.stopIntake();;
@@ -136,7 +137,7 @@ public class ShotLookupCommand extends Command {
        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
         if(m_shooter.atTargetSpeed(targetspeed)){
             // Capture the turret angle right before we start shooting
-            m_heldTurretAngle = m_turret.getCurrentAngle();
+       //     m_heldTurretAngle = m_turret.getCurrentAngle();
             m_state=shooterStates.SHOOT;
         } 
         break;
@@ -148,7 +149,8 @@ public class ShotLookupCommand extends Command {
        
         m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
         // Hold the turret at the captured angle to prevent drift during shooting
-        m_turret.holdTurretAtAngle(m_heldTurretAngle);
+        // held pending testing
+        //m_turret.holdTurretAtAngle(m_heldTurretAngle);
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
        
@@ -170,7 +172,7 @@ public class ShotLookupCommand extends Command {
     case EMPTYHOPPER:
         System.out.println("Flip Count"+ m_flipCount);
         m_flipCount=m_flipCount+1;
-        if (m_flipCount==8){
+        if (m_flipCount==6){
           //make it twice as fast
           m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode * 2 *  m_flipSpeed);
           m_flipCount = 0;
