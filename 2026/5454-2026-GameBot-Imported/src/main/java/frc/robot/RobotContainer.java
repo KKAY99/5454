@@ -191,6 +191,7 @@ public class RobotContainer {
   private boolean m_hubMatch=false;
   private String m_activeHubPhase="Undefined";
   private ShotCalculator m_ShotCalculator = new ShotCalculator();
+  private int m_currentFixedShotDistanceIndex = 0; // 0=fixedShotDistance1, 1=fixedShotDistance2, 2=fixedShotDistance3
   
 
   //
@@ -204,6 +205,7 @@ public class RobotContainer {
     createAutonomousCommandList(); 
     configureButtonBindings();
     resetDefaultCommand();
+    updateFixedShotDistanceDisplay(); // Initialize the fixed shot distance display
 
     m_pathChooser.setDefaultOption("Left2Neutral", "Left2Neutral");
     m_pathChooser.addOption("Right2Left", "Right2Left");
@@ -279,8 +281,7 @@ public class RobotContainer {
 
     Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, null);
     
-    Command fixedshot = new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance1);
-    m_xBoxDriver.leftTrigger().whileTrue(fixedshot);
+    m_xBoxDriver.leftTrigger().whileTrue(Commands.deferredProxy(() -> new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true, getCurrentFixedShotDistance())));
 
     /*Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
     m_xBoxDriver.x().whileTrue(shootKernelCommand);*/
@@ -307,6 +308,22 @@ public class RobotContainer {
     m_xBoxOperator.povRight().whileTrue(intakeFoldOut);
     Command intakeFoldOutSlow = m_intake.foldCommand(-0.2);
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
+    
+    // Fixed Shot Distance Selection - X decreases, Y increases
+    m_xBoxOperator.x().onTrue(Commands.runOnce(() -> {
+      if (m_currentFixedShotDistanceIndex > 0) {
+        m_currentFixedShotDistanceIndex--;
+      }
+      updateFixedShotDistanceDisplay();
+    }));
+    
+    m_xBoxOperator.y().onTrue(Commands.runOnce(() -> {
+      if (m_currentFixedShotDistanceIndex < 2) {
+        m_currentFixedShotDistanceIndex++;
+      }
+      updateFixedShotDistanceDisplay();
+    }));
+    
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
@@ -349,6 +366,24 @@ public class RobotContainer {
     //                TurretStates.TRACK,m_turretLimelight));
     */
     }
+
+  private void updateFixedShotDistanceDisplay() {
+    double[] distances = {
+      ShooterConstants.fixedShotDistance1,
+      ShooterConstants.fixedShotDistance2,
+      ShooterConstants.fixedShotDistance3
+    };
+    SmartDashboard.putNumber("Fixed Shot Distance", distances[m_currentFixedShotDistanceIndex]);
+  }
+
+  public double getCurrentFixedShotDistance() {
+    double[] distances = {
+      ShooterConstants.fixedShotDistance1,
+      ShooterConstants.fixedShotDistance2,
+      ShooterConstants.fixedShotDistance3
+    };
+    return distances[m_currentFixedShotDistanceIndex];
+  }
 
   private void updateisHubMatched(int Shift){
    Optional<Alliance> ally = DriverStation.getAlliance();
