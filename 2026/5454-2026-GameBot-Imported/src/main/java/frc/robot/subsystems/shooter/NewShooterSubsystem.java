@@ -253,8 +253,8 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
     currentLimits.StatorCurrentLimit=80;
     currentLimits.SupplyCurrentLimit=60;
     configurator.apply(currentLimits);
-    
   }
+  
   public void moveHood(double speed){
    // m_hoodMotor.set(speed);
   }
