@@ -25,6 +25,8 @@ public class TurretTrackCommand extends Command {
   private Limelight m_limelight;
   private TurretStates m_turretState;
   private PoseCalculator m_PoseCalc = new PoseCalculator();
+  private final double kLimelightDeadband=0.5;
+
   public TurretTrackCommand(TurretSubsystemPots turret,CommandSwerveDrivetrain drive,TurretStates state,Limelight limelight) {
     m_turret=turret;    
     m_drive=drive;
@@ -51,26 +53,30 @@ public class TurretTrackCommand extends Command {
     m_turret.stopTurret();
   }
 
-  private void trackHubpose(){
-    Pose2d currentPose = m_drive.getPose2d();
-    Pose2d aimAtPose = m_drive.getPose2d();
-        double bearing = m_PoseCalc.getBearingAngle( currentPose,aimAtPose);
-    ShotSolution solution = TurretUtil.computeShotSolution(currentPose, TargetType.HUB);
-    System.out.println("Solution " + solution.turretAngleDegrees);
-    double currentAngle = m_turret.getCurrentAngle();
-    double angleVariance = Math.abs(solution.turretAngleDegrees - currentAngle);
-    if(angleVariance>TurretConstants.trackerDeadBand){
-        String outputString="Current Pose " + String.format("%.2f",currentPose.getX()) + "," + String.format("%.2f",currentPose.getY())
-                            + "Aim at Pose:" + String.format("%.2f",aimAtPose.getX()) + "," + String.format("%.2f",aimAtPose.getY()); 
-        SmartDashboard.putString("Pose Info", outputString);                                                            
-        SmartDashboard.putString("Turret Move", "Moving Turret " + currentAngle +
-                                " to " + bearing);
-    }
-
-  }
+  
   private void trackHub(){
     if(!m_limelight.isFilteredTargetAvailable()){
-        
+      
+      double llx=m_limelight.getX();
+      
+      if(Math.abs(llx)<kLimelightDeadband){
+        m_turretState=TurretStates.END;
+        m_turret.stopTurret();
+      } else {
+        if (llx>0){
+          if(m_turret.getTurretPOTS()>TurretConstants.TurretLeftLimitPOTS){
+            m_turret.moveTurret(TurretConstants.kTrackingSpeed);
+            } else {
+               m_turret.stopTurret();
+            }
+        } else{
+           if(m_turret.getTurretPOTS()>Constants.TurretConstants.TurretRightLimitPOTS){
+            m_turret.moveTurret(TurretConstants.kTrackingSpeed);
+          } else {
+            m_turret.stopTurret();
+          }
+       }
+      }
     } 
   }
   // Returns true when the command should end.

@@ -206,7 +206,7 @@ public final class Constants {
     public static final double hoodDownSpeed=0.06;
     public static final double hoodDeadband=0.02;
   }
-  public enum TurretStates {MANUAL,TRACK,FIXEDLEFT,FIXEDRIGHT};
+  public enum TurretStates {MANUAL,TRACK,FIXEDLEFT,FIXEDRIGHT,END};
   public static final class TurretConstants {
     public static final int turretCanID=6;
     public static final double turretSpeed=0.11; 
@@ -216,7 +216,7 @@ public final class Constants {
     public static final double TurretRightLimitPOTS=0.7;
     public static final int encoder1CANID=11;
     public static final int encoder2CANID=12;
-
+    public static final double kTrackingSpeed=0.11;
     public static final double trackerDeadBand =1.0;
 
     public static final double kTurretOffsetX=0;

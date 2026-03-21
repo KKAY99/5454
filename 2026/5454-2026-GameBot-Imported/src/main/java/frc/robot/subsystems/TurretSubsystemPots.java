@@ -191,6 +191,9 @@ public boolean isOnTargetAngle(double angle){
   return true;
 }
 
+public double getTurretPOTS(){
+  return m_POTS.get();
+}
 
 public double getCurrentAngle(){
   return getTurretAngleFromMotor();

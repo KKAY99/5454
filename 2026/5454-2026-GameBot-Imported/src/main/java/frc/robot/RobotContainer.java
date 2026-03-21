@@ -307,6 +307,8 @@ public class RobotContainer {
     m_xBoxOperator.povRight().whileTrue(intakeFoldOut);
     Command intakeFoldOutSlow = m_intake.foldCommand(-0.2);
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
+    Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
+    m_xBoxOperator.y().whileTrue(turretTrack);
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
