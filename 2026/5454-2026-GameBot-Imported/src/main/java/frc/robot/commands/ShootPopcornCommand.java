@@ -17,6 +17,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import edu.wpi.first.math.geometry.Pose2d;
 /** An example command that uses an example subsystem. */
 import frc.robot.subsystems.TurretSubsystemPots;
+import frc.robot.utilities.Limelight;
 public class ShootPopcornCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
 
@@ -24,7 +25,8 @@ public class ShootPopcornCommand extends Command {
   private HopperSubsystem m_hopper;
   private IntakeSubsystem m_intake;
   private TurretSubsystemPots m_turret;
-  private CommandSwerveDrivetrain m_swerve;  
+  private CommandSwerveDrivetrain m_swerve;
+  private Limelight m_limelight;
   private enum shooterStates{
     INTAKE, SPINUP,WAIT,SHOOT,SHOOTING,END
   } 
@@ -33,13 +35,19 @@ public class ShootPopcornCommand extends Command {
   private double startShootTime;
   private TargetType m_target;
   private final double kSpinUpTime=1;
-  public ShootPopcornCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,TurretSubsystemPots turret, CommandSwerveDrivetrain swerve,TargetType target) {
+  
+  /*
+    Constructs a ShootPopcornCommand with AprilTag-based turret aiming.
+   */
+  public ShootPopcornCommand(NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
+                             TurretSubsystemPots turret, CommandSwerveDrivetrain swerve, TargetType target, Limelight limelight) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
     m_turret=turret;
     m_target=target;
     m_swerve=swerve;
+    m_limelight=limelight;
  
     m_state=shooterStates.INTAKE;
     addRequirements(m_hopper);
@@ -48,7 +56,13 @@ public class ShootPopcornCommand extends Command {
     addRequirements(m_turret);
     //DO NOT ADDD SWERVE AS A REQUIREMENT AS WE WANT TO BE ABLE TO DRIVE WHILE IN SHOOTING MODE.
   }
-
+  
+  /*
+   old method
+   */
+  public ShootPopcornCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,TurretSubsystemPots turret, CommandSwerveDrivetrain swerve,TargetType target) {
+    this(shooter, hopper, intake, turret, swerve, target, null);
+  }
  
   // Called when the command is initially scheduled.
   @Override
@@ -109,17 +123,24 @@ public class ShootPopcornCommand extends Command {
         m_shooter.runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
         break;
     case SHOOTING:
-
-    /*     ShotSolution solution = 
-        TurretUtil.computeShotSolution(m_swerve.getPose2d(), m_target);
-        if(solution.isValid){}
-          if(m_turret.isOnTargetAngle(solution.turretAngleDegrees)){
-            m_shooter.runNewShooter(solution.shooterSpeedRPS,
+        // Aim turret at hub using Limelight AprilTag data
+        if (m_limelight != null && m_limelight.isAnyTargetAvailable()) {
+          // Get the yaw angle from the AprilTag detection
+          double limelightYaw = m_limelight.getYawOfAprilTag();
+          
+          // Aim the turret at the hub using the AprilTag yaw
+          m_turret.aimTurretAtHubSimple(limelightYaw);
+          
+          System.out.println("Popcorn: Aiming turret with Limelight - Yaw: " + limelightYaw);
+        } else {
+          System.out.println("Popcorn: No AprilTag target available");
+        }
+        
+        // Keep the shooter and hopper running
+        m_shooter.runNewShooter(Constants.ShooterConstants.shootSpeed,
                             Constants.ShooterConstants.KickerSpeed);
-            
-          } else {
-            m_turret.turretTrack(m_target);
-          }*/
+        m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
+        m_intake.intakeonCommand();
         break;
     case END:
         m_shooter.hoodHome();

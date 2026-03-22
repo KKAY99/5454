@@ -211,6 +211,58 @@ public void holdTurretAtAngle(double targetAngleDegrees) {
   double targetMotorPosition = getTargetMotorPosition(targetAngleDegrees);
   moveMotor(targetMotorPosition);
 }
+
+/*
+  Aims the turret at the hub using AprilTag data from the Limelight.
+  The turret offset angle from the Limelight is combined with the AprilTag yaw to calculate the required turret rotation. This is still using the offsets but it is using it to aim with the limelight
+ 
+  @param limelightYawDegrees The yaw angle from the Limelight's AprilTag detection (relative to robot)
+  @param limelightXOffset The horizontal offset of the Limelight from robot center (in inches, positive = forward)
+  @param robotHeadingDegrees The robot's current heading from the gyro (0-360) I pray that this is accurate.
+ */
+public void aimTurretAtHub(double limelightYawDegrees, double limelightXOffset, double robotHeadingDegrees) {
+  // The Limelight is mounted on the turret pointing in the shooting direction
+  // The yaw angle from the AprilTag tells us how much we need to rotate from robot center
+  // We need to calculate the absolute angle the turret should point at the hub
+  
+  // Start with the Limelight's measured yaw (relative to turret's current position)
+  double turretTargetAngle = limelightYawDegrees;
+  
+  // Normalize to 0-360 range
+  turretTargetAngle = turretTargetAngle % 360;
+  if (turretTargetAngle < 0) {
+    turretTargetAngle += 360;
+  }
+  
+  // Log the aiming data to SmartDashboard for debugging
+  SmartDashboard.putNumber("Limelight Yaw (deg)", limelightYawDegrees);
+  SmartDashboard.putNumber("Turret Target Angle (deg)", turretTargetAngle);
+  
+  // Move the turret to face the hub
+  holdTurretAtAngle(turretTargetAngle);
+}
+
+/*
+  Simplified version that directly uses Limelight yaw to aim the turret.
+  This one should work of our application since the Limelight is mounted on the turret and the yaw is relative to the turret's current position. So we can just use the yaw as the target angle for the turret.
+  I was looking at 2024 code for aiming the turret and they did it in the less simple manner.
+  I dont actually know what is not working with the turret right now but as long as the turret can move with these commands it should aim.
+  
+  @param limelightYawDegrees The yaw angle from Limelight's AprilTag it should decrease with turret movement
+ */
+public void aimTurretAtHubSimple(double limelightYawDegrees) {
+  double turretTargetAngle = limelightYawDegrees;
+  
+  // Normalize to 0-360 range
+  turretTargetAngle = turretTargetAngle % 360;
+  if (turretTargetAngle < 0) {
+    turretTargetAngle += 360;
+  }
+  
+  SmartDashboard.putNumber("Turret Target Angle (deg)", turretTargetAngle);
+  holdTurretAtAngle(turretTargetAngle);
+}
+
 public void playMusic(String fileName){
 //        m_robotOrch.loadMusic(fileName);
 //        m_robotOrch.addInstrument(m_turretMotor);
