@@ -476,9 +476,9 @@ public class RobotContainer {
             updateHubStatus();
       double lldistance = m_turretLimelight.getDistanceInverted();
       if(lldistance>73 && lldistance<116){
-        m_xBoxDriver.setRumble(RumbleType.kBothRumble, 0.5);
+        m_xBoxDriver.getHID().setRumble(RumbleType.kBothRumble, 0.5);
       }else {
-        m_xBoxDriver.setRumble(RumbleType.kBothRumble,0);
+        m_xBoxDriver.getHID().setRumble(RumbleType.kBothRumble,0);
       }
       SmartDashboard.putBoolean("Our Hub Active",m_hubMatch);      
       SmartDashboard.putString("ActiveHub",m_activeHub);

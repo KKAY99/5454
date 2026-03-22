@@ -29,7 +29,7 @@ public class ClimbSubsystem extends SubsystemBase {
   //private SparkAbsoluteEncoder m_encoder;
 
   public ClimbSubsystem(int CanId1) {
-    m_climbMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true,Constants.k70Amp);
+    m_climbMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true,100);
     m_climbUpSwitch = new DigitalInput(ClimbConstants.climbUpSwitchDIO);
     m_climbDownSwitch = new DigitalInput(ClimbConstants.climbDownSwitchDIO);
   }

@@ -1,4 +1,6 @@
 package frc.robot.commands;
+import javax.lang.model.util.ElementScanner14;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -24,7 +26,7 @@ public class ShotLookupCommand extends Command {
   private HubLookUpTable m_HubLookUpTable = new HubLookUpTable();
   private boolean m_emptyHopper=false;
   private double m_lastHoodPos=0;
-  private double m_lastDistance=24; // default distance to use so will take up close shot if limelight is blocked/broken/hosed 
+  private double m_lastDistance=60;//24; // default distance to use so will take mid shot if limelight is not responding
   private double m_timeLimit=0;
   private double overrideDistance=0;
   private boolean overrideDistanceFlag=false;
@@ -41,6 +43,8 @@ public class ShotLookupCommand extends Command {
   private double fuelcheckStartTime;
   private final double kfuelcheckWait=2;
   private int m_flipCount=-6;
+  private int m_flipCountLimit=20;
+  private final int kflipCountMax=35;
   //private boolean NoLimeLightMode=0;
   private double m_flipSpeed=-1;
   public ShotLookupCommand(NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
@@ -50,6 +54,8 @@ public class ShotLookupCommand extends Command {
     m_intake=intake;
     m_turret=turret;
     m_limelight=limelight;
+    overrideDistanceFlag=false;
+    
     m_emptyHopper=emptyHopper;
     m_state=shooterStates.SPINUP;
     addRequirements(m_hopper);
@@ -125,8 +131,8 @@ public class ShotLookupCommand extends Command {
   //if distance is zero than use last disance 
   if(overrideDistanceFlag=true){
     distance=overrideDistance;
-  }
-  else if(distance==0){
+  } 
+  if(distance==0){
        distance=m_lastDistance;
   }else {
         m_lastDistance=distance;
@@ -143,7 +149,8 @@ public class ShotLookupCommand extends Command {
     m_lastHoodPos=hoodPos;
   }
   
-  System.out.println("Shooting Lookup :" + distance + " Speed:" + targetspeed  + " - State:" + m_state);
+  System.out.println("Shooting Lookup :" + distance + " Speed:" + targetspeed  + " - State:" + m_state +
+   "Override Flag:" + overrideDistanceFlag);
     switch(m_state){
     case SPINUP:
          m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
@@ -194,11 +201,14 @@ public class ShotLookupCommand extends Command {
     case EMPTYHOPPER:
         System.out.println("Flip Count"+ m_flipCount);
         m_flipCount=m_flipCount+1;
-        if (m_flipCount==12){
+        if (m_flipCount==m_flipCountLimit){
           //make it twice as fast
-          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode * 2 *  m_flipSpeed);
+          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode * 2.2 *  m_flipSpeed);
           m_flipCount = 0;
           m_flipSpeed=m_flipSpeed*-1; // FLIP SIGN TO REVERSE
+          if(m_flipCountLimit<kflipCountMax){
+            m_flipCountLimit=m_flipCountLimit+2;
+          }
         }
         /*if(m_intake.isAtInLimit() || m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
           m_state=shooterStates.NOFUEL2NDCHECK;
@@ -206,6 +216,8 @@ public class ShotLookupCommand extends Command {
         }*/
         if(m_intake.isinNoFlyZone()){
           m_intake.stopIntake();
+        } else {
+          m_intake.runIntake(Constants.IntakeConstants.highSpeed);
         }
       break;
     case NOFUEL2NDCHECK:
