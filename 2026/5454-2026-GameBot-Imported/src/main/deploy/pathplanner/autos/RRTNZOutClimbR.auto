@@ -19,13 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0
+            "name": "shotLookUpW5"
           }
         }
       ]
