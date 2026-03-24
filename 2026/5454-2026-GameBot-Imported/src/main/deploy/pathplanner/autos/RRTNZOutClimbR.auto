@@ -19,7 +19,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUpW5"
+            "name": "turretTrack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUp"
           }
         }
       ]

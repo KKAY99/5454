@@ -19,13 +19,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
+            "name": "turretTrack"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.0
+            "name": "shotLookUpW5"
           }
         },
         {
@@ -37,13 +37,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
+            "name": "turretTrack"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "shotLookUpW5"
           }
         },
         {
@@ -55,13 +55,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
+            "name": "turretTrack"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "shotLookUp"
           }
         }
       ]

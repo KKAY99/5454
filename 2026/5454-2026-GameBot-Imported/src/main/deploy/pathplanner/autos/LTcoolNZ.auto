@@ -19,13 +19,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
+            "name": "turretTrack"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.0
+            "name": "shotLookUp"
           }
         }
       ]
