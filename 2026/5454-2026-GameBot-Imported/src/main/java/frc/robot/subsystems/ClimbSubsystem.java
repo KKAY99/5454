@@ -22,7 +22,7 @@ import frc.robot.utilities.ObsidianCANSparkMax;
 
 public class ClimbSubsystem extends SubsystemBase {
   private ObsidianCANSparkMax m_climbMotor;
-  private DigitalInput m_climbUpSwitch;
+  private DigitalInput m_climbUpProx;
   private DigitalInput m_climbDownSwitch;
   private boolean m_homed=false;
  
@@ -30,12 +30,12 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public ClimbSubsystem(int CanId1) {
     m_climbMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true,100);
-    m_climbUpSwitch = new DigitalInput(ClimbConstants.climbUpSwitchDIO);
+    m_climbUpProx = new DigitalInput(ClimbConstants.climbUpSwitchDIO);
     m_climbDownSwitch = new DigitalInput(ClimbConstants.climbDownSwitchDIO);
   }
 
   public boolean isClimbUpLimit() {
-    return m_climbUpSwitch.get();
+    return m_climbUpProx.get();
   }
 
   public boolean isClimbDownLimit() {
@@ -93,7 +93,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Climb At High Limit",m_climbUpSwitch.get());
+    SmartDashboard.putBoolean("Climb At High Limit",m_climbUpProx.get());
     SmartDashboard.putBoolean("Climb At Low Limit",m_climbDownSwitch.get());
   
   }
