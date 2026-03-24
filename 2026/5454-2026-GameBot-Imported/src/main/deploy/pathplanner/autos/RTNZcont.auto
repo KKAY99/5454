@@ -19,7 +19,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
+            "name": "turretTrack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW5"
           }
         },
         {
@@ -31,7 +37,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
+            "name": "turretTrack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW5"
           }
         },
         {
@@ -43,7 +55,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
+            "name": "turretTrack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW5"
           }
         }
       ]
