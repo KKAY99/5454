@@ -60,7 +60,7 @@ public class TunerConstants {
         .withCurrentLimits(
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimit(Amps.of(60))
-                .withSupplyCurrentLimit(Amps.of(40))
+                .withSupplyCurrentLimit(Amps.of(35))
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
             );
@@ -69,7 +69,7 @@ public class TunerConstants {
             new CurrentLimitsConfigs()
                 // duplicating current limits for steering motor.
                 .withStatorCurrentLimit(Amps.of(60))
-                .withSupplyCurrentLimit(Amps.of(40))
+                .withSupplyCurrentLimit(Amps.of(35))
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
         );

@@ -59,21 +59,17 @@ public final class Constants {
   }
 
   public static final class LimeLightValues {
-    public static final double leftLimelightHeight=0;
-    public static final double leftLimelightAngle=0;
-    public static final double backLimelightHeight=0;
-    public static final double backLimelightAngle=0; 
+    public static final double leftLimelightHeight=0.2205;
+    public static final double leftLimelightAngle=30;
+    public static final double backLimelightHeight=0.2205;
+    public static final double backLimelightAngle=30; 
     
     public static final double turretLimelightHeight  =17.75;
     public static final double turretLimelightAngle=24;
-    public static final String turretLimelightName="limelight-three";
+    public static final String turretLimelightName="limelight-two";
     
-    public static final String leftLimelightName="limelight-two";
+    public static final String leftLimelightName="limelight-three";
     public static final String backLimelightName="limelight-one";
-
-    public static final int centerApriltagPipeline=0;
-    public static final int leftApriltagPipeline=1;
-    public static final int rightApriltagPipeline=2;
 
     //Confidence Max and Min Deadband Values
     public static final double confidenceDeadbandMin=60;
@@ -206,17 +202,17 @@ public final class Constants {
     public static final double hoodDownSpeed=0.06;
     public static final double hoodDeadband=0.02;
   }
-  public enum TurretStates {MANUAL,TRACK,FIXEDLEFT,FIXEDRIGHT,END};
+  public enum TurretStates {MANUAL,TRACK,SEARCH,FIXEDLEFT,FIXEDRIGHT,END};
   public static final class TurretConstants {
     public static final int turretCanID=6;
     public static final double turretSpeed=0.11; 
     public static final int TurretPOT=2;
     public static final int TurretPOTZero=0;
-    public static final double TurretLeftLimitPOTS=0.3; 
-    public static final double TurretRightLimitPOTS=0.7;
+    public static final double TurretLeftLimitPOTS=0.15; 
+    public static final double TurretRightLimitPOTS=0.85;
     public static final int encoder1CANID=11;
     public static final int encoder2CANID=12;
-    public static final double kTrackingSpeed=0.11;
+    public static final double kTrackingSpeed=0.05454;
     public static final double trackerDeadBand =1.0;
 
     public static final double kTurretOffsetX=0;
@@ -292,7 +288,7 @@ public final class Constants {
   }
 
   public static enum LEDStates{
-      ENABLED, DISABLED, INTAKING, HASCORAL, HASCORALANDDOALGEA,TELEOP, AUTOSCORING, GOLEFT, GORIGHT, LINEDUP,DISABLEDERROR,DISABLEDSEETARGET
+      ENABLED, DISABLED, INTAKING, TELEOP, AUTOSCORING, LINEDUP,DISABLEDERROR,DISABLEDSEETARGET
   }
 
   public static enum ColorStates{

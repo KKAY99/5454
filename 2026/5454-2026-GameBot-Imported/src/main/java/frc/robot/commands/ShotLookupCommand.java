@@ -129,7 +129,7 @@ public class ShotLookupCommand extends Command {
   double hoodPos=0;  
   double distance=m_limelight.getDistanceInverted();
   //if distance is zero than use last disance 
-  if(overrideDistanceFlag=true){
+  if(overrideDistanceFlag==true){
     distance=overrideDistance;
   } 
   if(distance==0){
@@ -149,7 +149,7 @@ public class ShotLookupCommand extends Command {
     m_lastHoodPos=hoodPos;
   }
   
-  System.out.println("Shooting Lookup :" + distance + " Speed:" + targetspeed  + " - State:" + m_state +
+  System.out.println("Shooting Lookup :" + distance + " Actual LL Dist:" + m_limelight.getDistanceInverted() + " Speed:" + targetspeed  + " - State:" + m_state +
    "Override Flag:" + overrideDistanceFlag);
     switch(m_state){
     case SPINUP:

@@ -52,20 +52,8 @@ public class Leds {
                 break;
                 case DISABLED:
                     setAnimationState(AnimationStates.PURPLELARSON);
-                case HASCORAL:
-                    setColorState(ColorStates.PURPLE);
-                break;
-                case HASCORALANDDOALGEA:
-                    setColorState(ColorStates.GREEN);
-                break;
                 case LINEDUP:
                     setAnimationState(AnimationStates.GREENFLASHING);
-                break;
-                case GOLEFT:
-                    setColorState(ColorStates.BLUE);
-                break;
-                case GORIGHT:
-                    setColorState(ColorStates.RED);
                 break;
                 case AUTOSCORING:
                     setAnimationState(AnimationStates.PURPLEFLASHING);

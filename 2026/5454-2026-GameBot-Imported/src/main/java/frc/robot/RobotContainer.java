@@ -28,6 +28,7 @@ import frc.robot.subsystems.shooter.NewShooterSubsystem;
 // import frc.robot.subsystems.shooter.ShooterSubsystem; // unused
 import frc.robot.utilities.Leds;
 import frc.robot.utilities.Limelight;
+import frc.robot.utilities.LimelightHelpers;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -87,7 +88,7 @@ public class RobotContainer {
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_turretLimelight=new Limelight(Constants.LimeLightValues.turretLimelightHeight,
                                             Constants.LimeLightValues.turretLimelightAngle,
-                                                0,Constants.LimeLightValues.leftLimelightName);
+                                                0,Constants.LimeLightValues.turretLimelightName);
   public final Limelight m_leftLimelight=new Limelight(Constants.LimeLightValues.leftLimelightHeight,Constants.LimeLightValues.leftLimelightAngle,
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_backLimelight=new Limelight(Constants.LimeLightValues.backLimelightHeight,Constants.LimeLightValues.backLimelightAngle,
@@ -308,7 +309,7 @@ public class RobotContainer {
     Command intakeFoldOutSlow = m_intake.foldCommand(-0.2);
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
     Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
-    m_xBoxOperator.y().whileTrue(turretTrack);
+    m_xBoxOperator.y().onTrue(turretTrack);
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
@@ -478,7 +479,7 @@ public class RobotContainer {
       if(lldistance>73 && lldistance<116){
         m_xBoxDriver.getHID().setRumble(RumbleType.kBothRumble, 0.5);
       }else {
-        m_xBoxDriver.getHID().setRumble(RumbleType.kBothRumble,0);
+        rumbleOff(); 
       }
       SmartDashboard.putBoolean("Our Hub Active",m_hubMatch);      
       SmartDashboard.putString("ActiveHub",m_activeHub);
@@ -529,8 +530,13 @@ public class RobotContainer {
       */
 
   }
+  private void rumbleOff(){
+     m_xBoxDriver.getHID().setRumble(RumbleType.kBothRumble,0);
+  
+  }
   public void DisabledPeriodic(){
-   updateOdomfromLimeLight();
+     rumbleOff(); 
+     updateOdomfromLimeLight();
 /* 
     if(m_leftLimelight.isAnyTargetAvailable()){
       m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
@@ -647,6 +653,10 @@ return pathfindingCommand;
 
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } */
+  }
+
+  public void SaveLimelights(){
+    LimelightHelpers.triggerRewindCapture(m_turretLimelight.getLimelightName(), 300);
   }
 
   public void AllPeriodic(){

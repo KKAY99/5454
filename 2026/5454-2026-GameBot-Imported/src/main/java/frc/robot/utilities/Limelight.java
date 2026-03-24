@@ -93,6 +93,8 @@ public class Limelight {
         m_mountingAngle=mountingAngle;
 
         m_limeLightName=limeLightName;
+        // Enable/disable rewind recording
+        LimelightHelpers.setRewindEnabled("limeLightName", true);
     };
 
     public String getLimelightName(){
