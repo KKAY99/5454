@@ -107,6 +107,9 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
    */
   @Override
   public void autonomousInit() {
+    LimelightHelpers.setThrottle("limelight-one", 0);
+    LimelightHelpers.setThrottle("limelight-two", 0);
+    LimelightHelpers.setThrottle("limelight-three", 0);
     m_robot.AutonMode();
 
     // schedule the autonomous command (example)
@@ -127,6 +130,9 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit(){
+    LimelightHelpers.setThrottle("limelight-one", 0);
+    LimelightHelpers.setThrottle("limelight-two", 0);
+    LimelightHelpers.setThrottle("limelight-three", 0);
    // if(m_autonomousCommand != null) {
    //   m_autonomousCommand.cancel();
    // }
@@ -144,6 +150,9 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit(){
+    LimelightHelpers.setThrottle("limelight-one", 150);
+    LimelightHelpers.setThrottle("limelight-two", 150);
+    LimelightHelpers.setThrottle("limelight-three", 150);
     m_robot.DisabledInit();
   }
 
