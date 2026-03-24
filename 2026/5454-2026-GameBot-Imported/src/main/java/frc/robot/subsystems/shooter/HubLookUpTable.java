@@ -48,9 +48,9 @@ public class HubLookUpTable {
         addEntry(83,  57, 0.0, 1.00);  // Close shot - nearly straight up
         addEntry(97,  59.5, 0.1, 1.00);  // Close shot - nearly straight up
        addEntry(117,  61, 0.12, 1.00);  // Close shot - nearly straight up
+       addEntry(128,  55, 0.22, 1.00);  // Close shot - nearly straight up
+      addEntry(154,  56.5, 0.25, 1.00);  // Close shot - nearly straight up
        
-        addEntry(133,  62.5, 0.12, 1.00);  // Close shot - nearly straight up
-        addEntry(152,  63.5, 0.12, 1.00);  // Close shot - nearly straight up
         addEntry(171,  65, 0.12, 1.00);  // Close shot - nearly straight up
         addEntry(191,  64.5, 0.20, 1.00);  // Close shot - nearly straight up
         addEntry(203,  65.5, 0.20, 1.00);  // Close shot - nearly straight up

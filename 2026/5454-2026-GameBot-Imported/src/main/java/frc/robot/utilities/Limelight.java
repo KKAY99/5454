@@ -94,13 +94,15 @@ public class Limelight {
 
         m_limeLightName=limeLightName;
         // Enable/disable rewind recording
-        LimelightHelpers.setRewindEnabled("limeLightName", true);
+        LimelightHelpers.setRewindEnabled(limeLightName, true);
     };
 
     public String getLimelightName(){
         return this.m_limeLightName;
     }
-
+    public void SetThrottle(int time){
+         LimelightHelpers.SetThrottle(m_limeLightName,time);
+    }
     public void setTargetHeight(double height){
         this.m_targetHeight=height;
     }

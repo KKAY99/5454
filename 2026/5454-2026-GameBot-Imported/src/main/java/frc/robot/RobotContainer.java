@@ -304,8 +304,9 @@ public class RobotContainer {
     m_xBoxOperator.povLeft().whileTrue(intakeFoldIn);
     Command intakeFoldSlow = m_intake.foldCommand(0.2);
     m_xBoxOperator.povDown().whileTrue(intakeFoldSlow);
-    Command intakeFoldOut = m_intake.foldCommand(-0.8);
-    m_xBoxOperator.povRight().whileTrue(intakeFoldOut);
+    Command intakeFoldOut = m_intake.foldCommand(-0.8);   
+     m_xBoxOperator.povRight().whileTrue(intakeFoldOut);
+     m_xBoxOperator.povRight().onFalse(new CompleteIntakeCommand(m_intake, m_hopper));
     Command intakeFoldOutSlow = m_intake.foldCommand(-0.2);
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
     Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
@@ -470,6 +471,12 @@ public class RobotContainer {
     }else {
       updateHubTime();;
     }
+  }
+
+  public void setLimelightThrottles(int time){
+    m_backLimelight.SetThrottle(time);
+    m_leftLimelight.SetThrottle(time);
+    m_turretLimelight.SetThrottle(time);
   }
   private void refreshSmartDashboard(){  
     //m_TurretSubsystem.showEncoderPositions();

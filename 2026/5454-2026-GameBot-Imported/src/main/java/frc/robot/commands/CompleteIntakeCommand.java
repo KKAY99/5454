@@ -71,8 +71,11 @@ public class CompleteIntakeCommand extends Command {
         m_state=intakeStates.PULSE; 
     break;
     case PULSE:
-            System.out.println("Out Pulse Count: " + m_outPulseCount + ", In Pulse Count: " + m_inPulseCount);
-        
+        //    System.out.println("Out Pulse Count: " + m_outPulseCount + ", In Pulse Count: " + m_inPulseCount);
+        if(m_hopper.getNoFuel()==false){
+          //stop agitate when fuel is seen
+          m_hopper.stopAgitate();
+        }
         if (m_flipSpeed > 0) {
             // Currently pulsing out
             m_intake.outFold(0.2 * m_flipSpeed * Constants.IntakeConstants.foldSpeed);
