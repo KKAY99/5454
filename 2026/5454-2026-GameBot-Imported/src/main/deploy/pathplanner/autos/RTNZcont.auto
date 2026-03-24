@@ -5,33 +5,58 @@
     "data": {
       "commands": [
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RTNZRT"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "turretTrack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUp128W5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RTNZRT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "turretTrack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUp128W5"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "expandIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RTNZRT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shotLookUp128W5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RTNZRT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shotLookUp128W5"
           }
         },
         {
@@ -43,7 +68,19 @@
         {
           "type": "named",
           "data": {
+            "name": "turretTrack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shotLookUp128W5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
           }
         }
       ]
