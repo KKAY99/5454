@@ -47,9 +47,23 @@ public class TurretTrackCommand extends Command {
   public void initialize() {
     //filter on front of hubs
     m_limelight.setLimelightIDFilter(10,26);
-    m_turretState=m_initState;
+    switch(m_turretState){
+      case SEARCH: //FLIP SEARCH DIRECTION
+      if(m_SearchRight==true){
+        m_SearchRight=false; //
+      } else {
+        m_SearchRight=true;
+      }
+      m_turretState=TurretStates.SEARCH;
+      break;
+      
+      case TRACK:
+      case MANUAL:
+      default:
+        m_turretState=m_initState;
+      break;
+    }
   }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -61,6 +75,7 @@ public class TurretTrackCommand extends Command {
   public void end(boolean interrupted) {
     System.out.println("Ending Turret Track");
     m_turret.stopTurret();
+    
   }
 
   

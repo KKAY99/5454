@@ -314,6 +314,8 @@ public class RobotContainer {
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
     Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
     m_xBoxOperator.y().onTrue(turretTrack);
+    Command turretTrackStop = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.END, m_turretLimelight);
+    m_xBoxOperator.x().onTrue(turretTrackStop);
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
