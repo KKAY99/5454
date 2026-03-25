@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.HoodConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.TurretSubsystemPots;
 import frc.robot.subsystems.shooter.HubLookUpTable;
@@ -32,7 +33,7 @@ public class ShotLookupCommand extends Command {
   private boolean overrideDistanceFlag=false;
   //private double m_heldTurretAngle=0; // Angle to hold the turret at during shooting
   private enum shooterStates{
-    SPINUP,WAIT,SHOOT,NOFUEL,EMPTYHOPPER,NOFUEL2NDCHECK,END
+    SPINUP,WAIT,SHOOT,NOFUEL,EMPTYHOPPER,SHOOTMORE,NOFUEL2NDCHECK,END
   } 
   private shooterStates m_state;
   private double stateStartTime;
@@ -42,11 +43,13 @@ public class ShotLookupCommand extends Command {
   private final double khoodDeadband = Constants.HoodConstants.hoodDeadband;
   private double fuelcheckStartTime;
   private final double kfuelcheckWait=2;
-  private int m_flipCount=-6;
-  private int m_flipCountLimit=20;
-  private final int kflipCountMax=35;
+  private int m_flipCount=0;
+  private int m_flipCountLimit=0;
+  private final int kflipCountMax=6;//35;
+  private final int kHopperPullLimit=8;
+  private int m_HopperPulls=0;
   //private boolean NoLimeLightMode=0;
-  private double m_flipSpeed=-1;
+  private double m_flipSpeed=0;
   public ShotLookupCommand(NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
                           TurretSubsystemPots turret, Limelight limelight, double timeLimit, boolean emptyHopper) {
     m_hopper=hopper;
@@ -190,36 +193,112 @@ public class ShotLookupCommand extends Command {
     case NOFUEL:
         fuelcheckStartTime=Timer.getFPGATimestamp();
         if(m_emptyHopper){
-          m_flipCount=-5; // below zero so first intake pull in is 15 loops
-          m_flipSpeed=-1;
+          m_flipCount=0; 
+          m_flipCountLimit=0;
+          m_flipSpeed=0;
+          m_HopperPulls=0;
           m_state=shooterStates.EMPTYHOPPER;    
-          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);      
+          //m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode);      
          } else{
           m_state=shooterStates.END;          
          }
       break; 
     case EMPTYHOPPER:
-        System.out.println("Flip Count"+ m_flipCount);
+        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+    
+    /*  System.out.println("Flip Count"+ m_flipCount);
         m_flipCount=m_flipCount+1;
         if (m_flipCount==m_flipCountLimit){
           //make it twice as fast
-          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode * 2.2 *  m_flipSpeed);
+          m_intake.inFold(Constants.IntakeConstants.foldSpeedAutoMode * 3 *  m_flipSpeed);
           m_flipCount = 0;
           m_flipSpeed=m_flipSpeed*-1; // FLIP SIGN TO REVERSE
           if(m_flipCountLimit<kflipCountMax){
-            m_flipCountLimit=m_flipCountLimit+2;
+            m_flipCountLimit=m_flipCountLimit+10;
           }
         }
         /*if(m_intake.isAtInLimit() || m_intake.intakeCurrentLimitCheck(Constants.IntakeConstants.ampInStop)){
           m_state=shooterStates.NOFUEL2NDCHECK;
           m_intake.stopFold();
         }*/
+        //if flip count (times through the loop) is greeater than limit than move to next hopper
+        if(m_flipCount>m_flipCountLimit){
+          m_flipCount=0;
+          m_HopperPulls=m_HopperPulls+1;
+        }
+        
+        //In First Time
+        
+        if(m_HopperPulls==0){
+          
+          m_flipSpeed=-0.8; // coming in speed
+          m_flipCountLimit=3;
+        }
+        if(m_HopperPulls==1){
+          
+          m_flipSpeed=0.8;  
+          m_flipCountLimit=2;
+        }
+        //In Second Time
+        if(m_HopperPulls==2){
+          
+          m_flipSpeed=-0.8; // coming in speed
+          m_flipCountLimit=8;
+        } 
+        if(m_HopperPulls==3){
+          
+          m_flipSpeed=0.8; 
+          m_flipCountLimit=6;
+        }
+        //In Third TIme
+         if(m_HopperPulls==4){
+          
+          m_flipSpeed=-0.8; // coming in speed
+          m_flipCountLimit=12;
+        }
+         if(m_HopperPulls==5){
+          
+          m_flipSpeed=0.8; // coming in speed
+          m_flipCountLimit=4;
+        }
+          if(m_HopperPulls==6){
+          
+          m_flipSpeed=-0.8; // coming in speed
+          m_flipCountLimit=4;
+        }
+          if(m_HopperPulls==7){
+          
+          m_flipSpeed=0.8; // coming in speed
+          m_flipCountLimit=4;
+        }
+          if(m_HopperPulls==8){
+          
+          m_flipSpeed=-0.8; // coming in speed
+          m_flipCountLimit=4;
+        }
+        
+        m_flipCount=m_flipCount+1;
+        
+        System.out.println("Flip Count:" + m_flipCount + " Hopper Pulls: "+ m_HopperPulls + " Speed:"+ m_flipSpeed);
+   
+        m_intake.inFold(m_flipSpeed);
+        
         if(m_intake.isinNoFlyZone()){
           m_intake.stopIntake();
         } else {
           m_intake.runIntake(Constants.IntakeConstants.highSpeed);
         }
+        
+        if(m_HopperPulls>kHopperPullLimit){
+          System.out.println("Stop Folding");
+          m_intake.stopFold();
+          m_state=shooterStates.SHOOTMORE;
+        }
       break;
+    case SHOOTMORE:
+            m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        //STAY IN THE LOOP FOREVER UNTIL USER STOPS
+     break;
     case NOFUEL2NDCHECK:
         currentTime=Timer.getFPGATimestamp();
         if(currentTime>fuelcheckStartTime+kfuelcheckWait){
