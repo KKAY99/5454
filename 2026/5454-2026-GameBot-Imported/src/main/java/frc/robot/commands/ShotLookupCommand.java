@@ -249,7 +249,7 @@ public class ShotLookupCommand extends Command {
             m_flipCountLimit=12;
           break;
           default:
-           if (m_HopperPulls % 2 == 0) {  //EDIT if we change hopper pull limit
+           if (m_HopperPulls % 2 != 0) {  //EDIT if we change hopper pull limit
               m_flipSpeed=0.8; //Out speed which we should start with first in the default case since we end with an inward pull
               m_flipCountLimit=4;
             } else {
