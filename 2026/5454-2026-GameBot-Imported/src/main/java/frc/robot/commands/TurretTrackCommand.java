@@ -32,12 +32,15 @@ public class TurretTrackCommand extends Command {
  
   private final double kTurretSlowSpeed=0.03;
   private boolean m_SearchRight=false;
-  public TurretTrackCommand(TurretSubsystemPots turret,CommandSwerveDrivetrain drive,TurretStates state,Limelight limelight) {
+  private boolean m_flipTrack=false;
+
+  public TurretTrackCommand(TurretSubsystemPots turret,CommandSwerveDrivetrain drive,TurretStates state,Limelight limelight, Boolean flipTrack) {
     m_turret=turret;    
     m_drive=drive;
     m_turretState=state;
     m_initState=state;
     m_limelight=limelight;
+    m_flipTrack=flipTrack;
     addRequirements(m_turret);
     
   }
@@ -56,6 +59,38 @@ public class TurretTrackCommand extends Command {
    
   }
 
+  //Four states turret tracking can be
+  // m_SearchRight     |      reversed
+  //   True                     False  - Normal operation, run the first if statement then set m_SearchRight to false at end
+  //   True                     True   - Reversed of the normal, run the second if statement and m_SearchRight to false at the end
+  //   False                    True   - Reversed operation, run the first if statement then set m_SearchRight to true at the end
+  //   False                    False  - Normal operation, run the second if statement then set m_SearchRight to true at the end
+
+  private void turretSearch(boolean reversed) {
+    if(m_limelight.isAnyTargetAvailable()){
+      m_turretState=TurretStates.TRACK;
+    }else {
+      if((m_SearchRight && !reversed) || (!m_SearchRight && reversed)){
+          if(m_turret.getTurretPOTS()<TurretConstants.TurretRightLimitPOTS){
+            m_turret.moveTurret(kTurretSearchSpeed);
+          } else {
+            m_turret.stopTurret();
+            m_SearchRight = reversed ? true : false;
+          }
+        } else {
+            System.out.println("Move R");
+          if(m_turret.getTurretPOTS()>Constants.TurretConstants.TurretLeftLimitPOTS){
+            System.out.println("Moving");
+            m_turret.moveTurret(-kTurretSearchSpeed);
+          } else {
+            System.out.println("Left Limit");
+            m_turret.stopTurret();
+            m_SearchRight = reversed ? false : true;
+        }
+      }
+    }
+  }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
@@ -64,7 +99,7 @@ public class TurretTrackCommand extends Command {
   }
 
   
-  private void trackHub(){
+  private void trackHub(boolean reversed){
     System.out.println("Tracking Turret XY");
  //   if(m_limelight.isFilteredTargetAvailable()){
     if(m_limelight.isAnyTargetAvailable() ){
@@ -104,7 +139,7 @@ public class TurretTrackCommand extends Command {
        }
       }
     } else {
-      m_turretState=TurretStates.SEARCH;
+      m_turretState= reversed ? TurretStates.REVERSEDSEARCH : TurretStates.SEARCH;
       System.out.println("No Target Available");
     } 
   }
@@ -119,36 +154,17 @@ public class TurretTrackCommand extends Command {
         break;
         
       case TRACK:
-        trackHub();
+        trackHub(m_flipTrack);
         break;
       case FIXEDLEFT:
         break;
       case FIXEDRIGHT:
         break;
       case SEARCH: 
-        
-        if(m_limelight.isAnyTargetAvailable()){
-          m_turretState=TurretStates.TRACK;
-        }else {
-          if(m_SearchRight){
-              if(m_turret.getTurretPOTS()<TurretConstants.TurretRightLimitPOTS){
-                m_turret.moveTurret(kTurretSearchSpeed);
-              } else {
-                m_turret.stopTurret();
-                m_SearchRight=false;
-              }
-            } else {
-                System.out.println("Move R");
-              if(m_turret.getTurretPOTS()>Constants.TurretConstants.TurretLeftLimitPOTS){
-                System.out.println("Moving");
-                m_turret.moveTurret(-kTurretSearchSpeed);
-              } else {
-                System.out.println("Left Limit");
-                m_turret.stopTurret();
-                m_SearchRight=true;
-            }
-          }
-        }
+        turretSearch(false);
+        break;
+      case REVERSEDSEARCH:
+        turretSearch(true);
         break;
       case END:
         returnValue=true;
