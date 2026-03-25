@@ -227,56 +227,39 @@ public class ShotLookupCommand extends Command {
           m_HopperPulls=m_HopperPulls+1;
         }
         
-        //In First Time
-        
-        if(m_HopperPulls==0){
-          
-          m_flipSpeed=-0.8; // coming in speed
-          m_flipCountLimit=3;
+        switch(m_HopperPulls){
+          case 0:
+            m_flipSpeed=-0.8; // coming in speed
+            m_flipCountLimit=3;
+          break;
+          case 1:
+            m_flipSpeed=0.8;  //Out speed
+            m_flipCountLimit=2;
+          break;
+          case 2:
+            m_flipSpeed=-0.8;
+            m_flipCountLimit=8;
+          break;
+          case 3:
+            m_flipSpeed=0.8; 
+            m_flipCountLimit=6;
+          break;
+          case 4:
+            m_flipSpeed=-0.8;
+            m_flipCountLimit=12;
+          break;
+          default:
+           if (m_HopperPulls % 2 != 0) {  //EDIT if we change hopper pull limit
+              m_flipSpeed=0.8; //Out speed which we should start with first in the default case since we end with an inward pull
+              m_flipCountLimit=4;
+            } else {
+              m_flipSpeed=-0.8; // coming in speed
+              m_flipCountLimit=6; // We pull in further then we push out incase we had jamed and never pulled in enough to start
+            }
+          break;
         }
-        if(m_HopperPulls==1){
-          
-          m_flipSpeed=0.8;  
-          m_flipCountLimit=2;
-        }
-        //In Second Time
-        if(m_HopperPulls==2){
-          
-          m_flipSpeed=-0.8; // coming in speed
-          m_flipCountLimit=8;
-        } 
-        if(m_HopperPulls==3){
-          
-          m_flipSpeed=0.8; 
-          m_flipCountLimit=6;
-        }
-        //In Third TIme
-         if(m_HopperPulls==4){
-          
-          m_flipSpeed=-0.8; // coming in speed
-          m_flipCountLimit=12;
-        }
-         if(m_HopperPulls==5){
-          
-          m_flipSpeed=0.8; // coming in speed
-          m_flipCountLimit=4;
-        }
-          if(m_HopperPulls==6){
-          
-          m_flipSpeed=-0.8; // coming in speed
-          m_flipCountLimit=4;
-        }
-          if(m_HopperPulls==7){
-          
-          m_flipSpeed=0.8; // coming in speed
-          m_flipCountLimit=4;
-        }
-          if(m_HopperPulls==8){
-          
-          m_flipSpeed=-0.8; // coming in speed
-          m_flipCountLimit=4;
-        }
-        
+
+
         m_flipCount=m_flipCount+1;
         
         System.out.println("Flip Count:" + m_flipCount + " Hopper Pulls: "+ m_HopperPulls + " Speed:"+ m_flipSpeed);
