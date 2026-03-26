@@ -46,7 +46,7 @@ public class ShotLookupCommand extends Command {
   private int m_flipCount=0;
   private int m_flipCountLimit=0;
   private final int kflipCountMax=6;//35;
-  private final int kHopperPullLimit=8;
+  private final int kHopperPullLimit=14;
   private int m_HopperPulls=0;
   //private boolean NoLimeLightMode=0;
   private double m_flipSpeed=0;

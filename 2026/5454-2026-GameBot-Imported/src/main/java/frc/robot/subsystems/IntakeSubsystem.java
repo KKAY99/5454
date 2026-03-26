@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -33,8 +35,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem(int CanId1, int CanId2) {
     m_intakeMotor = new TalonFX(CanId1);
-    m_intakeMotor.setNeutralMode(NeutralModeValue.Brake
-    );
+    m_intakeMotor.setNeutralMode(NeutralModeValue.Coast);
+    DutyCycleOut m_request = new DutyCycleOut(1.0);
+    // m_intakeMotor.setControl();
     m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true,80);
     m_intakeSwitch = new DigitalInput(IntakeConstants.intakeSwitchDIO);
   }
@@ -169,6 +172,10 @@ public class IntakeSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Intake Fold Current", m_fold.getOutputCurrent());
     SmartDashboard.putNumber("Intake Position", m_fold.getEncoder().getPosition());
     SmartDashboard.putBoolean("Intake Switch",m_intakeSwitch.get());
+    SmartDashboard.putNumber("Intake Supply Current",m_intakeMotor.getSupplyCurrent().getValueAsDouble());
+    SmartDashboard.putNumber("Intake Temperature",m_intakeMotor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Intake Torque Current",m_intakeMotor.getTorqueCurrent().getValueAsDouble());
+
     // System.out.println("Amp " + m_fold.getOutputCurrent());
     // This method will be called once per scheduler run
   }

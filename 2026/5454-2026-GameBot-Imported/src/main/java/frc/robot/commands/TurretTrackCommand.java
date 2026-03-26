@@ -28,7 +28,7 @@ public class TurretTrackCommand extends Command {
   private PoseCalculator m_PoseCalc = new PoseCalculator();
   private final double kLimelightDeadband=0.5;
   private final double kTurretFastSpeed=0.05454;
-  private final double kTurretSearchSpeed=0.08454;
+  private final double kTurretSearchSpeed=0.15454;
  
   private final double kTurretSlowSpeed=0.03;
   private boolean m_SearchRight=false;
@@ -46,6 +46,7 @@ public class TurretTrackCommand extends Command {
   @Override
   public void initialize() {
     //filter on front of hubs
+    System.out.println("Turret Track Init " + m_turretState + " - " + m_SearchRight);
     m_limelight.setLimelightIDFilter(10,26);
     switch(m_turretState){
       case SEARCH: //FLIP SEARCH DIRECTION

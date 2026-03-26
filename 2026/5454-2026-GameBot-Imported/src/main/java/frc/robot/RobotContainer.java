@@ -59,6 +59,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
 public class RobotContainer {
@@ -68,6 +69,7 @@ public class RobotContainer {
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+  //PowerDistribution m_pdh = new PowerDistribution();
   private final CommandXboxController m_xBoxDriver = new CommandXboxController(InputControllers.kXboxDrive);
   private CommandXboxController m_xBoxOperator = new CommandXboxController(InputControllers.kXboxOperator);
   //private CommandXboxController m_CustomController = new CommandXboxController(InputControllers.kCustomController);
@@ -314,6 +316,9 @@ public class RobotContainer {
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
     Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
     m_xBoxOperator.y().onTrue(turretTrack);
+    Command turretTrack2 = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.SEARCH, m_turretLimelight);
+    m_xBoxOperator.start().onTrue(turretTrack2);
+    
     Command turretTrackStop = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.END, m_turretLimelight);
     m_xBoxOperator.x().onTrue(turretTrackStop);
     //Testing and Debugging Commands on Custom Controller
@@ -502,6 +507,10 @@ public class RobotContainer {
       
     SmartDashboard.putBoolean("Is Climb Up ???",m_climb.isClimbUpLimit());
       SmartDashboard.putBoolean("Is Climb Down ???",m_climb.isClimbDownLimit());
+    //double totalCurrent = m_pdh.getTotalCurrent();
+    //SmartDashboard.putNumber("Current Total", totalCurrent);
+    //double current7 = m_pdh.getCurrent(4);
+    //SmartDashboard.putNumber("Current Channel 4", current7);
     }
       catch(Exception e){}
 
