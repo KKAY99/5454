@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "turretTrack"
+            "name": "turretLeft"
           }
         },
         {
@@ -36,15 +36,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "RTNZRT"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RTNZRT"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "turretTrack"
+            "name": "turretLeft"
           }
         },
         {
@@ -54,21 +67,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "expandIntake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RTscrapeRT"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "RTscrapeRT"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "turretTrack"
+            "name": "turretLeft"
           }
         },
         {

@@ -26,19 +26,32 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp128W5"
+            "name": "turretLeft"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "expandIntake"
+            "name": "shotLookUp128W5"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "RTNZBumpLineup"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RTNZBumpLineup"
+                }
+              }
+            ]
           }
         },
         {

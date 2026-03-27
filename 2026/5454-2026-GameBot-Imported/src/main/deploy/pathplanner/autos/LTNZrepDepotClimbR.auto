@@ -5,63 +5,65 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "expandIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LTNZLT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "turretTrack"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shotLookUpW5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LTlitnzLTflipVel"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LTNZLT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "turretTrack"
+            "name": "turretLeft"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shotLookUpW5"
+            "name": "shotLookUp128W5"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LTlitnzLTflipVel"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "popcorn"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "DepotVacuumPop"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "turretTrack"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shotLookUp"
           }
         }
       ]

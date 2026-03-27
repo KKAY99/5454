@@ -229,8 +229,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeoff", m_intake.intakeoffCommand());
     NamedCommands.registerCommand("NEWshooton", m_newShooter.shootonCommand());
     NamedCommands.registerCommand("NEWshootoff", m_newShooter.shootoffCommand());
-    NamedCommands.registerCommand("shootManual", new ShootMappingCommand(m_newShooter,m_hopper, m_intake,
-          m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,false));
+    NamedCommands.registerCommand("shootManual", new ShootMappingCommand(m_newShooter,m_hopper, m_intake, m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,false));
     NamedCommands.registerCommand("turretManualMove", new WaitCommand(2) );
     NamedCommands.registerCommand("turretManualStop", new WaitCommand(2));
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
@@ -241,6 +240,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("shotLookUpW5", new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(5));
     NamedCommands.registerCommand("shotLookUp128W5", new ShotLookupCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true, 128).withTimeout(5));
     NamedCommands.registerCommand("turretTrack", new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight));
+    NamedCommands.registerCommand("turretLeft", new AsherTurretToAngleCommand(-45.0, m_TurretSubsystem));
+    NamedCommands.registerCommand("turretRight", new AsherTurretToAngleCommand(-270.0, m_TurretSubsystem));
   }
 
   private void configureButtonBindings(){
