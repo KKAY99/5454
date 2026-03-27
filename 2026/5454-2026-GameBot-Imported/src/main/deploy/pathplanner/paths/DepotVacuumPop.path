@@ -52,8 +52,8 @@
         "y": 5.0
       },
       "prevControl": {
-        "x": 1.2292957746478876,
-        "y": 6.3819014084507035
+        "x": 1.4291544286465347,
+        "y": 5.067032908033465
       },
       "nextControl": null,
       "isLocked": false,
@@ -76,14 +76,7 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "completeIntake",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.21208,
     "maxAcceleration": 2.25,

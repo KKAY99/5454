@@ -5,15 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "expandIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "boring"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "boring"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
