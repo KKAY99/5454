@@ -49,12 +49,6 @@
         {
           "type": "named",
           "data": {
-            "name": "turretTrack"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shotLookUp"
           }
         }

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.285548912562538,
-        "y": 0.7106452977608214
+        "x": 5.094363033996086,
+        "y": 0.587420282470999
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 0.6103695842601641
       },
       "prevControl": {
-        "x": 6.841789930555556,
-        "y": 0.4033914207175929
+        "x": 5.470775701295419,
+        "y": 0.45838504434603333
       },
       "nextControl": {
-        "x": 7.629141922303837,
-        "y": 0.750632960006175
+        "x": 8.859773075810185,
+        "y": 0.7382675781249999
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 3.6610855758101852
       },
       "prevControl": {
-        "x": 9.262914627418695,
-        "y": 2.8038881824745756
+        "x": 8.923808955439815,
+        "y": 3.4598580729166666
       },
       "nextControl": {
-        "x": 7.787598195770459,
-        "y": 4.065957911988303
+        "x": 7.232466521162969,
+        "y": 3.973253485221405
       },
       "isLocked": false,
       "linkedName": null
@@ -52,12 +52,12 @@
         "y": 3.0713125000000003
       },
       "prevControl": {
-        "x": 7.006182143482795,
-        "y": 3.7873404161483766
+        "x": 7.047133609622673,
+        "y": 3.2537784488213695
       },
       "nextControl": {
-        "x": 6.714043186099475,
-        "y": 2.1776059974902724
+        "x": 6.5136545900906375,
+        "y": 2.6841891599397565
       },
       "isLocked": false,
       "linkedName": null
@@ -68,12 +68,12 @@
         "y": 2.5645367476851857
       },
       "prevControl": {
-        "x": 4.21330078125,
-        "y": 2.8149952160870595
+        "x": 4.239181672787123,
+        "y": 2.434529909222491
       },
       "nextControl": {
-        "x": 2.9401038025540327,
-        "y": 2.2480710966428346
+        "x": 3.3428912581785206,
+        "y": 2.6325785290248835
       },
       "isLocked": false,
       "linkedName": null
@@ -84,8 +84,8 @@
         "y": 3.5561490683229806
       },
       "prevControl": {
-        "x": 2.470020858204187,
-        "y": 3.3120461141192523
+        "x": 2.6720396515642086,
+        "y": 3.2085165164036327
       },
       "nextControl": null,
       "isLocked": false,
@@ -135,12 +135,12 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.212,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 200.0,
-    "maxAngularAcceleration": 200.0,
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 0,
@@ -152,5 +152,5 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
