@@ -62,6 +62,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.TurretUtil;
+import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -492,7 +493,8 @@ public class RobotContainer {
   }
   private void refreshSmartDashboard(){  
       //get turret angle
-  double turretAngleTarget=TurretUtil.getFieldAngleToTarget(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
+  double turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
+  
   SmartDashboard.putNumber("Turret Util Target Angle",turretAngleTarget);
 
     try{
