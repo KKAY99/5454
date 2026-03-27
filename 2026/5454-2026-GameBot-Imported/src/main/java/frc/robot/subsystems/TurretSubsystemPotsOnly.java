@@ -27,7 +27,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
-import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
@@ -46,7 +45,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.configs.Slot0Configs;
 
 
-public class TurretSubsystemPots extends SubsystemBase {
+public class TurretSubsystemPotsOnly extends SubsystemBase {
   private TalonFX m_turretMotor;
   private Orchestra m_robotOrch = new Orchestra();
       
@@ -55,23 +54,23 @@ public class TurretSubsystemPots extends SubsystemBase {
   private AnalogPotentiometer m_POTS;
   private final double kPotsLowLimit=Constants.TurretConstants.TurretLeftLimitPOTS;
   private final double kPotsHighLimit=Constants.TurretConstants.TurretRightLimitPOTS;
-  private double kLowerLimit=-40;
-  private double kUpperLimit=8;
+  private double kLowerLimit=-20;
+  private double kUpperLimit=19;
   private final double kGearReduction=8;  //80t to 10tooth
-  private final double kMotorRotationsToAngle=7.80;
-  private final double kDegreesPerRotation=0;
+  private final double kMotorRotationsToAngle=0.127;
+  private final double kDegreesPerRotation=7.86;
   private DutyCycleOut m_TurretDutyCycleOut = new DutyCycleOut(0.0);
+
   private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
-  public TurretSubsystemPots(int CanId1, int potsPort) {
-    SmartDashboard.putNumber("Target Turret Angle",0);
-   
+  public TurretSubsystemPotsOnly(int CanId1, int potsPort) {
+    SmartDashboard.putNumber("Target Angle",0);
     m_POTS = new AnalogPotentiometer(potsPort,1,0); 
     m_turretMotor = new TalonFX(CanId1,"5454Canivore");
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
     motorConfig.MotorOutput.NeutralMode=NeutralModeValue.Brake;
    
     m_turretMotor.getConfigurator().apply(motorConfig);
-    configureMotionMagic();
+    //configureMotionMagic();
    
    /* m_encoder1 = new CANcoder(encoder1ID);
     
@@ -103,9 +102,14 @@ public class TurretSubsystemPots extends SubsystemBase {
     return () -> encoder.getAbsolutePosition().getValue();
   }
   
- 
+  public void showEncoderPositions(){
+       // SmartDashboard.putNumber("Encoder 1",m_encoder1.getAbsolutePosition().getValueAsDouble());
+       // SmartDashboard.putNumber("Encoder 2",m_encoder2.getAbsolutePosition().getValueAsDouble());
+    }
+
    public void moveTurret(double speed) 
   {
+      showEncoderPositions();
       if(atLimit(speed)){
         stopTurret();
         System.out.println("Turret Stopped / At Limit");
@@ -152,21 +156,18 @@ Slot0Configs slot0Configs = talonFXConfigs.Slot0;
 slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
 slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
 slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-slot0Configs.kP = 8;//;//4.8; // A position error of 2.5 rotations results in 12 V output
-slot0Configs.kI = 0.01; // no output for integrated error
+slot0Configs.kP = 4.8; // A position error of 2.5 rotations results in 12 V output
+slot0Configs.kI = 0; // no output for integrated error
 slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
 
 // set Motion Magic settings
 MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
 motionMagicConfigs.MotionMagicCruiseVelocity = 20;//80; // Target cruise velocity of 80 rps
-motionMagicConfigs.MotionMagicAcceleration = 50;////160; // Targt acceleration of 160 rps/s (0.5 seconds)
+motionMagicConfigs.MotionMagicAcceleration = 40;////160; // Target acceleration of 160 rps/s (0.5 seconds)
 motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
 m_turretMotor.getConfigurator().apply(talonFXConfigs);
 } 
-
-
-
 private double getTurretAngleFromMotor(){
   double motorPos=m_turretMotor.getPosition().getValueAsDouble();
   double returnValue=0;
@@ -176,14 +177,14 @@ private double getTurretAngleFromMotor(){
      returnValue= 360-(Math.abs(motorPos)*kDegreesPerRotation);
   }
   return returnValue;
-
 }
+
 private double getTargetMotorPosition(double targetangle){
   double returnValue=0;
-  if(targetangle>=0 && targetangle<50){
-      returnValue=targetangle/kMotorRotationsToAngle;
+  if(targetangle<180){
+      returnValue=targetangle*kMotorRotationsToAngle;
   }else { // going negative
-      returnValue=0-((360-targetangle)/kMotorRotationsToAngle); // flip the sign and go that degrees to the other direction
+      returnValue=(360-targetangle)*-1*kMotorRotationsToAngle; // flip the sign and go that degrees to the other direction
   }
  return returnValue;
 }
@@ -242,14 +243,8 @@ private double POTStoRotations(double POTSValue ){
   if(currentPOTPosition<kHomeTurretPOTS){
     calcHomePos=calcHomePos*-1; // go negative on position
   }
-  System.out.println("Homing Position: " + calcHomePos );
   m_turretMotor.setPosition(calcHomePos,1);
-  SmartDashboard.putNumber("Target Pos for 0", getTargetMotorPosition(0));
-  SmartDashboard.putNumber("Target Pos for 90", getTargetMotorPosition(90));
-  SmartDashboard.putNumber("Target Pos for 180",+ getTargetMotorPosition(180));
-  SmartDashboard.putNumber("Target Pos for 270", getTargetMotorPosition(270));
-}   
-
+ }   
   @Override
   public void periodic(){
     SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));
@@ -259,19 +254,15 @@ private double POTStoRotations(double POTSValue ){
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/kGearReduction);
     SmartDashboard.putNumber("POTS Offset Angle",(m_POTS.get()*3600/kGearReduction)-225);
     SmartDashboard.putNumber("Motor Rotation Angle",getTurretAngleFromMotor());
+    double angle=SmartDashboard.getNumber("Target Angle",0);
     
- SmartDashboard.putNumber("Target Pos for 0", getTargetMotorPosition(0));
-  SmartDashboard.putNumber("Target Pos for 90", getTargetMotorPosition(90));
-  SmartDashboard.putNumber("Target Pos for 180",+ getTargetMotorPosition(180));
-  SmartDashboard.putNumber("Target Pos for 270", getTargetMotorPosition(270));
- 
-     double angle=SmartDashboard.getNumber("Target Turret Angle",0);
- 
-   if(!(angle==0)){
-      double targetPos=getTargetMotorPosition(angle);
-      System.out.println("Move Turret to "+ targetPos);
-        moveMotor(targetPos);
-    }  //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
+    double targetPos=getTargetMotorPosition(angle);
+    /*if(!(angle==0))
+    {
+      moveMotor(targetPos);
+    }*/
+    SmartDashboard.putNumber("Target Pos",targetPos);
+    //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
     //SmartDashboard.putNumber("POTS",m_POTS.; 
 
   }

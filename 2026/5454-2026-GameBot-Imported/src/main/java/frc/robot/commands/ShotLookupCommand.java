@@ -2,6 +2,7 @@ package frc.robot.commands;
 import javax.lang.model.util.ElementScanner14;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.TurretSubsystemPots;
 import frc.robot.subsystems.shooter.HubLookUpTable;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
+import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.HubLookUpTable.ShootingParameters;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.Limelight;
@@ -126,7 +128,6 @@ public class ShotLookupCommand extends Command {
   public boolean isFinished() {
   double currentTime;
   boolean returnValue=false;
-  
   //Lookup Shot Values
   double targetspeed=0;
   double hoodPos=0;  

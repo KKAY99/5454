@@ -61,6 +61,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.robot.subsystems.shooter.ShotCalculator;
+import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
@@ -489,7 +490,10 @@ public class RobotContainer {
     m_turretLimelight.SetThrottle(time);
   }
   private void refreshSmartDashboard(){  
-    //m_TurretSubsystem.showEncoderPositions();
+      //get turret angle
+  double turretAngleTarget=TurretUtil.getFieldAngleToTarget(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
+  SmartDashboard.putNumber("Turret Util Target Angle",turretAngleTarget);
+
     try{
             updateHubStatus();
       double lldistance = m_turretLimelight.getDistanceInverted();
@@ -539,8 +543,18 @@ public class RobotContainer {
     }
   }
   public void updateOdomfromLimeLight(){
-   /*     if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+      if(m_leftLimelight.isAnyTargetAvailable()){
+    // m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+  
+      Pose2d currentLeftPose=m_leftLimelight.GetPoseViaMegatag2();
+      double currentLeftTimeStamp=Utils.getCurrentTimeSeconds();
+
+      System.out.println("update vision left " + currentLeftPose.getX() + "/" + currentLeftPose.getY());
+      m_swerve.addVisionMeasurement(currentLeftPose,currentLeftTimeStamp);
+    } 
+  
+    if(m_backLimelight.isAnyTargetAvailable()){
+    // m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
       Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
       double currentTimeStamp=Utils.getCurrentTimeSeconds();
@@ -548,7 +562,7 @@ public class RobotContainer {
       System.out.println("update vision back " + currentPose.getX() + "/" + currentPose.getY());
       m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } 
-      */
+      
 
   }
   private void rumbleOff(){
@@ -692,6 +706,7 @@ return pathfindingCommand;
       m_intake.homeIntake(Constants.homeTimeOut);
       m_newShooter.hoodHome();
       m_climb.homeClimb(Constants.homeTimeOut);
+      m_TurretSubsystem.homeTurret();
       hasHomed = true;
     }
   }
