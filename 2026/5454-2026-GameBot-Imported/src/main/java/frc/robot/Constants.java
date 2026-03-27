@@ -1,13 +1,17 @@
 package frc.robot;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.config.PIDConstants;
+import edu.wpi.first.math.Matrix;
 
 public final class Constants {
   public static final double kRobotLoopTime = 0.020;
@@ -19,6 +23,9 @@ public final class Constants {
   public static final int k70Amp=70;
   public static final int k80Amp=80;
   public static final int pdhCAN=1;
+
+  public static final Matrix<N3, N1> kPoseEstimatorStandardDeviations = VecBuilder.fill(0.1, 0.1, 10);
+  public static final Matrix<N3, N1> kVisionStandardDeviations = VecBuilder.fill(5, 5, 500);
 
   //home time out
   public static final int homeTimeOut=3;

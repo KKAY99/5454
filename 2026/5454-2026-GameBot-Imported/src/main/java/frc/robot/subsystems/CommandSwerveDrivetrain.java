@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.TunerConstants.TunerSwerveDrivetrain;
 import org.littletonrobotics.junction.Logger;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -220,7 +221,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void buildPoseEstimator(){
         m_poseEstimator=new SwerveDrivePoseEstimator(getKinematics(),
                         new Rotation2d(this.getPigeon2().getYaw().getValue()),
-                        this.getState().ModulePositions,getPose2d());
+                        this.getState().ModulePositions,getPose2d(), Constants.kPoseEstimatorStandardDeviations, Constants.kVisionStandardDeviations);
     }
 
     public void configAutoBuilder(){
