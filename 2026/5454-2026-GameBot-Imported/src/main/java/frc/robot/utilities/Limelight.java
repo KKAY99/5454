@@ -227,8 +227,17 @@ public class Limelight {
                 this.botpose_targetspace.get():new double[]{};
     }
 
+    public LimelightHelpers.PoseEstimate getBotPoseEstimate_wpiBlue_MegaTag2(){
+        return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(m_limeLightName);
+    }
     public double getHeartBeat(){
         return hb.get(0);
+    }
+    public void SetIMUMode(int mode){
+        LimelightHelpers.SetIMUMode(m_limeLightName, mode);
+    }
+    public void SetIMUAssistAlpha(double alpha){
+        LimelightHelpers.SetIMUAssistAlpha(m_limeLightName, alpha);
     }
 
     /**

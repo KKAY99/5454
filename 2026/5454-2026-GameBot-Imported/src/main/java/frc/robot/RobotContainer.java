@@ -537,33 +537,43 @@ public class RobotContainer {
   }
 
   public void DisabledInit(){
-    m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(1,1,99999999));
     if(!m_hasResetGyro){
       m_hasResetGyro=true;
       m_swerve.getPigeon2().reset();
     }
+
   }
   public void updateOdomfromLimeLight(){
-      if(m_leftLimelight.isAnyTargetAvailable()){
-    // m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+   /*    if(m_leftLimelight.isAnyTargetAvailable()){
+     m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
   
       Pose2d currentLeftPose=m_leftLimelight.GetPoseViaMegatag2();
       double currentLeftTimeStamp=Utils.getCurrentTimeSeconds();
 
       System.out.println("update vision left " + currentLeftPose.getX() + "/" + currentLeftPose.getY());
       m_swerve.addVisionMeasurement(currentLeftPose,currentLeftTimeStamp);
-    } 
+    } */
+   m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+   LimelightHelpers.PoseEstimate mt2 = m_backLimelight.getBotPoseEstimate_wpiBlue_MegaTag2();
+    
+  boolean doRejectUpdate=false; //default to accept vision update
+  // if our angular velocity is greater than 360 degrees per second, ignore vision updates
+  if(Math.abs(m_swerve.getPigeon2().getAngularVelocityXDevice().getValueAsDouble()) > 360)
+  {
+    doRejectUpdate = true;
+  }
+  if(mt2.tagCount == 0)
+  {
+    doRejectUpdate = true;
+  }
+  if(!doRejectUpdate)
+    {
+      m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        System.out.println("update vision back - Tag Count: " + mt2.tagCount 
+              + " Pose:" + mt2.pose.getX() + "/"+ mt2.pose.getY());
+      m_swerve.addVisionMeasurement(mt2.pose,mt2.timestampSeconds);      
+    }
   
-    if(m_backLimelight.isAnyTargetAvailable()){
-    // m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-      System.out.println("update vision back " + currentPose.getX() + "/" + currentPose.getY());
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-      
 
   }
   private void rumbleOff(){
@@ -572,6 +582,8 @@ public class RobotContainer {
   }
   public void DisabledPeriodic(){
      rumbleOff(); 
+    // In disabledPeriodic or before match starts
+    m_backLimelight.SetIMUMode(1);
      updateOdomfromLimeLight();
 /* 
     if(m_leftLimelight.isAnyTargetAvailable()){
@@ -637,11 +649,16 @@ return pathfindingCommand;
   public void AutonMode(){
     homeRobot();
     InitialAutonPathfind();
+    //used fused IMU Mode
+    m_backLimelight.SetIMUMode(4);
+   
   }
 
   public void TeleopMode(){
     homeRobot();
-    
+    //used fused IMU Mode
+    m_backLimelight.SetIMUMode(4);
+   
     //m_LEDS.setLedState(LEDStates.TELEOP,false);
     
   }
@@ -704,6 +721,8 @@ return pathfindingCommand;
 
   public void homeRobot(){
     if(!hasHomed){
+      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+
       m_intake.homeIntake(Constants.homeTimeOut);
       m_newShooter.hoodHome();
       m_climb.homeClimb(Constants.homeTimeOut);

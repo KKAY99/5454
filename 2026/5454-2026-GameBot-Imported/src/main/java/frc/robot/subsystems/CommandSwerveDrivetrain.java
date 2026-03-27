@@ -221,7 +221,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void buildPoseEstimator(){
         m_poseEstimator=new SwerveDrivePoseEstimator(getKinematics(),
                         new Rotation2d(this.getPigeon2().getYaw().getValue()),
-                        this.getState().ModulePositions,getPose2d(), Constants.kPoseEstimatorStandardDeviations, Constants.kVisionStandardDeviations);
+                        this.getState().ModulePositions,getPose2d(), Constants.kPoseEstimatorStandardDeviations, 
+                        Constants.kVisionStandardDeviations);
     }
 
     public void configAutoBuilder(){
