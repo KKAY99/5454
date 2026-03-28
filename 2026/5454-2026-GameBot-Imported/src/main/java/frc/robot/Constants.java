@@ -183,6 +183,8 @@ public final class Constants {
     public static final double fixedShotDistance1=73;
     public static final double fixedShotDistance2=97;
     public static final double fixedShotDistance3=133;
+    public static final double kDefaultShootingDistance=60;
+    public static final double kDefaultPassDistance=200;
     //speeds
     public static final double shooterRPM=5000;
     public static final double IdleSpeed=52;// 0.7;
