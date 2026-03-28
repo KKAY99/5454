@@ -257,8 +257,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
               return false;
             },
             this // Reference to this subsystem to set requirements
-    );
-  }
+        );
+    }
+
+    public void gyroReset(){
+        this.getPigeon2().reset();
+    }
 
   /**
      * Resets both CTRE's internal pose estimator and RobotState so they stay in sync.
