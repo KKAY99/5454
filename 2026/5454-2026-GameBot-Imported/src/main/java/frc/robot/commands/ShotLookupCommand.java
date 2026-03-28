@@ -184,7 +184,8 @@ public class ShotLookupCommand extends Command {
    "Override Flag:" + overrideDistanceFlag);
     switch(m_state){
     case SPINUP:
-         m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
+         //m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
+         m_shooter.holdHoodPosMotionMagic(hoodPos);
         if(m_shooter.checkHoodPos(hoodPos, khoodSpeed,khoodDeadband)){
          stateStartTime=Timer.getFPGATimestamp();
           
@@ -194,7 +195,8 @@ public class ShotLookupCommand extends Command {
         }
     break;
     case WAIT:
-       m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
+       //m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
+       m_shooter.holdHoodPosMotionMagic(hoodPos);
         if(m_shooter.atTargetSpeed(targetspeed)){
             // Capture the turret angle right before we start shooting
        //     m_heldTurretAngle = m_turret.getCurrentAngle();
@@ -207,7 +209,9 @@ public class ShotLookupCommand extends Command {
         m_shooter.runNewShooter(targetspeed,
                             Constants.ShooterConstants.KickerSpeed);
        
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        //m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        m_shooter.holdHoodPosMotionMagic(hoodPos);
+        
         // Hold the turret at the captured angle to prevent drift during shooting
         // held pending testing
         //m_turret.holdTurretAtAngle(m_heldTurretAngle);
@@ -232,7 +236,8 @@ public class ShotLookupCommand extends Command {
          }
       break; 
     case EMPTYHOPPER:
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        //m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        m_shooter.holdHoodPosMotionMagic(hoodPos);
     
     /*  System.out.println("Flip Count"+ m_flipCount);
         m_flipCount=m_flipCount+1;
@@ -307,7 +312,8 @@ public class ShotLookupCommand extends Command {
         }
       break;
     case SHOOTMORE:
-            m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+            //m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+            m_shooter.holdHoodPosMotionMagic(hoodPos);
         //STAY IN THE LOOP FOREVER UNTIL USER STOPS
      break;
     case NOFUEL2NDCHECK:
