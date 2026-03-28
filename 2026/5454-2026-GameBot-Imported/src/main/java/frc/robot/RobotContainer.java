@@ -38,9 +38,6 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import org.ejml.dense.row.mult.MatrixMatrixMult_MT_ZDRM;
-import org.ejml.sparse.csc.mult.MatrixVectorMult_FSCC;
-
 import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
@@ -239,7 +236,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
     NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper));
-    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem,m_swerve, null));
+    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, false));
+    NamedCommands.registerCommand("pass", new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, true));
     NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
     NamedCommands.registerCommand("shotLookUpW5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,  m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(5));
     NamedCommands.registerCommand("shotLookUp128W5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true, 128).withTimeout(5));
@@ -300,14 +298,14 @@ public class RobotContainer {
     m_xBoxDriver.start().whileTrue(shootOne);
     m_xBoxOperator.leftTrigger().whileTrue(shootOne);
 
-    Command pass = new PassCommand(m_swerve,m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit);
+    Command pass = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, true);
     Command targetPass = Commands.runOnce(()->setTracking(TurretTrackingMethod.PASS));
     SequentialCommandGroup passIt = new SequentialCommandGroup(targetPass,pass);
     m_xBoxOperator.rightTrigger().whileTrue(passIt);
-    Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, null);
+    Command shoot = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, false);
+    m_xBoxDriver.leftTrigger().whileTrue(shoot);
     
     Command fixedshot = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance1);
-    m_xBoxDriver.leftTrigger().whileTrue(fixedshot);
 
     /*Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
     m_xBoxDriver.x().whileTrue(shootKernelCommand);*/
