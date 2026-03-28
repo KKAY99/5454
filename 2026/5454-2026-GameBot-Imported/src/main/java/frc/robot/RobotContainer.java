@@ -597,6 +597,16 @@ public class RobotContainer {
     // In disabledPeriodic or before match starts
     m_backLimelight.SetIMUMode(1);
      updateOdomfromLimeLight();
+     //brought over from teleop periodic:
+     if(m_backLimelight.isAnyTargetAvailable()){
+      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
+  
+      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
+      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+
+
+      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
+    } 
 /* 
     if(m_leftLimelight.isAnyTargetAvailable()){
       m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
