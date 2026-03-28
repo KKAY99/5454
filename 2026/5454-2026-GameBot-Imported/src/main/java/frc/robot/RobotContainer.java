@@ -66,6 +66,7 @@ import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
+import frc.robot.commands.PassCommand;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
   
@@ -286,12 +287,12 @@ public class RobotContainer {
 
     Command shootMapping = new ShootMappingCommand(m_swerve,m_newShooter,m_hopper,m_intake,
                                 m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    m_xBoxOperator.rightTrigger().whileTrue(shootMapping);
+    //m_xBoxOperator.rightTrigger().whileTrue(shootMapping);
 
     Command shootManual = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_TurretSubsystem,
                                 m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true);
     m_xBoxDriver.start().whileTrue(shootManual);
-    m_xBoxOperator.leftTrigger().whileTrue(shootManual);
+    //m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 
     Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, null);
     
@@ -301,11 +302,17 @@ public class RobotContainer {
     /*Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
     m_xBoxDriver.x().whileTrue(shootKernelCommand);*/
 
+    /*
     Command passLeft = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
     m_xBoxDriver.povLeft().whileTrue(passLeft);
     
     Command passRight = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
     m_xBoxDriver.povRight().whileTrue(passRight);
+     */
+
+    //i have no idea what im doing here asher is supposed to have this done. i hope. - jackson 2026
+    Command pass = new PassCommand();
+    m_xBoxDriver.rightTrigger().whileTrue(pass);
 
     Command intake = m_intake.intakeCommand();
 
@@ -324,10 +331,12 @@ public class RobotContainer {
      m_xBoxOperator.povRight().onFalse(new CompleteIntakeCommand(m_intake, m_hopper));
     Command intakeFoldOutSlow = m_intake.foldCommand(-0.2);
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
-    //Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
-    //m_xBoxOperator.y().onTrue(turretTrack);
-   // Command turretTrack2 = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.SEARCH, m_turretLimelight);
-   // m_xBoxOperator.start().onTrue(turretTrack2);
+    Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
+    m_xBoxOperator.y().onTrue(turretTrack);
+    Command turretTrack2 = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.SEARCH, m_turretLimelight);
+    //m_xBoxOperator.start().onTrue(turretTrack2);
+    m_xBoxOperator.leftTrigger().onTrue(turretTrack2);
+    
     
    // Command turretTrackStop = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.END, m_turretLimelight);
    // m_xBoxOperator.x().onTrue(turretTrackStop);
