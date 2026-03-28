@@ -23,7 +23,8 @@ public class TurretUtil {
     public enum TargetType {
         HUB,
         LEFT_PASS,
-        RIGHT_PASS
+        RIGHT_PASS,
+        NOTARGET
     }
 
     // =========================

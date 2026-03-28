@@ -39,6 +39,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import org.ejml.dense.row.mult.MatrixMatrixMult_MT_ZDRM;
+import org.ejml.sparse.csc.mult.MatrixVectorMult_FSCC;
 
 import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
@@ -54,6 +55,7 @@ import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.TurretStates;
+import frc.robot.Constants.TurretTrackingMethod;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -64,6 +66,7 @@ import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
+import frc.robot.commands.PassCommand;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
   
@@ -89,6 +92,7 @@ public class RobotContainer {
   // to Shuffleboard; the old 'Pots' class only used the potentiometer and
   // ignored the encoders.
   public final TurretSubsystemPots m_TurretSubsystem = new TurretSubsystemPots(Constants.TurretConstants.turretCanID,TurretConstants.TurretPOT);
+  public Constants.TurretTrackingMethod m_tracking=Constants.TurretTrackingMethod.HUB; //default target is hub
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_turretLimelight=new Limelight(Constants.LimeLightValues.turretLimelightHeight,
                                             Constants.LimeLightValues.turretLimelightAngle,
@@ -237,9 +241,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
     NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper));
     NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem,m_swerve, null));
-    NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
-    NamedCommands.registerCommand("shotLookUpW5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(5));
-    NamedCommands.registerCommand("shotLookUp128W5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true, 128).withTimeout(5));
+    NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
+    NamedCommands.registerCommand("shotLookUpW5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,  m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(5));
+    NamedCommands.registerCommand("shotLookUp128W5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true, 128).withTimeout(5));
     NamedCommands.registerCommand("turretTrack", new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight));
     NamedCommands.registerCommand("turretLeft", new AsherTurretToAngleCommand(-45.0, m_TurretSubsystem));
     NamedCommands.registerCommand("turretRight", new AsherTurretToAngleCommand(-270.0, m_TurretSubsystem));
@@ -250,11 +254,15 @@ public class RobotContainer {
     Trigger feulDetector = new Trigger(() -> m_hopper.getNoFuel());
 
     //QOL Drive
-    ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve, m_backLimelight);
-    m_xBoxDriver.button(9).onTrue(resetGyroCommand);
+    /*ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve);
+    m_xBoxDriver.button(9).onTrue(resetGyroCommand);*/
     //using CommandXBox for clarity 
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
+
+    ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve, m_backLimelight);
+    m_xBoxDriver.button(9).onTrue(resetGyroCommand);
+    
 
     Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper);
     m_xBoxDriver.leftBumper().toggleOnTrue(CompleteIntake);
@@ -279,20 +287,33 @@ public class RobotContainer {
 
     Command shootMapping = new ShootMappingCommand(m_swerve,m_newShooter,m_hopper,m_intake,
                                 m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    m_xBoxOperator.rightTrigger().whileTrue(shootMapping);
+    //m_xBoxOperator.rightTrigger().whileTrue(shootMapping);
 
-    Command shootManual = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_TurretSubsystem,
+    Command shootManual = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,
                                 m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true);
     m_xBoxDriver.start().whileTrue(shootManual);
-    m_xBoxOperator.leftTrigger().whileTrue(shootManual);
+    //m_xBoxOperator.leftTrigger().whileTrue(shootManual);
 
     Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, null);
     
-    Command fixedshot = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance1);
+    Command fixedshot = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance1);
     m_xBoxDriver.leftTrigger().whileTrue(fixedshot);
 
     /*Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
     m_xBoxDriver.x().whileTrue(shootKernelCommand);*/
+
+    /*
+    Command passLeft = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
+    m_xBoxDriver.povLeft().whileTrue(passLeft);
+    
+    Command passRight = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
+    m_xBoxDriver.povRight().whileTrue(passRight);
+     */
+
+    //i have no idea what im doing here asher is supposed to have this done. i hope. - jackson 2026
+    
+    //Command pass = new PassCommand();
+    //m_xBoxDriver.rightTrigger().whileTrue(pass);
 
     Command intake = m_intake.intakeCommand();
 
@@ -314,10 +335,18 @@ public class RobotContainer {
     Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
     m_xBoxOperator.y().onTrue(turretTrack);
     Command turretTrack2 = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.SEARCH, m_turretLimelight);
-    m_xBoxOperator.start().onTrue(turretTrack2);
+    //m_xBoxOperator.start().onTrue(turretTrack2);
+    m_xBoxOperator.leftTrigger().onTrue(turretTrack2);
     
-    Command turretTrackStop = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.END, m_turretLimelight);
-    m_xBoxOperator.x().onTrue(turretTrackStop);
+    
+   // Command turretTrackStop = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.END, m_turretLimelight);
+   // m_xBoxOperator.x().onTrue(turretTrackStop);
+ 
+    m_xBoxOperator.y().onTrue(Commands.runOnce(()-> swapTarget()));
+    m_xBoxOperator.x().onTrue(Commands.runOnce(()->setTracking(TurretTrackingMethod.NOTARGET)));
+    
+    
+ 
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
@@ -486,19 +515,8 @@ public class RobotContainer {
     m_turretLimelight.SetThrottle(time);
   }
   private void refreshSmartDashboard(){  
-      //get turret angle
-//  double turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
-  TurretUtil.TargetType target;
- // target=TurretUtil.getNearestPassTargetType(m_swerve.getPose2d());
  
- /*target=TargetType.HUB;
-  
-  double turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
-  
-  SmartDashboard.putNumber("Turret Util Target Angle",turretAngleTarget);
-  double targetPos=m_TurretSubsystem.getTargetMotorPosition(turretAngleTarget);
-  SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
-  m_TurretSubsystem.moveMotor(targetPos);*/
+
     try{
             updateHubStatus();
       double lldistance = m_turretLimelight.getDistanceInverted();
@@ -548,21 +566,10 @@ public class RobotContainer {
 
   }
   public void updateOdomfromLimeLight(){
-   /*    if(m_leftLimelight.isAnyTargetAvailable()){
-     m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentLeftPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentLeftTimeStamp=Utils.getCurrentTimeSeconds();
-
-      System.out.println("update vision left " + currentLeftPose.getX() + "/" + currentLeftPose.getY());
-      m_swerve.addVisionMeasurement(currentLeftPose,currentLeftTimeStamp);
-    } 
-      */
+ 
    double yaw =m_swerve.getPigeon2().getRotation2d().getDegrees();
    m_backLimelight.SetRobotOrientation(yaw,0);
    LimelightHelpers.PoseEstimate mt2 = m_backLimelight.getBotPoseEstimate_wpiBlue_MegaTag2();  
-   Pose2d mt1Pose =m_backLimelight.GetPoseViaMegatag1();
-   Pose2d mt2Pose = m_backLimelight.GetPoseViaMegatag2(); 
    boolean doRejectUpdate=false; //default to accept vision update
   // if our angular velocity is greater than 360 degrees per second, ignore vision updates
   if(Math.abs(m_swerve.getPigeon2().getAngularVelocityXDevice().getValueAsDouble()) > 360)
@@ -575,10 +582,12 @@ public class RobotContainer {
   }
   if(!doRejectUpdate)
     {
-      m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-        System.out.println("update vision back - Tag Count: " + mt2.tagCount 
+      m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.1,0.1,9999999));
+     
+      System.out.println("update vision back - Tag Count: " + mt2.tagCount 
               + " Pose:" + mt2.pose.getX() + "/"+ mt2.pose.getY());
-      m_swerve.addVisionMeasurement(mt2.pose,mt2.timestampSeconds);      
+              double timestamp=Utils.fpgaToCurrentTime(mt2.timestampSeconds); // CONVERT Time Units
+              m_swerve.addVisionMeasurement(mt2.pose,timestamp);      
     }
   //System.out.println(mt1Pose.toString() + " -" + mt2Pose.toString() + " -" + mt2Pose.toString());
 
@@ -591,51 +600,16 @@ public class RobotContainer {
      rumbleOff(); 
     // In disabledPeriodic or before match starts
     m_backLimelight.SetIMUMode(1);
-     updateOdomfromLimeLight();
-     //brought over from teleop periodic:
-     if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-/* 
-    if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-       System.out.println("update vision left "+ currentPose.getX() + "/" + currentPose.getY());
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    }*/ 
+    AllPeriodic();
     //m_LEDS.setLedState(LEDStates.DISABLED,false);
     //m_LEDS.activateLEDS();
   }
   
   public void AutoPeriodic(){
-    /*if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-
-    if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } */
+   AllPeriodic();
+   TargetTracking(m_tracking);
+   
+   
   }
 
   public void makefalsestartPose(){
@@ -668,7 +642,7 @@ return pathfindingCommand;
     InitialAutonPathfind();
     //used fused IMU Mode
     m_backLimelight.SetIMUMode(4);
-   
+    
   }
 
   public void TeleopMode(){
@@ -695,47 +669,65 @@ return pathfindingCommand;
     }
   }
   public void TeleopPeriodic(){
-    updateOdomfromLimeLight();
-
-    refreshSmartDashboard();
+    AllPeriodic();
+    TargetTracking(m_tracking);
     updateLEDs();
-    //m_ShotCalculator.clearShootingParameters();
-    //ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
-    //System.out.println("Turret Angle: " + shootingInfo.turretAngle());
-    //System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
-    
-    if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } 
 
-    /*if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
+   private void swapTarget(){
+    //TURN ON HUB TRACKING IF NOT IN HUB TRACKING MODE
+    //IF IN IN HUB TRACKING MOVE TO PASS 
+    
+    if(m_tracking ==TurretTrackingMethod.HUB){
+        m_tracking=TurretTrackingMethod.PASS;
+    }else {
+        m_tracking=TurretTrackingMethod.HUB;
+    }
+   }
+   private void setTracking(TurretTrackingMethod tracking){
+      m_tracking=tracking;
+   }
+   private void TargetTracking(TurretTrackingMethod trackingMethod ){
+    double turretAngleTarget=0;
+    TurretUtil.TargetType target;
+    switch (trackingMethod){
+      case HUB:
+        target=TurretUtil.TargetType.HUB;   
+        turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
+        trackTurretToAngle(turretAngleTarget);  
+      case PASS:
+        target = TurretUtil.getNearestPassTargetType(m_swerve.getPose2d());
+        turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
+        trackTurretToAngle(turretAngleTarget);  
+      case TURRET:
+      //fall through to NONE
+      case NOTARGET:
+        m_TurretSubsystem.stopTurret();
+      break;
+    }
+   }
+    private void trackTurretToAngle(double angle){
+      SmartDashboard.putNumber("Turret Util Target Angle",angle);
+      double targetPos=m_TurretSubsystem.getTargetMotorPosition(angle);
+      SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
+      m_TurretSubsystem.moveMotor(targetPos);
+ 
+}
 
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } */
-  }
 
   public void SaveLimelights(){
     LimelightHelpers.triggerRewindCapture(m_turretLimelight.getLimelightName(), 300);
   }
 
   public void AllPeriodic(){
+    updateOdomfromLimeLight();
     m_Field2d.setRobotPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
     refreshSmartDashboard();
   }
 
+  
   public void homeRobot(){
     if(!hasHomed){
       m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);

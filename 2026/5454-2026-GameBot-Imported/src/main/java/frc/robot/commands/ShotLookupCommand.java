@@ -27,7 +27,6 @@ public class ShotLookupCommand extends Command {
   private NewShooterSubsystem m_shooter;
   private HopperSubsystem m_hopper;
   private IntakeSubsystem m_intake;
-  private TurretSubsystemPots m_turret;
   private Limelight m_limelight;
   private HubLookUpTable m_HubLookUpTable = new HubLookUpTable();
   private boolean m_emptyHopper=false;
@@ -57,11 +56,10 @@ public class ShotLookupCommand extends Command {
   //private boolean NoLimeLightMode=0;
   private double m_flipSpeed=0;
   public ShotLookupCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
-                          TurretSubsystemPots turret, Limelight limelight, double timeLimit, boolean emptyHopper) {
+                          Limelight limelight, double timeLimit, boolean emptyHopper) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
-    m_turret=turret;
     m_swerve=swerve;
     m_limelight=limelight;
     overrideDistanceFlag=false;
@@ -74,11 +72,10 @@ public class ShotLookupCommand extends Command {
   }
 
   public ShotLookupCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
-                          TurretSubsystemPots turret, Limelight limelight, double timeLimit, boolean emptyHopper, double distance) {
+                           Limelight limelight, double timeLimit, boolean emptyHopper, double distance) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
-    m_turret=turret;
     m_swerve=swerve;
     m_limelight=limelight;
     m_emptyHopper=emptyHopper;
@@ -149,29 +146,12 @@ public class ShotLookupCommand extends Command {
   }else {
         m_lastDistance=distance;
   }
-  //limelight is unable to see the camera 
-  double xVel =m_swerve.getChassisSpeeds().vxMetersPerSecond;
-  double yVel = m_swerve.getChassisSpeeds().vyMetersPerSecond;
-  if((Math.abs(xVel)<0.05) && (Math.abs(yVel)<0.05)){
   
-    ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
-    
-    targetspeed=shotParams.shooterSpeed;
-    hoodPos=shotParams.hoodPosition;
-  } else {
-    //SHOOTING ON THE MOVE - HERE WE GO!
-    ShotSolution shotSolution = TurretUtil.computeLeadShotSolution(m_swerve.getPose2d(), xVel, yVel, 
-        TargetType.HUB);
-        targetspeed=shotSolution.shooterSpeedRPS;
-        hoodPos=shotSolution.trajectoryAngleDegrees;
-        double turretAngleTarget=shotSolution.turretAngleDegrees;
-  
-  SmartDashboard.putNumber("Turret Util Target Angle",turretAngleTarget);
-  double targetPos=m_turret.getTargetMotorPosition(turretAngleTarget);
-  SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
-  m_turret.moveMotor(targetPos); 
-        System.out.println("Shooting ont the Move :" + targetspeed + "/" + hoodPos);
-  }  
+ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
+
+targetspeed=shotParams.shooterSpeed;
+hoodPos=shotParams.hoodPosition;
+
   
   if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
     hoodPos=m_lastHoodPos;
@@ -184,7 +164,8 @@ public class ShotLookupCommand extends Command {
    "Override Flag:" + overrideDistanceFlag);
     switch(m_state){
     case SPINUP:
-         m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
+         //m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
+         m_shooter.holdHoodPosMotionMagic(hoodPos);
         if(m_shooter.checkHoodPos(hoodPos, khoodSpeed,khoodDeadband)){
          stateStartTime=Timer.getFPGATimestamp();
           
@@ -194,7 +175,8 @@ public class ShotLookupCommand extends Command {
         }
     break;
     case WAIT:
-       m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
+       //m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
+       m_shooter.holdHoodPosMotionMagic(hoodPos);
         if(m_shooter.atTargetSpeed(targetspeed)){
             // Capture the turret angle right before we start shooting
        //     m_heldTurretAngle = m_turret.getCurrentAngle();
@@ -207,10 +189,9 @@ public class ShotLookupCommand extends Command {
         m_shooter.runNewShooter(targetspeed,
                             Constants.ShooterConstants.KickerSpeed);
        
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
-        // Hold the turret at the captured angle to prevent drift during shooting
-        // held pending testing
-        //m_turret.holdTurretAtAngle(m_heldTurretAngle);
+        //m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        m_shooter.holdHoodPosMotionMagic(hoodPos);
+        
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
        
@@ -232,7 +213,8 @@ public class ShotLookupCommand extends Command {
          }
       break; 
     case EMPTYHOPPER:
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        //m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        m_shooter.holdHoodPosMotionMagic(hoodPos);
     
     /*  System.out.println("Flip Count"+ m_flipCount);
         m_flipCount=m_flipCount+1;
@@ -307,7 +289,8 @@ public class ShotLookupCommand extends Command {
         }
       break;
     case SHOOTMORE:
-            m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+            //m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+            m_shooter.holdHoodPosMotionMagic(hoodPos);
         //STAY IN THE LOOP FOREVER UNTIL USER STOPS
      break;
     case NOFUEL2NDCHECK:
