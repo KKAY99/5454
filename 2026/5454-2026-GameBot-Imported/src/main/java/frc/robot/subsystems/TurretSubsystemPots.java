@@ -252,8 +252,6 @@ private double POTStoRotations(double POTSValue ){
 
   @Override
   public void periodic(){
-    SmartDashboard.putBoolean("At High Limit Limit",atLimit(1));
-    SmartDashboard.putBoolean("At Low Limit Limit",atLimit(-1));
     SmartDashboard.putNumber("Motor Rotations",m_turretMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("POTS",m_POTS.get());
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/kGearReduction);

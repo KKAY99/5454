@@ -35,11 +35,13 @@ public class ClimbSubsystem extends SubsystemBase {
   }
 
   public boolean isClimbUpLimit() {
-    return m_climbUpProx.get();
+    //sensor is closed (true) until it hits the proximity and is open returning false
+    return !m_climbUpProx.get();
   }
 
   public boolean isClimbDownLimit() {
-    return m_climbDownSwitch.get();
+    //sensor is closed (true) until it hits the proximity and is open returning false
+    return !m_climbDownSwitch.get();
   }
 
   public void homeClimb(double maxHomeTime){

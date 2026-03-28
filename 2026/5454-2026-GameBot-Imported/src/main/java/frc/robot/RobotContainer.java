@@ -287,12 +287,14 @@ public class RobotContainer {
 
     Command shootMapping = new ShootMappingCommand(m_swerve,m_newShooter,m_hopper,m_intake,
                                 m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    //m_xBoxOperator.rightTrigger().whileTrue(shootMapping);
+    m_xBoxOperator.start().whileTrue(shootMapping);
 
-    Command shootManual = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,
+    Command shootLookup = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,
                                 m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true);
-    m_xBoxDriver.start().whileTrue(shootManual);
-    //m_xBoxOperator.leftTrigger().whileTrue(shootManual);
+    Command targetHub = Commands.runOnce(()->setTracking(TurretTrackingMethod.HUB));
+    SequentialCommandGroup shootOne=new SequentialCommandGroup(targetHub,shootLookup);
+    m_xBoxDriver.start().whileTrue(shootOne);
+    m_xBoxOperator.leftTrigger().whileTrue(shootOne);
 
     Command shootPopcorn = new ShootPopcornCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, m_swerve, null);
     
@@ -334,9 +336,8 @@ public class RobotContainer {
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
     Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
     m_xBoxOperator.y().onTrue(turretTrack);
-    Command turretTrack2 = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.SEARCH, m_turretLimelight);
-    //m_xBoxOperator.start().onTrue(turretTrack2);
-    m_xBoxOperator.leftTrigger().onTrue(turretTrack2);
+    
+    
     
     
    // Command turretTrackStop = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.END, m_turretLimelight);
@@ -515,16 +516,11 @@ public class RobotContainer {
     m_turretLimelight.SetThrottle(time);
   }
   private void refreshSmartDashboard(){  
- 
+
 
     try{
-            updateHubStatus();
-      double lldistance = m_turretLimelight.getDistanceInverted();
-      if(lldistance>73 && lldistance<116){
-        m_xBoxDriver.getHID().setRumble(RumbleType.kBothRumble, 0.5);
-      }else {
-        rumbleOff(); 
-      }
+      updateHubStatus();
+     
       SmartDashboard.putBoolean("Our Hub Active",m_hubMatch);      
       SmartDashboard.putString("ActiveHub",m_activeHub);
       SmartDashboard.putString("Active Phase",m_activeHubPhase);
@@ -583,13 +579,17 @@ public class RobotContainer {
   if(!doRejectUpdate)
     {
       m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.1,0.1,9999999));
-     
-      System.out.println("update vision back - Tag Count: " + mt2.tagCount 
-              + " Pose:" + mt2.pose.getX() + "/"+ mt2.pose.getY());
-              double timestamp=Utils.fpgaToCurrentTime(mt2.timestampSeconds); // CONVERT Time Units
-              m_swerve.addVisionMeasurement(mt2.pose,timestamp);      
+      SmartDashboard.putBoolean("Vision Updating from Back Limelight",false );
+      //System.out.println("update vision back - Tag Count: " + mt2.tagCount 
+      //        + " Pose:" + mt2.pose.getX() + "/"+ mt2.pose.getY());
+      //        double timestamp=Utils.fpgaToCurrentTime(mt2.timestampSeconds); // CONVERT Time Units
+      //        m_swerve.addVisionMeasurement(mt2.pose,timestamp);      
+    } else {
+    SmartDashboard.putBoolean("Vision Updating from Back Limelight",false );
     }
-  //System.out.println(mt1Pose.toString() + " -" + mt2Pose.toString() + " -" + mt2Pose.toString());
+  }
+  private void rumbleOn(){
+        m_xBoxDriver.getHID().setRumble(RumbleType.kBothRumble, 0.5);
 
   }
   private void rumbleOff(){
