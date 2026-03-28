@@ -294,12 +294,6 @@ public class RobotContainer {
     /*Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
     m_xBoxDriver.x().whileTrue(shootKernelCommand);*/
 
-    Command passLeft = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
-    m_xBoxDriver.povLeft().whileTrue(passLeft);
-    
-    Command passRight = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
-    m_xBoxDriver.povRight().whileTrue(passRight);
-
     Command intake = m_intake.intakeCommand();
 
     Command agitate = m_hopper.agitateCommand();

@@ -126,7 +126,7 @@ public class ShotLookupCommand extends Command {
     m_intake.SetIntakeOutMode();
     m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
-    m_intake.stopIntake();;
+    m_intake.stopIntake();
   }
 
   // Returns true when the command should end.
