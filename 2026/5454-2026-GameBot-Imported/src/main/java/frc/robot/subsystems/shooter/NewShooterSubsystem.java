@@ -71,13 +71,14 @@ public class NewShooterSubsystem extends SubsystemBase {
     hoodCoder_cfg.MagnetSensor.withMagnetOffset(Rotations.of(Constants.HoodConstants.hoodOffset));
     m_hoodCoder.getConfigurator().apply(hoodCoder_cfg);
     
-    //TalonFXConfiguration hoodMotor_cfg = new TalonFXConfiguration();
-    //hoodMotor_cfg.Feedback.FeedbackRemoteSensorID = m_hoodCoder.getDeviceID();
-    //m_hoodMotor.getConfigurator().apply(hoodMotor_cfg);
+    TalonFXConfiguration hoodMotor_cfg = new TalonFXConfiguration();
+    hoodMotor_cfg.Feedback.FeedbackRemoteSensorID = m_hoodCoder.getDeviceID();
+    hoodMotor_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder; // Set the feedback source to the CANcoder
+    m_hoodMotor.getConfigurator().apply(hoodMotor_cfg); // Apply the configuration to the hood motor
     
     m_hoodMotor.setNeutralMode(NeutralModeValue.Brake);
    
-    //configureMotionMagic(); //on Hood Motor
+    configureMotionMagic(); //on Hood Motor //
     //configureHoodMotor();
     
   }
@@ -142,6 +143,10 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
           }else{
             m_hoodMotor.stopMotor();
           }
+  }
+
+  public void holdHoodPosMotionMagic(double hoodTarget) {
+    m_hoodMotor.setControl(mmRequest.withPosition(hoodTarget));
   }
 
   public void hoodMoveToPosition(double hoodTarget, double hoodSpeed){
