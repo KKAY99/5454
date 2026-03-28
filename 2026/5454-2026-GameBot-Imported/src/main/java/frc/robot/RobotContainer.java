@@ -38,9 +38,6 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import org.ejml.dense.row.mult.MatrixMatrixMult_MT_ZDRM;
-import org.ejml.sparse.csc.mult.MatrixVectorMult_FSCC;
-
 import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ButtonBindings;
@@ -301,9 +298,9 @@ public class RobotContainer {
     SequentialCommandGroup passIt = new SequentialCommandGroup(targetPass,pass);
     m_xBoxOperator.rightTrigger().whileTrue(passIt);
     Command shoot = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, false);
+    m_xBoxDriver.leftTrigger().whileTrue(shoot);
     
     Command fixedshot = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance1);
-    m_xBoxDriver.leftTrigger().whileTrue(fixedshot);
 
     /*Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
     m_xBoxDriver.x().whileTrue(shootKernelCommand);*/
