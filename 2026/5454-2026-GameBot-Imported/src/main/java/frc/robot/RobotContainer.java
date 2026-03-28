@@ -311,8 +311,9 @@ public class RobotContainer {
      */
 
     //i have no idea what im doing here asher is supposed to have this done. i hope. - jackson 2026
-    Command pass = new PassCommand();
-    m_xBoxDriver.rightTrigger().whileTrue(pass);
+    
+    //Command pass = new PassCommand();
+    //m_xBoxDriver.rightTrigger().whileTrue(pass);
 
     Command intake = m_intake.intakeCommand();
 
