@@ -55,6 +55,7 @@ import frc.robot.Constants.LimeLightValues;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.TurretStates;
+import frc.robot.Constants.TurretTrackingMethod;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -90,7 +91,7 @@ public class RobotContainer {
   // to Shuffleboard; the old 'Pots' class only used the potentiometer and
   // ignored the encoders.
   public final TurretSubsystemPots m_TurretSubsystem = new TurretSubsystemPots(Constants.TurretConstants.turretCanID,TurretConstants.TurretPOT);
-  public final TurretUtil.TargetType m_target=TurretUtil.TargetType.HUB; //default target is hub
+  public Constants.TurretTrackingMethod m_tracking=Constants.TurretTrackingMethod.HUB; //default target is hub
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_turretLimelight=new Limelight(Constants.LimeLightValues.turretLimelightHeight,
                                             Constants.LimeLightValues.turretLimelightAngle,
@@ -323,13 +324,19 @@ public class RobotContainer {
      m_xBoxOperator.povRight().onFalse(new CompleteIntakeCommand(m_intake, m_hopper));
     Command intakeFoldOutSlow = m_intake.foldCommand(-0.2);
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
-    Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
-    m_xBoxOperator.y().onTrue(turretTrack);
-    Command turretTrack2 = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.SEARCH, m_turretLimelight);
-    m_xBoxOperator.start().onTrue(turretTrack2);
+    //Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
+    //m_xBoxOperator.y().onTrue(turretTrack);
+   // Command turretTrack2 = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.SEARCH, m_turretLimelight);
+   // m_xBoxOperator.start().onTrue(turretTrack2);
     
-    Command turretTrackStop = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.END, m_turretLimelight);
-    m_xBoxOperator.x().onTrue(turretTrackStop);
+   // Command turretTrackStop = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.END, m_turretLimelight);
+   // m_xBoxOperator.x().onTrue(turretTrackStop);
+ 
+    m_xBoxOperator.y().onTrue(Commands.runOnce(()-> swapTarget()));
+    m_xBoxOperator.x().onTrue(Commands.runOnce(()->setTracking(TurretTrackingMethod.NOTARGET)));
+    
+    
+ 
     //Testing and Debugging Commands on Custom Controller
     Command doNothing = Commands.none();
 
@@ -590,7 +597,8 @@ public class RobotContainer {
   
   public void AutoPeriodic(){
    AllPeriodic();
-   TargetTracking(m_target);
+   TargetTracking(m_tracking);
+   
    
   }
 
@@ -652,17 +660,50 @@ return pathfindingCommand;
   }
   public void TeleopPeriodic(){
     AllPeriodic();
-    TargetTracking(m_target);
+    TargetTracking(m_tracking);
     updateLEDs();
     } 
-   private void TargetTracking(TurretUtil.TargetType target ){
-     target=TargetType.HUB;
-     double turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
-     SmartDashboard.putNumber("Turret Util Target Angle",turretAngleTarget);
-     double targetPos=m_TurretSubsystem.getTargetMotorPosition(turretAngleTarget);
-     SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
-     m_TurretSubsystem.moveMotor(targetPos);
-  }
+
+   private void swapTarget(){
+    //TURN ON HUB TRACKING IF NOT IN HUB TRACKING MODE
+    //IF IN IN HUB TRACKING MOVE TO PASS 
+    
+    if(m_tracking ==TurretTrackingMethod.HUB){
+        m_tracking=TurretTrackingMethod.PASS;
+    }else {
+        m_tracking=TurretTrackingMethod.HUB;
+    }
+   }
+   private void setTracking(TurretTrackingMethod tracking){
+      m_tracking=tracking;
+   }
+   private void TargetTracking(TurretTrackingMethod trackingMethod ){
+    double turretAngleTarget=0;
+    TurretUtil.TargetType target;
+    switch (trackingMethod){
+      case HUB:
+        target=TurretUtil.TargetType.HUB;   
+        turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
+        trackTurretToAngle(turretAngleTarget);  
+      case PASS:
+        target = TurretUtil.getNearestPassTargetType(m_swerve.getPose2d());
+        turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
+        trackTurretToAngle(turretAngleTarget);  
+      case TURRET:
+      //fall through to NONE
+      case NOTARGET:
+        m_TurretSubsystem.stopTurret();
+      break;
+    }
+   }
+    private void trackTurretToAngle(double angle){
+      SmartDashboard.putNumber("Turret Util Target Angle",angle);
+      double targetPos=m_TurretSubsystem.getTargetMotorPosition(angle);
+      SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
+      m_TurretSubsystem.moveMotor(targetPos);
+ 
+}
+
 
   public void SaveLimelights(){
     LimelightHelpers.triggerRewindCapture(m_turretLimelight.getLimelightName(), 300);

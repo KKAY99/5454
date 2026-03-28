@@ -210,6 +210,7 @@ public final class Constants {
     public static final double hoodDeadband=0.02;
   }
   public enum TurretStates {MANUAL,TRACK,SEARCH,FIXEDLEFT,FIXEDRIGHT,ODOM,END};
+  public enum TurretTrackingMethod {HUB,PASS,TURRET,NOTARGET};
   public static final class TurretConstants {
     public static final int turretCanID=6;
     public static final double turretSpeed=0.11; 
