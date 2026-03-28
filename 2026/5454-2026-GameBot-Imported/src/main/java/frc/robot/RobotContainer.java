@@ -250,8 +250,8 @@ public class RobotContainer {
     Trigger feulDetector = new Trigger(() -> m_hopper.getNoFuel());
 
     //QOL Drive
-    /*ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve);
-    m_xBoxDriver.button(9).onTrue(resetGyroCommand);*/
+    ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve, m_backLimelight);
+    m_xBoxDriver.button(9).onTrue(resetGyroCommand);
     //using CommandXBox for clarity 
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
