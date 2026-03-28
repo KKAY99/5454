@@ -497,14 +497,7 @@ public class RobotContainer {
   TurretUtil.TargetType target;
  // target=TurretUtil.getNearestPassTargetType(m_swerve.getPose2d());
  
- /*target=TargetType.HUB;
-  
-  double turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
-  
-  SmartDashboard.putNumber("Turret Util Target Angle",turretAngleTarget);
-  double targetPos=m_TurretSubsystem.getTargetMotorPosition(turretAngleTarget);
-  SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
-  m_TurretSubsystem.moveMotor(targetPos);*/
+
     try{
             updateHubStatus();
       double lldistance = m_turretLimelight.getDistanceInverted();
@@ -554,21 +547,10 @@ public class RobotContainer {
 
   }
   public void updateOdomfromLimeLight(){
-   /*    if(m_leftLimelight.isAnyTargetAvailable()){
-     m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentLeftPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentLeftTimeStamp=Utils.getCurrentTimeSeconds();
-
-      System.out.println("update vision left " + currentLeftPose.getX() + "/" + currentLeftPose.getY());
-      m_swerve.addVisionMeasurement(currentLeftPose,currentLeftTimeStamp);
-    } 
-      */
+ 
    double yaw =m_swerve.getPigeon2().getRotation2d().getDegrees();
    m_backLimelight.SetRobotOrientation(yaw,0);
    LimelightHelpers.PoseEstimate mt2 = m_backLimelight.getBotPoseEstimate_wpiBlue_MegaTag2();  
-   Pose2d mt1Pose =m_backLimelight.GetPoseViaMegatag1();
-   Pose2d mt2Pose = m_backLimelight.GetPoseViaMegatag2(); 
    boolean doRejectUpdate=false; //default to accept vision update
   // if our angular velocity is greater than 360 degrees per second, ignore vision updates
   if(Math.abs(m_swerve.getPigeon2().getAngularVelocityXDevice().getValueAsDouble()) > 360)
@@ -581,10 +563,12 @@ public class RobotContainer {
   }
   if(!doRejectUpdate)
     {
-      m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-        System.out.println("update vision back - Tag Count: " + mt2.tagCount 
+      m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.1,0.1,9999999));
+     
+      System.out.println("update vision back - Tag Count: " + mt2.tagCount 
               + " Pose:" + mt2.pose.getX() + "/"+ mt2.pose.getY());
-      m_swerve.addVisionMeasurement(mt2.pose,mt2.timestampSeconds);      
+              double timestamp=Utils.fpgaToCurrentTime(mt2.timestampSeconds); // CONVERT Time Units
+              m_swerve.addVisionMeasurement(mt2.pose,timestamp);      
     }
   //System.out.println(mt1Pose.toString() + " -" + mt2Pose.toString() + " -" + mt2Pose.toString());
 
@@ -597,41 +581,14 @@ public class RobotContainer {
      rumbleOff(); 
     // In disabledPeriodic or before match starts
     m_backLimelight.SetIMUMode(1);
-     updateOdomfromLimeLight();
-/* 
-    if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-       System.out.println("update vision left "+ currentPose.getX() + "/" + currentPose.getY());
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    }*/ 
+    AllPeriodic();
     //m_LEDS.setLedState(LEDStates.DISABLED,false);
     //m_LEDS.activateLEDS();
   }
   
   public void AutoPeriodic(){
-    /*if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } 
-
-    if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } */
+   AllPeriodic();
+   
   }
 
   public void makefalsestartPose(){
@@ -691,41 +648,16 @@ return pathfindingCommand;
     }
   }
   public void TeleopPeriodic(){
-    updateOdomfromLimeLight();
-
-    refreshSmartDashboard();
+    AllPeriodic();
     updateLEDs();
-    //m_ShotCalculator.clearShootingParameters();
-    //ShotCalculator.ShootingParameters shootingInfo = m_ShotCalculator.getParameters(m_swerve);
-    //System.out.println("Turret Angle: " + shootingInfo.turretAngle());
-    //System.out.println("Turret Velocity:" + shootingInfo.turretVelocity());
-    
-    if(m_backLimelight.isAnyTargetAvailable()){
-      m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_backLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
     } 
-
-    /*if(m_leftLimelight.isAnyTargetAvailable()){
-      m_leftLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-  
-      Pose2d currentPose=m_leftLimelight.GetPoseViaMegatag2();
-      double currentTimeStamp=Utils.getCurrentTimeSeconds();
-
-
-      m_swerve.addVisionMeasurement(currentPose,currentTimeStamp);
-    } */
-  }
 
   public void SaveLimelights(){
     LimelightHelpers.triggerRewindCapture(m_turretLimelight.getLimelightName(), 300);
   }
 
   public void AllPeriodic(){
+    updateOdomfromLimeLight();
     m_Field2d.setRobotPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
