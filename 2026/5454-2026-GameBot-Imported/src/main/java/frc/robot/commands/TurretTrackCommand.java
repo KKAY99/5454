@@ -166,6 +166,10 @@ public class TurretTrackCommand extends Command {
           }
         }
         break;
+      case ODOM:
+    
+        returnValue=false;
+        break;
       case END:
         returnValue=true;
         break;

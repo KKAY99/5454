@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.TurretSubsystemPots;
 import frc.robot.subsystems.shooter.HubLookUpTable;
@@ -49,15 +50,17 @@ public class ShotLookupCommand extends Command {
   private int m_flipCountLimit=0;
   private final int kflipCountMax=6;//35;
   private final int kHopperPullLimit=14;
+  private CommandSwerveDrivetrain m_swerve;
   private int m_HopperPulls=0;
   //private boolean NoLimeLightMode=0;
   private double m_flipSpeed=0;
-  public ShotLookupCommand(NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
+  public ShotLookupCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
                           TurretSubsystemPots turret, Limelight limelight, double timeLimit, boolean emptyHopper) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
     m_turret=turret;
+    m_swerve=swerve;
     m_limelight=limelight;
     overrideDistanceFlag=false;
     
@@ -68,12 +71,13 @@ public class ShotLookupCommand extends Command {
     addRequirements(m_intake);
   }
 
-  public ShotLookupCommand(NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
+  public ShotLookupCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
                           TurretSubsystemPots turret, Limelight limelight, double timeLimit, boolean emptyHopper, double distance) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
     m_turret=turret;
+    m_swerve=swerve;
     m_limelight=limelight;
     m_emptyHopper=emptyHopper;
     overrideDistance=distance;
@@ -131,7 +135,9 @@ public class ShotLookupCommand extends Command {
   //Lookup Shot Values
   double targetspeed=0;
   double hoodPos=0;  
-  double distance=m_limelight.getDistanceInverted();
+//  double distance=m_limelight.getDistanceInverted();
+  double distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.TargetType.HUB);
+  System.out.println("Distance Calc" + distance);
   //if distance is zero than use last disance 
   if(overrideDistanceFlag==true){
     distance=overrideDistance;
@@ -142,8 +148,9 @@ public class ShotLookupCommand extends Command {
         m_lastDistance=distance;
   }
   //limelight is unable to see the camera 
-  ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
 
+  ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
+  
   targetspeed=shotParams.shooterSpeed;
   hoodPos=shotParams.hoodPosition;
   if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {

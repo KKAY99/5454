@@ -135,7 +135,7 @@ public class TurretSubsystemPots extends SubsystemBase {
      m_turretMotor.stopMotor();
   }
  
-  private void moveMotor(double targetmotorPosition){
+  public void moveMotor(double targetmotorPosition){
     if((targetmotorPosition>kLowerLimit) && (targetmotorPosition<kUpperLimit)){ 
          m_turretMotor.setControl(mmRequest.withPosition(targetmotorPosition)); 
  
@@ -178,7 +178,7 @@ private double getTurretAngleFromMotor(){
   return returnValue;
 
 }
-private double getTargetMotorPosition(double targetangle){
+public double getTargetMotorPosition(double targetangle){
   double returnValue=0;
   if(targetangle>=0 && targetangle<50){
       returnValue=targetangle/kMotorRotationsToAngle;

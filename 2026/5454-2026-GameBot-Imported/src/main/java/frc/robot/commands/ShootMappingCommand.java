@@ -5,8 +5,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
+import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.Limelight;
 /** An example command that uses an example subsystem. */
@@ -28,11 +30,13 @@ public class ShootMappingCommand extends Command {
   private double m_hoodPos=0;
   private double stateStartTime;
   private double startShootTime;
+  CommandSwerveDrivetrain m_swerve;
   private final double kSpinUpTime=1;
-  public ShootMappingCommand(NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,Limelight limelight, double timeLimit,boolean emptyHopper) {
+  public ShootMappingCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter,HopperSubsystem hopper, IntakeSubsystem intake,Limelight limelight, double timeLimit,boolean emptyHopper) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
+    m_swerve=swerve;
     m_limelight=limelight;
     m_emptyHopper=emptyHopper;
     m_state=shooterStates.SPINUP;
@@ -88,7 +92,9 @@ public class ShootMappingCommand extends Command {
   public boolean isFinished() {
   double currentTime;
   boolean returnValue=false;  
-  
+  double distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.TargetType.HUB);
+  SmartDashboard.putNumber("Odom Distance",distance);
+   
   System.out.println("Shot Mapping - State:" + m_state  + " " + Timer.getFPGATimestamp());
     switch(m_state){
     case SPINUP:

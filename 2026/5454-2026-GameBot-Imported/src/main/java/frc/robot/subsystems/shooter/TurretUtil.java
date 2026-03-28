@@ -141,9 +141,9 @@ public class TurretUtil {
         if(angle>0){
             ourAngle=360-angle;
         }else {
-             ourAngle=Math.abs(ourAngle);
+             ourAngle=Math.abs(angle);
         }
-        System.out.print("Turret Angle Calc:"+ angle +  " Our Angle:" + ourAngle);
+        //System.out.print("Turret Angle Calc:"+ angle +  " Our Angle:" + ourAngle);
         return ourAngle; 
     }
     // =========================

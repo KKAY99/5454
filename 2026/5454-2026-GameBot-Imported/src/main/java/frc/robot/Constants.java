@@ -209,7 +209,7 @@ public final class Constants {
     public static final double hoodDownSpeed=0.06;
     public static final double hoodDeadband=0.02;
   }
-  public enum TurretStates {MANUAL,TRACK,SEARCH,FIXEDLEFT,FIXEDRIGHT,END};
+  public enum TurretStates {MANUAL,TRACK,SEARCH,FIXEDLEFT,FIXEDRIGHT,ODOM,END};
   public static final class TurretConstants {
     public static final int turretCanID=6;
     public static final double turretSpeed=0.11; 
@@ -222,8 +222,8 @@ public final class Constants {
     public static final double kTrackingSpeed=0.05454;
     public static final double trackerDeadBand =1.0;
 
-    public static final double kTurretOffsetX=0;
-    public static final double kTurretOffsetY=0;
+    public static final double kTurretOffsetX=-0.0762;
+    public static final double kTurretOffsetY=0.1397;
     public static final double kMinShootingDistance=0;
     public static final double kMaxShootingDistance=100;
     public static final double kMinAngleDegrees=0;
