@@ -45,17 +45,16 @@ public class PassCommand extends Command {
   private final double khoodSpeed=Constants.HoodConstants.hoodSpeed;
   private final double khoodDeadband = Constants.HoodConstants.hoodDeadband;
 
-  public PassCommand(CommandSwerveDrivetrain swerve, NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, TurretSubsystemPots turret, double timeLimit) {
+  public PassCommand(CommandSwerveDrivetrain swerve, NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, double timeLimit) {
     m_swerve=swerve;
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
-    m_turret=turret;
     m_state=shooterStates.SPINUP;
     addRequirements(m_hopper);
     addRequirements(m_shooter);
     addRequirements(m_intake);
-    addRequirements(m_turret);
+
   }
   // Called when the command is initially scheduled.
   @Override
