@@ -6,9 +6,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.CANcoder;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
@@ -55,13 +53,15 @@ public class TurretSubsystemPots extends SubsystemBase {
   private AnalogPotentiometer m_POTS;
   private final double kPotsLowLimit=Constants.TurretConstants.TurretLeftLimitPOTS;
   private final double kPotsHighLimit=Constants.TurretConstants.TurretRightLimitPOTS;
-  private double kLowerLimit=-40;
-  private double kUpperLimit=8;
+  private double kLowerLimit=-42;
+  private double kUpperLimit=4.25;
   private final double kGearReduction=8;  //80t to 10tooth
-  private final double kMotorRotationsToAngle=7.80;
+  private final double kMotorRotationsToAngle=7.87499;//7.80;
   private final double kDegreesPerRotation=0;
   private DutyCycleOut m_TurretDutyCycleOut = new DutyCycleOut(0.0);
-  private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
+ private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
+ 
+ // private MotionMagicVelocityVoltage mmRequest = new MotionMagicVelocityVoltage (0);
   public TurretSubsystemPots(int CanId1, int potsPort) {
     SmartDashboard.putNumber("Target Turret Angle",0);
    
@@ -158,9 +158,9 @@ slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
 
 // set Motion Magic settings
 MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
-motionMagicConfigs.MotionMagicCruiseVelocity = 20;//80; // Target cruise velocity of 80 rps
-motionMagicConfigs.MotionMagicAcceleration = 50;////160; // Targt acceleration of 160 rps/s (0.5 seconds)
-motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
+motionMagicConfigs.MotionMagicCruiseVelocity = 20;//80; 
+motionMagicConfigs.MotionMagicAcceleration = 50;////160;
+motionMagicConfigs.MotionMagicJerk = 000; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
 m_turretMotor.getConfigurator().apply(talonFXConfigs);
 } 
@@ -180,7 +180,7 @@ private double getTurretAngleFromMotor(){
 }
 public double getTargetMotorPosition(double targetangle){
   double returnValue=0;
-  if(targetangle>=0 && targetangle<50){
+  if(targetangle>=0 && targetangle<35){
       returnValue=targetangle/kMotorRotationsToAngle;
   }else { // going negative
       returnValue=0-((360-targetangle)/kMotorRotationsToAngle); // flip the sign and go that degrees to the other direction

@@ -14,12 +14,12 @@ public class PassLookUpTable {
     /** Data structure to hold shooting parameters */
     public static class ShootingParameters {
         public final double shooterSpeed;     // RPS (Revolutions Per Second)
-        public final double trajectoryAngle;  // Degrees
+        public final double hoodAngle;  // Degrees
         public final double timeOfFlight;     // Seconds
         
-        public ShootingParameters(double shooterSpeed, double trajectoryAngle, double timeOfFlight) {
+        public ShootingParameters(double shooterSpeed, double hoodAngle, double timeOfFlight) {
             this.shooterSpeed = shooterSpeed;
-            this.trajectoryAngle = trajectoryAngle;
+            this.hoodAngle = hoodAngle;
             this.timeOfFlight = timeOfFlight;
         }
     }
@@ -37,22 +37,17 @@ public class PassLookUpTable {
         // Distance (m), Shooter Speed (RPS), Trajectory Angle (°), Time of Flight (s)
         // KrakenX60 shooting 226g ball - optimized for constant RPS ~75
         // Trajectory angles: 90° = straight up, 45° = maximum distance
-         addEntry(1.1134,  -11.0, 89.0, 1.32);  // Close shot - nearly straight up
-        addEntry(1.55,  -12, 75.0, 1.28);
-        addEntry(2.0,  -12, 70.0, 1.2);
-        addEntry(2.5,  -12.2, 65.0, 1.27);
-        addEntry(-3.0, -12.4, 60, 1.29);
-        addEntry(3.5,  -12.9, 56.0, 1.2);
-        addEntry(4.05,  -13.2, 54.0, 1.28);
-        addEntry(4.55,  -14.35, 48.0, 1.4);
-        addEntry(5.0,  -14.35, 48.0, 1.4);
-        //bs entry
-        addEntry(10, -20, 45, 2.4);
+         addEntry(2.42,50,0.6,0);  // Close shot - nearly straight up
+         addEntry(2.669,55,0.6,0);  // Close shot - nearly straight up
+         addEntry(4.324,57,0.6,0);  // Close shot - nearly straight up
+         addEntry(6.4,60,0.6,0);  // Close shot - nearly straight up
+         addEntry(9.05,89,0.6,0);  // Close shot - nearly straight up
+         addEntry(20,89,0.6,0);  // Close shot - nearly straight up
     }
     
     /** Add an entry to the lookup table */
-    public void addEntry(double distance, double shooterSpeed, double trajectoryAngle, double timeOfFlight) {
-        lookupTable.put(distance, new ShootingParameters(shooterSpeed, trajectoryAngle, timeOfFlight));
+    public void addEntry(double distance, double shooterSpeed, double hoodAngle, double timeOfFlight) {
+        lookupTable.put(distance, new ShootingParameters(shooterSpeed, hoodAngle, timeOfFlight));
     }
     
     /** 
@@ -85,7 +80,7 @@ public class PassLookUpTable {
         double ratio = (distance - lowerKey) / (upperKey - lowerKey);
         
         double interpolatedSpeed = lerp(lower.shooterSpeed, upper.shooterSpeed, ratio);
-        double interpolatedAngle = lerp(lower.trajectoryAngle, upper.trajectoryAngle, ratio);
+        double interpolatedAngle = lerp(lower.hoodAngle, upper.hoodAngle, ratio);
         double interpolatedTime = lerp(lower.timeOfFlight, upper.timeOfFlight, ratio);
         
         return new ShootingParameters(interpolatedSpeed, interpolatedAngle, interpolatedTime);
@@ -103,7 +98,7 @@ public class PassLookUpTable {
     
     /** Get trajectory angle for a given distance */
     public double getTrajectoryAngle(double distance) {
-        return getParameters(distance).trajectoryAngle;
+        return getParameters(distance).hoodAngle;
     }
     
     /** Get time of flight for a given distance */

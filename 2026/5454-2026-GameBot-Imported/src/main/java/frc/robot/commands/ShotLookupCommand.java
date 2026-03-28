@@ -16,6 +16,8 @@ import frc.robot.subsystems.shooter.HubLookUpTable;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.HubLookUpTable.ShootingParameters;
+import frc.robot.subsystems.shooter.TurretUtil.ShotSolution;
+import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.Limelight;
 /** An example command that uses an example subsystem. */
@@ -148,11 +150,29 @@ public class ShotLookupCommand extends Command {
         m_lastDistance=distance;
   }
   //limelight is unable to see the camera 
-
-  ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
+  double xVel =m_swerve.getChassisSpeeds().vxMetersPerSecond;
+  double yVel = m_swerve.getChassisSpeeds().vyMetersPerSecond;
+  if((Math.abs(xVel)<0.05) && (Math.abs(yVel)<0.05)){
   
-  targetspeed=shotParams.shooterSpeed;
-  hoodPos=shotParams.hoodPosition;
+    ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
+    
+    targetspeed=shotParams.shooterSpeed;
+    hoodPos=shotParams.hoodPosition;
+  } else {
+    //SHOOTING ON THE MOVE - HERE WE GO!
+    ShotSolution shotSolution = TurretUtil.computeLeadShotSolution(m_swerve.getPose2d(), xVel, yVel, 
+        TargetType.HUB);
+        targetspeed=shotSolution.shooterSpeedRPS;
+        hoodPos=shotSolution.trajectoryAngleDegrees;
+        double turretAngleTarget=shotSolution.turretAngleDegrees;
+  
+  SmartDashboard.putNumber("Turret Util Target Angle",turretAngleTarget);
+  double targetPos=m_turret.getTargetMotorPosition(turretAngleTarget);
+  SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
+  m_turret.moveMotor(targetPos); 
+        System.out.println("Shooting ont the Move :" + targetspeed + "/" + hoodPos);
+  }  
+  
   if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
     hoodPos=m_lastHoodPos;
   }else {

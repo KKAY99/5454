@@ -301,7 +301,7 @@ public class TurretUtil {
             case RIGHT_PASS:
                 // PassLookUpTable has the same ShootingParameters shape; bridge here
                 PassLookUpTable.ShootingParameters p = passTable.getParameters(distanceMeters);
-                return new HubLookUpTable.ShootingParameters(p.shooterSpeed, p.trajectoryAngle, p.timeOfFlight);
+                return new HubLookUpTable.ShootingParameters(p.shooterSpeed, p.hoodAngle, p.timeOfFlight);
             default:
                 return hubTable.getParameters(distanceMeters);
         }
