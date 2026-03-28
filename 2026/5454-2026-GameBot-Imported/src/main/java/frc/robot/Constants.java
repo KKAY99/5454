@@ -73,9 +73,9 @@ public final class Constants {
     
     public static final double turretLimelightHeight  =17.75;
     public static final double turretLimelightAngle=24;
-    public static final String turretLimelightName="limelight-two";
+    public static final String turretLimelightName="limelight-three";
     
-    public static final String leftLimelightName="limelight-three";
+    public static final String leftLimelightName="limelight-two";
     public static final String backLimelightName="limelight-one";
 
     //Confidence Max and Min Deadband Values
