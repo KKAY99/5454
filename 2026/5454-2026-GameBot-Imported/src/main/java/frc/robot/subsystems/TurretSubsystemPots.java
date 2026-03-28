@@ -53,8 +53,8 @@ public class TurretSubsystemPots extends SubsystemBase {
   private AnalogPotentiometer m_POTS;
   private final double kPotsLowLimit=Constants.TurretConstants.TurretLeftLimitPOTS;
   private final double kPotsHighLimit=Constants.TurretConstants.TurretRightLimitPOTS;
-  private double kLowerLimit=-42;
-  private double kUpperLimit=4.25;
+  private double kLowerLimit=-39;
+  private double kUpperLimit=5.5;
   private final double kGearReduction=8;  //80t to 10tooth
   private final double kMotorRotationsToAngle=7.87499;//7.80;
   private final double kDegreesPerRotation=0;
@@ -180,7 +180,7 @@ private double getTurretAngleFromMotor(){
 }
 public double getTargetMotorPosition(double targetangle){
   double returnValue=0;
-  if(targetangle>=0 && targetangle<35){
+  if(targetangle>=0 && targetangle<43){
       returnValue=targetangle/kMotorRotationsToAngle;
   }else { // going negative
       returnValue=0-((360-targetangle)/kMotorRotationsToAngle); // flip the sign and go that degrees to the other direction

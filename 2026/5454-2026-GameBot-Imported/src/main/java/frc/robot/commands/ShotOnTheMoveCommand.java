@@ -21,12 +21,13 @@ import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.utilities.Limelight;
 /** An example command that uses an example subsystem. */
-public class ShotLookupCommand extends Command {
+public class ShotOnTheMoveCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
 
   private NewShooterSubsystem m_shooter;
   private HopperSubsystem m_hopper;
   private IntakeSubsystem m_intake;
+  private TurretSubsystemPots m_turret;
   private Limelight m_limelight;
   private HubLookUpTable m_HubLookUpTable = new HubLookUpTable();
   private boolean m_emptyHopper=false;
@@ -55,12 +56,13 @@ public class ShotLookupCommand extends Command {
   private int m_HopperPulls=0;
   //private boolean NoLimeLightMode=0;
   private double m_flipSpeed=0;
-  public ShotLookupCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
-                          Limelight limelight, double timeLimit, boolean emptyHopper) {
+  public ShotOnTheMoveCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
+                          TurretSubsystemPots turret,Limelight limelight, double timeLimit, boolean emptyHopper) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
     m_swerve=swerve;
+    m_turret=turret;
     m_limelight=limelight;
     overrideDistanceFlag=false;
     
@@ -71,16 +73,12 @@ public class ShotLookupCommand extends Command {
     addRequirements(m_intake);
   }
 
-  public ShotLookupCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
-                           Limelight limelight, double timeLimit, boolean emptyHopper, double distance) {
+  public ShotOnTheMoveCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
+                            double timeLimit) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
     m_swerve=swerve;
-    m_limelight=limelight;
-    m_emptyHopper=emptyHopper;
-    overrideDistance=distance;
-    overrideDistanceFlag=true;
     m_state=shooterStates.SPINUP;
     addRequirements(m_hopper);
     addRequirements(m_shooter);
@@ -131,38 +129,26 @@ public class ShotLookupCommand extends Command {
   public boolean isFinished() {
   double currentTime;
   boolean returnValue=false;
-  //Lookup Shot Values
-  double targetspeed=0;
-  double hoodPos=0;  
-//  double distance=m_limelight.getDistanceInverted();
-  double distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.TargetType.HUB);
-  System.out.println("Distance Calc" + distance);
-  //if distance is zero than use last disance 
-  if(overrideDistanceFlag==true){
-    distance=overrideDistance;
-  } 
-  if(distance==0){
-       distance=m_lastDistance;
-  }else {
-        m_lastDistance=distance;
-  }
-  
-ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
 
-targetspeed=shotParams.shooterSpeed;
-hoodPos=shotParams.hoodPosition;
+  double velX = m_swerve.getChassisSpeeds().vxMetersPerSecond;
+double velY = m_swerve.getChassisSpeeds().vyMetersPerSecond;
+ShotSolution targetShot = TurretUtil.computeLeadShotSolution(m_swerve.getPose2d(),velX,velY,TurretUtil.TargetType.HUB); 
+double targetspeed=targetShot.shooterSpeedRPS;
+double hoodPos=targetShot.trajectoryAngleDegrees;
+double turretAngle=targetShot.turretAngleDegrees;
 
   
-  if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
-    hoodPos=m_lastHoodPos;
-  }else {
-    //update last position we moved to only if we are moving the hood Pos
-    m_lastHoodPos=hoodPos;
-  }
-  
-  System.out.println("Shooting Lookup :" + distance + " Actual LL Dist:" + m_limelight.getDistanceInverted() + " Speed:" + targetspeed  + " - State:" + m_state +
-   "Override Flag:" + overrideDistanceFlag);
-    switch(m_state){
+  System.out.println("Shooting On the Move - Speed "  + targetspeed  + 
+                     "Target Angle:" + turretAngle + " - State:" + m_state);
+  //always adjust the angle
+   double angle=TurretUtil. get5454TurretAngle(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
+   //copied from RObot Container
+  /*  SmartDashboard.putNumber("Turret Util Target Angle",angle);
+  double targetPos=m_turret.getTargetMotorPosition(angle);
+  SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
+  m_turret.moveMotor(targetPos); 
+  */
+switch(m_state){
     case SPINUP:
          m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
          //m_shooter.holdHoodPosMotionMagic(hoodPos);

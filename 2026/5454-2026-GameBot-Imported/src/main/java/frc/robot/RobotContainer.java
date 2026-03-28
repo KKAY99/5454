@@ -66,7 +66,6 @@ import frc.robot.subsystems.shooter.ShotCalculator;
 import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.shooter.PassCalculator.ShootingParameters;
-import frc.robot.commands.PassCommand;
 public class RobotContainer {
   private final Field2d m_Field2d = new Field2d();
   
@@ -287,7 +286,12 @@ public class RobotContainer {
 
     Command shootMapping = new ShootMappingCommand(m_swerve,m_newShooter,m_hopper,m_intake,
                                 m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    m_xBoxOperator.start().whileTrue(shootMapping);
+    //m_xBoxOperator.start().whileTrue(shootMapping);
+
+    Command ShotOntheMove = new ShotOnTheMoveCommand(m_swerve, m_newShooter, m_hopper, m_intake, ShooterConstants.kAgitateTimeLimit);
+    Command Notarget = Commands.runOnce(()->setTracking(TurretTrackingMethod.NOTARGET));
+    SequentialCommandGroup ShotMove=new SequentialCommandGroup(Notarget,ShotOntheMove);
+    m_xBoxOperator.start().whileTrue(ShotMove);
 
     Command shootLookup = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,
                                 m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true);
@@ -565,11 +569,16 @@ public class RobotContainer {
     }
 
   }
-  public void updateOdomfromLimeLight(){
- 
+
+  public void updateOdomFromLimelights(){
    double yaw =m_swerve.getPigeon2().getRotation2d().getDegrees();
    m_backLimelight.SetRobotOrientation(yaw,0);
-   LimelightHelpers.PoseEstimate mt2 = m_backLimelight.getBotPoseEstimate_wpiBlue_MegaTag2();  
+   updatefromLimeLight(m_backLimelight);
+   //updatefromLimelight(m_leftLimelight);
+  }  
+  public void updatefromLimeLight(Limelight limelight){
+ 
+   LimelightHelpers.PoseEstimate mt2 = limelight.getBotPoseEstimate_wpiBlue_MegaTag2();  
    boolean doRejectUpdate=false; //default to accept vision update
   // if our angular velocity is greater than 360 degrees per second, ignore vision updates
   if(Math.abs(m_swerve.getPigeon2().getAngularVelocityXDevice().getValueAsDouble()) > 360)
@@ -583,14 +592,14 @@ public class RobotContainer {
   if(!doRejectUpdate)
     {
       m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.1,0.1,9999999));
-      SmartDashboard.putBoolean("Vision Updating from Back Limelight",false );
+      SmartDashboard.putBoolean("Vision Updating from Limelight " + limelight.getLimelightName(),true );
       //System.out.println("update vision back - Tag Count: " + mt2.tagCount 
       //        + " Pose:" + mt2.pose.getX() + "/"+ mt2.pose.getY());
-      //        double timestamp=Utils.fpgaToCurrentTime(mt2.timestampSeconds); // CONVERT Time Units
-      //        m_swerve.addVisionMeasurement(mt2.pose,timestamp);      
+      double timestamp=Utils.fpgaToCurrentTime(mt2.timestampSeconds); // CONVERT Time Units
+      m_swerve.addVisionMeasurement(mt2.pose,timestamp);      
     } else {
-    SmartDashboard.putBoolean("Vision Updating from Back Limelight",false );
-    }
+        SmartDashboard.putBoolean("Vision Updating from Limelight " + limelight.getLimelightName(),false );
+      }
   }
   private void rumbleOn(){
         m_xBoxDriver.getHID().setRumble(RumbleType.kBothRumble, 0.5);
@@ -699,14 +708,17 @@ return pathfindingCommand;
         target=TurretUtil.TargetType.HUB;   
         turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
         trackTurretToAngle(turretAngleTarget);  
+        break;
       case PASS:
         target = TurretUtil.getNearestPassTargetType(m_swerve.getPose2d());
         turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
-        trackTurretToAngle(turretAngleTarget);  
+        trackTurretToAngle(turretAngleTarget);
+        break;  
       case TURRET:
       //fall through to NONE
       case NOTARGET:
-        m_TurretSubsystem.stopTurret();
+        //turret should not be moving
+        //m_TurretSubsystem.stopTurret();
       break;
     }
    }
@@ -724,7 +736,7 @@ return pathfindingCommand;
   }
 
   public void AllPeriodic(){
-    updateOdomfromLimeLight();
+    updateOdomFromLimelights();
     m_Field2d.setRobotPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
