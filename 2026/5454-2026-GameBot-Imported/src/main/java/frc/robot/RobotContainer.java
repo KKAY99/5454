@@ -39,6 +39,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import org.ejml.dense.row.mult.MatrixMatrixMult_MT_ZDRM;
+import org.ejml.sparse.csc.mult.MatrixVectorMult_FSCC;
 
 import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
@@ -89,6 +90,7 @@ public class RobotContainer {
   // to Shuffleboard; the old 'Pots' class only used the potentiometer and
   // ignored the encoders.
   public final TurretSubsystemPots m_TurretSubsystem = new TurretSubsystemPots(Constants.TurretConstants.turretCanID,TurretConstants.TurretPOT);
+  public final TurretUtil.TargetType m_target=TurretUtil.TargetType.HUB; //default target is hub
   public final ClimbSubsystem m_climb = new ClimbSubsystem(ClimbConstants.climbCanID1);
   public final Limelight m_turretLimelight=new Limelight(Constants.LimeLightValues.turretLimelightHeight,
                                             Constants.LimeLightValues.turretLimelightAngle,
@@ -255,6 +257,10 @@ public class RobotContainer {
     //using CommandXBox for clarity 
     GasPedalCommand gasPedalCommand=new GasPedalCommand(m_swerve,()->m_xBoxDriver.getRightTriggerAxis());
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
+
+    ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve, m_backLimelight);
+    m_xBoxDriver.button(9).onTrue(resetGyroCommand);
+    
 
     Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper);
     m_xBoxDriver.leftBumper().toggleOnTrue(CompleteIntake);
@@ -492,10 +498,6 @@ public class RobotContainer {
     m_turretLimelight.SetThrottle(time);
   }
   private void refreshSmartDashboard(){  
-      //get turret angle
-//  double turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
-  TurretUtil.TargetType target;
- // target=TurretUtil.getNearestPassTargetType(m_swerve.getPose2d());
  
 
     try{
@@ -588,6 +590,7 @@ public class RobotContainer {
   
   public void AutoPeriodic(){
    AllPeriodic();
+   TargetTracking(m_target);
    
   }
 
@@ -621,7 +624,7 @@ return pathfindingCommand;
     InitialAutonPathfind();
     //used fused IMU Mode
     m_backLimelight.SetIMUMode(4);
-   
+    
   }
 
   public void TeleopMode(){
@@ -649,8 +652,17 @@ return pathfindingCommand;
   }
   public void TeleopPeriodic(){
     AllPeriodic();
+    TargetTracking(m_target);
     updateLEDs();
     } 
+   private void TargetTracking(TurretUtil.TargetType target ){
+     target=TargetType.HUB;
+     double turretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),target);
+     SmartDashboard.putNumber("Turret Util Target Angle",turretAngleTarget);
+     double targetPos=m_TurretSubsystem.getTargetMotorPosition(turretAngleTarget);
+     SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
+     m_TurretSubsystem.moveMotor(targetPos);
+  }
 
   public void SaveLimelights(){
     LimelightHelpers.triggerRewindCapture(m_turretLimelight.getLimelightName(), 300);
@@ -664,6 +676,7 @@ return pathfindingCommand;
     refreshSmartDashboard();
   }
 
+  
   public void homeRobot(){
     if(!hasHomed){
       m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
