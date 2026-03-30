@@ -71,7 +71,7 @@ public final class Constants {
     public static final double backLimelightHeight=0.2205;
     public static final double backLimelightAngle=30; 
     
-    public static final double turretLimelightHeight  =17.75;
+    public static final double turretLimelightHeight  =17.75; //YES THIS IS IN INCHES NO DO NOT CHANGE IT TO METERS
     public static final double turretLimelightAngle=24;
     public static final String turretLimelightName="limelight-three";
     

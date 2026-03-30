@@ -136,18 +136,19 @@ ShotSolution targetShot = TurretUtil.computeLeadShotSolution(m_swerve.getPose2d(
 double targetspeed=targetShot.shooterSpeedRPS;
 double hoodPos=targetShot.trajectoryAngleDegrees;
 double turretAngle=targetShot.turretAngleDegrees;
-
   
-  System.out.println("Shooting On the Move - Speed "  + targetspeed  + 
-                     "Target Angle:" + turretAngle + " - State:" + m_state);
+    // Convert the leadshotsolution turret angle (normalized [-180,180)) to the
+    // turret system (0-360)
+    double target5454Angle = TurretUtil.get5454TurretAngle(turretAngle);
+    double targetPos = m_turret.getTargetMotorPosition(target5454Angle);
+    m_turret.moveMotor(targetPos);
+
+    System.out.println("Shooting On the Move - Speed "  + targetspeed  + 
+                       "Target Angle:" + turretAngle + " (->" + target5454Angle + ") - State:" + m_state);
   //always adjust the angle
-   double angle=TurretUtil. get5454TurretAngle(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
-   //copied from RObot Container
-  /*  SmartDashboard.putNumber("Turret Util Target Angle",angle);
-  double targetPos=m_turret.getTargetMotorPosition(angle);
-  SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
-  m_turret.moveMotor(targetPos); 
-  */
+  // Copied from RobotContainer — we now use the leadshotsolution
+  // turret angle and convert it with TurretUtil.get5454TurretAngle(double).
+  
 switch(m_state){
     case SPINUP:
          m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
