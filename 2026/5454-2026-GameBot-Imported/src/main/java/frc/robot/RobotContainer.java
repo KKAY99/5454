@@ -286,9 +286,10 @@ public class RobotContainer {
                                 m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
     //m_xBoxOperator.start().whileTrue(shootMapping);
 
-    Command ShotOntheMove = new ShotOnTheMoveCommand(m_swerve, m_newShooter, m_hopper, m_intake, ShooterConstants.kAgitateTimeLimit);
+    Command ShotOntheMove = new ShotOnTheMoveCommand(m_TurretSubsystem,m_swerve, m_newShooter, m_hopper, m_intake, ShooterConstants.kAgitateTimeLimit);
     Command Notarget = Commands.runOnce(()->setTracking(TurretTrackingMethod.NOTARGET));
-    SequentialCommandGroup ShotMove=new SequentialCommandGroup(Notarget,ShotOntheMove);
+    Command ReturnHub=Commands.runOnce(()->setTracking(TurretTrackingMethod.HUB));
+    SequentialCommandGroup ShotMove=new SequentialCommandGroup(Notarget,ShotOntheMove,ReturnHub);
     m_xBoxOperator.start().whileTrue(ShotMove);
 
     Command shootLookup = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,
@@ -301,6 +302,7 @@ public class RobotContainer {
     Command pass = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, true);
     Command targetPass = Commands.runOnce(()->setTracking(TurretTrackingMethod.PASS));
     SequentialCommandGroup passIt = new SequentialCommandGroup(targetPass,pass);
+
     m_xBoxOperator.rightTrigger().whileTrue(passIt);
     Command shoot = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, false);
     m_xBoxDriver.leftTrigger().whileTrue(shoot);
@@ -340,8 +342,8 @@ public class RobotContainer {
      m_xBoxOperator.povRight().onFalse(new CompleteIntakeCommand(m_intake, m_hopper));
     Command intakeFoldOutSlow = m_intake.foldCommand(-0.2);
     m_xBoxOperator.povUp().whileTrue(intakeFoldOutSlow);
-    Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
-    m_xBoxOperator.y().onTrue(turretTrack);
+//    Command turretTrack = new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight);
+  //  m_xBoxOperator.y().onTrue(turretTrack);
     
     
     
@@ -569,13 +571,13 @@ public class RobotContainer {
   }
 
   public void updateOdomFromLimelights(){
-   double yaw =m_swerve.getPigeon2().getRotation2d().getDegrees();
-   m_backLimelight.SetRobotOrientation(yaw,0);
    updatefromLimeLight(m_backLimelight);
-   //updatefromLimelight(m_leftLimelight);
+   updatefromLimeLight(m_leftLimelight);
   }  
   public void updatefromLimeLight(Limelight limelight){
- 
+   double yaw =m_swerve.getPigeon2().getRotation2d().getDegrees();
+   limelight.SetRobotOrientation(yaw,0);
+   
    LimelightHelpers.PoseEstimate mt2 = limelight.getBotPoseEstimate_wpiBlue_MegaTag2();  
    boolean doRejectUpdate=false; //default to accept vision update
   // if our angular velocity is greater than 360 degrees per second, ignore vision updates

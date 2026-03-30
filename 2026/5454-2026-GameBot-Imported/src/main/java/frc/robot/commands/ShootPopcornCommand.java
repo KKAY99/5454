@@ -34,8 +34,6 @@ public class ShootPopcornCommand extends Command {
   private TurretSubsystemPots m_turret;
   private double m_lastDistance; // default distance
   private double m_lastHoodPos=0; // default hood pos
-  private double overrideDistance=0;
-  private boolean overrideDistanceFlag=false;
   private enum shooterStates{
     SPINUP,WAIT,SHOOT,PASSING,END
   } 
@@ -91,32 +89,13 @@ public class ShootPopcornCommand extends Command {
   //Lookup Shot Values
   double targetspeed=0;
   double hoodPos=0;  
-//  double distance=m_limelight.getDistanceInverted();
   double distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.getNearestPassTargetType(m_swerve.getPose2d()));
 
-  System.out.println("Distance Calc: " + distance);
-
-  //if distance is zero than use last disance 
-  if(overrideDistanceFlag==true){
-    distance=overrideDistance;
-  } 
-  if(distance==0){
-       distance=m_lastDistance;
-  }else {
-        m_lastDistance=distance;
-  }
-
-
-  double xVel =m_swerve.getChassisSpeeds().vxMetersPerSecond;
-  double yVel = m_swerve.getChassisSpeeds().vyMetersPerSecond;
-  if((Math.abs(xVel)<0.05) && (Math.abs(yVel)<0.05)){
-  
     ShootingParameters shotParams = m_PassLookUpTable.getParameters(distance);
     
     targetspeed=shotParams.shooterSpeed;
     hoodPos=shotParams.hoodAngle;
-  }
-  
+
   if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
     hoodPos=m_lastHoodPos;
   }else {

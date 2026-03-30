@@ -26,13 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "turretLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shotLookUp128W5"
+            "name": "shotLookUpW5"
           }
         },
         {

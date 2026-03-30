@@ -135,6 +135,16 @@ public class TurretUtil {
         double turretRad = fieldAngleRad - robotHeadingRad;
         return normalizeDegrees(Math.toDegrees(turretRad));
     }
+    public static double get5454TurretAngleFromAngle(double angle){
+        double ourAngle=0;
+        if(angle>0){
+            ourAngle=360-angle;
+        }else {
+             ourAngle=Math.abs(angle);
+        }
+        //System.out.print("Turret Angle Calc:"+ angle +  " Our Angle:" + ourAngle);
+        return ourAngle;
+    }
     public static double get5454TurretAngle(Pose2d robotPose, TargetType target){
         double angle=getTurretAngleDegrees(robotPose, target);
         double ourAngle=0;

@@ -37,27 +37,27 @@ public class HubLookUpTable {
     
     /** Initialize the lookup table with known data points */
     private void initializeLookupTable() {
-        // Distance (m), Shooter Speed (RPS), Trajectory Angle (°), Time of Flight (s)
+        // Distance (m), Shooter Speed (RPS), Hood Angle (°), Time of Flight (s)
         // KrakenX60 shooting 226g ball - optimized for constant RPS ~75
-        // Trajectory angles: 90° = straight up, 45° = maximum distance
-        addEntry(2,  50, 0.0, 1.00);  // Close shot - nearly straight up
-        addEntry(2.3,  53, 0.0, 1.00);  // Close shot - nearly straight up
-        addEntry(2.42,  53, 0.1, 1.00);  // Close shot - nearly straight up
-        addEntry(2.63,  54.54, 0.1, 1.00);  // Close shot - nearly straight up
-        addEntry(2.78,  54.54, 0.17, 1.00);  // Close shot - nearly straight up
-        addEntry(2.98,  54.54, 0.20, 1.00);  // Close shot - nearly straight up
-        addEntry(3.36,  54.54, 0.30, 1.00);  // Close shot - nearly straight up
-        addEntry(3.51,  56, 0.30, 1.00);  // Close shot - nearly straight up
-        addEntry(3.68,  56.5, 0.32, 1.00);  // Close shot - nearly straight up
+        
+        addEntry(2,  50, 0.0, 1.00); 
+        addEntry(2.3,  53, 0.0, 1.00);  
+        addEntry(2.42,  53, 0.1, 1.00);  
+        addEntry(2.63,  54.54, 0.1, 1.00);  
+        addEntry(2.78,  54.54, 0.17, 1.00);  
+        addEntry(2.98,  54.54, 0.20, 1.00);  
+        addEntry(3.36,  54.54, 0.30, 1.00);  
+        addEntry(3.51,  56, 0.30, 1.00);  
+        addEntry(3.68,  56.5, 0.32, 1.00);  
        
-       addEntry(3.68,  56.5, 0.32, 1.00);  // Close shot - nearly straight up
-       addEntry(3.91,  58, 0.32, 1.00);  // Close shot - nearly straight up
-       addEntry(4.19,  58.5, 0.32, 1.00);  // Close shot - nearly straight up
-       addEntry(4.49,  59.5, 0.35, 1.00);  // Close shot - nearly straight up
-       addEntry(4.78,  62, 0.35, 1.00);  // Close shot - nearly straight up
-       addEntry(5.61,  65, 0.36, 1.00);  // Close shot - nearly straight up
+       addEntry(3.68,  56.5, 0.32, 1.00);  
+       addEntry(3.91,  58, 0.32, 1.00);  
+       addEntry(4.19,  58.5, 0.32, 1.00);  
+       addEntry(4.49,  59.5, 0.35, 1.00);  
+       addEntry(4.78,  62, 0.35, 1.00);  
+       addEntry(5.61,  65, 0.36, 1.00);  
        //GIVE IT ALL THE POWER
-       addEntry(9,  66, 0.36, 1.00);  // Close shot - nearly straight up
+       addEntry(9,  66, 0.36, 1.00);  
        
   
     }

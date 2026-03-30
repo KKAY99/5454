@@ -73,16 +73,18 @@ public class ShotOnTheMoveCommand extends Command {
     addRequirements(m_intake);
   }
 
-  public ShotOnTheMoveCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
+  public ShotOnTheMoveCommand(TurretSubsystemPots turret,CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
                             double timeLimit) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
     m_swerve=swerve;
+    m_turret=turret;
     m_state=shooterStates.SPINUP;
     addRequirements(m_hopper);
     addRequirements(m_shooter);
     addRequirements(m_intake);
+    //DO NOT REQUIRE TURRET OR DRIVE
   }
 
   private boolean checkNoFuelorFuelTimeLimit(){
@@ -130,24 +132,25 @@ public class ShotOnTheMoveCommand extends Command {
   double currentTime;
   boolean returnValue=false;
 
-  double velX = m_swerve.getChassisSpeeds().vxMetersPerSecond;
+double velX = m_swerve.getChassisSpeeds().vxMetersPerSecond;
 double velY = m_swerve.getChassisSpeeds().vyMetersPerSecond;
 ShotSolution targetShot = TurretUtil.computeLeadShotSolution(m_swerve.getPose2d(),velX,velY,TurretUtil.TargetType.HUB); 
 double targetspeed=targetShot.shooterSpeedRPS;
 double hoodPos=targetShot.trajectoryAngleDegrees;
 double turretAngle=targetShot.turretAngleDegrees;
 
-  
+//REFERENCE ONLY - DO NOT USE TARGETING
+ double StaticTurretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
+         
   System.out.println("Shooting On the Move - Speed "  + targetspeed  + 
-                     "Target Angle:" + turretAngle + " - State:" + m_state);
+                     "Target Angle:" + turretAngle + " Static Angle:" + StaticTurretAngleTarget +" - State:" + m_state);
   //always adjust the angle
-   double angle=TurretUtil. get5454TurretAngle(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
-   //copied from RObot Container
-  /*  SmartDashboard.putNumber("Turret Util Target Angle",angle);
+   double angle=TurretUtil.get5454TurretAngleFromAngle(turretAngle);
+  SmartDashboard.putNumber("Turret Util Target Angle",angle);
   double targetPos=m_turret.getTargetMotorPosition(angle);
   SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
   m_turret.moveMotor(targetPos); 
-  */
+  
 switch(m_state){
     case SPINUP:
          m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
@@ -164,12 +167,11 @@ switch(m_state){
        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
        //m_shooter.holdHoodPosMotionMagic(hoodPos);
         if(m_shooter.atTargetSpeed(targetspeed)){
-            // Capture the turret angle right before we start shooting
-       //     m_heldTurretAngle = m_turret.getCurrentAngle();
             m_state=shooterStates.SHOOT;
         } 
         break;
     case SHOOT:
+        
         m_shooter.runKicker(Constants.ShooterConstants.KickerSpeed);
 
         m_shooter.runNewShooter(targetspeed,
@@ -180,10 +182,7 @@ switch(m_state){
         
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
-       
-        if(checkNoFuelorFuelTimeLimit()){
-          m_state=shooterStates.NOFUEL;
-        }         
+       //STAY IN SHOOT
        break;
     case NOFUEL:
         fuelcheckStartTime=Timer.getFPGATimestamp();
