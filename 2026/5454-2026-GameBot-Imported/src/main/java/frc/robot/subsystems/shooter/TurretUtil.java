@@ -147,6 +147,23 @@ public class TurretUtil {
         //System.out.print("Turret Angle Calc:"+ angle +  " Our Angle:" + ourAngle);
         return ourAngle; 
     }
+
+    /**
+     * Converts a normalized turret angle in degrees ([-180, 180)) into the 5454
+     * turret coordinate system (0-360 style) used by the turret motor/encoder code.
+     * This is the same conversion performed by the Pose-based helper above but
+     * operates directly on an angle value (useful for lead/compensated angles).
+     * thanks copilot!
+     */
+    public static double get5454TurretAngle(double angle) {
+        double ourAngle = 0;
+        if (angle > 0) {
+            ourAngle = 360 - angle;
+        } else {
+            ourAngle = Math.abs(angle);
+        }
+        return ourAngle;
+    }
     // =========================
     // LOOKUP TABLE ACCESSORS
     // =========================
