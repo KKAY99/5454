@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "boring"
+                  "pathName": "DepotSweep"
                 }
               },
               {
@@ -26,13 +26,26 @@
         {
           "type": "named",
           "data": {
-            "name": "turretTrack"
+            "name": "shotLookUp"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shotLookUp"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LTNZLT"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         }
       ]

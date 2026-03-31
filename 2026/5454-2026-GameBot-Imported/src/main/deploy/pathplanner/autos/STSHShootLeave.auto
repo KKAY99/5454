@@ -5,33 +5,59 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "closeHop2Center"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "closeHop2Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "NEWshooton"
+            "name": "shotLookUpW3"
           }
         },
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 1.0
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CDepot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "CLeave"
+            "name": "shotLookUp"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Stop To Shoot",
+  "folder": null,
   "choreoAuto": false
 }

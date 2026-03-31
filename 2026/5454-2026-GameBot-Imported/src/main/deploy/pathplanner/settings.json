@@ -5,10 +5,7 @@
   "pathFolders": [
     "No Velocity"
   ],
-  "autoFolders": [
-    "Stop To Shoot",
-    "Runners"
-  ],
+  "autoFolders": [],
   "defaultMaxVel": 5.21208,
   "defaultMaxAccel": 2.25,
   "defaultMaxAngVel": 720.0,

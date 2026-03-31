@@ -243,8 +243,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("shotLookUpW5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,  m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(5));
     NamedCommands.registerCommand("shotLookUp128W5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true, 128).withTimeout(5));
     NamedCommands.registerCommand("turretTrack", new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight));
-    NamedCommands.registerCommand("turretLeft", new AsherTurretToAngleCommand(-45.0, m_TurretSubsystem));
-    NamedCommands.registerCommand("turretRight", new AsherTurretToAngleCommand(-270.0, m_TurretSubsystem));
   }
 
   private void configureButtonBindings(){

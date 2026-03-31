@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LTNZLT"
+                  "pathName": "LTinNout"
                 }
               },
               {
@@ -26,13 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "turretLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shotLookUp128W5"
+            "name": "shotLookUpW3"
           }
         },
         {
@@ -42,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LTlitnzLTflipVel"
+                  "pathName": "LTinNout2"
                 }
               },
               {
@@ -57,13 +51,32 @@
         {
           "type": "named",
           "data": {
-            "name": "popcorn"
+            "name": "shotLookUpW3"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "DepotVacuumPop"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "DepotVacuumPop2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUp"
           }
         }
       ]

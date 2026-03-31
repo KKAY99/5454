@@ -5,57 +5,72 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "expandIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RTNZRT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "turretLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shotLookUp128W5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RTOut"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RTinNout"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "turretTrack"
+            "name": "shotLookUpW3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RTOut"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shotLookUpW5"
+            "name": "shotLookUpW3"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "OutDepotClimbL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "turretTrack"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "OutDepotClimbL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
