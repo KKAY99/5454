@@ -198,6 +198,9 @@ public double getTurretPOTS(){
 public double getCurrentAngle(){
   return getTurretAngleFromMotor();
 }
+public double getCurrentPosition(){
+  return m_turretMotor.getPosition().getValueAsDouble();
+}
 public void turretTrack(TargetType target){
 
 }
@@ -212,9 +215,9 @@ public void holdTurretAtAngle(double targetAngleDegrees) {
   moveMotor(targetMotorPosition);
 }
 public void playMusic(String fileName){
-//        m_robotOrch.loadMusic(fileName);
-//        m_robotOrch.addInstrument(m_turretMotor);
-//       m_robotOrch.play();
+ //       m_robotOrch.loadMusic(fileName);
+ //       m_robotOrch.addInstrument(m_turretMotor);
+ //      m_robotOrch.play();
     }
 
 

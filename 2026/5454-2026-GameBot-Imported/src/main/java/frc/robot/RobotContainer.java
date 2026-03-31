@@ -214,7 +214,7 @@ public class RobotContainer {
     m_pathChooser.addOption("Right2Left", "Right2Left");
     m_pathChooser.addOption("ShootDepotShootNZ", "ShootDepotShootNZ");
     SmartDashboard.putData("Path Chooser", m_pathChooser);
-   // m_TurretSubsystem.playMusic("IndianaJones.chrp");
+    m_TurretSubsystem.playMusic("IndianaJones.chrp");
   }
 
 

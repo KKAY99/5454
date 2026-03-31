@@ -68,7 +68,12 @@ public class CompleteIntakeCommand extends Command {
     case INTAKE:
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed); 
-        m_state=intakeStates.PULSE; 
+        //DISABLE PULSE 3/30/26 AND STAY IN INTAKE STATE
+        //m_state=intakeStates.PULSE;
+         if(m_hopper.getNoFuel()==false){
+          //stop agitate when fuel is seen
+          m_hopper.stopAgitate();
+        } 
     break;
     case PULSE:
         //    System.out.println("Out Pulse Count: " + m_outPulseCount + ", In Pulse Count: " + m_inPulseCount);

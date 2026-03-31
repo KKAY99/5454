@@ -1,8 +1,11 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.HoodConstants;
+import frc.robot.Constants.InputControllers;
 import frc.robot.Constants.PassConstants.PassTargets;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -31,6 +34,8 @@ public class ShootPopcornCommand extends Command {
   private HopperSubsystem m_hopper;
   private IntakeSubsystem m_intake;
   private boolean m_isPass;
+  private CommandXboxController m_xBoxDriver;
+  
   private TurretSubsystemPots m_turret;
   private double m_lastDistance; // default distance
   private double m_lastHoodPos=0; // default hood pos
@@ -54,6 +59,7 @@ public class ShootPopcornCommand extends Command {
     addRequirements(m_hopper);
     addRequirements(m_shooter);
     addRequirements(m_intake);
+    //DRIVE NOT added by design
   }
 
   // Called when the command is initially scheduled.
