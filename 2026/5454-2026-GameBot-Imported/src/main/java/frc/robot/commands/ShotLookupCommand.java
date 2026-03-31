@@ -181,7 +181,9 @@ hoodPos=shotParams.hoodPosition;
             // Capture the turret angle right before we start shooting
        //     m_heldTurretAngle = m_turret.getCurrentAngle();
             m_state=shooterStates.SHOOT;
-        } 
+        } else {
+          System.out.println("Not at Speed");
+        }
         break;
     case SHOOT:
         m_shooter.runKicker(Constants.ShooterConstants.KickerSpeed);

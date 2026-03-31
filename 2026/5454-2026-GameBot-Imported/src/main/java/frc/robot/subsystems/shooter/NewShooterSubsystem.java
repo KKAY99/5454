@@ -186,6 +186,7 @@ public void runKicker(double kickerSpeed){
 public boolean atTargetSpeed(double targetSpeed){
   double currentSpeed=m_1shooterMotor.getVelocity().getValueAsDouble();
   double speedDiff = Math.abs(currentSpeed-targetSpeed);
+  System.out.println("Compare Shooter Speed:" + currentSpeed + " - " + targetSpeed);
   if(currentSpeed>targetSpeed){
     //allow greater deadband for going over shot
      return (speedDiff<Constants.ShooterConstants.shooterVelocityHighDeadband);
