@@ -187,7 +187,9 @@ public final class Constants {
     public static final double kDefaultPassDistance=200;
     //speeds
     public static final double shooterRPM=5000;
-    public static final double IdleSpeed=55;// 0.7;
+    public static final double IdleSpeed=50;// 0.7;
+    public static final double AutoIdleSpeed=55;// 0.7;
+    
     public static final double KickerSpeed=-1; //pos 1 for B-bot
     public static final double shootSpeed=100; //0.8;
     public static final double kAgitateTimeLimit=5; //how long to agitate on empty

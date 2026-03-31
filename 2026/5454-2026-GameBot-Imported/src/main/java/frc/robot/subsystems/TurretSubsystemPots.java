@@ -158,8 +158,8 @@ slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
 
 // set Motion Magic settings
 MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
-motionMagicConfigs.MotionMagicCruiseVelocity = 20;//80; 
-motionMagicConfigs.MotionMagicAcceleration = 50;////160;
+motionMagicConfigs.MotionMagicCruiseVelocity = 80;//80; 
+motionMagicConfigs.MotionMagicAcceleration = 160;//50;////160;
 motionMagicConfigs.MotionMagicJerk = 000; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
 m_turretMotor.getConfigurator().apply(talonFXConfigs);

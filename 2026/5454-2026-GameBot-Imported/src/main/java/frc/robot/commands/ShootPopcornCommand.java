@@ -141,14 +141,14 @@ public class ShootPopcornCommand extends Command {
         } 
         break;
     case SHOOT:
-        if(m_shooter.atTargetSpeed(targetspeed)==false){
+        /* if(m_shooter.atTargetSpeed(targetspeed)==false){
     
           //stop kicker until the speed is up to speed 
           //allows for moving robot to pause shooting for new distance
             m_shooter.runNewShooter(targetspeed,
                       0);
             m_state=shooterStates.WAIT;
-        } else {          
+        } else { */          
           //Ready to Shoot
           m_shooter.runKicker(Constants.ShooterConstants.KickerSpeed);
 
@@ -158,7 +158,7 @@ public class ShootPopcornCommand extends Command {
           m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
           m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
           m_intake.runIntake(Constants.IntakeConstants.highSpeed);
-        }
+        //}
        break;
     case PASSING:
             m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);

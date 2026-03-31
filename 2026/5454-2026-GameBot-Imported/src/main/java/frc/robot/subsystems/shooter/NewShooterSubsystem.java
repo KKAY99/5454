@@ -149,9 +149,9 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
     m_hoodMotor.setControl(mmRequest.withPosition(hoodTarget));
   }
 
-  public void primeMotors(){
-    System.out.println("Shooter Primen:" + Constants.ShooterConstants.IdleSpeed);
-    runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
+  public void primeMotors(double primeSpeed){
+    System.out.println("Shooter Priming:" + primeSpeed);
+    runShooterVelocity(primeSpeed);
   }
   public void hoodMoveToPosition(double hoodTarget, double hoodSpeed){
     double deadband = Constants.HoodConstants.hoodDeadband;

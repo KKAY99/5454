@@ -658,7 +658,7 @@ return pathfindingCommand;
     homeRobot();
     //used fused IMU Mode
     m_backLimelight.SetIMUMode(4);
-    m_newShooter.primeMotors();
+    m_newShooter.primeMotors(Constants.ShooterConstants.AutoIdleSpeed);
     InitialAutonPathfind();
     
   }
@@ -700,7 +700,9 @@ return pathfindingCommand;
         m_tracking=TurretTrackingMethod.PASS;
     }else {
         m_tracking=TurretTrackingMethod.HUB;
-    }
+        m_newShooter.primeMotors(Constants.ShooterConstants.IdleSpeed);
+  
+      }
    }
    private void setTracking(TurretTrackingMethod tracking){
       m_tracking=tracking;
