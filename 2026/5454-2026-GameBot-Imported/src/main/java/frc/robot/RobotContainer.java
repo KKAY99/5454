@@ -651,9 +651,10 @@ return pathfindingCommand;
 }
   public void AutonMode(){
     homeRobot();
-    InitialAutonPathfind();
     //used fused IMU Mode
     m_backLimelight.SetIMUMode(4);
+    m_newShooter.primeMotors();
+    InitialAutonPathfind();
     
   }
 
