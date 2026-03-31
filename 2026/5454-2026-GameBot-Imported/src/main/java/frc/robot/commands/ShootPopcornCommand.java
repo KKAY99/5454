@@ -12,6 +12,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TurretSubsystemPots;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import frc.robot.subsystems.shooter.PassLookUpTable.ShootingParameters;
+import frc.robot.subsystems.shooter.HubLookUpTable;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 import frc.robot.subsystems.shooter.PassLookUpTable;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -28,7 +29,7 @@ public class ShootPopcornCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})  
 
   private PassLookUpTable m_PassLookUpTable = new PassLookUpTable();
-
+  private HubLookUpTable m_HubLookupTable = new HubLookUpTable();
   private CommandSwerveDrivetrain m_swerve;
   private NewShooterSubsystem m_shooter;
   private HopperSubsystem m_hopper;
@@ -95,13 +96,23 @@ public class ShootPopcornCommand extends Command {
   //Lookup Shot Values
   double targetspeed=0;
   double hoodPos=0;  
-  double distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.getNearestPassTargetType(m_swerve.getPose2d()));
+  double distance;
+  
+  if(m_isPass){
+      PassLookUpTable.ShootingParameters passParams;
+       distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.getNearestPassTargetType(m_swerve.getPose2d()));
+      passParams = m_PassLookUpTable.getParameters(distance);
+      targetspeed=passParams.shooterSpeed;
+      hoodPos=passParams.hoodAngle;
 
-    ShootingParameters shotParams = m_PassLookUpTable.getParameters(distance);
-    
+  } else { 
+    HubLookUpTable.ShootingParameters shotParams;
+    distance=TurretUtil.getDistance(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
+    shotParams=m_HubLookupTable.getParameters(distance);
     targetspeed=shotParams.shooterSpeed;
-    hoodPos=shotParams.hoodAngle;
-
+    hoodPos=shotParams.hoodPosition;
+  }
+    
   if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
     hoodPos=m_lastHoodPos;
   }else {
@@ -112,7 +123,9 @@ public class ShootPopcornCommand extends Command {
   
     switch(m_state){
     case SPINUP:
-         m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
+        //start intake
+        m_intake.runIntake(Constants.IntakeConstants.highSpeed); 
+        m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
         if(m_shooter.checkHoodPos(hoodPos, khoodSpeed,khoodDeadband)){
          stateStartTime=Timer.getFPGATimestamp();
           
@@ -124,23 +137,28 @@ public class ShootPopcornCommand extends Command {
     case WAIT:
        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
         if(m_shooter.atTargetSpeed(targetspeed)){
-            // Capture the turret angle right before we start shooting
-       //     m_heldTurretAngle = m_turret.getCurrentAngle();
             m_state=shooterStates.SHOOT;
         } 
         break;
     case SHOOT:
-        m_shooter.runKicker(Constants.ShooterConstants.KickerSpeed);
+        if(m_shooter.atTargetSpeed(targetspeed)==false){
+    
+          //stop kicker until the speed is up to speed 
+          //allows for moving robot to pause shooting for new distance
+            m_shooter.runNewShooter(targetspeed,
+                      0);
+            m_state=shooterStates.WAIT;
+        } else {          
+          //Ready to Shoot
+          m_shooter.runKicker(Constants.ShooterConstants.KickerSpeed);
 
-        m_shooter.runNewShooter(targetspeed,
-                            Constants.ShooterConstants.KickerSpeed);
-       
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
-        // Hold the turret at the captured angle to prevent drift during shooting
-        // held pending testing
-        //m_turret.holdTurretAtAngle(m_heldTurretAngle);
-        m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
-        m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+          m_shooter.runNewShooter(targetspeed,
+                              Constants.ShooterConstants.KickerSpeed);
+        
+          m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+          m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
+          m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+        }
        break;
     case PASSING:
             m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);

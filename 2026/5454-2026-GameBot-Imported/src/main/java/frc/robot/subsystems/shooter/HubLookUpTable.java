@@ -40,15 +40,15 @@ public class HubLookUpTable {
         // Distance (m), Shooter Speed (RPS), Hood Angle (°), Time of Flight (s)
         // KrakenX60 shooting 226g ball - optimized for constant RPS ~75
         
-        addEntry(2,  50, 0.0, 1.00); 
-        addEntry(2.3,  53, 0.0, 1.00);  
-        addEntry(2.42,  53, 0.1, 1.00);  
-        addEntry(2.63,  54.54, 0.1, 1.00);  
-        addEntry(2.78,  54.54, 0.17, 1.00);  
-        addEntry(2.98,  54.54, 0.20, 1.00);  
-        addEntry(3.36,  54.54, 0.30, 1.00);  
-        addEntry(3.51,  56, 0.30, 1.00);  
-        addEntry(3.68,  56.5, 0.32, 1.00);  
+        addEntry(2,  50, 0.0, 1); 
+        addEntry(2.3,  53, 0.0, 1);  
+        addEntry(2.42,  53, 0.1, 1);  
+        addEntry(2.63,  54.54, 0.1, 1);  
+        addEntry(2.78,  54.54, 0.17, 0.9);  
+        addEntry(2.98,  54.54, 0.20, 0.85);  
+        addEntry(3.36,  54.54, 0.30, 0.85);  
+        addEntry(3.51,  56, 0.30, 0.85);  
+        addEntry(3.68,  56.5, 0.32, 0.85);  
        
        addEntry(3.68,  56.5, 0.32, 1.00);  
        addEntry(3.91,  58, 0.32, 1.00);  
