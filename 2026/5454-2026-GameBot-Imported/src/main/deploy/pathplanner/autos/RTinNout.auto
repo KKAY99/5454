@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUpW5"
+            "name": "shotLookUpW8"
           }
         },
         {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RTinNout2"
+                  "pathName": "RTNZRT"
                 }
               },
               {

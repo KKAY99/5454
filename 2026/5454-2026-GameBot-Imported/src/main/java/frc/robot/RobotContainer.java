@@ -240,6 +240,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("pass", new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, true));
     NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
     NamedCommands.registerCommand("shotLookUpW3", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,  m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(3));
+    NamedCommands.registerCommand("shotLookUpW8", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,  m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(8));
     NamedCommands.registerCommand("shotLookUpW5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,  m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(5));
     NamedCommands.registerCommand("shotLookUp128W5", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true, 128).withTimeout(5));
     NamedCommands.registerCommand("turretTrack", new TurretTrackCommand(m_TurretSubsystem, m_swerve, TurretStates.TRACK, m_turretLimelight));
