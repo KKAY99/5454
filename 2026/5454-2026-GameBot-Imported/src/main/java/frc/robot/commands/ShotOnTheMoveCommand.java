@@ -56,6 +56,7 @@ public class ShotOnTheMoveCommand extends Command {
   private int m_HopperPulls=0;
   //private boolean NoLimeLightMode=0;
   private double m_flipSpeed=0;
+  private double kTurretPosDeadband=0.1;
   public ShotOnTheMoveCommand(CommandSwerveDrivetrain swerve,NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, 
                           TurretSubsystemPots turret,Limelight limelight, double timeLimit, boolean emptyHopper) {
     m_hopper=hopper;
@@ -137,15 +138,15 @@ double velY = m_swerve.getChassisSpeeds().vyMetersPerSecond;
 ShotSolution targetShot = TurretUtil.computeLeadShotSolution(m_swerve.getPose2d(),velX,velY,TurretUtil.TargetType.HUB); 
 double targetspeed=targetShot.shooterSpeedRPS;
 double hoodPos=targetShot.trajectoryAngleDegrees;
-double turretAngle=targetShot.turretAngleDegrees;
+double turretSourceAngle=targetShot.turretAngleDegrees;
 
 //REFERENCE ONLY - DO NOT USE TARGETING
  double StaticTurretAngleTarget=TurretUtil.get5454TurretAngle(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
+  //always adjust the angle
+   double angle=TurretUtil.get5454TurretAngleFromAngle(turretSourceAngle);
          
   System.out.println("Shooting On the Move - Speed "  + targetspeed  + 
-                     "Target Angle:" + turretAngle + " Static Angle:" + StaticTurretAngleTarget +" - State:" + m_state);
-  //always adjust the angle
-   double angle=TurretUtil.get5454TurretAngleFromAngle(turretAngle);
+                     "Target Angle:" + angle + " Static Angle:" + StaticTurretAngleTarget +" - State:" + m_state);
   SmartDashboard.putNumber("Turret Util Target Angle",angle);
   double targetPos=m_turret.getTargetMotorPosition(angle);
   SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
@@ -166,23 +167,30 @@ switch(m_state){
     case WAIT:
        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
        //m_shooter.holdHoodPosMotionMagic(hoodPos);
-        if(m_shooter.atTargetSpeed(targetspeed)){
+        if(m_shooter.atTargetSpeed(targetspeed) && checkTurretPos(targetPos)){
             m_state=shooterStates.SHOOT;
         } 
         break;
     case SHOOT:
-        
-        m_shooter.runKicker(Constants.ShooterConstants.KickerSpeed);
+        if(checkTurretPos(targetPos)==false){
+          //stop kicker until the angle is alligned
+            m_shooter.runNewShooter(targetspeed,
+                      0);
+            m_state=shooterStates.WAIT;
+        } else {          
+           m_shooter.runKicker(Constants.ShooterConstants.KickerSpeed);
 
-        m_shooter.runNewShooter(targetspeed,
+          m_shooter.runNewShooter(targetspeed,
                             Constants.ShooterConstants.KickerSpeed);
        
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
-        //m_shooter.holdHoodPosMotionMagic(hoodPos);
+          m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+          //m_shooter.holdHoodPosMotionMagic(hoodPos);
         
-        m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
-        m_intake.runIntake(Constants.IntakeConstants.highSpeed);
-       //STAY IN SHOOT
+          m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
+         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+        //STAY IN SHOOT
+        
+        } 
        break;
     case NOFUEL:
         fuelcheckStartTime=Timer.getFPGATimestamp();
@@ -295,5 +303,15 @@ switch(m_state){
 
       
   }
+
+  private boolean checkTurretPos(double targetPosition){
+    boolean returnValue=false;
+    double actual=m_turret.getCurrentPosition();
+    if(Math.abs(targetPosition-actual)<kTurretPosDeadband){
+      returnValue=true;
+    }
+    return returnValue;
+  }
+  
 }
 
