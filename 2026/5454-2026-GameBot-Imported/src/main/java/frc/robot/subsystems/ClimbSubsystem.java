@@ -75,6 +75,11 @@ public class ClimbSubsystem extends SubsystemBase {
       m_climbMotor.stopMotor();
     }
   }
+  public void setClimbSpeed(double speed){
+     m_climbMotor.set(speed);
+   
+  }
+  
   public void retractClimb() {
     m_climbMotor.set(ClimbConstants.climbBackSpeed);
     while (!isClimbDownLimit()){
