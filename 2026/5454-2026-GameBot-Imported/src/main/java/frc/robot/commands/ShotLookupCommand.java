@@ -43,7 +43,6 @@ public class ShotLookupCommand extends Command {
   private double stateStartTime;
   private double startShootTime;
   private final double kSpinUpTime=1;
-  private final double khoodSpeed=Constants.HoodConstants.hoodSpeed;
   private final double khoodDeadband = Constants.HoodConstants.hoodDeadband;
   private double fuelcheckStartTime;
   private final double kfuelcheckWait=2;
@@ -52,6 +51,8 @@ public class ShotLookupCommand extends Command {
   private final int kflipCountMax=6;//35;
   private final int kHopperPullLimit=14;
   private CommandSwerveDrivetrain m_swerve;
+  private final double khoodSpeed=Constants.HoodConstants.hoodSpeed;
+
   private int m_HopperPulls=0;
   //private boolean NoLimeLightMode=0;
   private double m_flipSpeed=0;
@@ -175,7 +176,7 @@ hoodPos=shotParams.hoodPosition;
         }
     break;
     case WAIT:
-       m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
+       m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed, 0.04); 
        //m_shooter.holdHoodPosMotionMagic(hoodPos);
         if(m_shooter.atTargetSpeed(targetspeed)){
             // Capture the turret angle right before we start shooting
@@ -191,7 +192,7 @@ hoodPos=shotParams.hoodPosition;
         m_shooter.runNewShooter(targetspeed,
                             Constants.ShooterConstants.KickerSpeed);
        
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed, 0.04);
         //m_shooter.holdHoodPosMotionMagic(hoodPos);
         
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
@@ -215,7 +216,7 @@ hoodPos=shotParams.hoodPosition;
          }
       break; 
     case EMPTYHOPPER:
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+        m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed, 0.04);
         //m_shooter.holdHoodPosMotionMagic(hoodPos);
     
     /*  System.out.println("Flip Count"+ m_flipCount);
@@ -291,7 +292,7 @@ hoodPos=shotParams.hoodPosition;
         }
       break;
     case SHOOTMORE:
-            m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+            m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed, 0.04);
             //m_shooter.holdHoodPosMotionMagic(hoodPos);
         //STAY IN THE LOOP FOREVER UNTIL USER STOPS
      break;

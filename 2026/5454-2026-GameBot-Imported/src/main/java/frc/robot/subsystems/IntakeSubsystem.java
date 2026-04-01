@@ -51,7 +51,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean isIntakeSwitched() {
-    return m_intakeSwitch.get();
+    //reverse for new limit switch 3/31
+    return !m_intakeSwitch.get();
   }
 
   public void homeIntake(double maxHomeTime){
@@ -171,7 +172,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Intake Fold Current", m_fold.getOutputCurrent());
     SmartDashboard.putNumber("Intake Position", m_fold.getEncoder().getPosition());
-    SmartDashboard.putBoolean("Intake Switch",m_intakeSwitch.get());
+    SmartDashboard.putBoolean("Intake Switch",isIntakeSwitched());
     SmartDashboard.putNumber("Intake Supply Current",m_intakeMotor.getSupplyCurrent().getValueAsDouble());
     SmartDashboard.putNumber("Intake Temperature",m_intakeMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Intake Torque Current",m_intakeMotor.getTorqueCurrent().getValueAsDouble());

@@ -267,6 +267,8 @@ public class RobotContainer {
 
     Command foldIn = new IntakeIntakeCommand(m_intake);
 
+
+
     Command foldOut = new IntakeFoldCommand(m_intake);
     m_xBoxDriver.y().onTrue(Commands.sequence(new InstantCommand(m_intake::toggleIntakeMode), foldOut));
     
@@ -279,7 +281,10 @@ public class RobotContainer {
     //m_xBoxDriver.b().onTrue(Commands.runOnce(()->rightClimb()));
 
     Command climbDown = m_climb.climbDownCommand();
-    m_xBoxDriver.a().onTrue(climbDown);
+    Command stopIntake = Commands.runOnce(()->m_intake.stopIntake());
+    Command stopShooter = Commands.runOnce(()->m_newShooter.stopNewShooter(false));
+    SequentialCommandGroup downWeGoClimb = new SequentialCommandGroup(stopIntake,stopShooter,climbDown);
+    m_xBoxDriver.a().onTrue(downWeGoClimb);
     //m_xBoxDriver.a().onTrue(Commands.runOnce(()->leftClimb()));
 
     Command shootMapping = new ShootMappingCommand(m_swerve,m_newShooter,m_hopper,m_intake,
@@ -302,7 +307,7 @@ public class RobotContainer {
     Command pass = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, true);
     Command targetPass = Commands.runOnce(()->setTracking(TurretTrackingMethod.PASS));
     SequentialCommandGroup passIt = new SequentialCommandGroup(targetPass,pass);
-
+    m_xBoxDriver.x().whileTrue(passIt);
     m_xBoxOperator.rightTrigger().whileTrue(passIt);
     
     Command shoot = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, false);
@@ -532,7 +537,19 @@ public class RobotContainer {
 
     try{
       updateHubStatus();
-     
+      String targetString="";
+      switch(m_tracking){
+        case HUB:
+          targetString="Hub";
+          break;
+        case TURRET:
+          targetString="Turret";
+          break;
+        default:
+          targetString="";
+          break; 
+         }
+      SmartDashboard.putString("Turret Target",targetString);
       SmartDashboard.putBoolean("Our Hub Active",m_hubMatch);      
       SmartDashboard.putString("ActiveHub",m_activeHub);
       SmartDashboard.putString("Active Phase",m_activeHubPhase);
@@ -624,6 +641,7 @@ public class RobotContainer {
   
   public void AutoPeriodic(){
    AllPeriodic();
+  
    TargetTracking(m_tracking);
    
    
@@ -658,13 +676,16 @@ return pathfindingCommand;
     homeRobot();
     //used fused IMU Mode
     m_backLimelight.SetIMUMode(4);
-    m_newShooter.primeMotors(Constants.ShooterConstants.AutoIdleSpeed);
+     setTracking(TurretTrackingMethod.HUB);
+     m_newShooter.primeMotors(Constants.ShooterConstants.AutoIdleSpeed);
     InitialAutonPathfind();
     
   }
 
   public void TeleopMode(){
     homeRobot();
+    setTracking(TurretTrackingMethod.HUB);
+    m_newShooter.primeMotors(Constants.ShooterConstants.IdleSpeed);
     //used fused IMU Mode
     m_backLimelight.SetIMUMode(4);
    

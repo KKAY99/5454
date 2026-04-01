@@ -25,6 +25,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.Constants.TurretTrackingMethod;
 import frc.robot.subsystems.shooter.TurretUtil;
 import frc.robot.subsystems.shooter.TurretUtil.TargetType;
 import edu.wpi.first.wpilibj.AnalogEncoder;
@@ -47,7 +48,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 public class TurretSubsystemPots extends SubsystemBase {
   private TalonFX m_turretMotor;
   private Orchestra m_robotOrch = new Orchestra();
-      
+  private TurretUtil.TargetType m_target;    
  // private CANcoder m_encoder1;
  // private CANcoder m_encoder2;
   private AnalogPotentiometer m_POTS;
@@ -59,12 +60,12 @@ public class TurretSubsystemPots extends SubsystemBase {
   private final double kMotorRotationsToAngle=7.87499;//7.80;
   private final double kDegreesPerRotation=0;
   private DutyCycleOut m_TurretDutyCycleOut = new DutyCycleOut(0.0);
- private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
+  private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
  
  // private MotionMagicVelocityVoltage mmRequest = new MotionMagicVelocityVoltage (0);
   public TurretSubsystemPots(int CanId1, int potsPort) {
     SmartDashboard.putNumber("Target Turret Angle",0);
-   
+    m_target=TargetType.HUB;
     m_POTS = new AnalogPotentiometer(potsPort,1,0); 
     m_turretMotor = new TalonFX(CanId1,"5454Canivore");
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
@@ -103,7 +104,9 @@ public class TurretSubsystemPots extends SubsystemBase {
     return () -> encoder.getAbsolutePosition().getValue();
   }
   
- 
+  public void setTarget(TurretUtil.TargetType target){
+    m_target=target;
+  }
    public void moveTurret(double speed) 
   {
       if(atLimit(speed)){
@@ -143,6 +146,16 @@ public class TurretSubsystemPots extends SubsystemBase {
       System.out.println("Move Target out of Range");
     }
       } 
+
+  
+    private void trackTurretToAngle(double angle){
+      SmartDashboard.putNumber("Turret Util Target Angle",angle);
+      double targetPos=getTargetMotorPosition(angle);
+      SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
+      moveMotor(targetPos);
+ 
+}
+
 
 private void configureMotionMagic(){
   // in init function
@@ -261,12 +274,8 @@ private double POTStoRotations(double POTSValue ){
     SmartDashboard.putNumber("POTS Offset Angle",(m_POTS.get()*3600/kGearReduction)-225);
     SmartDashboard.putNumber("Motor Rotation Angle",getTurretAngleFromMotor());
     
- SmartDashboard.putNumber("Target Pos for 0", getTargetMotorPosition(0));
-  SmartDashboard.putNumber("Target Pos for 90", getTargetMotorPosition(90));
-  SmartDashboard.putNumber("Target Pos for 180",+ getTargetMotorPosition(180));
-  SmartDashboard.putNumber("Target Pos for 270", getTargetMotorPosition(270));
- 
-     double angle=SmartDashboard.getNumber("Target Turret Angle",0);
+
+  /*   double angle=SmartDashboard.getNumber("Target Turret Angle",0);
  
    if(!(angle==0)){
       double targetPos=getTargetMotorPosition(angle);
@@ -274,6 +283,6 @@ private double POTStoRotations(double POTSValue ){
         moveMotor(targetPos);
     }  //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
     //SmartDashboard.putNumber("POTS",m_POTS.; 
-
+*/
   }
 }

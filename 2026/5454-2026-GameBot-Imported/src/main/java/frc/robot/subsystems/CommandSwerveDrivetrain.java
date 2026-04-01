@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -175,6 +176,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
         super(drivetrainConstants, odometryUpdateFrequency, modules);
+        
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -439,6 +441,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
+/* 
+    public void setSteerPID(double kP, double kI, double kD) {
+        for (var module : m_modules) {
+            module.getSteerMotor().getConfigurator().apply(
+                new Slot0Configs().withKP(kP).withKI(kI).withKD(kD));
+        }
+    }
+    public void setDrivePID(double kP, double kI, double kD) {
+    for (var module : m_modules) {
+        module.getSteerMotor().getConfigurator().apply(
+            new Slot0Configs().withKP(kP).withKI(kI).withKD(kD));
+    }
+}
+    */
     public void playMusic(String fileName){
         Orchestra robotOrch = new Orchestra();
         robotOrch.loadMusic(fileName);
