@@ -36,6 +36,8 @@ import yams.mechanisms.*;
 import yams.units.EasyCRT;
 import yams.units.EasyCRTConfig;
 import java.util.function.Supplier;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
 import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Rotations;
@@ -52,7 +54,8 @@ public class TurretSubsystemPots extends SubsystemBase {
  // private CANcoder m_encoder1;
  // private CANcoder m_encoder2;
   private AnalogPotentiometer m_POTS;
-  private final double kPotsLowLimit=Constants.TurretConstants.TurretLeftLimitPOTS;
+  private Pose2d m_pose;
+    private final double kPotsLowLimit=Constants.TurretConstants.TurretLeftLimitPOTS;
   private final double kPotsHighLimit=Constants.TurretConstants.TurretRightLimitPOTS;
   private double kLowerLimit=-39;
   private double kUpperLimit=5.5;
@@ -146,7 +149,13 @@ public class TurretSubsystemPots extends SubsystemBase {
       System.out.println("Move Target out of Range");
     }
       } 
-
+      
+    public void setPose(Pose2d pose){
+      m_pose=pose;
+    }
+    public Pose2d getPose(){
+      return m_pose;
+    }
   
     private void trackTurretToAngle(double angle){
       SmartDashboard.putNumber("Turret Util Target Angle",angle);

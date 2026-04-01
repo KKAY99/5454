@@ -236,8 +236,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("climbUp", m_climb.climbUpCommand());
     NamedCommands.registerCommand("climbDown", m_climb.climbDownCommand());
     NamedCommands.registerCommand("completeIntake", new CompleteIntakeCommand(m_intake, m_hopper));
-    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, false));
-    NamedCommands.registerCommand("pass", new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, true));
+    NamedCommands.registerCommand("popcorn", new ShootPopcornCommand(m_newShooter,m_hopper,m_intake, false));
+    NamedCommands.registerCommand("pass", new ShootPopcornCommand(m_newShooter,m_hopper,m_intake, true));
     NamedCommands.registerCommand("shotLookUp", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true));
     NamedCommands.registerCommand("shotLookUpW3", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,  m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(3));
     NamedCommands.registerCommand("shotLookUpW8", new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,  m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true).withTimeout(8));
@@ -308,13 +308,13 @@ public class RobotContainer {
     m_xBoxDriver.start().whileTrue(shootOne);
     m_xBoxOperator.leftTrigger().whileTrue(shootOne);
 
-    Command pass = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, true);
+    Command pass = new ShootPopcornCommand(m_newShooter,m_hopper,m_intake, true);
     Command targetPass = Commands.runOnce(()->setTracking(TurretTrackingMethod.PASS));
     SequentialCommandGroup passIt = new SequentialCommandGroup(targetPass,pass);
     m_xBoxDriver.x().whileTrue(passIt);
     m_xBoxOperator.rightTrigger().whileTrue(passIt);
     
-    Command shoot = new ShootPopcornCommand(m_swerve,m_newShooter,m_hopper,m_intake, false);
+    Command shoot = new ShootPopcornCommand(m_newShooter,m_hopper,m_intake, false);
     Command targetHubPopcorn = Commands.runOnce(()->setTracking(TurretTrackingMethod.HUB));
     SequentialCommandGroup PopcornShotIt = new SequentialCommandGroup(targetHubPopcorn,shoot);
 
@@ -770,6 +770,7 @@ return pathfindingCommand;
   public void AllPeriodic(){
     updateOdomFromLimelights();
     m_Field2d.setRobotPose(m_swerve.getPose2d());
+    m_TurretSubsystem.setPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
     refreshSmartDashboard();

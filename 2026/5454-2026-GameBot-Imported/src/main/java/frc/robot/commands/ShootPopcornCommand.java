@@ -30,12 +30,10 @@ public class ShootPopcornCommand extends Command {
 
   private PassLookUpTable m_PassLookUpTable = new PassLookUpTable();
   private HubLookUpTable m_HubLookupTable = new HubLookUpTable();
-  private CommandSwerveDrivetrain m_swerve;
   private NewShooterSubsystem m_shooter;
   private HopperSubsystem m_hopper;
   private IntakeSubsystem m_intake;
   private boolean m_isPass;
-  private CommandXboxController m_xBoxDriver;
   
   private TurretSubsystemPots m_turret;
   private double m_lastDistance; // default distance
@@ -50,8 +48,7 @@ public class ShootPopcornCommand extends Command {
   private final double khoodSpeed=Constants.HoodConstants.hoodSpeed;
   private final double khoodDeadband = Constants.HoodConstants.hoodDeadband;
 
-  public ShootPopcornCommand(CommandSwerveDrivetrain swerve, NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, boolean isPass) {
-    m_swerve=swerve;
+  public ShootPopcornCommand(NewShooterSubsystem shooter, HopperSubsystem hopper, IntakeSubsystem intake, boolean isPass) {
     m_hopper=hopper;
     m_shooter=shooter;
     m_intake=intake;
@@ -100,14 +97,14 @@ public class ShootPopcornCommand extends Command {
   
   if(m_isPass){
       PassLookUpTable.ShootingParameters passParams;
-       distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.getNearestPassTargetType(m_swerve.getPose2d()));
+       distance=TurretUtil.getDistance(m_turret.getPose(), TurretUtil.getNearestPassTargetType(m_turret.getPose()));
       passParams = m_PassLookUpTable.getParameters(distance);
       targetspeed=passParams.shooterSpeed;
       hoodPos=passParams.hoodAngle;
 
   } else { 
     HubLookUpTable.ShootingParameters shotParams;
-    distance=TurretUtil.getDistance(m_swerve.getPose2d(),TurretUtil.TargetType.HUB);
+    distance=TurretUtil.getDistance(m_turret.getPose(),TurretUtil.TargetType.HUB);
     shotParams=m_HubLookupTable.getParameters(distance);
     targetspeed=shotParams.shooterSpeed;
     hoodPos=shotParams.hoodPosition;
