@@ -35,6 +35,7 @@ import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.ObsidianCANSparkMax;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance.NetworkMode;
 import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -46,7 +47,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     private TalonFX m_2shooterMotor;
     private TalonFX m_hoodMotor;
     private CANcoder m_hoodCoder;
- 
+    private Pose2d m_pose;
 //    private PositionVoltage m_request= new PositionVoltage(0).withSlot(0);
    private MotionMagicDutyCycle mmRequest = new MotionMagicDutyCycle(0);
 
@@ -127,10 +128,23 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
       return 0.0;
     }
   }
+  public void setPose(Pose2d pose){
+      m_pose=pose;
+      System.out.println("Pose Set" + m_pose.getX());
+      
+    }
+    public Pose2d getRobotPose(){
+      System.out.println("Reuurning Pose : " + m_pose.getX()); 
+      return m_pose;
+    }
+  
+  
   public boolean checkHoodPos(double hoodTarget, double hoodSpeed,double deadband){
     double hoodDiff=Math.abs(getHoodPos()-hoodTarget);
     return (hoodDiff<=deadband);
   }
+
+
   public void poormanHoldHoodPos(double hoodTarget, double hoodSpeed,double deadband){
     double currentPos =  getHoodPos();
     double hoodDiff=Math.abs(currentPos-hoodTarget);    

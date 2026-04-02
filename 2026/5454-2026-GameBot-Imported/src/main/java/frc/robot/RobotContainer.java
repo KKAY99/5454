@@ -770,7 +770,7 @@ return pathfindingCommand;
   public void AllPeriodic(){
     updateOdomFromLimelights();
     m_Field2d.setRobotPose(m_swerve.getPose2d());
-    m_TurretSubsystem.setPose(m_swerve.getPose2d());
+    m_newShooter.setPose(m_swerve.getPose2d());
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
     refreshSmartDashboard();

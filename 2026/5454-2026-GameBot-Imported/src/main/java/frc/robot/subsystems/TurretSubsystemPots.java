@@ -54,7 +54,7 @@ public class TurretSubsystemPots extends SubsystemBase {
  // private CANcoder m_encoder1;
  // private CANcoder m_encoder2;
   private AnalogPotentiometer m_POTS;
-  private Pose2d m_pose;
+
     private final double kPotsLowLimit=Constants.TurretConstants.TurretLeftLimitPOTS;
   private final double kPotsHighLimit=Constants.TurretConstants.TurretRightLimitPOTS;
   private double kLowerLimit=-39;
@@ -150,13 +150,7 @@ public class TurretSubsystemPots extends SubsystemBase {
     }
       } 
       
-    public void setPose(Pose2d pose){
-      m_pose=pose;
-    }
-    public Pose2d getPose(){
-      return m_pose;
-    }
-  
+    
     private void trackTurretToAngle(double angle){
       SmartDashboard.putNumber("Turret Util Target Angle",angle);
       double targetPos=getTargetMotorPosition(angle);

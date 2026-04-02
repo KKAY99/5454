@@ -41,8 +41,12 @@ public class PassLookUpTable {
          addEntry(2.669,55,0.6,0);  
          addEntry(4.324,57,0.6,0);  
          addEntry(6.4,60,0.6,0);  
-         addEntry(9.05,89,0.6,0);  
-         addEntry(20,89,0.6,0);  
+         addEntry(9.05,88,0.6,0);  
+         addEntry(11.05,88,0.6,0);  
+         addEntry(12,88,0.2,0);  
+         addEntry(20,88,0.2,0);  
+        addEntry(40,88,0.2,0);  
+    
     }
     
     /** Add an entry to the lookup table */

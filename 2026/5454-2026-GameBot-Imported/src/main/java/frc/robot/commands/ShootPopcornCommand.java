@@ -1,4 +1,5 @@
 package frc.robot.commands;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,7 +36,6 @@ public class ShootPopcornCommand extends Command {
   private IntakeSubsystem m_intake;
   private boolean m_isPass;
   
-  private TurretSubsystemPots m_turret;
   private double m_lastDistance; // default distance
   private double m_lastHoodPos=0; // default hood pos
   private enum shooterStates{
@@ -94,17 +94,19 @@ public class ShootPopcornCommand extends Command {
   double targetspeed=0;
   double hoodPos=0;  
   double distance;
-  
+  Pose2d turretPose;
+  turretPose=m_shooter.getRobotPose();
+  System.out.println(turretPose.getX());
   if(m_isPass){
       PassLookUpTable.ShootingParameters passParams;
-       distance=TurretUtil.getDistance(m_turret.getPose(), TurretUtil.getNearestPassTargetType(m_turret.getPose()));
+       distance=TurretUtil.getDistance(m_shooter.getRobotPose(), TurretUtil.getNearestPassTargetType(m_shooter.getRobotPose()));
       passParams = m_PassLookUpTable.getParameters(distance);
       targetspeed=passParams.shooterSpeed;
       hoodPos=passParams.hoodAngle;
 
   } else { 
     HubLookUpTable.ShootingParameters shotParams;
-    distance=TurretUtil.getDistance(m_turret.getPose(),TurretUtil.TargetType.HUB);
+    distance=TurretUtil.getDistance(m_shooter.getRobotPose(),TurretUtil.TargetType.HUB);
     shotParams=m_HubLookupTable.getParameters(distance);
     targetspeed=shotParams.shooterSpeed;
     hoodPos=shotParams.hoodPosition;
