@@ -53,7 +53,7 @@ public class TurretTrackingModeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Ending Turret Track");
+    //System.out.println("Ending Turret Track");
     m_turret.stopTurret();
     
   }

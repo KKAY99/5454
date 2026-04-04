@@ -92,14 +92,14 @@ public class ShotOnTheMoveCommand extends Command {
     boolean returnValue=false;
     double currentTime;
         if(m_hopper.getNoFuel()) {
-          System.out.println("No Fuel Detected...");
+          //System.out.println("No Fuel Detected...");
           returnValue=true;
         }
         //check time limit if the value is greater than zero
         //acts a failsafe if FuelSensor is not working
         currentTime = Timer.getFPGATimestamp();
         if(m_timeLimit>0 && (currentTime>=startShootTime+m_timeLimit)){
-          System.out.println("Shoot Time Limit Reached... Ending Shoot Command");
+          //System.out.println("Shoot Time Limit Reached... Ending Shoot Command");
           returnValue=true;
         }
         return returnValue;
@@ -118,7 +118,7 @@ public class ShotOnTheMoveCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  System.out.println("Stopping Shooter");
+  //System.out.println("Stopping Shooter");
     m_shooter.hoodMoveToZero();
     m_intake.stopFold();
     m_intake.SetIntakeOutMode();
@@ -145,8 +145,8 @@ double turretSourceAngle=targetShot.turretAngleDegrees;
   //always adjust the angle
    double angle=TurretUtil.get5454TurretAngleFromAngle(turretSourceAngle);
          
-  System.out.println("Shooting On the Move - Speed "  + targetspeed  + 
-                     "Target Angle:" + angle + " Static Angle:" + StaticTurretAngleTarget +" - State:" + m_state);
+  //System.out.println("Shooting On the Move - Speed "  + targetspeed  + 
+  //                   "Target Angle:" + angle + " Static Angle:" + StaticTurretAngleTarget +" - State:" + m_state);
   SmartDashboard.putNumber("Turret Util Target Angle",angle);
   double targetPos=m_turret.getTargetMotorPosition(angle);
   SmartDashboard.putNumber("Turret Util Target Pos",targetPos); 
@@ -209,7 +209,7 @@ switch(m_state){
         m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
         //m_shooter.holdHoodPosMotionMagic(hoodPos);
     
-    /*  System.out.println("Flip Count"+ m_flipCount);
+    /*  //System.out.println("Flip Count"+ m_flipCount);
         m_flipCount=m_flipCount+1;
         if (m_flipCount==m_flipCountLimit){
           //make it twice as fast
@@ -265,7 +265,7 @@ switch(m_state){
 
         m_flipCount=m_flipCount+1;
         
-        System.out.println("Flip Count:" + m_flipCount + " Hopper Pulls: "+ m_HopperPulls + " Speed:"+ m_flipSpeed);
+        //System.out.println("Flip Count:" + m_flipCount + " Hopper Pulls: "+ m_HopperPulls + " Speed:"+ m_flipSpeed);
    
         m_intake.inFold(m_flipSpeed);
         
@@ -276,7 +276,7 @@ switch(m_state){
         }
         
         if(m_HopperPulls>kHopperPullLimit){
-          System.out.println("Stop Folding");
+          //System.out.println("Stop Folding");
           m_intake.stopFold();
           m_state=shooterStates.SHOOTMORE;
         }

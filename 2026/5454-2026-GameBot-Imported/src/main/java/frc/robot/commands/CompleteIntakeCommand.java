@@ -49,7 +49,7 @@ public class CompleteIntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  System.out.println("Stopping Intake and Hopper");
+  //System.out.println("Stopping Intake and Hopper");
  
     m_intake.stopIntake();
     m_intake.stopFold();
@@ -76,7 +76,7 @@ public class CompleteIntakeCommand extends Command {
         } 
     break;
     case PULSE:
-        //    System.out.println("Out Pulse Count: " + m_outPulseCount + ", In Pulse Count: " + m_inPulseCount);
+        //    //System.out.println("Out Pulse Count: " + m_outPulseCount + ", In Pulse Count: " + m_inPulseCount);
         if(m_hopper.getNoFuel()==false){
           //stop agitate when fuel is seen
           m_hopper.stopAgitate();
@@ -99,7 +99,7 @@ public class CompleteIntakeCommand extends Command {
             }
         }
         
-       /*  System.out.println("Flip Count: " + m_PulseCount);
+       /*  //System.out.println("Flip Count: " + m_PulseCount);
         m_PulseCount = m_PulseCount + 1;
         if (m_PulseCount == 5) {
             m_intake.inFold(0.2 * m_flipSpeed);

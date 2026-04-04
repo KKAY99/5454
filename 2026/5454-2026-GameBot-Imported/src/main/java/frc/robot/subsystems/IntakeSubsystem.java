@@ -59,13 +59,13 @@ public class IntakeSubsystem extends SubsystemBase {
     //pull intake until we hit limit switch and then reset position
      double startTime = Timer.getFPGATimestamp();
      double endTime = startTime + maxHomeTime;
-    System.out.println("Intake is starting homing");
+    //System.out.println("Intake is starting homing");
     while(!isIntakeSwitched() && Timer.getFPGATimestamp()<endTime){
      m_fold.set(-Constants.IntakeConstants.foldHomeSpeed);
     }
     m_fold.stopMotor(); // stop intake
     m_fold.getEncoder().setPosition(0.0); // reset encoder to zero at home in
-    System.out.println("Intake has homed");
+    //System.out.println("Intake has homed");
     SetIntakeInMode();
     m_homed=true;
   }
@@ -90,10 +90,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void stopIntake(){
-    System.out.println("Stopping Intake");
+    //System.out.println("Stopping Intake");
     m_intakeMotor.stopMotor();
   }
-
+ 
+  
+ 
   public Command foldCommand(double speed){
       return Commands.startEnd(    ()->runFoldManual(speed),
                                           ()->stopFold(),
@@ -177,7 +179,7 @@ public class IntakeSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Intake Temperature",m_intakeMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Intake Torque Current",m_intakeMotor.getTorqueCurrent().getValueAsDouble());
 
-    // System.out.println("Amp " + m_fold.getOutputCurrent());
+    // //System.out.println("Amp " + m_fold.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 }

@@ -114,20 +114,20 @@ public class TurretSubsystemPots extends SubsystemBase {
   {
       if(atLimit(speed)){
         stopTurret();
-        System.out.println("Turret Stopped / At Limit");
+        //System.out.println("Turret Stopped / At Limit");
    
       } else {
           //hard coded for testing
            m_turretMotor.set(speed);
            //m_turretMotor.setControl(m_TurretDutyCycleOut.withOutput(speed)); 
-           System.out.println("Turret Move:" + speed);
+           //System.out.println("Turret Move:" + speed);
    
       }
 
   }
   public boolean atLimit(double speed){
     boolean returnValue=false;
-    //System.out.println("Limit Check:" + speed + " -- " + m_POTS.get());
+    ////System.out.println("Limit Check:" + speed + " -- " + m_POTS.get());
     if(speed<0 && m_POTS.get()<kPotsLowLimit){// Moving Left towards zero on POTS
         returnValue=true;
     }else if (speed>0 && m_POTS.get()>kPotsHighLimit){ //moving right towards One on POTS
@@ -137,7 +137,7 @@ public class TurretSubsystemPots extends SubsystemBase {
   }
   
   public void stopTurret(){
-    System.out.println("Stopping Turret");
+    //System.out.println("Stopping Turret");
      m_turretMotor.stopMotor();
   }
  
@@ -146,7 +146,7 @@ public class TurretSubsystemPots extends SubsystemBase {
          m_turretMotor.setControl(mmRequest.withPosition(targetmotorPosition)); 
  
     } else {
-      System.out.println("Move Target out of Range");
+      //System.out.println("Move Target out of Range");
     }
       } 
       
@@ -261,7 +261,7 @@ private double POTStoRotations(double POTSValue ){
   if(currentPOTPosition<kHomeTurretPOTS){
     calcHomePos=calcHomePos*-1; // go negative on position
   }
-  System.out.println("Homing Position: " + calcHomePos );
+  //System.out.println("Homing Position: " + calcHomePos );
   m_turretMotor.setPosition(calcHomePos,1);
   SmartDashboard.putNumber("Target Pos for 0", getTargetMotorPosition(0));
   SmartDashboard.putNumber("Target Pos for 90", getTargetMotorPosition(90));
@@ -282,7 +282,7 @@ private double POTStoRotations(double POTSValue ){
  
    if(!(angle==0)){
       double targetPos=getTargetMotorPosition(angle);
-      System.out.println("Move Turret to "+ targetPos);
+      //System.out.println("Move Turret to "+ targetPos);
         moveMotor(targetPos);
     }  //SmartDashboard.putBoolean("AtLimit",atLimit(m_speed));
     //SmartDashboard.putNumber("POTS",m_POTS.; 

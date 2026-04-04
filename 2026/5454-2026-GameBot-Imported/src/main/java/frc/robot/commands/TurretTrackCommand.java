@@ -46,7 +46,7 @@ public class TurretTrackCommand extends Command {
   @Override
   public void initialize() {
     //filter on front of hubs
-    System.out.println("Turret Track Init " + m_turretState + " - " + m_SearchRight);
+    //System.out.println("Turret Track Init " + m_turretState + " - " + m_SearchRight);
     m_limelight.setLimelightIDFilter(10,26);
     switch(m_turretState){
       case SEARCH: //FLIP SEARCH DIRECTION
@@ -74,19 +74,19 @@ public class TurretTrackCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Ending Turret Track");
+    //System.out.println("Ending Turret Track");
     m_turret.stopTurret();
     
   }
 
   
   private void trackHub(){
-    System.out.println("Tracking Turret XY");
+    //System.out.println("Tracking Turret XY");
  //   if(m_limelight.isFilteredTargetAvailable()){
     if(m_limelight.isAnyTargetAvailable() ){
       
       double llx=m_limelight.getX();
-      System.out.println("Limelight X:"  + llx + " POTS:" + m_turret.getTurretPOTS());
+      //System.out.println("Limelight X:"  + llx + " POTS:" + m_turret.getTurretPOTS());
       double gap=Math.abs(llx)-kLimelightDeadband;
       double turretSpeed;
       if(gap>1){
@@ -95,7 +95,7 @@ public class TurretTrackCommand extends Command {
         turretSpeed=kTurretSlowSpeed;
       }
       if(Math.abs(llx)<kLimelightDeadband){
-        System.out.println("In Limelight Deadband");
+        //System.out.println("In Limelight Deadband");
         m_turretState=TurretStates.END;
         m_turret.stopTurret();
       } else {
@@ -104,24 +104,24 @@ public class TurretTrackCommand extends Command {
             //Move Left
             m_turret.moveTurret(turretSpeed);
             } else {
-               System.out.println("Right Limit");
+               //System.out.println("Right Limit");
                m_turret.stopTurret();
             }
         } else{
            //Move Right
-           System.out.println("Move R");
+           //System.out.println("Move R");
            if(m_turret.getTurretPOTS()>Constants.TurretConstants.TurretLeftLimitPOTS){
-            System.out.println("Moving");
+            //System.out.println("Moving");
             m_turret.moveTurret(-turretSpeed);
           } else {
-            System.out.println("Left Limit");
+            //System.out.println("Left Limit");
             m_turret.stopTurret();
           }
        }
       }
     } else {
       m_turretState=TurretStates.SEARCH;
-      System.out.println("No Target Available");
+      //System.out.println("No Target Available");
     } 
   }
   // Returns true when the command should end.
@@ -154,12 +154,12 @@ public class TurretTrackCommand extends Command {
                 m_SearchRight=false;
               }
             } else {
-                System.out.println("Move R");
+                //System.out.println("Move R");
               if(m_turret.getTurretPOTS()>Constants.TurretConstants.TurretLeftLimitPOTS){
-                System.out.println("Moving");
+                //System.out.println("Moving");
                 m_turret.moveTurret(-kTurretSearchSpeed);
               } else {
-                System.out.println("Left Limit");
+                //System.out.println("Left Limit");
                 m_turret.stopTurret();
                 m_SearchRight=true;
             }

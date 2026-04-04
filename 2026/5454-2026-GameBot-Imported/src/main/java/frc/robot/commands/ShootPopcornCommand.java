@@ -79,7 +79,7 @@ public class ShootPopcornCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  System.out.println("Stopping Shooter");
+  //System.out.println("Stopping Shooter");
     m_shooter.hoodMoveToZero();
     m_intake.stopFold();
     m_intake.SetIntakeOutMode();
@@ -96,7 +96,7 @@ public class ShootPopcornCommand extends Command {
   double distance;
   Pose2d turretPose;
   turretPose=m_shooter.getRobotPose();
-  System.out.println(turretPose.getX());
+  //System.out.println(turretPose.getX());
   if(m_isPass){
       PassLookUpTable.ShootingParameters passParams;
        distance=TurretUtil.getDistance(m_shooter.getRobotPose(), TurretUtil.getNearestPassTargetType(m_shooter.getRobotPose()));

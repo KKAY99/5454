@@ -60,7 +60,7 @@ private static final Slot0Configs steerGains = new Slot0Configs()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimit(Amps.of(60))
-                .withSupplyCurrentLimit(Amps.of(35))
+                .withSupplyCurrentLimit(Amps.of(40))
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
             );
@@ -69,7 +69,7 @@ private static final Slot0Configs steerGains = new Slot0Configs()
             new CurrentLimitsConfigs()
                 // duplicating current limits for steering motor.
                 .withStatorCurrentLimit(Amps.of(60))
-                .withSupplyCurrentLimit(Amps.of(35))
+                .withSupplyCurrentLimit(Amps.of(40))
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
         );

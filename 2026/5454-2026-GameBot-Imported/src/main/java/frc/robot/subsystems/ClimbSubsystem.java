@@ -48,12 +48,12 @@ public class ClimbSubsystem extends SubsystemBase {
     //pull climb down until we hit limit switch and then reset position
     double startTime = Timer.getFPGATimestamp();
     double endTime = startTime + maxHomeTime;
-    System.out.println("Climb is starting homing");
+    //System.out.println("Climb is starting homing");
     while(!isClimbDownLimit() && Timer.getFPGATimestamp()<endTime){
      m_climbMotor.set(ClimbConstants.climbBackSpeed);
     }
     m_climbMotor.stopMotor();
-    System.out.println("Climb has homed");
+    //System.out.println("Climb has homed");
     m_homed=true;
   }
 

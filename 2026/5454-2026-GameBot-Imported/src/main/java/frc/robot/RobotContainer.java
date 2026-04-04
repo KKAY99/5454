@@ -160,12 +160,12 @@ public class RobotContainer {
         
           Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
           startPose=FieldConstants.flipIfRed(startPose);
-          Command goToStart = AutoBuilder.pathfindToPose(
+         /* Command goToStart = AutoBuilder.pathfindToPose(
             startPose,
             goToConstraints,
             0.0
           );
-
+          */
           Command followAuto = new PathPlannerAuto(selectedAuto.getName());
 
           // go to start pos then call auto
@@ -258,7 +258,8 @@ public class RobotContainer {
     m_xBoxDriver.rightTrigger().whileTrue(gasPedalCommand);
 
     ResetGyroCommand resetGyroCommand=new ResetGyroCommand(m_swerve, m_backLimelight);
-    m_xBoxDriver.button(9).onTrue(resetGyroCommand);
+    //back button
+    m_xBoxDriver.button(7).onTrue(resetGyroCommand);
     
 
     Command CompleteIntake = new CompleteIntakeCommand(m_intake,m_hopper);
@@ -304,10 +305,12 @@ public class RobotContainer {
     Command shootLookup = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,
                                 m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true);
     Command targetHub = Commands.runOnce(()->setTracking(TurretTrackingMethod.HUB));
-    SequentialCommandGroup shootOne=new SequentialCommandGroup(targetHub,shootLookup);
+    Command intakeOutMode = new InstantCommand(m_intake::SetIntakeOutMode);
+    Command intakeOutSL= new IntakeFoldCommand(m_intake);
+    SequentialCommandGroup shootOne=new SequentialCommandGroup(targetHub,shootLookup,intakeOutMode,intakeOutSL);
     m_xBoxDriver.start().whileTrue(shootOne);
     m_xBoxOperator.leftTrigger().whileTrue(shootOne);
-
+    
     Command pass = new ShootPopcornCommand(m_newShooter,m_hopper,m_intake, true);
     Command targetPass = Commands.runOnce(()->setTracking(TurretTrackingMethod.PASS));
     SequentialCommandGroup passIt = new SequentialCommandGroup(targetPass,pass);
@@ -373,43 +376,7 @@ public class RobotContainer {
     Command doNothing = Commands.none();
 
     
-    //m_CustomController.b().whileTrue(doNothing);
-    //m_CustomController.y().whileTrue(doNothing);
-    //m_CustomController.x().toggleOnTrue(doNothing);
-    //m_CustomController.leftTrigger().whileTrue(doNothing);
-    //m_CustomController.rightBumper().onTrue(Commands.runOnce(()->InitialAutonPathfind()));
-    //m_CustomController.leftBumper().onTrue(doNothing);
-
-
-   /* 
-    m_xBoxDriver.a().whileTrue(doNothing);
-    m_xBoxDriver.b().whileTrue(doNothing);
-    m_xBoxDriver.x().whileTrue(doNothing);
-    m_xBoxDriver.y().whileTrue(doNothing);
-    m_xBoxDriver.rightBumper().whileTrue(doNothing);
-    m_xBoxDriver.leftBumper().whileTrue(doNothing); */
-
-
-    /*Command newShoot = m_newShooter.shootCommand();
-    Command newHoodUp = m_newShooter.HoodUp();
-    Command newHoodDown = m_newShooter.HoodDown();
-    Command newVelocityShot = Commands.startEnd(  ()->m_newShooter.runShooterVelocity(ShooterConstants.shooterRPM),
-                                           ()->m_newShooter.stopNewShooter(true),
-                                           m_newShooter);
     
-    m_FunnyController.leftBumper().whileTrue(intake);
-    m_FunnyController.rightBumper().whileTrue(agitate);
-    m_FunnyController.leftTrigger().whileTrue(shootManual);
-    m_FunnyController.y().whileTrue(newHoodUp);
-    m_FunnyController.a().whileTrue(foldOut);
-    m_FunnyController.b().whileTrue(foldIn);
-    m_FunnyController.x().whileTrue(newHoodDown);
-    m_FunnyController.povRight().whileTrue(new MoveTurretCommand(m_TurretSubsystem,TurretConstants.turretSpeed));
-    m_FunnyController.povLeft().whileTrue(new MoveTurretCommand(m_TurretSubsystem,-TurretConstants.turretSpeed));
-    //m_FunnyController.povUp().whileTrue(m_TurretSubsystem.setMotortoZero());
-    //m_FunnyController.povDown().onTrue(new TurretTrackCommand(m_TurretSubsystem, m_swerve,
-    //                TurretStates.TRACK,m_turretLimelight));
-    */
     }
 
   private void updateisHubMatched(int Shift){
@@ -577,7 +544,7 @@ public class RobotContainer {
       SmartDashboard.putData("Auto Chooser",m_autoChooser);
 
     }catch(Exception e){
-      System.out.println("Create Autos Failed, Exception: " + e.getMessage());
+      //System.out.println("Create Autos Failed, Exception: " + e.getMessage());
     }
   }
 
@@ -618,7 +585,7 @@ public class RobotContainer {
     {
       m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.1,0.1,9999999));
       SmartDashboard.putBoolean("Vision Updating from Limelight " + limelight.getLimelightName(),true );
-      //System.out.println("update vision back - Tag Count: " + mt2.tagCount 
+      ////System.out.println("update vision back - Tag Count: " + mt2.tagCount 
       //        + " Pose:" + mt2.pose.getX() + "/"+ mt2.pose.getY());
       double timestamp=Utils.fpgaToCurrentTime(mt2.timestampSeconds); // CONVERT Time Units
       m_swerve.addVisionMeasurement(mt2.pose,timestamp);      
@@ -673,7 +640,38 @@ Command pathfindingCommand = AutoBuilder.pathfindToPose(
         targetPose,
         constraints,
         0.0 // Goal end velocity in meters/sec
-);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+        );
 return pathfindingCommand;
 }
   public void AutonMode(){
@@ -708,7 +706,7 @@ return pathfindingCommand;
 
   }
   catch (Exception e){
-    System.out.println("LED Update Error");
+    //System.out.println("LED Update Error");
     }
   }
   public void TeleopPeriodic(){
@@ -764,7 +762,9 @@ return pathfindingCommand;
 
 
   public void SaveLimelights(){
-    LimelightHelpers.triggerRewindCapture(m_turretLimelight.getLimelightName(), 300);
+    //LimelightHelpers.triggerRewindCapture(m_turretLimelight.getLimelightName(), 300);
+    //LimelightHelpers.triggerRewindCapture(m_backLimelight.getLimelightName(), 300);
+    LimelightHelpers.triggerRewindCapture(m_leftLimelight.getLimelightName(), 300);
   }
 
   public void AllPeriodic(){
@@ -779,13 +779,18 @@ return pathfindingCommand;
   
   public void homeRobot(){
     if(!hasHomed){
+      //System.out.println("System is starting Homing- " + DriverStation.getMatchTime());
+     
       m_backLimelight.SetRobotOrientation(m_swerve.getPigeon2().getRotation2d().getDegrees(),0);
-
       m_intake.homeIntake(Constants.homeTimeOut);
+      //System.out.println("Homing Hood");
       m_newShooter.hoodHome();
+      //System.out.println("Homing Climb");
       m_climb.homeClimb(Constants.homeTimeOut);
+      //System.out.println("Homing Turret");
       m_TurretSubsystem.homeTurret();
       hasHomed = true;
+      //System.out.println("System is completed Homing- " + DriverStation.getMatchTime());
     }
   }
  

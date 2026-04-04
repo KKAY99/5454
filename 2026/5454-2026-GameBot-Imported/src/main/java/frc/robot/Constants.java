@@ -157,7 +157,7 @@ public final class Constants {
     public static final double lowSpeed=-0.5;
     public static final double highSpeed=-1.0;
     public static final double outtakeSpeed=0.9;
-    public static final double foldSpeed=-0.5;//-0.2;
+    public static final double foldSpeed=-0.8;//-0.2;
     public static final double foldHomeSpeed=-0.15;
     public static final double foldSpeedAutoMode=-0.15;
     public static final double ampInStop=30;//10;
@@ -207,7 +207,7 @@ public final class Constants {
   }
   public static final class HoodConstants{
     public static final int hoodCoderCANID=51;
-    public static final double hoodOffset=-0.080000;//-0.488037109375;
+    public static final double hoodOffset=-0.71484375;//-0.488037109375;
     public static final double hoodSpeed=0.09;
     public static final double hoodUpSpeed=-0.09;
     public static final double hoodDownSpeed=0.09;

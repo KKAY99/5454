@@ -52,14 +52,14 @@ public class ShootMappingCommand extends Command {
     boolean returnValue=false;
     double currentTime;
         if(m_hopper.getNoFuel()) {
-          System.out.println("No Fuel Detected...");
+          //System.out.println("No Fuel Detected...");
           returnValue=true;
         }
         //check time limit if the value is greater than zero
         //acts a failsafe if FuelSensor is not working
         currentTime = Timer.getFPGATimestamp();
         if(m_timeLimit>0 && (currentTime>=startShootTime+m_timeLimit)){
-          System.out.println("Shoot Time Limit Reached... Ending Shoot Command");
+          //System.out.println("Shoot Time Limit Reached... Ending Shoot Command");
           returnValue=true;
         }
         return returnValue;
@@ -79,7 +79,7 @@ public class ShootMappingCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  System.out.println("Stopping Shooter");
+  //System.out.println("Stopping Shooter");
     //disabled idle mode for hood testing
     m_shooter.stopNewShooter(true);
     m_hopper.stopAgitate();
@@ -95,7 +95,7 @@ public class ShootMappingCommand extends Command {
   double distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.TargetType.HUB);
   SmartDashboard.putNumber("Odom Distance",distance);
    
-  System.out.println("Shot Mapping - State:" + m_state  + " " + Timer.getFPGATimestamp());
+  //System.out.println("Shot Mapping - State:" + m_state  + " " + Timer.getFPGATimestamp());
     switch(m_state){
     case SPINUP:
         m_shooter.poormanHoldHoodPos(m_hoodPos, .06, 0.04); 

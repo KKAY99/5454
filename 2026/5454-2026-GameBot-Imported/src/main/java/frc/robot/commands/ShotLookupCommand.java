@@ -92,14 +92,14 @@ public class ShotLookupCommand extends Command {
     boolean returnValue=false;
     double currentTime;
         if(m_hopper.getNoFuel()) {
-          System.out.println("No Fuel Detected...");
+          //System.out.println("No Fuel Detected...");
           returnValue=true;
         }
         //check time limit if the value is greater than zero
         //acts a failsafe if FuelSensor is not working
         currentTime = Timer.getFPGATimestamp();
         if(m_timeLimit>0 && (currentTime>=startShootTime+m_timeLimit)){
-          System.out.println("Shoot Time Limit Reached... Ending Shoot Command");
+          //System.out.println("Shoot Time Limit Reached... Ending Shoot Command");
           returnValue=true;
         }
         return returnValue;
@@ -118,7 +118,7 @@ public class ShotLookupCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  System.out.println("Stopping Shooter");
+  //System.out.println("Stopping Shooter");
     m_shooter.hoodMoveToZero();
     m_intake.stopFold();
     m_intake.SetIntakeOutMode();
@@ -137,7 +137,7 @@ public class ShotLookupCommand extends Command {
   double hoodPos=0;  
 //  double distance=m_limelight.getDistanceInverted();
   double distance=TurretUtil.getDistance(m_swerve.getPose2d(), TurretUtil.TargetType.HUB);
-  System.out.println("Distance Calc" + distance);
+  //System.out.println("Distance Calc" + distance);
   //if distance is zero than use last disance 
   if(overrideDistanceFlag==true){
     distance=overrideDistance;
@@ -161,8 +161,8 @@ hoodPos=shotParams.hoodPosition;
     m_lastHoodPos=hoodPos;
   }
   
-  System.out.println("Shooting Lookup :" + distance + " Actual LL Dist:" + m_limelight.getDistanceInverted() + " Speed:" + targetspeed  + " - State:" + m_state +
-   "Override Flag:" + overrideDistanceFlag);
+  //System.out.println("Shooting Lookup :" + distance + " Actual LL Dist:" + m_limelight.getDistanceInverted() + " Speed:" + targetspeed  + " - State:" + m_state +
+  // "Override Flag:" + overrideDistanceFlag);
     switch(m_state){
     case SPINUP:
          m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
@@ -183,7 +183,7 @@ hoodPos=shotParams.hoodPosition;
        //     m_heldTurretAngle = m_turret.getCurrentAngle();
             m_state=shooterStates.SHOOT;
         } else {
-          System.out.println("Not at Speed");
+          //System.out.println("Not at Speed");
         }
         break;
     case SHOOT:
@@ -219,7 +219,7 @@ hoodPos=shotParams.hoodPosition;
         m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed, 0.04);
         //m_shooter.holdHoodPosMotionMagic(hoodPos);
     
-    /*  System.out.println("Flip Count"+ m_flipCount);
+    /*  //System.out.println("Flip Count"+ m_flipCount);
         m_flipCount=m_flipCount+1;
         if (m_flipCount==m_flipCountLimit){
           //make it twice as fast
@@ -275,7 +275,7 @@ hoodPos=shotParams.hoodPosition;
 
         m_flipCount=m_flipCount+1;
         
-        System.out.println("Flip Count:" + m_flipCount + " Hopper Pulls: "+ m_HopperPulls + " Speed:"+ m_flipSpeed);
+        //System.out.println("Flip Count:" + m_flipCount + " Hopper Pulls: "+ m_HopperPulls + " Speed:"+ m_flipSpeed);
    
         m_intake.inFold(m_flipSpeed);
         
@@ -286,7 +286,7 @@ hoodPos=shotParams.hoodPosition;
         }
         
         if(m_HopperPulls>kHopperPullLimit){
-          System.out.println("Stop Folding");
+          //System.out.println("Stop Folding");
           m_intake.stopFold();
           m_state=shooterStates.SHOOTMORE;
         }

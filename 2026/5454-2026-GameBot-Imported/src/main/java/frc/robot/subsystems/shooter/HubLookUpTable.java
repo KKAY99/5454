@@ -45,6 +45,26 @@ public class HubLookUpTable {
         addEntry(2.42,  53, 0.1, 1);  
         addEntry(2.63,  54.54, 0.1, 1);  
         addEntry(2.78,  54.54, 0.17, 0.9);  
+        addEntry(2.98,  54.54, 0.285, 0.85);  
+        addEntry(3.36,  54.54, 0.285, 0.85);  
+        addEntry(3.51,  56, 0.285, 0.85);  
+        addEntry(3.68,  56.5, 0.295, 0.85);  
+       
+       addEntry(3.68,  56.5, 0.295, 1.00);  
+       addEntry(3.91,  58, 0.295, 1.00);  
+       addEntry(3.97,  58, 0.295, 1.00);  
+       addEntry(4.19,  58.5, 0.31, 1.00);  
+       addEntry(4.49,  59.5, 0.31, 1.00);  
+       addEntry(4.78,  62, 0.35, 1.00);  
+       addEntry(5.61,  65, 0.36, 1.00);  
+       //GIVE IT ALL THE POWER
+       addEntry(9,  66, 0.36, 1.00);  
+       
+     /*       addEntry(2,  50, 0.0, 1); 
+        addEntry(2.3,  53, 0.0, 1);  
+        addEntry(2.42,  53, 0.1, 1);  
+        addEntry(2.63,  54.54, 0.1, 1);  
+        addEntry(2.78,  54.54, 0.17, 0.9);  
         addEntry(2.98,  54.54, 0.20, 0.85);  
         addEntry(3.36,  54.54, 0.30, 0.85);  
         addEntry(3.51,  56, 0.30, 0.85);  
@@ -58,9 +78,9 @@ public class HubLookUpTable {
        addEntry(5.61,  65, 0.36, 1.00);  
        //GIVE IT ALL THE POWER
        addEntry(9,  66, 0.36, 1.00);  
-       
-  
+  */
     }
+ 
     
     /** Add an entry to the lookup table */
     public void addEntry(double distance, double shooterSpeed, double hoodPosition, double timeOfFlight) {
@@ -103,7 +123,7 @@ public class HubLookUpTable {
         //Speed Multiplier
         double multiplier = SmartDashboard.getNumber("Speed Adjuster:",1);
         if(!(multiplier==1)){
-            System.out.println("Changing Speed due to Multiplier-" + multiplier);
+            //System.out.println("Changing Speed due to Multiplier-" + multiplier);
                 //increase by multiplier percent
                 interpolatedSpeed=interpolatedSpeed*(multiplier);
             

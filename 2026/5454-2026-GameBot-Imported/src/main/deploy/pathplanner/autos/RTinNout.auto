@@ -26,31 +26,6 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUpW8"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RTNZRT"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "expandIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shotLookUpW5"
           }
         },
@@ -61,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "RTNZBumpLineup"
+                  "pathName": "RTinNout2"
                 }
               },
               {

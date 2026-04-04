@@ -130,11 +130,11 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   }
   public void setPose(Pose2d pose){
       m_pose=pose;
-      System.out.println("Pose Set" + m_pose.getX());
+   //   //System.out.println("Pose Set" + m_pose.getX());
       
     }
     public Pose2d getRobotPose(){
-      System.out.println("Reuurning Pose : " + m_pose.getX()); 
+   //   //System.out.println("Reuurning Pose : " + m_pose.getX()); 
       return m_pose;
     }
   
@@ -164,7 +164,7 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   }
 
   public void primeMotors(double primeSpeed){
-    System.out.println("Shooter Priming:" + primeSpeed);
+    //System.out.println("Shooter Priming:" + primeSpeed);
     runShooterVelocity(primeSpeed);
   }
   public void hoodMoveToPosition(double hoodTarget, double hoodSpeed){
@@ -190,7 +190,7 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
-    System.out.println("Shooter Spin:" + speed);
+    //System.out.println("Shooter Spin:" + speed);
     runShooterVelocity(speed);
     m_kickerMotor.set(kickerSpeed);
   }
@@ -200,7 +200,7 @@ public void runKicker(double kickerSpeed){
 public boolean atTargetSpeed(double targetSpeed){
   double currentSpeed=m_1shooterMotor.getVelocity().getValueAsDouble();
   double speedDiff = Math.abs(currentSpeed-targetSpeed);
-  System.out.println("Compare Shooter Speed:" + currentSpeed + " - " + targetSpeed);
+  //System.out.println("Compare Shooter Speed:" + currentSpeed + " - " + targetSpeed);
   if(currentSpeed>targetSpeed){
     //allow greater deadband for going over shot
      return (speedDiff<Constants.ShooterConstants.shooterVelocityHighDeadband);
@@ -229,12 +229,9 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
   
 
   public void stopNewShooter(boolean idleMode){
-    System.out.println("stopping shooter");
+    //System.out.println("stopping shooter");
     if(idleMode){
-      //runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
-      //kill motors always to save power 
-      m_1shooterMotor.stopMotor();
-      m_2shooterMotor.stopMotor();
+      runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
     }else {
       m_1shooterMotor.stopMotor();
       m_2shooterMotor.stopMotor();

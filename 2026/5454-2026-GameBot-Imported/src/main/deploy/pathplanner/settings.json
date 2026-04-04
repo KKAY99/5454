@@ -30,5 +30,7 @@
   "brModuleY": -0.28,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Intake when out\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.4,\"y\":0.0},\"size\":{\"width\":0.5,\"length\":0.1},\"borderRadius\":0.025,\"strokeWidth\":0.02,\"filled\":false}}"
+  ]
 }

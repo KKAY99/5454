@@ -349,7 +349,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDeadband((TunerConstants.kMaxSpeed*0.1))
             .withRotationalDeadband((TunerConstants.kMaxAngularSpeed*0.1));
 
-        //System.out.println("VELOCITY X SPEED: "+(-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult);
+        ////System.out.println("VELOCITY X SPEED: "+(-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalMult);
             
         return this.applyRequest(() -> drive.withVelocityX((-driveController.getRawAxis(translationAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
             .withVelocityY((-driveController.getRawAxis(strafeAxis)*TunerConstants.kMaxSpeed)*m_gasPedalDriveMult)
@@ -358,7 +358,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void setGasPedalMult(double driveMult,double rotMult){
-       // System.out.println("GAS PEDAL MULT: "+m_gasPedalMult);
+       // //System.out.println("GAS PEDAL MULT: "+m_gasPedalMult);
         m_gasPedalDriveMult=driveMult;
         m_gasPedalRotMult=rotMult;
     }
