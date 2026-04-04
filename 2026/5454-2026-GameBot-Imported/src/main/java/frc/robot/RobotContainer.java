@@ -323,31 +323,25 @@ public class RobotContainer {
 
     m_xBoxDriver.leftTrigger().whileTrue(PopcornShotIt);
     
-    Command fixedshot = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance1);
-
+    Command fixedshot1 = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance1);
+    m_xBoxDriver.povLeft().whileTrue(fixedshot1);
+    Command fixedshot2 = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance2);
+    m_xBoxDriver.povUp().whileTrue(fixedshot2);
+    Command fixedshot3 = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake, m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit,true, ShooterConstants.fixedShotDistance3);
+    m_xBoxDriver.povRight().whileTrue(fixedshot3);
     /*Command shootKernelCommand = new ShootKernelCommand(m_newShooter,m_hopper,m_intake,Constants.ShooterConstants.kAgitateTimeLimit,true,m_TurretSubsystem,null);
     m_xBoxDriver.x().whileTrue(shootKernelCommand);*/
 
-    /*
-    Command passLeft = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
-    m_xBoxDriver.povLeft().whileTrue(passLeft);
-    
-    Command passRight = new PassCommand(m_newShooter, m_hopper, m_intake, m_TurretSubsystem, null, m_activeHubTime);
-    m_xBoxDriver.povRight().whileTrue(passRight);
-     */
-
-    //i have no idea what im doing here asher is supposed to have this done. i hope. - jackson 2026
-    
-    //Command pass = new PassCommand();
-    //m_xBoxDriver.rightTrigger().whileTrue(pass);
-
     Command intake = m_intake.intakeCommand();
+
+
 
     Command agitate = m_hopper.agitateCommand();
     m_xBoxOperator.rightBumper().whileTrue(agitate);
 
     Command outitate = m_hopper.inverseAgitateCommand();
     m_xBoxOperator.leftBumper().whileTrue(outitate);
+    m_xBoxDriver.povDown().whileTrue(outitate);
     
     Command intakeFoldIn = m_intake.foldCommand(0.8);
     m_xBoxOperator.povLeft().whileTrue(intakeFoldIn);
@@ -712,7 +706,7 @@ return pathfindingCommand;
   public void TeleopPeriodic(){
     AllPeriodic();
     TargetTracking(m_tracking);
-    updateLEDs();
+   // updateLEDs();
     } 
 
    private void swapTarget(){

@@ -49,7 +49,7 @@ public class ShotLookupCommand extends Command {
   private int m_flipCount=0;
   private int m_flipCountLimit=0;
   private final int kflipCountMax=6;//35;
-  private final int kHopperPullLimit=14;
+  private final int kHopperPullLimit=18;
   private CommandSwerveDrivetrain m_swerve;
   private final double khoodSpeed=Constants.HoodConstants.hoodSpeed;
 
@@ -153,7 +153,9 @@ ShootingParameters shotParams = m_HubLookUpTable.getParameters(distance);
 targetspeed=shotParams.shooterSpeed;
 hoodPos=shotParams.hoodPosition;
 
-  
+SmartDashboard.putNumber("Shot Distance ",distance);
+SmartDashboard.putNumber("Shot Speed",targetspeed);
+SmartDashboard.putNumber("Shot Hood",hoodPos);
   if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
     hoodPos=m_lastHoodPos;
   }else {
@@ -264,10 +266,10 @@ hoodPos=shotParams.hoodPosition;
           default:
            if (m_HopperPulls % 2 != 0) {  //EDIT if we change hopper pull limit
               m_flipSpeed=0.8; //Out speed which we should start with first in the default case since we end with an inward pull
-              m_flipCountLimit=4;
+              m_flipCountLimit=6;
             } else {
               m_flipSpeed=-0.8; // coming in speed
-              m_flipCountLimit=6; // We pull in further then we push out incase we had jamed and never pulled in enough to start
+              m_flipCountLimit=8; // We pull in further then we push out incase we had jamed and never pulled in enough to start
             }
           break;
         }

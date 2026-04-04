@@ -180,9 +180,9 @@ public final class Constants {
     public static final int kickerCANID=61;
     public static final int fuelSensorDIO=9;
     //fixed shots distances
-    public static final double fixedShotDistance1=73;
-    public static final double fixedShotDistance2=97;
-    public static final double fixedShotDistance3=133;
+    public static final double fixedShotDistance1=2;
+    public static final double fixedShotDistance2=2.98;
+    public static final double fixedShotDistance3=3.97;
     public static final double kDefaultShootingDistance=60;
     public static final double kDefaultPassDistance=200;
     //speeds
@@ -207,7 +207,7 @@ public final class Constants {
   }
   public static final class HoodConstants{
     public static final int hoodCoderCANID=51;
-    public static final double hoodOffset=-0.71484375;//-0.488037109375;
+    public static final double hoodOffset=-0.642089;  //71484375;//-0.488037109375;
     public static final double hoodSpeed=0.09;
     public static final double hoodUpSpeed=-0.09;
     public static final double hoodDownSpeed=0.09;

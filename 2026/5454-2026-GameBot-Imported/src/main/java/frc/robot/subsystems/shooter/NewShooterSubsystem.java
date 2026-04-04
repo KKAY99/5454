@@ -40,6 +40,7 @@ import edu.wpi.first.networktables.NetworkTableInstance.NetworkMode;
 import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class NewShooterSubsystem extends SubsystemBase {
@@ -175,11 +176,14 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   }
   
   public void hoodMoveToZero(){
+    double startTime=Timer.getFPGATimestamp();
+    double kTimeLimit =1;
     double hoodTarget=0;
     double hoodSpeed=Constants.HoodConstants.hoodSpeed;
     double deadband = Constants.HoodConstants.hoodDeadband;
-    while (!checkHoodPos(hoodTarget,hoodSpeed,deadband)){
-      poormanHoldHoodPos(hoodTarget,hoodSpeed,deadband);
+    while (!checkHoodPos(hoodTarget,hoodSpeed,deadband)
+      && Timer.getFPGATimestamp()<(startTime+kTimeLimit))
+        {      poormanHoldHoodPos(hoodTarget,hoodSpeed,deadband);
     }
     stopHood();
   }
