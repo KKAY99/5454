@@ -23,6 +23,7 @@ public final class Constants {
   public static final int k70Amp=70;
   public static final int k80Amp=80;
   public static final int pdhCAN=1;
+  public static final int CANdleID=14;
 
   public static final Matrix<N3, N1> kPoseEstimatorStandardDeviations = VecBuilder.fill(0.1, 0.1, 10);
   public static final Matrix<N3, N1> kVisionStandardDeviations = VecBuilder.fill(5, 5, 500);

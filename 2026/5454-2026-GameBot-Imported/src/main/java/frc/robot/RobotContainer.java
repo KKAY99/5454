@@ -1,5 +1,9 @@
 package frc.robot;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.LEDConfigs;
+import com.ctre.phoenix6.hardware.CANdle;
+import com.ctre.phoenix6.signals.StripTypeValue;
+import com.ctre.phoenix6.configs.LEDConfigs;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -12,6 +16,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -26,9 +31,11 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.shooter.FieldConstants;
 import frc.robot.subsystems.shooter.NewShooterSubsystem;
 // import frc.robot.subsystems.shooter.ShooterSubsystem; // unused
-import frc.robot.utilities.Leds;
 import frc.robot.utilities.Limelight;
 import frc.robot.utilities.LimelightHelpers;
+import frc.robot.utilities.CANdleLib.LEDColor;
+import frc.robot.utilities.CANdleLib.LEDStrip;
+import frc.robot.utilities.CANdleLib;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -97,6 +104,9 @@ public class RobotContainer {
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_backLimelight=new Limelight(Constants.LimeLightValues.backLimelightHeight,Constants.LimeLightValues.backLimelightAngle,
                                                 0,Constants.LimeLightValues.backLimelightName);
+  public final CANdleLib m_CANdleLib = new CANdleLib(Constants.CANdleID, 1, 40, 1);
+  public final CANdle m_CANdle = m_CANdleLib.createCANdle();
+  public final LEDStrip m_LEDStrip = m_CANdleLib.createLEDStrip(0, 40);
 
  
   private final SendableChooser<Command> m_autoChooser;
@@ -553,6 +563,7 @@ public class RobotContainer {
       m_hasResetGyro=true;
       m_swerve.getPigeon2().reset();
     }
+    m_CANdleLib.setStripColor(m_CANdle, m_LEDStrip, 200,200,200);
 
   }
 
