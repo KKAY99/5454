@@ -154,7 +154,7 @@ private static final Slot0Configs steerGains = new Slot0Configs()
     private static final int kFrontRightDriveMotorId = 33;
     private static final int kFrontRightSteerMotorId = 43;
     private static final int kFrontRightEncoderId = 53;
-    private static final Angle kFrontRightEncoderOffset = Rotations.of(0.375732421875);
+    private static final Angle kFrontRightEncoderOffset = Rotations.of(-0.12548828125);
     private static final boolean kFrontRightSteerMotorInverted = true;
     private static final boolean kFrontRightEncoderInverted = false;
 
@@ -165,7 +165,7 @@ private static final Slot0Configs steerGains = new Slot0Configs()
     private static final int kBackLeftDriveMotorId = 32;
     private static final int kBackLeftSteerMotorId = 42;
     private static final int kBackLeftEncoderId = 52;
-    private static final Angle kBackLeftEncoderOffset = Rotations.of(0.124267578125);
+    private static final Angle kBackLeftEncoderOffset = Rotations.of(0.11328125);
     private static final boolean kBackLeftSteerMotorInverted = true;
     private static final boolean kBackLeftEncoderInverted = false;
 
@@ -176,7 +176,7 @@ private static final Slot0Configs steerGains = new Slot0Configs()
     private static final int kBackRightDriveMotorId = 31;
     private static final int kBackRightSteerMotorId = 41;
     private static final int kBackRightEncoderId = 51;
-    private static final Angle kBackRightEncoderOffset = Rotations.of(-0.41845703125);
+    private static final Angle kBackRightEncoderOffset = Rotations.of(0.079345703125);
     private static final boolean kBackRightSteerMotorInverted = true;
     private static final boolean kBackRightEncoderInverted = false;
 
