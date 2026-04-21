@@ -1,6 +1,6 @@
 package frc.robot.commands;
 import javax.lang.model.util.ElementScanner14;
-
+import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -119,6 +119,8 @@ public class ShotLookupCommand extends Command {
   @Override
   public void end(boolean interrupted) {
   //System.out.println("Stopping Shooter");
+    Logger.recordOutput("Shooter/ShotLookupState",m_state.toString());
+ 
     m_shooter.hoodMoveToZero();
     m_intake.stopFold();
     m_intake.SetIntakeOutMode();
@@ -154,17 +156,20 @@ targetspeed=shotParams.shooterSpeed;
 hoodPos=shotParams.hoodPosition;
 
 SmartDashboard.putNumber("Shot Distance ",distance);
+Logger.recordOutput("Shooter/ShotDistance",distance);
 SmartDashboard.putNumber("Shot Speed",targetspeed);
+Logger.recordOutput("Shooter/ShotTargetSpeed",targetspeed);
 SmartDashboard.putNumber("Shot Hood",hoodPos);
-  if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
+if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
     hoodPos=m_lastHoodPos;
   }else {
     //update last position we moved to only if we are moving the hood Pos
     m_lastHoodPos=hoodPos;
   }
-  
-  //System.out.println("Shooting Lookup :" + distance + " Actual LL Dist:" + m_limelight.getDistanceInverted() + " Speed:" + targetspeed  + " - State:" + m_state +
-  // "Override Flag:" + overrideDistanceFlag);
+  Logger.recordOutput("Shooter/ShotLookupState",m_state.toString());
+  Logger.recordOutput("Shooter/ShotDistance",distance);
+  System.out.println("Shooting Lookup :" + distance + " Actual LL Dist:" + m_limelight.getDistanceInverted() + " Speed:" + targetspeed  + " - State:" + m_state +
+   "Override Flag:" + overrideDistanceFlag);
     switch(m_state){
     case SPINUP:
          m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 

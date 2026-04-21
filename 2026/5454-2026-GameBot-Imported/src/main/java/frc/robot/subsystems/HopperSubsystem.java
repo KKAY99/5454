@@ -1,5 +1,5 @@
 package frc.robot.subsystems;
-
+import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.hardware.CANcoder;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
@@ -65,6 +65,10 @@ public class HopperSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("Kicker Sensor", m_BREAK.get());
+    Logger.recordOutput("Hopper/KickerSensor",m_BREAK.get());
+    Logger.recordOutput("Hopper/HopperSpeed",m_hopperMotor.get());
+    Logger.recordOutput("Hopper/HopperCurrentOutput",m_hopperMotor.getOutputCurrent());
+ 
     // This method will be called once per scheduler run
   }
   

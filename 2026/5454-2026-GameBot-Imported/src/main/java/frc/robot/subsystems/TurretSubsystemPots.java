@@ -1,5 +1,5 @@
 package frc.robot.subsystems;
-
+import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
@@ -271,13 +271,16 @@ private double POTStoRotations(double POTSValue ){
 
   @Override
   public void periodic(){
+
     SmartDashboard.putNumber("Motor Rotations",m_turretMotor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("POTS",m_POTS.get());
     SmartDashboard.putNumber("POTS Angle",m_POTS.get()*3600/kGearReduction);
     SmartDashboard.putNumber("POTS Offset Angle",(m_POTS.get()*3600/kGearReduction)-225);
     SmartDashboard.putNumber("Motor Rotation Angle",getTurretAngleFromMotor());
-    
-
+    Logger.recordOutput("Turret/RotateSpeed", m_turretMotor.getVelocity().getValueAsDouble());
+    Logger.recordOutput("Turret/RotatePosition", m_turretMotor.getPosition().getValueAsDouble());
+    Logger.recordOutput("Turret/POTS Position", m_POTS.get());
+   
   /*   double angle=SmartDashboard.getNumber("Target Turret Angle",0);
  
    if(!(angle==0)){

@@ -26,6 +26,8 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import static edu.wpi.first.units.Units.Rotations;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -234,7 +236,11 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
 
   public void stopNewShooter(boolean idleMode){
     //System.out.println("stopping shooter");
+    //demo mode change 
+    idleMode=false;
+    
     if(idleMode){
+    
       runShooterVelocity(Constants.ShooterConstants.IdleSpeed);
     }else {
       m_1shooterMotor.stopMotor();
@@ -323,6 +329,12 @@ public Command shutdownCommand(){
     SmartDashboard.putNumber("Shooter Velocity", m_1shooterMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Hood CanCoder Value",m_hoodCoder.getAbsolutePosition().getValueAsDouble());  
     SmartDashboard.putNumber("Hood 'Pos'",getHoodPos());  
-  
+    Logger.recordOutput("Shooter/ShooterMotor1Velocity", m_1shooterMotor.getVelocity().getValueAsDouble());
+    Logger.recordOutput("Shooter/ShooterMotor2Velocity",  m_2shooterMotor.getVelocity().getValueAsDouble());
+    Logger.recordOutput("Shooter/ShooterMotor1Current", m_1shooterMotor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("Shooter/ShooterMotor2Current",  m_2shooterMotor.getSupplyCurrent().getValueAsDouble());
+    Logger.recordOutput("Shooter/Hood CanCoder Value", m_hoodCoder.getAbsolutePosition().getValueAsDouble());
+    Logger.recordOutput("Shooter/Hood 'Pos'",getHoodPos());
+   
   }
 }
