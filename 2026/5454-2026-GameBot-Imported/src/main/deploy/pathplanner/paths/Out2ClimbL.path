@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.476,
-        "y": 0.872
+        "x": 0.4,
+        "y": 0.838
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5616825527679129,
-        "y": 1.106858468340347
+        "x": 0.48568255276791295,
+        "y": 1.072858468340347
       },
       "isLocked": true,
       "linkedName": null
@@ -72,7 +72,14 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "climbAlignL",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 5.21208,
     "maxAcceleration": 2.25,

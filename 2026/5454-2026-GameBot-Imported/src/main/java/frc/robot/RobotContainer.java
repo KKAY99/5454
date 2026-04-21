@@ -223,7 +223,7 @@ public class RobotContainer {
     //NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
     //NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
     NamedCommands.registerCommand("expandIntake", Commands.sequence(new InstantCommand(m_intake::SetIntakeOutMode), new IntakeFoldCommand(m_intake))); //this should fix the intake not folding during autos
-    NamedCommands.registerCommand("shrinkIntake", new IntakeIntakeCommand(m_intake));
+    NamedCommands.registerCommand("shrinkIntake", Commands.sequence(new InstantCommand(m_intake::SetIntakeInMode), new IntakeFoldCommand(m_intake)));
     NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
     NamedCommands.registerCommand("agitateoff", m_hopper.agitateoffCommand());
     NamedCommands.registerCommand("intakeon", m_intake.intakeonCommand());
