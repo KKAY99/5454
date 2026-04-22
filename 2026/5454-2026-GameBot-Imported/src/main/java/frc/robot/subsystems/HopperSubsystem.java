@@ -35,6 +35,7 @@ public class HopperSubsystem extends SubsystemBase {
 
   public void stopAgitate(){
     m_hopperMotor.stopMotor();
+   //m_hopperMotor.set(Constants.HopperConstants.agitateLowSpeed);
   }
   public Command agitateCommand(){
     return Commands.startEnd(    ()->agitate(Constants.HopperConstants.agitateSpeed),

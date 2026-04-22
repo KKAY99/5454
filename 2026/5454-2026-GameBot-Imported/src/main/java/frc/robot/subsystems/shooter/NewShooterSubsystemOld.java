@@ -45,7 +45,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class NewShooterSubsystem extends SubsystemBase {
+public class NewShooterSubsystemOld extends SubsystemBase {
     private TalonFX m_1shooterMotor;
     private TalonFX m_2shooterMotor;
     private TalonFX m_hoodMotor;
@@ -56,7 +56,7 @@ public class NewShooterSubsystem extends SubsystemBase {
 
     //private TalonFX m_kickerMotor;
     private ObsidianCANSparkMax m_kickerMotor;
-  public NewShooterSubsystem(int shooter1CANID, int shooter2CANID, int kickerCANID,int hoodCANID) {
+  public NewShooterSubsystemOld(int shooter1CANID, int shooter2CANID, int kickerCANID,int hoodCANID) {
     m_hoodCoder = new CANcoder(Constants.HoodConstants.hoodCoderCANID);
     m_1shooterMotor = new TalonFX(shooter1CANID);
     configureShootermotor(m_1shooterMotor);
@@ -83,7 +83,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     m_hoodMotor.setNeutralMode(NeutralModeValue.Brake);
    
     configureMotionMagic(); //on Hood Motor //
-    configureHoodMotor();
+    //configureHoodMotor();
     
   }
 private void configureHoodMotor(){
@@ -96,6 +96,7 @@ private void configureHoodMotor(){
         config.Slot0.kV = 0.12;
         config.Slot0.kA = 0.0;
 
+        // 4. Set Neutral Mode (Brake is usually best for hoods)
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         m_hoodMotor.getConfigurator().apply(config);
@@ -120,7 +121,6 @@ motionMagicConfigs.MotionMagicJerk = 16; // Target jerk of 1600 rps/s/s (0.1 sec
 
 m_hoodMotor.getConfigurator().apply(talonFXConfigs);
 }
-
 
   public double getHoodPos(){
     double currentPos=m_hoodCoder.getAbsolutePosition().getValueAsDouble();
@@ -297,10 +297,8 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
   public void stopHood(){
     m_hoodMotor.stopMotor();
   }
-   public Command MMHood(double targetPos){
-    return Commands.runOnce(()->holdHoodPosMotionMagic(targetPos),this);
-   }
-   public Command HoodUp(){
+
+  public Command HoodUp(){
     return Commands.startEnd(    ()->moveHood(HoodConstants.hoodUpSpeed),
                                            ()->stopHood(),
                                            this);

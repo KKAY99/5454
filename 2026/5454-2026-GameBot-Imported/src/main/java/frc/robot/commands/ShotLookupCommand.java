@@ -119,8 +119,9 @@ public class ShotLookupCommand extends Command {
   @Override
   public void end(boolean interrupted) {
   //System.out.println("Stopping Shooter");
-    Logger.recordOutput("Shooter/ShotLookupState",m_state.toString());
- 
+    
+  Logger.recordOutput("Shooter/ShotLookupState",m_state.toString());
+    m_state=shooterStates.SPINUP;  
     m_shooter.hoodMoveToZero();
     m_intake.stopFold();
     m_intake.SetIntakeOutMode();
