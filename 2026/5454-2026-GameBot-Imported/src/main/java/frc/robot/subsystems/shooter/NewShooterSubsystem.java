@@ -50,9 +50,10 @@ public class NewShooterSubsystem extends SubsystemBase {
     private TalonFX m_2shooterMotor;
     private TalonFX m_hoodMotor;
     private CANcoder m_hoodCoder;
+    private double testLastHood=0;
     private Pose2d m_pose;
-//    private PositionVoltage m_request= new PositionVoltage(0).withSlot(0);
-   private MotionMagicDutyCycle mmRequest = new MotionMagicDutyCycle(0);
+   private PositionVoltage m_request= new PositionVoltage(0).withSlot(0);
+ //  private MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
 
     //private TalonFX m_kickerMotor;
     private ObsidianCANSparkMax m_kickerMotor;
@@ -75,48 +76,28 @@ public class NewShooterSubsystem extends SubsystemBase {
     hoodCoder_cfg.MagnetSensor.withMagnetOffset(Rotations.of(Constants.HoodConstants.hoodOffset));
     m_hoodCoder.getConfigurator().apply(hoodCoder_cfg);
     
-    TalonFXConfiguration hoodMotor_cfg = new TalonFXConfiguration();
-    hoodMotor_cfg.Feedback.FeedbackRemoteSensorID = m_hoodCoder.getDeviceID();
-    hoodMotor_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder; // Set the feedback source to the CANcoder
-    m_hoodMotor.getConfigurator().apply(hoodMotor_cfg); // Apply the configuration to the hood motor
-    
+  
+ 
+   configureMotionMagicHood(); //on Hood Motor //
+   
     m_hoodMotor.setNeutralMode(NeutralModeValue.Brake);
    
-    configureMotionMagic(); //on Hood Motor //
-    configureHoodMotor();
-    
-  }
-private void configureHoodMotor(){
-     TalonFXConfiguration config = new TalonFXConfiguration();
+    SmartDashboard.putNumber("HoodMM",0);
+  
 
-        config.Slot0.kP = 0.1;
-        config.Slot0.kI = 0.0;
-        config.Slot0.kD = 1;
-        config.Slot0.kS = 0.25; // Friction feedforward
-        config.Slot0.kV = 0.12;
-        config.Slot0.kA = 0.0;
-
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-        m_hoodMotor.getConfigurator().apply(config);
 }
-private void configureMotionMagic(){
+private void configureMotionMagicHood(){
   // in init function
 TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
+talonFXConfigs.Feedback.FeedbackRemoteSensorID = Constants.HoodConstants.hoodCoderCANID;
+talonFXConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder; // Set the feedback source to the CANcoder
+System.out.println("Feedback config setting "+ talonFXConfigs.Feedback.FeedbackRemoteSensorID);  
+
 // set slot 0 gains
 Slot0Configs slot0Configs = talonFXConfigs.Slot0;
-slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
-slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
-slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-slot0Configs.kP = 1.0;//4.8; 
-slot0Configs.kI = 0; // no output for integrated error
-slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
-
-// set Motion Magic settings
-MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
-motionMagicConfigs.MotionMagicCruiseVelocity = 4;//80; // Target cruise velocity of 80 rps
-motionMagicConfigs.MotionMagicAcceleration = 8;////160; // Target acceleration of 160 rps/s (0.5 seconds)
-motionMagicConfigs.MotionMagicJerk = 16; // Target jerk of 1600 rps/s/s (0.1 seconds)
+slot0Configs.kP = 35; // An error of 1 rps results in 0.11 V output
+slot0Configs.kI = 0.0; // An error of 1 rps increases output by 0.5 V each second
+slot0Configs.kD = 0.05; // An acceleration of 1 rps/s results in 0.01 V output
 
 m_hoodMotor.getConfigurator().apply(talonFXConfigs);
 }
@@ -147,56 +128,30 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
     return (hoodDiff<=deadband);
   }
 
+  
 
-  public void poormanHoldHoodPos(double hoodTarget, double hoodSpeed,double deadband){
-    double currentPos = getHoodPos();
-    double hoodDiff=Math.abs(currentPos-hoodTarget);    
-        if(hoodDiff>deadband){
-            if(currentPos>hoodTarget){
-                m_hoodMotor.set(-hoodSpeed);
-            }else {
-                m_hoodMotor.set(hoodSpeed);
-            }            
-          }else{
-            m_hoodMotor.stopMotor();
-          }
-  }
-
-  public void holdHoodPosMotionMagic(double hoodTarget) {
-    m_hoodMotor.setControl(mmRequest.withPosition(hoodTarget));
+  public void HoodSetPos(double hoodTarget) {
+    m_hoodMotor.setControl(m_request.withPosition(hoodTarget));
   }
 
   public void primeMotors(double primeSpeed){
     //System.out.println("Shooter Priming:" + primeSpeed);
     runShooterVelocity(primeSpeed);
   }
-  public void hoodMoveToPosition(double hoodTarget, double hoodSpeed){
-    double startTime=Timer.getFPGATimestamp();
-    double kTimeLimit =1;
-    
-    double deadband = Constants.HoodConstants.hoodDeadband;
-    while (!checkHoodPos(hoodTarget,hoodSpeed,deadband)  && 
-    Timer.getFPGATimestamp()<(startTime+kTimeLimit)){
-      poormanHoldHoodPos(hoodTarget,hoodSpeed,deadband);
-    }
+  public void hoodMoveToPosition(double hoodTarget){
+     HoodSetPos(hoodTarget);
   }
   
   public void hoodMoveToZero(){
     double startTime=Timer.getFPGATimestamp();
     double kTimeLimit =1;
     double hoodTarget=0;
-    double hoodSpeed=Constants.HoodConstants.hoodSpeed;
-    double deadband = Constants.HoodConstants.hoodDeadband;
-    while (!checkHoodPos(hoodTarget,hoodSpeed,deadband)
-      && Timer.getFPGATimestamp()<(startTime+kTimeLimit))
-        {      poormanHoldHoodPos(hoodTarget,hoodSpeed,deadband);
-    }
-    stopHood();
+    hoodMove(hoodTarget);
   }
  
 
   public void hoodMove(double hoodSpeed){
-    m_hoodMotor.set(hoodSpeed);
+   // m_hoodMotor.set(hoodSpeed);
   }
 
   public void runNewShooter(double speed,double kickerSpeed) {
@@ -297,9 +252,7 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
   public void stopHood(){
     m_hoodMotor.stopMotor();
   }
-   public Command MMHood(double targetPos){
-    return Commands.runOnce(()->holdHoodPosMotionMagic(targetPos),this);
-   }
+  
    public Command HoodUp(){
     return Commands.startEnd(    ()->moveHood(HoodConstants.hoodUpSpeed),
                                            ()->stopHood(),
@@ -332,6 +285,7 @@ public Command shutdownCommand(){
   }
     @Override
   public void periodic(){
+
     SmartDashboard.putNumber("Shooter Velocity", m_1shooterMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Hood CanCoder Value",m_hoodCoder.getAbsolutePosition().getValueAsDouble());  
     SmartDashboard.putNumber("Hood 'Pos'",getHoodPos());  

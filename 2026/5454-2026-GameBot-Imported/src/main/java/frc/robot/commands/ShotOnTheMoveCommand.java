@@ -154,19 +154,17 @@ double turretSourceAngle=targetShot.turretAngleDegrees;
   
 switch(m_state){
     case SPINUP:
-         m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
-         //m_shooter.holdHoodPosMotionMagic(hoodPos);
-        if(m_shooter.checkHoodPos(hoodPos, khoodSpeed,khoodDeadband)){
-         stateStartTime=Timer.getFPGATimestamp();
+         m_shooter.HoodSetPos(hoodPos);
           
          m_shooter.runNewShooter(targetspeed,
                             0);
           m_state=shooterStates.WAIT;
-        }
+   
     break;
     case WAIT:
-       m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
-       //m_shooter.holdHoodPosMotionMagic(hoodPos);
+              m_shooter.HoodSetPos(hoodPos);
+   
+   
         if(m_shooter.atTargetSpeed(targetspeed) && checkTurretPos(targetPos)){
             m_state=shooterStates.SHOOT;
         } 
@@ -182,9 +180,8 @@ switch(m_state){
 
           m_shooter.runNewShooter(targetspeed,
                             Constants.ShooterConstants.KickerSpeed);
+         m_shooter.HoodSetPos(hoodPos);
        
-          m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
-          //m_shooter.holdHoodPosMotionMagic(hoodPos);
         
           m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
          m_intake.runIntake(Constants.IntakeConstants.highSpeed);
@@ -206,8 +203,7 @@ switch(m_state){
          }
       break; 
     case EMPTYHOPPER:
-        m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
-        //m_shooter.holdHoodPosMotionMagic(hoodPos);
+         m_shooter.HoodSetPos(hoodPos);
     
     /*  //System.out.println("Flip Count"+ m_flipCount);
         m_flipCount=m_flipCount+1;
@@ -282,8 +278,8 @@ switch(m_state){
         }
       break;
     case SHOOTMORE:
-            m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
-            //m_shooter.holdHoodPosMotionMagic(hoodPos);
+                  m_shooter.HoodSetPos(hoodPos);
+   
         //STAY IN THE LOOP FOREVER UNTIL USER STOPS
      break;
     case NOFUEL2NDCHECK:

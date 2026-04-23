@@ -65,6 +65,7 @@ public class HopperSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
+   
     SmartDashboard.putBoolean("Kicker Sensor", m_BREAK.get());
     Logger.recordOutput("Hopper/KickerSensor",m_BREAK.get());
     Logger.recordOutput("Hopper/HopperSpeed",m_hopperMotor.get());

@@ -330,6 +330,7 @@ public Command shutdownCommand(){
   }
     @Override
   public void periodic(){
+
     SmartDashboard.putNumber("Shooter Velocity", m_1shooterMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Hood CanCoder Value",m_hoodCoder.getAbsolutePosition().getValueAsDouble());  
     SmartDashboard.putNumber("Hood 'Pos'",getHoodPos());  

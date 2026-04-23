@@ -98,24 +98,21 @@ public class ShootMappingCommand extends Command {
   //System.out.println("Shot Mapping - State:" + m_state  + " " + Timer.getFPGATimestamp());
     switch(m_state){
     case SPINUP:
-        m_shooter.poormanHoldHoodPos(m_hoodPos, .06, 0.04); 
-        if(m_shooter.checkHoodPos(m_hoodPos, .06, 0.04)){
-         stateStartTime=Timer.getFPGATimestamp();
-          m_shooter.runNewShooter(m_speed,
-                            Constants.ShooterConstants.KickerSpeed);
-          m_state=shooterStates.WAIT;
-        }
-        
+        m_shooter.HoodSetPos(m_hoodPos);   
+        m_shooter.runNewShooter(m_speed,
+                          Constants.ShooterConstants.KickerSpeed);
+        m_state=shooterStates.WAIT;
+      
         
     break;
     case WAIT:
-        m_shooter.poormanHoldHoodPos(m_hoodPos, .06, 0.04); 
+        m_shooter.HoodSetPos(m_hoodPos);   
         if(m_shooter.atTargetSpeed(m_speed)){
             m_state=shooterStates.SHOOT;
         }
       break;
     case SHOOT:
-        m_shooter.poormanHoldHoodPos(m_hoodPos, .06, 0.04); 
+        m_shooter.HoodSetPos(m_hoodPos);   
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
         m_intake.runIntake(Constants.IntakeConstants.highSpeed);
         break;

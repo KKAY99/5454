@@ -1,4 +1,6 @@
 package frc.robot.commands;
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -123,23 +125,24 @@ SmartDashboard.putNumber("Shot Hood",hoodPos);
     m_lastHoodPos=hoodPos;
   }
 
+  Logger.recordOutput("Shooter/ShotLookupState",m_state.toString());
+  Logger.recordOutput("Shooter/ShotDistance",distance);
+  System.out.println("Shooting Lookup :" + distance + " Actual LL Dist:" + m_limelight.getDistanceInverted() + " Speed:" + targetspeed  + " - State:" + m_state);
   
     switch(m_state){
     case SPINUP:
         //start intake
         m_intake.runIntake(Constants.IntakeConstants.highSpeed); 
-        m_shooter.poormanHoldHoodPos(hoodPos, khoodSpeed,khoodDeadband); 
-        if(m_shooter.checkHoodPos(hoodPos, khoodSpeed,khoodDeadband)){
-         stateStartTime=Timer.getFPGATimestamp();
+        m_shooter.HoodSetPos(hoodPos);
           
          m_shooter.runNewShooter(targetspeed,
                             0);
           m_state=shooterStates.WAIT;
-        }
+       
     break;
     case WAIT:
-       m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04); 
-        if(m_shooter.atTargetSpeed(targetspeed)){
+        m_shooter.HoodSetPos(hoodPos);   
+       if(m_shooter.atTargetSpeed(targetspeed)){
             m_state=shooterStates.SHOOT;
         } 
         break;
@@ -157,14 +160,14 @@ SmartDashboard.putNumber("Shot Hood",hoodPos);
 
           m_shooter.runNewShooter(targetspeed,
                               Constants.ShooterConstants.KickerSpeed);
-        
-          m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+          m_shooter.HoodSetPos(hoodPos);     
           m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
           m_intake.runIntake(Constants.IntakeConstants.highSpeed);
         //}
        break;
     case PASSING:
-            m_shooter.poormanHoldHoodPos(hoodPos, .06, 0.04);
+          m_shooter.HoodSetPos(hoodPos);     
+      
         //STAY IN THE LOOP FOREVER UNTIL USER STOPS
      break;
     case END:
