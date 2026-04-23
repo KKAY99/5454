@@ -1,5 +1,11 @@
 package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
+
+
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
@@ -16,15 +22,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.ObsidianCANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXSConfigurator;
 
 public class HopperSubsystem extends SubsystemBase {
-  private ObsidianCANSparkMax m_hopperMotor;
+  private TalonFX m_hopperMotor;
   private DigitalInput m_BREAK;
  
   //private SparkAbsoluteEncoder m_encoder;
 
   public HopperSubsystem(int CanId1, int fuelSensorDIO) {
-    m_hopperMotor = new ObsidianCANSparkMax(CanId1, MotorType.kBrushless, true, Constants.k80Amp);
+    m_hopperMotor = new TalonFX(CanId1);
+
+    TalonFXConfigurator configurator = m_hopperMotor.getConfigurator();
+    m_hopperMotor.setNeutralMode(NeutralModeValue.Brake);
+    CurrentLimitsConfigs currentLimits =  new CurrentLimitsConfigs();
+    currentLimits.StatorCurrentLimit=80;
+    currentLimits.SupplyCurrentLimit=60;
+    configurator.apply(currentLimits);
+
     m_BREAK = new DigitalInput(fuelSensorDIO);
    }
 
@@ -69,7 +87,7 @@ public class HopperSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Kicker Sensor", m_BREAK.get());
     Logger.recordOutput("Hopper/KickerSensor",m_BREAK.get());
     Logger.recordOutput("Hopper/HopperSpeed",m_hopperMotor.get());
-    Logger.recordOutput("Hopper/HopperCurrentOutput",m_hopperMotor.getOutputCurrent());
+    Logger.recordOutput("Hopper/HopperCurrentOutput",m_hopperMotor.getTorqueCurrent().getValue());
  
     // This method will be called once per scheduler run
   }

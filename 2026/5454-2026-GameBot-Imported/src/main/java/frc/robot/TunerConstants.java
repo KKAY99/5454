@@ -154,7 +154,7 @@ private static final Slot0Configs steerGains = new Slot0Configs()
     private static final int kFrontRightDriveMotorId = 33;
     private static final int kFrontRightSteerMotorId = 43;
     private static final int kFrontRightEncoderId = 53;
-    private static final Angle kFrontRightEncoderOffset = Rotations.of(-0.12548828125);
+    private static final Angle kFrontRightEncoderOffset = Rotations.of(-0.120361328125);
     private static final boolean kFrontRightSteerMotorInverted = true;
     private static final boolean kFrontRightEncoderInverted = false;
 

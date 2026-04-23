@@ -21,6 +21,7 @@ import frc.robot.subsystems.shooter.NewShooterSubsystem;
 import frc.robot.subsystems.shooter.PassLookUpTable;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.shooter.TurretUtil;
+import frc.robot.utilities.Limelight;
 
 /*I want this to:
   2. aim at that target ; be spinning up
@@ -37,6 +38,7 @@ public class ShootPopcornCommand extends Command {
   private NewShooterSubsystem m_shooter;
   private HopperSubsystem m_hopper;
   private IntakeSubsystem m_intake;
+  private Limelight m_limelight;
   private boolean m_isPass;
   
   private double m_lastDistance; // default distance
