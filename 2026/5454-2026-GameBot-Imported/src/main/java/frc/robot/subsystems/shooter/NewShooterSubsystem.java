@@ -143,16 +143,10 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   }
   
   public void hoodMoveToZero(){
-    double startTime=Timer.getFPGATimestamp();
-    double kTimeLimit =1;
     double hoodTarget=0;
-    hoodMove(hoodTarget);
+    hoodMoveToPosition(hoodTarget);
   }
  
-
-  public void hoodMove(double hoodSpeed){
-   // m_hoodMotor.set(hoodSpeed);
-  }
 
   public void runNewShooter(double speed,double kickerSpeed) {
     //System.out.println("Shooter Spin:" + speed);
@@ -211,32 +205,18 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
   }
 
   
-  private void PIDconfigureShootermotor(TalonFX motor){
-    TalonFXConfigurator configurator = motor.getConfigurator();
-    TalonFXConfiguration config = new TalonFXConfiguration();
-    //apply bang Bang Controller
-      config.Slot0.kP = 0.1;
-      config.Slot0.kV = 0.1;//0.12; // Velocity feedforward
-  
-      
-    configurator.apply(config);
-    //Apply current limits
-    CurrentLimitsConfigs currentLimits =  new CurrentLimitsConfigs();
-    currentLimits.StatorCurrentLimit=80;
-    currentLimits.SupplyCurrentLimit=60;
-    configurator.apply(currentLimits);
-    
-  }
   private void configureShootermotor(TalonFX motor){
     TalonFXConfigurator configurator = motor.getConfigurator();
     TalonFXConfiguration config = new TalonFXConfiguration();
     //apply bang Bang Controller
-      config.Slot0.kP = 999999.0;
-      config.TorqueCurrent.PeakForwardTorqueCurrent = 800.0;
-      config.TorqueCurrent.PeakReverseTorqueCurrent = -800.0;
+      //config.Slot0.kP = 999999.0;
+      //config.TorqueCurrent.PeakForwardTorqueCurrent = 800.0;
+      //config.TorqueCurrent.PeakReverseTorqueCurrent = -800.0;
       config.MotorOutput.PeakForwardDutyCycle = 1.0;
       config.MotorOutput.PeakReverseDutyCycle = -1.0;
-      
+    config.Slot0.kP=50;  
+    config.Slot0.kI=0;
+    config.Slot0.kD=0;
     configurator.apply(config);
     //Apply current limits
     CurrentLimitsConfigs currentLimits =  new CurrentLimitsConfigs();
@@ -245,24 +225,11 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
     configurator.apply(currentLimits);
   }
   
-  public void moveHood(double speed){
-   // m_hoodMotor.set(speed);
-  }
-
+  
   public void stopHood(){
     m_hoodMotor.stopMotor();
   }
   
-   public Command HoodUp(){
-    return Commands.startEnd(    ()->moveHood(HoodConstants.hoodUpSpeed),
-                                           ()->stopHood(),
-                                           this);
-  }
-  public Command HoodDown(){
-    return Commands.startEnd(    ()->moveHood(HoodConstants.hoodDownSpeed),
-                                           ()->stopHood(),
-                                           this);
-  }
   public Command hoodHome(){
     return Commands.runOnce(    ()->hoodMoveToZero(),
                                            this);

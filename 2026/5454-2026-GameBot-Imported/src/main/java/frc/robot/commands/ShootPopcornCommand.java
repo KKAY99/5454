@@ -127,7 +127,7 @@ SmartDashboard.putNumber("Shot Hood",hoodPos);
 
   Logger.recordOutput("Shooter/ShotLookupState",m_state.toString());
   Logger.recordOutput("Shooter/ShotDistance",distance);
-  System.out.println("Shooting Lookup :" + distance + " Actual LL Dist:" + m_limelight.getDistanceInverted() + " Speed:" + targetspeed  + " - State:" + m_state);
+  System.out.println("Shooting Lookup :" + distance + " Speed:" + targetspeed  + " - State:" + m_state);
   
     switch(m_state){
     case SPINUP:
