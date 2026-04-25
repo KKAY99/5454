@@ -41,11 +41,11 @@ public class PassLookUpTable {
          addEntry(2.669,55,0.6,0);  
          addEntry(4.324,57,0.6,0);  
          addEntry(6.4,60,0.6,0);  
-         addEntry(9.05,88,0.6,0);  
-         addEntry(11.05,88,0.6,0);  
-         addEntry(12,88,.30,0);  
-         addEntry(20,88,0.30,0);  
-        addEntry(40,88,0.30,0);  
+         addEntry(9.05,95,0.6,0);  
+         addEntry(11.05,95,0.6,0);  
+         addEntry(12,96,.60,0);  
+         addEntry(20,96,0.60,0);  
+        addEntry(40,96,0.60,0);  
     
     }
     

@@ -15,9 +15,11 @@ import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -65,6 +67,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     m_2shooterMotor = new TalonFX(shooter2CANID);
     configureShootermotor(m_2shooterMotor);
     m_2shooterMotor.setNeutralMode(NeutralModeValue.Coast);
+    //m_2shooterMotor.setControl(new Follower(m_1shooterMotor.getDeviceID(), MotorAlignmentValue.Opposed));
     m_hoodMotor = new TalonFX(hoodCANID);
     
     m_kickerMotor = new ObsidianCANSparkMax(kickerCANID, MotorType.kBrushless,false,Constants.k70Amp);
@@ -143,7 +146,7 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   }
   
   public void hoodMoveToZero(){
-    double hoodTarget=0;
+    double hoodTarget=0.03;  // go close to zero
     hoodMoveToPosition(hoodTarget);
   }
  
@@ -186,6 +189,11 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
    */
   }
   
+  public boolean isShooterAtIdle(){
+    //if shoter is below idle threshold, we can consider it at idle, which means it's not spinning enough to shoot, and we can stop it without worrying about cutting power to a spinning flywheel
+    double currentSpeed=m_1shooterMotor.getVelocity().getValueAsDouble();
+    return (currentSpeed<Constants.ShooterConstants.IdleSpeedThreshold);
+  }
 
   public void stopNewShooter(boolean idleMode){
     //System.out.println("stopping shooter");
@@ -209,14 +217,14 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
     TalonFXConfigurator configurator = motor.getConfigurator();
     TalonFXConfiguration config = new TalonFXConfiguration();
     //apply bang Bang Controller
-      //config.Slot0.kP = 999999.0;
-      //config.TorqueCurrent.PeakForwardTorqueCurrent = 800.0;
-      //config.TorqueCurrent.PeakReverseTorqueCurrent = -800.0;
+      config.Slot0.kP = 999999.0;
+      config.TorqueCurrent.PeakForwardTorqueCurrent = 800.0;
+      config.TorqueCurrent.PeakReverseTorqueCurrent = -800.0;
       config.MotorOutput.PeakForwardDutyCycle = 1.0;
       config.MotorOutput.PeakReverseDutyCycle = -1.0;
-    config.Slot0.kP=50;  
-    config.Slot0.kI=0;
-    config.Slot0.kD=0;
+    //config.Slot0.kP=50;  
+    //config.Slot0.kI=0;
+    //config.Slot0.kD=0;
     configurator.apply(config);
     //Apply current limits
     CurrentLimitsConfigs currentLimits =  new CurrentLimitsConfigs();

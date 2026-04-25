@@ -34,7 +34,7 @@ public class HopperSubsystem extends SubsystemBase {
   //private SparkAbsoluteEncoder m_encoder;
 
   public HopperSubsystem(int CanId1, int fuelSensorDIO) {
-    m_hopperMotor = new TalonFX(CanId1);
+    m_hopperMotor = new TalonFX(CanId1,"rio");
 
     TalonFXConfigurator configurator = m_hopperMotor.getConfigurator();
     m_hopperMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -53,7 +53,6 @@ public class HopperSubsystem extends SubsystemBase {
 
   public void stopAgitate(){
     m_hopperMotor.stopMotor();
-   //m_hopperMotor.set(Constants.HopperConstants.agitateLowSpeed);
   }
   public Command agitateCommand(){
     return Commands.startEnd(    ()->agitate(Constants.HopperConstants.agitateSpeed),

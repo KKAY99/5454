@@ -84,7 +84,9 @@ public class ShootPopcornCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  //System.out.println("Stopping Shooter");
+  Logger.recordOutput("Shooter/ShotLookupState",m_state.toString());
+  
+    //System.out.println("Stopping Shooter");
     m_shooter.hoodMoveToZero();
     m_intake.stopFold();
     m_intake.SetIntakeOutMode();
@@ -108,13 +110,16 @@ public class ShootPopcornCommand extends Command {
       passParams = m_PassLookUpTable.getParameters(distance);
       targetspeed=passParams.shooterSpeed;
       hoodPos=passParams.hoodAngle;
-
+      Logger.recordOutput("Shooter/PopcornMode","Pass");
+  
   } else { 
     HubLookUpTable.ShootingParameters shotParams;
     distance=TurretUtil.getDistance(m_shooter.getRobotPose(),TurretUtil.TargetType.HUB);
     shotParams=m_HubLookupTable.getParameters(distance);
     targetspeed=shotParams.shooterSpeed;
     hoodPos=shotParams.hoodPosition;
+    Logger.recordOutput("Shooter/PopcornMode","Shoot");
+ 
   }
     
   SmartDashboard.putNumber("Shot Distance ",distance);
@@ -126,7 +131,8 @@ SmartDashboard.putNumber("Shot Hood",hoodPos);
     //update last position we moved to only if we are moving the hood Pos
     m_lastHoodPos=hoodPos;
   }
-
+  
+  Logger.recordOutput("Shooter/ShotLookupState",m_state.toString()); 
   Logger.recordOutput("Shooter/ShotLookupState",m_state.toString());
   Logger.recordOutput("Shooter/ShotDistance",distance);
   System.out.println("Shooting Lookup :" + distance + " Speed:" + targetspeed  + " - State:" + m_state);

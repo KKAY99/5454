@@ -304,13 +304,13 @@ public class RobotContainer {
 
     Command shootMapping = new ShootMappingCommand(m_swerve,m_newShooter,m_hopper,m_intake,
                                 m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    //m_xBoxOperator.start().whileTrue(shootMapping);
+    m_xBoxOperator.start().whileTrue(shootMapping);
 
     Command ShotOntheMove = new ShotOnTheMoveCommand(m_TurretSubsystem,m_swerve, m_newShooter, m_hopper, m_intake, ShooterConstants.kAgitateTimeLimit);
     Command Notarget = Commands.runOnce(()->setTracking(TurretTrackingMethod.NOTARGET));
     Command ReturnHub=Commands.runOnce(()->setTracking(TurretTrackingMethod.HUB));
     SequentialCommandGroup ShotMove=new SequentialCommandGroup(Notarget,ShotOntheMove,ReturnHub);
-    m_xBoxOperator.start().whileTrue(ShotMove);
+    //m_xBoxOperator.start().whileTrue(ShotMove);
 
     Command shootLookup = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,
                                 m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true);
@@ -586,6 +586,12 @@ public class RobotContainer {
   {
     doRejectUpdate = true;
   }
+  //reject default position of (0,0) as this is default pose returned in error
+  //conditions per Limelight documentation in April 2026
+  if(mt2.pose.getX()==0 && mt2.pose.getY()==0)
+  {
+    doRejectUpdate = true;
+  }
   if(!doRejectUpdate)
     {
       m_swerve.setVisionMeasurementStdDevs(VecBuilder.fill(0.1,0.1,9999999));
@@ -717,6 +723,10 @@ return pathfindingCommand;
   public void TeleopPeriodic(){
     AllPeriodic();
     TargetTracking(m_tracking);
+//    if (m_newShooter.getCurrentCommand() == null) {
+      //Shooter is not being used so move hood back to zero
+ //     m_newShooter.hoodMoveToZero();
+ //   }
    // updateLEDs();
     } 
 
@@ -779,6 +789,7 @@ return pathfindingCommand;
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime()); //elastic
     SmartDashboard.putNumber("Voltage",RobotController.getBatteryVoltage()); //elastic
     refreshSmartDashboard();
+    
   }
 
   
