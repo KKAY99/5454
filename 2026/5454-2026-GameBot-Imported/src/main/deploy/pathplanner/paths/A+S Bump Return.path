@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.787125110913932,
+        "y": 3.0249866903283045
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.787125110913932,
+        "y": 3.0249866903283045
+      },
+      "isLocked": false,
+      "linkedName": "R Trench End Intake 1"
+    },
+    {
+      "anchor": {
+        "x": 5.606140195208518,
+        "y": 2.357009760425909
+      },
+      "prevControl": {
+        "x": 6.010863102088266,
+        "y": 2.357009760425909
+      },
+      "nextControl": {
+        "x": 5.321603438093967,
+        "y": 2.357009760425909
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.030807453416149,
+        "y": 2.357009760425909
+      },
+      "prevControl": {
+        "x": 3.0661627924754766,
+        "y": 2.6044971338412006
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "R Trench End Bump Return"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.33730158730158605,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -2.245742565895081
+  },
+  "reversed": false,
+  "folder": "Alex+Seth R Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 91.06091169026429
+  },
+  "useDefaultConstraints": true
+}

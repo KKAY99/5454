@@ -1,0 +1,95 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.407000887311446,
+        "y": 0.48184560780833974
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.274117125110914,
+        "y": 0.4577018633540365
+      },
+      "isLocked": false,
+      "linkedName": "Trench Start"
+    },
+    {
+      "anchor": {
+        "x": 6.563842058562556,
+        "y": 0.7957142857142845
+      },
+      "prevControl": {
+        "x": 5.879769299023957,
+        "y": 0.6508518189884639
+      },
+      "nextControl": {
+        "x": 8.281837545794417,
+        "y": 1.1595250947751488
+      },
+      "isLocked": false,
+      "linkedName": "Trench Start Deploy Intake"
+    },
+    {
+      "anchor": {
+        "x": 7.972227151730259,
+        "y": 0.7957142857142845
+      },
+      "prevControl": {
+        "x": 7.970420293577662,
+        "y": 0.545720815272322
+      },
+      "nextControl": {
+        "x": 7.975444440240164,
+        "y": 1.24085222797511
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.787125110913932,
+        "y": 3.0249866903283045
+      },
+      "prevControl": {
+        "x": 7.898964262904182,
+        "y": 2.8013977727091577
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "R Trench End Intake 1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.3928571428571432,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 91.06091169026429
+  },
+  "reversed": false,
+  "folder": "Alex+Seth R Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 1.0050860052542672
+  },
+  "useDefaultConstraints": true
+}

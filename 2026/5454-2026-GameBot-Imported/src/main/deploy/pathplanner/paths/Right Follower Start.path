@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.537826086956521,
+        "y": 0.48184560780833974
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.851694764862466,
+        "y": 0.46574977817213736
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.407000887311446,
+        "y": 0.48184560780833974
+      },
+      "prevControl": {
+        "x": 4.109228039041703,
+        "y": 0.4657497781721373
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Trench Start"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 1.0050860052542672
+  },
+  "reversed": false,
+  "folder": "Alex+Seth R Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

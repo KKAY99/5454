@@ -1,0 +1,107 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.2119787045252877,
+        "y": 5.230115350488021
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.0027116237799454,
+        "y": 4.963176574977816
+      },
+      "isLocked": false,
+      "linkedName": "Depo Intake Extended"
+    },
+    {
+      "anchor": {
+        "x": 0.51,
+        "y": 4.731144631765749
+      },
+      "prevControl": {
+        "x": 0.7458966437009686,
+        "y": 4.50597056277846
+      },
+      "nextControl": {
+        "x": 0.3291611139641072,
+        "y": 4.903763568436374
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.6,
+        "y": 7.032848269742679
+      },
+      "prevControl": {
+        "x": 0.35832369303462197,
+        "y": 6.9688751296636084
+      },
+      "nextControl": {
+        "x": 0.8736291038154392,
+        "y": 7.1052795031055895
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.66,
+        "y": 6.863842058562556
+      },
+      "prevControl": {
+        "x": 1.6121210215552728,
+        "y": 7.131924194513121
+      },
+      "nextControl": {
+        "x": 2.161632653061224,
+        "y": 4.0551197870452524
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.65,
+        "y": 5.0
+      },
+      "prevControl": {
+        "x": 0.5054982198414947,
+        "y": 5.204007930068963
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.1,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 88.89829388479363
+  },
+  "reversed": false,
+  "folder": "Depo Run",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 140.4773687288289
+  },
+  "useDefaultConstraints": true
+}

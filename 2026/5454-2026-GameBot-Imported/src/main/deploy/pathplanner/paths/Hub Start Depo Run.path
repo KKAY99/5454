@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5700177462289258,
+        "y": 3.982688553682342
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.9172304570102674,
+        "y": 4.439775134440729
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.816,
+        "y": 4.812
+      },
+      "prevControl": {
+        "x": 2.270497812797723,
+        "y": 4.493757205379209
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Depot Intake Start"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 141.6358426323289
+  },
+  "reversed": false,
+  "folder": "Depo Run",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.45471886169311987
+  },
+  "useDefaultConstraints": true
+}

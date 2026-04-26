@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.787125110913932,
+        "y": 3.0249866903283045
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.787125110913932,
+        "y": 2.0249866903283045
+      },
+      "isLocked": false,
+      "linkedName": "R Trench End Intake 1"
+    },
+    {
+      "anchor": {
+        "x": 7.819316770186335,
+        "y": 1.4797870452528832
+      },
+      "prevControl": {
+        "x": 7.742566075205645,
+        "y": 1.7177141996930207
+      },
+      "nextControl": {
+        "x": 8.221712511091393,
+        "y": 0.23236024844720427
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.407000887311446,
+        "y": 0.48184560780833974
+      },
+      "prevControl": {
+        "x": 4.577986169531778,
+        "y": 0.664229908843361
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Trench Start"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9391534391534395,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.4338624338624286,
+      "rotationDegrees": 0.8754772691069472
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 1.0050860052542672
+  },
+  "reversed": false,
+  "folder": "Alex+Seth R Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 91.06091169026429
+  },
+  "useDefaultConstraints": true
+}

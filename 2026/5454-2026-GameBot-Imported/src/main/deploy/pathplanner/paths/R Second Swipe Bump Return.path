@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.585927240461402,
+        "y": 3.4837178349600704
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.748944099378882,
+        "y": 3.242280390417036
+      },
+      "isLocked": false,
+      "linkedName": "End R Second Swipe"
+    },
+    {
+      "anchor": {
+        "x": 5.598092280390417,
+        "y": 2.4052972493345157
+      },
+      "prevControl": {
+        "x": 6.459219165927241,
+        "y": 2.429440993788819
+      },
+      "nextControl": {
+        "x": 4.598485096240417,
+        "y": 2.377270879685451
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.9342324755989346,
+        "y": 2.5099201419698307
+      },
+      "prevControl": {
+        "x": 3.4342324755989346,
+        "y": 2.5099201419698307
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9047619047619072,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Alex+Seth R Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 91.24536426676815
+  },
+  "useDefaultConstraints": true
+}
