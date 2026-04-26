@@ -1,6 +1,7 @@
 package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.LEDConfigs;
+import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.StripTypeValue;
 import com.ctre.phoenix6.configs.LEDConfigs;
@@ -104,9 +105,9 @@ public class RobotContainer {
                                                 0,Constants.LimeLightValues.leftLimelightName);
   public final Limelight m_backLimelight=new Limelight(Constants.LimeLightValues.backLimelightHeight,Constants.LimeLightValues.backLimelightAngle,
                                                 0,Constants.LimeLightValues.backLimelightName);
-  public final CANdleLib m_CANdleLib = new CANdleLib(Constants.CANdleID, 1, 40, 1);
+  public final CANdleLib m_CANdleLib = new CANdleLib(Constants.CANdleID, 1, 200, 1);
   public final CANdle m_CANdle = m_CANdleLib.createCANdle();
-  public final LEDStrip m_LEDStrip = m_CANdleLib.createLEDStrip(0, 40);
+  public final LEDStrip m_LEDStrip = m_CANdleLib.createLEDStrip(0, 200);
 
  
   private final SendableChooser<Command> m_autoChooser;
@@ -563,6 +564,7 @@ public class RobotContainer {
       m_hasResetGyro=true;
       m_swerve.getPigeon2().reset();
     }
+    
     m_CANdleLib.setStripColor(m_CANdle, m_LEDStrip, 200,200,200);
 
   }

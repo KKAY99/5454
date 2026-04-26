@@ -3,57 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 4.0
+        "x": 4.407000887311446,
+        "y": 0.5945164152617566
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.125810817429092,
-        "y": 4.571170340562763
+        "x": 5.407000887311445,
+        "y": 0.5945164152617566
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 5.950891311233108
+        "x": 6.829423247559894,
+        "y": 0.5945164152617566
       },
       "prevControl": {
-        "x": 2.9248342787587007,
-        "y": 5.950019966438998
+        "x": 5.500907751958137,
+        "y": 0.5945164152617566
       },
       "nextControl": {
-        "x": -0.06325577952660044,
-        "y": 5.9528352348350975
+        "x": 8.157938743161644,
+        "y": 0.5945164152617566
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.7295777027027028,
-        "y": 5.950891311233108
+        "x": 7.843460514640638,
+        "y": 3.2261845607808333
       },
       "prevControl": {
-        "x": 0.9795621389270871,
-        "y": 5.953680871337636
-      },
-      "nextControl": {
-        "x": 0.0035666965793919037,
-        "y": 5.942789801520271
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.8516790276604729,
-        "y": 5.950891311233108
-      },
-      "prevControl": {
-        "x": 0.6017090830734879,
-        "y": 5.954767753310541
+        "x": 7.843460514640638,
+        "y": 2.5582076308784374
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,15 +46,15 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.3981085526315793,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 1,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "completeIntake",
+      "name": "",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
@@ -82,14 +66,14 @@
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 91.00508600525413
   },
   "reversed": false,
-  "folder": "No Velocity",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

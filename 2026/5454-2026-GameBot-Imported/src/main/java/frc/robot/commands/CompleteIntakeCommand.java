@@ -105,10 +105,10 @@ public class CompleteIntakeCommand extends Command {
             m_intake.inFold(0.2 * m_flipSpeed);
             m_PulseCount = 0;
             m_flipSpeed = m_flipSpeed * -1;
-        }
+        }*/
         if (m_intake.isinNoFlyZone()) {
             m_intake.stopIntake();
-        } */
+        } 
 
     break;
     case END:

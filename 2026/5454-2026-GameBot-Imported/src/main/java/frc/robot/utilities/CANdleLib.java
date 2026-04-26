@@ -73,11 +73,12 @@ public class CANdleLib{
      */
     public CANdle createCANdle() {
         CANdle candle;
-        candle = new CANdle(busId);
+        candle = new CANdle(busId,"5454Canivore");
         CANdleConfiguration config = new CANdleConfiguration();
         config.withLED(m_rgbOrder);
         config.withLED(globalBrightness);
         candle.getConfigurator().apply(config);
+        
         return candle;
     }
 

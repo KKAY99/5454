@@ -43,25 +43,28 @@ public class HubLookUpTable {
         addEntry(1.8,  45, 0.0, 1); 
         addEntry(1.91,  46, 0.0, 1); 
         addEntry(2.06,  47, 0.0, 1); 
-        addEntry(2.3,  53, 0.0, 1);  
-        addEntry(2.42,  53, 0.1, 1);  
-        addEntry(2.63,  54.54, 0.1, 1);  
-        addEntry(2.78,  54.54, 0.17, 0.9);  
-        addEntry(2.98,  54.54, 0.25, 0.85);  
-        addEntry(3.30,  54.54, 0.25, 0.85);  
-        addEntry(3.36,  54.54, 0.30, 0.85);  
-        addEntry(3.51,  56, 0.30, 0.85);  
-        addEntry(3.68,  56.5, 0.31, 0.85);  
+        addEntry(2.23,  48, 0.0, 1);  
+        addEntry(2.31,  50, 0.0, 1);  
+        addEntry(2.39,  51, 0.0, 1);  
+        addEntry(2.52,  51, 0.1, 0.9);  
+        addEntry(2.65,  52, 0.1, 0.85);  
+        addEntry(2.8,  53, 0.1, 0.85);  
+        addEntry(3.14,  53, 0.2, 0.85);  
+        addEntry(3.32,  53, 0.3, 0.85);  
+        addEntry(3.37,  53.2, 0.3, 0.85);  
+        addEntry(3.41,  53.8, 0.3, 0.85);  
+        addEntry(3.50,  54.54, 0.3, 0.85);  
+        addEntry(3.56,  56, 0.3, 0.85);  
+        addEntry(3.74   ,  56.3, 0.35, 0.85);  
+        addEntry(3.86   ,  57, 0.32, 0.85);  
        
-       addEntry(3.68,  56.5, 0.31, 1.00);  
-       addEntry(3.91,  58, 0.31, 1.00);  
-       addEntry(3.97,  58, 0.31, 1.00);  
-       addEntry(4.19,  58.5, 0.31, 1.00);  
-       addEntry(4.49,  59.5, 0.31, 1.00);  
-       addEntry(4.78,  62, 0.35, 1.00);  
-       addEntry(5.61,  65, 0.36, 1.00);  
+        addEntry(3.90   ,  57.5, 0.32, 0.85);  
+        addEntry(4.2   ,  57.5, 0.35, 0.85);  
+        addEntry(4.77   ,  60, 0.4, 0.85);  
+        addEntry(5.59   ,  64, 0.4, 0.85);  
+        addEntry(5.84      ,  66, 0.4, 0.85);  
        //GIVE IT ALL THE POWER
-       addEntry(9,  66, 0.36, 1.00);  
+       addEntry(9,  67, 0.36, 1.00);  
        
      /*       addEntry(2,  50, 0.0, 1); 
         addEntry(2.3,  53, 0.0, 1);  
