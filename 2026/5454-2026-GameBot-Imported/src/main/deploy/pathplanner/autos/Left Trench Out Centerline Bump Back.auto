@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Mirrored To Left Right Trench Follower Start"
+            "pathName": "Left Right Trench Follower Start"
           }
         },
         {
@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mirrored To Left To Centerline"
+                  "pathName": "Left To Centerline"
                 }
               },
               {
@@ -42,13 +42,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mirrored To Left Center Sweep"
+                  "pathName": "Left Center Sweep"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mirrored To Left Centerline Trench Return"
+                  "pathName": "Left Centerline Bump Return"
                 }
               },
               {

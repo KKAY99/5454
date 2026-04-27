@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5473894436519258,
+        "y": 0.4057061340941527
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.122703516790037,
+        "y": 1.6640539978964513
+      },
+      "isLocked": false,
+      "linkedName": "Follower Start"
+    },
+    {
+      "anchor": {
+        "x": 1.7314777777777777,
+        "y": 1.9789222222222222
+      },
+      "prevControl": {
+        "x": 1.981275452620454,
+        "y": 1.7081805181410323
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "R Follower End"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Seth Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

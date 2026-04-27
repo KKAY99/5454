@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mirrored To Left Bump to centerline"
+                  "pathName": "Left Bump to centerline"
                 }
               }
             ]
@@ -30,13 +30,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mirrored To Left Center Sweep"
+                  "pathName": "Left Center Sweep"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mirrored To Left Centerline Bump Return"
+                  "pathName": "Left Centerline Bump Return"
                 }
               },
               {
