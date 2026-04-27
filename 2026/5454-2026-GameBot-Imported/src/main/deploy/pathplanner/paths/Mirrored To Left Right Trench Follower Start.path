@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8612581215578707,
-        "y": 7.611389695542049
+        "x": 4.1904308921965985,
+        "y": 7.6158600195703725
       },
       "isLocked": false,
       "linkedName": "Mirrored Follower Start"
@@ -20,8 +20,8 @@
         "y": 7.595293865905846
       },
       "prevControl": {
-        "x": 4.090629434183895,
-        "y": 7.61138969554205
+        "x": 3.939433303934631,
+        "y": 7.568692125487777
       },
       "nextControl": null,
       "isLocked": false,

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1344097284755255,
-        "y": 6.891631140380853
+        "x": 2.6766888888888882,
+        "y": 7.279111111111111
       },
       "isLocked": false,
       "linkedName": "Mirrored Trench Start"
@@ -20,8 +20,8 @@
         "y": 5.612811111111112
       },
       "prevControl": {
-        "x": 3.7956249999999994,
-        "y": 5.945377777777779
+        "x": 3.4075222222222226,
+        "y": 6.139011111111111
       },
       "nextControl": null,
       "isLocked": false,
