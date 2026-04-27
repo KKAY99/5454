@@ -48,12 +48,12 @@
     },
     {
       "anchor": {
-        "x": 1.0980888888888887,
-        "y": 2.0471333333333326
+        "x": 1.7314777777777777,
+        "y": 1.9789222222222222
       },
       "prevControl": {
-        "x": 1.4983286967797602,
-        "y": 2.0557248392358316
+        "x": 2.131717585668649,
+        "y": 1.9875137281247213
       },
       "nextControl": null,
       "isLocked": false,
@@ -67,6 +67,10 @@
     },
     {
       "waypointRelativePos": 2.043983402489632,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 2.148547717842324,
       "rotationDegrees": 0.0
     }
   ],
@@ -83,7 +87,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Seth Paths",

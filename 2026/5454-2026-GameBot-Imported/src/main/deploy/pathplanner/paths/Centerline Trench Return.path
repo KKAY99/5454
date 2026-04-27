@@ -40,7 +40,7 @@
         "y": 0.6625734672744514
       },
       "nextControl": {
-        "x": 1.9653444444444437,
+        "x": 1.9653444444444435,
         "y": 0.6244444444444435
       },
       "isLocked": false,
@@ -48,12 +48,12 @@
     },
     {
       "anchor": {
-        "x": 1.0980888888888887,
-        "y": 2.0471333333333326
+        "x": 1.7314777777777777,
+        "y": 1.9789222222222222
       },
       "prevControl": {
-        "x": 1.8386666666666667,
-        "y": 2.0373888888888882
+        "x": 2.472055555555554,
+        "y": 1.969177777777778
       },
       "nextControl": null,
       "isLocked": false,
@@ -63,7 +63,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.5771106941838742,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -79,7 +79,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Seth Paths",
