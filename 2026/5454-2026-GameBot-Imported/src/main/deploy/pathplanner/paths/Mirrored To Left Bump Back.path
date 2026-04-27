@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 6.019033333333335,
-        "y": 5.325100000000002
+        "y": 5.1061000000000005
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.469666666666667,
-        "y": 5.666155555555557
+        "y": 5.447155555555556
       },
       "isLocked": false,
       "linkedName": "Mirrored R Trench Out Return Pick Point"
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 3.1834,
-        "y": 5.831811111111113
+        "y": 5.612811111111112
       },
       "prevControl": {
         "x": 4.1481,
-        "y": 5.822066666666668
+        "y": 5.603066666666667
       },
       "nextControl": {
         "x": 2.5376475015493525,
-        "y": 5.838333863620717
+        "y": 5.6193338636207155
       },
       "isLocked": false,
       "linkedName": "Mirrored R TrenchFollower End"
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 1.0980888888888887,
-        "y": 6.172866666666668
+        "y": 5.953866666666666
       },
       "prevControl": {
         "x": 1.6202902777777775,
-        "y": 6.191750000000001
+        "y": 5.97275
       },
       "nextControl": null,
       "isLocked": true,
