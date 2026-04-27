@@ -19,12 +19,6 @@
                 "data": {
                   "pathName": "Mirrored To Left Bump to centerline"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "expandIntake"
-                }
               }
             ]
           }

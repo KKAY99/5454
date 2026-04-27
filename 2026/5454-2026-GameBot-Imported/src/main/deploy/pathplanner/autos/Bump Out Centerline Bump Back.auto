@@ -19,12 +19,6 @@
                 "data": {
                   "pathName": "Bump to centerline"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "expandIntake"
-                }
               }
             ]
           }

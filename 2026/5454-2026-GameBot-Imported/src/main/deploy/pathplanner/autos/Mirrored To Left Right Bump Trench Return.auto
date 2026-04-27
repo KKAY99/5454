@@ -21,12 +21,6 @@
                 }
               },
               {
-                "type": "named",
-                "data": {
-                  "name": "expandIntake"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
