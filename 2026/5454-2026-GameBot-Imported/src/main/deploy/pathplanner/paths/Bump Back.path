@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.019033333333335,
+        "y": 2.894899999999999
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.469666666666667,
+        "y": 2.553844444444444
+      },
+      "isLocked": false,
+      "linkedName": "R Trench Out Return Pick Point"
+    },
+    {
+      "anchor": {
+        "x": 3.1834,
+        "y": 2.3881888888888874
+      },
+      "prevControl": {
+        "x": 4.1481,
+        "y": 2.397933333333333
+      },
+      "nextControl": {
+        "x": 2.5376475015493525,
+        "y": 2.381666136379284
+      },
+      "isLocked": false,
+      "linkedName": "R TrenchFollower End"
+    },
+    {
+      "anchor": {
+        "x": 1.0980888888888887,
+        "y": 2.0471333333333326
+      },
+      "prevControl": {
+        "x": 1.6202902777777775,
+        "y": 2.0282499999999994
+      },
+      "nextControl": null,
+      "isLocked": true,
+      "linkedName": "R Follower End"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.07527559055118221,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "New Folder",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -88.75463573323157
+  },
+  "useDefaultConstraints": true
+}

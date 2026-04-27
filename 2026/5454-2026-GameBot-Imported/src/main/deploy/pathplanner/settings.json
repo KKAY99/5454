@@ -3,11 +3,14 @@
   "robotLength": 0.838,
   "holonomicMode": true,
   "pathFolders": [
-    "Depo Run",
     "Alex+Seth R Trench",
+    "Depo Run",
+    "New Folder",
     "No Velocity"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Followers"
+  ],
   "defaultMaxVel": 5.21208,
   "defaultMaxAccel": 2.25,
   "defaultMaxAngVel": 720.0,

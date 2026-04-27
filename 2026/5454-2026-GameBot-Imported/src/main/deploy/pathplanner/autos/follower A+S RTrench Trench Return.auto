@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Follower Start"
+            "pathName": "Right Trench Follower Start"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Follower End"
+            "pathName": "Right Trench Follower End"
           }
         },
         {

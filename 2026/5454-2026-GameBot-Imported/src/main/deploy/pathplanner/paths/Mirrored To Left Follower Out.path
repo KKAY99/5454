@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.407000887311446,
+        "y": 7.738154392191661
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.697466666666667,
+        "y": 7.80018888888889
+      },
+      "isLocked": false,
+      "linkedName": "Trench Start"
+    },
+    {
+      "anchor": {
+        "x": 5.697466666666667,
+        "y": 7.059611111111112
+      },
+      "prevControl": {
+        "x": 5.677977777777778,
+        "y": 7.965844444444445
+      },
+      "nextControl": {
+        "x": 5.718967071818745,
+        "y": 6.059842271539538
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.697466666666667,
+        "y": 4.175255555555556
+      },
+      "prevControl": {
+        "x": 5.707211111111112,
+        "y": 5.149700000000001
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "R Trench Follower Out end"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2614173228346463,
+      "rotationDegrees": -0.0
+    },
+    {
+      "waypointRelativePos": 1.0651968503937217,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "New Folder",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -1.0050860052542672
+  },
+  "useDefaultConstraints": true
+}

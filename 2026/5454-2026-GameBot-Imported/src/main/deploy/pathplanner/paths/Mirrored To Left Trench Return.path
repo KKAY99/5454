@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.019033333333335,
+        "y": 5.325100000000002
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.999544444444444,
+        "y": 6.04618888888889
+      },
+      "isLocked": false,
+      "linkedName": "R Trench Out Return Pick Point"
+    },
+    {
+      "anchor": {
+        "x": 5.746188888888888,
+        "y": 7.44938888888889
+      },
+      "prevControl": {
+        "x": 6.291877777777778,
+        "y": 7.254500000000001
+      },
+      "nextControl": {
+        "x": 4.788195781196088,
+        "y": 7.791529284493462
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.6571999999999996,
+        "y": 7.605300000000001
+      },
+      "prevControl": {
+        "x": 3.487404583892346,
+        "y": 7.771340916778469
+      },
+      "nextControl": {
+        "x": 1.8289222222222223,
+        "y": 7.439644444444446
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.0980888888888887,
+        "y": 6.172866666666668
+      },
+      "prevControl": {
+        "x": 0.6790777777777777,
+        "y": 6.294672222222224
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "R Follower End"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9703937007873945,
+      "rotationDegrees": -0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -0.0
+  },
+  "reversed": false,
+  "folder": "New Folder",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 88.75463573323157
+  },
+  "useDefaultConstraints": true
+}

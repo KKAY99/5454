@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 4.407000887311446,
-        "y": 0.48184560780833974
+        "y": 7.738154392191661
       },
       "prevControl": null,
       "nextControl": {
         "x": 3.1530083333333336,
-        "y": 1.1855083333333334
+        "y": 7.034491666666668
       },
       "isLocked": false,
       "linkedName": "Trench Start"
     },
     {
       "anchor": {
-        "x": 1.1424916666666667,
-        "y": 2.0093666666666663
+        "x": 3.1834,
+        "y": 5.831811111111113
       },
       "prevControl": {
-        "x": 1.7547166666666665,
-        "y": 1.6767999999999996
+        "x": 3.7956249999999994,
+        "y": 6.16437777777778
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "R TrenchFollower End"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -0.0
   },
   "reversed": false,
-  "folder": "Alex+Seth R Trench",
+  "folder": "New Folder",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 1.0050860052542672
+    "rotation": -1.0050860052542672
   },
   "useDefaultConstraints": true
 }

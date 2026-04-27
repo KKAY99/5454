@@ -1,0 +1,95 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.697466666666667,
+        "y": 4.0447444444444445
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.902100000000001,
+        "y": 4.405288888888889
+      },
+      "isLocked": false,
+      "linkedName": "R Trench Follower Out end"
+    },
+    {
+      "anchor": {
+        "x": 6.135966666666666,
+        "y": 4.863277777777778
+      },
+      "prevControl": {
+        "x": 5.891221561732265,
+        "y": 4.812289214249778
+      },
+      "nextControl": {
+        "x": 6.380711771601067,
+        "y": 4.914266341305779
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.135966666666666,
+        "y": 4.064233333333333
+      },
+      "prevControl": {
+        "x": 6.3378616802157035,
+        "y": 4.2116728243255155
+      },
+      "nextControl": {
+        "x": 5.934071653117628,
+        "y": 3.916793842341151
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.019033333333335,
+        "y": 2.894899999999999
+      },
+      "prevControl": {
+        "x": 5.999544444444444,
+        "y": 3.265188888888888
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "R Trench Out Return Pick Point"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9552755905511623,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.820787401574793,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -88.75463573323157
+  },
+  "reversed": false,
+  "folder": "New Folder",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}
