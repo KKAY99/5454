@@ -12,7 +12,7 @@
         "y": 6.04618888888889
       },
       "isLocked": false,
-      "linkedName": "R Trench Out Return Pick Point"
+      "linkedName": "Mirrored R Trench Out Return Pick Point"
     },
     {
       "anchor": {
@@ -57,7 +57,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R Follower End"
+      "linkedName": "Mirrored R Follower End"
     }
   ],
   "rotationTargets": [

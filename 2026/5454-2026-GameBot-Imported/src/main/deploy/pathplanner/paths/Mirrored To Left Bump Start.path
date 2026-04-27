@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6250213980028523,
-        "y": 5.821740370898716
+        "x": 3.5732667617689007,
+        "y": 5.951126961483595
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.625021398002853,
-        "y": 5.821740370898716
+        "x": 4.573266761768902,
+        "y": 5.951126961483595
       },
       "isLocked": false,
-      "linkedName": "Bump Start"
+      "linkedName": "Mirrored Bump Start"
     },
     {
       "anchor": {
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R Trench Follower Out end"
+      "linkedName": "Mirrored R Trench Follower Out end"
     }
   ],
   "rotationTargets": [

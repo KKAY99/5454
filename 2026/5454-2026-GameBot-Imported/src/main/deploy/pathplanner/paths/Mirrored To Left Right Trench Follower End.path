@@ -12,7 +12,7 @@
         "y": 7.034491666666668
       },
       "isLocked": false,
-      "linkedName": "Trench Start"
+      "linkedName": "Mirrored Trench Start"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R TrenchFollower End"
+      "linkedName": "Mirrored R TrenchFollower End"
     }
   ],
   "rotationTargets": [],
