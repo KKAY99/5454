@@ -20,7 +20,7 @@
         "y": 3.3567222222222224
       },
       "prevControl": {
-        "x": 5.891221561732265,
+        "x": 5.891221561732264,
         "y": 3.407710785750223
       },
       "nextControl": {
@@ -86,7 +86,7 @@
     "rotation": 88.75463573323157
   },
   "reversed": false,
-  "folder": "New Folder",
+  "folder": "Follower Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -90.0

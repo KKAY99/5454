@@ -25,7 +25,7 @@
       },
       "nextControl": {
         "x": 4.788195781196088,
-        "y": 0.42847071550653865
+        "y": 0.4284707155065386
       },
       "isLocked": false,
       "linkedName": null
@@ -82,7 +82,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "New Folder",
+  "folder": "Follower Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -88.75463573323157
