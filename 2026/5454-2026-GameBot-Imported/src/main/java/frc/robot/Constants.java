@@ -272,11 +272,11 @@ public final class Constants {
       public static final double alignRotation=00;
 
       public static final double yTolerance=05;
-      public static final double ySetpoint=00;
+      public static final double ySetpoint=4.896;
       public static final double xTolerance=05;
-      public static final double xSetpoint=00;
+      public static final double xSetpoint=1.004;
       public static final double rotTolerance=03;
-      public static final double rotSetpoint=00;
+      public static final double rotSetpoint=90;
 
       public static final double waitTime=5;
       public static final double validationTime=4;

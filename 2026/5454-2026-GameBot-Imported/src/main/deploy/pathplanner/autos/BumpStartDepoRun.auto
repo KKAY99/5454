@@ -38,7 +38,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shotLookUp"
+            "name": "shotLookUpW5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "climbAlignL"
           }
         }
       ]

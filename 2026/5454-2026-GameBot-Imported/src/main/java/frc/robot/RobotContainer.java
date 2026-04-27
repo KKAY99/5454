@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
+import java.util.jar.Attributes.Name;
 
 import frc.robot.commands.*;
 import frc.robot.Constants.AutoConstants;
@@ -118,14 +119,14 @@ public class RobotContainer {
   public void rightClimb() {
     Command extend = m_climb.climbUpCommand();
     Command retract = m_climb.climbDownCommand();
-    Command align = new ClimbAutoAlign(true, m_swerve);
+    Command align = new AutoAlignPose(true, m_swerve);
     CommandScheduler.getInstance().schedule(Commands.sequence(extend, align, retract));
   }
 
   public void leftClimb() {
     Command extend = m_climb.climbUpCommand();
     Command retract = m_climb.climbDownCommand();
-    Command align = new ClimbAutoAlign(false, m_swerve);
+    Command align = new AutoAlignPose(false, m_swerve);
     CommandScheduler.getInstance().schedule(Commands.sequence(extend, align, retract));
   }
 
@@ -171,12 +172,12 @@ public class RobotContainer {
         
           Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
           startPose=FieldConstants.flipIfRed(startPose);
-         /* Command goToStart = AutoBuilder.pathfindToPose(
+          Command goToStart = AutoBuilder.pathfindToPose(
             startPose,
             goToConstraints,
             0.0
           );
-          */
+          
           Command followAuto = new PathPlannerAuto(selectedAuto.getName());
 
           // go to start pos then call auto
@@ -186,7 +187,7 @@ public class RobotContainer {
           if(currentPose.getX()!=0 | currentPose.getY()!=0) {
             //disable pathing
             //            CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
-            CommandScheduler.getInstance().schedule(Commands.sequence(followAuto));
+            CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
           
           } else { //no starting pose
             CommandScheduler.getInstance().schedule(Commands.sequence(followAuto));
@@ -231,8 +232,8 @@ public class RobotContainer {
 
     //Named Commands
   public void configureNamedCommands() {
-    //NamedCommands.registerCommand("climbAlignR", new ClimbAutoAlign(true, m_swerve));
-    //NamedCommands.registerCommand("climbAlignL", new ClimbAutoAlign(false, m_swerve));
+    NamedCommands.registerCommand("climbAlignR", Commands.runOnce(() -> rightClimb()));
+    NamedCommands.registerCommand("climbAlignL", Commands.runOnce(() -> leftClimb()));
     NamedCommands.registerCommand("expandIntake", Commands.sequence(new InstantCommand(m_intake::SetIntakeOutMode), new IntakeFoldCommand(m_intake))); //this shoulcd fix the intake not folding during autos
     NamedCommands.registerCommand("shrinkIntake", Commands.sequence(new InstantCommand(m_intake::SetIntakeInMode), new IntakeFoldCommand(m_intake)));
     NamedCommands.registerCommand("agitateon", m_hopper.agitateonCommand());
