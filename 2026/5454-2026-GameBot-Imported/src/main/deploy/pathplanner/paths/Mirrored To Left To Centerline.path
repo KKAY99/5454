@@ -4,54 +4,50 @@
     {
       "anchor": {
         "x": 4.407000887311446,
-        "y": 0.48184560780833974
+        "y": 7.738154392191661
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.697466666666667,
-        "y": 0.4198111111111109
+        "x": 5.407000887311446,
+        "y": 7.738154392191661
       },
       "isLocked": false,
-      "linkedName": "Trench Start"
+      "linkedName": "Mirrored Trench Start"
     },
     {
       "anchor": {
-        "x": 5.697466666666667,
-        "y": 1.160388888888889
+        "x": 6.369833333333333,
+        "y": 7.410411111111112
       },
       "prevControl": {
-        "x": 5.677977777777778,
-        "y": 0.25415555555555536
+        "x": 5.369833333333333,
+        "y": 7.410411111111112
       },
       "nextControl": {
-        "x": 5.718967071818745,
-        "y": 2.1601577284604625
+        "x": 7.369833333333335,
+        "y": 7.410411111111112
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.697466666666667,
-        "y": 4.0447444444444445
+        "x": 7.841244444444444,
+        "y": 6.30928888888889
       },
       "prevControl": {
-        "x": 5.707211111111112,
-        "y": 3.0702999999999996
+        "x": 7.850988888888889,
+        "y": 6.942677777777778
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R Trench Follower Out end"
+      "linkedName": "Mirrored Centerline"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.2614173228346463,
-      "rotationDegrees": 0.0
-    },
-    {
-      "waypointRelativePos": 1.0651968503937217,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 0.6701688555347016,
+      "rotationDegrees": -0.0
     }
   ],
   "constraintZones": [],
@@ -67,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 1.0050860052542672
+    "rotation": -1.0050860052542672
   },
   "useDefaultConstraints": true
 }

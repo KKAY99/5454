@@ -12,7 +12,7 @@
         "y": 7.7542502218278635
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Mirrored Follower Start"
     },
     {
       "anchor": {
@@ -45,7 +45,7 @@
     "rotation": -1.0050860052542672
   },
   "reversed": false,
-  "folder": "Follower Paths",
+  "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -0.0

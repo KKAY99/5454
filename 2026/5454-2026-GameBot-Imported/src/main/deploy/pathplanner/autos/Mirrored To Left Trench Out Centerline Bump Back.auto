@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mirrored To Left Follower Out"
+                  "pathName": "Mirrored To Left To Centerline"
                 }
               },
               {
@@ -31,30 +31,30 @@
                 "data": {
                   "name": "expandIntake"
                 }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Mirrored To Left Center Sweep"
+                }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shotLookUpW5"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Mirrored To Left R Sweep Back"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Mirrored To Left Trench Return"
-                      }
-                    }
-                  ]
+                  "pathName": "Mirrored To Left Centerline Bump Return"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shotLookUpW5"
                 }
               }
             ]
@@ -63,7 +63,7 @@
       ]
     }
   },
-  "resetOdom": false,
-  "folder": "Followers",
+  "resetOdom": true,
+  "folder": "Seth",
   "choreoAuto": false
 }

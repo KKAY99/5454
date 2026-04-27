@@ -3,32 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.407000887311446,
-        "y": 7.738154392191661
+        "x": 3.592666666666667,
+        "y": 5.753855555555557
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1530083333333336,
-        "y": 7.034491666666668
+        "x": 4.592666666666665,
+        "y": 5.753855555555557
       },
       "isLocked": false,
-      "linkedName": "Mirrored Trench Start"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.1834,
-        "y": 5.831811111111113
+        "x": 7.841244444444444,
+        "y": 6.30928888888889
       },
       "prevControl": {
-        "x": 3.7956249999999994,
-        "y": 6.16437777777778
+        "x": 7.3540222222222225,
+        "y": 6.83548888888889
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored R TrenchFollower End"
+      "linkedName": "Mirrored Centerline"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.40746887966804995,
+      "rotationDegrees": 25.0
+    },
+    {
+      "waypointRelativePos": 0.6780082987551834,
+      "rotationDegrees": -0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -1.0050860052542672
+    "rotation": -0.0
   },
   "useDefaultConstraints": true
 }

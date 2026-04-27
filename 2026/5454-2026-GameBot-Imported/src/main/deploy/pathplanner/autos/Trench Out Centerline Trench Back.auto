@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Follower Out"
+                  "pathName": "To Centerline"
                 }
               },
               {
@@ -31,30 +31,30 @@
                 "data": {
                   "name": "expandIntake"
                 }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Sweep"
+                }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "R Sweep Back"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Trench Return"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shotLookUpW5"
-                      }
-                    }
-                  ]
+                  "pathName": "Centerline Trench Return"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shotLookUpW5"
                 }
               }
             ]
@@ -63,7 +63,7 @@
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": "Seth",
   "choreoAuto": false
 }

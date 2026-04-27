@@ -3,32 +3,48 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.019033333333335,
-        "y": 2.894899999999999
+        "x": 7.470955555555555,
+        "y": 3.2164666666666655
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.469666666666667,
-        "y": 2.553844444444444
+        "x": 7.480725706719032,
+        "y": 2.966657651324459
       },
       "isLocked": false,
-      "linkedName": "R Trench Out Return Pick Point"
+      "linkedName": "Centerline End"
     },
     {
       "anchor": {
-        "x": 3.1834,
-        "y": 2.3881888888888874
+        "x": 7.198111111111111,
+        "y": 2.0471333333333326
       },
       "prevControl": {
-        "x": 4.1481,
-        "y": 2.397933333333333
+        "x": 7.6296203995557255,
+        "y": 2.260961906907793
       },
       "nextControl": {
-        "x": 2.5376475015493525,
-        "y": 2.381666136379284
+        "x": 6.7203757379310884,
+        "y": 1.8103980506205046
       },
       "isLocked": false,
-      "linkedName": "R TrenchFollower End"
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.931333333333333,
+        "y": 2.2907444444444436
+      },
+      "prevControl": {
+        "x": 6.371746137583435,
+        "y": 2.2861884329010143
+      },
+      "nextControl": {
+        "x": 2.5434724653229677,
+        "y": 2.3257914119104983
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -36,17 +52,21 @@
         "y": 2.0471333333333326
       },
       "prevControl": {
-        "x": 1.6202902777777775,
-        "y": 2.0282499999999994
+        "x": 1.5280190980125434,
+        "y": 1.9792370428451063
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "R Follower End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.07527559055118221,
+      "waypointRelativePos": 1.0097560975609974,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 2.1354596622889064,
       "rotationDegrees": 0.0
     }
   ],
@@ -69,7 +89,7 @@
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -88.75463573323157
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

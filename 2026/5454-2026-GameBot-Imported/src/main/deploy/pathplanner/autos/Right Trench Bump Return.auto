@@ -37,12 +37,6 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "shotLookUpW5"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
                         "pathName": "R Sweep Back"
@@ -52,6 +46,12 @@
                       "type": "path",
                       "data": {
                         "pathName": "Bump Back"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shotLookUpW5"
                       }
                     }
                   ]
@@ -64,6 +64,6 @@
     }
   },
   "resetOdom": false,
-  "folder": "Followers",
+  "folder": "Seth",
   "choreoAuto": false
 }

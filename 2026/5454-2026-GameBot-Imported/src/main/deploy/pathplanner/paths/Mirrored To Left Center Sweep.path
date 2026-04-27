@@ -3,67 +3,75 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.019033333333335,
-        "y": 5.325100000000002
+        "x": 7.841244444444444,
+        "y": 6.30928888888889
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.999544444444444,
-        "y": 6.04618888888889
+        "x": 7.85773233779841,
+        "y": 5.75979869376941
       },
       "isLocked": false,
-      "linkedName": "Mirrored R Trench Out Return Pick Point"
+      "linkedName": "Mirrored Centerline"
     },
     {
       "anchor": {
-        "x": 5.746188888888888,
-        "y": 7.44938888888889
+        "x": 7.987411111111111,
+        "y": 4.747831669044222
       },
       "prevControl": {
-        "x": 6.291877777777778,
-        "y": 7.254500000000001
+        "x": 8.098560852904324,
+        "y": 5.459007263930223
       },
       "nextControl": {
-        "x": 4.788195781196088,
-        "y": 7.791529284493462
+        "x": 7.94880720983708,
+        "y": 4.500830173489186
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6571999999999996,
-        "y": 7.605300000000001
+        "x": 7.470955555555555,
+        "y": 4.346733238231098
       },
       "prevControl": {
-        "x": 3.487404583892346,
-        "y": 7.771340916778469
+        "x": 7.509112162327703,
+        "y": 4.0996622497285315
       },
       "nextControl": {
-        "x": 1.8289222222222223,
-        "y": 7.439644444444446
+        "x": 7.366069574992359,
+        "y": 5.02588909327233
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0980888888888887,
-        "y": 6.172866666666668
+        "x": 7.470955555555555,
+        "y": 5.003533333333335
       },
       "prevControl": {
-        "x": 0.6790777777777777,
-        "y": 6.294672222222224
+        "x": 7.464679157942993,
+        "y": 4.689519617142201
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored R Follower End"
+      "linkedName": "Mirrored Centerline End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.9703937007873945,
-      "rotationDegrees": -0.0
+      "waypointRelativePos": 0.8983114446528968,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.5347091932457524,
+      "rotationDegrees": -180.0
+    },
+    {
+      "waypointRelativePos": 2.06,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
@@ -79,13 +87,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 88.75463573323157
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
