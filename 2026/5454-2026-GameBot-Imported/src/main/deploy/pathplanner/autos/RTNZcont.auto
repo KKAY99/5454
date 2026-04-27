@@ -26,12 +26,6 @@
         {
           "type": "named",
           "data": {
-            "name": "turretLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shotLookUp128W5"
           }
         },
@@ -57,12 +51,6 @@
         {
           "type": "named",
           "data": {
-            "name": "turretLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shotLookUp128W5"
           }
         },
@@ -83,12 +71,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "turretLeft"
           }
         },
         {
