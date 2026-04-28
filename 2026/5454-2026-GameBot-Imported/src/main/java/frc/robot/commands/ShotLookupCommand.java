@@ -255,15 +255,15 @@ if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
           break;
           case 2:
             m_flipSpeed=-0.8;
-            m_flipCountLimit=6;//8;
+            m_flipCountLimit=3;//6;//8;
           break;
           case 3:
             m_flipSpeed=0.8; 
-            m_flipCountLimit=4;//6;
+            m_flipCountLimit=2;//6;
           break;
           case 4:
             m_flipSpeed=-0.8;
-            m_flipCountLimit=8;//12;
+            m_flipCountLimit=4;//8;//12;
           break;
           default:
            if (m_HopperPulls % 2 != 0) {  //EDIT if we change hopper pull limit

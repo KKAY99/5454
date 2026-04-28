@@ -134,6 +134,7 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   
 
   public void HoodSetPos(double hoodTarget) {
+    System.out.println("Hood Target is " + hoodTarget);
     m_hoodMotor.setControl(m_request.withPosition(hoodTarget));
   }
 
@@ -141,7 +142,7 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
     //System.out.println("Shooter Priming:" + primeSpeed);
     runShooterVelocity(primeSpeed);
   }
-  public void hoodMoveToPosition(double hoodTarget){
+  private void hoodMoveToPosition(double hoodTarget){
      HoodSetPos(hoodTarget);
   }
   
