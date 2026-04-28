@@ -3,69 +3,64 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.470955555555555,
-        "y": 3.2164666666666655
+        "x": 5.609766666666667,
+        "y": 5.732126961483594
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.490444444444445,
-        "y": 2.5441
+        "x": 6.609766666666667,
+        "y": 5.732126961483594
       },
       "isLocked": false,
-      "linkedName": "Centerline End"
+      "linkedName": "Mirrored afterbumpcross"
     },
     {
       "anchor": {
-        "x": 6.665606276747502,
-        "y": 0.9103138373751789
+        "x": 6.545233333333333,
+        "y": 6.44108888888889
       },
       "prevControl": {
-        "x": 7.503628498969724,
-        "y": 1.4365138373751787
+        "x": 6.4127335983325375,
+        "y": 6.229089312887618
       },
       "nextControl": {
-        "x": 5.82320708307569,
-        "y": 0.38136550646497225
+        "x": 6.6914,
+        "y": 6.674955555555556
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6608777777777783,
-        "y": 0.6439333333333332
+        "x": 7.685333333333334,
+        "y": 6.791888888888889
       },
       "prevControl": {
-        "x": 5.282569430654982,
-        "y": 0.6625734672744514
+        "x": 7.603747785278286,
+        "y": 7.028201813521795
       },
       "nextControl": {
-        "x": 1.9653444444444432,
-        "y": 0.6244444444444435
+        "x": 7.766918881388382,
+        "y": 6.555575964255983
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.7314777777777777,
-        "y": 1.9789222222222222
+        "x": 7.841244444444444,
+        "y": 6.090288888888889
       },
       "prevControl": {
-        "x": 2.472055555555554,
-        "y": 1.969177777777778
+        "x": 7.597633333333333,
+        "y": 6.674955555555555
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R Follower End"
+      "linkedName": "Mirrored Centerline"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.5771106941838742,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -79,13 +74,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -66.53035442610306
   },
   "useDefaultConstraints": true
 }

@@ -17,7 +17,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Bump Start"
+                  "pathName": "left rotate Bump Cross"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Bump cross to close sweep"
                 }
               },
               {

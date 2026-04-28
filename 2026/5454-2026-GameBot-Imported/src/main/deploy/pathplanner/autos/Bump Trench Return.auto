@@ -11,16 +11,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Bump Start"
-                }
-              }
-            ]
+            "pathName": "left rotate Bump Cross"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bump cross to close sweep"
           }
         },
         {

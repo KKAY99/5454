@@ -3,51 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.592666666666667,
-        "y": 5.534855555555556
+        "x": 5.609766666666667,
+        "y": 2.268873038516405
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.592666666666665,
-        "y": 5.534855555555556
+        "x": 5.687722222222223,
+        "y": 3.1774888888888895
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "afterbumpcross"
     },
     {
       "anchor": {
-        "x": 7.841244444444444,
-        "y": 6.090288888888889
+        "x": 5.697466666666667,
+        "y": 4.0447444444444445
       },
       "prevControl": {
-        "x": 7.3540222222222225,
-        "y": 6.616488888888889
+        "x": 5.687722222222223,
+        "y": 3.294422222222222
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored Centerline"
+      "linkedName": "R Trench Follower Out end"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.40746887966804995,
-      "rotationDegrees": 14.999999999999998
-    },
-    {
-      "waypointRelativePos": 0.6780082987551834,
-      "rotationDegrees": -0.0
+      "waypointRelativePos": 0.4556016597510322,
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "expandIntake",
-      "waypointRelativePos": 0.4079404466501179,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.21208,
     "maxAcceleration": 2.25,
@@ -58,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -0.0
+    "rotation": 66.53035442610306
   },
   "useDefaultConstraints": true
 }

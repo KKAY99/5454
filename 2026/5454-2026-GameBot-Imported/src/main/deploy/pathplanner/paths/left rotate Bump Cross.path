@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5732667617689007,
+        "y": 2.268873038516405
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.573266761768901,
+        "y": 2.2688730385164053
+      },
+      "isLocked": false,
+      "linkedName": "Bump Start"
+    },
+    {
+      "anchor": {
+        "x": 5.609766666666667,
+        "y": 2.268873038516405
+      },
+      "prevControl": {
+        "x": 4.609766666666667,
+        "y": 2.268873038516405
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "afterbumpcross"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3958506224066434,
+      "rotationDegrees": 45.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 66.53035442610306
+  },
+  "reversed": false,
+  "folder": "Seth Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
+}

@@ -17,42 +17,21 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftBumpToCLPart1"
+                  "pathName": "Left Bump Cross"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "expandIntake"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftBumptoCLPart2"
+                  "pathName": "Left Bump Cross to Centerline"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "path",
                 "data": {
