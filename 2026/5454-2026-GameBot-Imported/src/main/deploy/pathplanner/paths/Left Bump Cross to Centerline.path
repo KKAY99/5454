@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.609766666666667,
-        "y": 5.732126961483594
+        "x": 6.242875864331196,
+        "y": 6.1832859202906345
       },
       "isLocked": false,
       "linkedName": "Mirrored afterbumpcross"
@@ -20,28 +20,28 @@
         "y": 6.44108888888889
       },
       "prevControl": {
-        "x": 6.4127335983325375,
-        "y": 6.229089312887618
+        "x": 6.25473452944091,
+        "y": 6.230242019585669
       },
       "nextControl": {
-        "x": 6.6914,
-        "y": 6.674955555555556
+        "x": 6.904578343739348,
+        "y": 6.701905007332872
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.685333333333334,
-        "y": 6.791888888888889
+        "x": 7.714566666666668,
+        "y": 6.44108888888889
       },
       "prevControl": {
-        "x": 7.603747785278286,
-        "y": 7.028201813521795
+        "x": 7.475124146013672,
+        "y": 6.776759850653061
       },
       "nextControl": {
-        "x": 7.766918881388382,
-        "y": 6.555575964255983
+        "x": 7.8919613083091456,
+        "y": 6.1924019396805825
       },
       "isLocked": false,
       "linkedName": null
@@ -52,15 +52,20 @@
         "y": 6.090288888888889
       },
       "prevControl": {
-        "x": 7.597633333333333,
-        "y": 6.674955555555555
+        "x": 7.809474296681891,
+        "y": 6.338261987653947
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Mirrored Centerline"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.4365145228215748,
+      "rotationDegrees": -45.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
