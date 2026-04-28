@@ -17,19 +17,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left To Centerline"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "expandIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left To Centerline"
                 }
               }
             ]
