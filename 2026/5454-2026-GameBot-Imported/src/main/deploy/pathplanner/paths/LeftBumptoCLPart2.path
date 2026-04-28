@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.592666666666667,
-        "y": 5.534855555555556
+        "x": 6.217781721384206,
+        "y": 6.107338065661047
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.592666666666665,
-        "y": 5.534855555555556
+        "x": 7.217781721384204,
+        "y": 6.107338065661047
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BumpIntakeOutPoint"
     },
     {
       "anchor": {
@@ -35,19 +35,12 @@
     },
     {
       "waypointRelativePos": 0.6780082987551834,
-      "rotationDegrees": -0.0
+      "rotationDegrees": 4.8529213619689875
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "expandIntake",
-      "waypointRelativePos": 0.4079404466501179,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.21208,
     "maxAcceleration": 2.25,
@@ -64,7 +57,7 @@
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -0.0
+    "rotation": 36.86989764584404
   },
   "useDefaultConstraints": true
 }

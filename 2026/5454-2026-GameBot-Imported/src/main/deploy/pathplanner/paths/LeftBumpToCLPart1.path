@@ -16,49 +16,33 @@
     },
     {
       "anchor": {
-        "x": 7.6664063886424145,
-        "y": 6.630452528837622
+        "x": 6.217781721384206,
+        "y": 6.107338065661047
       },
       "prevControl": {
-        "x": 7.179184166420193,
-        "y": 7.156652528837622
+        "x": 5.500654163813616,
+        "y": 6.107338065661047
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored Centerline"
+      "linkedName": "BumpIntakeOutPoint"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.40746887966804995,
-      "rotationDegrees": 14.999999999999998
-    },
-    {
-      "waypointRelativePos": 0.6780082987551834,
-      "rotationDegrees": -0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "expandIntake",
-      "waypointRelativePos": 0.4079404466501179,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.21208,
+    "maxVelocity": 5.212,
     "maxAcceleration": 2.25,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -90.0
+    "velocity": 0.0,
+    "rotation": 36.86989764584404
   },
   "reversed": false,
   "folder": "Seth Paths",
@@ -66,5 +50,5 @@
     "velocity": 0,
     "rotation": -0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
