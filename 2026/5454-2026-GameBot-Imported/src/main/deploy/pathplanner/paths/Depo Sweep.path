@@ -68,12 +68,12 @@
         "y": 5.0
       },
       "prevControl": {
-        "x": 0.5054982198414947,
+        "x": 0.5054982198414946,
         "y": 5.204007930068963
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "endDepotCL"
     }
   ],
   "rotationTargets": [

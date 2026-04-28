@@ -170,13 +170,13 @@ public class RobotContainer {
           //Do Nothing
         }else {
         
-          Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
+          /*Pose2d startPose = group.get(0).getStartingHolonomicPose().orElse(group.get(0).getStartingDifferentialPose());
           startPose=FieldConstants.flipIfRed(startPose);
           Command goToStart = AutoBuilder.pathfindToPose(
             startPose,
             goToConstraints,
             0.0
-          );
+          );*/
           
           Command followAuto = new PathPlannerAuto(selectedAuto.getName());
 
@@ -184,10 +184,10 @@ public class RobotContainer {
           SmartDashboard.putString("Asher's Cool Message:","should be running sequence");
           //add auto to scheduler
           Pose2d currentPose = m_swerve.getPose2d();
-          if(currentPose.getX()!=0 | currentPose.getY()!=0) {
+          if(currentPose.getX()>1 || currentPose.getY()>1) {
             //disable pathing
             //            CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
-            CommandScheduler.getInstance().schedule(Commands.sequence(goToStart, followAuto));
+            CommandScheduler.getInstance().schedule(Commands.sequence(followAuto));
           
           } else { //no starting pose
             CommandScheduler.getInstance().schedule(Commands.sequence(followAuto));
