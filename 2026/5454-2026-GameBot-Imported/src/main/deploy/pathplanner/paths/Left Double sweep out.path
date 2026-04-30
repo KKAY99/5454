@@ -1,0 +1,84 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.3884022824536375,
+        "y": 7.595293865905846
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.946428963640823,
+        "y": 7.115062515694155
+      },
+      "isLocked": false,
+      "linkedName": "Mirrored Trench Start"
+    },
+    {
+      "anchor": {
+        "x": 7.665844444444444,
+        "y": 6.791888888888889
+      },
+      "prevControl": {
+        "x": 7.358698166224477,
+        "y": 7.1303318664337665
+      },
+      "nextControl": {
+        "x": 7.926978690306301,
+        "y": 6.5041463441293885
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.889966666666666,
+        "y": 4.6676
+      },
+      "prevControl": {
+        "x": 7.833762458294738,
+        "y": 4.944608177494407
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Mirrored Double Swipe out end"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8555831265508583,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 2.25,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Seth Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -1.0050860052542672
+  },
+  "useDefaultConstraints": true
+}
