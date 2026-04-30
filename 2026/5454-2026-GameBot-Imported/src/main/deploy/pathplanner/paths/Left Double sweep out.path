@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.946428963640823,
-        "y": 7.115062515694155
+        "x": 6.978797402742541,
+        "y": 7.106376414648863
       },
       "isLocked": false,
       "linkedName": "Mirrored Trench Start"
@@ -20,12 +20,12 @@
         "y": 6.791888888888889
       },
       "prevControl": {
-        "x": 7.358698166224477,
-        "y": 7.1303318664337665
+        "x": 7.346567314468943,
+        "y": 7.1120473779122575
       },
       "nextControl": {
-        "x": 7.926978690306301,
-        "y": 6.5041463441293885
+        "x": 7.937443392294657,
+        "y": 6.519540196795806
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 4.6676
       },
       "prevControl": {
-        "x": 7.833762458294738,
-        "y": 4.944608177494407
+        "x": 7.811915176392171,
+        "y": 5.140694006186624
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,21 +45,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8555831265508583,
-      "maxWaypointRelativePos": 2.0,
-      "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 2.25,
-        "maxAngularVelocity": 720.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
