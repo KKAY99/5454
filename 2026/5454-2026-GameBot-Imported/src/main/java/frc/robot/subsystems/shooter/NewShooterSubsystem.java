@@ -74,7 +74,7 @@ public class NewShooterSubsystem extends SubsystemBase {
     
         /* Configure CANcoder to zero the magnet appropriately */
     CANcoderConfiguration hoodCoder_cfg = new CANcoderConfiguration();
-    hoodCoder_cfg.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1.0; // unsigned [0,1) range, so 1.0 is the same as 0.0, which means the discontinuity is at the wrap-around point
+    hoodCoder_cfg.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.8;//1.0; // unsigned [0,1) range, so 1.0 is the same as 0.0, which means the discontinuity is at the wrap-around point
     hoodCoder_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     hoodCoder_cfg.MagnetSensor.withMagnetOffset(Rotations.of(Constants.HoodConstants.hoodOffset));
     m_hoodCoder.getConfigurator().apply(hoodCoder_cfg);
@@ -147,7 +147,7 @@ m_hoodMotor.getConfigurator().apply(talonFXConfigs);
   }
   
   public void hoodMoveToZero(){
-    double hoodTarget=0.03;  // go close to zero
+    double hoodTarget=0.05;  // go close to zero
     hoodMoveToPosition(hoodTarget);
   }
  
