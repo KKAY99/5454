@@ -148,8 +148,8 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit(){
-    m_robot.setLimelightThrottles(150);
-    //m_robot.setLimelightThrottles(0);
+    //m_robot.setLimelightThrottles(150);
+    m_robot.setLimelightThrottles(0);
     m_robot.DisabledInit();
     m_robot.SaveLimelights();
   }

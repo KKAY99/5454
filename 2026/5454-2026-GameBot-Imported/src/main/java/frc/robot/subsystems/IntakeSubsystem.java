@@ -39,6 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
     DutyCycleOut m_request = new DutyCycleOut(1.0);
     // m_intakeMotor.setControl();
     m_fold = new ObsidianCANSparkMax(CanId2, MotorType.kBrushless, true,50);
+  
     m_intakeSwitch = new DigitalInput(IntakeConstants.intakeSwitchDIO);
   }
 

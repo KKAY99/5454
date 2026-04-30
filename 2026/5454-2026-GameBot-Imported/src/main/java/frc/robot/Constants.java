@@ -211,7 +211,7 @@ public final class Constants {
   public static final class HoodConstants{
 
     public static final int hoodCoderCANID=51;
-    public static final double hoodOffset=-0.101806640625;//-0.125;//-0.091064453125;//-0.120849609375;//-0.09765625;//-0.642089;  //71484375;//-0.488037109375;
+    public static final double hoodOffset=-0.132568359375;//-0.101806640625;//-0.125;//-0.091064453125;//-0.120849609375;//-0.09765625;//-0.642089;  //71484375;//-0.488037109375;
     
     public static final double hoodSpeed=0.09;
     public static final double hoodUpSpeed=-0.09;

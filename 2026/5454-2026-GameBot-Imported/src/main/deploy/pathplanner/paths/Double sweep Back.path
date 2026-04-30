@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 4.3884022824536375,
-        "y": 0.4057061340941527
+        "x": 4.077036379769299,
+        "y": 0.40941437444542994
       },
       "prevControl": {
-        "x": 5.630513552068472,
-        "y": 0.30219686162624837
+        "x": 5.69466725820763,
+        "y": 0.19212067435669836
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench Start"
+      "linkedName": "Shoottrench"
     }
   ],
   "rotationTargets": [],

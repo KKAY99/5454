@@ -200,7 +200,11 @@ if(Math.abs(hoodPos-m_lastHoodPos)<Constants.HoodConstants.hoodDeadband) {
       
         
         m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
-        m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+        if(m_intake.isinNoFlyZone()){
+          m_intake.stopIntake();
+        } else {
+          m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+        }
        
         if(checkNoFuelorFuelTimeLimit()){
           m_state=shooterStates.NOFUEL;

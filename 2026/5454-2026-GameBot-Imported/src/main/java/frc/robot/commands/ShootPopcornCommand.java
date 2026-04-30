@@ -140,13 +140,24 @@ SmartDashboard.putNumber("Shot Hood",hoodPos);
     switch(m_state){
     case SPINUP:
         //start intake
-        m_intake.runIntake(Constants.IntakeConstants.highSpeed); 
+           if(m_intake.isinNoFlyZone()){
+          m_intake.stopIntake();
+        } else {
+          m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+        }
         m_shooter.HoodSetPos(hoodPos);
           
          m_shooter.runNewShooter(targetspeed,
                             0);
+         if(m_isPass) {
+          //when passing don't wait for speed
+          m_state=shooterStates.SHOOT;
+         } else{
+          //when shooting wait for speed
           m_state=shooterStates.WAIT;
        
+         }
+          
     break;
     case WAIT:
         m_shooter.HoodSetPos(hoodPos);   
@@ -170,7 +181,12 @@ SmartDashboard.putNumber("Shot Hood",hoodPos);
                               Constants.ShooterConstants.KickerSpeed);
           m_shooter.HoodSetPos(hoodPos);     
           m_hopper.agitate(Constants.HopperConstants.agitateSpeed);
+             if(m_intake.isinNoFlyZone()){
+          m_intake.stopIntake();
+        } else {
           m_intake.runIntake(Constants.IntakeConstants.highSpeed);
+        }
+         
         //}
        break;
     case PASSING:

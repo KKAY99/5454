@@ -3,48 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.3884022824536375,
-        "y": 0.4057061340941527
+        "x": 4.077036379769299,
+        "y": 0.40941437444542994
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.95371705178848,
-        "y": 0.7610882729499697
+        "x": 5.597369385998747,
+        "y": 0.5012293510223945
       },
       "isLocked": false,
-      "linkedName": "Trench Start"
+      "linkedName": "Shoottrench"
     },
     {
       "anchor": {
-        "x": 6.833808844507845,
-        "y": 1.1043937232524967
+        "x": 6.306308784383318,
+        "y": 1.2222537710736459
       },
       "prevControl": {
-        "x": 6.673466652655511,
-        "y": 0.9071306053800043
+        "x": 6.2902129547471155,
+        "y": 0.7635226264418795
       },
       "nextControl": {
-        "x": 7.659284562618959,
-        "y": 2.119946223823245
+        "x": 6.344705847337848,
+        "y": 2.3165700652777588
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.159133333333333,
-        "y": 3.323655555555555
+        "x": 6.056823425022182,
+        "y": 3.3871428571428566
       },
       "prevControl": {
-        "x": 7.0350162075615135,
-        "y": 3.1053212036312003
+        "x": 6.016481011993095,
+        "y": 3.130557862956845
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Double Swipe out end2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3368700265251993,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
