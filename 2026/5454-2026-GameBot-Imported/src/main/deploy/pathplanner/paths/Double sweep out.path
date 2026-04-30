@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5473894436519258,
+        "x": 4.3884022824536375,
         "y": 0.4057061340941527
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.122703516790037,
-        "y": 1.6640539978964513
+        "x": 6.978797402742541,
+        "y": 0.8946235853511364
       },
       "isLocked": false,
-      "linkedName": "Follower Start"
+      "linkedName": "Trench Start"
     },
     {
       "anchor": {
-        "x": 0.9226888888888891,
-        "y": 0.9557555555555552
+        "x": 7.665844444444444,
+        "y": 1.2091111111111104
       },
       "prevControl": {
-        "x": 1.1724865637315653,
-        "y": 0.6850138514743653
+        "x": 7.346567314468943,
+        "y": 0.8889526220877422
+      },
+      "nextControl": {
+        "x": 7.937443392294657,
+        "y": 1.4814598032041928
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.889966666666666,
+        "y": 3.3333999999999993
+      },
+      "prevControl": {
+        "x": 7.811915176392171,
+        "y": 2.8603059938133746
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R Follower End"
+      "linkedName": "Double Swipe out end"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 122.00538320808352
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 1.0050860052542672
   },
   "useDefaultConstraints": true
 }

@@ -1,0 +1,84 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.3884022824536375,
+        "y": 0.4057061340941527
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.95371705178848,
+        "y": 0.7610882729499697
+      },
+      "isLocked": false,
+      "linkedName": "Trench Start"
+    },
+    {
+      "anchor": {
+        "x": 6.833808844507845,
+        "y": 1.1043937232524967
+      },
+      "prevControl": {
+        "x": 6.673466652655511,
+        "y": 0.9071306053800043
+      },
+      "nextControl": {
+        "x": 7.659284562618959,
+        "y": 2.119946223823245
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.159133333333333,
+        "y": 3.323655555555555
+      },
+      "prevControl": {
+        "x": 7.0350162075615135,
+        "y": 3.1053212036312003
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Double Swipe out end2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.093796526054583,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 2.25,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": "Seth Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 1.0050860052542672
+  },
+  "useDefaultConstraints": true
+}

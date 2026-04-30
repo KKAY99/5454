@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Double sweep out"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Double sweep Back"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Double sweep out2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Double sweep Back2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW5"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Seth",
+  "choreoAuto": false
+}

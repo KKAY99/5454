@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5473894436519258,
-        "y": 0.4057061340941527
+        "x": 4.3884022824536375,
+        "y": 7.595293865905846
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.122703516790037,
-        "y": 1.6640539978964513
+        "x": 6.978797402742541,
+        "y": 7.106376414648863
       },
       "isLocked": false,
-      "linkedName": "Follower Start"
+      "linkedName": "Mirrored Trench Start"
     },
     {
       "anchor": {
-        "x": 0.9226888888888891,
-        "y": 0.9557555555555552
+        "x": 7.665844444444444,
+        "y": 6.791888888888889
       },
       "prevControl": {
-        "x": 1.1724865637315653,
-        "y": 0.6850138514743653
+        "x": 7.346567314468943,
+        "y": 7.1120473779122575
+      },
+      "nextControl": {
+        "x": 7.937443392294657,
+        "y": 6.519540196795806
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.889966666666666,
+        "y": 4.6676
+      },
+      "prevControl": {
+        "x": 7.811915176392171,
+        "y": 5.140694006186624
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R Follower End"
+      "linkedName": "Mirrored Double Swipe out end"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 122.00538320808352
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -1.0050860052542672
   },
   "useDefaultConstraints": true
 }
