@@ -11,8 +11,8 @@
   "autoFolders": [
     "Seth"
   ],
-  "defaultMaxVel": 5.21208,
-  "defaultMaxAccel": 2.25,
+  "defaultMaxVel": 4.43,
+  "defaultMaxAccel": 3.8,
   "defaultMaxAngVel": 720.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
@@ -23,8 +23,8 @@
   "driveGearing": 5.9,
   "maxDriveSpeed": 4.43,
   "driveMotorType": "krakenX60",
-  "driveCurrentLimit": 80.0,
-  "wheelCOF": 0.9,
+  "driveCurrentLimit": 95.0,
+  "wheelCOF": 1.43,
   "flModuleX": 0.28,
   "flModuleY": 0.28,
   "frModuleX": 0.28,

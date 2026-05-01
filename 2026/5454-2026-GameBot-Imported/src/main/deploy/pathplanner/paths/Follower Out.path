@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 4.622308588300727,
-        "y": 0.4939548739433308
+        "y": 0.4939548739433309
       },
       "isLocked": false,
       "linkedName": "Trench Start"
@@ -58,8 +58,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.21208,
-    "maxAcceleration": 2.25,
+    "maxVelocity": 4.43,
+    "maxAcceleration": 3.8,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

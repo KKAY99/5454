@@ -53,15 +53,15 @@ private static final Slot0Configs steerGains = new Slot0Configs()
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private static final Current kSlipCurrent = Amps.of(60);
+    private static final Current kSlipCurrent = Amps.of(120);
 
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
     private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(Amps.of(80))
-                .withSupplyCurrentLimit(Amps.of(60))
+                .withStatorCurrentLimit(Amps.of(90))
+                .withSupplyCurrentLimit(Amps.of(85))
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)
             );
