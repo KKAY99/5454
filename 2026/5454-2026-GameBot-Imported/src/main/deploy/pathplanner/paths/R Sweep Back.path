@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 5.8257519152296595,
-        "y": 2.966724531614093
+        "y": 2.9667245316140907
       },
       "nextControl": {
         "x": 5.803048084770339,
@@ -49,16 +49,16 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.21208,
-    "maxAcceleration": 2.25,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 596.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0.5,
-    "rotation": 90.0
+    "rotation": 45.0
   },
   "reversed": false,
   "folder": "Seth Paths",

@@ -41,14 +41,10 @@
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "R Follower End"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 45.0
-    },
     {
       "waypointRelativePos": 0.7684647302904717,
       "rotationDegrees": 45.0
@@ -58,10 +54,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.21208,
-    "maxAcceleration": 2.25,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 596.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -73,7 +69,7 @@
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 45.0
   },
   "useDefaultConstraints": true
 }

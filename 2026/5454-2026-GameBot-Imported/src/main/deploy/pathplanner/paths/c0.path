@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.65,
-        "y": 5.0
+        "x": 3.5732667617689007,
+        "y": 5.732126961483594
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0094765398232952,
-        "y": 5.046784876491401
+        "x": 3.1431994290602865,
+        "y": 5.838016644556616
       },
       "isLocked": false,
-      "linkedName": "endDepotCL"
+      "linkedName": "Mirrored Bump Start"
     },
     {
       "anchor": {
-        "x": 1.0237643238595298,
-        "y": 4.890939140637808
+        "x": 2.8296095829636196,
+        "y": 5.495696539485359
       },
       "prevControl": {
-        "x": 0.7904635498924285,
-        "y": 4.801101793914124
+        "x": 3.2400412268889163,
+        "y": 5.629551717569028
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "endalignCL"
+      "linkedName": "climb intake out"
     }
   ],
   "rotationTargets": [],
@@ -33,10 +33,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 4.0,
-    "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 596.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 200.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -45,10 +45,10 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Depo Run",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
