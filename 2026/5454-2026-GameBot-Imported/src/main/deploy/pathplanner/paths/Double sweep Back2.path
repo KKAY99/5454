@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 4.077036379769299,
-        "y": 0.40941437444542994
+        "x": 3.7873114463176574,
+        "y": 0.4255102040816314
       },
       "prevControl": {
-        "x": 4.3265723115733605,
-        "y": 0.4246399693001033
+        "x": 4.036847378121719,
+        "y": 0.44073579893630477
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoottrench"
+      "linkedName": "ShootTrench2"
     }
   ],
   "rotationTargets": [],

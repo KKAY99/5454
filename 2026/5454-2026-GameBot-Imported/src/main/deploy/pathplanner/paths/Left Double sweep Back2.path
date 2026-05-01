@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 4.077036379769299,
-        "y": 7.591585625554569
+        "x": 3.8597426796805676,
+        "y": 7.6283939662821645
       },
       "prevControl": {
-        "x": 4.326572311573361,
-        "y": 7.576360030699896
+        "x": 4.1097426796805685,
+        "y": 7.6283939662821645
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored Shoottrench"
+      "linkedName": "MirroredShootTrenchback"
     }
   ],
   "rotationTargets": [],
