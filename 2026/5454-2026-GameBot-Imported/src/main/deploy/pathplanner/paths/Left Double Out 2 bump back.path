@@ -8,43 +8,32 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.663037919116631,
-        "y": 5.521281295915116
+        "x": 5.892355555555555,
+        "y": 5.2815
       },
       "isLocked": false,
       "linkedName": "Mirrored Double Swipe out end2"
     },
     {
       "anchor": {
-        "x": 5.742954747116238,
-        "y": 7.366244010647737
+        "x": 3.5731777777777776,
+        "y": 5.495877777777778
       },
       "prevControl": {
-        "x": 6.940887088819216,
-        "y": 7.048859359995388
-      },
-      "nextControl": {
-        "x": 5.4604281625817865,
-        "y": 7.441097654890278
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.077036379769299,
-        "y": 7.591585625554569
-      },
-      "prevControl": {
-        "x": 4.3265723115733605,
-        "y": 7.576360030699896
+        "x": 4.830211111111112,
+        "y": 5.720000000000001
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored Shoottrench"
+      "linkedName": "Mirrored bumpshoot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6782287822878222,
+      "rotationDegrees": -45.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

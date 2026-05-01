@@ -3,75 +3,75 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.609766666666667,
-        "y": 5.732126961483594
+        "x": 3.5731777777777776,
+        "y": 2.505122222222221
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.242875864331196,
-        "y": 6.1832859202906345
+        "x": 5.083566666666664,
+        "y": 2.78771111111111
       },
       "isLocked": false,
-      "linkedName": "Mirrored afterbumpcross"
+      "linkedName": "bumpshoot"
     },
     {
       "anchor": {
-        "x": 6.545233333333333,
-        "y": 6.44108888888889
+        "x": 6.056823425022182,
+        "y": 1.8035222222222216
       },
       "prevControl": {
-        "x": 6.25473452944091,
-        "y": 6.230242019585669
+        "x": 5.531811111111112,
+        "y": 1.969177777777777
       },
       "nextControl": {
-        "x": 6.904578343739348,
-        "y": 6.701905007332872
+        "x": 6.393372412885462,
+        "y": 1.6973319328158005
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.714566666666668,
-        "y": 6.44108888888889
+        "x": 5.804655555555557,
+        "y": 2.505122222222221
       },
       "prevControl": {
-        "x": 7.475124146013672,
-        "y": 6.776759850653061
+        "x": 5.825809166809884,
+        "y": 2.060896385881346
       },
       "nextControl": {
-        "x": 7.8919613083091456,
-        "y": 6.1924019396805825
+        "x": 5.775422222222224,
+        "y": 3.1190222222222213
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.841244444444444,
-        "y": 6.090288888888889
+        "x": 6.056823425022182,
+        "y": 3.3871428571428566
       },
       "prevControl": {
-        "x": 7.809474296681891,
-        "y": 6.338261987653947
+        "x": 6.135966666666666,
+        "y": 2.758477777777778
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored Centerline"
+      "linkedName": "Double Swipe out end2"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.4365145228215748,
-      "rotationDegrees": -45.0
+      "waypointRelativePos": 0.2671586715867118,
+      "rotationDegrees": 45.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.43,
-    "maxAcceleration": 3.8,
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -79,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -66.53035442610306
+    "rotation": 1.0050860052542672
   },
   "useDefaultConstraints": true
 }

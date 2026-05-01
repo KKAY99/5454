@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.019033333333335,
-        "y": 5.1061000000000005
+        "x": 5.814399999999999,
+        "y": 5.427666666666667
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.121434241854232,
-        "y": 5.228708385647231
+        "x": 4.916800908520896,
+        "y": 5.550275052313897
       },
       "isLocked": false,
       "linkedName": "Mirrored R Trench Out Return Pick Point"
@@ -47,11 +47,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": -0.0
+      "rotationDegrees": -45.0
     },
     {
       "waypointRelativePos": 0.7684647302904717,
-      "rotationDegrees": -0.0
+      "rotationDegrees": -45.0
     }
   ],
   "constraintZones": [],
@@ -73,7 +73,7 @@
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 88.75463573323157
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

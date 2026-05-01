@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.019033333333335,
-        "y": 2.894899999999999
+        "x": 5.814399999999999,
+        "y": 2.5733333333333324
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.121434241854232,
-        "y": 2.7722916143527687
+        "x": 4.916800908520896,
+        "y": 2.450724947686102
       },
       "isLocked": false,
       "linkedName": "R Trench Out Return Pick Point"
@@ -47,11 +47,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 45.0
     },
     {
       "waypointRelativePos": 0.7684647302904717,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 45.0
     }
   ],
   "constraintZones": [],
@@ -73,7 +73,7 @@
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -88.75463573323157
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

@@ -8,54 +8,38 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.312073859191369,
-        "y": 5.591664639296935
+        "x": 6.48640209867273,
+        "y": 5.206822208858779
       },
       "isLocked": false,
       "linkedName": "Mirrored Double Swipe out end"
     },
     {
       "anchor": {
-        "x": 6.406833095577745,
-        "y": 6.831912981455063
+        "x": 3.5731777777777776,
+        "y": 5.495877777777778
       },
       "prevControl": {
-        "x": 7.131540981920152,
-        "y": 5.986420447388921
-      },
-      "nextControl": {
-        "x": 6.173937232524963,
-        "y": 7.103624821683308
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.077036379769299,
-        "y": 7.591585625554569
-      },
-      "prevControl": {
-        "x": 5.69466725820763,
-        "y": 7.808879325643301
+        "x": 3.310726881270546,
+        "y": 5.479126498983021
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored Shoottrench"
+      "linkedName": "Mirrored bumpshoot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.669372693726932,
-      "rotationDegrees": -0.0
+      "waypointRelativePos": 0.6501845018450187,
+      "rotationDegrees": -45.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.43,
-    "maxAcceleration": 3.8,
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

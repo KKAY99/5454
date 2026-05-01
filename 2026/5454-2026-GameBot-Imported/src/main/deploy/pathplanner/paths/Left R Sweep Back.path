@@ -8,72 +8,43 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.8846685195057695,
-        "y": 3.438087044204483
+        "x": 5.851620876505674,
+        "y": 3.7078121309960315
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Mirrored R Trench Follower Out end"
     },
     {
       "anchor": {
-        "x": 6.135966666666666,
-        "y": 3.137722222222221
+        "x": 5.814399999999999,
+        "y": 4.784533333333334
       },
       "prevControl": {
-        "x": 5.952326047668971,
-        "y": 3.307357486993859
+        "x": 5.8257519152296595,
+        "y": 5.034275468385907
       },
       "nextControl": {
-        "x": 6.31960728566436,
-        "y": 2.9680869574505833
+        "x": 5.803048084770339,
+        "y": 4.534791198280759
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.135966666666666,
-        "y": 3.9367666666666663
+        "x": 5.814399999999999,
+        "y": 5.427666666666667
       },
       "prevControl": {
-        "x": 6.163583564869534,
-        "y": 3.688296735017679
-      },
-      "nextControl": {
-        "x": 6.071402512512247,
-        "y": 4.517651994623467
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.019033333333335,
-        "y": 5.1061000000000005
-      },
-      "prevControl": {
-        "x": 6.048691167809833,
-        "y": 4.820722189126761
+        "x": 5.828359274721055,
+        "y": 5.178056693610176
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Mirrored R Trench Out Return Pick Point"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.23667377398721962,
-      "rotationDegrees": -90.0
-    },
-    {
-      "waypointRelativePos": 0.9552755905511623,
-      "rotationDegrees": -0.0
-    },
-    {
-      "waypointRelativePos": 1.820787401574793,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -86,13 +57,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 88.75463573323157
+    "velocity": 0.5,
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.5,
     "rotation": -90.0
   },
   "useDefaultConstraints": true

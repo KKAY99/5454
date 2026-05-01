@@ -8,54 +8,38 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.312073859191369,
-        "y": 2.4093353607030648
+        "x": 6.48640209867273,
+        "y": 2.7941777911412204
       },
       "isLocked": false,
       "linkedName": "Double Swipe out end"
     },
     {
       "anchor": {
-        "x": 6.406833095577745,
-        "y": 1.1690870185449365
+        "x": 3.5731777777777776,
+        "y": 2.505122222222221
       },
       "prevControl": {
-        "x": 7.131540981920152,
-        "y": 2.014579552611078
-      },
-      "nextControl": {
-        "x": 6.173937232524963,
-        "y": 0.8973751783166914
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.077036379769299,
-        "y": 0.40941437444542994
-      },
-      "prevControl": {
-        "x": 5.69466725820763,
-        "y": 0.19212067435669836
+        "x": 3.310726881270546,
+        "y": 2.521873501016979
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoottrench"
+      "linkedName": "bumpshoot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.669372693726932,
-      "rotationDegrees": 0.0
+      "waypointRelativePos": 0.6501845018450187,
+      "rotationDegrees": 45.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.43,
-    "maxAcceleration": 3.8,
+    "maxVelocity": 5.21208,
+    "maxAcceleration": 2.25,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

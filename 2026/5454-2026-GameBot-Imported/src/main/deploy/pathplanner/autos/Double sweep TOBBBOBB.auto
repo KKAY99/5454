@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Double sweep out"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Double Swipe In bump long"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Double sweep out2 bump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Double Out 2 bump back"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW5"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Seth",
+  "choreoAuto": false
+}

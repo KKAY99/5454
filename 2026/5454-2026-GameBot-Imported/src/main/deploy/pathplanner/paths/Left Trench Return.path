@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.019033333333335,
-        "y": 5.1061000000000005
+        "x": 5.814399999999999,
+        "y": 5.427666666666667
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.642116714040182,
-        "y": 5.963994614303269
+        "x": 6.116477777777778,
+        "y": 6.655466666666666
       },
       "isLocked": false,
       "linkedName": "Mirrored R Trench Out Return Pick Point"
     },
     {
       "anchor": {
-        "x": 5.843633333333333,
+        "x": 5.726700000000001,
         "y": 7.386299999999999
       },
       "prevControl": {
-        "x": 6.468861592857999,
-        "y": 7.137863916179717
+        "x": 6.116477777777778,
+        "y": 6.5093
       },
       "nextControl": {
-        "x": 5.611302673553092,
-        "y": 7.478617195180951
+        "x": 5.62516538348664,
+        "y": 7.6147528871550625
       },
       "isLocked": false,
       "linkedName": null
@@ -63,11 +63,15 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.9703937007873945,
-      "rotationDegrees": -180.0
+      "rotationDegrees": -0.0
     },
     {
       "waypointRelativePos": 1.7302904564315145,
-      "rotationDegrees": -180.0
+      "rotationDegrees": -0.0
+    },
+    {
+      "waypointRelativePos": 1.910701107011063,
+      "rotationDegrees": -0.0
     }
   ],
   "constraintZones": [],
@@ -82,14 +86,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": -122.00538320808352
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 88.75463573323157
+    "velocity": 2.0,
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
