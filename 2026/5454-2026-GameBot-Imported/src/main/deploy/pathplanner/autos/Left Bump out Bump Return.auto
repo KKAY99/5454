@@ -17,13 +17,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "left rotate Bump Cross"
+                  "pathName": "Left left rotate Bump Cross"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Bump cross to close sweep"
+                  "pathName": "Left Bump cross to close sweep"
                 }
               }
             ]
@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "R Sweep Back"
+            "pathName": "Left R Sweep Back"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Bump Back"
+            "pathName": "Left Bump Back"
           }
         },
         {
