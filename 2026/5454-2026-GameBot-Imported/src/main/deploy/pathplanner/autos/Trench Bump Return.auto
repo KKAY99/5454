@@ -7,7 +7,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 2.5
           }
         },
         {
@@ -30,6 +30,12 @@
                 "type": "path",
                 "data": {
                   "pathName": "Follower Out"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
                 }
               }
             ]

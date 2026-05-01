@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 4.622308588300727,
-        "y": 0.4939548739433308
+        "y": 0.4939548739433309
       },
       "isLocked": false,
       "linkedName": "Trench Start"
@@ -66,7 +66,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 90.0
   },
   "reversed": false,

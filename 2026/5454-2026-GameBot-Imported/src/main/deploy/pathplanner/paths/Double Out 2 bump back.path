@@ -3,51 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.889966666666666,
-        "y": 3.3333999999999993
+        "x": 6.056823425022182,
+        "y": 3.3871428571428566
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.312073859191369,
-        "y": 2.4093353607030648
+        "x": 5.892355555555555,
+        "y": 2.719499999999999
       },
       "isLocked": false,
-      "linkedName": "Double Swipe out end"
+      "linkedName": "Double Swipe out end2"
     },
     {
       "anchor": {
-        "x": 6.406833095577745,
-        "y": 1.1690870185449365
+        "x": 3.5731777777777776,
+        "y": 2.505122222222221
       },
       "prevControl": {
-        "x": 7.131540981920152,
-        "y": 2.014579552611078
-      },
-      "nextControl": {
-        "x": 6.173937232524963,
-        "y": 0.8973751783166914
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.077036379769299,
-        "y": 0.40941437444542994
-      },
-      "prevControl": {
-        "x": 5.69466725820763,
-        "y": 0.19212067435669836
+        "x": 4.830211111111112,
+        "y": 2.2809999999999993
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoottrench"
+      "linkedName": "bumpshoot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.669372693726932,
-      "rotationDegrees": 0.0
+      "waypointRelativePos": 0.6782287822878222,
+      "rotationDegrees": 45.0
     }
   ],
   "constraintZones": [],

@@ -8,72 +8,43 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.8846685195057695,
-        "y": 4.562912955795516
+        "x": 5.851620876505674,
+        "y": 4.293187869003968
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "R Trench Follower Out end"
     },
     {
       "anchor": {
-        "x": 6.135966666666666,
-        "y": 4.863277777777778
+        "x": 5.814399999999999,
+        "y": 3.2164666666666655
       },
       "prevControl": {
-        "x": 5.952326047668971,
-        "y": 4.69364251300614
+        "x": 5.8257519152296595,
+        "y": 2.966724531614093
       },
       "nextControl": {
-        "x": 6.31960728566436,
-        "y": 5.032913042549416
+        "x": 5.803048084770339,
+        "y": 3.4662088017192403
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.135966666666666,
-        "y": 4.064233333333333
+        "x": 5.814399999999999,
+        "y": 2.5733333333333324
       },
       "prevControl": {
-        "x": 6.163583564869534,
-        "y": 4.3127032649823205
-      },
-      "nextControl": {
-        "x": 6.071402512512247,
-        "y": 3.4833480053765324
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.019033333333335,
-        "y": 2.894899999999999
-      },
-      "prevControl": {
-        "x": 6.048691167809833,
-        "y": 3.180277810873238
+        "x": 5.828359274721055,
+        "y": 2.8229433063898233
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "R Trench Out Return Pick Point"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.23667377398721962,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 0.9552755905511623,
-      "rotationDegrees": 0.0
-    },
-    {
-      "waypointRelativePos": 1.820787401574793,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -86,13 +57,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -88.75463573323157
+    "velocity": 0.5,
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.5,
     "rotation": 90.0
   },
   "useDefaultConstraints": true

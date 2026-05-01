@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.3884022824536375,
-        "y": 0.4057061340941527
+        "x": 6.056823425022182,
+        "y": 4.613857142857142
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6766888888888882,
-        "y": 0.7218888888888887
+        "x": 5.892355555555555,
+        "y": 5.2815
       },
       "isLocked": false,
-      "linkedName": "Trench Start"
+      "linkedName": "Mirrored Double Swipe out end2"
     },
     {
       "anchor": {
-        "x": 3.1834,
-        "y": 2.3881888888888874
+        "x": 3.5731777777777776,
+        "y": 5.495877777777778
       },
       "prevControl": {
-        "x": 3.4075222222222226,
-        "y": 1.8619888888888885
+        "x": 4.830211111111112,
+        "y": 5.720000000000001
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R TrenchFollower End"
+      "linkedName": "Mirrored bumpshoot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6782287822878222,
+      "rotationDegrees": -45.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -1.0050860052542672
   },
   "reversed": false,
   "folder": "Seth Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 1.0050860052542672
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
