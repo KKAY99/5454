@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5473894436519258,
-        "y": 7.595293865905846
+        "x": 2.8296095829636196,
+        "y": 5.495696539485359
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.122703516790037,
-        "y": 6.336946002103549
+        "x": 1.5682177421556707,
+        "y": 5.836089891054905
       },
       "isLocked": false,
-      "linkedName": "Mirrored Follower Start"
+      "linkedName": "climb intake out"
     },
     {
       "anchor": {
-        "x": 0.9226888888888891,
-        "y": 7.045244444444444
+        "x": 1.0751641526175684,
+        "y": 5.680798580301686
       },
       "prevControl": {
-        "x": 1.1724865637315653,
-        "y": 7.315986148525634
+        "x": 2.2090752259599684,
+        "y": 5.693865137717731
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored R Follower End"
+      "linkedName": "c1 end"
     }
   ],
   "rotationTargets": [],
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.43,
-    "maxAcceleration": 3.1,
-    "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 596.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 200.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -122.00538320808352
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Seth Paths",
+  "folder": "Depo Run",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -0.0
+    "rotation": 90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

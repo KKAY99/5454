@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c0"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "expandIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "climbUp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "c4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "climbDown"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

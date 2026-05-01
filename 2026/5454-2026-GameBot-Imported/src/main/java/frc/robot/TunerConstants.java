@@ -60,7 +60,7 @@ private static final Slot0Configs steerGains = new Slot0Configs()
     private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
         .withCurrentLimits(
             new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(Amps.of(90))
+                .withStatorCurrentLimit(Amps.of(85))
                 .withSupplyCurrentLimit(Amps.of(85))
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimitEnable(true)

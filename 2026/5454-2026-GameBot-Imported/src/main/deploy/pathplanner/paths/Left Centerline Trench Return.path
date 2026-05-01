@@ -40,7 +40,7 @@
         "y": 7.338426532725548
       },
       "nextControl": {
-        "x": 1.9653444444444426,
+        "x": 1.9653444444444423,
         "y": 7.376555555555556
       },
       "isLocked": false,
@@ -71,9 +71,9 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.43,
-    "maxAcceleration": 3.8,
+    "maxAcceleration": 3.1,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 596.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
