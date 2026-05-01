@@ -44,37 +44,7 @@
         {
           "type": "named",
           "data": {
-            "name": "climbUp"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "badClimbL"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "pushCL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "climbDown"
+            "name": "shotLookUpW5"
           }
         }
       ]

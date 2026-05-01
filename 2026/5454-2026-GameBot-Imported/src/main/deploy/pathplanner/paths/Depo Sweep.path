@@ -36,49 +36,17 @@
         "y": 7.274285714285714
       },
       "prevControl": {
-        "x": 0.3343381682319268,
-        "y": 7.096401142554815
-      },
-      "nextControl": {
-        "x": 0.7088866438949766,
-        "y": 7.475688973697038
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.66,
-        "y": 6.863842058562556
-      },
-      "prevControl": {
-        "x": 1.6121210215552728,
-        "y": 7.131924194513121
-      },
-      "nextControl": {
-        "x": 2.161632653061224,
-        "y": 4.0551197870452524
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.65,
-        "y": 5.0
-      },
-      "prevControl": {
-        "x": 0.5054982198414946,
-        "y": 5.204007930068963
+        "x": 0.36549821984149455,
+        "y": 7.478293644354677
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "endDepotCL"
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.1,
+      "waypointRelativePos": 1.05,
       "rotationDegrees": 90.0
     }
   ],
