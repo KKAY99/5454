@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 4.3884022824536375,
-        "y": 7.595293865905846
+        "x": 4.077036379769299,
+        "y": 7.591585625554569
       },
       "prevControl": {
-        "x": 5.630513552068472,
-        "y": 7.698803138373751
+        "x": 5.69466725820763,
+        "y": 7.808879325643301
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mirrored Trench Start"
+      "linkedName": "Mirrored Shoottrench"
     }
   ],
   "rotationTargets": [],
