@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.889966666666666,
-        "y": 3.3333999999999993
+        "x": 2.8054955873842595,
+        "y": 2.225330295138889
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.312073859191369,
-        "y": 2.4093353607030648
+        "x": 2.648515136973461,
+        "y": 1.964702865194639
       },
       "isLocked": false,
-      "linkedName": "Double Swipe out end"
+      "linkedName": "TiePostBump"
     },
     {
       "anchor": {
-        "x": 6.406833095577745,
-        "y": 1.1690870185449365
+        "x": 2.9866170132775824,
+        "y": 0.9461274482834505
       },
       "prevControl": {
-        "x": 7.131540981920152,
-        "y": 2.014579552611078
+        "x": 2.726050187719974,
+        "y": 1.331789228349904
       },
       "nextControl": {
-        "x": 6.173937232524963,
-        "y": 0.8973751783166914
+        "x": 3.1265756654536103,
+        "y": 0.7389763544387168
       },
       "isLocked": false,
       "linkedName": null
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 4.077,
-        "y": 0.40427500550175977
+        "y": 0.409
       },
       "prevControl": {
-        "x": 5.694630878438331,
-        "y": 0.18698130541302815
+        "x": 3.80110245358801,
+        "y": 0.40648151738658667
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,22 +49,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.21208,
-    "maxAcceleration": 2.25,
+    "maxVelocity": 2.5,
+    "maxAcceleration": 1.25,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 1.0050860052542672
   },
   "reversed": false,
-  "folder": "Seth Paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -135.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

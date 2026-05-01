@@ -5,9 +5,34 @@
     "data": {
       "commands": [
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RTTieBump"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shotLookUpW5"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Bump Start Depot Run"
+            "pathName": "RTTieConnect"
           }
         },
         {
@@ -17,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Extend Intake Depo Run"
+                  "pathName": "Double sweep out2"
                 }
               },
               {
@@ -32,55 +57,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Depo Sweep"
+            "pathName": "Double sweep Back2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shotLookUpW5"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "climbUp"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "badClimbL"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "pushCL"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "climbDown"
+            "name": "shotLookUp"
           }
         }
       ]

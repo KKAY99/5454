@@ -1,0 +1,136 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.077,
+        "y": 0.40427500550175977
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.321884497859662,
+        "y": 0.4545898413657584
+      },
+      "isLocked": false,
+      "linkedName": "Shoottrench"
+    },
+    {
+      "anchor": {
+        "x": 5.82607499816608,
+        "y": 0.6
+      },
+      "prevControl": {
+        "x": 5.668186568330351,
+        "y": 0.40616696947112396
+      },
+      "nextControl": {
+        "x": 6.50640217784515,
+        "y": 1.4352092621704977
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.82607499816608,
+        "y": 3.418319166299882
+      },
+      "prevControl": {
+        "x": 5.732692279089328,
+        "y": 3.709398502246052
+      },
+      "nextControl": {
+        "x": 5.919749131338568,
+        "y": 3.126331475764013
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.82607499816608,
+        "y": 0.6
+      },
+      "prevControl": {
+        "x": 6.298711230267588,
+        "y": 1.1353981353777172
+      },
+      "nextControl": {
+        "x": 5.504284771126761,
+        "y": 0.23547888240903697
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.077,
+        "y": 0.40427500550175977
+      },
+      "prevControl": {
+        "x": 4.31390763277396,
+        "y": 0.4841171844139024
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Shoottrench"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.5407072368421055,
+      "rotationDegrees": 85.0
+    },
+    {
+      "waypointRelativePos": 3.248684210526316,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.9017857142857135,
+      "maxWaypointRelativePos": 2.1247923588039863,
+      "constraints": {
+        "maxVelocity": 5.21208,
+        "maxAcceleration": 2.25,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "completeIntake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 1.0050860052542672
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 2.0,
+    "rotation": 1.0050860052542672
+  },
+  "useDefaultConstraints": false
+}

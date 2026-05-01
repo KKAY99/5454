@@ -5,15 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "expandIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LTinNout"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LTinNout"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
@@ -23,15 +30,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "expandIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LTinNout2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LTinNout2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "expandIntake"
+                }
+              }
+            ]
           }
         },
         {
