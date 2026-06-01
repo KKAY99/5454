@@ -306,13 +306,13 @@ public class RobotContainer {
 
     Command shootMapping = new ShootMappingCommand(m_swerve,m_newShooter,m_hopper,m_intake,
                                 m_turretLimelight,Constants.ShooterConstants.kAgitateTimeLimit,true);
-    m_xBoxOperator.start().whileTrue(shootMapping);
+    //m_xBoxOperator.start().whileTrue(shootMapping);
 
     Command ShotOntheMove = new ShotOnTheMoveCommand(m_TurretSubsystem,m_swerve, m_newShooter, m_hopper, m_intake, ShooterConstants.kAgitateTimeLimit);
     Command Notarget = Commands.runOnce(()->setTracking(TurretTrackingMethod.NOTARGET));
     Command ReturnHub=Commands.runOnce(()->setTracking(TurretTrackingMethod.HUB));
     SequentialCommandGroup ShotMove=new SequentialCommandGroup(Notarget,ShotOntheMove,ReturnHub);
-    //m_xBoxOperator.start().whileTrue(ShotMove);
+    m_xBoxOperator.start().whileTrue(ShotMove);
 
     Command shootLookup = new ShotLookupCommand(m_swerve,m_newShooter, m_hopper, m_intake,
                                 m_turretLimelight, Constants.ShooterConstants.kAgitateTimeLimit, true);
