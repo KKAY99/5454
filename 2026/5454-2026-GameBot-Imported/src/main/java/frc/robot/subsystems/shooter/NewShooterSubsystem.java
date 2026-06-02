@@ -173,6 +173,11 @@ public boolean atTargetSpeed(double targetSpeed){
  
 }
 public void runShooterVelocity(double targetSpeed){
+if(Math.abs(targetSpeed) < Constants.ShooterConstants.IdleSpeedThreshold){
+  m_1shooterMotor.stopMotor();
+  m_2shooterMotor.stopMotor();
+  return;
+}
 // Torque-current bang-bang
 //m_1shooterMotor.setControl(new MotionMagicVelocityVoltage(targetSpeed));
 //m_1shooterMotor.setControl(new MotionMagicVelocityVoltage(-targetSpeed));
@@ -193,7 +198,7 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
   public boolean isShooterAtIdle(){
     //if shoter is below idle threshold, we can consider it at idle, which means it's not spinning enough to shoot, and we can stop it without worrying about cutting power to a spinning flywheel
     double currentSpeed=m_1shooterMotor.getVelocity().getValueAsDouble();
-    return (currentSpeed<Constants.ShooterConstants.IdleSpeedThreshold);
+    return (Math.abs(currentSpeed)<Constants.ShooterConstants.IdleSpeedThreshold);
   }
 
   public void stopNewShooter(boolean idleMode){
@@ -230,7 +235,9 @@ m_2shooterMotor.setControl(new VelocityVoltage(-targetSpeed));
     //Apply current limits
     CurrentLimitsConfigs currentLimits =  new CurrentLimitsConfigs();
     currentLimits.StatorCurrentLimit=80;
+    currentLimits.StatorCurrentLimitEnable=true;
     currentLimits.SupplyCurrentLimit=60;
+    currentLimits.SupplyCurrentLimitEnable=true;
     configurator.apply(currentLimits);
   }
   
