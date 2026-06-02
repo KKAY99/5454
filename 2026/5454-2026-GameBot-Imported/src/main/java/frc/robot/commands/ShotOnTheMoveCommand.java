@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.IntakeConstants;
@@ -133,9 +134,14 @@ public class ShotOnTheMoveCommand extends Command {
   double currentTime;
   boolean returnValue=false;
 
-double velX = m_swerve.getChassisSpeeds().vxMetersPerSecond;
-double velY = m_swerve.getChassisSpeeds().vyMetersPerSecond;
-ShotSolution targetShot = TurretUtil.computeLeadShotSolution(m_swerve.getPose2d(),velX,velY,TurretUtil.TargetType.HUB); 
+ChassisSpeeds fieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(
+    m_swerve.getChassisSpeeds(),
+    m_swerve.getPose2d().getRotation());
+ShotSolution targetShot = TurretUtil.computeLeadShotSolution(
+    m_swerve.getPose2d(),
+    fieldRelativeSpeeds.vxMetersPerSecond,
+    fieldRelativeSpeeds.vyMetersPerSecond,
+    TurretUtil.TargetType.HUB); 
 double targetspeed=targetShot.shooterSpeedRPS;
 double hoodPos=targetShot.trajectoryAngleDegrees;
 double turretSourceAngle=targetShot.turretAngleDegrees;
